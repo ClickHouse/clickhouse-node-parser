@@ -1,0 +1,489 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "b"
+              }
+            ],
+            "from": {
+              "left": {
+                "kind": "tableRef",
+                "database": "system",
+                "table": "one"
+              },
+              "kind": "join",
+              "joinType": "INNER",
+              "right": {
+                "kind": "tableRef",
+                "database": "system",
+                "table": "one"
+              },
+              "constraint": {
+                "kind": "using",
+                "columns": [
+                  "dummy"
+                ]
+              }
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                },
+                "alias": "b"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "one"
+            }
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "4"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "X"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "Y"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            ],
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "materialize",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              }
+            ],
+            "groupBy": {
+              "kind": "groupingSets",
+              "sets": [
+                [
+                  {
+                    "kind": "functionCall",
+                    "name": "tuple",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "toUInt128",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "67"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "columnRef",
+      "parts": [
+        "a"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "75"
+            },
+            {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "tuple",
+                  "elements": [
+                    {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "tuple",
+                              "elements": [
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "67"
+                                },
+                                {
+                                  "kind": "tuple",
+                                  "elements": [
+                                    {
+                                      "kind": "literal",
+                                      "type": "UInt64",
+                                      "value": "67"
+                                    },
+                                    {
+                                      "kind": "tuple",
+                                      "elements": [
+                                        {
+                                          "kind": "functionCall",
+                                          "name": "tuple",
+                                          "args": [
+                                            {
+                                              "kind": "tuple",
+                                              "elements": [
+                                                {
+                                                  "kind": "functionCall",
+                                                  "name": "tuple",
+                                                  "args": [
+                                                    {
+                                                      "kind": "functionCall",
+                                                      "name": "toLowCardinality",
+                                                      "args": [
+                                                        {
+                                                          "kind": "functionCall",
+                                                          "name": "toLowCardinality",
+                                                          "args": [
+                                                            {
+                                                              "kind": "literal",
+                                                              "type": "UInt64",
+                                                              "value": "1"
+                                                            }
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "1"
+                                                }
+                                              ],
+                                              "source": "(tuple(toLowCardinality(toLowCardinality(1))), 1)"
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "kind": "functionCall",
+                                          "name": "toNullable",
+                                          "args": [
+                                            {
+                                              "kind": "literal",
+                                              "type": "UInt64",
+                                              "value": "1"
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "source": "(tuple((tuple(toLowCardinality(toLowCardinality(1))), 1)), toNullable(1))"
+                                    }
+                                  ],
+                                  "source": "(67, (tuple((tuple(toLowCardinality(toLowCardinality(1))), 1)), toNullable(1)))"
+                                },
+                                {
+                                  "kind": "tuple",
+                                  "elements": [
+                                    {
+                                      "kind": "functionCall",
+                                      "name": "tuple",
+                                      "args": [
+                                        {
+                                          "kind": "functionCall",
+                                          "name": "toUInt256",
+                                          "args": [
+                                            {
+                                              "kind": "literal",
+                                              "type": "UInt64",
+                                              "value": "1"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "kind": "literal",
+                                      "type": "UInt64",
+                                      "value": "1"
+                                    }
+                                  ],
+                                  "source": "(tuple(toUInt256(1)), 1)"
+                                }
+                              ],
+                              "source": "(67, (67, (tuple((tuple(toLowCardinality(toLowCardinality(1))), 1)), toNullable(1))), (tuple(toUInt256(1)), 1))"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            }
+                          ],
+                          "source": "((67, (67, (tuple((tuple(toLowCardinality(toLowCardinality(1))), 1)), toNullable(1))), (tuple(toUInt256(1)), 1)), 1)"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ],
+                  "source": "(tuple(((67, (67, (tuple((tuple(toLowCardinality(toLowCardinality(1))), 1)), toNullable(1))), (tuple(toUInt256(1)), 1)), 1)), 1)"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "source": "((tuple(((67, (67, (tuple((tuple(toLowCardinality(toLowCardinality(1))), 1)), toNullable(1))), (tuple(toUInt256(1)), 1)), 1)), 1), 1)"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ],
+          "source": "(75, ((tuple(((67, (67, (tuple((tuple(toLowCardinality(toLowCardinality(1))), 1)), toNullable(1))), (tuple(toUInt256(1)), 1)), 1)), 1), 1), toNullable(1))"
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

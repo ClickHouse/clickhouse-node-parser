@@ -1,0 +1,34 @@
+SELECT *
+FROM users AS u1
+WHERE EXISTS((
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.age = u2.age
+    ));
+
+SELECT *
+FROM users AS u1
+WHERE (age = 50)
+    OR exists((
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.age = u2.age
+    ))
+ORDER BY `ALL` ASC
+SETTINGS allow_experimental_correlated_subqueries = 1;
+
+SELECT *
+FROM users AS u1
+WHERE (age = 50)
+    OR exists((
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.age = u2.age
+        UNION ALL
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.age != u2.age
+    ))
+ORDER BY `ALL` ASC
+FORMAT Null
+SETTINGS allow_experimental_correlated_subqueries = 1;

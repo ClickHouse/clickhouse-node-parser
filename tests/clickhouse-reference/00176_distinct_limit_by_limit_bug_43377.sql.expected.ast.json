@@ -1,0 +1,128 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "distinct": {
+          "kind": "distinct"
+        },
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "Title"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "SearchPhrase"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "test",
+          "table": "hits"
+        },
+        "where": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "!=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "SearchPhrase"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": ""
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "unaryExpr",
+              "op": "NOT",
+              "expr": {
+                "kind": "functionCall",
+                "name": "match",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "Title"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "[а-яА-ЯёЁ]"
+                  }
+                ]
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "unaryExpr",
+              "op": "NOT",
+              "expr": {
+                "kind": "functionCall",
+                "name": "match",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "SearchPhrase"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "[а-яА-ЯёЁ]"
+                  }
+                ]
+              },
+              "parenthesized": true
+            }
+          ]
+        },
+        "limitBy": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "by": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Title"
+              ]
+            }
+          ]
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        }
+      }
+    }
+  }
+]

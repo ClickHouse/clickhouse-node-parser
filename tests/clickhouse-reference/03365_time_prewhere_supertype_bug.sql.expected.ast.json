@@ -1,0 +1,164 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "prewhere": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "asterisk"
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "naryExpr",
+              "op": "OR",
+              "operands": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "8"
+                },
+                {
+                  "kind": "asterisk"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "parenthesized": true
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "functionCall",
+                "name": "toTime64",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "isZeroOrNull",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "13"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "asterisk"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "toLowCardinality",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "functionCall",
+            "name": "toTime64",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "isNullable",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "materialize",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "materialize",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "13"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "isNull",
+                "args": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "asterisk"
+          }
+        }
+      ]
+    }
+  }
+]

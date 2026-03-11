@@ -1,0 +1,114 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "APIKey"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ConversionEventValue"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "left_table",
+        "alias": "left_table"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "APIKey"
+                    ]
+                  },
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "EventValueForPostback"
+                      ]
+                    },
+                    "alias": "ConversionEventValue"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "right_table",
+                  "alias": "right_table"
+                }
+              }
+            },
+            "kind": "join",
+            "joinType": "INNER",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "APIKey"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "left_table",
+                  "alias": "left_table"
+                },
+                "groupBy": {
+                  "kind": "expressions",
+                  "items": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "APIKey"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "constraint": {
+              "kind": "using",
+              "columns": [
+                "APIKey"
+              ]
+            }
+          }
+        }
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "APIKey"
+        ]
+      }
+    }
+  }
+]

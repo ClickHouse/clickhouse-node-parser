@@ -1,0 +1,169 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "begin"
+        ]
+      },
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "e1",
+                  "value"
+                ]
+              }
+            ],
+            "from": {
+              "left": {
+                "kind": "subqueryFrom",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "events",
+                    "alias": "e1"
+                  },
+                  "where": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "e1",
+                        "value"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "events",
+                        "value"
+                      ]
+                    }
+                  }
+                },
+                "alias": "e1"
+              },
+              "kind": "join",
+              "joinType": "INNER",
+              "right": {
+                "kind": "subqueryFrom",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "castExpr",
+                        "expr": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "type": "Float64",
+                        "operator": true
+                      },
+                      "alias": "begin"
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableFunction",
+                    "name": "numbers",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    ]
+                  },
+                  "where": {
+                    "kind": "naryExpr",
+                    "op": "AND",
+                    "operands": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": ">=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "kind": "binaryExpr",
+                        "op": "<",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "constraint": {
+                "kind": "using",
+                "columns": [
+                  "begin"
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "events"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "begin"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

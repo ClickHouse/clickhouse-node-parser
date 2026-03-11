@@ -1,0 +1,2 @@
+SELECT * FROM t0;
+SELECT * FROM t1;

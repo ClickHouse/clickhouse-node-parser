@@ -1,0 +1,3 @@
+SELECT *
+FROM tab
+ORDER BY val ASC;

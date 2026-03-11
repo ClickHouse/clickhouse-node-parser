@@ -1,0 +1,108 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "in_sample"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "subquery",
+            "name": "RandomUsers",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "user_id"
+                  ]
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "rand",
+                      "args": []
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  },
+                  "alias": "in_sample"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "users_items"
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "user_id"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "user_id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "in_sample"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "RandomUsers"
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "in_sample"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,202 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        "alias": "period"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "alias": "having_check"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "min",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            }
+          ]
+        },
+        "alias": "period_start"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "addDays",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "date"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "period_end"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "dateDiff",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "second"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "period_start"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "period_end"
+              ]
+            }
+          ]
+        },
+        "alias": "total_duration"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            }
+          ]
+        },
+        "alias": "metric_"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "repro_hits"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "period"
+          ]
+        }
+      ]
+    },
+    "having": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "having_check"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "Int64",
+        "value": "-1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "min",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        "alias": "min_number"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ]
+    },
+    "having": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "1"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "min_number"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

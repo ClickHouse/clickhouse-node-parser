@@ -1,0 +1,2 @@
+SELECT c0::Dynamic FROM t0;
+SELECT c0 FROM t0;

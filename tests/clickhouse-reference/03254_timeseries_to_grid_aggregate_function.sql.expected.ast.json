@@ -1,0 +1,1386 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "groupArraySorted",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          }
+        ],
+        "args": [
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUnixTimestamp",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "timestamp"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              }
+            ],
+            "source": "(toUnixTimestamp(timestamp), value)"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "agg"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data_agg",
+      "final": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "timeSeriesResampleToGridWithStaleness",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "200"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "15"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "timeSeriesResampleToGridWithStalenessMerge",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "200"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "15"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "agg"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data_agg"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "timestamp"
+                ]
+              },
+              "type": "DateTime64(2,'UTC')",
+              "operator": true
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100"
+              },
+              "type": "Int32",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "150"
+              },
+              "type": "UInt16",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "15"
+              },
+              "type": "Decimal(10,2)",
+              "operator": true
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "timestamp"
+                ]
+              },
+              "type": "DateTime64(3, 'UTC')",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              "type": "Float32",
+              "operator": true
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "timestamp"
+                ]
+              },
+              "type": "DateTime64(3, 'UTC')",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              "type": "Float32",
+              "operator": true
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStalenessIf",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "timeSeriesResampleToGridWithStaleness",
+        "params": [
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "2025-06-01 12:00:00.300"
+            },
+            "type": "DateTime64(3, 'UTC')",
+            "operator": true
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "2025-06-01 12:00:00.900"
+            },
+            "type": "DateTime64(3, 'UTC')",
+            "operator": true
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "0.300"
+            },
+            "type": "Decimal64(3)",
+            "operator": true
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "0.500"
+            },
+            "type": "Decimal64(3)",
+            "operator": true
+          }
+        ],
+        "args": [
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2025-06-01 12:00:00.011"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2025-06-01 12:00:00.768"
+                }
+              ],
+              "source": "['2025-06-01 12:00:00.011', '2025-06-01 12:00:00.768']"
+            },
+            "type": "Array(DateTime64(3, 'UTC'))",
+            "operator": true
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                }
+              ],
+              "source": "[10, 20]"
+            },
+            "type": "Array(Float64)",
+            "operator": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              "type": "Decimal(10,3)",
+              "operator": true
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              "type": "Int64",
+              "operator": true
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              "type": "String",
+              "operator": true
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              "type": "DateTime",
+              "operator": true
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100"
+              },
+              "type": "Float64",
+              "operator": true
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "150"
+              },
+              "type": "Float32",
+              "operator": true
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "15"
+              },
+              "type": "Float32",
+              "operator": true
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "50"
+              },
+              "type": "Float64",
+              "operator": true
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "Int64",
+              "value": "-100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "Int64",
+              "value": "-150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "Int64",
+              "value": "-15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "Int64",
+              "value": "-50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "200"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "timeSeriesResampleToGridWithStaleness",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "150"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timestamp"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  }
+]

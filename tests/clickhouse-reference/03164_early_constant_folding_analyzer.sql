@@ -1,0 +1,1 @@
+select trimLeft(explain) from (explain SELECT count(1) FROM checks WHERE test_name IS NOT NULL) where explain like '%ReadFromPreparedSource%' SETTINGS enable_analyzer = 1, enable_parallel_replicas = 0;

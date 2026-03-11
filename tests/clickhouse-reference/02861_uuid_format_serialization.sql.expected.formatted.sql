@@ -1,0 +1,10 @@
+SELECT *
+FROM t_uuid
+ORDER BY x ASC
+LIMIT 1
+FORMAT RowBinary;
+
+SELECT *
+FROM t_uuid
+ORDER BY x ASC
+FORMAT RowBinary;

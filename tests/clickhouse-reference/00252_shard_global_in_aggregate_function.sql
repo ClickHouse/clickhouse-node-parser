@@ -1,0 +1,2 @@
+SELECT sum(UserID GLOBAL IN (SELECT UserID FROM remote('127.0.0.{2,3}', currentDatabase(), storage))) FROM remote('127.0.0.{2,3}', currentDatabase(), storage);
+SELECT sum(UserID GLOBAL IN (SELECT UserID FROM storage)) FROM remote('127.0.0.{2,3}', currentDatabase(), storage);

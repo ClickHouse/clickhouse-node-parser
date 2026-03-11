@@ -1,0 +1,27 @@
+SELECT *
+FROM
+    l
+LEFT JOIN r
+    USING (a)
+ORDER BY a ASC;
+
+SELECT a
+FROM
+    l
+RIGHT JOIN r
+    USING (a)
+ORDER BY a ASC;
+
+SELECT *
+FROM
+    l
+RIGHT JOIN r
+    USING (a)
+ORDER BY a ASC;
+
+SELECT a
+FROM
+    l
+LEFT JOIN r
+    USING (a)
+ORDER BY a ASC;

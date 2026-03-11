@@ -1,0 +1,24 @@
+SELECT *
+FROM map_formats
+ORDER BY m['k1'] ASC
+FORMAT JSON;
+
+SELECT *
+FROM map_formats
+ORDER BY m['k1'] ASC
+FORMAT JSONEachRow;
+
+SELECT *
+FROM map_formats
+ORDER BY m['k1'] ASC
+FORMAT CSV;
+
+SELECT *
+FROM map_formats
+ORDER BY m['k1'] ASC
+FORMAT TSV;
+
+SELECT *
+FROM map_formats
+ORDER BY m['k1'] ASC
+FORMAT TSKV;

@@ -1,0 +1,1 @@
+SELECT like('Win\\Sys', '%Win\\Sys%');

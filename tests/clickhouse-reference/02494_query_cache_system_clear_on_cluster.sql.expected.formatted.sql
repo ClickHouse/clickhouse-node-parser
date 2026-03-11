@@ -1,0 +1,7 @@
+SELECT formatQuery('SYSTEM DROP QUERY CACHE');
+
+SELECT formatQuery('SYSTEM DROP QUERY CACHE TAG ''tag''');
+
+SELECT formatQuery('SYSTEM DROP QUERY CACHE TAG ''tag'' ON CLUSTER ''cluster''');
+
+SELECT formatQuery('SYSTEM DROP QUERY CACHE ON CLUSTER ''cluster''');

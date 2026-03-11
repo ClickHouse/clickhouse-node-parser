@@ -1,0 +1,216 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "cityHash64",
+            "args": [
+              {
+                "kind": "asterisk"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "quantileTiming",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.5"
+              }
+            ],
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "SendTiming"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "count",
+            "args": []
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2,3,4,5,6,7,8,9,10}"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "test",
+                "hits"
+              ]
+            }
+          ]
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "SendTiming"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "Int64",
+            "value": "-1"
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "CounterID"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "cityHash64",
+            "args": [
+              {
+                "kind": "asterisk"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "quantileTiming",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.5"
+              }
+            ],
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "SendTiming"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "count",
+            "args": []
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2,3,4,5,6,7,8,9,10}"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "test",
+                "hits"
+              ]
+            }
+          ]
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "SendTiming"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "Int64",
+            "value": "-1"
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "CounterID"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "optimize_aggregation_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

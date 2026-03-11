@@ -1,0 +1,3 @@
+
+SELECT * FROM table0 JOIN table2 USING id JOIN table1 USING id2 ORDER BY ALL;
+SELECT * FROM table0 AS t0 JOIN table2 USING val JOIN table1 USING val ORDER BY ALL;

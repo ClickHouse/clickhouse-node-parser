@@ -1,0 +1,1 @@
+SELECT dictGetString(concat({CLICKHOUSE_DATABASE: String}, '.restricted_dict'), 'value', toUInt64(1));

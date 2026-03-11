@@ -1,0 +1,18 @@
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, World%';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, World %';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, World 1%';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, World 2%';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, Worle%';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, Wor%';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello%';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello %';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello,%';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello;%';
+SELECT s FROM index_for_like WHERE s LIKE 'H%';
+SELECT s FROM index_for_like WHERE s LIKE 'Good%';
+SELECT s FROM index_for_like WHERE s LIKE '%';
+SELECT s FROM index_for_like WHERE s LIKE '%Hello%';
+SELECT s FROM index_for_like WHERE s LIKE '%Hello';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, World% %';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, Worl_%';
+SELECT s FROM index_for_like WHERE s LIKE 'Hello, Worl\\_%';

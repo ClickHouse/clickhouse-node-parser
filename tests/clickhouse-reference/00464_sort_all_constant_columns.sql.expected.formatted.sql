@@ -1,0 +1,18 @@
+SELECT *
+FROM (
+        SELECT
+            1 AS x,
+            2 AS y
+    )
+ORDER BY x ASC;
+
+SELECT *
+FROM (
+        SELECT x
+        FROM (
+                SELECT
+                    2 AS x,
+                    arrayJoin([1,2,3])
+            )
+    )
+ORDER BY x ASC;

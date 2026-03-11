@@ -1,0 +1,23 @@
+SELECT MAX(aggr)
+FROM
+(
+	SELECT MAX(-1) AS aggr
+	FROM system.one
+	WHERE NOT 1
+	UNION ALL
+	SELECT MAX(-1) AS aggr
+	FROM system.one
+	WHERE 1
+
+);
+SELECT MaX(aggr)
+FROM
+(
+    SELECT mAX(-1) AS aggr
+    FROM system.one
+    WHERE NOT 1
+    UNION ALL
+    SELECT max(-1) AS aggr
+    FROM system.one
+    WHERE not 1
+);

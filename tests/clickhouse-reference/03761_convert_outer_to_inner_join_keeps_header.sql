@@ -1,0 +1,1 @@
+SELECT 1 FROM t0 l JOIN t0 m ON TRUE ANY RIGHT JOIN t0 r ON (l.c0 + l.c1) = r.c1 WHERE 1 IS NULL;

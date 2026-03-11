@@ -1,0 +1,204 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toDate",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2017-01-01"
+                }
+              ]
+            },
+            "alias": "base",
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMonth",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        },
+        "alias": "d"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        },
+        "alias": "t"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toQuarter",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            }
+          ]
+        },
+        "alias": "qd"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toQuarter",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ]
+        },
+        "alias": "qt"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toStartOfQuarter",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            }
+          ]
+        },
+        "alias": "sqd"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toStartOfQuarter",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ]
+        },
+        "alias": "sqt"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "toRelativeQuarterNum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toRelativeQuarterNum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "base"
+                ]
+              }
+            ]
+          }
+        },
+        "alias": "qdiff_d"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "toRelativeQuarterNum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toRelativeQuarterNum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "base"
+                ]
+              }
+            ]
+          }
+        },
+        "alias": "qdiff_t"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "24"
+      }
+    }
+  }
+]

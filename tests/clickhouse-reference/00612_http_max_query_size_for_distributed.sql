@@ -1,0 +1,1 @@
+SELECT key FROM dist_00612;

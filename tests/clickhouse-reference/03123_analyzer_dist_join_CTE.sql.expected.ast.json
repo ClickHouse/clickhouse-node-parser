@@ -1,0 +1,172 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "subquery",
+            "name": "b",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toInt64",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "a"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "subquery",
+            "name": "c",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toInt64",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "a"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "left": {
+            "left": {
+              "kind": "tableRef",
+              "table": "dist_t0",
+              "alias": "a"
+            },
+            "kind": "join",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "tableRef",
+              "table": "b",
+              "alias": "b"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b",
+                    "a"
+                  ]
+                }
+              }
+            }
+          },
+          "kind": "join",
+          "joinType": "LEFT",
+          "right": {
+            "kind": "tableRef",
+            "table": "c",
+            "alias": "c"
+          },
+          "constraint": {
+            "kind": "on",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a",
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "c",
+                  "a"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

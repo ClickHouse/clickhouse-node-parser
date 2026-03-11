@@ -1,0 +1,12 @@
+select * from xp where i in [0, 1];
+select * from xp where i global in [0, 1];
+select * from xp_d where i in [0, 1];
+select * from xp_d where i global in [0, 1];
+select * from xp where i in (select * from numbers(2));
+select * from xp where i global in (select * from numbers(2));
+select * from xp_d where i in (select * from numbers(2));
+select * from xp_d where i global in (select * from numbers(2));
+select * from xp where i in (null);
+select * from xp where i global in (null);
+select * from xp_d where i in (null);
+select * from xp_d where i global in (null);

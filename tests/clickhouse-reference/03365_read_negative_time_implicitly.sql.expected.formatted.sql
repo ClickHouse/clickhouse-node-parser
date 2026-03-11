@@ -1,0 +1,2 @@
+SELECT c0
+FROM tx;

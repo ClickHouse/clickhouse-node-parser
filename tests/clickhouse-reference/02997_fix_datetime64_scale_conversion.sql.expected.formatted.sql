@@ -1,0 +1,19 @@
+SELECT *
+FROM test_0
+ORDER BY a ASC;
+
+SELECT *
+FROM test_2
+ORDER BY a ASC;
+
+SELECT *
+FROM test_3
+ORDER BY a ASC;
+
+SELECT *
+FROM test_6
+ORDER BY a ASC;
+
+SELECT *
+FROM test_9
+ORDER BY a ASC;

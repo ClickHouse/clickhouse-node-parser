@@ -1,0 +1,124 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "visits"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayFilter",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "t"
+                ],
+                "body": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "arrayMap",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x"
+                    ],
+                    "body": {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "x"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "42"
+                      }
+                    ],
+                    "source": "[42]"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "i"
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "tuple",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "i"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        ],
+        "source": "(str, i.1)"
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "x"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      ],
+      "parenthesized": true
+    }
+  }
+]

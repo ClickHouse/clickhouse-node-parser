@@ -1,0 +1,3 @@
+SELECT *, _version FROM 02577_keepermap_delete_update ORDER BY key;
+SELECT '-----------';
+SELECT count() FROM 02577_keepermap_delete_update;

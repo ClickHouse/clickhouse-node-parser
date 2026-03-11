@@ -1,0 +1,34 @@
+SELECT x
+FROM
+(
+    SELECT
+        x,
+        `1`
+    FROM
+    (
+        SELECT x, 1 FROM test_00744
+    )
+    ALL INNER JOIN
+    (
+        SELECT
+            count(),
+            1
+        FROM test_00744
+    ) jss2 USING (`1`)
+    LIMIT 10
+);
+SELECT
+    x,
+    `1`
+FROM
+(
+    SELECT x, 1 FROM test_00744
+)
+ALL INNER JOIN
+(
+    SELECT
+        count(),
+        1
+    FROM test_00744
+) js2 USING (`1`)
+LIMIT 10;

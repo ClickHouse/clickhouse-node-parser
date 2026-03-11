@@ -1,0 +1,83 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "t_union_remote"
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "remote",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "127.0.0.1"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t_union_remote"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  }
+]

@@ -1,0 +1,9 @@
+-- Tags: no-fasttest
+
+SELECT arraySort(h3kRing(581276613233082367, toUInt16(1)));
+SELECT h3kRing(581276613233082367, toUInt16(0));
+SELECT h3kRing(581276613233082367, -1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+SELECT h3kRing(581276613233082367, toUInt16(-1)); -- { serverError PARAMETER_OUT_OF_BOUND }
+SELECT arraySort(h3kRing(581276613233082367, 1));
+SELECT h3kRing(581276613233082367, 0);
+SELECT arraySort(h3kRing(h3_index, k)) FROM h3_indexes ORDER BY h3_index;

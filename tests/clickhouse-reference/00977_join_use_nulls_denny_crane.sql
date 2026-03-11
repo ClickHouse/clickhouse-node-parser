@@ -1,0 +1,12 @@
+select t.*, s.a, s.b, s.c from t left join s on (s.a = t.a and s.b = t.b);
+select t.*, s.a, s.b, s.c from t right join s on (s.a = t.a and s.b = t.b);
+select t.*, s.a, s.b, s.c from t left join s on (s.a = t.a and s.b = t.b) SETTINGS join_use_nulls = 1;
+select t.*, s.a, s.b, s.c from t right join s on (s.a = t.a and s.b = t.b) SETTINGS join_use_nulls = 1;
+select * from t left join s on (s.a = t.a and s.b = t.b);
+select * from t right join s on (s.a = t.a and s.b = t.b);
+select t.*, s.* from t left join s on (s.a = t.a and s.b = t.b) SETTINGS join_use_nulls = 1;
+select t.*, s.* from t right join s on (s.a = t.a and s.b = t.b) SETTINGS join_use_nulls = 1;
+select t.*, s.* from t left join s on (s.a = t.a and s.b = t.b);
+select t.*, s.* from t right join s on (s.a = t.a and s.b = t.b);
+select * from t left join s on (s.a = t.a and s.b = t.b) SETTINGS join_use_nulls = 1;
+select * from t right join s on (s.a = t.a and s.b = t.b) SETTINGS join_use_nulls = 1;

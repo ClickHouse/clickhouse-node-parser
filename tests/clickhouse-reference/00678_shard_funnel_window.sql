@@ -1,0 +1,1 @@
+SELECT level, COUNT() FROM (SELECT uid, windowFunnel(3600)(toUInt32(its), action_code != '', action_code = '2') AS level FROM remote('127.0.0.{2,3}', currentDatabase(), remote_test) GROUP BY uid) GROUP BY level;

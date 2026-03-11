@@ -1,0 +1,15 @@
+select 'no bf: metadata', rg.num_rows, col.name, col.bloom_filter_bytes from file(bf_03263.parquet, ParquetMetadata) array join row_groups as rg array join rg.columns as col order by rg.file_offset, col.name;
+select 'no bf: UInt64 hit', count(), sum(n = 12300 as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'no bf: UInt64 miss', count(), sum(n = 12345 as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'bf: metadata', rg.num_rows, col.name, col.bloom_filter_bytes from file(bf_03263.parquet, ParquetMetadata) array join row_groups as rg array join rg.columns as col order by rg.file_offset, col.name;
+select 'bf: UInt64 hit', count(), sum(n = 12300 as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'bf: UInt64 miss', count(), sum(n = 12345 as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'bf: String hit', count(), sum(s = '1230' as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'bf: String miss', count(), sum(s = '1234' as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'bf: UInt256 hit', count(), sum(l = 7890000000000000000000000000000000000000000::UInt256 as cond) from file(bf_03263.parquet, Parquet, 'l UInt256') where indexHint(cond);
+select 'bf: UInt256 miss', count(), sum(l = 7890000000000000000000000000000000000000001::UInt256 as cond) from file(bf_03263.parquet, Parquet, 'l UInt256') where indexHint(cond);
+select 'bf: Decimal128(4) hit', count(), sum(d = 108147.456::Decimal128(4) as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'bf: Decimal128(4) miss', count(), sum(d = 108147.4567::Decimal128(4) as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'bf: LowCardinality(String) hit', count(), sum(lc = 'lc4' as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'bf: LowCardinality(String) miss', count(), sum(lc = 'lc1' as cond) from file(bf_03263.parquet) where indexHint(cond);
+select 'more bits per value: metadata', rg.num_rows, col.name, col.bloom_filter_bytes from file(bf_03263.parquet, ParquetMetadata) array join row_groups as rg array join rg.columns as col order by rg.file_offset, col.name;

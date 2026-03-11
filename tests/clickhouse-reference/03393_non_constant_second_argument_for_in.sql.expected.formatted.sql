@@ -1,0 +1,258 @@
+SELECT number
+FROM numbers(10)
+WHERE has([number % 3, number % 5], number % 2)
+ORDER BY number ASC;
+
+SELECT '-- IN --';
+
+SELECT number
+FROM numbers(10)
+WHERE number % 2 IN ([number % 3, number % 5])
+ORDER BY number ASC
+SETTINGS allow_experimental_analyzer = 1;
+
+SELECT number
+FROM numbers(10)
+WHERE number % 2 IN ([number % 3, number % 5])
+ORDER BY number ASC
+SETTINGS allow_experimental_analyzer = 0;
+
+SELECT (1, 2) IN ([number % 3, number % 5])
+FROM numbers(2);
+
+SELECT (1, 2) IN (
+        SELECT [0, 0]
+        UNION ALL
+        SELECT [1, 1]
+    );
+
+SELECT (1, 2) IN ([(number % 3, number % 5)])
+FROM numbers(2);
+
+SELECT
+    (1, 2) IN (
+        SELECT (0, 0)
+    ),
+    (1, 2) IN (
+        SELECT (1, 1)
+    );
+
+SELECT (1, 1) IN ([(number % 3, number % 5)])
+FROM numbers(2);
+
+SELECT
+    (1, 1) IN (
+        SELECT (0, 0)
+    ),
+    (1, 1) IN (
+        SELECT (1, 1)
+    );
+
+SELECT (1, null) IN ([(number % 3, number % 5)])
+FROM numbers(2);
+
+SELECT
+    (1, null) IN (
+        SELECT (0, 0::Nullable(Int))
+    ),
+    (1, null) IN (
+        SELECT (1, 1::Nullable(Int))
+    );
+
+SELECT (1, null) IN ([(number % 3, number % 5), (1, null)])
+FROM numbers(2);
+
+SELECT
+    (1, null) IN (
+        SELECT (0, 0::Nullable(Int))
+        UNION ALL
+        SELECT (1, null)
+    ),
+    (1, null) IN (
+        SELECT (1, 1::Nullable(Int))
+        UNION ALL
+        SELECT (1, null)
+    );
+
+SELECT *
+FROM numbers(1000)
+WHERE number IN (123, 10 - number, 456);
+
+SELECT
+    NULL IN (1, number),
+    NULL IN (1, number, NULL),
+    NULL IN (1, 2),
+    NULL IN (1, NULL)
+FROM numbers(1)
+SETTINGS transform_null_in = 1;
+
+SELECT
+    NULL IN (1, number),
+    NULL IN (1, number, NULL),
+    NULL IN (1, 2),
+    NULL IN (1, NULL)
+FROM numbers(1)
+SETTINGS transform_null_in = 0;
+
+SELECT toNullable(1) IN ([1, number])
+FROM numbers(2);
+
+SELECT toNullable(1) IN (1, number)
+FROM numbers(2);
+
+SELECT 'a' IN (5, number, 'a')
+FROM numbers(2);
+
+SELECT NULL IN (258, CAST('string' AS Nullable(String)), CAST(number AS Nullable(UInt64)))
+FROM numbers(1)
+SETTINGS transform_null_in = 1;
+
+SELECT NULL IN (258, CAST('string' AS Nullable(String)), CAST(number AS Nullable(UInt64)))
+FROM numbers(1)
+SETTINGS transform_null_in = 0;
+
+SELECT NULL IN (258, CAST('string' AS Nullable(String)), CAST(number AS Nullable(UInt64)), NULL)
+FROM numbers(1)
+SETTINGS transform_null_in = 1;
+
+SELECT NULL IN (258, CAST('string' AS Nullable(String)), CAST(number AS Nullable(UInt64)), NULL)
+FROM numbers(1)
+SETTINGS transform_null_in = 0;
+
+SELECT NULL IN ([1, number])
+FROM numbers(1)
+SETTINGS transform_null_in = 1;
+
+SELECT NULL IN ([1, number])
+FROM numbers(1)
+SETTINGS transform_null_in = 0;
+
+SELECT 1 IN ([1, toNullable(number)])
+FROM numbers(2)
+SETTINGS transform_null_in = 1;
+
+SELECT 1 IN ([1, toNullable(number)])
+FROM numbers(2)
+SETTINGS transform_null_in = 0;
+
+SELECT
+    0 AS x,
+    [if(number > 1, NULL, number)] AS arr,
+    tuple(arr[1]) AS t,
+    x IN (t),
+    x IN (arr)
+FROM numbers(3)
+SETTINGS transform_null_in = 0;
+
+SELECT
+    arrayJoin([0, 1, NULL]) AS x,
+    [if(number > 1, NULL, number)] AS arr,
+    tuple(arr[1]) AS t,
+    x IN (t),
+    x IN (arr)
+FROM numbers(3)
+SETTINGS transform_null_in = 0;
+
+SELECT
+    NULL AS x,
+    [if(number > 1, NULL, number)] AS arr,
+    tuple(arr[1]) AS t,
+    x IN (t),
+    x IN (arr)
+FROM numbers(3)
+SETTINGS transform_null_in = 0;
+
+SELECT 1 IN (if(1 > 0, 1, 2));
+
+SELECT 1 IN (if(1 > 0, 2, 1));
+
+SELECT 2 IN (if(0 > 1, 1, 2));
+
+SELECT
+    number,
+    number IN (if(number > 2, 5, 1))
+FROM numbers(6);
+
+SELECT
+    number,
+    number IN (if(number % 2 = 0, number, number + 10))
+FROM numbers(5);
+
+SELECT 1 NOT IN (if(1 > 0, 1, 2));
+
+SELECT 1 NOT IN (if(1 > 0, 2, 1));
+
+SELECT
+    number,
+    number NOT IN (if(number > 2, 5, 1))
+FROM numbers(6);
+
+SELECT 1 IN (if(1 > 0, if(2 > 1, 1, 3), 2));
+
+SELECT 2 IN (if(1 > 0, if(2 > 1, 1, 3), 2));
+
+SELECT 1 IN (multiIf(1 > 2, 10, 2 > 3, 20, 1));
+
+SELECT 10 IN (multiIf(1 > 0, 10, 2 > 3, 20, 1));
+
+SELECT 1 IN (coalesce(NULL, 1));
+
+SELECT 1 IN (coalesce(NULL, 2));
+
+SELECT 1 IN (coalesce(1, 2));
+
+SELECT 1 IN (nullIf(1, 2));
+
+SELECT 1 IN (nullIf(2, 2));
+
+SELECT 5 IN (2 + 3);
+
+SELECT 5 IN (2 * 3);
+
+SELECT 'hello' IN (if(1 > 0, 'hello', 'world'));
+
+SELECT 'world' IN (if(1 > 0, 'hello', 'world'));
+
+SELECT *
+FROM (
+        SELECT
+            number,
+            number IN (if(number > 2, 5, number)) AS result
+        FROM numbers(6)
+    )
+WHERE result = 1;
+
+SELECT
+    number,
+    number IN (if(number > 2, 5, 1)),
+    number IN (if(number < 2, 0, 10))
+FROM numbers(6);
+
+SELECT 1 GLOBAL IN (if(1 > 0, 1, 2));
+
+SELECT 1 GLOBAL NOT IN (if(1 > 0, 1, 2));
+
+SELECT *
+FROM (
+        SELECT *
+        FROM VALUES('cab_type String, dropoff UInt16', ('yellow', 138), ('green', 132))
+    ) AS t
+WHERE dropoff IN (if(cab_type = 'yellow', 138, 132));
+
+SELECT
+    1 IN (nullIf(1, 1)) AS r,
+    toTypeName(1 IN (nullIf(1, 1))) AS t;
+
+SELECT
+    1 NOT IN (nullIf(1, 1)) AS r,
+    toTypeName(1 NOT IN (nullIf(1, 1))) AS t;
+
+SELECT
+    number,
+    number IN (nullIf(number, 1))
+FROM numbers(3);
+
+SELECT
+    number,
+    number NOT IN (nullIf(number, 1))
+FROM numbers(3);

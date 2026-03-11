@@ -1,0 +1,204 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a\" : {\"b\" : 42}}"
+          },
+          "type": "JSON",
+          "operator": true
+        },
+        "alias": "json1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a.b\" : 42}"
+          },
+          "type": "JSON",
+          "operator": true
+        },
+        "alias": "json2"
+      },
+      {
+        "kind": "functionCall",
+        "name": "JSONAllPaths",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "JSONAllPaths",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json2"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a.b\" : 42, \"a\" : {\"b\" : \"Hello World!\"}}"
+          },
+          "type": "JSON",
+          "operator": true
+        },
+        "alias": "json"
+      },
+      {
+        "kind": "functionCall",
+        "name": "JSONAllPaths",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a.b\" : 42, \"a\" : {\"b\" : \"Hello World!\"}}"
+          },
+          "type": "JSON",
+          "operator": true
+        },
+        "alias": "json"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json",
+          "a%2Eb"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json",
+          "a",
+          "b"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a.b\" : 42, \"a\" : {\"b\" : \"Hello World!\"}}"
+          },
+          "type": "JSON",
+          "operator": true
+        },
+        "alias": "json"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json",
+          "a%2Eb"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json",
+          "a.b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json",
+          "a",
+          "b"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a.b\" : 42, \"a\" : {\"b\" : \"Hello World!\"}}"
+          },
+          "type": "JSON(`a%2Eb` UInt8)",
+          "operator": true
+        },
+        "alias": "json"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json",
+          "a%2Eb"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json",
+              "a%2Eb"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

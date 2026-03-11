@@ -1,0 +1,85 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a\" : [{\"b\" : 42}]}"
+          },
+          "type": "JSON(a Array(JSON))",
+          "operator": true
+        },
+        "alias": "json"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json",
+          "a",
+          "b"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "json"
+            ]
+          },
+          "type": "JSON",
+          "operator": true
+        },
+        "alias": "json2"
+      },
+      {
+        "kind": "functionCall",
+        "name": "dynamicType",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json2",
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json2",
+          "a[]",
+          "b"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"transaction\": {\"date\": \"2025-03-13 22:20:29.751999\"}}"
+          },
+          "type": "JSON",
+          "operator": true
+        },
+        "type": "JSON(transaction Nullable(JSON(date DateTime64(6, 'UTC'))))",
+        "operator": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,1 @@
+SELECT throwIf(1);

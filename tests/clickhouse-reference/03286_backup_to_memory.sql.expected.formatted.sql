@@ -1,0 +1,3 @@
+SELECT *
+FROM t1
+ORDER BY x ASC;

@@ -1,0 +1,213 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "result"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "lon"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "lat"
+                  ]
+                }
+              ],
+              "source": "(lon, lat)"
+            },
+            "alias": "input_geo"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "h3ToGeo",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "geoToH3",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "lon"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "lat"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "res"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "output_geo"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "<",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "abs",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "-",
+                            "left": {
+                              "kind": "functionCall",
+                              "name": "tupleElement",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "input_geo"
+                                  ]
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                }
+                              ]
+                            },
+                            "right": {
+                              "kind": "functionCall",
+                              "name": "tupleElement",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "output_geo"
+                                  ]
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.001"
+                      }
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "<",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "abs",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "-",
+                            "left": {
+                              "kind": "functionCall",
+                              "name": "tupleElement",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "input_geo"
+                                  ]
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "2"
+                                }
+                              ]
+                            },
+                            "right": {
+                              "kind": "functionCall",
+                              "name": "tupleElement",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "output_geo"
+                                  ]
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "2"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.001"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "ok"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "fail"
+                }
+              ]
+            },
+            "alias": "result"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "h3_geo"
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "x"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "y"
+            }
+          ]
+        },
+        "alias": "a"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "y"
+            }
+          ]
+        },
+        "alias": "b"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "y"
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "b",
+          "y"
+        ]
+      }
+    }
+  }
+]

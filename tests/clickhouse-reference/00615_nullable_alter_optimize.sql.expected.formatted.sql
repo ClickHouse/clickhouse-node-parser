@@ -1,0 +1,3 @@
+SELECT *
+FROM test_00615
+ORDER BY data ASC;

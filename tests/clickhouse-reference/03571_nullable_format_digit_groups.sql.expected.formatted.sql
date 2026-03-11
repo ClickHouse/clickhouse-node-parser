@@ -1,0 +1,2 @@
+SELECT toNullable(3646616306303)
+FORMAT PrettyCompact;

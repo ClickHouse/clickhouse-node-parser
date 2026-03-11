@@ -1,0 +1,150 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "merge_reason"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "table"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "part_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "partition_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "partition"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "merged_from"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "part_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "event_type"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "MergePartsStart"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "MergeParts"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "MutatePartStart"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "MutatePart"
+            }
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_time_microseconds"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "Vertical"
+  }
+]

@@ -1,0 +1,15 @@
+SELECT * FROM nullable_key ORDER BY k, v;
+SELECT * FROM nullable_key WHERE k IS NULL;
+SELECT * FROM nullable_key WHERE k IS NOT NULL;
+SELECT * FROM nullable_key WHERE k > 10;
+SELECT * FROM nullable_key WHERE k < 10;
+SELECT * FROM nullable_key WHERE k IN (10, 20) SETTINGS transform_null_in = 1;
+SELECT * FROM nullable_key WHERE k IN (3, NULL) SETTINGS transform_null_in = 1;
+SELECT * FROM nullable_key_without_final_mark WHERE s IS NULL;
+SELECT * FROM nullable_key_without_final_mark WHERE s IS NOT NULL;
+SELECT * FROM nullable_minmax_index ORDER BY k, v;
+SELECT * FROM nullable_minmax_index WHERE v IS NULL;
+SELECT * FROM nullable_minmax_index WHERE v IS NOT NULL;
+SELECT * FROM nullable_minmax_index WHERE v > 2;
+SELECT * FROM nullable_minmax_index WHERE v <= 2;
+SELECT * FROM xxxx_null WHERE ts > '2021-10-11 00:00:00';

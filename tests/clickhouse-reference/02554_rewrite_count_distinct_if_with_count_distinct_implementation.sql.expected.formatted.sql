@@ -1,0 +1,2 @@
+SELECT countDistinctIf(number % 10, number % 5 = 2)
+FROM numbers(1000);

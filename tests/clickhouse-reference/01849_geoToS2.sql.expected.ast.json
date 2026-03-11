@@ -1,0 +1,399 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "s2ToGeo",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s2_index"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "geoToS2",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "longitude"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "latitude"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "s2_indexes"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s2_index"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "first"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "second"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "result"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "s2ToGeo",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "geoToS2",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "longitude"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "latitude"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "output_geo"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "roundBankers",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "longitude"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "roundBankers",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "latitude"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "first"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "roundBankers",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "tupleElement",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "output_geo"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "roundBankers",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "tupleElement",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "output_geo"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "second"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "first"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "second"
+                    ]
+                  }
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "ok"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "fail"
+                }
+              ]
+            },
+            "alias": "result"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "s2_indexes"
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "s2_index"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "s2ToGeo",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Int64",
+                "value": "-1"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "s2ToGeo",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "nan"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "geoToS2",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toFloat64",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toFloat64",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "geoToS2",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "nan"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "nan"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "geoToS2",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "-inf"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1.1754943508222875e-38"
+          }
+        ]
+      }
+    ]
+  }
+]

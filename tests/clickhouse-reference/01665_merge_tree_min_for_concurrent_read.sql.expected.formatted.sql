@@ -1,0 +1,11 @@
+SELECT *
+FROM data_01655
+SETTINGS
+    merge_tree_min_rows_for_concurrent_read = 0,
+    merge_tree_min_bytes_for_concurrent_read = 0;
+
+SELECT *
+FROM data_01655
+SETTINGS
+    merge_tree_min_rows_for_concurrent_read = 18446744073709551615,
+    merge_tree_min_bytes_for_concurrent_read = 18446744073709551615;

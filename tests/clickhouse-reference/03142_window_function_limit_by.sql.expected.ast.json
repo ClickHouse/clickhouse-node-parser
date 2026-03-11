@@ -1,0 +1,170 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "in"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "out"
+            ]
+          }
+        },
+        "alias": "ratio"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": [
+            {
+              "kind": "asterisk"
+            }
+          ]
+        },
+        "alias": "count_rows_w"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "error_win_func"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ]
+    },
+    "windows": [
+      {
+        "name": "w",
+        "body": "ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        },
+        "alias": "m"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": [],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "m"
+                ]
+              }
+            ]
+          }
+        },
+        "alias": "cnt"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "st"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "x"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "y"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "m"
+          ]
+        }
+      ]
+    }
+  }
+]

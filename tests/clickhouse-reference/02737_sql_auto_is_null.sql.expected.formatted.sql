@@ -1,0 +1,1 @@
+SELECT getSetting('SQL_AUTO_IS_NULL');

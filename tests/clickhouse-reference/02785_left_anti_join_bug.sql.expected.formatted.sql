@@ -1,0 +1,12 @@
+SELECT *
+FROM
+    (
+        SELECT
+            CAST('104857.5', 'Float32'),
+            corr(NULL, id, id) AS corr_value
+        FROM test_table__fuzz_3
+        GROUP BY value
+    ) AS subquery
+LEFT JOIN test_table
+    ON subquery.corr_value = test_table.id
+FORMAT Null;

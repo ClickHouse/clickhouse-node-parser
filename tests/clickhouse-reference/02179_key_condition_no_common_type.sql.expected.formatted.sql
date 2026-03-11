@@ -1,0 +1,3 @@
+SELECT *
+FROM t
+WHERE c < 1.2;

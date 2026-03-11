@@ -1,0 +1,10 @@
+SELECT *
+FROM dist_01071;
+
+SELECT *
+FROM dist_01071
+WHERE key = 0;
+
+SELECT *
+FROM dist2_01071
+WHERE key = 1;

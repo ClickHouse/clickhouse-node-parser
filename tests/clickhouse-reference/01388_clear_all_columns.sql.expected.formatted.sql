@@ -1,0 +1,3 @@
+SELECT *
+FROM test
+ORDER BY y ASC;

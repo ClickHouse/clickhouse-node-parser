@@ -1,0 +1,13 @@
+SELECT '-- Without index';
+SELECT name FROM 03443_data WHERE match(name, 'J|XYZ') SETTINGS use_skip_indexes = 0;
+SELECT name FROM 03443_data WHERE match(name, 'XYZ|J') SETTINGS use_skip_indexes = 0;
+SELECT name FROM 03443_data WHERE match(name, '[J]|XYZ') SETTINGS use_skip_indexes = 0;
+SELECT name FROM 03443_data WHERE match(name, 'XYZ|[J]') SETTINGS use_skip_indexes = 0;
+SELECT name FROM 03443_data WHERE match(name, 'J|XYZ') SETTINGS use_skip_indexes = 1;
+SELECT name FROM 03443_data WHERE match(name, 'XYZ|J') SETTINGS use_skip_indexes = 1;
+SELECT name FROM 03443_data WHERE match(name, '[J]|XYZ') SETTINGS use_skip_indexes = 1;
+SELECT name FROM 03443_data WHERE match(name, 'XYZ|[J]') SETTINGS use_skip_indexes = 1;
+SELECT trim(leading ' ' from explain) FROM (EXPLAIN indexes=1 SELECT name FROM 03443_data WHERE match(name, 'J|XYZ')) WHERE explain LIKE '%Granules: %' SETTINGS use_skip_indexes = 1;
+SELECT trim(leading ' ' from explain) FROM (EXPLAIN indexes=1 SELECT name FROM 03443_data WHERE match(name, 'XYZ|J')) WHERE explain LIKE '%Granules: %' SETTINGS use_skip_indexes = 1;
+SELECT trim(leading ' ' from explain) FROM (EXPLAIN indexes=1 SELECT name FROM 03443_data WHERE match(name, '[J]|XYZ')) WHERE explain LIKE '%Granules: %' SETTINGS use_skip_indexes = 1;
+SELECT trim(leading ' ' from explain) FROM (EXPLAIN indexes=1 SELECT name FROM 03443_data WHERE match(name, 'XYZ|[J]')) WHERE explain LIKE '%Granules: %' SETTINGS use_skip_indexes = 1;

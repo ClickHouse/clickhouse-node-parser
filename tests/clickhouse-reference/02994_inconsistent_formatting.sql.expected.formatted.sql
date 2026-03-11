@@ -1,0 +1,7 @@
+SELECT *
+FROM table
+ORDER BY x ASC;
+
+SELECT *
+FROM `FORMAT`
+FORMAT Values;

@@ -1,0 +1,149 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "cnt"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "data",
+              "key"
+            ]
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "key"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "left",
+                "alias": "s"
+              }
+            },
+            "alias": "data"
+          },
+          "kind": "join",
+          "joinType": "LEFT",
+          "right": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "key"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "right"
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "key"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "promo"
+          },
+          "constraint": {
+            "kind": "on",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "promo",
+                  "key"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "data",
+                  "key"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "having": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  }
+]

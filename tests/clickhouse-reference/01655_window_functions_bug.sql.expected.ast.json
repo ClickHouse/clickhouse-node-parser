@@ -1,0 +1,164 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "round",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "functionCall",
+                "name": "countIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "rating"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  }
+                ],
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "countIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "<",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "rating"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  }
+                ],
+                "parenthesized": true
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            }
+          ]
+        },
+        "alias": "nps"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "dense_rank",
+          "args": [],
+          "window": {
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nps"
+                  ]
+                },
+                "direction": "DESC"
+              }
+            ]
+          }
+        },
+        "alias": "rank"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "rating"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "alias": "rest_id"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "rest_id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rank"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

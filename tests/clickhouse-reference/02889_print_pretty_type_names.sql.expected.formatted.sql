@@ -1,0 +1,4 @@
+SELECT toTypeName(a)
+FROM test
+LIMIT 1
+FORMAT TSVRaw;

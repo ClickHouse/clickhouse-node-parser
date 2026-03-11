@@ -1,0 +1,259 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "i"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            "alias": "k"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            "alias": "v"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "runningDifference",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "v"
+                  ]
+                }
+              ]
+            },
+            "alias": "d"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "runningDifference",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "cityHash64",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "tupleElement",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "t"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "i"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "NULL",
+                              "value": "NULL"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "65535"
+                            }
+                          ],
+                          "source": "(NULL, 65535)"
+                        },
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "a"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "7"
+                            }
+                          ],
+                          "source": "('a', 7)"
+                        },
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "a"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "3"
+                            }
+                          ],
+                          "source": "('a', 3)"
+                        },
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "b"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "11"
+                            }
+                          ],
+                          "source": "('b', 11)"
+                        },
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "b"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "2"
+                            }
+                          ],
+                          "source": "('b', 2)"
+                        },
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": ""
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "Int64",
+                              "value": "-9223372036854775808"
+                            }
+                          ],
+                          "source": "('', -9223372036854775808)"
+                        }
+                      ],
+                      "source": "[(NULL, 65535), ('a', 7), ('a', 3), ('b', 11), ('b', 2), ('', -9223372036854775808)]"
+                    }
+                  ]
+                },
+                "alias": "t"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "i"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "9223372036854775807"
+      }
+    }
+  }
+]

@@ -1,0 +1,2646 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "total_count"
+              ]
+            }
+          ]
+        },
+        "alias": "total"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "COUNT",
+                  "args": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ]
+                },
+                "alias": "total_count"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  ]
+                },
+                "alias": "facebookHits"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "transactions"
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "COUNT",
+                  "args": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ]
+                },
+                "alias": "total_count"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "SUM",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "if",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "=",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "domain"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "facebook.com"
+                          }
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "alias": "facebookHits"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "clicks"
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "domain"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "domain"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "format": "JSONEachRow"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "total_count"
+              ]
+            }
+          ]
+        },
+        "alias": "total"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "COUNT",
+                  "args": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ]
+                },
+                "alias": "total_count"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "SUM",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "if",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "=",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "domain"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "facebook.com"
+                          }
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "alias": "facebookHits"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "clicks"
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "COUNT",
+                  "args": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ]
+                },
+                "alias": "total_count"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  ]
+                },
+                "alias": "facebookHits"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "transactions"
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "domain"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "domain"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "format": "JSONEachRow"
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "total_count"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "total"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "union",
+                "queries": [
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "COUNT",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        },
+                        "alias": "total_count"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "0"
+                            }
+                          ]
+                        },
+                        "alias": "facebookHits"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "transactions"
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "domain"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "COUNT",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        },
+                        "alias": "total_count"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "SUM",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "if",
+                              "args": [
+                                {
+                                  "kind": "binaryExpr",
+                                  "op": "=",
+                                  "left": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "domain"
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "literal",
+                                    "type": "String",
+                                    "value": "facebook.com"
+                                  }
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "0"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "alias": "facebookHits"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "clicks"
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "domain"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "total_count"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "total"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "union",
+                "queries": [
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "COUNT",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        },
+                        "alias": "total_count"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "SUM",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "if",
+                              "args": [
+                                {
+                                  "kind": "binaryExpr",
+                                  "op": "=",
+                                  "left": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "domain"
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "literal",
+                                    "type": "String",
+                                    "value": "facebook.com"
+                                  }
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "0"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "alias": "facebookHits"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "clicks"
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "domain"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "COUNT",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        },
+                        "alias": "total_count"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "0"
+                            }
+                          ]
+                        },
+                        "alias": "facebookHits"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "transactions"
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "domain"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "total"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "total_count"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "total"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "facebookHits"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "facebook"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "union",
+                "queries": [
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "COUNT",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        },
+                        "alias": "total_count"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "0"
+                            }
+                          ]
+                        },
+                        "alias": "facebookHits"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "transactions"
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "domain"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "COUNT",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        },
+                        "alias": "total_count"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "SUM",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "if",
+                              "args": [
+                                {
+                                  "kind": "binaryExpr",
+                                  "op": "=",
+                                  "left": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "domain"
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "literal",
+                                    "type": "String",
+                                    "value": "facebook.com"
+                                  }
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "0"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "alias": "facebookHits"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "clicks"
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "domain"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "total_count"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "total"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "max",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "facebookHits"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "facebook"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "union",
+                "queries": [
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "COUNT",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        },
+                        "alias": "total_count"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "SUM",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "if",
+                              "args": [
+                                {
+                                  "kind": "binaryExpr",
+                                  "op": "=",
+                                  "left": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "domain"
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "literal",
+                                    "type": "String",
+                                    "value": "facebook.com"
+                                  }
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "0"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "alias": "facebookHits"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "clicks"
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "domain"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "COUNT",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        },
+                        "alias": "total_count"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "0"
+                            }
+                          ]
+                        },
+                        "alias": "facebookHits"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "transactions"
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "domain"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "domain"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "domain"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "total"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_count"
+                    ]
+                  }
+                ]
+              },
+              "alias": "total"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "domain"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "union",
+              "queries": [
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "toUInt64",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "transactions"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "SUM",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "if",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "=",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "domain"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "facebook.com"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "clicks"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        },
+        "alias": "js1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_count"
+                    ]
+                  }
+                ]
+              },
+              "alias": "total"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "domain"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "union",
+              "queries": [
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "SUM",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "if",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "=",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "domain"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "facebook.com"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "clicks"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "toUInt64",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "transactions"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "total",
+          "domain"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "total"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "domain"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "total"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_count"
+                    ]
+                  }
+                ]
+              },
+              "alias": "total"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "domain"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "union",
+              "queries": [
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "toUInt64",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "transactions"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "SUM",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "if",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "=",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "domain"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "facebook.com"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "clicks"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        },
+        "alias": "js1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_count"
+                    ]
+                  }
+                ]
+              },
+              "alias": "total"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "domain"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "union",
+              "queries": [
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "SUM",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "if",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "=",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "domain"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "facebook.com"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "clicks"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "toUInt64",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "transactions"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "total",
+          "domain"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "total"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "domain"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_count"
+                    ]
+                  }
+                ]
+              },
+              "alias": "total"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "domain"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "union",
+              "queries": [
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "toUInt64",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "transactions"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "SUM",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "if",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "=",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "domain"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "facebook.com"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "clicks"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        },
+        "alias": "js1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_count"
+                    ]
+                  }
+                ]
+              },
+              "alias": "total"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "domain"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "union",
+              "queries": [
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "SUM",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "if",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "=",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "domain"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "facebook.com"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "clicks"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "COUNT",
+                        "args": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ]
+                      },
+                      "alias": "total_count"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "toUInt64",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        ]
+                      },
+                      "alias": "facebookHits"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "domain"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "transactions"
+                  },
+                  "groupBy": {
+                    "kind": "expressions",
+                    "items": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "total",
+          "domain"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "total"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "domain"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

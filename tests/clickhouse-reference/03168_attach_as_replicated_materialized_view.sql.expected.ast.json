@@ -1,0 +1,78 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sumMerge",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "sumCountViews"
+              ]
+            }
+          ]
+        },
+        "alias": "sumCountViews"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "monthly_aggregated_data_mv"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "hourly_data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "engine"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "database"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "currentDatabase",
+        "args": []
+      }
+    }
+  }
+]

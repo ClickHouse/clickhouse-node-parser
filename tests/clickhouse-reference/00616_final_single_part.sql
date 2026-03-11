@@ -1,0 +1,3 @@
+SELECT * FROM test_00616 ORDER BY ver;
+SELECT * FROM replacing_00616 ORDER BY ver;
+SELECT * FROM replacing_00616 FINAL ORDER BY ver;

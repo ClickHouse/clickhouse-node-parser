@@ -1,0 +1,1 @@
+SELECT lowerUTF8('�') = lowerUTF8('�');

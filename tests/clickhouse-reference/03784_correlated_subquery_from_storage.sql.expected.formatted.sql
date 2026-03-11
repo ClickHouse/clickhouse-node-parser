@@ -1,0 +1,23 @@
+SELECT 1
+FROM (
+        SELECT 1
+    ) AS tx (c0)
+WHERE (
+        SELECT tx.c0
+    ) = 1;
+
+SELECT *
+FROM
+    t2
+LEFT JOIN t0
+    ON t2.c0 = t0.c0
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM t2
+WHERE EXISTS((
+        SELECT 1
+        FROM t0
+        WHERE t2.c0 = t0.c0
+    ))
+ORDER BY `ALL` ASC;

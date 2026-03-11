@@ -1,0 +1,188 @@
+SELECT *
+FROM pk
+WHERE x = 2
+    AND y = 11
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 1
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 44
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 44
+    AND z = 4935
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 44
+    AND z = 4578
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 44
+    AND z = 4934
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 44
+    AND z = 4936
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 44
+    AND z = 4577
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 44
+    AND z = 4579
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 55
+    AND z > 5786
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 55
+    AND z >= 5786
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 55
+    AND z > 1235
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 55
+    AND z >= 1235
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 55
+    AND z >= 1000
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 55
+    AND z >= 1000
+    AND x < 10000
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 55
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y >= 50
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y > 44
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x >= 3
+    AND y > 44
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x > 2
+    AND y > 44
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE x = 3
+    AND y = 55
+    AND z = 5786
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE z = 2791
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE z = 5786
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE z = 1235
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE z = 4578
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE y = 11
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE y = 22
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE y = 33
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE y = 44
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM pk
+WHERE y = 55
+ORDER BY `ALL` ASC;

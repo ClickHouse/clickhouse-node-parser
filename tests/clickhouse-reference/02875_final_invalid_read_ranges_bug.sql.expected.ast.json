@@ -1,0 +1,108 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tid"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "processed_at"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "created_at"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "amount"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t",
+      "final": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tid"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "amount"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t",
+      "final": true
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "processed_at"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2023-09-19 00:00:00"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "processed_at"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2023-09-20 01:00:00"
+          },
+          "parenthesized": true
+        }
+      ]
+    }
+  }
+]

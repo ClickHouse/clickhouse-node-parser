@@ -1,0 +1,2 @@
+SELECT * FROM nested1 ORDER BY x;
+SELECT * FROM nested2 ORDER BY x;

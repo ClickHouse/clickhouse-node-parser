@@ -1,0 +1,56 @@
+{
+  "name": "clickhouse-node-parser",
+  "version": "0.1.0",
+  "description": "A TypeScript parser for ClickHouse SQL",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "generate:parser": "peggy --cache --format commonjs --dts --output src/parser.js src/grammar.pegjs",
+    "build": "npm run generate:parser && tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepublishOnly": "npm run typecheck && npm run lint && npm run test && npm run build",
+    "release": "npm publish --access public",
+    "generate:expected-outputs": "npx tsx scripts/generate-expected-outputs.ts",
+    "parse": "node scripts/parse.js",
+    "format": "node scripts/format.js",
+    "explain": "node scripts/explain.js"
+  },
+  "keywords": [
+    "clickhouse",
+    "sql",
+    "parser",
+    "typescript"
+  ],
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/jest": "^29.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^29.0.0",
+    "peggy": "^5.1.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "^29.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.0.0"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
+}

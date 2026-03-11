@@ -1,0 +1,11 @@
+SELECT h3HexRing(581276613233082367, toUInt16(0));
+
+SELECT h3HexRing(579205132326352334, toUInt16(1)) AS hexRing;
+
+SELECT h3HexRing(581276613233082367, -1);
+
+SELECT h3HexRing(581276613233082367, toUInt16(-1));
+
+SELECT arraySort(h3HexRing(h3_index, k))
+FROM h3_indexes
+ORDER BY h3_index ASC;

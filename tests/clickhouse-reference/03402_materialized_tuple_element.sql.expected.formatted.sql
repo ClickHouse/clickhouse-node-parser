@@ -1,0 +1,4 @@
+SELECT
+    *,
+    dt
+FROM t;

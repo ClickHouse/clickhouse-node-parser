@@ -1,0 +1,2 @@
+SELECT * FROM mv ORDER BY a;
+SELECT * FROM mv_target ORDER BY a;

@@ -1,0 +1,18 @@
+SELECT
+    DomainID,
+    Domain
+FROM
+    (
+        SELECT 1 AS DomainID
+        FROM `system`.one
+    ) AS js1
+LEFT JOIN (
+        SELECT
+            1 AS DomainID,
+            'abc' AS Domain
+        UNION ALL
+        SELECT
+            2 AS DomainID,
+            'def' AS Domain
+    ) AS js2
+    USING (DomainID);

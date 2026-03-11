@@ -1,0 +1,3 @@
+SELECT * FROM original_mv ORDER BY x;
+SELECT * FROM dst ORDER BY x;
+SELECT * FROM new_mv ORDER BY x;

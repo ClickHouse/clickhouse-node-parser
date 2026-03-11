@@ -1,0 +1,38 @@
+SELECT NULL::Variant(String, UInt64);
+
+SELECT 42::UInt64::Variant(String, UInt64);
+
+SELECT 42::UInt32::Variant(String, UInt64);
+
+SELECT now()::Variant(String, UInt64);
+
+SELECT CAST(if(number % 2, NULL, number), 'Variant(String, UInt64)')
+FROM numbers(4);
+
+SELECT 'Hello'::LowCardinality(String)::Variant(LowCardinality(String), UInt64);
+
+SELECT 'Hello'::LowCardinality(Nullable(String))::Variant(LowCardinality(String), UInt64);
+
+SELECT 'NULL'::LowCardinality(Nullable(String))::Variant(LowCardinality(String), UInt64);
+
+SELECT CAST(CAST(if(number % 2, NULL, 'Hello'), 'LowCardinality(Nullable(String))'), 'Variant(LowCardinality(String), UInt64)')
+FROM numbers(4);
+
+SELECT NULL::Variant(String, UInt64)::UInt64;
+
+SELECT NULL::Variant(String, UInt64)::Nullable(UInt64);
+
+SELECT '42'::Variant(String, UInt64)::UInt64;
+
+SELECT 'str'::Variant(String, UInt64)::UInt64;
+
+SELECT CAST(multiIf(number % 3 == 0, NULL::Variant(String, UInt64), number % 3 == 1, 'Hello'::Variant(String, UInt64), number::Variant(String, UInt64)), 'Nullable(String)')
+FROM numbers(6);
+
+SELECT CAST(multiIf(number == 1, NULL::Variant(String, UInt64), number == 2, 'Hello'::Variant(String, UInt64), number::Variant(String, UInt64)), 'UInt64')
+FROM numbers(6);
+
+SELECT number::Variant(UInt64)::Variant(String, UInt64)::Variant(Array(String), String, UInt64)
+FROM numbers(2);
+
+SELECT 'str'::Variant(String, UInt64)::Variant(String, Array(UInt64));

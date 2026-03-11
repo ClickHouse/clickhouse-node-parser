@@ -1,0 +1,67 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "NewColumn"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test_a"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "OldColumn"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "NewColumn"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_b"
+          }
+        },
+        "alias": "s"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "OldColumn"
+        ]
+      }
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "NewColumn"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": ""
+      }
+    }
+  }
+]

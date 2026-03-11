@@ -1,0 +1,21 @@
+SELECT (*)
+EXCEPT
+SELECT 1;
+
+SELECT * + 1
+EXCEPT
+SELECT 1;
+
+SELECT *
+FROM (
+(((        SELECT 1
+        UNION ALL
+        SELECT 2)
+EXCEPT
+        SELECT 3)
+        UNION ALL
+        SELECT (*))
+EXCEPT
+        SELECT 4
+    )
+ORDER BY * ASC;

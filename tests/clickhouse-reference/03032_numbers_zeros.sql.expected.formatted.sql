@@ -1,0 +1,49 @@
+SELECT '------numbers_0-argument-----';
+
+SELECT number
+FROM numbers()
+LIMIT 10;
+
+SELECT number
+FROM `system`.numbers
+LIMIT 10;
+
+SELECT number
+FROM numbers(10);
+
+SELECT number
+FROM numbers(10, 10);
+
+SELECT number
+FROM numbers(10, 10, 2);
+
+SELECT number
+FROM numbers_mt()
+LIMIT 10;
+
+SELECT number
+FROM numbers_mt(10);
+
+SELECT number
+FROM numbers_mt(10, 10);
+
+SELECT number
+FROM numbers_mt(10, 10, 2);
+
+SELECT zero
+FROM zeros()
+LIMIT 10;
+
+SELECT zero
+FROM `system`.zeros
+LIMIT 10;
+
+SELECT zero
+FROM zeros(10);
+
+SELECT zero
+FROM zeros_mt()
+LIMIT 10;
+
+SELECT zero
+FROM zeros_mt(10);

@@ -1,0 +1,1 @@
+SELECT timeZoneOf(1);

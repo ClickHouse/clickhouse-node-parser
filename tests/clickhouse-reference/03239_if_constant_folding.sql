@@ -1,0 +1,5 @@
+select false  ? c : '' as c, count() from (select '' c) group by c;
+select if( 0 , c, '') _c, count() from (select '' c) group by _c;
+select if(1 = 0, c, '') _c, count() from (select '' c) group by _c;
+select materialize(false) ? c : 'x' as c, count() from (select 'o' c) group by c;
+select if(1 = 1, c, '') _c, count() from (select '' c) group by _c;

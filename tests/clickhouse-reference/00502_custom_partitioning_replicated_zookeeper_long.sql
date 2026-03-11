@@ -1,0 +1,14 @@
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'not_partitioned_replica1_00502' AND active ORDER BY name;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'not_partitioned_replica2_00502' AND active ORDER BY name;
+SELECT sum(x) FROM not_partitioned_replica2_00502;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_week_replica1' AND active ORDER BY name;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_week_replica2' AND active ORDER BY name;
+SELECT sum(x) FROM partitioned_by_week_replica2;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_tuple_replica1_00502' AND active ORDER BY name;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_tuple_replica2_00502' AND active ORDER BY name;
+SELECT sum(y) FROM partitioned_by_tuple_replica2_00502;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_string_replica1' AND active ORDER BY name;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_string_replica2' AND active ORDER BY name;
+SELECT sum(x) FROM partitioned_by_string_replica2;
+SELECT partition, name, rows FROM system.parts WHERE database = currentDatabase() AND table = 'without_fixed_size_columns_replica2' AND active ORDER BY name;
+SELECT * FROM without_fixed_size_columns_replica2 ORDER BY s;

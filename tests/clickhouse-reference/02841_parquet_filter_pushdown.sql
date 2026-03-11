@@ -1,0 +1,54 @@
+select count(), sum(number) from file('02841.parquet') where indexHint(u8 in (10, 15, 250));
+select count(), sum(number) from file('02841.parquet') where indexHint(i8 between -3 and 2);
+select count(), sum(number) from file('02841.parquet') where indexHint(u16 between 4000 and 61000 or u16 == 42);
+select count(), sum(number) from file('02841.parquet') where indexHint(i16 between -150 and 250);
+select count(), sum(number) from file('02841.parquet') where indexHint(u32 in (42, 4294966296));
+select count(), sum(number) from file('02841.parquet') where indexHint(i32 between -150 and 250);
+select count(), sum(number) from file('02841.parquet') where indexHint(u64 in (42, 18446744073709550616));
+select count(), sum(number) from file('02841.parquet') where indexHint(i64 between -150 and 250);
+select count(), sum(number) from file('02841.parquet') where indexHint(date32 between '1992-01-01' and '2023-08-02');
+select count(), sum(number) from file('02841.parquet') where indexHint(dt64_ms between '2000-01-01' and '2005-01-01');
+select count(), sum(number) from file('02841.parquet') where indexHint(dt64_us between toDateTime64(900000000, 2) and '2005-01-01');
+select count(), sum(number) from file('02841.parquet') where indexHint(dt64_ns between '2000-01-01' and '2005-01-01');
+select count(), sum(number) from file('02841.parquet') where indexHint(dt64_s between toDateTime64('-2.01e8'::Decimal64(0), 0) and toDateTime64(1.5e8::Decimal64(0), 0));
+select count(), sum(number) from file('02841.parquet') where indexHint(dt64_cs between toDateTime64('-2.01e8'::Decimal64(1), 1) and toDateTime64(1.5e8::Decimal64(2), 2));
+select count(), sum(number) from file('02841.parquet') where indexHint(f32 between -0.11::Float32 and 0.06::Float32);
+select count(), sum(number) from file('02841.parquet') where indexHint(f64 between -0.11 and 0.06);
+select count(), sum(number) from file('02841.parquet') where indexHint(s between '-9' and '1!!!');
+select count(), sum(number) from file('02841.parquet') where indexHint(fs between '-9' and '1!!!');
+select count(), sum(number) from file('02841.parquet') where indexHint(d32 between '-0.011'::Decimal32(3) and 0.006::Decimal32(3));
+select count(), sum(number) from file('02841.parquet') where indexHint(d64 between '-0.0000011'::Decimal64(7) and 0.0000006::Decimal64(9));
+select count(), sum(number) from file('02841.parquet') where indexHint(d128 between '-0.00000000000011'::Decimal128(20) and 0.00000000000006::Decimal128(20));
+select count(), sum(number) from file('02841.parquet') where indexHint(d256 between '-0.00000000000000000000000000011'::Decimal256(40) and 0.00000000000000000000000000006::Decimal256(35));
+select count(), sum(number) from file('02841.parquet') where indexHint(0);
+select count(), sum(number) from file('02841.parquet') where indexHint(s like '99%' or u64 == 2000);
+select count(), sum(number) from file('02841.parquet') where indexHint(s like 'z%');
+select count(), sum(number) from file('02841.parquet') where indexHint(u8 == 10 or 1 == 1);
+select count(), sum(number) from file('02841.parquet') where indexHint(u8 < 0);
+select count(), sum(number) from file('02841.parquet') where indexHint(u64 + 1000000 == 1001000);
+select count(), sum(number) from file('02841.parquet') where indexHint(u64 + 1000000 == 1001000) settings input_format_parquet_filter_push_down = 0;
+select count(), sum(number) from file('02841.parquet') where indexHint(u32 + 1000000 == 999000);
+select count() from file('02841.parquet') where indexHint(s > '');
+select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null is NULL);
+select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null_lc is NULL);
+select count(), sum(number) from file('02841.parquet') where indexHint(mostly_null is not NULL);
+select count(), sum(number) from file('02841.parquet') where indexHint(mostly_null_lc is not NULL);
+select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null > 850);
+select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null_lc > 850);
+select count(), sum(number) from file('02841.parquet') where indexHint(never_null > 850);
+select count(), sum(number) from file('02841.parquet') where indexHint(never_null_lc > 850);
+select count(), sum(number) from file('02841.parquet') where indexHint(never_null < 150);
+select count(), sum(number) from file('02841.parquet') where indexHint(never_null_lc < 150);
+-- Quirk with infinities: this reads too much because KeyCondition represents NULLs as infinities.
+select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null < 150);
+select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null_lc < 150);
+select count(), sum(number) from file('02841.parquet') where indexHint(positive_or_null < 50); -- quirk with infinities
+select count(), sum(number) from file('02841.parquet', Parquet, 'number UInt64, positive_or_null UInt64') where indexHint(positive_or_null < 50);
+select count(), sum(number) from file('02841.parquet') where indexHint(negative_or_null > -50);
+select count(), sum(number) from file('02841.parquet', Parquet, 'number UInt64, negative_or_null Int64') where indexHint(negative_or_null > -50);
+select count(), sum(number) from file('02841.parquet') where indexHint(string_or_null == ''); -- quirk with infinities
+-- Parquet index analysis doesn't support empty() function yet
+select count(), sum(number) from file('02841.parquet', Parquet, 'number UInt64, string_or_null String') where indexHint(string_or_null == '') settings optimize_empty_string_comparisons = 0;
+select count(), sum(number) from file('02841.parquet', Parquet, 'number UInt64, nEgAtIvE_oR_nUlL Int64') where indexHint(nEgAtIvE_oR_nUlL > -50) settings input_format_parquet_case_insensitive_column_matching = 1;
+select * from file('02841.parquet', Parquet, 'x Nullable(String)') where x not in (1);
+select * from file('t.parquet', Parquet, 'x Int64') where x >= 3;

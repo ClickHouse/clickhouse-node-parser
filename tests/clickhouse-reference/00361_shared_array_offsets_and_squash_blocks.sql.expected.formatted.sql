@@ -1,0 +1,7 @@
+SELECT *
+FROM nested1
+ORDER BY x ASC;
+
+SELECT *
+FROM nested2
+ORDER BY x ASC;

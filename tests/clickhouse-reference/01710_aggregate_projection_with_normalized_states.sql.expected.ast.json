@@ -1,0 +1,327 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "functionCall",
+              "name": "quantileState",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      ],
+                      "source": "[1,2,3]"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": "AggregateFunction(quantile(1), UInt8)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "ifNotFinite",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "quantilesTimingMerge",
+                  "params": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.95"
+                    }
+                  ],
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "q"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "alias": "d1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "ifNotFinite",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "quantilesTimingMerge",
+                  "params": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.99"
+                    }
+                  ],
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "q"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "alias": "d2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "ifNotFinite",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "quantilesTimingMerge",
+                  "params": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.50"
+                    }
+                  ],
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "q"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "alias": "d3"
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "r"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "x"
+      }
+    },
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "quantilesTimingMerge",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.95"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "q"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "quantilesTimingMerge",
+        "params": [
+          {
+            "kind": "functionCall",
+            "name": "toInt64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "q"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "r"
+          ]
+        }
+      ]
+    }
+  }
+]

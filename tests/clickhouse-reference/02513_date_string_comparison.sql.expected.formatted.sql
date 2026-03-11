@@ -1,0 +1,143 @@
+SELECT count()
+FROM datetime_date_table
+WHERE col_date > '2020-03-04';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date > '2020-03-04'::Date;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date > '2020-03-04 10:20:45';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date > '2020-03-04 10:20:45'::DateTime;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date > '2020-03-04 10:20:45.100';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date > '2020-03-04 10:20:45.100'::DateTime64(3);
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime > '2020-03-04';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime > '2020-03-04'::Date;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime > '2020-03-04 10:20:45';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime > '2020-03-04 10:20:45'::DateTime;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime > '2020-03-04 10:20:45.100';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime > '2020-03-04 10:20:45.100'::DateTime64(3);
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_string > '2020-03-04';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_string > '2020-03-04'::Date;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_string > '2020-03-04 10:20:45';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_string > '2020-03-04 10:20:45'::DateTime;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_string > '2020-03-04 10:20:45.100';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_string > '2020-03-04 10:20:45.100'::DateTime64(3);
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_string > '2020-03-04';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_string > '2020-03-04'::Date;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_string > '2020-03-04 10:20:45';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_string > '2020-03-04 10:20:45'::DateTime;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_string > '2020-03-04 10:20:45.100';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_string > '2020-03-04 10:20:45.100'::DateTime64(3);
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_lc > '2020-03-04';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_lc > '2020-03-04'::Date;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_lc > '2020-03-04 10:20:45';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_lc > '2020-03-04 10:20:45'::DateTime;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_lc > '2020-03-04 10:20:45.100';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_date_lc > '2020-03-04 10:20:45.100'::DateTime64(3);
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_lc > '2020-03-04';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_lc > '2020-03-04'::Date;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_lc > '2020-03-04 10:20:45';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_lc > '2020-03-04 10:20:45'::DateTime;
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_lc > '2020-03-04 10:20:45.100';
+
+SELECT count()
+FROM datetime_date_table
+WHERE col_datetime_lc > '2020-03-04 10:20:45.100'::DateTime64(3);

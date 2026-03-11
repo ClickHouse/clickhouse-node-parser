@@ -1,0 +1,2 @@
+SELECT randomStringUTF8(18446744073709551615 - 1000 + number * 2003)
+FROM numbers(2);

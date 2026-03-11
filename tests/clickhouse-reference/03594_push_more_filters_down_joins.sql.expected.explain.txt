@@ -1,0 +1,169 @@
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 4)
+   ExpressionList (children 1)
+    Literal UInt64_1
+   TablesInSelectQuery (children 3)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier t2
+    TablesInSelectQueryElement (children 2)
+     TableExpression (children 1)
+      TableIdentifier t1
+     TableJoin (children 1)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Identifier t2.id
+        Identifier t1.fid
+    TablesInSelectQueryElement (children 2)
+     TableExpression (children 1)
+      TableIdentifier t3
+     TableJoin (children 1)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Identifier t1.tid
+        Identifier t3.id
+   Function and (children 1)
+    ExpressionList (children 4)
+     Literal Bool_1
+     Function isNotNull (children 1)
+      ExpressionList (children 1)
+       Identifier t2.resource_id
+     Function in (children 1)
+      ExpressionList (children 2)
+       Identifier t2.status
+       Literal 'OPEN'
+     Function in (children 1)
+      ExpressionList (children 2)
+       Identifier t3.status
+       Literal 'BACKLOG'
+   Set
+
+SelectWithUnionQuery (children 2)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 1)
+    Function throwIf (children 1)
+     ExpressionList (children 1)
+      Function notEquals (children 1)
+       ExpressionList (children 2)
+        Function arrayElement (children 1)
+         ExpressionList (children 2)
+          Identifier ProfileEvents
+          Literal 'JoinResultRowCount'
+        Literal UInt64_0
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier system.query_log
+   Function and (children 1)
+    ExpressionList (children 5)
+     Function equals (children 1)
+      ExpressionList (children 2)
+       Identifier log_comment
+       Literal '03594_push_more_filters_down_joins'
+     Function equals (children 1)
+      ExpressionList (children 2)
+       Identifier current_database
+       Function currentDatabase (children 1)
+        ExpressionList
+     Function equals (children 1)
+      ExpressionList (children 2)
+       Identifier type
+       Literal 'QueryFinish'
+     Function greaterOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier event_date
+       Function yesterday (children 1)
+        ExpressionList
+     Function greaterOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier event_time
+       Function minus (children 1)
+        ExpressionList (children 2)
+         Function NOW (children 1)
+          ExpressionList
+         Function toIntervalMinute (children 1)
+          ExpressionList (children 1)
+           Literal UInt64_10
+ Identifier Null
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 1)
+    Function arrayElement (alias step) (children 1)
+     ExpressionList (children 2)
+      Function splitByWhitespace (children 1)
+       ExpressionList (children 1)
+        Function trimBoth (children 1)
+         ExpressionList (children 1)
+          Identifier explain
+      Literal UInt64_1
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      Subquery (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 2)
+          ExpressionList (children 1)
+           Asterisk
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             Function viewExplain (children 1)
+              ExpressionList (children 3)
+               Literal 'EXPLAIN'
+               Literal ''
+               Subquery (children 1)
+                SelectWithUnionQuery (children 1)
+                 ExpressionList (children 1)
+                  SelectQuery (children 4)
+                   ExpressionList (children 1)
+                    Literal UInt64_1
+                   TablesInSelectQuery (children 3)
+                    TablesInSelectQueryElement (children 1)
+                     TableExpression (children 1)
+                      TableIdentifier t2
+                    TablesInSelectQueryElement (children 2)
+                     TableExpression (children 1)
+                      TableIdentifier t1
+                     TableJoin (children 1)
+                      Function equals (children 1)
+                       ExpressionList (children 2)
+                        Identifier t2.id
+                        Identifier t1.fid
+                    TablesInSelectQueryElement (children 2)
+                     TableExpression (children 1)
+                      TableIdentifier t3
+                     TableJoin (children 1)
+                      Function equals (children 1)
+                       ExpressionList (children 2)
+                        Identifier t1.tid
+                        Identifier t3.id
+                   Function and (children 1)
+                    ExpressionList (children 4)
+                     Literal Bool_1
+                     Function isNotNull (children 1)
+                      ExpressionList (children 1)
+                       Identifier t2.resource_id
+                     Function in (children 1)
+                      ExpressionList (children 2)
+                       Identifier t2.status
+                       Literal 'OPEN'
+                     Function in (children 1)
+                      ExpressionList (children 2)
+                       Identifier t3.status
+                       Literal 'BACKLOG'
+                   Set
+   Function or (children 1)
+    ExpressionList (children 2)
+     Function ilike (children 1)
+      ExpressionList (children 2)
+       Identifier step
+       Literal 'Join%'
+     Function ilike (children 1)
+      ExpressionList (children 2)
+       Identifier step
+       Literal '%Filter%'

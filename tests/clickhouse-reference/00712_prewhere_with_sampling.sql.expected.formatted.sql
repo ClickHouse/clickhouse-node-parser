@@ -1,0 +1,7 @@
+SELECT a
+FROM tab_00712_2 SAMPLE 1/2
+PREWHERE b = 2;
+
+SELECT count()
+FROM sample_prewhere SAMPLE 1/2
+PREWHERE CounterID = 1;

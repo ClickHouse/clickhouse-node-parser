@@ -1,0 +1,1 @@
+SELECT * FROM dist_00967;

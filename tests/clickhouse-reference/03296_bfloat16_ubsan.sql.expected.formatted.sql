@@ -1,0 +1,1 @@
+SELECT (65535::BFloat16)::Int16;

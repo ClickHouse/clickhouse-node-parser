@@ -1,0 +1,422 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "trimBoth",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "SearchPhrase"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "MIN",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "URL"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "MIN",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "Title"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "COUNT",
+                "args": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ]
+              },
+              "alias": "c"
+            },
+            {
+              "kind": "functionCall",
+              "name": "COUNTDistinct",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "UserID"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "test",
+            "table": "hits"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "Title"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%Google%"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "notLike",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "URL"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%.google.%"
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<>",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "SearchPhrase"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ""
+                }
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "SearchPhrase"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "direction": "DESC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          },
+          "settings": [
+            {
+              "name": "allow_reorder_prewhere_conditions",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere filter column%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "trimBoth",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "SearchPhrase"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "MIN",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "URL"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "MIN",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "Title"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "COUNT",
+                "args": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ]
+              },
+              "alias": "c"
+            },
+            {
+              "kind": "functionCall",
+              "name": "COUNTDistinct",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "UserID"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "test",
+            "table": "hits"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "Title"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%Google%"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "notLike",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "URL"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%.google.%"
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<>",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "SearchPhrase"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ""
+                }
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "SearchPhrase"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "direction": "DESC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          },
+          "settings": [
+            {
+              "name": "allow_reorder_prewhere_conditions",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere filter column%"
+        }
+      ]
+    }
+  }
+]

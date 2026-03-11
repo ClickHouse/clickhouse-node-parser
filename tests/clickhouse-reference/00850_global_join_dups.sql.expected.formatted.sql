@@ -1,0 +1,155 @@
+SELECT *
+FROM
+    t1_00850
+INNER JOIN (
+        SELECT *
+        FROM
+            (
+                SELECT *
+                FROM t2_00850
+            )
+        INNER JOIN (
+                SELECT *
+                FROM t1_00850
+            )
+            USING (dummy)
+    )
+    USING (dummy);
+
+SELECT toDateTime64(toString(toString('0000-00-00 00:00:000000-00-00 00:00:00', toDateTime64(toDateTime64('655.36', -2, NULL)))), NULL)
+FROM
+    t1_00850
+INNER JOIN (
+        SELECT
+            toDateTime64(toDateTime64('6553.6', '', NULL), NULL),
+            *
+        FROM
+            (
+                SELECT *
+                FROM t2_00850
+            )
+        INNER JOIN (
+                SELECT
+                    toDateTime64('6553.7', 1024, NULL),
+                    *
+                FROM t1_00850
+            )
+            USING (dummy)
+    )
+    USING (dummy);
+
+SELECT toString('0000-00-00 00:00:000000-00-00 00:00:00', toDateTime64(toDateTime64('655.36', -2, NULL)));
+
+SELECT *
+FROM
+    remote('127.0.0.2', `system`.one)
+INNER JOIN (
+        SELECT *
+        FROM
+            (
+                SELECT dummy
+                FROM remote('127.0.0.2', `system`.one)
+            ) AS t1_00850
+        INNER JOIN (
+                SELECT dummy
+                FROM remote('127.0.0.3', `system`.one)
+            ) AS t2_00850
+            USING (dummy)
+    )
+    USING (dummy);
+
+SELECT *
+FROM
+    remote('127.0.0.2', `system`.one)
+INNER JOIN (
+        SELECT
+            *,
+            dummy
+        FROM
+            (
+                SELECT dummy
+                FROM remote('127.0.0.2', `system`.one)
+            ) AS t1_00850
+        INNER JOIN (
+                SELECT dummy
+                FROM remote('127.0.0.3', `system`.one)
+            ) AS t2_00850
+            USING (dummy)
+    )
+    USING (dummy);
+
+SELECT *
+FROM
+    remote('127.0.0.2', `system`.one)
+INNER JOIN (
+        SELECT
+            *,
+            t1_00850.*,
+            t2_00850.*
+        FROM
+            (
+                SELECT toUInt8(0) AS dummy
+            ) AS t1_00850
+        INNER JOIN (
+                SELECT toUInt8(0) AS dummy
+            ) AS t2_00850
+            USING (dummy)
+    )
+    USING (dummy);
+
+SELECT *
+FROM
+    remote('127.0.0.2', `system`.one)
+INNER JOIN (
+        SELECT
+            *,
+            dummy
+        FROM
+            (
+                SELECT toUInt8(0) AS dummy
+            ) AS t1_00850
+        INNER JOIN (
+                SELECT toUInt8(0) AS dummy
+            ) AS t2_00850
+            USING (dummy)
+    )
+    USING (dummy);
+
+SELECT *
+FROM
+    remote('127.0.0.2', `system`.one)
+INNER JOIN (
+        SELECT
+            *,
+            dummy AS other
+        FROM
+            (
+                SELECT dummy
+                FROM remote('127.0.0.3', `system`.one)
+            ) AS t1_00850
+        INNER JOIN (
+                SELECT toUInt8(0) AS dummy
+            ) AS t2_00850
+            USING (dummy)
+    )
+    USING (dummy);
+
+SELECT *
+FROM
+    remote('127.0.0.2', `system`.one)
+INNER JOIN (
+        SELECT
+            *,
+            dummy,
+            dummy AS other
+        FROM
+            (
+                SELECT toUInt8(0) AS dummy
+            ) AS t1_00850
+        INNER JOIN (
+                SELECT dummy
+                FROM remote('127.0.0.3', `system`.one)
+            ) AS t2_00850
+            USING (dummy)
+    )
+    USING (dummy);

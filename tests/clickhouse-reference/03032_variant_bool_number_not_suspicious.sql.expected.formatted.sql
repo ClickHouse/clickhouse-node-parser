@@ -1,0 +1,1 @@
+SELECT 'true'::Bool::Variant(UInt32, Bool);

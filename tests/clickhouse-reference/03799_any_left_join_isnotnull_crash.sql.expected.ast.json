@@ -1,0 +1,298 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s",
+            "site"
+          ]
+        },
+        "alias": "site"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "naryExpr",
+              "op": "OR",
+              "operands": [
+                {
+                  "kind": "functionCall",
+                  "name": "isNull",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a",
+                        "order"
+                      ]
+                    }
+                  ],
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "<=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a",
+                      "order"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": ">",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a",
+                      "order"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "30"
+                  },
+                  "parenthesized": true
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            {
+              "kind": "functionCall",
+              "name": "accurateCastOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "order"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Int32"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "page_level"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "count"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "AddedToCart",
+        "alias": "a"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "Session",
+        "alias": "s"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "sessionId"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "id"
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "isNotNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a",
+                "top"
+              ]
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "functionCall",
+          "name": "isNotNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a",
+                "screenHeight"
+              ]
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "screenHeight"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "isPromotion"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "_CAST",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "UInt8"
+              }
+            ]
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "device"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "DESKTOP"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "functionCall",
+          "name": "isNotNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s",
+                "site"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "site"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "page_level"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "site"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "page_level"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "JSONEachRow"
+  }
+]

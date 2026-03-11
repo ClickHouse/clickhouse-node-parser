@@ -1,0 +1,8 @@
+select 1 from t as l join t as r on l.id = r.id prewhere l.x;
+select 2 from t as l join t as r on l.id = r.id where r.x;
+select 3 from t as l join t as r on l.id = r.id prewhere l.x where r.x;
+select 4 from t as l join t as r using id prewhere l.x where r.x;
+select 5 from t as l join t as r on l.id = r.id where l.x and r.x;
+select 6 from t as l join t as r using id where l.x and r.x;
+select 7 from t as l join t as r on l.id = r.id where l.x and r.x;
+select 8 from t as l join t as r using id where l.x and r.x;

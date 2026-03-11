@@ -1,0 +1,3 @@
+SELECT count()
+FROM t_buf SAMPLE 1/2
+FORMAT Null;

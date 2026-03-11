@@ -1,0 +1,17 @@
+SELECT * FROM compression_codec_replicated1 ORDER BY id;
+SELECT * FROM compression_codec_replicated2 ORDER BY id;
+SELECT count(*) FROM compression_codec_replicated1 WHERE id = 2 GROUP BY id;
+SELECT count(*) FROM compression_codec_replicated2 WHERE id = 2 GROUP BY id;
+SELECT * FROM compression_codec_multiple_replicated2 ORDER BY id;
+SELECT * FROM compression_codec_multiple_replicated1 ORDER BY id;
+SELECT count(*) FROM compression_codec_multiple_replicated1;
+SELECT count(*) FROM compression_codec_multiple_replicated2;
+SELECT count(distinct data) FROM compression_codec_multiple_replicated1;
+SELECT count(distinct data) FROM compression_codec_multiple_replicated2;
+SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_replicated1;
+SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_replicated2;
+SELECT sum(cityHash64(*)) FROM compression_codec_multiple_replicated2;
+SELECT sum(cityHash64(*)) FROM compression_codec_multiple_replicated1;
+SELECT * FROM compression_codec_multiple_more_types_replicated order by id;
+SELECT data FROM compression_codec_multiple_with_key_replicated WHERE id BETWEEN 3 AND 1112;
+SELECT COUNT(DISTINCT data) FROM compression_codec_multiple_with_key_replicated WHERE id < 222;

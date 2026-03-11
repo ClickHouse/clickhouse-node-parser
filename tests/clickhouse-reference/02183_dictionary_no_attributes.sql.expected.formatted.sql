@@ -1,0 +1,70 @@
+SELECT *
+FROM `02183_dictionary_test_table`;
+
+SELECT dictGet('02183_flat_dictionary', 'value', 0);
+
+SELECT dictHas('02183_flat_dictionary', 0);
+
+SELECT dictHas('02183_flat_dictionary', 1);
+
+SELECT dictHas('02183_flat_dictionary', 2);
+
+SELECT *
+FROM `02183_flat_dictionary`;
+
+SELECT dictHas('02183_hashed_dictionary', 0);
+
+SELECT dictHas('02183_hashed_dictionary', 1);
+
+SELECT dictHas('02183_hashed_dictionary', 2);
+
+SELECT *
+FROM `02183_hashed_dictionary`;
+
+SELECT dictHas('02183_hashed_array_dictionary', 0);
+
+SELECT dictHas('02183_hashed_array_dictionary', 1);
+
+SELECT dictHas('02183_hashed_array_dictionary', 2);
+
+SELECT *
+FROM `02183_hashed_array_dictionary`;
+
+SELECT dictHas('02183_cache_dictionary', 0);
+
+SELECT dictHas('02183_cache_dictionary', 1);
+
+SELECT dictHas('02183_cache_dictionary', 2);
+
+SELECT *
+FROM `02183_cache_dictionary`;
+
+SELECT dictHas('02183_direct_dictionary', 0);
+
+SELECT dictHas('02183_direct_dictionary', 1);
+
+SELECT dictHas('02183_direct_dictionary', 2);
+
+SELECT *
+FROM `02183_direct_dictionary`;
+
+SELECT dictHas('02183_ip_trie_dictionary', tuple(IPv4StringToNum('127.0.0.0')));
+
+SELECT dictHas('02183_ip_trie_dictionary', tuple(IPv4StringToNum('127.0.0.1')));
+
+SELECT *
+FROM `02183_ip_trie_dictionary`;
+
+SELECT dictHas('02183_polygon_dictionary', tuple(0.5, 0.5));
+
+SELECT dictHas('02183_polygon_dictionary', tuple(1.5, 1.5));
+
+SELECT *
+FROM `02183_polygon_dictionary`;
+
+SELECT *
+FROM `02183_range_dictionary`;
+
+SELECT dictHas('02183_range_dictionary', 0, 0);
+
+SELECT dictHas('02183_range_dictionary', 0, 2);

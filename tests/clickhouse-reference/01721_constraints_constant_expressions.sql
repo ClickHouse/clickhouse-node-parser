@@ -1,0 +1,3 @@
+SELECT * FROM constraint_constant_number_expression;
+SELECT * FROM constraint_constant_number_expression_non_uint8;
+SELECT * FROM constraint_constant_nullable_expression_that_contains_null;

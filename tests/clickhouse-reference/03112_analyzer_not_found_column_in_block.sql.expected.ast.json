@@ -1,0 +1,97 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "user_id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "user_id"
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "user_id"
+                ]
+              }
+            ]
+          },
+          "parenthesized": true
+        },
+        "alias": "count"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "my_first_table"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "user_id"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "101"
+            }
+          ]
+        }
+      ]
+    },
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "user_id"
+          ]
+        }
+      ]
+    }
+  }
+]

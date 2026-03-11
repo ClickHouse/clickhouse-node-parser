@@ -1,0 +1,13 @@
+select v1 from test order by v1 nulls first;
+select v1 from test order by v1 nulls last;
+select v2 from test order by v2 nulls first;
+select v2 from test order by v2 nulls last;
+select * from test order by v1, v2 nulls first;
+select * from test order by v1, v2 nulls last;
+select * from test order by v2, v1 nulls first;
+select * from test order by v2, v1 nulls last;
+select v1, v2, v1 = v2 from test order by v1, v2;
+select v1, v2, v1 < v2 from test order by v1, v2;
+select v1, v2, v1 <= v2 from test order by v1, v2;
+select v1, v2, v1 > v2 from test order by v1, v2;
+select v1, v2, v2 >= v2 from test order by v1, v2;

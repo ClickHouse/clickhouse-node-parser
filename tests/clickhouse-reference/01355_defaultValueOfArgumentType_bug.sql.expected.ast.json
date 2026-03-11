@@ -1,0 +1,62 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toLowCardinality",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ""
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "lc"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lc"
+            ]
+          }
+        ]
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "lc"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "defaultValueOfArgumentType",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lc"
+            ]
+          }
+        ]
+      }
+    }
+  }
+]

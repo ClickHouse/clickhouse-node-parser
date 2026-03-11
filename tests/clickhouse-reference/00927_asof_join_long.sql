@@ -1,0 +1,13 @@
+SELECT SUM(trades.price - tvs.tv) FROM
+(SELECT k, t, t as price
+    FROM (SELECT toUInt32(number) AS k FROM numbers(1000)) keys
+    CROSS JOIN (SELECT toUInt32(number * 10) AS t FROM numbers(3000)) trade_times
+    SETTINGS join_algorithm = 'hash') trades
+ASOF LEFT JOIN tvs USING(k,t);
+SELECT SUM(trades.price - tvs.tv) FROM
+(SELECT k, t, t as price
+    FROM (SELECT toUInt32(number) AS k FROM numbers(1000)) keys
+    CROSS JOIN (SELECT toUInt32(number * 10) AS t FROM numbers(3000)) trade_times
+    SETTINGS join_algorithm = 'hash') trades
+ASOF LEFT JOIN tvs USING(k,t)
+SETTINGS join_algorithm = 'full_sorting_merge';

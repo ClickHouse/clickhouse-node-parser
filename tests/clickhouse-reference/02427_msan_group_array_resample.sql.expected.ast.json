@@ -1,0 +1,148 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "finalizeAggregation",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "state"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "groupArrayResample",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "9223372036854775806"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1048575"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "65537"
+              }
+            ],
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupArrayStateResample",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2147483648"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "65535"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "9223372036854775806"
+                  }
+                }
+              ]
+            },
+            "alias": "state"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

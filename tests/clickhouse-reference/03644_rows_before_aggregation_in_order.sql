@@ -1,0 +1,12 @@
+select i
+from 03644_data
+group by i
+having count() > 1
+settings
+    rows_before_aggregation = 1,
+    exact_rows_before_limit = 1,
+    output_format_write_statistics = 0,
+    max_block_size = 100,
+    aggregation_in_order_max_block_bytes = 8,
+    optimize_aggregation_in_order=1
+format JSONCompact;

@@ -1,0 +1,1 @@
+SELECT * FROM alter_00121 ORDER BY d;

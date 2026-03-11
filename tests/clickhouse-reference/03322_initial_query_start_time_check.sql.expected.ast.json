@@ -1,0 +1,153 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "now",
+          "args": []
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "max",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "initialQueryStartTime",
+          "args": []
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "max",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "it"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "initialQueryStartTime",
+          "args": []
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "min",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "it"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "binaryExpr",
+        "op": ">=",
+        "left": {
+          "kind": "functionCall",
+          "name": "initialQueryStartTime",
+          "args": []
+        },
+        "right": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "now",
+            "args": []
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "it"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1..10}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tmp"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "max_distributed_connections",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "async_socket_for_remote",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  }
+]

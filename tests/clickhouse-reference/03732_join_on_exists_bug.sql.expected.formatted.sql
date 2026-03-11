@@ -1,0 +1,31 @@
+SELECT 1
+FROM
+    t0
+INNER JOIN t0 AS tx
+    ON EXISTS((
+        SELECT 1
+    ))
+INNER JOIN t0 AS ty
+    ON t0.c0 = ty.c0;
+
+SELECT 1
+FROM
+    t0
+INNER JOIN t0 AS tx
+    ON EXISTS((
+        SELECT 1
+    ))
+INNER JOIN t0 AS ty
+    ON t0.c0 = ty.c0
+SETTINGS allow_general_join_planning = 0;
+
+SELECT 1
+FROM
+    t0
+INNER JOIN t0 AS tx
+    ON EXISTS((
+        SELECT 1
+    ))
+INNER JOIN t0 AS ty
+    ON t0.c0 = ty.c0
+SETTINGS query_plan_use_new_logical_join_step = 0;

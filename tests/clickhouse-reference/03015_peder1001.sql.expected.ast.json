@@ -1,0 +1,152 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDayOfWeek",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ShipmentDate"
+              ]
+            }
+          ]
+        },
+        "alias": "c"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_data"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "isNotNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "lowerUTF8",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "formatDateTime",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "plus",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "toDate",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "2024-01-01"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toIntervalDay",
+                          "args": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": "-",
+                              "left": {
+                                "kind": "functionCall",
+                                "name": "toInt32",
+                                "args": [
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "c"
+                                    ]
+                                  }
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "%W"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%m%"
+            }
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "62"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "0"
+    }
+  }
+]

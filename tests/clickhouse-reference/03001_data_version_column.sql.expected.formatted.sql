@@ -1,0 +1,15 @@
+SELECT
+    _part,
+    _part_data_version,
+    *
+FROM t_data_version
+ORDER BY a ASC;
+
+SELECT
+    _part,
+    _part_data_version,
+    *
+FROM t_data_version
+WHERE _part_data_version = 4
+ORDER BY a ASC
+SETTINGS max_rows_to_read = 1;

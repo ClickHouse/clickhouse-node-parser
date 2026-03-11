@@ -1,0 +1,9 @@
+SELECT a
+FROM ttl_00933_2
+ORDER BY a ASC;
+
+SELECT
+    a,
+    b
+FROM ttl_00933_2
+ORDER BY a ASC;

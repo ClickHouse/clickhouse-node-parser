@@ -1,0 +1,375 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "URL"
+          ]
+        },
+        "alias": "ym:ah:URL"
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "unaryExpr",
+                "op": "NOT",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "DontCountHits"
+                  ]
+                }
+              },
+              {
+                "kind": "unaryExpr",
+                "op": "NOT",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "Refresh"
+                  ]
+                }
+              }
+            ],
+            "parenthesized": true
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "quantilesTimingIf",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.1"
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.9"
+            }
+          ],
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "DOMCompleteTiming"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "LoadEventEndTiming"
+                ]
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "!=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "DOMCompleteTiming"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-1"
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "!=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "LoadEventEndTiming"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "t"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "hits"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "800784"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "naryExpr",
+              "op": "OR",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "DontCountHits"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "IsNotBounce"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "parenthesized": true
+                }
+              ],
+              "parenthesized": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "!=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": ""
+              },
+              "parenthesized": true
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ym:ah:URL"
+          ]
+        }
+      ]
+    },
+    "withTotals": true,
+    "having": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "unaryExpr",
+                    "op": "NOT",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "DontCountHits"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "unaryExpr",
+                    "op": "NOT",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "Refresh"
+                      ]
+                    }
+                  }
+                ],
+                "parenthesized": true
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "functionCall",
+            "name": "count",
+            "args": []
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "unaryExpr",
+                  "op": "NOT",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "DontCountHits"
+                    ]
+                  }
+                },
+                {
+                  "kind": "unaryExpr",
+                  "op": "NOT",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "Refresh"
+                    ]
+                  }
+                }
+              ],
+              "parenthesized": true
+            }
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "URL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "1"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      },
+      "commaSyntax": true
+    }
+  }
+]

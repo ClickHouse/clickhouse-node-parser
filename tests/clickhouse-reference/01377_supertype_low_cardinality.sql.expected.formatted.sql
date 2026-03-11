@@ -1,0 +1,156 @@
+SELECT 'hello'
+UNION ALL
+SELECT toLowCardinality('hello');
+
+SELECT toTypeName(x)
+FROM (
+        SELECT 'hello' AS x
+        UNION ALL
+        SELECT toLowCardinality('hello')
+    );
+
+SELECT '---';
+
+SELECT a
+FROM t1
+UNION ALL
+SELECT a
+FROM t2;
+
+SELECT x
+FROM a;
+
+SELECT x
+FROM b;
+
+SELECT x
+FROM c;
+
+SELECT x
+FROM d;
+
+SELECT x
+FROM a
+UNION ALL
+SELECT x
+FROM b;
+
+SELECT x
+FROM a
+UNION ALL
+SELECT x
+FROM c;
+
+SELECT x
+FROM a
+UNION ALL
+SELECT x
+FROM d;
+
+SELECT x
+FROM b
+UNION ALL
+SELECT x
+FROM a;
+
+SELECT x
+FROM b
+UNION ALL
+SELECT x
+FROM c;
+
+SELECT x
+FROM b
+UNION ALL
+SELECT x
+FROM d;
+
+SELECT x
+FROM c
+UNION ALL
+SELECT x
+FROM a;
+
+SELECT x
+FROM c
+UNION ALL
+SELECT x
+FROM b;
+
+SELECT x
+FROM c
+UNION ALL
+SELECT x
+FROM d;
+
+SELECT x
+FROM d
+UNION ALL
+SELECT x
+FROM a;
+
+SELECT x
+FROM d
+UNION ALL
+SELECT x
+FROM c;
+
+SELECT x
+FROM d
+UNION ALL
+SELECT x
+FROM b;
+
+SELECT x
+FROM b
+UNION ALL
+SELECT x
+FROM c
+UNION ALL
+SELECT x
+FROM d;
+
+SELECT x
+FROM a
+UNION ALL
+SELECT x
+FROM c
+UNION ALL
+SELECT x
+FROM d;
+
+SELECT x
+FROM a
+UNION ALL
+SELECT x
+FROM b
+UNION ALL
+SELECT x
+FROM d;
+
+SELECT x
+FROM a
+UNION ALL
+SELECT x
+FROM b
+UNION ALL
+SELECT x
+FROM c;
+
+SELECT x
+FROM a
+UNION ALL
+SELECT x
+FROM b
+UNION ALL
+SELECT x
+FROM c
+UNION ALL
+SELECT x
+FROM d;
+
+SELECT [CAST('abc' AS LowCardinality(String)), CAST('def' AS Nullable(String))];
+
+SELECT [CAST('abc' AS LowCardinality(String)), CAST('def' AS FixedString(3))];
+
+SELECT [CAST('abc' AS LowCardinality(String)), CAST('def' AS LowCardinality(FixedString(3)))];

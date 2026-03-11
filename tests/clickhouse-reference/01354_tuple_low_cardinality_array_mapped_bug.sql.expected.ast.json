@@ -1,0 +1,153 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayExists",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "tupleElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ],
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "pattern"
+              },
+              "parenthesized": true
+            }
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "tuple",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "a"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ],
+              "source": "[tuple('a', 1)]"
+            },
+            "type": "Array(Tuple(LowCardinality(String), UInt8))"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "arrayExists",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "tupleElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ],
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "pattern"
+                  }
+                ]
+              },
+              "parenthesized": true
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "values"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "parenthesized": true
+    }
+  }
+]

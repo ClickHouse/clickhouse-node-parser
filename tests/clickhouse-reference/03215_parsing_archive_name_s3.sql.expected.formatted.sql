@@ -1,0 +1,24 @@
+SELECT
+    _file,
+    _path
+FROM s3(s3_conn, filename = '::03215_archive.csv')
+ORDER BY (_file, _path) ASC;
+
+SELECT
+    _file,
+    _path
+FROM s3(s3_conn, filename = 'test :: 03215_archive.csv')
+ORDER BY (_file, _path) ASC;
+
+SELECT
+    _file,
+    _path
+FROM s3(s3_conn, filename = 'test::03215_archive.csv')
+ORDER BY (_file, _path) ASC;
+
+SELECT
+    _file,
+    _path
+FROM s3(s3_conn, filename = 'test.zip::03215_archive.csv')
+ORDER BY (_file, _path) ASC
+SETTINGS allow_archive_path_syntax = 0;

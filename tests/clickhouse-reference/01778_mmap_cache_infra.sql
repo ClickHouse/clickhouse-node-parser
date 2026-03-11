@@ -1,0 +1,2 @@
+SELECT event FROM system.events WHERE event LIKE '%MMap%' ORDER BY event;
+SELECT metric FROM system.metrics WHERE metric LIKE '%MMap%' ORDER BY metric;

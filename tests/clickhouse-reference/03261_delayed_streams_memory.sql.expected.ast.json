@@ -1,0 +1,114 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "if",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "<",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "memory_usage"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "300000000"
+            }
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Ok"
+          },
+          {
+            "kind": "functionCall",
+            "name": "format",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Fail: memory usage {}"
+              },
+              {
+                "kind": "functionCall",
+                "name": "formatReadableSize",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "memory_usage"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "INSERT INTO t_100_columns%"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        }
+      ]
+    }
+  }
+]

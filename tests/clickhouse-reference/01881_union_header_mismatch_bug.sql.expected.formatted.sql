@@ -1,0 +1,54 @@
+SELECT *
+FROM (
+        SELECT
+            'table' AS table,
+            toInt64(10) AS `rows`,
+            toInt64(101) AS elements
+        UNION ALL
+        SELECT
+            'another table' AS table,
+            toInt64(0) AS `rows`,
+            toInt64(0) AS elements
+    )
+WHERE `rows` - elements <> 0;
+
+SELECT
+    label,
+    number
+FROM (
+        SELECT
+            'a' AS label,
+            number
+        FROM (
+                SELECT number
+                FROM numbers(10)
+            )
+        UNION ALL
+        SELECT
+            'b' AS label,
+            number
+        FROM (
+                SELECT number
+                FROM numbers(10)
+            )
+    )
+WHERE number IN (
+        SELECT number
+        FROM numbers(5)
+    )
+ORDER BY
+    label ASC,
+    number ASC;
+
+SELECT NULL
+FROM
+    (
+        SELECT
+            [1048575, NULL] AS ax,
+            2147483648 AS c
+    ) AS t1
+ARRAY JOIN ax
+INNER JOIN (
+        SELECT NULL AS c
+    ) AS t2
+    USING (c);

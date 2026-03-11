@@ -1,0 +1,102 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "APPLICATION",
+            "Name"
+          ]
+        },
+        "alias": "App"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "DATABASE_IO",
+                "Date"
+              ]
+            },
+            "type": "DATE"
+          },
+          "type": "DATE"
+        },
+        "alias": "date"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "DATABASE_IO"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "APPLICATION"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "DATABASE_IO",
+              "Base"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "APPLICATION",
+              "Base"
+            ]
+          },
+          "parenthesized": true
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "DATABASE_IO",
+              "Date"
+            ]
+          },
+          "type": "DATE"
+        },
+        "type": "TIMESTAMP"
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2020-01-01 00:00:00"
+          }
+        ]
+      },
+      "parenthesized": true
+    }
+  }
+]

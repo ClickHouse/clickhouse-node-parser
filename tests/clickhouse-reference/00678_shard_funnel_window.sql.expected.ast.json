@@ -1,0 +1,135 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "level"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "COUNT",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "uid"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "windowFunnel",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3600"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt32",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "its"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "!=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "action_code"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": ""
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "action_code"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2"
+                  }
+                }
+              ]
+            },
+            "alias": "level"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{2,3}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "remote_test"
+              ]
+            }
+          ]
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "uid"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "level"
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,2 @@
+SELECT * FROM 03215_test_v;
+SELECT * FROM 03215_multi_v;

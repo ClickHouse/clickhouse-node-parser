@@ -1,0 +1,13 @@
+SELECT x
+FROM
+    tab
+ARRAY JOIN arr
+PREWHERE x != 0
+WHERE arr;
+
+SELECT x
+FROM
+    tab
+ARRAY JOIN arr
+PREWHERE arr
+WHERE x != 0;

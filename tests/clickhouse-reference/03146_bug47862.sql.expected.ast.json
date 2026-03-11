@@ -1,0 +1,165 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toInt64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "lookup_res"
+              ]
+            }
+          ]
+        },
+        "alias": "cast_res"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "indexOf",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "field_id"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            },
+            "alias": "val_idx"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "110"
+                    }
+                  ],
+                  "source": "['110']"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "val_idx"
+                  ]
+                }
+              ]
+            },
+            "alias": "lookup_res"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "array",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "10"
+                            }
+                          ],
+                          "source": "[10]"
+                        },
+                        {
+                          "kind": "array",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "15"
+                            }
+                          ],
+                          "source": "[15]"
+                        }
+                      ],
+                      "source": "[[10], [15]]"
+                    }
+                  ]
+                },
+                "alias": "field_id"
+              }
+            ]
+          }
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "val_idx"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "cast_res"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

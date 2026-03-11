@@ -1,0 +1,127 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "tx"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableFunction",
+        "name": "VALUES",
+        "args": [
+          {
+            "kind": "asterisk",
+            "parenthesized": true
+          }
+        ],
+        "alias": "ty"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "c0"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ],
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "46"
+              },
+              {
+                "kind": "functionCall",
+                "name": "isNull",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ],
+                "parenthesized": true
+              },
+              {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "asterisk"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ],
+                "parenthesized": true
+              }
+            ]
+          }
+        ],
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "number"
+        ]
+      }
+    }
+  }
+]

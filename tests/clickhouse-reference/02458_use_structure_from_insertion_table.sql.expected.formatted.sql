@@ -1,0 +1,7 @@
+SELECT *
+FROM test
+ORDER BY y ASC;
+
+SELECT *
+FROM test
+ORDER BY x ASC;

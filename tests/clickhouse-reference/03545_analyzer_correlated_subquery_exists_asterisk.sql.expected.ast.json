@@ -1,0 +1,57 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test",
+      "alias": "t1"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "EXISTS",
+      "args": [
+        {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test",
+              "alias": "t2"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "i1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "i2"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

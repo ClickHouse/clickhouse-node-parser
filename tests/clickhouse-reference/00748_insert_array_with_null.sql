@@ -1,0 +1,1 @@
+SELECT strings from arraytest;

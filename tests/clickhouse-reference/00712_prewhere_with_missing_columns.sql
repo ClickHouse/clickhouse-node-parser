@@ -1,0 +1,4 @@
+SELECT * FROM mergetree_00712;
+SELECT * FROM mergetree_00712 ORDER BY x;
+SELECT s FROM mergetree_00712 PREWHERE x AND y ORDER BY s;
+SELECT s, y FROM mergetree_00712 PREWHERE x AND y ORDER BY s;

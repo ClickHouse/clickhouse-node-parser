@@ -1,0 +1,17 @@
+SELECT 1.23e9
+FORMAT Pretty;
+
+SELECT -1.23e9
+FORMAT Pretty;
+
+SELECT inf
+FORMAT Pretty;
+
+SELECT -inf
+FORMAT Pretty;
+
+SELECT nan
+FORMAT Pretty;
+
+SELECT 1e111
+FORMAT Pretty;

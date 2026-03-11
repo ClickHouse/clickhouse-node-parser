@@ -1,0 +1,11 @@
+SELECT id, map FROM map_containsValueLike_test WHERE mapContainsValueLike(map, '1-%') = 1;
+SELECT id, map FROM map_containsValueLike_test WHERE mapContainsValueLike(map, '3-%') = 0 order by id;
+SELECT mapContainsValueLike(map('aa', '1', 'bb', '2'), '1%');
+SELECT mapContainsValueLike(map('aa', toLowCardinality('1'), 'b', toLowCardinality('2')), '1%');
+SELECT mapContainsValueLike(map('aa', '1', 'bb', '2'), materialize('1%'));
+SELECT mapContainsValueLike(materialize(map('aa', '1', 'bb', '2')), '1%');
+SELECT mapContainsValueLike(materialize(map('aa', '1', 'bb', '2')), materialize('1%'));
+SELECT mapContainsValueLike(map('aa', 'cc', 'bb', 'dd'), 'd%');
+SELECT mapContainsValueLike(map('aa', 'cc', 'bb', 'dd'), 'q%');
+SELECT mapExtractValueLike(map('aa', 'cc', 'bb', 'dd'), 'd%');
+SELECT mapExtractValueLike(map('aa', 'cc', 'bb', 'dd'), 'q%');

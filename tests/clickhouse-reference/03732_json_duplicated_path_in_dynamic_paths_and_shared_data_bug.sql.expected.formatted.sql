@@ -1,0 +1,3 @@
+SELECT *
+FROM test2
+FORMAT Null;

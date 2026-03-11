@@ -1,0 +1,444 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "Sign"
+                ]
+              }
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "Arr"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "visits1"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "PP",
+            "Key2"
+          ]
+        },
+        "alias": "ym:s:pl2"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "visits1"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "ParsedParams.Key2"
+            ]
+          },
+          "alias": "PP.Key2"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "ParsedParams.Key1"
+            ]
+          },
+          "alias": "PP.Key1"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayEnumerateUniq",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ParsedParams.Key2"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "arrayMap",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x_0"
+                    ],
+                    "body": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ParsedParams.Key1"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "upp_==_yes_"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayEnumerateUniq",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ParsedParams.Key2"
+                ]
+              }
+            ]
+          },
+          "alias": "_uniq_ParsedParams"
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "CounterID"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100500"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "u"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "cumSum"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "u"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "min",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ]
+            },
+            "alias": "mn"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ]
+            },
+            "alias": "mx"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupArray",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ]
+            },
+            "alias": "dg"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupArray",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "v"
+                  ]
+                }
+              ]
+            },
+            "alias": "vg"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "mn"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "toUInt32",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "binaryExpr",
+                            "op": "-",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "mx"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "mn"
+                              ]
+                            }
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "days"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayCumSum",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "arrayMap",
+                      "args": [
+                        {
+                          "kind": "lambdaExpr",
+                          "params": [
+                            "x"
+                          ],
+                          "body": {
+                            "kind": "functionCall",
+                            "name": "arrayElement",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "vg"
+                                ]
+                              },
+                              {
+                                "kind": "functionCall",
+                                "name": "indexOf",
+                                "args": [
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "dg"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "x"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "days"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "cumSum"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "u"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "-",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "today",
+                    "args": []
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "d"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "v"
+              }
+            ]
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "u"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

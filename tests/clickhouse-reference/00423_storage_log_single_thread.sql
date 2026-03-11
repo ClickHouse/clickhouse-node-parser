@@ -1,0 +1,2 @@
+SELECT * FROM log LIMIT 1;
+SELECT * FROM log;

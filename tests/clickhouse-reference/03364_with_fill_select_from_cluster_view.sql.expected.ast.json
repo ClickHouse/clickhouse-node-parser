@@ -1,0 +1,127 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "view",
+          "args": [
+            {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "queryParam",
+                        "name": "CurrentStart",
+                        "type": "String"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "dummy"
+                        ]
+                      },
+                      "type": "Date",
+                      "operator": true
+                    },
+                    "alias": "x"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "database": "system",
+                  "table": "one"
+                },
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    "direction": "ASC",
+                    "fillFrom": {
+                      "kind": "functionCall",
+                      "name": "toDate",
+                      "args": [
+                        {
+                          "kind": "queryParam",
+                          "name": "CurrentStart",
+                          "type": "String"
+                        }
+                      ]
+                    },
+                    "fillTo": {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "toDate",
+                        "args": [
+                          {
+                            "kind": "queryParam",
+                            "name": "CurrentEnd",
+                            "type": "String"
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "toIntervalDay",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        ]
+                      }
+                    },
+                    "fillStep": {
+                      "kind": "functionCall",
+                      "name": "toIntervalDay",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,15 @@
+select json from test_wide_map_with_buckets format Null;
+select json.b from test_wide_map_with_buckets format Null;
+select json.arr from test_wide_map_with_buckets format Null;
+select json.b, json.c from test_wide_map_with_buckets format Null;
+select json.b, json.c, json.arr from test_wide_map_with_buckets format Null;
+select json, json.b, json.c from test_wide_map_with_buckets format Null;
+select json, json.b, json.c, json.arr from test_wide_map_with_buckets format Null;
+select json.b, json.c, json from test_wide_map_with_buckets format Null;
+select json.b, json.c, json.arr, json from test_wide_map_with_buckets format Null;
+select json.^a from test_wide_map_with_buckets format Null;
+select json, json.^a from test_wide_map_with_buckets format Null;
+select json.^a, json.a.a1 from test_wide_map_with_buckets format Null;
+select json.a.a1, json.^a from test_wide_map_with_buckets format Null;
+select json.^a, json.a.a1, json.arr from test_wide_map_with_buckets format Null;
+select json.a.a1, json.arr, json.^a from test_wide_map_with_buckets format Null;

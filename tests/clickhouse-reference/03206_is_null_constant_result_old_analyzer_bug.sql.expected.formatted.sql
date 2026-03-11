@@ -1,0 +1,35 @@
+SELECT
+    `left`.x,
+    (isNull(`right`.x))::Boolean
+FROM
+    `left`
+LEFT JOIN `right`
+    ON `left`.x = `right`.x
+GROUP BY ALL;
+
+SELECT
+    isNullable(number)::Boolean,
+    now()
+FROM numbers(2)
+GROUP BY
+    isNullable(number)::Boolean,
+    now()
+FORMAT Null;
+
+SELECT
+    isNull(number)::Boolean,
+    now()
+FROM numbers(2)
+GROUP BY
+    isNull(number)::Boolean,
+    now()
+FORMAT Null;
+
+SELECT
+    (isNull(number))::Boolean,
+    now()
+FROM numbers(2)
+GROUP BY
+    (isNull(number))::Boolean,
+    now()
+FORMAT Null;

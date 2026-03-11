@@ -1,0 +1,8 @@
+SELECT
+    t1_00844.f1,
+    t2_00844.f3
+FROM
+    t1_00844
+INNER JOIN t2_00844
+    ON t1_00844.f2 = t2_00844.f1
+WHERE t2_00844.f1 = '1';

@@ -1,0 +1,205 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Carrier"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toFloat64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "C3"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "C1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toFloat64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "C1"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "C2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toFloat64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "C2"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "C3"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "alias": "Carrier"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "count",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "CAST",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "Nullable(Int32)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "C1"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            "alias": "C2"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "min",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            "alias": "C3"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Carrier"
+              ]
+            }
+          ]
+        }
+      },
+      "alias": "ITBL"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "Carrier"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1000001"
+      }
+    },
+    "settings": [
+      {
+        "name": "prefer_column_name_to_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

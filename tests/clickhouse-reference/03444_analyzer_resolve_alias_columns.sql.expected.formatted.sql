@@ -1,0 +1,7 @@
+SELECT *
+FROM users
+FORMAT Null;
+
+SELECT *
+FROM out1
+FORMAT Null;

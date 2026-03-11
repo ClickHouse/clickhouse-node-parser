@@ -1,0 +1,99 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "text"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniqExactIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "hash"
+              ]
+            },
+            {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "hash"
+                ]
+              },
+              "values": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "distinct": {
+                    "kind": "distinct"
+                  },
+                  "select": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "hash"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "test_table",
+                    "alias": "t1"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "alias": "counter"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table",
+      "alias": "t2"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "text"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "counter"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "text"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

@@ -1,0 +1,200 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "delete_ttl_info_min"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "delete_ttl_info_max"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "move_ttl_info",
+          "expression"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "move_ttl_info",
+          "min"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "move_ttl_info",
+          "max"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "parts"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "ttl"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "rows"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTimeZone",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "delete_ttl_info_min"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "UTC"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTimeZone",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "delete_ttl_info_max"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "UTC"
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "move_ttl_info",
+          "expression"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "move_ttl_info",
+          "min"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "move_ttl_info",
+          "max"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "parts"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "ttl"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "active"
+          ]
+        }
+      ]
+    }
+  }
+]

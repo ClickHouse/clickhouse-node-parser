@@ -1,0 +1,373 @@
+SELECT toTime('000:00:01');
+
+SELECT toTime('001:01:01');
+
+SELECT toTime('100:01:01');
+
+SELECT toTime('999:01:01');
+
+SELECT toTime('999:59:59');
+
+SELECT toTime('00:00:01');
+
+SELECT toTime('01:01:01');
+
+SELECT toTime('10:01:01');
+
+SELECT toTime('99:01:01');
+
+SELECT toTime('99:59:59');
+
+SELECT toTime('0:00:01');
+
+SELECT toTime('1:01:01');
+
+SELECT toTime('0:01:01');
+
+SELECT toTime('9:01:01');
+
+SELECT toTime('9:99:99');
+
+SELECT toTime('-000:00:01');
+
+SELECT toTime('-001:01:01');
+
+SELECT toTime('-100:01:01');
+
+SELECT toTime('-999:01:01');
+
+SELECT toTime('-999:59:59');
+
+SELECT toTime('-00:00:01');
+
+SELECT toTime('-01:01:01');
+
+SELECT toTime('-10:01:01');
+
+SELECT toTime('-99:01:01');
+
+SELECT toTime('-99:99:99');
+
+SELECT toTime('-0:00:01');
+
+SELECT toTime('-1:01:01');
+
+SELECT toTime('-0:01:01');
+
+SELECT toTime('-9:01:01');
+
+SELECT toTime('-9:59:59');
+
+SELECT toTime('-9:99:99');
+
+SELECT toTime64('000:00:01', 0);
+
+SELECT toTime64('001:01:01.1', 0);
+
+SELECT toTime64('100:01:01', 0);
+
+SELECT toTime64('999:01:01.1', 0);
+
+SELECT toTime64('999:59:59', 0);
+
+SELECT toTime64('00:00:01.1', 0);
+
+SELECT toTime64('01:01:01', 0);
+
+SELECT toTime64('10:01:01.1', 0);
+
+SELECT toTime64('99:01:01', 0);
+
+SELECT toTime64('99:59:59.1', 0);
+
+SELECT toTime64('0:00:01', 0);
+
+SELECT toTime64('1:01:01.1', 0);
+
+SELECT toTime64('0:01:01', 0);
+
+SELECT toTime64('9:01:01.1', 0);
+
+SELECT toTime64('9:59:59', 0);
+
+SELECT toTime64('-000:00:01.1', 0);
+
+SELECT toTime64('-001:01:01', 0);
+
+SELECT toTime64('-100:01:01.1', 0);
+
+SELECT toTime64('-999:01:01', 0);
+
+SELECT toTime64('-999:59:59.1', 0);
+
+SELECT toTime64('-00:00:01', 0);
+
+SELECT toTime64('-01:01:01.1', 0);
+
+SELECT toTime64('-10:01:01', 0);
+
+SELECT toTime64('-99:01:01.1', 0);
+
+SELECT toTime64('-99:59:59', 0);
+
+SELECT toTime64('-0:00:01.1', 0);
+
+SELECT toTime64('-1:01:01', 0);
+
+SELECT toTime64('-0:01:01.1', 0);
+
+SELECT toTime64('-9:01:01', 0);
+
+SELECT toTime64('-9:59:59.1', 0);
+
+SELECT toTime64('000:00:01.123', 3);
+
+SELECT toTime64('001:01:01.1234', 3);
+
+SELECT toTime64('100:01:01.123', 3);
+
+SELECT toTime64('999:01:01.1234', 3);
+
+SELECT toTime64('999:59:59.123', 3);
+
+SELECT toTime64('00:00:01.123', 3);
+
+SELECT toTime64('01:01:01.1234', 3);
+
+SELECT toTime64('10:01:01.123', 3);
+
+SELECT toTime64('99:01:01.1234', 3);
+
+SELECT toTime64('99:59:59.123', 3);
+
+SELECT toTime64('0:00:01.123', 3);
+
+SELECT toTime64('1:01:01.1234', 3);
+
+SELECT toTime64('0:01:01.123', 3);
+
+SELECT toTime64('9:01:01.1234', 3);
+
+SELECT toTime64('9:59:59.123', 3);
+
+SELECT toTime64('-000:00:01.123', 3);
+
+SELECT toTime64('-001:01:01.1234', 3);
+
+SELECT toTime64('-100:01:01.123', 3);
+
+SELECT toTime64('-999:01:01.1234', 3);
+
+SELECT toTime64('-999:59:59.123', 3);
+
+SELECT toTime64('-00:00:01.123', 3);
+
+SELECT toTime64('-01:01:01.1234', 3);
+
+SELECT toTime64('-10:01:01.123', 3);
+
+SELECT toTime64('-99:01:01.1234', 3);
+
+SELECT toTime64('-99:59:59.123', 3);
+
+SELECT toTime64('-0:00:01.123', 3);
+
+SELECT toTime64('-1:01:01.1234', 3);
+
+SELECT toTime64('-0:01:01.123', 3);
+
+SELECT toTime64('-9:01:01.1234', 3);
+
+SELECT toTime64('-9:59:59.123', 3);
+
+SELECT toTime64('000:00:01.123456', 6);
+
+SELECT toTime64('001:01:01.1234567', 6);
+
+SELECT toTime64('100:01:01.123456', 6);
+
+SELECT toTime64('999:01:01.1234567', 6);
+
+SELECT toTime64('999:59:59.123456', 6);
+
+SELECT toTime64('00:00:01.1234567', 6);
+
+SELECT toTime64('01:01:01.123456', 6);
+
+SELECT toTime64('10:01:01.1234567', 6);
+
+SELECT toTime64('99:01:01.123456', 6);
+
+SELECT toTime64('99:59:59.1234567', 6);
+
+SELECT toTime64('0:00:01.123456', 6);
+
+SELECT toTime64('1:01:01.1234567', 6);
+
+SELECT toTime64('0:01:01.123456', 6);
+
+SELECT toTime64('9:01:01.1234567', 6);
+
+SELECT toTime64('9:59:59.123456', 6);
+
+SELECT toTime64('-000:00:01.1234567', 6);
+
+SELECT toTime64('-001:01:01.123456', 6);
+
+SELECT toTime64('-100:01:01.1234567', 6);
+
+SELECT toTime64('-999:01:01.123456', 6);
+
+SELECT toTime64('-999:59:59.1234567', 6);
+
+SELECT toTime64('-00:00:01.123456', 6);
+
+SELECT toTime64('-01:01:01.1234567', 6);
+
+SELECT toTime64('-10:01:01.123456', 6);
+
+SELECT toTime64('-99:01:01.1234567', 6);
+
+SELECT toTime64('-99:59:59.123456', 6);
+
+SELECT toTime64('-0:00:01.1234567', 6);
+
+SELECT toTime64('-1:01:01.123456', 6);
+
+SELECT toTime64('-0:01:01.1234567', 6);
+
+SELECT toTime64('-9:01:01.123456', 6);
+
+SELECT toTime64('-9:59:59.1234567', 6);
+
+SELECT toTime64('000:00:01.1234567', 7);
+
+SELECT toTime64('001:01:01.12345678', 7);
+
+SELECT toTime64('100:01:01.1234567', 7);
+
+SELECT toTime64('999:01:01.12345678', 7);
+
+SELECT toTime64('999:59:59.1234567', 7);
+
+SELECT toTime64('00:00:01.12345678', 7);
+
+SELECT toTime64('01:01:01.1234567', 7);
+
+SELECT toTime64('10:01:01.12345678', 7);
+
+SELECT toTime64('99:01:01.1234567', 7);
+
+SELECT toTime64('99:59:59.12345678', 7);
+
+SELECT toTime64('0:00:01.1234567', 7);
+
+SELECT toTime64('1:01:01.12345678', 7);
+
+SELECT toTime64('0:01:01.1234567', 7);
+
+SELECT toTime64('9:01:01.12345678', 7);
+
+SELECT toTime64('9:59:59.1234567', 7);
+
+SELECT toTime64('-000:00:01.12345678', 7);
+
+SELECT toTime64('-001:01:01.1234567', 7);
+
+SELECT toTime64('-100:01:01.12345678', 7);
+
+SELECT toTime64('-999:01:01.1234567', 7);
+
+SELECT toTime64('-999:59:59.12345678', 7);
+
+SELECT toTime64('-00:00:01.1234567', 7);
+
+SELECT toTime64('-01:01:01.12345678', 7);
+
+SELECT toTime64('-10:01:01.1234567', 7);
+
+SELECT toTime64('-99:01:01.12345678', 7);
+
+SELECT toTime64('-99:59:59.1234567', 7);
+
+SELECT toTime64('-0:00:01.12345678', 7);
+
+SELECT toTime64('-1:01:01.1234567', 7);
+
+SELECT toTime64('-0:01:01.12345678', 7);
+
+SELECT toTime64('-9:01:01.1234567', 7);
+
+SELECT toTime64('-9:59:59.12345678', 7);
+
+SELECT toTime64('000:00:01.1234567891', 9);
+
+SELECT toTime64('001:01:01.123456789', 9);
+
+SELECT toTime64('100:01:01.1234567891', 9);
+
+SELECT toTime64('999:01:01.123456789', 9);
+
+SELECT toTime64('999:59:59.1234567891', 9);
+
+SELECT toTime64('00:00:01.123456789', 9);
+
+SELECT toTime64('01:01:01.1234567891', 9);
+
+SELECT toTime64('10:01:01.123456789', 9);
+
+SELECT toTime64('99:01:01.1234567891', 9);
+
+SELECT toTime64('99:59:59.123456789', 9);
+
+SELECT toTime64('0:00:01.1234567891', 9);
+
+SELECT toTime64('1:01:01.123456789', 9);
+
+SELECT toTime64('0:01:01.1234567891', 9);
+
+SELECT toTime64('9:01:01.123456789', 9);
+
+SELECT toTime64('9:59:59.1234567891', 9);
+
+SELECT toTime64('-000:00:01.123456789', 9);
+
+SELECT toTime64('-001:01:01.1234567891', 9);
+
+SELECT toTime64('-100:01:01.123456789', 9);
+
+SELECT toTime64('-999:01:01.1234567891', 9);
+
+SELECT toTime64('-999:59:59.123456789', 9);
+
+SELECT toTime64('-00:00:01.1234567891', 9);
+
+SELECT toTime64('-01:01:01.123456789', 9);
+
+SELECT toTime64('-10:01:01.1234567891', 9);
+
+SELECT toTime64('-99:01:01.123456789', 9);
+
+SELECT toTime64('-99:59:59.1234567891', 9);
+
+SELECT toTime64('-0:00:01.123456789', 9);
+
+SELECT toTime64('-1:01:01.1234567891', 9);
+
+SELECT toTime64('-0:01:01.123456789', 9);
+
+SELECT toTime64('-9:01:01.1234567891', 9);
+
+SELECT toTime64('-9:59:59.123456789', 9);
+
+SELECT toTime64('-9:99:99', 0);
+
+SELECT toTime64('9:99:99', 0);
+
+SELECT toTime64('-9:99:99.1234', 3);
+
+SELECT toTime64('9:99:99.1234', 3);
+
+SELECT toTime('a');
+
+SELECT toTime64('a', 0);

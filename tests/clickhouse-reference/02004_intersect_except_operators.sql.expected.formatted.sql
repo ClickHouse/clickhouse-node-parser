@@ -1,0 +1,297 @@
+SELECT 1
+INTERSECT
+SELECT 1;
+
+SELECT 2
+INTERSECT
+SELECT 1;
+
+SELECT 1
+EXCEPT
+SELECT 1;
+
+SELECT 2
+EXCEPT
+SELECT 1;
+
+SELECT number
+FROM numbers(20)
+INTERSECT
+SELECT number
+FROM numbers(5, 5);
+
+SELECT number
+FROM numbers(10)
+EXCEPT
+SELECT number
+FROM numbers(5);
+
+SELECT
+    number,
+    number + 10
+FROM numbers(12)
+EXCEPT
+SELECT
+    number + 5,
+    number + 15
+FROM numbers(10);
+
+SELECT 1
+EXCEPT
+(SELECT 2
+INTERSECT
+SELECT 1);
+
+SELECT 1
+EXCEPT
+(SELECT 2
+INTERSECT
+SELECT 2);
+
+(SELECT 1
+INTERSECT
+SELECT 1)
+EXCEPT
+SELECT 2;
+
+(SELECT 1
+INTERSECT
+SELECT 1)
+EXCEPT
+SELECT 1;
+
+((SELECT 1
+INTERSECT
+SELECT 1)
+EXCEPT
+(SELECT 2
+INTERSECT
+SELECT 1))
+EXCEPT
+(SELECT 3
+INTERSECT
+SELECT 1);
+
+((SELECT 1
+INTERSECT
+SELECT 1)
+EXCEPT
+(SELECT 2
+INTERSECT
+SELECT 1))
+EXCEPT
+(SELECT 3
+INTERSECT
+SELECT 2);
+
+(((SELECT 1
+INTERSECT
+SELECT 1)
+EXCEPT
+(SELECT 2
+INTERSECT
+SELECT 1))
+EXCEPT
+(SELECT 3
+INTERSECT
+SELECT 2))
+EXCEPT
+SELECT 1;
+
+SELECT number
+FROM numbers(10)
+EXCEPT
+SELECT 5;
+
+((SELECT number
+FROM numbers(100)
+INTERSECT
+SELECT number
+FROM numbers(20, 60))
+EXCEPT
+SELECT number
+FROM numbers(30, 20))
+EXCEPT
+SELECT number
+FROM numbers(60, 20);
+
+SELECT *
+FROM (
+        SELECT 1
+INTERSECT
+        SELECT 1
+    );
+
+SELECT count()
+FROM (
+        SELECT number
+        FROM numbers(10)
+EXCEPT
+        SELECT 5
+    );
+
+SELECT count()
+FROM (
+        SELECT number
+        FROM numbers(1000000)
+INTERSECT
+        SELECT number
+        FROM numbers(200000, 600000)
+    );
+
+SELECT count()
+FROM (
+((        SELECT number
+        FROM numbers(100)
+INTERSECT
+        SELECT number
+        FROM numbers(20, 60))
+EXCEPT
+        SELECT number
+        FROM numbers(30, 20))
+EXCEPT
+        SELECT number
+        FROM numbers(60, 20)
+    );
+
+SELECT count()
+FROM (
+(((        SELECT number
+        FROM numbers(100)
+INTERSECT
+        SELECT number
+        FROM numbers(20, 60))
+EXCEPT
+        SELECT number
+        FROM numbers(30, 20))
+EXCEPT
+        SELECT number
+        FROM numbers(60, 20))
+        UNION ALL
+        SELECT number
+        FROM numbers(100, 10)
+    );
+
+SELECT count()
+FROM (
+((        SELECT number
+        FROM numbers(1000000)
+INTERSECT
+        SELECT number
+        FROM numbers(200000, 600000))
+EXCEPT
+        SELECT number
+        FROM numbers(300000, 200000))
+EXCEPT
+        SELECT number
+        FROM numbers(600000, 200000)
+    );
+
+SELECT count()
+FROM (
+        SELECT 1
+INTERSECT
+        SELECT 1
+    )
+LIMIT 100;
+
+SELECT count()
+FROM (
+        SELECT 1
+EXCEPT
+        SELECT 2
+    )
+LIMIT 100;
+
+SELECT 1
+UNION ALL
+(SELECT 1
+INTERSECT
+SELECT 1);
+
+SELECT 1
+UNION ALL
+(SELECT 1
+INTERSECT
+SELECT 2);
+
+SELECT *
+FROM (
+((        SELECT 1
+        UNION ALL
+        SELECT 2
+        UNION ALL
+        SELECT 3
+        UNION ALL
+        SELECT 4)
+EXCEPT
+        SELECT 3)
+        UNION ALL
+        SELECT 5
+    )
+ORDER BY 1 ASC;
+
+SELECT *
+FROM (
+        SELECT 1
+        UNION ALL
+        SELECT 2
+        UNION ALL
+        SELECT 3
+        UNION ALL
+(        SELECT 4
+INTERSECT
+        SELECT 3)
+        UNION ALL
+        SELECT 5
+    )
+ORDER BY 1 ASC;
+
+SELECT *
+FROM (
+(        SELECT 1
+        UNION ALL
+        SELECT 2
+        UNION ALL
+        SELECT 3
+        UNION ALL
+(        SELECT 4
+INTERSECT
+        SELECT 3)
+        UNION ALL
+        SELECT 5)
+EXCEPT
+        SELECT 1
+    )
+ORDER BY 1 ASC;
+
+SELECT 1
+INTERSECT
+(SELECT 1
+EXCEPT
+SELECT 2);
+
+((SELECT 1
+UNION ALL
+SELECT 2)
+EXCEPT
+((SELECT 2
+EXCEPT
+SELECT 1)
+UNION ALL
+SELECT 1))
+EXCEPT
+SELECT 4;
+
+SELECT 1
+INTERSECT
+SELECT count()
+FROM (
+(        SELECT 1
+EXCEPT
+(        SELECT 2
+INTERSECT
+        SELECT 2))
+        UNION ALL
+        SELECT 1
+    );

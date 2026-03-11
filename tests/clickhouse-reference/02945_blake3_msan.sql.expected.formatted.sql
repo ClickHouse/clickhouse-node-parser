@@ -1,0 +1,1 @@
+SELECT hex(BLAKE3(BLAKE3('a')));

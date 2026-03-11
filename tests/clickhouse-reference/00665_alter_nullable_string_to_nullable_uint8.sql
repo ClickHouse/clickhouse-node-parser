@@ -1,0 +1,2 @@
+SELECT * FROM alter_00665;
+SELECT * FROM alter_00665 ORDER BY boolean_false NULLS LAST;

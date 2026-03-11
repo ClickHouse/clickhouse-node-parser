@@ -1,0 +1,92 @@
+SELECT domainRFC('http://[2001:db8::1]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001:db8::1]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[::200]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001:db8::1]')
+FORMAT CSV;
+
+SELECT domainRFC('[2001db81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[20[01:db8::1]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[20[01:db]8::1]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001:db8::1')
+FORMAT CSV;
+
+SELECT domainRFC('2001:db8::1]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db.81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db/81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db?81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db#81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db@81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db;81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db=81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db&81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db~81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db%81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db<81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db>81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db{81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db}81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db|81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db\\81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db^81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[2001::db 81]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[[]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[]]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[]:80')
+FORMAT CSV;
+
+SELECT domainRFC('[ ]:80')
+FORMAT CSV;

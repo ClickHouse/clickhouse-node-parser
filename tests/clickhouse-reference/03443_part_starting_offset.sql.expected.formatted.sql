@@ -1,0 +1,46 @@
+SELECT
+    _part,
+    _part_starting_offset,
+    _part_offset
+FROM test
+ORDER BY `all` ASC;
+
+SELECT
+    _part,
+    _part_starting_offset,
+    _part_offset
+FROM test
+WHERE j = 8
+ORDER BY `all` ASC;
+
+SELECT
+    *,
+    _part_starting_offset + _part_offset
+FROM test
+WHERE _part_starting_offset + _part_offset = 8
+SETTINGS
+    parallel_replicas_local_plan = 0,
+    max_rows_to_read = 1;
+
+SELECT
+    *,
+    _part_offset + _part_starting_offset
+FROM test
+WHERE _part_offset + _part_starting_offset = 8
+SETTINGS
+    parallel_replicas_local_plan = 0,
+    max_rows_to_read = 1;
+
+SELECT *
+FROM test
+PREWHERE 8 = (_part_offset + _part_starting_offset)
+WHERE 8 = (_part_offset + _part_starting_offset)
+SETTINGS
+    parallel_replicas_local_plan = 0,
+    max_rows_to_read = 1;
+
+SELECT *
+FROM test
+PREWHERE (8 = (_part_starting_offset * _part_offset))
+    AND 3
+WHERE 8 = (_part_starting_offset + _part_offset);

@@ -1,0 +1,295 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "-- Original issue with max_insert_delayed_streams_for_parallel_write <= 1"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "landing",
+      "final": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mv",
+      "final": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "hour"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk4"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk3"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "occurences"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "landing"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk4"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk3"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk1"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk2"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk4"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk3"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk4"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk3"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "countMerge",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "occurences"
+              ]
+            }
+          ]
+        },
+        "alias": "occurences"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ds"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk4"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk3"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk1"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk2"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk4"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk3"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

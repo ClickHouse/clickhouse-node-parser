@@ -1,0 +1,113 @@
+SELECT *
+FROM tab_00612
+ORDER BY key ASC;
+
+SELECT
+    key,
+    arrayJoin(arr) AS val
+FROM tab_00612
+WHERE (key, val) IN (1, 1);
+
+SELECT
+    key,
+    arrayJoin(arr) AS val
+FROM tab_00612
+WHERE (key, val) IN ((1, 1), (2, 2))
+ORDER BY key ASC;
+
+SELECT key
+FROM
+    tab_00612
+LEFT ARRAY JOIN arr AS val
+WHERE (key, val) IN (1, 1);
+
+SELECT key
+FROM
+    tab_00612
+LEFT ARRAY JOIN arr AS val
+WHERE (key, val) IN ((1, 1), (2, 2))
+ORDER BY key ASC;
+
+SELECT
+    key,
+    arrayJoin(n.x) AS val
+FROM tab_00612
+WHERE (key, val) IN (1, 1);
+
+SELECT
+    key,
+    arrayJoin(n.x) AS val
+FROM tab_00612
+WHERE (key, val) IN ((1, 1), (2, 2))
+ORDER BY key ASC;
+
+SELECT key
+FROM
+    tab_00612
+LEFT ARRAY JOIN n.x AS val
+WHERE (key, val) IN (1, 1);
+
+SELECT key
+FROM
+    tab_00612
+LEFT ARRAY JOIN n.x AS val
+WHERE (key, val) IN ((1, 1), (2, 2))
+ORDER BY key ASC;
+
+SELECT max(key)
+FROM
+    tab_00612
+LEFT ARRAY JOIN `n.x` AS val
+WHERE (key, val) IN ((1, 1));
+
+SELECT max(key)
+FROM
+    tab_00612
+LEFT ARRAY JOIN n AS val
+WHERE (key, val.x) IN (1, 1);
+
+SELECT max(key)
+FROM
+    tab_00612
+LEFT ARRAY JOIN `n.x` AS val
+WHERE (key, val) IN ((1, 1), (2, 2));
+
+SELECT max(key)
+FROM
+    tab_00612
+LEFT ARRAY JOIN n AS val
+WHERE (key, val.x) IN ((1, 1), (2, 2));
+
+SELECT max(key)
+FROM
+    tab_00612
+LEFT JOIN (
+        SELECT
+            key,
+            arrayJoin(n.x) AS val
+        FROM tab_00612
+    ) AS js2
+    USING (key)
+WHERE (key, val) IN (1, 1);
+
+SELECT max(key)
+FROM
+    tab_00612
+LEFT JOIN (
+        SELECT
+            key,
+            arrayJoin(n.x) AS val
+        FROM tab_00612
+    ) AS js2
+    USING (key)
+WHERE (key, val) IN ((1, 1), (2, 2));
+
+SELECT count(*)
+FROM tab_00612
+PREWHERE id1 IN (1);
+
+SELECT count()
+FROM tab_00612
+WHERE (key1, id1) IN (-1, 1)
+    AND (key1, 1) IN (-1, 1)
+SETTINGS force_primary_key = 1;

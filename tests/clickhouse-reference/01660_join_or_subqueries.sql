@@ -1,0 +1,5 @@
+select a1 from tab1 any left join (select * from tab2) on b1 = a2 or b2 = a1;
+select a1 from tab1 any left join (select a2, b2 from tab2) on b1 = a2 or b2 = a1;
+select a1, b1 from tab1 any left join (select * from tab2) on b1 = a2 or b2 = a1;
+select a1, b1, a2, b2 from tab1 any left join (select *, a2 as z from tab2) on b1 + 1 = z + 1 or b1 = z * 2;
+select a1, b1, a2, b2 from tab1 any left join (select *, a2 + 1 as z from tab2) on b1 + 1 = z or b1 = z * 2;

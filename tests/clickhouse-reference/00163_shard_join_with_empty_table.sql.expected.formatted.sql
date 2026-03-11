@@ -1,0 +1,107 @@
+SELECT *
+FROM (
+        SELECT
+            number,
+            n,
+            j1,
+            j2
+        FROM
+            (
+                SELECT
+                    number,
+                    number / 2 AS n
+                FROM remote('127.0.0.{2,3}', `system`.numbers)
+            )
+        LEFT JOIN (
+                SELECT
+                    number / 3 AS n,
+                    number AS j1,
+                    'Hello' AS j2
+                FROM `system`.numbers
+                LIMIT 0
+            )
+            USING (n)
+        LIMIT 10
+    )
+ORDER BY number ASC;
+
+SELECT *
+FROM (
+        SELECT
+            number,
+            n,
+            j1,
+            j2
+        FROM
+            (
+                SELECT
+                    dummy + 2 AS number,
+                    number / 2 AS n
+                FROM remote('127.0.0.{2,3}', `system`.one)
+            )
+        INNER JOIN (
+                SELECT
+                    number / 3 AS n,
+                    number AS j1,
+                    'Hello' AS j2
+                FROM `system`.numbers
+                LIMIT 0
+            )
+            USING (n)
+        LIMIT 10
+    )
+ORDER BY number ASC;
+
+SELECT *
+FROM (
+        SELECT
+            number,
+            n,
+            j1,
+            j2
+        FROM
+            (
+                SELECT
+                    number,
+                    number / 2 AS n
+                FROM remote('127.0.0.{2,3}', `system`.numbers)
+            )
+        LEFT JOIN (
+                SELECT
+                    number / 3 AS n,
+                    number AS j1,
+                    'Hello' AS j2
+                FROM `system`.numbers
+                LIMIT 0
+            )
+            USING (n)
+        LIMIT 10
+    )
+ORDER BY number ASC;
+
+SELECT *
+FROM (
+        SELECT
+            number,
+            n,
+            j1,
+            j2
+        FROM
+            (
+                SELECT
+                    dummy + 2 AS number,
+                    number / 2 AS n
+                FROM remote('127.0.0.{2,3}', `system`.one)
+            )
+        INNER JOIN (
+                SELECT
+                    number / 3 AS n,
+                    number AS j1,
+                    'Hello' AS j2
+                FROM `system`.numbers
+                LIMIT 0
+            )
+            USING (n)
+        LIMIT 10
+    )
+ORDER BY number ASC;

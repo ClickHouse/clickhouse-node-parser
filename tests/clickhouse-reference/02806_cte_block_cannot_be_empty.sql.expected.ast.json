@@ -1,0 +1,126 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "outer_table",
+                  "condition_value"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "formatRowNoNewline",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "JSONEachRow"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "outer_table",
+                    "result_date"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          ]
+        },
+        "alias": "json"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "alias": "condition_value"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "plus",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toDate",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-06-24"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toIntervalMonth",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "inner_table",
+                        "offset"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "result_date"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "offset"
+              }
+            ]
+          },
+          "alias": "inner_table"
+        }
+      },
+      "alias": "outer_table"
+    }
+  }
+]

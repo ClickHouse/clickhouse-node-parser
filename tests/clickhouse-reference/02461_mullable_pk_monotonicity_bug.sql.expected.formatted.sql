@@ -1,0 +1,89 @@
+SELECT x + 1
+FROM tab
+WHERE plus(x, 1) <= 2
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE plus(x, 1::Nullable(UInt8)) <= 2
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE plus(x, 1::LowCardinality(UInt8)) <= 2
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE plus(x, 1::LowCardinality(Nullable(UInt8))) <= 2
+ORDER BY x ASC;
+
+SELECT 1 + x
+FROM tab
+WHERE plus(1, x) <= 2
+ORDER BY x ASC;
+
+SELECT 1 + x
+FROM tab
+WHERE plus(1::Nullable(UInt8), x) <= 2
+ORDER BY x ASC;
+
+SELECT 1 + x
+FROM tab
+WHERE plus(1::LowCardinality(UInt8), x) <= 2
+ORDER BY x ASC;
+
+SELECT 1 + x
+FROM tab
+WHERE plus(1::LowCardinality(Nullable(UInt8)), x) <= 2
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE (x + 1::LowCardinality(UInt8)) <= -9223372036854775808
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE plus(x, 1) <= toDateTime('2022-02-02') + 2
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE plus(x, 1::Nullable(UInt8)) <= toDateTime('2022-02-02') + 2
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE plus(x, 1::LowCardinality(UInt8)) <= toDateTime('2022-02-02') + 2
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE plus(x, 1::LowCardinality(Nullable(UInt8))) <= toDateTime('2022-02-02') + 2
+ORDER BY x ASC;
+
+SELECT 1 + x
+FROM tab
+WHERE plus(1, x) <= toDateTime('2022-02-02') + 2
+ORDER BY x ASC;
+
+SELECT 1 + x
+FROM tab
+WHERE plus(1::Nullable(UInt8), x) <= toDateTime('2022-02-02') + 2
+ORDER BY x ASC;
+
+SELECT 1 + x
+FROM tab
+WHERE plus(1::LowCardinality(UInt8), x) <= toDateTime('2022-02-02') + 2
+ORDER BY x ASC;
+
+SELECT 1 + x
+FROM tab
+WHERE plus(1::LowCardinality(Nullable(UInt8)), x) <= toDateTime('2022-02-02') + 2
+ORDER BY x ASC;
+
+SELECT x + 1
+FROM tab
+WHERE (x + CAST('1', 'Nullable(UInt8)')) <= -2147483647
+ORDER BY x ASC;

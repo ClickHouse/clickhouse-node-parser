@@ -1,0 +1,7 @@
+SELECT * FROM qbits_16 ORDER BY id;
+SELECT * FROM qbits_32 ORDER BY id;
+SELECT * FROM qbits_64 ORDER BY id;
+SELECT * FROM qbits;
+SELECT * FROM qbit_64 ORDER BY id;
+SELECT * FROM qbit_32 ORDER BY id;
+SELECT * FROM qbit_16 ORDER BY id;

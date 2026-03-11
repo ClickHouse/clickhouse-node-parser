@@ -1,0 +1,7 @@
+SELECT count(ver)
+FROM myRMT FINAL
+PREWHERE ver > '2000-01-01';
+
+SELECT count()
+FROM myRMT FINAL
+PREWHERE ver > '2000-01-01';

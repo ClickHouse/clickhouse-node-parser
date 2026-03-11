@@ -1,0 +1,122 @@
+[
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "loanx_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "rating_sp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "cdu_date"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "row_number",
+          "args": [],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "cdu_date"
+                ]
+              }
+            ]
+          }
+        },
+        "alias": "row_number"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "last_value",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "cdu_date"
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "loanx_id"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "cdu_date"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        },
+        "alias": "last_cdu_date"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "atable"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cdu_date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "loanx_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "rating_sp"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "query_plan_remove_redundant_distinct",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

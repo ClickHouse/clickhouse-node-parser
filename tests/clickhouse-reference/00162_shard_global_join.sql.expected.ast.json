@@ -1,0 +1,153 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "j1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "j2"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dummy"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  }
+                ]
+              },
+              "alias": "n"
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "remote",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "127.0.0.{2,3}"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "system",
+                  "one"
+                ]
+              }
+            ]
+          }
+        },
+        "alias": "jr1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              },
+              "alias": "n"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "j1"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "Hello"
+              },
+              "alias": "j2"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        },
+        "alias": "jr2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "n"
+        ]
+      }
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  }
+]

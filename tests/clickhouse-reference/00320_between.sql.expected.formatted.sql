@@ -1,0 +1,1 @@
+SELECT and(greaterOrEquals(2, 1 + 1), lessOrEquals(2, 3 - 1));

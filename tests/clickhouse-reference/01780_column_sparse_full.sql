@@ -1,0 +1,36 @@
+SELECT name, column, serialization_kind
+FROM system.parts_columns WHERE table = 't_sparse_full' AND database = currentDatabase() AND active
+ORDER BY name, column;
+SELECT id, u FROM t_sparse_full ORDER BY id, u LIMIT 4;
+SELECT id, u FROM t_sparse_full ORDER BY id, u LIMIT 4 SETTINGS optimize_read_in_order = 0;
+SELECT id, u, s FROM t_sparse_full ORDER BY u DESC LIMIT 3;
+SELECT id, u, s FROM t_sparse_full WHERE u != 0 ORDER BY u DESC LIMIT 3;
+SELECT id % 3 AS k, sum(u) FROM t_sparse_full WHERE u != 0 GROUP BY k ORDER BY k;
+SELECT uniqExact(u) FROM t_sparse_full WHERE s != '';
+SELECT toUInt32(s) % 5 AS k, groupUniqArray(u % 4) FROM t_sparse_full WHERE s != '' GROUP BY k ORDER BY k;
+SELECT max(range(id % 10)[u]) FROM t_sparse_full;
+SELECT id, u, s FROM remote('127.0.0.{1,2}', currentDatabase(), t_sparse_full) ORDER BY id, u, s LIMIT 5;
+SELECT sum(u) FROM t_sparse_full GROUP BY id % 3 AS k WITH TOTALS ORDER BY k;
+SELECT sum(u) AS value FROM t_sparse_full GROUP BY id % 3 AS k WITH ROLLUP ORDER BY value;
+SELECT sum(u) AS value FROM t_sparse_full GROUP BY id % 3 AS k WITH CUBE ORDER BY value;
+SELECT sum(id) FROM t_sparse_full GROUP BY u % 3 AS k ORDER BY k;
+SELECT count() FROM t_sparse_full WHERE u % 4 = 0;
+SELECT count() FROM t_sparse_full WHERE u IN (SELECT u FROM t_sparse_full WHERE id % 4 = 2);
+SELECT DISTINCT u FROM t_sparse_full ORDER BY id LIMIT 5;
+SELECT id, u, s FROM t_sparse_full INNER JOIN
+(
+    SELECT number * 3 AS u FROM numbers(10)
+) AS t1 USING(u) ORDER BY id, u, s LIMIT 5;
+SELECT id, u, s FROM t_sparse_full FULL JOIN
+(
+    SELECT number * 3 AS u FROM numbers(10)
+) AS t1 USING(u) ORDER BY id, u, s LIMIT 5;
+SELECT id, u, s FROM (SELECT number * 2 AS u FROM numbers(10)) AS t1
+INNER JOIN t_sparse_full USING(u) ORDER BY id, u, s LIMIT 5;
+SELECT id, u, s FROM (SELECT number * 2 AS u FROM numbers(10)) AS t1
+FULL JOIN t_sparse_full USING(u) ORDER BY id, u, s LIMIT 5;
+SELECT id, u, s FROM (SELECT u FROM t_sparse_full) AS t1
+FULL JOIN t_sparse_full USING(u) ORDER BY id, u, s LIMIT 5;
+SELECT column, serialization_kind
+FROM system.parts_columns WHERE table = 't_sparse_full' AND database = currentDatabase() AND active
+ORDER BY name, column;

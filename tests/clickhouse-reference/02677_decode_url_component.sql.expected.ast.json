@@ -1,0 +1,103 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "encodeURLComponent",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "кликхаус"
+            }
+          ]
+        },
+        "alias": "encoded"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "decodeURLComponent",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "encoded"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "кликхаус"
+          }
+        },
+        "alias": "expected_EQ"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "decodeURLComponent",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "encodeURLComponent",
+              "args": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "randomString",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "100"
+                      }
+                    ]
+                  },
+                  "alias": "x"
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,11 @@
+SELECT *
+FROM test_00616
+ORDER BY ver ASC;
+
+SELECT *
+FROM replacing_00616
+ORDER BY ver ASC;
+
+SELECT *
+FROM replacing_00616 FINAL
+ORDER BY ver ASC;

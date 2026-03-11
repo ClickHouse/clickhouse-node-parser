@@ -1,0 +1,15 @@
+SELECT CAST('2023-01-01' AS Float64);
+
+SELECT CAST('2023-01-01' AS Float32);
+
+SELECT toFloat32('2023-01-01');
+
+SELECT toFloat64('2023-01-01');
+
+SELECT toFloat32OrZero('2023-01-01');
+
+SELECT toFloat64OrZero('2023-01-01');
+
+SELECT toFloat32OrNull('2023-01-01');
+
+SELECT toFloat64OrNull('2023-01-01');

@@ -1,0 +1,3 @@
+SELECT *
+FROM log
+ORDER BY x ASC;

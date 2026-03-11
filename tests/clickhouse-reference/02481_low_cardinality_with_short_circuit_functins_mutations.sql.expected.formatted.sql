@@ -1,0 +1,4 @@
+SELECT *
+FROM issue_46128
+WHERE id <= 2
+ORDER BY id ASC;

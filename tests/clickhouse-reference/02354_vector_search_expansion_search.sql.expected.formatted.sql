@@ -1,0 +1,2 @@
+SELECT countDistinct(*)
+FROM results;

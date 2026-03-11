@@ -1,0 +1,1 @@
+SELECT * FROM t_v ORDER BY A;

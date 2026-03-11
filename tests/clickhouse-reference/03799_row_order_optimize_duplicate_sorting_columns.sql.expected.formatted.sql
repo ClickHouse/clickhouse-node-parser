@@ -1,0 +1,3 @@
+SELECT *
+FROM t0
+ORDER BY `ALL` ASC;

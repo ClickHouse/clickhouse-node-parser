@@ -1,0 +1,370 @@
+[
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "firstNonDefault",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "__table3",
+                "dummy"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "__table4",
+                "dummy"
+              ]
+            }
+          ]
+        },
+        "alias": "dummy"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "__table4",
+            "isNotNull(map(assumeNotNull(isNull(3)), NULL))"
+          ]
+        },
+        "alias": "isNotNull(map(assumeNotNull(isNull(3)), NULL))"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "__table4",
+            "isNotDistinctFrom(3, isZeroOrNull(isNotNull(3)))"
+          ]
+        },
+        "alias": "isNotDistinctFrom(3, isZeroOrNull(isNotNull(3)))"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "left": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "one",
+            "alias": "__table3"
+          },
+          "kind": "join",
+          "joinType": "FULL",
+          "right": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "distinct": {
+                "kind": "distinct"
+              },
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "__table5",
+                      "dummy"
+                    ]
+                  },
+                  "alias": "dummy"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "__table5",
+                      "isNotNull(map(assumeNotNull(isNull(3)), NULL))"
+                    ]
+                  },
+                  "alias": "isNotNull(map(assumeNotNull(isNull(3)), NULL))"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "_CAST",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "UInt8"
+                      }
+                    ]
+                  },
+                  "alias": "isNotDistinctFrom(3, isZeroOrNull(isNotNull(3)))"
+                }
+              ],
+              "from": {
+                "kind": "subqueryFrom",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "__table6",
+                          "dummy"
+                        ]
+                      },
+                      "alias": "dummy"
+                    },
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "_CAST",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "UInt8"
+                          }
+                        ]
+                      },
+                      "alias": "isNotNull(map(assumeNotNull(isNull(3)), NULL))"
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableFunction",
+                    "name": "remote",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "127.0.0.3"
+                      }
+                    ],
+                    "alias": "__table6"
+                  }
+                },
+                "alias": "__table5"
+              }
+            },
+            "alias": "__table4"
+          },
+          "constraint": {
+            "kind": "using",
+            "columns": [
+              "dummy"
+            ]
+          }
+        },
+        "kind": "arrayJoin",
+        "joinType": "LEFT ARRAY",
+        "expressions": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "equals",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "materialize",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "_CAST",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "UInt8"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "source": "[equals(materialize(3), _CAST(1, 'UInt8'))]"
+            },
+            "alias": "__array_join_exp_2"
+          }
+        ]
+      },
+      "kind": "arrayJoin",
+      "joinType": "LEFT ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "map",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "_CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UInt8"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "_CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UInt8"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "_CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UInt128"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "__array_join_exp_1"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "__table4",
+            "isNotNull(map(assumeNotNull(isNull(3)), NULL))"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "firstNonDefault",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "__table3",
+                "dummy"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "__table4",
+                "dummy"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "__table4",
+            "isNotDistinctFrom(3, isZeroOrNull(isNotNull(3)))"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "__table4",
+            "isNotNull(map(assumeNotNull(isNull(3)), NULL))"
+          ]
+        }
+      ]
+    },
+    "withCube": true,
+    "settings": [
+      {
+        "name": "enable_lazy_columns_replication",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

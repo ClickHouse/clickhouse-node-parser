@@ -1,0 +1,106 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "materialize",
+        "args": [
+          {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ],
+            "source": "[NULL]"
+          }
+        ]
+      },
+      {
+        "kind": "array",
+        "elements": [],
+        "source": "[]"
+      },
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t1"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "key"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t2",
+              "key"
+            ]
+          }
+        }
+      }
+    },
+    "prewhere": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "10"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "key"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "withTotals": true
+  }
+]

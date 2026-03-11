@@ -1,0 +1,150 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "alias2"
+          ]
+        },
+        "alias": "alias3"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "table"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "arr_alias"
+            ]
+          },
+          "alias": "alias2"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayEnumerateUniq",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "arr_alias"
+                ]
+              }
+            ]
+          },
+          "alias": "_uniq_Event"
+        }
+      ]
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2010-10-10"
+              }
+            ]
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "inExpr",
+          "negated": true,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "z"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "x"
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "Int64",
+            "value": "-1"
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  }
+]

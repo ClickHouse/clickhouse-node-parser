@@ -1,0 +1,59 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "With "
+            },
+            {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "_CAST",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "ba\\0"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "LowCardinality(FixedString(3))"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "concat('With ', materialize(CAST('ba\\0', 'LowCardinality(FixedString(3))')))"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "one"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "With "
+        }
+      ]
+    }
+  }
+]

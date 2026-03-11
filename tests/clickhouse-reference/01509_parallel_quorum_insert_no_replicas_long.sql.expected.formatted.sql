@@ -1,0 +1,9 @@
+SELECT COUNT()
+FROM r1;
+
+SELECT COUNT()
+FROM r2;
+
+SELECT *
+FROM r2
+WHERE key = 4;

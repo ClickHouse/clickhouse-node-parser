@@ -1,0 +1,88 @@
+[
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "result"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toStartOfFifteenMinutes",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "toDateTime",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "2017-12-25 00:00:00"
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "60"
+                    }
+                  }
+                }
+              ]
+            },
+            "alias": "result"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "120"
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "result"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

@@ -1,0 +1,67 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"a\" : [[1, {}], null]}"
+              }
+            ]
+          },
+          "type": "JSON",
+          "operator": true
+        },
+        "alias": "json"
+      },
+      {
+        "kind": "functionCall",
+        "name": "getSubcolumn",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "a"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dynamicType",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "getSubcolumn",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

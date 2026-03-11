@@ -1,0 +1,10 @@
+select * from test_merge order by all;
+select t.a from test_merge order by all;
+select t.b from test_merge order by all;
+select x, t.a from test_merge order by all;
+select y, t.a from test_merge order by all;
+select t.a, t.b from test_merge order by all;
+select x, t.a, t.b from test_merge order by all;
+select y, t.a, t.b from test_merge order by all;
+select x, t.a, t.b, y from test_merge order by all;
+select json.a.b, json.a.g, json.c, json.d from test_merge;

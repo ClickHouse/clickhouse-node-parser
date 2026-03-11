@@ -1,0 +1,136 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "num"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "hostName",
+          "args": []
+        },
+        "alias": "hostName"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "query_log",
+        "alias": "a"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "processes",
+        "alias": "b"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a",
+                  "query_id"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b",
+                  "query_id"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "type"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "QueryStart"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "dateDiff",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "second"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_time"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "now",
+                    "args": []
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "current_database"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              }
+            }
+          ]
+        }
+      }
+    },
+    "format": "Null"
+  }
+]

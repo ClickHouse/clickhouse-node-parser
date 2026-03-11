@@ -1,0 +1,279 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        },
+        "alias": "a"
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "a"
+            ],
+            "body": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "parenthesized": true
+            }
+          },
+          {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1, 2, 3]"
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        },
+        "alias": "c"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c1"
+              ]
+            }
+          ]
+        },
+        "alias": "v"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "alias": "c1"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "v"
+                }
+              ],
+              "source": "['v']"
+            },
+            "alias": "c2"
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "arrayExists",
+      "args": [
+        {
+          "kind": "lambdaExpr",
+          "params": [
+            "v"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "v"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "v"
+            },
+            "parenthesized": true
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c2"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c1"
+              ]
+            }
+          ]
+        },
+        "alias": "v"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "alias": "c1"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "v"
+                }
+              ],
+              "source": "['v']"
+            },
+            "alias": "c2"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "d"
+                }
+              ],
+              "source": "['d']"
+            },
+            "alias": "d"
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "arrayExists",
+      "args": [
+        {
+          "kind": "lambdaExpr",
+          "params": [
+            "i"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            "right": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "d"
+                }
+              ],
+              "source": "['d']"
+            },
+            "parenthesized": true
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c2"
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1 @@
+SELECT t1.* FROM t0 FULL JOIN t1 USING (y) JOIN t2 USING (y) PREWHERE toLowCardinality(1);

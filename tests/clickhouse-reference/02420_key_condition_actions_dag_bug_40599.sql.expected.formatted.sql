@@ -1,0 +1,19 @@
+SELECT count()
+FROM (
+        SELECT event_dt
+        FROM (
+                SELECT
+                    event_dt,
+                    403 AS event_id
+                FROM (
+                        SELECT event_dt
+                        FROM tba AS tba
+                        WHERE event_id = 9
+                            AND ((tba.event_dt >= 20220822
+                            AND tba.event_dt <= 20220822))
+                    )
+            ) AS tba
+        WHERE tba.event_dt >= 20220822
+            AND tba.event_dt <= 20220822
+            AND event_id = 403
+    );

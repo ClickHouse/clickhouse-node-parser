@@ -1,0 +1,17 @@
+select * from tab_00612 order by key;
+select key, arrayJoin(arr) as val from tab_00612 where (key, val) in (1, 1);
+select key, arrayJoin(arr) as val from tab_00612 where (key, val) in ((1, 1), (2, 2)) order by key;
+select key from tab_00612 left array join arr as val where (key, val) in (1, 1);
+select key from tab_00612 left array join arr as val where (key, val) in ((1, 1), (2, 2)) order by key;
+select key, arrayJoin(n.x) as val from tab_00612 where (key, val) in (1, 1);
+select key, arrayJoin(n.x) as val from tab_00612 where (key, val) in ((1, 1), (2, 2)) order by key;
+select key from tab_00612 left array join n.x as val where (key, val) in (1, 1);
+select key from tab_00612 left array join n.x as val where (key, val) in ((1, 1), (2, 2)) order by key;
+select max(key) from tab_00612 left array join `n.x` as val where (key, val) in ((1, 1));
+select max(key) from tab_00612 left array join n as val where (key, val.x) in (1, 1);
+select max(key) from tab_00612 left array join `n.x` as val where (key, val) in ((1, 1), (2, 2));
+select max(key) from tab_00612 left array join n as val where (key, val.x) in ((1, 1), (2, 2));
+select max(key) from tab_00612 any left join (select key, arrayJoin(n.x) as val from tab_00612) js2 using key where (key, val) in (1, 1);
+select max(key) from tab_00612 any left join (select key, arrayJoin(n.x) as val from tab_00612) js2 using key where (key, val) in ((1, 1), (2, 2));
+SELECT count(*) FROM tab_00612 PREWHERE id1 IN (1);
+SELECT count() FROM tab_00612 WHERE (key1, id1) IN (-1, 1) AND (key1, 1) IN (-1, 1) SETTINGS force_primary_key = 1;

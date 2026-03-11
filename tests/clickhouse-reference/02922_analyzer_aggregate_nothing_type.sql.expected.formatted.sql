@@ -1,0 +1,238 @@
+SELECT sum(NULL);
+
+SELECT quantile(0.5)(NULL);
+
+SELECT quantiles(0.1, 0.2)(NULL::Nullable(UInt32));
+
+SELECT
+    quantile(0.5)(NULL),
+    quantiles(0.1, 0.2)(NULL::Nullable(UInt32)),
+    count(NULL),
+    sum(NULL);
+
+SELECT count(NULL)
+FROM remote('127.0.0.{1,2}', numbers(3))
+GROUP BY number % 2
+WITH TOTALS;
+
+SELECT quantile(0.5)(NULL)
+FROM remote('127.0.0.{1,2}', numbers(3))
+GROUP BY number % 2
+WITH TOTALS;
+
+SELECT quantiles(0.1, 0.2)(NULL::Nullable(UInt32))
+FROM remote('127.0.0.{1,2}', numbers(3))
+GROUP BY number % 2
+WITH TOTALS;
+
+SELECT '-- notinhgs:';
+
+SELECT
+    nothing() AS n,
+    toTypeName(n);
+
+SELECT
+    nothing(1) AS n,
+    toTypeName(n);
+
+SELECT
+    nothing(NULL) AS n,
+    toTypeName(n);
+
+SELECT
+    nothingUInt64() AS n,
+    toTypeName(n);
+
+SELECT
+    nothingUInt64(1) AS n,
+    toTypeName(n);
+
+SELECT
+    nothingUInt64(NULL) AS n,
+    toTypeName(n);
+
+SELECT
+    nothingNull() AS n,
+    toTypeName(n);
+
+SELECT
+    nothingNull(1) AS n,
+    toTypeName(n);
+
+SELECT
+    nothingNull(NULL) AS n,
+    toTypeName(n);
+
+SELECT quantileArray(0.5)([NULL, NULL]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantileArrayIf(0.5)([NULL], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantileArrayIf(0.5)([NULL], 0) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantileIfArray(0.5)([NULL, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantileIfArray(0.5)([1, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantileIfArrayIf(0.5)([1, NULL], [1, 0], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantileIfArrayArray(0.5)([[1, NULL]], [[1, 0]]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantilesArray(0.5, 0.9)([NULL :: Nullable(UInt64), NULL]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantilesArrayIf(0.5, 0.9)([NULL :: Nullable(UInt64)], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantilesArrayIf(0.5, 0.9)([NULL :: Nullable(UInt64)], 0) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantilesIfArray(0.5, 0.9)([NULL :: Nullable(UInt64), NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantilesIfArray(0.5, 0.9)([1, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantilesIfArrayIf(0.5, 0.9)([1, NULL], [1, 0], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT quantilesIfArrayArray(0.5, 0.9)([[1, NULL]], [[1, 0]]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingArray([NULL, NULL]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingArrayIf([NULL], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingArrayIf([NULL], 0) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingIfArray([NULL, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingIfArray([1, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingIfArrayIf([1, NULL], [1, 0], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingIfArrayArray([[1, NULL]], [[1, 0]]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingUInt64Array([NULL, NULL]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingUInt64ArrayIf([NULL], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingUInt64ArrayIf([NULL], 0) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingUInt64IfArray([NULL, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingUInt64IfArray([1, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingUInt64IfArrayIf([1, NULL], [1, 0], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingUInt64IfArrayArray([[1, NULL]], [[1, 0]]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingNullArray([NULL, NULL]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingNullArrayIf([NULL], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingNullArrayIf([NULL], 0) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingNullIfArray([NULL, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingNullIfArray([1, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingNullIfArrayIf([1, NULL], [1, 0], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT nothingNullIfArrayArray([[1, NULL]], [[1, 0]]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT sumArray([NULL, NULL]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT sumArrayIf([NULL], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT sumArrayIf([NULL], 0) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT sumIfArray([NULL, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT sumIfArray([1, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT sumIfArrayIf([1, NULL], [1, 0], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT sumIfArrayArray([[1, NULL]], [[1, 0]]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT countArray([NULL, NULL]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT countArrayIf([NULL], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT countArrayIf([NULL], 0) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT countIfArray([NULL, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT countIfArray([1, NULL], [1, 0]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT countIfArrayIf([1, NULL], [1, 0], 1) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT countIfArrayArray([[1, NULL]], [[1, 0]]) AS x
+FROM remote('127.0.0.{1,2}', numbers(3));
+
+SELECT count(NULL)
+FROM t1
+WITH TOTALS;
+
+SELECT
+    count(NULL AS a),
+    a
+FROM t1
+WITH TOTALS;
+
+SELECT
+    count(NULL AS a),
+    sum(a)
+FROM t1
+WITH TOTALS;
+
+SELECT uniq(NULL)
+FROM t1
+WITH TOTALS;
+
+SELECT
+    quantile(0.5)(NULL),
+    quantile(0.9)(NULL),
+    quantiles(0.1, 0.2)(NULL::Nullable(UInt32))
+FROM t1
+WITH TOTALS;

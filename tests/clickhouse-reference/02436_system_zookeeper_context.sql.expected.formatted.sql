@@ -1,0 +1,2 @@
+SELECT DISTINCT n
+FROM mt;

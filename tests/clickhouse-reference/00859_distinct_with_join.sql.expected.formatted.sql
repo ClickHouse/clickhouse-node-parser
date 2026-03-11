@@ -1,0 +1,6 @@
+SELECT DISTINCT a
+FROM
+    fooL
+LEFT JOIN fooR
+    USING (a)
+ORDER BY a ASC;

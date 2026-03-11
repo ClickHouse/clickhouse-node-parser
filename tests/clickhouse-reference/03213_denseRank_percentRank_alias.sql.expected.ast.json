@@ -1,0 +1,344 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "---- denseRank() ----"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "p"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "o"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "rank",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "denseRank",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "row_number",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "intDiv",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            },
+            "alias": "p"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "mod",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            },
+            "alias": "o"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "31"
+            }
+          ]
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "o"
+              ]
+            },
+            "direction": "ASC"
+          },
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ]
+      },
+      "alias": "t"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "p"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "o"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "windows": [
+      {
+        "name": "w",
+        "body": "partition by p order by o, number"
+      }
+    ],
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "product_name"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "group_name"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "price"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "rank",
+              "args": [],
+              "window": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "group_name"
+                    ]
+                  }
+                ],
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "price"
+                      ]
+                    },
+                    "direction": "ASC"
+                  }
+                ]
+              }
+            },
+            "alias": "rank"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "percentRank",
+              "args": [],
+              "window": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "group_name"
+                    ]
+                  }
+                ],
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "price"
+                      ]
+                    },
+                    "direction": "ASC"
+                  }
+                ]
+              }
+            },
+            "alias": "percent"
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "products"
+          },
+          "kind": "join",
+          "joinType": "INNER",
+          "right": {
+            "kind": "tableRef",
+            "table": "product_groups"
+          },
+          "constraint": {
+            "kind": "using",
+            "columns": [
+              "group_id"
+            ]
+          }
+        }
+      },
+      "alias": "t"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "group_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "price"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "product_name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

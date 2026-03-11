@@ -1,0 +1,116 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayFilter",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "a",
+                    "b"
+                  ],
+                  "body": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "GeneralInterests"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayReduce",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "groupArray"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "GeneralInterests"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "res"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  }
+]

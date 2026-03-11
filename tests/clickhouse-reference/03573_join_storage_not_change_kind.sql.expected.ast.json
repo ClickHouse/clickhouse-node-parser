@@ -1,0 +1,92 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event",
+          "message"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "user",
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "user",
+          "age"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "events",
+        "alias": "event"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "users",
+        "alias": "user"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event",
+              "user_id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "user",
+              "uid"
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "user",
+          "uid"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "user",
+            "age"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

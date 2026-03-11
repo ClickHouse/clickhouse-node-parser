@@ -1,0 +1,25 @@
+SELECT
+    x,
+    y,
+    z,
+    argMax(d, a),
+    argMax(ad, a),
+    argMax(td, a),
+    argMax(md, a),
+    argMax(j, a),
+    max(a),
+    argMin(d, a),
+    argMin(ad, a),
+    argMin(td, a),
+    argMin(md, a),
+    argMin(j, a),
+    min(a)
+FROM test
+GROUP BY
+    x,
+    y,
+    z
+ORDER BY
+    x ASC,
+    y ASC,
+    z ASC;

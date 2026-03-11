@@ -1,0 +1,1 @@
+SELECT c0 FROM t0 FINAL SETTINGS output_format_native_use_flattened_dynamic_and_json_serialization = 1;

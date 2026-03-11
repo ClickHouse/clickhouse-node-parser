@@ -1,0 +1,14 @@
+SELECT '-----------------------';
+SELECT sleep(1) FORMAT Null;
+SELECT * FROM system.database_replicas WHERE database LIKE 'db_%' ORDER BY database;
+SELECT database FROM system.database_replicas WHERE database LIKE 'db_%' ORDER BY database;
+SELECT DISTINCT is_readonly FROM system.database_replicas WHERE database LIKE 'db_%';
+SELECT count(*) FROM system.database_replicas WHERE database LIKE 'db_%';
+SELECT * FROM system.database_replicas WHERE database LIKE 'db_%' ORDER BY database LIMIT 1;
+SELECT * FROM system.database_replicas WHERE database LIKE 'db_%' ORDER BY database LIMIT 6;
+SELECT * FROM system.database_replicas WHERE database LIKE 'db_%' ORDER BY database LIMIT 7;
+SELECT * FROM system.database_replicas WHERE database LIKE 'db_%' AND is_readonly=0 ORDER BY database;
+SELECT * FROM system.database_replicas WHERE database LIKE 'db_%' AND is_readonly=1 ORDER BY database;
+SELECT is_readonly FROM system.database_replicas WHERE database='db_2' ORDER BY database;
+SELECT * FROM system.database_replicas WHERE database='db_11' ORDER BY database;
+SELECT database, max_log_ptr FROM system.database_replicas WHERE database LIKE 'db_%' AND max_log_ptr > 1;

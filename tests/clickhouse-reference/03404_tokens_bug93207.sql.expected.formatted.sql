@@ -1,0 +1,1 @@
+SELECT tokens(NULL, 1, materialize(1));

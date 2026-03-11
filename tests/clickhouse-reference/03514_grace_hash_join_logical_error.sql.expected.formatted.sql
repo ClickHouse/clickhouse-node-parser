@@ -1,0 +1,7 @@
+SELECT *
+FROM
+    A AS a
+INNER JOIN A AS b
+    ON a.A = b.A
+LIMIT 1
+FORMAT Null;

@@ -1,0 +1,35 @@
+SELECT '--- raw';
+
+SELECT *
+FROM tab
+ORDER BY
+    x ASC,
+    version ASC;
+
+SELECT *
+FROM tab FINAL
+ORDER BY x ASC;
+
+SELECT *
+FROM tab2 FINAL
+ORDER BY x ASC;
+
+SELECT *
+FROM tab3 FINAL
+PREWHERE z < 250
+ORDER BY x ASC;
+
+SELECT x
+FROM tab4 FINAL
+ORDER BY x ASC;
+
+SELECT
+    x,
+    version
+FROM tab4 FINAL
+ORDER BY x ASC;
+
+SELECT x
+FROM tab_final FINAL
+PREWHERE y != 'ccc'
+ORDER BY x ASC;

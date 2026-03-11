@@ -1,0 +1,68 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "v"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_cache_sparse"
+    },
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_cache"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "query"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "SELECT v FROM t_cache_sparse%"
+        }
+      ]
+    }
+  }
+]

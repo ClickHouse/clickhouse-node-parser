@@ -1,0 +1,3 @@
+SELECT *
+FROM test_data
+FORMAT CSV;

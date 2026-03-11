@@ -1,0 +1,2 @@
+SELECT * FROM file;
+SELECT * FROM file2;

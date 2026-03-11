@@ -1,0 +1,731 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqStateMap",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "map",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqStateForEachMapForEachMap",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "map",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "map",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "array",
+                        "elements": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          }
+                        ],
+                        "source": "[number, number]"
+                      }
+                    ]
+                  }
+                ],
+                "source": "[map(1, [number, number])]"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqStateForEachResample",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "75"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          }
+        ],
+        "args": [
+          {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ],
+            "source": "[number, number + 1]"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqStateMapForEachResample",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "75"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          }
+        ],
+        "args": [
+          {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "map",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "[map(1, number)]"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniqStateForEachMerge",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ]
+        },
+        "alias": "y"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniqStateForEachState",
+              "args": [
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ],
+                  "source": "[number]"
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqMerge",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniqStateForEachMerge",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "uniqStateForEachState",
+                  "args": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        }
+                      ],
+                      "source": "[number]"
+                    }
+                  ]
+                },
+                "alias": "x"
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "mapApply",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "k",
+              "v"
+            ],
+            "body": {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "finalizeAggregation",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "v"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "source": "(k, finalizeAggregation(v))"
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "mapApply",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "k",
+              "v"
+            ],
+            "body": {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayMap",
+                  "args": [
+                    {
+                      "kind": "lambdaExpr",
+                      "params": [
+                        "x"
+                      ],
+                      "body": {
+                        "kind": "functionCall",
+                        "name": "mapApply",
+                        "args": [
+                          {
+                            "kind": "lambdaExpr",
+                            "params": [
+                              "k",
+                              "v"
+                            ],
+                            "body": {
+                              "kind": "tuple",
+                              "elements": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "k"
+                                  ]
+                                },
+                                {
+                                  "kind": "functionCall",
+                                  "name": "arrayMap",
+                                  "args": [
+                                    {
+                                      "kind": "lambdaExpr",
+                                      "params": [
+                                        "x"
+                                      ],
+                                      "body": {
+                                        "kind": "functionCall",
+                                        "name": "finalizeAggregation",
+                                        "args": [
+                                          {
+                                            "kind": "columnRef",
+                                            "parts": [
+                                              "x"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "v"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "source": "(k, arrayMap(x -> finalizeAggregation(x), v))"
+                            }
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "x"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "v"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "source": "(k, arrayMap(x -> mapApply(k, v -> (k, arrayMap(x -> finalizeAggregation(x), v)), x), v))"
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "finalizeAggregation",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "mapApply",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "k",
+                          "v"
+                        ],
+                        "body": {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "k"
+                              ]
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "finalizeAggregation",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "v"
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "source": "(k, finalizeAggregation(v))"
+                        }
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  }
+]

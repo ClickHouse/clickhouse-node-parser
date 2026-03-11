@@ -1,0 +1,8 @@
+select arraySort(arrayIntersect(arr, [1,2])) from array_intersect order by arr;
+select arraySort(arrayIntersect(arr, [])) from array_intersect order by arr;
+select arraySort(arrayIntersect([], arr)) from array_intersect order by arr;
+select arraySort(arrayIntersect([1,2], arr)) from array_intersect order by arr;
+select arraySort(arrayIntersect([1,2], [1,2,3,4])) from array_intersect order by arr;
+select arraySort(arrayIntersect([], [])) from array_intersect order by arr;
+select arraySort(arrayIntersect([-100], [156]));
+select arraySort(arrayIntersect([1], [257]));

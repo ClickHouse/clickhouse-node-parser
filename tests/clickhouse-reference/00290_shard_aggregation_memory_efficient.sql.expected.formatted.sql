@@ -1,0 +1,6 @@
+SELECT concat(toString(number), arrayStringConcat(arrayMap(x -> '.', range(number % 10)))) AS k
+FROM remote('127.0.0.{2,3}', currentDatabase(), numbers_10_00290)
+WHERE number < (if(randConstant() % 2, 4999, 10000))
+GROUP BY k
+ORDER BY k ASC
+LIMIT 10;

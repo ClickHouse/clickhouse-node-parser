@@ -1,0 +1,1 @@
+SELECT CAST(toIntervalDay(1) AS Nullable(Decimal(10, 10)));

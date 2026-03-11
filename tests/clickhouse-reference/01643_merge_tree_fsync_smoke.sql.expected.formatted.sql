@@ -1,0 +1,6 @@
+SELECT *
+FROM data_01643;
+
+SELECT *
+FROM data_01643
+ORDER BY key ASC;

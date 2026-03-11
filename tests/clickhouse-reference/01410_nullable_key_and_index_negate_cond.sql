@@ -1,0 +1,10 @@
+select '---Q1---';
+select * from test_23634 where id !='';
+select * from test_23634 where id !='' and s != '';
+select * from test_23634 where id !='' and s != '' and s1 != '';
+select * from test_23634 where (id, s, s1) != ('', '', '') order by id, s1, s1;
+select * from test_23634 where (id, s, s1) = ('', '', '') order by id, s1, s1;
+select * from test_23634 where (id, s, s1) = ('', '', 's2') order by id, s1, s1;
+select * from test_23634 where (id, s, s1) = ('', 's1', 's1') order by id, s1, s1;
+select * from test_23634 where (id, s, s1) = ('s', 's', 's') order by id, s1, s1;
+select * from test_23634 where (id, s, s1) = (null::Nullable(String), null::Nullable(String), null::Nullable(String)) order by id, s1, s1;

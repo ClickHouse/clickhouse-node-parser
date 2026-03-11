@@ -1,0 +1,92 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "ignore",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "CAST",
+            "args": [
+              {
+                "kind": "tuple",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayMap",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "k"
+                        ],
+                        "body": {
+                          "kind": "functionCall",
+                          "name": "toString",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "k"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "mapKeys",
+                        "args": [
+                          {
+                            "kind": "alias",
+                            "expr": {
+                              "kind": "functionCall",
+                              "name": "uniqMapMerge",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "uniq_tags_ids"
+                                  ]
+                                }
+                              ]
+                            },
+                            "alias": "m"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "mapValues",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "m"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "source": "(arrayMap(k -> toString(k), mapKeys(uniqMapMerge(uniq_tags_ids) AS m)), mapValues(m))"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Map(String, UInt32)"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "segfault_mv"
+    }
+  }
+]

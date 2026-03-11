@@ -1,0 +1,82 @@
+SELECT b
+FROM
+    t1
+INNER JOIN t2
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT b
+FROM
+    t1lc
+INNER JOIN t2lc
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT b
+FROM
+    t1lc
+INNER JOIN t2
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM
+    t1
+INNER JOIN t2
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM
+    t1lc
+INNER JOIN t2lc
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM
+    t1lc
+INNER JOIN t2
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT t1.*
+FROM
+    t1
+INNER JOIN t2
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT t1.b
+FROM
+    t1
+INNER JOIN t2
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT
+    t1.*,
+    t2.*
+FROM
+    t1
+INNER JOIN t2
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT
+    t1lc.*,
+    t2lc.*
+FROM
+    t1lc
+INNER JOIN t2lc
+    USING (b)
+ORDER BY `ALL` ASC;
+
+SELECT
+    t1lc.*,
+    t2.*
+FROM
+    t1lc
+INNER JOIN t2
+    USING (b)
+ORDER BY `ALL` ASC;

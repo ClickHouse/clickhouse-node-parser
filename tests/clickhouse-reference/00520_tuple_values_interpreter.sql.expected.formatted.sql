@@ -1,0 +1,3 @@
+SELECT *
+FROM tuple
+ORDER BY t ASC;

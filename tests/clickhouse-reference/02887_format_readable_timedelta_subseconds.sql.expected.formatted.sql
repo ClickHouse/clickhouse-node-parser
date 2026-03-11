@@ -1,0 +1,1 @@
+SELECT formatReadableTimeDelta(1.1, 'seconds', 'hours');

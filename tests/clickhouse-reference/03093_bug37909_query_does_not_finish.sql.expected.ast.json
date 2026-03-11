@@ -1,0 +1,546 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v_date"
+          ]
+        },
+        "alias": "vDate"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "round",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "v_share"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "v_sum"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "expr",
+            "name": "dummy_1",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "rand",
+                      "args": []
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10000"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "expr",
+            "name": "dummy_2",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "rand",
+                      "args": []
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10000"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "expr",
+            "name": "dummy_3",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "rand",
+                      "args": []
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10000"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "subquery",
+            "name": "_v",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "xxHash64",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "rand",
+                          "args": []
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100000"
+                    }
+                  },
+                  "alias": "d_id"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "functionCall",
+                          "name": "parseDateTimeBestEffort",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "2022-01-01"
+                            }
+                          ]
+                        },
+                        "right": {
+                          "kind": "binaryExpr",
+                          "op": "%",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "rand",
+                            "args": []
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "2600000"
+                          },
+                          "parenthesized": true
+                        }
+                      }
+                    ]
+                  },
+                  "alias": "v_date"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1000000"
+                  }
+                ]
+              },
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d_id"
+                    ]
+                  },
+                  "direction": "ASC"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "subquery",
+            "name": "_i",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "xxHash64",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "rand",
+                          "args": []
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "40000"
+                    }
+                  },
+                  "alias": "d_id"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1000000"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "subquery",
+            "name": "not_i",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  "alias": "v_date"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d_id"
+                  ]
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  "alias": "v_share"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "_i"
+              },
+              "limit": {
+                "count": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              }
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "union",
+            "queries": [
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d_id"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "v_date"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "v_share"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "not_i"
+                }
+              },
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d_id"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "v_date"
+                    ]
+                  },
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "alias": "v_share"
+                  }
+                ],
+                "from": {
+                  "kind": "subqueryFrom",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "d_id"
+                        ]
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "arrayJoin",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "groupArray",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "v_date"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "alias": "v_date"
+                      }
+                    ],
+                    "from": {
+                      "kind": "subqueryFrom",
+                      "query": {
+                        "kind": "union",
+                        "queries": [
+                          {
+                            "kind": "select",
+                            "select": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "v_date"
+                                ]
+                              },
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "d_id"
+                                ]
+                              }
+                            ],
+                            "from": {
+                              "kind": "tableRef",
+                              "table": "_v"
+                            }
+                          },
+                          {
+                            "kind": "select",
+                            "select": [
+                              {
+                                "kind": "alias",
+                                "expr": {
+                                  "kind": "literal",
+                                  "type": "NULL",
+                                  "value": "NULL"
+                                },
+                                "alias": "v_date"
+                              },
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "d_id"
+                                ]
+                              }
+                            ],
+                            "from": {
+                              "kind": "tableRef",
+                              "table": "_i"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "d_id"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "where": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "v_date"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "2022-05-08"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "v_date"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "2022-06-07"
+              },
+              "parenthesized": true
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "vDate"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

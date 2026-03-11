@@ -1,0 +1,232 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "255"
+        }
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d",
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1048577"
+                  }
+                ]
+              },
+              "alias": "id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "9223372036854775807"
+                  }
+                ]
+              },
+              "alias": "value"
+            }
+          ],
+          "groupBy": {
+            "kind": "groupingSets",
+            "sets": [
+              [
+                {
+                  "kind": "functionCall",
+                  "name": "toLowCardinality",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1024"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "10.0001"
+                  }
+                }
+              ],
+              [
+                {
+                  "kind": "binaryExpr",
+                  "op": "!=",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2147483646"
+                    },
+                    "parenthesized": true
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-9223372036854775807"
+                  }
+                }
+              ],
+              [
+                {
+                  "kind": "binaryExpr",
+                  "op": "!=",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "Int64",
+                      "value": "-1"
+                    },
+                    "parenthesized": true
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "255"
+                  }
+                }
+              ]
+            ]
+          }
+        },
+        "alias": "a"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "9223372036854775807"
+                  }
+                ]
+              },
+              "alias": "id"
+            }
+          ],
+          "where": {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2147483646"
+              },
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          }
+        },
+        "alias": "d"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "id"
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "join_use_nulls",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,3 @@
+SELECT s
+FROM t
+PREWHERE a = 1;

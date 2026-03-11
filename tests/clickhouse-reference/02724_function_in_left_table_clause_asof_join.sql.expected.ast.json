@@ -1,0 +1,350 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ],
+                "source": "[1, 2, 3]"
+              },
+              "alias": "arr"
+            }
+          ]
+        },
+        "alias": "sessions"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "session_id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              },
+              "alias": "id"
+            }
+          ]
+        },
+        "alias": "visitors"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "visitors",
+                  "session_id"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "sessions",
+                  "id"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "arrayFirst",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "a"
+                    ],
+                    "body": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayMap",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "a"
+                        ],
+                        "body": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "a"
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "sessions",
+                          "arr"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "visitors",
+                  "id"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ],
+                "source": "[1, 2, 3]"
+              },
+              "alias": "arr"
+            }
+          ]
+        },
+        "alias": "sessions"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "session_id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              },
+              "alias": "id"
+            }
+          ]
+        },
+        "alias": "visitors"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "visitors",
+                  "session_id"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "sessions",
+                  "id"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "arrayFirst",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "a"
+                    ],
+                    "body": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayMap",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "a"
+                        ],
+                        "body": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "a"
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "sessions",
+                          "arr"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "visitors",
+                  "id"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "full_sorting_merge"
+        }
+      }
+    ]
+  }
+]

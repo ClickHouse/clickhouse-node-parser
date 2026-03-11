@@ -1,0 +1,382 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "column"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table",
+      "alias": "t"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "{CLICKHOUSE_DATABASE:Identifier}",
+          "table",
+          "column"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "VALUES",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "x UInt16, y UInt16"
+              },
+              {
+                "kind": "tuple",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ],
+                "source": "(0,1)"
+              }
+            ]
+          }
+        },
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "z"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "VALUES",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "x UInt16, z UInt16"
+              },
+              {
+                "kind": "tuple",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ],
+                "source": "(2,3)"
+              }
+            ]
+          }
+        },
+        "alias": "t2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "---"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dummy"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "one",
+          "dummy"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "system",
+          "one",
+          "dummy"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "nest",
+          "key",
+          "subkey"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "table",
+          "nest"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "table"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "nest"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ],
+                "source": "[1, 2, 3]"
+              },
+              "alias": "arr"
+            }
+          ]
+        }
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "arr"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "table"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1, 2, 3]"
+          },
+          "alias": "arr"
+        }
+      ]
+    }
+  }
+]

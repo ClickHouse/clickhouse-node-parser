@@ -1,0 +1,1 @@
+SELECT * FROM null_00549 ORDER BY k, a, b;

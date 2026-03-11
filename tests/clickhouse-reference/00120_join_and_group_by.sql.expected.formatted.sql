@@ -1,0 +1,37 @@
+SELECT value
+FROM
+    `system`.one
+LEFT JOIN (
+        SELECT
+            dummy,
+            dummy AS value
+    ) AS js2
+    USING (dummy)
+GROUP BY value;
+
+SELECT
+    value1,
+    value2,
+    sum(number)
+FROM
+    (
+        SELECT
+            number,
+            intHash64(number) AS value1
+        FROM `system`.numbers
+        LIMIT 10
+    ) AS js1
+LEFT JOIN (
+        SELECT
+            number,
+            intHash32(number) AS value2
+        FROM `system`.numbers
+        LIMIT 10
+    ) AS js2
+    USING (number)
+GROUP BY
+    value1,
+    value2
+ORDER BY
+    value1 ASC,
+    value2 ASC;

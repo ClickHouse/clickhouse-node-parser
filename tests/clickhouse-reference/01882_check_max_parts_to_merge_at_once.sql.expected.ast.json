@@ -1,0 +1,168 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "COUNT",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "limited_merge_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "if",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "==",
+            "left": {
+              "kind": "functionCall",
+              "name": "length",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "topK",
+                  "params": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ],
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "length",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "merged_from"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "<=",
+            "left": {
+              "kind": "functionCall",
+              "name": "arrayMin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "topK",
+                  "params": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ],
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "length",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "merged_from"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "part_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "limited_merge_table"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "MergeParts"
+          }
+        }
+      ]
+    }
+  }
+]

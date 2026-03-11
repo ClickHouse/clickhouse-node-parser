@@ -1,0 +1,182 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "subquery1",
+            "period"
+          ]
+        },
+        "alias": "period"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "subquery1",
+                "data1"
+              ]
+            }
+          ]
+        },
+        "alias": "data"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "subquery2",
+                "data"
+              ]
+            }
+          ]
+        },
+        "alias": "other_data"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "date"
+                ]
+              },
+              "alias": "period"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "data"
+                ]
+              },
+              "alias": "data1"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "hits"
+          }
+        },
+        "alias": "subquery1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "date"
+                ]
+              },
+              "alias": "period"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "data"
+                ]
+              },
+              "alias": "data"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "hits"
+          }
+        },
+        "alias": "subquery2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "subquery1",
+              "period"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "subquery2",
+              "period"
+            ]
+          },
+          "parenthesized": true
+        }
+      }
+    }
+  }
+]

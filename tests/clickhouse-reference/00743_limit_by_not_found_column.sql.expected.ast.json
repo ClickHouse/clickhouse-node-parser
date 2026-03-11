@@ -1,0 +1,385 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": [
+            {
+              "kind": "asterisk"
+            }
+          ]
+        },
+        "alias": "total"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "message"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "info"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            },
+            "alias": "cnt"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "installation_stats"
+        },
+        "where": {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "message_type"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "fail"
+            }
+          ]
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "message"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "info"
+              ]
+            }
+          ]
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "cnt"
+              ]
+            },
+            "direction": "DESC"
+          }
+        ],
+        "limitBy": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          },
+          "by": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "message"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "AccountID"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "AccountID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "Currency"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "Accounts"
+        },
+        "limitBy": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "by": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Currency"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "concat",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "http://reddit.com/r/"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "subreddit"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "/comments/"
+          },
+          {
+            "kind": "functionCall",
+            "name": "replaceRegexpOne",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "link_id"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "t[0-9]_"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "subreddit"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "link_id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "cnt"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "created_date"
+                  ]
+                },
+                "alias": "y"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "link_id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "subreddit"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "count",
+                  "args": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ]
+                },
+                "alias": "cnt"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "commententry1"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "toYear",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "created_date"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2016"
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "link_id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "subreddit"
+                  ]
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            "direction": "ASC"
+          },
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "cnt"
+              ]
+            },
+            "direction": "DESC"
+          }
+        ],
+        "limitBy": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "by": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,21 @@
+SELECT *
+FROM nullable_00457
+ORDER BY s ASC;
+
+SELECT s
+FROM nullable_00457
+ORDER BY s ASC;
+
+SELECT ns
+FROM nullable_00457
+ORDER BY s ASC;
+
+SELECT narr
+FROM nullable_00457
+ORDER BY s ASC;
+
+SELECT
+    s,
+    narr
+FROM nullable_00457
+ORDER BY s ASC;

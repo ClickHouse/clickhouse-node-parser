@@ -1,0 +1,1 @@
+SELECT '{"skip" : "Hello"}'::JSON(`skip` Nullable(String));

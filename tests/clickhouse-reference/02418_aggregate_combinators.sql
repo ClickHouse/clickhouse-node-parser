@@ -1,0 +1,11 @@
+select uniqStateMap(map(1, number)) from numbers(10);
+select uniqStateForEachMapForEachMap(map(1, [map(1, [number, number])])) from numbers(10);
+select uniqStateForEachResample(30, 75, 30)([number, number + 1], 30) from numbers(10);
+select uniqStateMapForEachResample(30, 75, 30)([map(1, number)], 30) from numbers(10);
+select uniqStateForEachMerge(x) as y from (select uniqStateForEachState([number]) as x from numbers(10));
+select uniqMerge(y[1]) from (select uniqStateForEachMerge(x) as y from (select uniqStateForEachState([number]) as x from numbers(10)));
+select * from test format Null;
+select mapApply(k, v -> (k, finalizeAggregation(v)), x) from test;
+select mapApply(k, v -> (k, arrayMap(x -> mapApply(k, v -> (k, arrayMap(x -> finalizeAggregation(x), v)), x), v)), x) from test;
+select arrayMap(x -> arrayMap(x -> finalizeAggregation(x), x), x) from test;
+select arrayMap(x -> arrayMap(x -> mapApply(k, v -> (k, finalizeAggregation(v)), x), x), x) from test;

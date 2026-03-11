@@ -1,0 +1,155 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "segmented_ctr_cache",
+          "product_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "segmented_ctr_cache",
+          "segment_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "count_in_bookmark"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "count_in_cart"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "segmented_ctr_cache"
+        },
+        "kind": "join",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "cart_join"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "cart_join",
+                    "product_id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "segmented_ctr_cache",
+                    "product_id"
+                  ]
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "cart_join",
+                    "segment_id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "segmented_ctr_cache",
+                    "segment_id"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "bookmarks_join"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "bookmarks_join",
+                  "product_id"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "segmented_ctr_cache",
+                  "product_id"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "bookmarks_join",
+                  "segment_id"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "segmented_ctr_cache",
+                  "segment_id"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

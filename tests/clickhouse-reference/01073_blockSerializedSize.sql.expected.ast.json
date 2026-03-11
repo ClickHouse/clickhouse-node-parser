@@ -1,0 +1,607 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "UInt8"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Nullable(UInt8)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "UInt32"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0xdeadbeaf"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "UInt64"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0xdeadbeafdead"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Nullable(UInt64)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xdeadbeafdead"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "String"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "foo"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "FixedString(32)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "cast",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "foo"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "FixedString(32)"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Enum8"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "a"
+            },
+            "type": "Enum8('a' = 1, 'b' = 2)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Array"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "foo"
+              }
+            ],
+            "source": "['foo']"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "uniqCombinedState(100)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "uniqCombinedState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "uniqCombinedState(10000)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "uniqCombinedState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "uniqCombinedState(100000)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "uniqCombinedState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "uniqCombinedState(1000000)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "uniqCombinedState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "uniqCombinedState(10000000)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "uniqCombinedState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000000"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "uniqCombined64State(10000000)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "uniqCombined64State",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000000"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "String,UInt8"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "foo"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Block(UInt32)"
+      },
+      {
+        "kind": "functionCall",
+        "name": "blockSerializedSize",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    }
+  }
+]

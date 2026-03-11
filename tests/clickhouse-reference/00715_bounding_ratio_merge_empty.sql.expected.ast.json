@@ -1,0 +1,99 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "boundingRatioMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "state"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "boundingRatioState",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "timestamp"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "event"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "state"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "rate_test"
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "boundingRatioState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "rate_test2"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,1 @@
+SELECT untuple(x -> 0);

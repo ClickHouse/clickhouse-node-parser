@@ -1,0 +1,88 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test2",
+        "alias": "test2"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayFilter",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "t"
+                ],
+                "body": {
+                  "kind": "inExpr",
+                  "negated": false,
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t"
+                    ]
+                  },
+                  "values": {
+                    "kind": "subqueryExpr",
+                    "query": {
+                      "kind": "select",
+                      "distinct": {
+                        "kind": "distinct"
+                      },
+                      "select": [
+                        {
+                          "kind": "alias",
+                          "expr": {
+                            "kind": "functionCall",
+                            "name": "now",
+                            "args": []
+                          },
+                          "alias": "ym:a"
+                        }
+                      ],
+                      "where": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    }
+                  },
+                  "global": true,
+                  "parenthesized": true
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "test2",
+                  "b"
+                ]
+              }
+            ]
+          },
+          "alias": "test2_b"
+        }
+      ]
+    },
+    "where": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "1"
+    }
+  }
+]

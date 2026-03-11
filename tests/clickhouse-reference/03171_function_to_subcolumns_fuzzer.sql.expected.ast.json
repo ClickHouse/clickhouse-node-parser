@@ -1,0 +1,258 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "mapContains",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "m"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toNullable",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "aaa"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_func_to_subcolumns_map_2"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "isNull",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "right",
+              "n"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t_func_to_subcolumns_join",
+        "alias": "left"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "id"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "qqq"
+                  },
+                  "alias": "n"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  "alias": "id"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "www"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "right"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "id"
+        ]
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "empty",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "arr"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "length",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            }
+          ]
+        },
+        "alias": "n"
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_func_to_subcolumns_use_nulls"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      ]
+    },
+    "withRollup": true,
+    "having": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "isNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "group_by_use_nulls",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

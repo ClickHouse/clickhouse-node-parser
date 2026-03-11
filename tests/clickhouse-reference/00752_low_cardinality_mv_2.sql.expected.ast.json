@@ -1,0 +1,179 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "any",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "acctstatustype"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "Stop"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "radacct"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "acctstatustype"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "Stop"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "acctinputoctets"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "acctoutputoctets"
+              ]
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "parenthesized": true
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tadig"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dow"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "traffic_bytes"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "maxMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "last_stop"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "minMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "min_radacctid"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "maxMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "max_radacctid"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mv_traffic_by_tadig15min"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "tadig"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dow"
+          ]
+        }
+      ]
+    }
+  }
+]

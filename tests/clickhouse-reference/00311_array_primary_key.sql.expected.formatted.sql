@@ -1,0 +1,3 @@
+SELECT *
+FROM array_pk
+ORDER BY n ASC;

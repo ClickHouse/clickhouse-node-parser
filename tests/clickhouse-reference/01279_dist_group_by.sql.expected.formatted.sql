@@ -1,0 +1,4 @@
+SELECT *
+FROM data_01279
+GROUP BY key
+FORMAT Null;

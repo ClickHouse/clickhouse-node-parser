@@ -1,0 +1,91 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "COUNT",
+          "args": []
+        },
+        "alias": "x"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "array_in_index"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "array_not_in_index"
+                  ]
+                }
+              ]
+            },
+            "alias": "array_not_in_index_joined"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "right"
+        }
+      },
+      "alias": "T00J0"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "T00J0",
+              "array_not_in_index_joined"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "has",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "T00J0",
+                "array_in_index"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "abc"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

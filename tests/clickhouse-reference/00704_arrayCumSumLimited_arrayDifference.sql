@@ -1,0 +1,10 @@
+SELECT arrayCumSumNonNegative([1, 2, 3, 4]);
+SELECT arrayCumSumNonNegative([1, -5, 5, -2]);
+SELECT arrayDifference([1, 2, 3, 4]);
+SELECT arrayDifference([1, 7, 100, 5]);
+SELECT arrayCumSumNonNegative(a) FROM test;
+SELECT arrayCumSumNonNegative(b) FROM test;
+SELECT arrayCumSumNonNegative(c) FROM test;
+SELECT arrayDifference(a) FROM test;
+SELECT arrayDifference(b) FROM test;
+SELECT arrayDifference(c) FROM test;

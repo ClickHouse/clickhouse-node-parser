@@ -1,0 +1,103 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "y"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "round",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "y"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "quantilesExactInclusive",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.9"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "q"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "Int64",
+                      "value": "-2147483648"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ],
+                  "source": "[-2147483648, 1, 2]"
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ]
+      }
+    }
+  }
+]

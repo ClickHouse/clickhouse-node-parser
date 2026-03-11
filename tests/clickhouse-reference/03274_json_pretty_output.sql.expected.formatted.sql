@@ -1,0 +1,14 @@
+SELECT
+    tuple(1 AS b, 2 AS c) AS a,
+    map('e', 3, 'f', 4) AS d,
+    [5, 6] AS g,
+    tuple(map('i', [tuple(7 as j, 8 as k)]) AS l, 42 AS m) AS h
+FORMAT JSON;
+
+SELECT
+    tuple(1 AS b, 2 AS c) AS a,
+    map('e', 3, 'f', 4) AS d,
+    [5, 6] AS g,
+    tuple(map('i', [tuple(7 as j, 8 as k)]) AS l, 42 AS m) AS h
+FORMAT JSON
+SETTINGS output_format_json_pretty_print = 0;

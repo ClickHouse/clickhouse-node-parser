@@ -1,0 +1,158 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ip"
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "ip"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toIPv4",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "1.2.3.4"
+                }
+              ]
+            },
+            "alias": "ip"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "20"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ip"
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "ip"
+          ]
+        }
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toIPv4OrNull",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "0.0.0.3"
+                }
+              ]
+            },
+            "alias": "ip"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "20"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

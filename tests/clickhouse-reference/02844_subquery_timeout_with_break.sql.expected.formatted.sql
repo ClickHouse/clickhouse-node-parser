@@ -1,0 +1,6 @@
+SELECT *
+FROM t
+WHERE value IN (
+        SELECT number
+        FROM numbers(1000000000)
+    );

@@ -1,0 +1,118 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "intersect",
+            "op": "EXCEPT",
+            "left": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "{\"a\":42}"
+                      },
+                      "type": "JSON",
+                      "operator": true
+                    },
+                    "type": "Variant(JSON, String)",
+                    "operator": true
+                  },
+                  "type": "Variant(JSON, String, Array(String))",
+                  "operator": true
+                }
+              ],
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "b"
+                    },
+                    "type": "Variant(JSON, String)",
+                    "operator": true
+                  },
+                  "type": "Variant(JSON, String, Array(String))",
+                  "operator": true
+                }
+              ],
+              "parenthesized": true
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "c"
+                      }
+                    ],
+                    "source": "['c']"
+                  },
+                  "type": "Array(String)",
+                  "operator": true
+                },
+                "type": "Variant(JSON, String, Array(String))",
+                "operator": true
+              }
+            ],
+            "parenthesized": true
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_suspicious_types_in_order_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

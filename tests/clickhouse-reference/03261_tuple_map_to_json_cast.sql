@@ -1,0 +1,3 @@
+select map('a', number::UInt32, 'b', toDate(number), 'c', range(number), 'd', [map('e', number::UInt32)])::JSON as json, JSONAllPathsWithTypes(json) from numbers(5);
+select map('a' || number % 3, number::UInt32, 'b' || number % 3, toDate(number), 'c' || number % 3, range(number), 'd' || number % 3, [map('e' || number % 3, number::UInt32)])::JSON as json, JSONAllPathsWithTypes(json) from numbers(5);
+select tuple(number::UInt32 as a, toDate(number) as b, range(number) as c, [tuple(number::UInt32 as e)] as d)::JSON as json, JSONAllPathsWithTypes(json) from numbers(5);

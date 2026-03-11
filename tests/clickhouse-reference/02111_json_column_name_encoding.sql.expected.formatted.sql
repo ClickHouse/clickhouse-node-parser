@@ -1,0 +1,2 @@
+SELECT length('�')
+FORMAT JSONCompact;

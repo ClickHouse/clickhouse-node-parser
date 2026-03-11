@@ -1,0 +1,463 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "max",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "window": {}
+        },
+        "alias": "aid"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toLowCardinality",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "aaaa"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "id"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers_mt",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000000"
+            }
+          ]
+        }
+      }
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "max",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        },
+        "alias": "id"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "aaaa"
+                }
+              ]
+            },
+            "alias": "id"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers_mt",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000000"
+            }
+          ]
+        }
+      }
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "countIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "sym"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "Red"
+              }
+            }
+          ],
+          "window": {}
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "CAST",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "CAST",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "5"
+                      }
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "Enum8('Red' = 0, 'Blue' = 1, 'Yellow' = 2, 'Black' = 3, 'White' = 4)"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "LowCardinality(String)"
+                }
+              ]
+            },
+            "alias": "sym"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "materialize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toLowCardinality",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a\\0aa"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "countIf",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toLowCardinality",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0aaaaaaa\\0"
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "sym"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "Red"
+              }
+            }
+          ],
+          "window": {
+            "frame": {
+              "frameType": "range",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "currentRow"
+              }
+            }
+          }
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "CAST",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "CAST",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "5"
+                      }
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "Enum8('Red' = 0, 'Blue' = 1, 'Yellow' = 2, 'Black' = 3, 'White' = 4)"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "LowCardinality(String)"
+                }
+              ]
+            },
+            "alias": "sym"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "NULL",
+        "value": "NULL"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "max",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "window": {
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "preceding",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "aid"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          },
+          {
+            "kind": "functionCall",
+            "name": "max",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ],
+            "window": {}
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toLowCardinality",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "id"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers_mt",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    "format": "Null"
+  }
+]

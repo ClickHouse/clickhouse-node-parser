@@ -1,0 +1,117 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "zero"
+                  ]
+                },
+                "alias": "number"
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "remote",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "127.0.0.2"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "system",
+                    "zeros"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "sleep",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.5"
+                    }
+                  ]
+                }
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "numbers"
+            }
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  }
+]

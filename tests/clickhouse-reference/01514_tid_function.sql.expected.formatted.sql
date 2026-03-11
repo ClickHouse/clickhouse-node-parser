@@ -1,0 +1,2 @@
+SELECT tid()
+FORMAT Null;

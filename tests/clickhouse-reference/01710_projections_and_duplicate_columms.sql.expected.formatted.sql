@@ -1,0 +1,18 @@
+SELECT
+    '-21474836.48',
+    10000000000.,
+    '',
+    count(kbytes),
+    '',
+    10.0001,
+    toStartOfMinute(datetime) AS dt_m,
+    10,
+    NULL
+FROM projection_test__fuzz_0
+GROUP BY dt_m
+WITH ROLLUP
+WITH TOTALS
+ORDER BY
+    count(retry_count / duration) ASC,
+    100000000000000000000. ASC
+FORMAT Null;

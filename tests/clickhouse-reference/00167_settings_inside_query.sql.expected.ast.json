@@ -1,0 +1,173 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "functionCall",
+        "name": "toUInt64",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          }
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "distinct": {
+            "kind": "distinct"
+          },
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "blockSize",
+              "args": []
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "settings": [
+            {
+              "name": "max_block_size",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "123"
+              }
+            },
+            {
+              "name": "max_rows_to_read",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "name": "read_overflow_mode",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "break"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      },
+      {
+        "name": "read_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "distinct": {
+          "kind": "distinct"
+        },
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "blockSize",
+              "args": []
+            },
+            "alias": "x"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "settings": [
+          {
+            "name": "max_block_size",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            }
+          },
+          {
+            "name": "max_rows_to_read",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          },
+          {
+            "name": "read_overflow_mode",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "break"
+            }
+          }
+        ]
+      }
+    }
+  }
+]

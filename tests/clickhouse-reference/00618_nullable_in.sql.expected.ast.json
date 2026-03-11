@@ -1,0 +1,239 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                }
+              ]
+            },
+            "values": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                }
+              ]
+            },
+            "values": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "b"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniqExact",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ]
+        },
+        "alias": "u"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniqExactIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              }
+            }
+          ]
+        },
+        "alias": "ue"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniqExactIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              "values": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "ui"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                }
+              ]
+            },
+            "alias": "name"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "a"
+      }
+    }
+  }
+]

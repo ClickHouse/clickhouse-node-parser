@@ -1,0 +1,4 @@
+SELECT *
+FROM (
+        SELECT [1.1, 1.2]
+    );

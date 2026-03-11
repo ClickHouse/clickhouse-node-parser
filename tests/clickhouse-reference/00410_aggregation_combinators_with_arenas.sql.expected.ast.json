@@ -1,0 +1,468 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupUniqArrayIf",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "hex",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "arena"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupUniqArrayMerge",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ds"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupUniqArrayState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ]
+            },
+            "alias": "ds"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "arena"
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "groupUniqArray"
+              },
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ],
+                    "source": "[1, 2]"
+                  },
+                  {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ],
+                    "source": "[1]"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "emptyArrayUInt8",
+                    "args": []
+                  },
+                  {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ],
+                    "source": "[1]"
+                  },
+                  {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ],
+                    "source": "[1, 2]"
+                  }
+                ],
+                "source": "[[1, 2], [1],  emptyArrayUInt8(), [1], [1, 2]]"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "length",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayReduce",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "groupUniqArray"
+                    },
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "functionCall",
+                          "name": "hex",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "hex",
+                          "args": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": "+",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "number"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "hex",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "source": "[hex(number), hex(number+1), hex(number)]"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "length",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "runningAccumulate",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupUniqArrayState",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toString",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "numbers"
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "11"
+              }
+            }
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ]
+      }
+    }
+  }
+]

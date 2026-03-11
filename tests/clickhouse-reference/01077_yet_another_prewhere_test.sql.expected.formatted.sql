@@ -1,0 +1,6 @@
+SELECT
+    a,
+    b
+FROM t50
+PREWHERE b = 1
+ORDER BY a ASC;

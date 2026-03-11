@@ -1,0 +1,10 @@
+SELECT *
+FROM tab_00577
+ORDER BY version ASC;
+
+SELECT *
+FROM tab_00577;
+
+SELECT *
+FROM testCleanupR1
+ORDER BY uid ASC;

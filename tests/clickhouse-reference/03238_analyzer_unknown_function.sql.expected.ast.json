@@ -1,0 +1,112 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "source",
+            "count"
+          ]
+        },
+        "alias": "count"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "count",
+                "args": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ]
+              },
+              "alias": "count"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "key"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "alias": "key"
+              }
+            ]
+          }
+        },
+        "alias": "source"
+      },
+      "kind": "join",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "one",
+        "alias": "r"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "source",
+              "key"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "r",
+              "dummy"
+            ]
+          }
+        }
+      }
+    }
+  }
+]

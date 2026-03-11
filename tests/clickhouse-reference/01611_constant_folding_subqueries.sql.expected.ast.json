@@ -1,0 +1,286 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "database": "system",
+                  "table": "numbers"
+                },
+                "limit": {
+                  "count": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "offset": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            },
+            "alias": "n"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "format": "CSV"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "numbers"
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "offset": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        },
+        "alias": "n"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toUInt64",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "/",
+            "left": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "format": "CSV"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "expr",
+            "name": "n",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "database": "system",
+                  "table": "numbers"
+                },
+                "limit": {
+                  "count": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "offset": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            }
+          },
+          {
+            "kind": "expr",
+            "name": "q",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "/",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "one"
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "q"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "\\\\d[a-z]"
+                  }
+                ]
+              }
+            },
+            "alias": "n"
+          },
+          {
+            "kind": "functionCall",
+            "name": "extractAll",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "5abc"
+              },
+              {
+                "kind": "functionCall",
+                "name": "assumeNotNull",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "format": "CSV"
+  }
+]

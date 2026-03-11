@@ -1,0 +1,18 @@
+SELECT *
+FROM (
+        SELECT
+            number,
+            joined
+        FROM
+            `system`.numbers
+        LEFT JOIN (
+                SELECT
+                    number * 2 AS number,
+                    number * 10 + 1 AS joined
+                FROM `system`.numbers
+                LIMIT 10
+            ) AS js2
+            USING (number)
+        LIMIT 10
+    )
+ORDER BY `ALL` ASC;

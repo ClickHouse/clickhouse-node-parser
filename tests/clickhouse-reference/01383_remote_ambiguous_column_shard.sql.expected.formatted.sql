@@ -1,0 +1,13 @@
+SELECT
+    f.id1 AS ID,
+    d.name AS Name,
+    sum(f.value)
+FROM
+    remote('127.0.0.{1,2,3}', test_01383.fact) AS f
+LEFT JOIN test_01383.dimension AS d
+    ON f.id1 = d.id1
+WHERE f.id1 = f.id2
+GROUP BY
+    ID,
+    Name
+ORDER BY ID ASC;

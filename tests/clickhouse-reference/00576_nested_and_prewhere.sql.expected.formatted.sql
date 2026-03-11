@@ -1,0 +1,16 @@
+SELECT DISTINCT n.b
+FROM nested
+PREWHERE filter
+ORDER BY `ALL` ASC;
+
+SELECT DISTINCT n.c
+FROM nested
+PREWHERE filter
+ORDER BY `ALL` ASC;
+
+SELECT DISTINCT
+    n.a,
+    n.c
+FROM nested
+PREWHERE filter
+ORDER BY `ALL` ASC;

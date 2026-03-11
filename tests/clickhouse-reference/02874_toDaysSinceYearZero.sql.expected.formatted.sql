@@ -1,0 +1,47 @@
+SELECT toDaysSinceYearZero();
+
+SELECT toDaysSinceYearZero(toDate('2023-09-08'), 3);
+
+SELECT toDaysSinceYearZero('str');
+
+SELECT toDaysSinceYearZero(42);
+
+SELECT toDaysSinceYearZero(toDate('1970-01-01'));
+
+SELECT toDaysSinceYearZero(toDate('2023-09-08'));
+
+SELECT toDaysSinceYearZero(toDate('2023-09-08'), 'America/Los_Angeles');
+
+SELECT toDaysSinceYearZero(toDate32('1900-01-01'));
+
+SELECT toDaysSinceYearZero(toDate32('2023-09-08'));
+
+SELECT toDaysSinceYearZero(toDate32('2023-09-08'), 'America/Los_Angeles');
+
+SELECT toDaysSinceYearZero(toDateTime('1970-01-01 00:00:00'));
+
+SELECT toDaysSinceYearZero(toDateTime('2023-09-08 11:11:11'));
+
+SELECT toDaysSinceYearZero(toDateTime('2023-09-08 11:11:11'), 'America/Los_Angeles');
+
+SELECT toDaysSinceYearZero(toDateTime64('1900-01-01 00:00:00.000', 3));
+
+SELECT toDaysSinceYearZero(toDateTime64('2023-09-08 11:11:11.123', 3));
+
+SELECT toDaysSinceYearZero(toDateTime64('2023-09-08 11:11:11.123', 3), 'America/Los_Angeles');
+
+SELECT toDaysSinceYearZero(toDateTime64('2023-09-08 11:11:11.123123123', 9));
+
+SELECT toDaysSinceYearZero(NULL);
+
+SELECT toDaysSinceYearZero(materialize(toDate('2023-09-08')));
+
+SELECT toDaysSinceYearZero(materialize(toDate32('2023-09-08')));
+
+SELECT toDaysSinceYearZero(materialize(toDateTime('2023-09-08 11:11:11')));
+
+SELECT toDaysSinceYearZero(materialize(toDateTime64('2023-09-08 11:11:11.123', 3)));
+
+SELECT toDaysSinceYearZero(materialize(toDateTime64('2023-09-08 11:11:11.123123123', 9)));
+
+SELECT to_days(toDate('2023-09-08'));

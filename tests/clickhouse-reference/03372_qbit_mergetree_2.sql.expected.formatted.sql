@@ -1,0 +1,7 @@
+SELECT *
+FROM qbits
+ORDER BY id ASC;
+
+SELECT *
+FROM qbits
+ORDER BY `order` ASC;

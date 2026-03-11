@@ -1,0 +1,1125 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PIPELINE",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "nw"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "WR"
+                    ]
+                  }
+                ]
+              },
+              "alias": "R"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sumIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "WR"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "uniq_rows"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ]
+              },
+              "alias": "UNR"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "uniq",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "nw"
+                        ]
+                      }
+                    ],
+                    "window": {
+                      "partitionBy": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ac"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "alias": "uniq_rows"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "AVG",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "wg"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "WR"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nw"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "window_function_threading"
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ac"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "nw"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "nw"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "nw"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "R"
+                ]
+              },
+              "direction": "DESC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "ilike",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%ScatterByPartitionTransform%"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "nw"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WR"
+              ]
+            }
+          ]
+        },
+        "alias": "R"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sumIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WR"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "uniq_rows"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        },
+        "alias": "UNR"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniq",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nw"
+                  ]
+                }
+              ],
+              "window": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ac"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "uniq_rows"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "AVG",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "wg"
+                  ]
+                }
+              ]
+            },
+            "alias": "WR"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ac"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "nw"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "window_function_threading"
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ac"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "nw"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "nw"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "nw"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "R"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "nw"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WR"
+              ]
+            }
+          ]
+        },
+        "alias": "R"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sumIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WR"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "uniq_rows"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        },
+        "alias": "UNR"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniq",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nw"
+                  ]
+                }
+              ],
+              "window": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ac"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "uniq_rows"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "AVG",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "wg"
+                  ]
+                }
+              ]
+            },
+            "alias": "WR"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ac"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "nw"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "window_function_threading"
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ac"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "nw"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "nw"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "nw"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "R"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "nw"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WR"
+              ]
+            }
+          ]
+        },
+        "alias": "R"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sumIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WR"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "uniq_rows"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        },
+        "alias": "UNR"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "uniq",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "nw"
+                      ]
+                    }
+                  ],
+                  "window": {
+                    "partitionBy": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "ac"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "alias": "uniq_rows"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "AVG",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "wg"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "WR"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ac"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "nw"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "window_function_threading"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nw"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "uniq",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "nw"
+                      ]
+                    }
+                  ],
+                  "window": {
+                    "partitionBy": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "ac"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "alias": "uniq_rows"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "AVG",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "wg"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "WR"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ac"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "nw"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "window_function_threading"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nw"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "uniq",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "nw"
+                      ]
+                    }
+                  ],
+                  "window": {
+                    "partitionBy": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "ac"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "alias": "uniq_rows"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "AVG",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "wg"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "WR"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ac"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "nw"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "window_function_threading"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nw"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "uniq",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "nw"
+                      ]
+                    }
+                  ],
+                  "window": {
+                    "partitionBy": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "ac"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "alias": "uniq_rows"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "AVG",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "wg"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "WR"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ac"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "nw"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "window_function_threading"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ac"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nw"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "nw"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "nw"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "R"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  }
+]

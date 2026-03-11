@@ -1,0 +1,3 @@
+SELECT v
+FROM test
+PREWHERE 1;

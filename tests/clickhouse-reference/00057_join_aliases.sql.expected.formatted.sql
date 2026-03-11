@@ -1,0 +1,27 @@
+SELECT *
+FROM (
+        SELECT
+            number,
+            n,
+            j1,
+            j2
+        FROM
+            (
+                SELECT
+                    number,
+                    number / 2 AS n
+                FROM `system`.numbers
+            ) AS js1
+        LEFT JOIN (
+                SELECT
+                    number / 3 AS n,
+                    number AS j1,
+                    'Hello' AS j2
+                FROM `system`.numbers
+                LIMIT 10
+            ) AS js2
+            USING (n)
+        LIMIT 10
+    )
+ORDER BY n ASC
+SETTINGS join_algorithm = 'hash';

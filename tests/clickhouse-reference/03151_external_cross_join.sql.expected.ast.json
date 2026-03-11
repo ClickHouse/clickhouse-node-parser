@@ -1,0 +1,103 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "x"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t2",
+              "number"
+            ]
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "t1"
+          },
+          "kind": "join",
+          "joinType": "CROSS",
+          "right": {
+            "kind": "tableFunction",
+            "name": "numbers_mt",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10000000"
+              }
+            ],
+            "alias": "t2"
+          }
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "all"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

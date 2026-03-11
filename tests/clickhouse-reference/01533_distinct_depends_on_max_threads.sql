@@ -1,0 +1,1 @@
+SELECT DISTINCT 1 FROM bug_13492, numbers(1) n;

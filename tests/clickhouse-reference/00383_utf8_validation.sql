@@ -1,0 +1,1 @@
+SELECT '\xED\x20\xA8' AS s FORMAT JSONCompact;

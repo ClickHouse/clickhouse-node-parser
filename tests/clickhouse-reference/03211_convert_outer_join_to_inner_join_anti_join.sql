@@ -1,0 +1,18 @@
+SELECT * FROM t0 FORMAT PrettyMonoBlock;
+SELECT left.c2 FROM t0 AS left
+LEFT ANTI JOIN t0 AS right_0 ON ((left.c0)=(right_0.c1))
+WHERE (abs ((- ((sign (right_0.c1))))));
+SELECT SUM(check <> 0)
+FROM
+(
+  SELECT (abs ((- ((sign (right_0.c1)))))) AS `check`
+  FROM t0 AS left
+  LEFT ANTI JOIN t0 AS right_0 ON ((left.c0)=(right_0.c1))
+);
+SELECT (abs ((- ((sign (right_0.c1)))))) AS `check`
+FROM t0 AS left
+LEFT ANTI JOIN t0 AS right_0 ON ((left.c0)=(right_0.c1));
+SELECT (abs ((- ((sign (right_0.c1)))))) AS `check`
+FROM t0 AS left
+LEFT ANTI JOIN t0 AS right_0 ON ((left.c0)=(right_0.c1))
+WHERE check <> 0;

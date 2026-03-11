@@ -1,0 +1,243 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "cast",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "AggregateFunction(sum, Decimal(50, 10))"
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "arrayReduce",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "sumState"
+                    },
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "functionCall",
+                          "name": "toDecimal256",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "0.000001"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "10"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toDecimal256",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "1.1"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "10"
+                            }
+                          ]
+                        }
+                      ],
+                      "source": "[toDecimal256('0.000001', 10), toDecimal256('1.1', 10)]"
+                    }
+                  ]
+                },
+                "alias": "x"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "minMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "cast",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "AggregateFunction(min, Decimal(18, 10))"
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "arrayReduce",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "minState"
+                    },
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "functionCall",
+                          "name": "toDecimal64",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "0.000001"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "10"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toDecimal64",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "1.1"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "10"
+                            }
+                          ]
+                        }
+                      ],
+                      "source": "[toDecimal64('0.000001', 10), toDecimal64('1.1', 10)]"
+                    }
+                  ]
+                },
+                "alias": "x"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dec"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "consumer_02366"
+    }
+  }
+]

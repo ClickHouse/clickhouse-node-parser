@@ -1,0 +1,208 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "foo"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "untuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "topKWeightedMerge",
+                      "params": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "100"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "counts"
+                        }
+                      ],
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "top_items"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "top"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "topk_test"
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "foo"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "foo"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "top",
+            "count"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "top",
+            "item"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "untuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "topKWeightedMerge",
+                      "params": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "100"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "counts"
+                        }
+                      ],
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "top_items"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "top"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "topk_test",
+          "final": true
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "top",
+            "count"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "top",
+            "item"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

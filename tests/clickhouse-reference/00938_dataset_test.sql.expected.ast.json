@@ -1,0 +1,146 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "ans"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "-67.0"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "<",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "ans"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "-66.9"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "expr",
+            "name": "model",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "state"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "state"
+                        ]
+                      }
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "state"
+                      ]
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "model"
+                }
+              }
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "evalMLMethod",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "model"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "predict1"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "predict2"
+                  ]
+                }
+              ]
+            },
+            "alias": "ans"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "defaults"
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "all"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ],
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    }
+  }
+]

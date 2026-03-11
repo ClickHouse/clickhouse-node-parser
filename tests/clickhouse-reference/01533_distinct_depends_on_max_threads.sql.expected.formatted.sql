@@ -1,0 +1,4 @@
+SELECT DISTINCT 1
+FROM
+    bug_13492
+CROSS JOIN numbers(1) AS n;

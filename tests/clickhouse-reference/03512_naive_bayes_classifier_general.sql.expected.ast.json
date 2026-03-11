@@ -1,0 +1,125 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "naiveBayesClassifier",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "lang_byte_2"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "She painted the wall a bright yellow"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "model_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "input_text"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "naiveBayesClassifier",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "model_name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "input_text"
+              ]
+            }
+          ]
+        },
+        "alias": "classification"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "model_names"
+      },
+      "kind": "join",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "tableRef",
+        "table": "input_texts"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "model_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "input_text"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

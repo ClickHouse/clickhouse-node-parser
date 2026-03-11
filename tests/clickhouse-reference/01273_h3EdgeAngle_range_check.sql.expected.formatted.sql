@@ -1,0 +1,1 @@
+SELECT h3EdgeAngle(100);

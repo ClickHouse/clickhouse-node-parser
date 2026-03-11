@@ -1,0 +1,8 @@
+SELECT value1
+FROM date_t__fuzz_45
+PREWHERE (toStartOfSecond(date1) < 199203)
+    AND (199300 < 1)
+WHERE (199203 <= toStartOfSecond(date1))
+    AND (1 < toLowCardinality(199300))
+QUALIFY isNull(id)
+SETTINGS enable_analyzer = 1;

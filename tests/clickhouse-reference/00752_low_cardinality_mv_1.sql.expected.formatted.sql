@@ -1,0 +1,3 @@
+SELECT *
+FROM lc_mv_00752
+ORDER BY letter ASC;

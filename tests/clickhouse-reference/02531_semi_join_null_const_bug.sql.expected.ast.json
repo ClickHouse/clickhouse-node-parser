@@ -1,0 +1,92 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b",
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    },
+                    "type": "UInt32",
+                    "operator": true
+                  }
+                ]
+              },
+              "alias": "id"
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "array",
+                "elements": [],
+                "source": "[]"
+              }
+            ]
+          }
+        },
+        "alias": "a"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "type": "UInt64",
+                    "operator": true
+                  }
+                ]
+              },
+              "alias": "id"
+            }
+          ]
+        },
+        "alias": "b"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "id"
+        ]
+      }
+    }
+  }
+]

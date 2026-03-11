@@ -1,0 +1,13 @@
+select str from lc_str_0;
+select str from lc_null_str_0;
+select val from lc_int8_0;
+select val from lc_null_int8_0;
+select str from lc_fix_str_0;
+select str from lc_null_fix_str_0;
+SELECT toLowCardinality('a') AS s, toTypeName(s), toTypeName(length(s)) from system.one;
+select toLowCardinality('a') as val group by val order by val;
+select (toLowCardinality('a') as val) || 'b' group by val order by val;
+select toLowCardinality(z) as val from (select arrayJoin(['c', 'd']) as z) group by val order by val;
+select (toLowCardinality(z) as val) || 'b'  from (select arrayJoin(['c', 'd']) as z) group by val order by val;
+select toUUID(str1), toUUID(str2), toUUID(str3) from lc_str_uuid;
+select toUUID(str1, '', NULL), toUUID(str2, '', NULL), toUUID(str3, '', NULL) from lc_str_uuid;

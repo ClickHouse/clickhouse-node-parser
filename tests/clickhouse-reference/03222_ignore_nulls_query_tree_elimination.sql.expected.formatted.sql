@@ -1,0 +1,25 @@
+SELECT count()
+FROM with_fill_date__fuzz_0
+ORDER BY
+    count() ASC,
+    count() ASC,
+    max(d) ASC WITH FILL STEP toIntervalDay(10);
+
+SELECT count()
+FROM with_fill_date__fuzz_0
+ORDER BY
+    any(d32) ASC,
+    any_respect_nulls(d32) ASC,
+    max(d) ASC WITH FILL STEP toIntervalDay(10);
+
+SELECT count()
+FROM with_fill_date__fuzz_0
+ORDER BY
+    any(d32) ASC,
+    any(d32) ASC,
+    any(d32) ASC,
+    any_respect_nulls(d32) ASC,
+    any_respect_nulls(d32) ASC,
+    sum(d33) ASC,
+    sum(d33) ASC,
+    max(d) ASC WITH FILL STEP toIntervalDay(10);

@@ -1,0 +1,1 @@
+SELECT deltaSumTimestamp(1, 2);

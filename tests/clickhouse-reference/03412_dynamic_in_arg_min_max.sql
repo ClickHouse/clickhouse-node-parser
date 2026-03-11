@@ -1,0 +1,1 @@
+select x, y, z, argMax(d, a), argMax(ad, a), argMax(td, a), argMax(md, a), argMax(j, a), max(a), argMin(d, a), argMin(ad, a), argMin(td, a), argMin(md, a), argMin(j, a), min(a) from test group by x, y, z order by x, y, z;

@@ -1,0 +1,27 @@
+SELECT jsonMergePatch(NULL);
+
+SELECT jsonMergePatch('{"a":1}');
+
+SELECT jsonMergePatch('{"a":1}', '{"b":1}');
+
+SELECT jsonMergePatch('{"a":1}', '{"b":1}', '{"c":[1,2]}');
+
+SELECT jsonMergePatch('{"a":1}', '{"b":1}', '{"c":[{"d":1},2]}');
+
+SELECT jsonMergePatch('{"a":1}', '{"name": "joey"}', '{"name": "tom"}', '{"name": "zoey"}');
+
+SELECT jsonMergePatch('{"a": "1","b": 2,"c": [true,{"qrdzkzjvnos": true,"yxqhipj": false,"oesax": "33o8_6AyUy"}]}', '{"c": "1"}');
+
+SELECT jsonMergePatch('{"a": {"b": 1, "c": 2}}', '{"a": {"b": [3, 4]}}');
+
+SELECT jsonMergePatch('{ "a": 1, "b":2 }', '{ "a": 3, "c":4 }', '{ "a": 5, "d":6 }');
+
+SELECT jsonMergePatch('{"a":1, "b":2}', '{"b":null}');
+
+SELECT jsonMergePatch('[1]');
+
+SELECT jsonMergePatch('{"a": "1","b": 2,"c": [true,"qrdzkzjvnos": true,"yxqhipj": false,"oesax": "33o8_6AyUy"}]}', '{"c": "1"}');
+
+SELECT jsonMergePatch(s1, s2)
+FROM t_json_merge
+ORDER BY id ASC;

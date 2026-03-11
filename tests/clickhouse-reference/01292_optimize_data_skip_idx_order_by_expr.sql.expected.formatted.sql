@@ -1,0 +1,3 @@
+SELECT *
+FROM data_01292
+WHERE key > 0;

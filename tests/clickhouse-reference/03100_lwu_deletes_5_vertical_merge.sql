@@ -1,0 +1,10 @@
+SELECT count() FROM t_lwu_deletes_vertical;
+SELECT count() FROM system.parts_columns WHERE database = currentDatabase() AND table = 't_lwu_deletes_vertical' AND active AND partition_id = 'all' AND column = '_row_exists';
+SELECT
+    merge_algorithm,
+    read_rows,
+    rows,
+    ProfileEvents['ReadTasksWithAppliedPatches'],
+    ProfileEvents['PatchesReadRows']
+FROM system.part_log WHERE database = currentDatabase() AND table = 't_lwu_deletes_vertical' AND event_type = 'MergeParts'
+ORDER BY event_time_microseconds;

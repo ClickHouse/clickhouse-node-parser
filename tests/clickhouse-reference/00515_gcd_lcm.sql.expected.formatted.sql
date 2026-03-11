@@ -1,0 +1,73 @@
+SELECT gcd(1280, 1024);
+
+SELECT gcd(11, 121);
+
+SELECT gcd(-256, 64);
+
+SELECT gcd(1, 1);
+
+SELECT gcd(4, 2);
+
+SELECT gcd(15, 49);
+
+SELECT gcd(255, 254);
+
+SELECT gcd(2147483647, 2147483646);
+
+SELECT gcd(4611686011984936962, 2147483647);
+
+SELECT gcd(-2147483648, 1);
+
+SELECT gcd(255, 515);
+
+SELECT gcd(255, 510);
+
+SELECT gcd(255, 512);
+
+SELECT lcm(1280, 1024);
+
+SELECT lcm(11, 121);
+
+SELECT lcm(-256, 64);
+
+SELECT lcm(1, 1);
+
+SELECT lcm(4, 2);
+
+SELECT lcm(15, 49);
+
+SELECT lcm(255, 254);
+
+SELECT lcm(2147483647, 2147483646);
+
+SELECT lcm(4611686011984936962, 2147483647);
+
+SELECT lcm(-2147483648, 1);
+
+SELECT gcd(1280.1, 1024.1);
+
+SELECT gcd(11.1, 121.1);
+
+SELECT gcd(-256.1, 64.1);
+
+SELECT gcd(1.1, 1.1);
+
+SELECT gcd(4.1, 2.1);
+
+SELECT gcd(15.1, 49.1);
+
+SELECT gcd(255.1, 254.1);
+
+SELECT lcm(1280.1, 1024.1);
+
+SELECT lcm(11.1, 121.1);
+
+SELECT lcm(-256.1, 64.1);
+
+SELECT lcm(1.1, 1.1);
+
+SELECT lcm(4.1, 2.1);
+
+SELECT lcm(15.1, 49.1);
+
+SELECT lcm(255.1, 254.1);

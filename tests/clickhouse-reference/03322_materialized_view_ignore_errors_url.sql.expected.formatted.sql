@@ -1,0 +1,3 @@
+SELECT *
+FROM src
+WHERE x = 2;

@@ -1,0 +1,101 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"id\":1,\"foo\":[\"bar\"]}"
+        },
+        "alias": "a"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "jsonMergePatch",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toJSONString",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "map",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "foo"
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "arrayPushBack",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "arrayMap",
+                          "args": [
+                            {
+                              "kind": "lambdaExpr",
+                              "params": [
+                                "x"
+                              ],
+                              "body": {
+                                "kind": "functionCall",
+                                "name": "JSONExtractString",
+                                "args": [
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "x"
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "JSONExtractArrayRaw",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "a"
+                                  ]
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "foo"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "baz"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "b"
+      }
+    ]
+  }
+]

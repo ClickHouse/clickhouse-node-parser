@@ -1,0 +1,12 @@
+SELECT avgWeighted(x, y)
+FROM (
+        SELECT
+            NULL,
+            255 AS x,
+            1 AS y
+        UNION ALL
+        SELECT
+            y,
+            NULL AS x,
+            1 AS y
+    );

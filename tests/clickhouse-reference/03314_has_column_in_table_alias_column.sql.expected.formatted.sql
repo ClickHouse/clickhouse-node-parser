@@ -1,0 +1,1 @@
+SELECT hasColumnInTable(currentDatabase(), 'test', 'alias_col_a');

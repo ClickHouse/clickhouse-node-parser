@@ -1,0 +1,2 @@
+SELECT * FROM table1 ORDER BY x;
+SELECT * FROM table2 ORDER BY y;

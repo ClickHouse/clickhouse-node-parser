@@ -1,0 +1,263 @@
+SELECT DISTINCT number * 1
+FROM numbers(10, sipHash64(sipHash64(sipHash64(2), 1), 1, 2, *), sipHash64(sipHash64(29103473, sipHash64(1), '3', sipHash64(1), 1)))
+GROUP BY
+    1,
+    isNullable(1)
+WITH TOTALS
+ORDER BY 1 ASC
+SETTINGS enable_analyzer = 1;
+
+SELECT number
+FROM numbers(10, 14630045721179951620, 6670599363308407409);
+
+SELECT number
+FROM numbers(10, 14630045721179951620, 6670599363308407409)
+LIMIT 10;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM numbers(0, 1000, 1);
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM numbers(5, 1000, 7);
+
+SELECT number
+FROM numbers(18446744073709551614, 5, 1);
+
+SELECT number
+FROM numbers(18446744073709551610, 10, 1);
+
+SELECT number
+FROM numbers(18446744073709551610, 10, 3);
+
+SELECT number
+FROM numbers(18446744073709551615, 18446744073709551615, 18446744073709551615);
+
+SELECT number
+FROM numbers(18446744073709551615, 18446744073709551615, 1844674407370955161);
+
+SELECT number
+FROM numbers(5, 18446744073709551615, 1)
+LIMIT 10;
+
+SELECT number
+FROM numbers(0, 1000, 2)
+WHERE and(greaterOrEquals(number, 10), lessOrEquals(number, 40));
+
+SELECT number
+FROM numbers(18446744073709551610, 10, 3)
+WHERE number >= 18446744073709551612;
+
+SELECT number
+FROM numbers(18446744073709551615, 10, 3)
+WHERE number >= 5;
+
+SELECT number
+FROM numbers(18446744073709551610, 10, 3)
+WHERE number <= 5;
+
+SELECT number
+FROM numbers(18446744073709551610, 10, 3)
+WHERE number >= 18446744073709551612
+    OR number <= 5;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM numbers(0, 1000, 1)
+WHERE number % 3 = 0;
+
+SELECT number
+FROM numbers(100, 10, 1)
+WHERE number < 50;
+
+SELECT number
+FROM `system`.numbers
+WHERE number < 10;
+
+SELECT *
+FROM numbers(10)
+LIMIT 0;
+
+SELECT *
+FROM `system`.numbers
+LIMIT 0;
+
+SELECT number
+FROM numbers_mt(10, 14630045721179951620, 6670599363308407409);
+
+SELECT number
+FROM numbers_mt(10, 14630045721179951620, 6670599363308407409)
+LIMIT 10;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM numbers_mt(0, 1000, 1);
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM numbers_mt(5, 1000, 7);
+
+SELECT number
+FROM numbers_mt(18446744073709551614, 5, 1);
+
+SELECT number
+FROM numbers_mt(18446744073709551610, 10, 1);
+
+SELECT number
+FROM numbers_mt(18446744073709551610, 10, 3);
+
+SELECT number
+FROM numbers_mt(18446744073709551615, 18446744073709551615, 18446744073709551615);
+
+SELECT number
+FROM numbers_mt(18446744073709551615, 18446744073709551615, 1844674407370955161);
+
+SELECT number
+FROM numbers_mt(5, 18446744073709551615, 1)
+LIMIT 10;
+
+SELECT number
+FROM numbers_mt(0, 1000, 2)
+WHERE and(greaterOrEquals(number, 10), lessOrEquals(number, 40));
+
+SELECT number
+FROM numbers_mt(18446744073709551610, 10, 3)
+WHERE number >= 18446744073709551612;
+
+SELECT number
+FROM numbers_mt(18446744073709551615, 10, 3)
+WHERE number >= 5;
+
+SELECT number
+FROM numbers_mt(18446744073709551610, 10, 3)
+WHERE number <= 5;
+
+SELECT number
+FROM numbers_mt(18446744073709551610, 10, 3)
+WHERE number >= 18446744073709551612
+    OR number <= 5;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM numbers_mt(0, 1000, 1)
+WHERE number % 3 = 0;
+
+SELECT number
+FROM numbers_mt(100, 10, 1)
+WHERE number < 50;
+
+SELECT number
+FROM `system`.numbers_mt
+WHERE number < 10;
+
+SELECT *
+FROM `system`.numbers_mt
+LIMIT 0;
+
+SELECT number
+FROM `system`.numbers_mt
+WHERE number < 100
+LIMIT 5;
+
+SELECT number
+FROM `system`.numbers_mt
+WHERE number < 1000
+LIMIT 5;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM `system`.numbers_mt
+WHERE number < 1000000;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM `system`.numbers_mt
+WHERE number >= 5
+    AND number < 7000;
+
+SELECT number
+FROM `system`.numbers_mt
+WHERE (and(greaterOrEquals(number, 10), lessOrEquals(number, 15)))
+    OR (and(greaterOrEquals(number, 100), lessOrEquals(number, 105)));
+
+SELECT number
+FROM `system`.numbers_mt
+WHERE (and(greaterOrEquals(number, 10), lessOrEquals(number, 20)))
+    OR (and(greaterOrEquals(number, 100), lessOrEquals(number, 110)))
+LIMIT 7;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM `system`.numbers_mt
+WHERE number >= 100000
+    AND number < 100000 + 1000000;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM `system`.numbers_mt
+WHERE number >= 500
+    AND number < 2000;
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM `system`.numbers_mt
+WHERE (and(greaterOrEquals(number, 0), lessOrEquals(number, 50)))
+    OR (and(greaterOrEquals(number, 1000), lessOrEquals(number, 1100)))
+    OR (and(greaterOrEquals(number, 100000), lessOrEquals(number, 100100)));
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM `system`.numbers_mt
+WHERE (and(greaterOrEquals(number, 2), lessOrEquals(number, 50)))
+    OR (and(greaterOrEquals(number, 30), lessOrEquals(number, 60)))
+    OR (and(greaterOrEquals(number, 50), lessOrEquals(number, 70)));
+
+SELECT
+    count(),
+    min(number),
+    max(number),
+    sum(number)
+FROM `system`.numbers_mt
+WHERE number < 1000;
+
+SELECT number
+FROM `system`.numbers_mt
+WHERE and(greaterOrEquals(number, 123456), lessOrEquals(number, 1000000))
+LIMIT 10;

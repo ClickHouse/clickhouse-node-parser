@@ -1,0 +1,1 @@
+SELECT ignore(lengthUTF8(lowerUTF8(randomStringUTF8(99))));

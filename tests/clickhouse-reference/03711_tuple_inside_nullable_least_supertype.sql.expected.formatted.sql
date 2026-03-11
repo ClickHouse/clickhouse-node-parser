@@ -1,0 +1,109 @@
+SELECT toTypeName([CAST((8, 9), 'Tuple(Int32, Int32)'), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
+
+SELECT toTypeName([(8, 9), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
+
+SELECT toTypeName([NULL, '3', CAST('3', 'Nullable(String)')]);
+
+SELECT toTypeName([NULL, (8, 9), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
+
+SELECT toTypeName([NULL, (8, 9), CAST((2, 5), 'Tuple(Int32, Int32)')]);
+
+SELECT *
+FROM test_nullable_tuples
+ORDER BY id ASC;
+
+SELECT toTypeName([
+    CAST((1, 2), 'Tuple(Int8, Int8)'),
+    CAST((3, 4), 'Nullable(Tuple(Int32, Int32))')
+]);
+
+SELECT toTypeName([
+    CAST((1, 2), 'Tuple(UInt32, UInt32)'),
+    CAST((3, 4), 'Nullable(Tuple(Int64, Int64))')
+]);
+
+SELECT toTypeName([
+    CAST(('a', 'b'), 'Tuple(String, String)'),
+    CAST(('c', 'd'), 'Nullable(Tuple(FixedString(1), FixedString(1)))')
+]);
+
+SELECT toTypeName(CAST([(1, 7), CAST(NULL, 'Nullable(Tuple(Int8, Int8))'), (2, 8)], 'Array(Nullable(Tuple(Int8, Int8)))'));
+
+SELECT toTypeName([NULL, NULL, (1, 2), NULL, CAST((3, 4), 'Nullable(Tuple(Int32, Int32))')]);
+
+SELECT toTypeName([
+    CAST((1, 'a'), 'Tuple(x Int32, y String)'),
+    CAST((2, 'b'), 'Nullable(Tuple(x Int32, y String))')
+]);
+
+SELECT toTypeName([
+    CAST((1, 'a'), 'Tuple(x Int32, y String)'),
+    CAST((2, 'b'), 'Nullable(Tuple(n Int32, m String))')
+]);
+
+SELECT toTypeName([
+    (3, 'c'),
+    CAST((1, 'a'), 'Tuple(x Int32, y String)'),
+    CAST((2, 'b'), 'Nullable(Tuple(x Int32, y String))')
+]);
+
+SELECT toTypeName([NULL, CAST((1, 'a'), 'Tuple(x Int32, y String)')]);
+
+SELECT toTypeName([NULL, CAST(((1, 2), 'a'), 'Tuple(Tuple(Int32, Int32), String)')]);
+
+SELECT toTypeName([NULL, CAST(((1, 2), 'a'), 'Nullable(Tuple(Tuple(Int32, Int32), String))')]);
+
+SELECT toTypeName([NULL, CAST(((1, 2), 'a'), 'Tuple(Nullable(Tuple(Int32, Int32)), String)')]);
+
+SELECT toTypeName([
+    NULL,
+    CAST((((1, 2), 3), 4), 'Tuple(Tuple(Tuple(Int32, Int32), Int32), Int32)'),
+    CAST((((5, 6), 7), 8), 'Nullable(Tuple(Tuple(Tuple(Int32, Int32), Int32), Int32))')
+]);
+
+SELECT toTypeName([
+    CAST((1, 2), 'Tuple(Int32, Int32)'),
+    CAST((3, 4, 5), 'Nullable(Tuple(Int32, Int32, Int32))')
+]);
+
+SELECT toTypeName([
+    NULL,
+    CAST((1, 2), 'Tuple(Int32, Int32)'),
+    CAST((3, 4, 5), 'Nullable(Tuple(Int32, Int32, Int32))')
+]);
+
+SELECT toTypeName([
+    CAST([(1, 2), (3, 4)], 'Array(Tuple(Int32, Int32))'),
+    CAST([(5, 6), (7, 8)], 'Array(Nullable(Tuple(Int32, Int32)))')
+]);
+
+SELECT toTypeName([
+    CAST([(1, 2), (3, 4)], 'Array(Nullable(Tuple(Int32, Int32)))'),
+    CAST([(5, 6), (7, 8)], 'Array(Tuple(Int32, Int32))')
+]);
+
+SELECT toTypeName([
+    CAST(tuple(), 'Tuple()'),
+    CAST(tuple(), 'Nullable(Tuple())')
+]);
+
+SELECT toTypeName([
+    CAST(tuple(1), 'Tuple(Int32)'),
+    CAST(tuple(2), 'Nullable(Tuple(Int32))')
+]);
+
+SELECT toTypeName([
+    CAST((1,2,3,4,5,6,7,8,9,10), 'Tuple(Int32,Int32,Int32,Int32,Int32,Int32,Int32,Int32,Int32,Int32)'),
+    CAST((11,12,13,14,15,16,17,18,19,20), 'Nullable(Tuple(Int32,Int32,Int32,Int32,Int32,Int32,Int32,Int32,Int32,Int32))')
+]);
+
+SELECT toTypeName([
+    CAST(NULL, 'Nullable(Tuple(Int32, String))'),
+    CAST(NULL, 'Nullable(Tuple(Int32, String))'),
+    CAST(NULL, 'Nullable(Tuple(Int32, String))')
+]);
+
+SELECT toTypeName([
+    CAST((1, NULL), 'Tuple(Int32, Nullable(String))'),
+    CAST((2, 'b'), 'Nullable(Tuple(Int32, Nullable(String)))')
+]);

@@ -1,0 +1,187 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "h3ToParent",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "641573946153969375"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "h3ToParent",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "641573946153969375"
+          },
+          {
+            "kind": "functionCall",
+            "name": "arrayJoin",
+            "args": [
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ],
+                "source": "[1,2]"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "geoToH3",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "longitude"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "latitude"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt8",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "8"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "h3Index"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "data_table"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "geoToH3",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "longitude"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "latitude"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt8",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "-",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "longitude"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "longitude"
+                      ]
+                    }
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "8"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "h3Index"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "data_table"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

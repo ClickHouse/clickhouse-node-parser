@@ -1,0 +1,1 @@
+SELECT * FROM n1_n2_join ORDER BY ALL;

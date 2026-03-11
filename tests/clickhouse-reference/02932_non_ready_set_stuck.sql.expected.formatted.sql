@@ -1,0 +1,17 @@
+SELECT *
+FROM
+    (
+        SELECT item_id
+        FROM tab
+        GROUP BY item_id
+        WITH TOTALS
+        ORDER BY '922337203.6854775806' IN (
+                SELECT NULL
+            ) ASC
+    ) AS l
+RIGHT JOIN (
+        SELECT item_id
+        FROM tab
+    ) AS r
+    ON l.item_id = r.item_id
+WHERE NULL;

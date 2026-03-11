@@ -1,0 +1,21 @@
+SELECT *
+FROM numbers(10)
+FORMAT JSONLines;
+
+SELECT *
+FROM numbers(10)
+FORMAT NDJSON;
+
+SELECT *
+FROM `02267_t`
+ORDER BY
+    n1 ASC,
+    n2 ASC
+FORMAT JSONLines;
+
+SELECT *
+FROM `02267_t`
+ORDER BY
+    n1 ASC,
+    n2 ASC
+FORMAT NDJSON;

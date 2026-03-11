@@ -1,0 +1,298 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "apply",
+            "func": {
+              "kind": "columnRef",
+              "parts": [
+                "hex"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "functionCall",
+                    "name": "stochasticLogisticRegressionState",
+                    "params": [
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0."
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "5"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "SGD"
+                      }
+                    ],
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              }
+            },
+            "alias": "col1"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "functionCall",
+                    "name": "stochasticLinearRegressionState",
+                    "params": [
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0."
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "5"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "SGD"
+                      }
+                    ],
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              }
+            },
+            "alias": "col2"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "bitmapHasAny",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "bitmapBuild",
+                  "args": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "functionCall",
+                          "name": "toUInt8",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      ],
+                      "source": "[toUInt8(1)]"
+                    }
+                  ]
+                },
+                {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "functionCall",
+                        "name": "groupBitmapState",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "toUInt8",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "alias": "has1"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "bitmapHasAny",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "bitmapBuild",
+                  "args": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      ],
+                      "source": "[toUInt64(1)]"
+                    }
+                  ]
+                },
+                {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "functionCall",
+                        "name": "groupBitmapState",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "toUInt64",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "2"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "alias": "has2"
+          }
+        ]
+      }
+    }
+  }
+]

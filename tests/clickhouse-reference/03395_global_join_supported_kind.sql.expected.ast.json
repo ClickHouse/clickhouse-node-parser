@@ -1,0 +1,72 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t1"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableFunction",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.1"
+          }
+        ],
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableFunction",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.1"
+          }
+        ],
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "dummy"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t2",
+              "dummy"
+            ]
+          }
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

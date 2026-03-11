@@ -1,0 +1,2 @@
+SELECT * FROM t FORMAT Null; -- { serverError SOCKET_TIMEOUT }
+SELECT * FROM t ORDER BY a FORMAT Null; -- { serverError SOCKET_TIMEOUT }

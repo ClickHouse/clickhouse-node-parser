@@ -1,0 +1,30 @@
+SELECT
+    dim,
+    sum(idnum)
+FROM
+    test_bm_join
+RIGHT JOIN (
+        SELECT
+            dim,
+            bitmapOrCardinality(ids, ids2) AS idnum
+        FROM
+            (
+                SELECT
+                    dim,
+                    groupBitmapState(toUInt64(id)) AS ids
+                FROM test_bm
+                WHERE dim > 2
+                GROUP BY dim
+            ) AS A
+        RIGHT JOIN (
+                SELECT
+                    dim,
+                    groupBitmapState(toUInt64(id)) AS ids2
+                FROM test_bm
+                WHERE dim < 2
+                GROUP BY dim
+            ) AS B
+            USING (dim)
+    ) AS C
+    USING (dim)
+GROUP BY dim;

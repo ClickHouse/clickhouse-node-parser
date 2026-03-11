@@ -1,0 +1,232 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqExact",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupUniqArray",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayUniq",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupArray",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "uniqExact",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayUniq",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupArray",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "uniqExact",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "_"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayUniq",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupArray",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "groupArray",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "round",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "log",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "intHash32",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "round",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "cbrt",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "intHash32",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        }
+      }
+    }
+  }
+]

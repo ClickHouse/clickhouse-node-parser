@@ -1,0 +1,925 @@
+SELECT
+    '(forward, head, A)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, B)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, C)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'C') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, D)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'D') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, E)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'E') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, B)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, C)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, D)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'D') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, E)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'E') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A->B)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A->C)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'C') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, B->A)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B', action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A->B)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A->C)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A', action = 'C') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, B->A)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'B', action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A->A->B)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, B->A->A)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B', action = 'A', action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A->A->B)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A', action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, B->A->A)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'B', action = 'A', action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id >= 10',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id >= 10',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id >= 10',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B', action = 'C') AS next_node
+FROM test_sequenceNextNode_Nullable
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id >= 10',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C') AS next_node
+FROM test_sequenceNextNode_Nullable
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A) id >= 10',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'D', action = 'C') AS next_node
+FROM test_sequenceNextNode_Nullable
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A) id >= 10',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'D', action = 'C', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(0, A) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A') AS next_node
+        FROM test_sequenceNextNode_Nullable
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'B'
+    );
+
+SELECT
+    '(0, C) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('forward', 'head')(dt, action, 1, action = 'C') AS next_node
+        FROM test_sequenceNextNode_Nullable
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'D'
+    );
+
+SELECT
+    '(0, B->C) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B', action = 'C') AS next_node
+        FROM test_sequenceNextNode_Nullable
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'D'
+    );
+
+SELECT
+    '(0, A->B->C) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'B', action = 'C') AS next_node
+        FROM test_sequenceNextNode_Nullable
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'D'
+    );
+
+SELECT
+    '(0, A) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A') AS next_node
+        FROM test_sequenceNextNode_Nullable
+        WHERE id = 11
+        GROUP BY id
+        HAVING isNull(next_node)
+    );
+
+SELECT
+    '(0, C) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C') AS next_node
+        FROM test_sequenceNextNode_Nullable
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'B'
+    );
+
+SELECT
+    '(0, C->B) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C', action = 'B') AS next_node
+        FROM test_sequenceNextNode_Nullable
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'A'
+    );
+
+SELECT
+    '(0, C->B->A) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C', action = 'B', action = 'A') AS next_node
+        FROM test_sequenceNextNode_Nullable
+        WHERE id = 11
+        GROUP BY id
+        HAVING isNull(next_node)
+    );
+
+SELECT
+    '(forward, head) id < 10',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1) AS next_node
+FROM test_sequenceNextNode_Nullable
+WHERE id < 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail) id < 10',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1) AS next_node
+FROM test_sequenceNextNode_Nullable
+WHERE id < 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, A)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, A->B)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, A->B->C)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'A', action = 'B', action = 'C') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, B)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, B->B)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'B', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, B->A)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'B', action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, A)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, B)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, 1, action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, B->A)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, 1, action = 'B', action = 'A') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, B->B)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, 1, action = 'B', action = 'B') AS next_node
+FROM test_sequenceNextNode_Nullable
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, B)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, C)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'C') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, D)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'D') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, E)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'E') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, B)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, C)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, D)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'D') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, E)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'E') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A->B)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A->C)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'C') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, B->A)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B', action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A->B)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A->C)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A', action = 'C') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, B->A)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'B', action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A->A->B)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, B->A->A)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B', action = 'A', action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A->A->B)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A', action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, B->A->A)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'B', action = 'A', action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id >= 10',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id >= 10',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id >= 10',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B', action = 'C') AS next_node
+FROM test_sequenceNextNode
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id >= 10',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C') AS next_node
+FROM test_sequenceNextNode
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A) id >= 10',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'D', action = 'C') AS next_node
+FROM test_sequenceNextNode
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, A) id >= 10',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'D', action = 'C', action = 'B') AS next_node
+FROM test_sequenceNextNode
+WHERE id >= 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(0, A) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A') AS next_node
+        FROM test_sequenceNextNode
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'B'
+    );
+
+SELECT
+    '(0, C) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('forward', 'head')(dt, action, 1, action = 'C') AS next_node
+        FROM test_sequenceNextNode
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'D'
+    );
+
+SELECT
+    '(0, B->C) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('forward', 'head')(dt, action, 1, action = 'B', action = 'C') AS next_node
+        FROM test_sequenceNextNode
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'D'
+    );
+
+SELECT
+    '(0, A->B->C) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A', action = 'B', action = 'C') AS next_node
+        FROM test_sequenceNextNode
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'D'
+    );
+
+SELECT
+    '(0, A) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'A') AS next_node
+        FROM test_sequenceNextNode
+        WHERE id = 11
+        GROUP BY id
+        HAVING isNull(next_node)
+    );
+
+SELECT
+    '(0, C) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C') AS next_node
+        FROM test_sequenceNextNode
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'B'
+    );
+
+SELECT
+    '(0, C->B) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C', action = 'B') AS next_node
+        FROM test_sequenceNextNode
+        WHERE id = 11
+        GROUP BY id
+        HAVING next_node = 'A'
+    );
+
+SELECT
+    '(0, C->B->A) id = 11',
+    count()
+FROM (
+        SELECT
+            id,
+            sequenceNextNode('backward', 'tail')(dt, action, 1, action = 'C', action = 'B', action = 'A') AS next_node
+        FROM test_sequenceNextNode
+        WHERE id = 11
+        GROUP BY id
+        HAVING isNull(next_node)
+    );
+
+SELECT
+    '(forward, head) id < 10',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1) AS next_node
+FROM test_sequenceNextNode
+WHERE id < 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail) id < 10',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, 1) AS next_node
+FROM test_sequenceNextNode
+WHERE id < 10
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, A)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, A->B)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'A', action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, A->B->C)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'A', action = 'B', action = 'C') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, B)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, B->B)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'B', action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, B->A)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, 1, action = 'B', action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, A)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, B)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, 1, action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, B->A)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, 1, action = 'B', action = 'A') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, B->B)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, 1, action = 'B', action = 'B') AS next_node
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(max_args)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = '0', action = '1', action = '2', action = '3', action = '4', action = '5', action = '6', action = '7', action = '8', action = '9', action = '10', action = '11', action = '12', action = '13', action = '14', action = '15', action = '16', action = '17', action = '18', action = '19', action = '20', action = '21', action = '22', action = '23', action = '24', action = '25', action = '26', action = '27', action = '28', action = '29', action = '30', action = '31', action = '32', action = '33', action = '34', action = '35', action = '36', action = '37', action = '38', action = '39', action = '40', action = '41', action = '42', action = '43', action = '44', action = '45', action = '46', action = '47', action = '48', action = '49', action = '50', action = '51', action = '52', action = '53', action = '54', action = '55', action = '56', action = '57', action = '58', action = '59', action = '60', action = '61', action = '62', action = '63')
+FROM test_sequenceNextNode
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, A) id = 12',
+    sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A') AS next_node
+FROM test_sequenceNextNode
+WHERE id = 12;
+
+SELECT
+    '(forward, head, 1)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, referrer = '1') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, 1, A)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, referrer = '1', action = 'A') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, head, 1, A->B)',
+    id,
+    sequenceNextNode('forward', 'head')(dt, action, referrer = '1', action = 'A', action = 'B') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, 1)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, referrer = '1') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, 1, A)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, referrer = '1', action = 'A') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, tail, 1, A->B)',
+    id,
+    sequenceNextNode('backward', 'tail')(dt, action, referrer = '1', action = 'A', action = 'B') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, 1, B)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, referrer = '2', action = 'B') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(forward, first_match, 1, B->C)',
+    id,
+    sequenceNextNode('forward', 'first_match')(dt, action, referrer = '2', action = 'B', action = 'C') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, 1, B)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, referrer = '2', action = 'B') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;
+
+SELECT
+    '(backward, first_match, 1, B->C)',
+    id,
+    sequenceNextNode('backward', 'first_match')(dt, action, referrer = '2', action = 'B', action = 'A') AS next_node
+FROM test_base_condition
+GROUP BY id
+ORDER BY id ASC;

@@ -1,0 +1,173 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "_part"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "rowNumberInAllBlocks",
+            "args": []
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "key"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toStartOfInterval",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ts"
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIntervalMinute",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                }
+              ],
+              "source": "(key, toStartOfInterval(ts, toIntervalMinute(3)), ts)"
+            },
+            "alias": "cur"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "lagInFrame",
+              "args": [
+                {
+                  "kind": "tuple",
+                  "elements": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "key"
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toStartOfInterval",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ts"
+                          ]
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toIntervalMinute",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "3"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ts"
+                      ]
+                    }
+                  ],
+                  "source": "(key, toStartOfInterval(ts, toIntervalMinute(3)), ts)"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "window": {}
+            },
+            "alias": "prev"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "ttl_group_by_bug"
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "cur"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "prev"
+        ]
+      }
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

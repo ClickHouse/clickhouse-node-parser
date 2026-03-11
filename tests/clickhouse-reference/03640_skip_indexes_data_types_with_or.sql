@@ -1,0 +1,16 @@
+SELECT '-- Simple OR condition'; -- surviving granules: 100, but only 1 granule is real match
+SELECT explain AS explain FROM (
+    EXPLAIN indexes = 1 SELECT id FROM tab WHERE (i = 1 OR s = 'firststring' OR u = 1 OR hasToken(t1, 'number1'))
+) WHERE explain LIKE '%Granules%' OR explain LIKE '%PrimaryKey%' OR explain LIKE '%Name%';
+SELECT explain AS explain FROM (
+    EXPLAIN indexes = 1 SELECT id FROM tab WHERE (id >= 301 AND (i = 1 OR s = 'firststring' OR u = 1 OR hasToken(t1, 'number1')))
+) WHERE explain LIKE '%Granules%' OR explain LIKE '%PrimaryKey%' OR explain LIKE '%Name%';
+SELECT explain AS explain FROM (
+    EXPLAIN indexes = 1 SELECT id FROM tab WHERE (i = 10 OR s = 'laststring')
+) WHERE explain LIKE '%Granules%' OR explain LIKE '%PrimaryKey%' OR explain LIKE '%Name%';
+SELECT explain AS explain FROM (
+    EXPLAIN indexes = 1 SELECT id FROM tab WHERE (hasToken(t1, 'number1') OR hasToken(t2, 'line1'))
+) WHERE explain LIKE '%Granules%' OR explain LIKE '%PrimaryKey%' OR explain LIKE '%Name%';
+SELECT explain AS explain FROM (
+    EXPLAIN indexes = 1 SELECT id FROM tab WHERE (hasToken(t1, 'number1') OR hasToken(t2, 'line85'))
+) WHERE explain LIKE '%Granules%' OR explain LIKE '%PrimaryKey%' OR explain LIKE '%Name%';

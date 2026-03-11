@@ -1,0 +1,9 @@
+SELECT event
+FROM `system`.events
+WHERE like(event, '%MMap%')
+ORDER BY event ASC;
+
+SELECT metric
+FROM `system`.metrics
+WHERE like(metric, '%MMap%')
+ORDER BY metric ASC;

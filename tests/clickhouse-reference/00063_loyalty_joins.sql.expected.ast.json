@@ -1,0 +1,1330 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "loyalty"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserID"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "SearchEngineID"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  }
+                ]
+              },
+              "alias": "yandex"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "SearchEngineID"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  }
+                ]
+              },
+              "alias": "google"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "if",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "yandex"
+                            ]
+                          },
+                          "right": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "google"
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "/",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "yandex"
+                            ]
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "yandex"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "google"
+                              ]
+                            },
+                            "parenthesized": true
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "/",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "negate",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "google"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "yandex"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "google"
+                              ]
+                            },
+                            "parenthesized": true
+                          }
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  }
+                ]
+              },
+              "alias": "loyalty"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "test",
+            "table": "hits"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "OR",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "SearchEngineID"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "SearchEngineID"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "parenthesized": true
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "UserID"
+                ]
+              }
+            ]
+          },
+          "having": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "yandex"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "google"
+                ]
+              },
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        }
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "UserID"
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "loyalty"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "loyalty"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "loyalty"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserID"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "test",
+            "table": "hits"
+          }
+        }
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserID"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "SearchEngineID"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  }
+                ]
+              },
+              "alias": "yandex"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "SearchEngineID"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  }
+                ]
+              },
+              "alias": "google"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "if",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "yandex"
+                            ]
+                          },
+                          "right": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "google"
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "/",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "yandex"
+                            ]
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "yandex"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "google"
+                              ]
+                            },
+                            "parenthesized": true
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "/",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "negate",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "google"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "yandex"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "google"
+                              ]
+                            },
+                            "parenthesized": true
+                          }
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  }
+                ]
+              },
+              "alias": "loyalty"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "test",
+            "table": "hits"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "OR",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "SearchEngineID"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "SearchEngineID"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "parenthesized": true
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "UserID"
+                ]
+              }
+            ]
+          },
+          "having": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "yandex"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "google"
+                ]
+              },
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        }
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "UserID"
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "loyalty"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "loyalty"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "loyalty"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "loyalty"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "UserID"
+            ]
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "UserID"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "database": "test",
+                "table": "hits"
+              }
+            }
+          },
+          "kind": "join",
+          "joinType": "LEFT",
+          "right": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "UserID"
+                  ]
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "sum",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "SearchEngineID"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      }
+                    ]
+                  },
+                  "alias": "yandex"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "sum",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "SearchEngineID"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      }
+                    ]
+                  },
+                  "alias": "google"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toInt8",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "*",
+                        "left": {
+                          "kind": "functionCall",
+                          "name": "if",
+                          "args": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": ">",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "yandex"
+                                ]
+                              },
+                              "right": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "google"
+                                ]
+                              }
+                            },
+                            {
+                              "kind": "binaryExpr",
+                              "op": "/",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "yandex"
+                                ]
+                              },
+                              "right": {
+                                "kind": "binaryExpr",
+                                "op": "+",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "yandex"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "google"
+                                  ]
+                                },
+                                "parenthesized": true
+                              }
+                            },
+                            {
+                              "kind": "binaryExpr",
+                              "op": "/",
+                              "left": {
+                                "kind": "functionCall",
+                                "name": "negate",
+                                "args": [
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "google"
+                                    ]
+                                  }
+                                ]
+                              },
+                              "right": {
+                                "kind": "binaryExpr",
+                                "op": "+",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "yandex"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "google"
+                                  ]
+                                },
+                                "parenthesized": true
+                              }
+                            }
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        }
+                      }
+                    ]
+                  },
+                  "alias": "loyalty"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "database": "test",
+                "table": "hits"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "OR",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "SearchEngineID"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    "parenthesized": true
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "SearchEngineID"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    },
+                    "parenthesized": true
+                  }
+                ]
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "UserID"
+                    ]
+                  }
+                ]
+              },
+              "having": {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "yandex"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "google"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              }
+            }
+          },
+          "constraint": {
+            "kind": "using",
+            "columns": [
+              "UserID"
+            ]
+          }
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "loyalty"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "loyalty"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "loyalty"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "c"
+      },
+      {
+        "kind": "functionCall",
+        "name": "bar",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "functionCall",
+              "name": "log",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "functionCall",
+              "name": "log",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3000000"
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "80"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserID"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "if",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "yandex"
+                            ]
+                          },
+                          "right": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "google"
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "/",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "yandex"
+                            ]
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "yandex"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "google"
+                              ]
+                            },
+                            "parenthesized": true
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "/",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "negate",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "google"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "yandex"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "google"
+                              ]
+                            },
+                            "parenthesized": true
+                          }
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  }
+                ]
+              },
+              "alias": "loyalty"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "UserID"
+                  ]
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "sum",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "SearchEngineID"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      }
+                    ]
+                  },
+                  "alias": "yandex"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "sum",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "SearchEngineID"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      }
+                    ]
+                  },
+                  "alias": "google"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "database": "test",
+                "table": "hits"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "OR",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "SearchEngineID"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    "parenthesized": true
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "SearchEngineID"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    },
+                    "parenthesized": true
+                  }
+                ]
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "UserID"
+                    ]
+                  }
+                ]
+              },
+              "having": {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "yandex"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "google"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              }
+            }
+          }
+        }
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "UserID"
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "loyalty"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "loyalty"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

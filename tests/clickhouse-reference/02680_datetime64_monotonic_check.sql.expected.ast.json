@@ -1,0 +1,160 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toHour",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toTimeZone",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "UTC"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "toHour_UTC"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toHour",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toTimeZone",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Asia/Jerusalem"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "toHour_Israel"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "02680_datetime64_monotonic_check"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "toHour_Israel"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "toHour_UTC"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "toHour_Israel"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Asia/Jerusalem"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "02680_datetime_monotonic_check_lc"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toHour",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "timestamp"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Asia/Jerusalem"
+              }
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  }
+]

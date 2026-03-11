@@ -1,0 +1,8 @@
+select zero from system.zeros limit 10 settings max_block_size = 3;
+select zero from system.zeros_mt limit 10 settings max_block_size = 3, max_threads = 2;
+select zero from zeros(10) settings max_block_size = 3;
+select zero from zeros_mt(10) settings max_block_size = 3, max_threads=3;
+select sum(zero), count() from (select * from system.zeros limit 10000000);
+select sum(zero), count() from (select * from system.zeros_mt limit 10000000);
+select sum(zero), count() from zeros(10000000);
+select sum(zero), count() from zeros_mt(10000000);

@@ -1,0 +1,4 @@
+SELECT *, 'original' AS orig FROM test ORDER BY a, b WITH FILL TO 20 STEP 2 STALENESS 3, c WITH FILL TO 25 step 3;
+SELECT *, 'original' AS orig FROM test2 ORDER BY a, b WITH FILL;
+SELECT *, 'original' AS orig FROM test2 ORDER BY a WITH FILL to 20 STALENESS 4, b WITH FILL TO 15 STALENESS 7;
+SELECT a, b, 'original' AS orig FROM test3 ORDER BY a WITH FILL TO 33 STEP 3, b WITH FILL FROM -10 STEP 2;

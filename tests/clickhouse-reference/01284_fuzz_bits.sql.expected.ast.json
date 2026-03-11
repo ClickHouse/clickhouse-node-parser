@@ -1,0 +1,387 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "fuzzBits",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "string"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "fuzzBits",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "string"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "-1.0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "fuzzBits",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.3"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "fuzzBits",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "randomString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "100"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.5"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "fuzzBits",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "randomString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "100"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.5"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "fuzzBits",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "abacaba"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.9"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "0.29"
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "8"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10000"
+                }
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "sum"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "sum"
+                ]
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "0.31"
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "8"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10000"
+                }
+              }
+            }
+          ],
+          "parenthesized": true
+        },
+        "alias": "res"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arraySum",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "id"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "bitCount",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "reinterpretAsUInt8",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "substring",
+                            "args": [
+                              {
+                                "kind": "functionCall",
+                                "name": "fuzzBits",
+                                "args": [
+                                  {
+                                    "kind": "functionCall",
+                                    "name": "materialize",
+                                    "args": [
+                                      {
+                                        "kind": "functionCall",
+                                        "name": "arrayStringConcat",
+                                        "args": [
+                                          {
+                                            "kind": "functionCall",
+                                            "name": "arrayMap",
+                                            "args": [
+                                              {
+                                                "kind": "lambdaExpr",
+                                                "params": [
+                                                  "x"
+                                                ],
+                                                "body": {
+                                                  "kind": "functionCall",
+                                                  "name": "toString",
+                                                  "args": [
+                                                    {
+                                                      "kind": "literal",
+                                                      "type": "String",
+                                                      "value": "\\0"
+                                                    }
+                                                  ]
+                                                }
+                                              },
+                                              {
+                                                "kind": "functionCall",
+                                                "name": "range",
+                                                "args": [
+                                                  {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "10000"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "literal",
+                                    "type": "Float64",
+                                    "value": "0.3"
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "binaryExpr",
+                                "op": "+",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "id"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10000"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "sum"
+          }
+        ]
+      }
+    }
+  }
+]

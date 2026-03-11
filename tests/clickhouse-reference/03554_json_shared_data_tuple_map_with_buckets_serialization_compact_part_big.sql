@@ -1,0 +1,10 @@
+select json.data from test_compact_map_with_buckets_tuple format Null;
+select json.data, json.data.b from test_compact_map_with_buckets_tuple format Null;
+select json.data.b, json.data from test_compact_map_with_buckets_tuple format Null;
+select json.data, json.data.b, json.data.c from test_compact_map_with_buckets_tuple format Null;
+select json.data.b, json.data, json.data.c from test_compact_map_with_buckets_tuple format Null;
+select json.data.b, json.data.c, json.data from test_compact_map_with_buckets_tuple format Null;
+select json.data, json.data.^a from test_compact_map_with_buckets_tuple format Null;
+select json.data.^a, json.data from test_compact_map_with_buckets_tuple format Null;
+select json.data, json.data.^a, json.data.b from test_compact_map_with_buckets_tuple format Null;
+select json.data.b, json.data.^a, json.data from test_compact_map_with_buckets_tuple format Null;

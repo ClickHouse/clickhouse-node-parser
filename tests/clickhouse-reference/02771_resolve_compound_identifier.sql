@@ -1,0 +1,1 @@
+SELECT t.x FROM test_02771.t ORDER BY t.x;

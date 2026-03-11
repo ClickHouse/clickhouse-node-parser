@@ -1,0 +1,1 @@
+SELECT * FROM underlying_01797 FORMAT Null;

@@ -1,0 +1,11 @@
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'not_partitioned' AND active ORDER BY name;
+SELECT sum(x) FROM not_partitioned;
+SELECT system.detached_parts.* EXCEPT (bytes_on_disk, `path`, disk, modification_time) FROM system.detached_parts WHERE database = currentDatabase() AND table = 'not_partitioned';
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_week' AND active ORDER BY name;
+SELECT sum(x) FROM partitioned_by_week;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_tuple' AND active ORDER BY name;
+SELECT sum(y) FROM partitioned_by_tuple;
+SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_string' AND active ORDER BY name;
+SELECT sum(x) FROM partitioned_by_string;
+SELECT partition, name, rows FROM system.parts WHERE database = currentDatabase() AND table = 'without_fixed_size_columns' AND active ORDER BY name;
+SELECT * FROM without_fixed_size_columns ORDER BY s;

@@ -1,0 +1,43 @@
+SELECT trimLeft(`explain`)
+FROM (
+        EXPLAIN projections = 1
+        SELECT *
+        FROM test_simple_projection
+        WHERE region = 'europe'
+            AND user_id = 101
+    )
+WHERE like(`explain`, '%ReadFromMergeTree%')
+    OR match(`explain`, '^\\s+[A-Z][a-z]+(\\s+[A-Z][a-z]+)*:');
+
+SELECT trimLeft(`explain`)
+FROM (
+        EXPLAIN projections = 1
+        SELECT *
+        FROM test_simple_projection
+        WHERE region != 'unknown'
+            AND user_id = 106
+    )
+WHERE like(`explain`, '%ReadFromMergeTree%')
+    OR match(`explain`, '^\\s+[A-Z][a-z]+(\\s+[A-Z][a-z]+)*:');
+
+SELECT trimLeft(`explain`)
+FROM (
+        EXPLAIN projections = 1
+        SELECT *
+        FROM test_simple_projection
+        WHERE region = 'us_west'
+            AND user_id = 107
+    )
+WHERE like(`explain`, '%ReadFromMergeTree%')
+    OR match(`explain`, '^\\s+[A-Z][a-z]+(\\s+[A-Z][a-z]+)*:');
+
+SELECT trimLeft(`explain`)
+FROM (
+        EXPLAIN projections = 1
+        SELECT *
+        FROM test_simple_projection
+        WHERE region != 'unknown'
+            AND user_id != 999
+    )
+WHERE like(`explain`, '%ReadFromMergeTree%')
+    OR match(`explain`, '^\\s+[A-Z][a-z]+(\\s+[A-Z][a-z]+)*:');

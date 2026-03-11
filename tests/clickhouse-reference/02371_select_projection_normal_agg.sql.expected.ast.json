@@ -1,0 +1,216 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "equals",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "sum_bytes1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "sum_bytes2"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "equals",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "avg_duration1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "avg_duration2"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toStartOfHour",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "datetime"
+                    ]
+                  }
+                ]
+              },
+              "alias": "hour"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "bytes"
+                    ]
+                  }
+                ]
+              },
+              "alias": "sum_bytes1"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "avg",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "duration"
+                    ]
+                  }
+                ]
+              },
+              "alias": "avg_duration1"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "video_log"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDate",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "hour"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2022-07-22"
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "device_id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "100"
+                },
+                "parenthesized": true
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "hour"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "hour"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "sum_bytes"
+                ]
+              },
+              "alias": "sum_bytes2"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "avg_duration"
+                ]
+              },
+              "alias": "avg_duration2"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "video_log_result"
+          }
+        }
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "hour"
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "joined_subquery_requires_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  }
+]

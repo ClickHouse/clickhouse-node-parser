@@ -1,0 +1,4 @@
+SELECT *
+FROM (
+        SELECT 1
+    ) SAMPLE 1/2;

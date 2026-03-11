@@ -1,0 +1,3 @@
+SELECT x FROM quorum1 ORDER BY x;
+SELECT x FROM quorum2 ORDER BY x;
+SELECT x FROM quorum3 ORDER BY x; -- {serverError REPLICA_IS_NOT_IN_QUORUM}

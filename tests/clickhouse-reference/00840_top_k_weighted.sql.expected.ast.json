@@ -1,0 +1,240 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "topKWeighted",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "weight"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            "alias": "weight"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "hello"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            }
+                          ],
+                          "source": "('hello', 1)"
+                        },
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "world"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "2"
+                            }
+                          ],
+                          "source": "('world', 2)"
+                        },
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "goodbye"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "3"
+                            }
+                          ],
+                          "source": "('goodbye', 3)"
+                        },
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "abc"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            }
+                          ],
+                          "source": "('abc', 1)"
+                        }
+                      ],
+                      "source": "[('hello', 1), ('world', 2), ('goodbye', 3), ('abc', 1)]"
+                    }
+                  ]
+                },
+                "alias": "t"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "topKWeighted",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "weight"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "n"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "weight"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers"
+        },
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        }
+      }
+    }
+  }
+]

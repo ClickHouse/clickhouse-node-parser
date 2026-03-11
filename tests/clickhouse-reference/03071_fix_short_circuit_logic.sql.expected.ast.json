@@ -1,0 +1,222 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "block_timestamp"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "block_timestamp"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "bytes2hex",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "token_address"
+                  ]
+                }
+              ]
+            },
+            "alias": "token_address_hex"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "transfer_id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "address"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "block_timestamp"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "token_address"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "zksync"
+                },
+                "alias": "chain"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test"
+            }
+          }
+        },
+        "where": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "address"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "hex2bytes",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "0xd387a6e4e84a6c86bd90c158c6028a58cc8ac459"
+                  }
+                ]
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "functionCall",
+              "name": "notLike",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "transfer_id"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "gas%"
+                }
+              ],
+              "parenthesized": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "functionCall",
+              "name": "dictGetOrDefault",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "token_data_map"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "is_blacklisted"
+                },
+                {
+                  "kind": "tuple",
+                  "elements": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "token_address_hex"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "zksync"
+                    }
+                  ],
+                  "source": "(token_address_hex, 'zksync')"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Bool",
+                  "value": "1"
+                }
+              ],
+              "parenthesized": true
+            }
+          ]
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "short_circuit_function_evaluation",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "enable"
+        }
+      },
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  }
+]

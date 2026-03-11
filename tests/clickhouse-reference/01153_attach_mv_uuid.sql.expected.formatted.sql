@@ -1,0 +1,3 @@
+SELECT *
+FROM mv
+ORDER BY n ASC;

@@ -1,0 +1,9 @@
+SELECT X + 1
+FROM (
+        SELECT 12345678901 AS X
+        UNION ALL
+        SELECT number
+        FROM `system`.numbers
+        LIMIT 10
+    )
+ORDER BY X ASC;

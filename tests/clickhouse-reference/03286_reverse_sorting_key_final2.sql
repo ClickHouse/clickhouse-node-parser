@@ -1,0 +1,1 @@
+SELECT sum(c0) FROM t0 FINAL;

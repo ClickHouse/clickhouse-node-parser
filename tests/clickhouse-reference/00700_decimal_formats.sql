@@ -1,0 +1,2 @@
+SELECT * FROM decimal ORDER BY b DESC FORMAT CSV;
+SELECT * FROM decimal ORDER BY c FORMAT TabSeparated;

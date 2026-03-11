@@ -1,0 +1,1 @@
+SELECT * FROM qbits ORDER BY id;

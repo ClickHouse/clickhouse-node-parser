@@ -1,0 +1,2 @@
+SELECT c0, _part FROM t ORDER BY ALL;
+SELECT c0, _part FROM taggr FINAL ORDER BY ALL;

@@ -1,0 +1,11 @@
+SELECT *
+FROM t_filter
+WHERE f
+ORDER BY u ASC
+LIMIT 5;
+
+SELECT *
+FROM t_filter
+WHERE f != 0
+ORDER BY u ASC
+LIMIT 5;

@@ -1,0 +1,3 @@
+SELECT *
+FROM alter_00061
+ORDER BY k ASC;

@@ -1,0 +1,37 @@
+SELECT c0
+FROM test_limit_by_validation
+GROUP BY c0
+LIMIT 1 BY c1;
+
+SELECT
+    c0,
+    sum(c2) AS s
+FROM test_limit_by_validation
+GROUP BY c0
+LIMIT 1 BY c1;
+
+SELECT
+    c0,
+    c1
+FROM test_limit_by_validation
+GROUP BY
+    c0,
+    c1
+ORDER BY
+    c0 ASC,
+    c1 ASC
+LIMIT 1 BY c1;
+
+SELECT
+    c0,
+    sum(c1) AS s
+FROM test_limit_by_validation
+GROUP BY c0
+ORDER BY c0 ASC
+LIMIT 1 BY c0;
+
+SELECT c0 + 1 AS expr
+FROM test_limit_by_validation
+GROUP BY c0 + 1
+ORDER BY expr ASC
+LIMIT 1 BY expr;

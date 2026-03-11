@@ -1,0 +1,1854 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ts"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "nonNegativeDerivative",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "metric"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ts"
+                      ]
+                    }
+                  ],
+                  "window": {
+                    "partitionBy": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "metric"
+                        ]
+                      }
+                    ],
+                    "orderBy": [
+                      {
+                        "kind": "orderByItem",
+                        "expr": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ts"
+                          ]
+                        },
+                        "direction": "ASC"
+                      },
+                      {
+                        "kind": "orderByItem",
+                        "expr": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "metric"
+                          ]
+                        },
+                        "direction": "ASC"
+                      }
+                    ],
+                    "frame": {
+                      "frameType": "rows",
+                      "start": {
+                        "kind": "unbounded"
+                      },
+                      "end": {
+                        "kind": "unbounded"
+                      }
+                    }
+                  }
+                },
+                "alias": "deriv"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "nnd"
+            },
+            "offset": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              },
+              "commaSyntax": true
+            }
+          }
+        },
+        "right": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ts"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "nonNegativeDerivative",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "metric"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ts"
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIntervalSecond",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  ],
+                  "window": {
+                    "partitionBy": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "metric"
+                        ]
+                      }
+                    ],
+                    "orderBy": [
+                      {
+                        "kind": "orderByItem",
+                        "expr": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ts"
+                          ]
+                        },
+                        "direction": "ASC"
+                      }
+                    ],
+                    "frame": {
+                      "frameType": "rows",
+                      "start": {
+                        "kind": "unbounded"
+                      },
+                      "end": {
+                        "kind": "unbounded"
+                      }
+                    }
+                  }
+                },
+                "alias": "deriv"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "nnd"
+            },
+            "offset": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              },
+              "commaSyntax": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "preceding",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "end": {
+                "kind": "following",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalNanosecond",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "preceding",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "end": {
+                "kind": "following",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalMicrosecond",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "preceding",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "end": {
+                "kind": "following",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalMillisecond",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "preceding",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "end": {
+                "kind": "following",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalSecond",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "6"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "preceding",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "7"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "following",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalHour",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "8"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalDay",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "9"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "preceding",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              },
+              "end": {
+                "kind": "following",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalWeek",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "preceding",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalMonth",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "11"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalQuarter",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "12"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalYear",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "13"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalNanosecond",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "string not datetime"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalNanosecond",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalNanosecond",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nonNegativeDerivative",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric"
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ts"
+                  ]
+                },
+                "direction": "ASC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "metric"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "deriv"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  }
+]

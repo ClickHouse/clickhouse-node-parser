@@ -1,0 +1,1 @@
+SELECT 1 FROM t0 JOIN t1 ON t0.c0 = t1.c0;

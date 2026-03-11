@@ -1,0 +1,254 @@
+[
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "eq"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "expr",
+            "name": "arr",
+            "expr": {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "expr",
+            "name": "arr_with_nan",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "if",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "x"
+                          ]
+                        },
+                        "right": {
+                          "kind": "functionCall",
+                          "name": "intDiv",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "10"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "nan"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "expr",
+            "name": "arr_filtered",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayFilter",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "binaryExpr",
+                    "op": "!=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "intDiv",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayReduce",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "quantileBFloat16"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr_with_nan"
+                  ]
+                }
+              ]
+            },
+            "alias": "q1"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayReduce",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "quantileBFloat16"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr_filtered"
+                  ]
+                }
+              ]
+            },
+            "alias": "q2"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "q1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "q2"
+                ]
+              }
+            },
+            "alias": "eq"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

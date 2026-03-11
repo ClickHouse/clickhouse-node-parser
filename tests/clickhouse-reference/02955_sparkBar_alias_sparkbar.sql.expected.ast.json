@@ -1,0 +1,77 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sparkbar",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "9"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "cnt"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                }
+              ]
+            },
+            "alias": "cnt"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "spark_bar_test"
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "event_date"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

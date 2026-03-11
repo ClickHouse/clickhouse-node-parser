@@ -1,0 +1,2 @@
+SELECT 1
+FROM t0 FINAL;

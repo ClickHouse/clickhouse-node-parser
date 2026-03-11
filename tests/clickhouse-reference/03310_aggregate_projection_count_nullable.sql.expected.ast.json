@@ -1,0 +1,246 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatDateTime",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toStartOfInterval",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "collectorReceiptTime"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toIntervalHour",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Y-%m-%d %H"
+            }
+          ]
+        },
+        "alias": "time"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "COUNT",
+          "args": []
+        },
+        "alias": "count"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "collectorReceiptTime"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2025-01-01 00:00:00"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "collectorReceiptTime"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2025-01-01 23:59:59"
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatDateTime",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toStartOfInterval",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "collectorReceiptTime"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toIntervalHour",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Y-%m-%d %H"
+            }
+          ]
+        },
+        "alias": "time"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "COUNT",
+          "args": []
+        },
+        "alias": "count"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "collectorReceiptTime"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2025-01-01 00:00:00"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "collectorReceiptTime"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2025-01-01 23:59:59"
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "force_optimize_projection",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

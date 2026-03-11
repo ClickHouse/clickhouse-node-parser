@@ -1,0 +1,22 @@
+SELECT * FROM t1 JOIN t2 ON t1.foo = t2.bar WHERE t2.dt >= '2020-02-01';
+SELECT t1.*, t1.dt, t2.*, t2.dt FROM t1 JOIN t2 ON t1.foo = t2.bar WHERE t2.dt >= '2020-02-01';
+SELECT t1.dt, t2.dt FROM t1 JOIN t2 ON t1.foo = t2.bar ORDER BY t1.dt;
+SELECT * FROM t1 ALL JOIN t2 ON t1.dt = t2.dt ORDER BY t1.time, t2.time;
+SELECT * FROM t1 ALL JOIN t2 USING (dt) ORDER BY t1.time, t2.time settings enable_analyzer=0;
+SELECT * FROM t1 ALL JOIN t2 USING (dt) ORDER BY t1.time, t2.time settings enable_analyzer=1;
+SELECT * FROM t1 JOIN t2 ON t1.dt1 = t2.dt2 ORDER BY t1.time, t1.dimension_1, t2.time, t2.dimension_2;
+SELECT * FROM t1 JOIN t2 ON t1.foo = t2.bar WHERE t2.aliascol2 == 'fact2t1_val2';
+SELECT t1.aliascol1, t2.aliascol2 FROM t1 JOIN t2 ON t1.foo = t2.bar ORDER BY t1.time, t2.time;
+SELECT t1.time, t2.time FROM t1 JOIN t2 ON t1.aliascol1 = t2.aliascol2 ORDER BY t1.time, t2.time;
+SELECT count() FROM t1 JOIN t2 ON t1.time_alias = t2.time;
+SELECT count() FROM t1 JOIN t2 ON t1.time = t2.time_alias;
+SELECT count() FROM t1 JOIN t2 ON t1.time_alias = t2.time_alias;
+SELECT count() FROM t1 JOIN t2 USING (time_alias);
+SELECT t1.time as talias FROM t1 JOIN t2 ON talias = t2.time;
+SELECT t1.time as talias FROM t1 JOIN t2 ON talias = t2.time_alias;
+SELECT t2.time as talias FROM t1 JOIN t2 ON t1.time = talias;
+SELECT t2.time as talias FROM t1 JOIN t2 ON t1.time_alias = talias;
+SELECT time as talias FROM t1 JOIN t2 ON talias = t2.time settings enable_analyzer=0; -- { serverError AMBIGUOUS_COLUMN_NAME }
+SELECT time as talias FROM t1 JOIN t2 ON talias = t2.time settings enable_analyzer=1;
+SELECT time as talias FROM t1 JOIN t2 ON t1.time = talias ORDER BY ALL settings enable_analyzer=1;
+SELECT * FROM t1 JOIN t2 ON t1.time = t2.time AND NULL ORDER BY ALL settings enable_analyzer=1;

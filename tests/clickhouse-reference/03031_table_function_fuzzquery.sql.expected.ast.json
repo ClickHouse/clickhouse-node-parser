@@ -1,0 +1,76 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "fuzzQuery",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "SELECT 1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "500"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8956"
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "format": "TSVWithNamesAndTypes"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "fuzzQuery",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "SELECT *\nFROM (\n  SELECT\n    ([toString(number % 2)] :: Array(LowCardinality(String))) AS item_id,\n    count()\n  FROM numbers(3)\n  GROUP BY item_id WITH TOTALS\n) AS l FULL JOIN (\n  SELECT\n    ([toString((number % 2) * 2)] :: Array(String)) AS item_id\n  FROM numbers(3)\n) AS r\nON l.item_id = r.item_id\nORDER BY 1,2,3;\n"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "500"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8956"
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "format": "NULL"
+  }
+]

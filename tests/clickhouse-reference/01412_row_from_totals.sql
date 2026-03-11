@@ -1,0 +1,18 @@
+SELECT EventDate
+FROM
+(
+    SELECT EventDate
+    FROM tracking_events_tmp AS t1
+    WHERE (EventDate >= toDate('2020-07-10')) AND (EventDate <= toDate('2020-07-11')) AND (APIKey = 2)
+    GROUP BY EventDate
+)
+FULL OUTER JOIN 
+(
+    SELECT EventDate
+    FROM remote('127.0.0.{1,3}', currentDatabase(), open_events_tmp) AS t2
+    WHERE (EventDate >= toDate('2020-07-10')) AND (EventDate <= toDate('2020-07-11')) AND (APIKey = 2)
+    GROUP BY EventDate
+        WITH TOTALS
+) USING EventDate
+ORDER BY EventDate
+settings totals_mode = 'after_having_auto', group_by_overflow_mode = 'any', max_rows_to_group_by = 10000000, joined_subquery_requires_alias=0;

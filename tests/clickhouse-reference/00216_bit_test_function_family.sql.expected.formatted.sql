@@ -1,0 +1,121 @@
+SELECT
+    bitTest(0, 0) = 0,
+    bitTest(1, 0) = 1,
+    bitTest(1, 1) = 0,
+    bitTest(0xff, 7) = 1;
+
+SELECT
+    bitTestAll(0, 0) = 0,
+    bitTestAll(1, 0) = 1,
+    bitTestAll(1, 1) = 0,
+    bitTestAll(0xff, 0) = 1,
+    bitTestAll(0xff, 1) = 1,
+    bitTestAll(0xff, 2) = 1,
+    bitTestAll(0xff, 3) = 1,
+    bitTestAll(0xff, 4) = 1,
+    bitTestAll(0xff, 5) = 1,
+    bitTestAll(0xff, 6) = 1,
+    bitTestAll(0xff, 7) = 1,
+    bitTestAll(0xff, 0, 1) = 1,
+    bitTestAll(0xff, 2, 3) = 1,
+    bitTestAll(0xff, 4, 5) = 1,
+    bitTestAll(0xff, 6, 7) = 1,
+    bitTestAll(0xff, 0, 1, 2, 3) = 1,
+    bitTestAll(0xff, 4, 5, 6, 7) = 1,
+    bitTestAll(0xff, 0, 1, 2, 3, 4, 5, 6, 7) = 1,
+    bitTestAll(0x81, 0) = 1,
+    bitTestAll(0x81, 1) = 0,
+    bitTestAll(0x81, 2) = 0,
+    bitTestAll(0x81, 3) = 0,
+    bitTestAll(0x81, 4) = 0,
+    bitTestAll(0x81, 5) = 0,
+    bitTestAll(0x81, 6) = 0,
+    bitTestAll(0x81, 7) = 1,
+    bitTestAll(0x81, 0, 1) = 0,
+    bitTestAll(0x81, 2, 3) = 0,
+    bitTestAll(0x81, 4, 5) = 0,
+    bitTestAll(0x81, 6, 7) = 0,
+    bitTestAll(0x81, 0, 1, 2, 3) = 0,
+    bitTestAll(0x81, 4, 5, 6, 7) = 0,
+    bitTestAll(0x81, 0, 1, 2, 3, 4, 5, 6, 7) = 0,
+    bitTestAll(0x81, 0, 7) = 1;
+
+SELECT
+    bitTestAny(0, 0) = 0,
+    bitTestAny(1, 0) = 1,
+    bitTestAny(1, 1) = 0,
+    bitTestAny(0xff, 0) = 1,
+    bitTestAny(0xff, 1) = 1,
+    bitTestAny(0xff, 2) = 1,
+    bitTestAny(0xff, 3) = 1,
+    bitTestAny(0xff, 4) = 1,
+    bitTestAny(0xff, 5) = 1,
+    bitTestAny(0xff, 6) = 1,
+    bitTestAny(0xff, 7) = 1,
+    bitTestAny(0xff, 0, 1) = 1,
+    bitTestAny(0xff, 2, 3) = 1,
+    bitTestAny(0xff, 4, 5) = 1,
+    bitTestAny(0xff, 6, 7) = 1,
+    bitTestAny(0xff, 0, 1, 2, 3) = 1,
+    bitTestAny(0xff, 4, 5, 6, 7) = 1,
+    bitTestAny(0xff, 0, 1, 2, 3, 4, 5, 6, 7) = 1,
+    bitTestAny(0x81, 0) = 1,
+    bitTestAny(0x81, 1) = 0,
+    bitTestAny(0x81, 2) = 0,
+    bitTestAny(0x81, 3) = 0,
+    bitTestAny(0x81, 4) = 0,
+    bitTestAny(0x81, 5) = 0,
+    bitTestAny(0x81, 6) = 0,
+    bitTestAny(0x81, 7) = 1,
+    bitTestAny(0x81, 0, 1) = 1,
+    bitTestAny(0x81, 2, 3) = 0,
+    bitTestAny(0x81, 4, 5) = 0,
+    bitTestAny(0x81, 6, 7) = 1,
+    bitTestAny(0x81, 0, 1, 2, 3) = 1,
+    bitTestAny(0x81, 4, 5, 6, 7) = 1,
+    bitTestAny(0x81, 0, 1, 2, 3, 4, 5, 6, 7) = 1;
+
+SELECT
+    n = n_,
+    number AS n,
+    bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(b7, 1), b6), 1), b5), 1), b4), 1), b3), 1), b2), 1), b1), 1), b0) AS n_,
+    bitTest(n, 7) AS b7,
+    bitTest(n, 6) AS b6,
+    bitTest(n, 5) AS b5,
+    bitTest(n, 4) AS b4,
+    bitTest(n, 3) AS b3,
+    bitTest(n, 2) AS b2,
+    bitTest(n, 1) AS b1,
+    bitTest(n, 0) AS b0
+FROM `system`.numbers
+LIMIT 256;
+
+SELECT
+    n = n_,
+    number AS n,
+    bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(b7, 1), b6), 1), b5), 1), b4), 1), b3), 1), b2), 1), b1), 1), b0) AS n_,
+    bitTestAll(n, 7) AS b7,
+    bitTestAll(n, 6) AS b6,
+    bitTestAll(n, 5) AS b5,
+    bitTestAll(n, 4) AS b4,
+    bitTestAll(n, 3) AS b3,
+    bitTestAll(n, 2) AS b2,
+    bitTestAll(n, 1) AS b1,
+    bitTestAll(n, 0) AS b0
+FROM `system`.numbers
+LIMIT 256;
+
+SELECT
+    n = n_,
+    number AS n,
+    bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(bitOr(bitShiftLeft(b7, 1), b6), 1), b5), 1), b4), 1), b3), 1), b2), 1), b1), 1), b0) AS n_,
+    bitTestAny(n, 7) AS b7,
+    bitTestAny(n, 6) AS b6,
+    bitTestAny(n, 5) AS b5,
+    bitTestAny(n, 4) AS b4,
+    bitTestAny(n, 3) AS b3,
+    bitTestAny(n, 2) AS b2,
+    bitTestAny(n, 1) AS b1,
+    bitTestAny(n, 0) AS b0
+FROM `system`.numbers
+LIMIT 256;

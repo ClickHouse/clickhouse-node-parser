@@ -1,0 +1,2 @@
+SELECT *
+FROM format(CSV, '""');

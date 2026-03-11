@@ -1,0 +1,33 @@
+select arraySort(arrayUnion(arr, [1,2])) from array_union order by arr;
+select '-------';
+select arraySort(arrayUnion(arr, [])) from array_union order by arr;
+select arraySort(arrayUnion([], arr)) from array_union order by arr;
+select arraySort(arrayUnion([1,2], arr)) from array_union order by arr;
+select arraySort(arrayUnion([1,2], [1,2,3,4])) from array_union order by arr;
+select arraySort(arrayUnion([], [])) from array_union order by arr;
+select arraySort(arrayUnion([-100], [156]));
+select arraySort(arrayUnion([1], [-257, -100]));
+select arraySort(arrayUnion(['hi'], ['hello', 'hi'], []));
+SELECT arraySort(arrayUnion([1, 2, NULL], [1, 3, NULL], [2, 3, NULL]));
+SELECT arraySort(arrayUnion([NULL, NULL, NULL, 1], [1, NULL, NULL], [1, 2, 3, NULL]));
+SELECT arraySort(arrayUnion([1, 1, 1, 2, 3], [2, 2, 4], [5, 10, 20]));
+SELECT arraySort(arrayUnion([1, 2], [1, 3], []));
+-- example from docs
+SELECT
+    arrayUnion([-2, 1], [10, 1], [-2], []) as num_example,
+    arrayUnion(['hi'], [], ['hello', 'hi']) as str_example,
+    arrayUnion([1, 3, NULL], [2, 3, NULL]) as null_example;
+--mix of types
+SELECT arrayUnion([1], [-2], [1.1, 'hi'], [NULL, 'hello', []]);  -- {serverError NO_COMMON_TYPE}
+SELECT arrayUnion([1]);
+SELECT arrayUnion(); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
+--bigger arrays
+SELECT arraySort(arrayUnion(range(1, 256), range(2, 257)));
+SELECT length(arrayUnion(range(1, 100000), range(9999, 200000)));
+--bigger number of arguments
+SELECT arraySort(arrayUnion([1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 13], [1, 14], [1, 15], [1, 16], [1, 17], [1, 18], [1, 19]));
+SELECT
+	ta.id AS id,
+    ta.properties AS properties,
+	arrayUnion(ta.properties) AS propertiesUnion
+FROM test_array_union ta;

@@ -1,0 +1,3 @@
+SELECT t0.c1
+FROM t0
+ORDER BY 1 ASC;

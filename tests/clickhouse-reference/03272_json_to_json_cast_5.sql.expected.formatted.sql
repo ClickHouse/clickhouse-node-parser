@@ -1,0 +1,151 @@
+SELECT
+    json::JSON(max_dynamic_paths=5, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;
+
+SELECT
+    json::JSON(max_dynamic_paths=3, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;
+
+SELECT
+    json::JSON(max_dynamic_paths=2, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;
+
+SELECT
+    json::JSON(max_dynamic_paths=1, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;
+
+SELECT
+    json::JSON(max_dynamic_paths=0, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;
+
+SELECT
+    json::JSON(max_dynamic_paths=3, max_dynamic_types=0, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    isDynamicElementInSharedData(json2.k1),
+    isDynamicElementInSharedData(json2.k9),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;
+
+SELECT
+    json::JSON(max_dynamic_paths=2, max_dynamic_types=0, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    isDynamicElementInSharedData(json2.k1),
+    isDynamicElementInSharedData(json2.k9),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;
+
+SELECT
+    json::JSON(max_dynamic_paths=1, max_dynamic_types=0, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    isDynamicElementInSharedData(json2.k1),
+    isDynamicElementInSharedData(json2.k9),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;
+
+SELECT
+    json::JSON(max_dynamic_paths=0, max_dynamic_types=0, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
+    JSONDynamicPaths(json2),
+    JSONSharedDataPaths(json2),
+    isDynamicElementInSharedData(json2.k1),
+    isDynamicElementInSharedData(json2.k9),
+    json2.k0,
+    json2.k1,
+    json2.k2,
+    json2.k3,
+    json2.k4,
+    json2.k5,
+    json2.k6,
+    json2.k7,
+    json2.k8,
+    json2.k9
+FROM test;

@@ -1,0 +1,74 @@
+SELECT *
+FROM test_02559
+ORDER BY x ASC;
+
+SELECT s
+FROM test_02559
+PREWHERE x
+    AND y
+ORDER BY s ASC;
+
+SELECT
+    s,
+    y
+FROM test_02559
+PREWHERE y
+ORDER BY s ASC;
+
+SELECT
+    s,
+    y
+FROM test_02559
+PREWHERE NOT y
+ORDER BY s ASC;
+
+SELECT
+    s,
+    y
+FROM test_02559
+PREWHERE x
+    AND y
+ORDER BY s ASC;
+
+SELECT
+    s,
+    y
+FROM test_02559
+PREWHERE x
+    AND NOT y
+ORDER BY s ASC;
+
+SELECT
+    s,
+    y
+FROM test_02559
+PREWHERE y
+    AND x
+ORDER BY s ASC;
+
+SELECT
+    s,
+    y
+FROM test_02559
+PREWHERE (NOT y)
+    AND x
+ORDER BY s ASC;
+
+SELECT s
+FROM test_02559
+PREWHERE z
+ORDER BY s ASC;
+
+SELECT s
+FROM test_02559
+PREWHERE y
+    AND z
+ORDER BY s ASC;
+
+SELECT
+    s,
+    z
+FROM test_02559
+PREWHERE NOT y
+    AND z
+ORDER BY s ASC;

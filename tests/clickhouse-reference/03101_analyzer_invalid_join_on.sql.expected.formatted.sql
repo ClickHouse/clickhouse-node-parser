@@ -1,0 +1,13 @@
+SELECT ref_0.c11 AS c_2_c30_0
+FROM
+    t2 AS ref_0
+CROSS JOIN (
+        SELECT ref_1.c3 AS c_6_c28_15
+        FROM t1 AS ref_1
+    ) AS subq_0
+WHERE subq_0.c_6_c28_15 = (
+        SELECT c11
+        FROM t2
+        ORDER BY c11 ASC
+        LIMIT 1
+    );

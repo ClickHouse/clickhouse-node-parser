@@ -1,0 +1,131 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "view",
+          "args": [
+            {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "union",
+                "queries": [
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "castExpr",
+                          "expr": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          "type": "Decimal(7, 2)"
+                        },
+                        "alias": "a"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "0"
+                        },
+                        "alias": "b"
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableFunction",
+                      "name": "numbers",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "castExpr",
+                          "expr": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          "type": "Decimal(7, 2)"
+                        },
+                        "alias": "b"
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableFunction",
+                      "name": "numbers",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

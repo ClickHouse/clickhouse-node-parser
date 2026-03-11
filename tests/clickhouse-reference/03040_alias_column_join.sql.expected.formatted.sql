@@ -1,0 +1,3 @@
+SELECT val
+FROM `03040_test` AS t
+GROUP BY val;

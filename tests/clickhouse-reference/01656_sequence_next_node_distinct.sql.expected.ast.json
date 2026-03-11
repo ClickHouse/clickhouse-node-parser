@@ -1,0 +1,146 @@
+[
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "(forward, head, A->B)"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sequenceNextNodeDistinct",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "forward"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "head"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "action"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "action"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "A"
+              }
+            },
+            {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "functionCall",
+                  "name": "toNullable",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "isNotNull",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "unaryExpr",
+                  "op": "NOT",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toNullable",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "isNullable",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "parenthesized": true
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "next_node"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "events_demo"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "asterisk"
+        }
+      ]
+    },
+    "withTotals": true,
+    "withRollup": true,
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

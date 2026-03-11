@@ -1,0 +1,241 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_00563"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "functionCall",
+        "name": "toInt32",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "site_id"
+            ]
+          }
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_00563"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "functionCall",
+        "name": "toInt32",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "site_id"
+            ]
+          }
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "101"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "join_with_index"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "key"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "data"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "join_with_index"
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "data"
+                  ]
+                }
+              ]
+            },
+            "values": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "529335254087962442"
+              }
+            ]
+          }
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "key"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_uniq"
+        ]
+      },
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "_uniq"
+          ]
+        },
+        "values": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "99"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "join_with_index"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "data"
+                ]
+              }
+            ],
+            "source": "[key, data]"
+          },
+          "alias": "_uniq"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "_uniq"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

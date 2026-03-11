@@ -1,0 +1,1 @@
+SELECT {undefined_param: UInt64};

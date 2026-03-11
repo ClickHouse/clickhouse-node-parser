@@ -1,0 +1,205 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayFilter",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "lc_lambda"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "i"
+            ],
+            "body": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "resources_host"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "i"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "source": "[resources_host[i]]"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "arrayEnumerate",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "resources_host"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_array"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "arrayElement",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayMap",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "y"
+                        ],
+                        "body": {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "x"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "y"
+                              ]
+                            },
+                            "parenthesized": true
+                          },
+                          "right": {
+                            "kind": "functionCall",
+                            "name": "toLowCardinality",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ]
+                          },
+                          "parenthesized": true
+                        }
+                      },
+                      {
+                        "kind": "array",
+                        "elements": [],
+                        "source": "[]"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ],
+                "parenthesized": true
+              },
+              "parenthesized": true
+            }
+          },
+          {
+            "kind": "array",
+            "elements": [],
+            "source": "[]"
+          }
+        ]
+      }
+    ]
+  }
+]

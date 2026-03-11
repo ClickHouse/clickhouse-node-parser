@@ -1,0 +1,2 @@
+SELECT '� �' AS s
+FORMAT JSONCompact;

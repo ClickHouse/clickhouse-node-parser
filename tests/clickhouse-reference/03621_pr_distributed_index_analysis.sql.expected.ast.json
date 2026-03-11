@@ -1,0 +1,602 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_10m"
+    },
+    "settings": [
+      {
+        "name": "allow_experimental_parallel_reading_from_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "distributed_index_analysis",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "parallel_replicas"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_10m"
+    },
+    "settings": [
+      {
+        "name": "allow_experimental_parallel_reading_from_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "distributed_index_analysis",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "parallel_replicas"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_10m"
+    },
+    "settings": [
+      {
+        "name": "allow_experimental_parallel_reading_from_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "distributed_index_analysis",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_one_shard_two_replicas"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "anyIf",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "normalizeQuery",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "query"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "is_initial_query"
+              ]
+            }
+          ]
+        },
+        "alias": "q"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "any",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayElement",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "Settings"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "allow_experimental_parallel_reading_from_replicas"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "any",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "arrayElement",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "Settings"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "cluster_for_parallel_replicas"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "parallel_replicas"
+                  }
+                },
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "max2",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "count",
+                        "args": []
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "19"
+                      }
+                    ]
+                  },
+                  "type": "UInt64",
+                  "operator": true
+                },
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "max2",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "count",
+                        "args": []
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    ]
+                  },
+                  "type": "UInt64",
+                  "operator": true
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "any",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "arrayElement",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "Settings"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "cluster_for_parallel_replicas"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "parallel_replicas"
+                  }
+                },
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "max2",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "count",
+                        "args": []
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    ]
+                  },
+                  "type": "UInt64",
+                  "operator": true
+                },
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "max2",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "count",
+                        "args": []
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ]
+                  },
+                  "type": "UInt64",
+                  "operator": true
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "queries_with_subqueries"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "anyIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "arrayElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ProfileEvents"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DistributedIndexAnalysisScheduledReplicas"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "is_initial_query"
+              ]
+            }
+          ]
+        },
+        "alias": "distributed_index_analysis_replicas"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "anyIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "arrayElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ProfileEvents"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "ParallelReplicasUsedCount"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "is_initial_query"
+              ]
+            }
+          ]
+        },
+        "alias": "read_with_parallel_replicas"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "query_kind"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "Select"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "Settings"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "distributed_index_analysis"
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "1"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "endsWith",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "log_comment"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "-"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "initial_query_id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "min",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "event_time_microseconds"
+              ]
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "Vertical"
+  }
+]

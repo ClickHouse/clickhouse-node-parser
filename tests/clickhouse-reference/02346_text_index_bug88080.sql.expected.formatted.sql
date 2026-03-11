@@ -1,0 +1,1 @@
+SELECT hasAllTokens('a', '[[(2,1)]]'::Polygon);

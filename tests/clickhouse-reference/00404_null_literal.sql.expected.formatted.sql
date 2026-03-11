@@ -1,0 +1,7 @@
+SELECT isNull(NULL);
+
+SELECT isNotNull(NULL);
+
+SELECT NOT isNotNull(NULL);
+
+SELECT NOT isNull(NULL);

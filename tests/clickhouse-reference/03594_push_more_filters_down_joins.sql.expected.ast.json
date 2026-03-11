@@ -1,0 +1,515 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "t2"
+        },
+        "kind": "join",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "t1"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t2",
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "fid"
+              ]
+            }
+          }
+        }
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t3"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "tid"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t3",
+              "id"
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        },
+        {
+          "kind": "functionCall",
+          "name": "isNotNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t2",
+                "resource_id"
+              ]
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t2",
+              "status"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "OPEN"
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t3",
+              "status"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "BACKLOG"
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03594_push_more_filters_down_joins"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "throwIf",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ProfileEvents"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "JoinResultRowCount"
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "log_comment"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "03594_push_more_filters_down_joins"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "NOW",
+              "args": []
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "splitByWhitespace",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "trimBoth",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "explain"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "step"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ],
+          "from": {
+            "left": {
+              "left": {
+                "kind": "tableRef",
+                "table": "t2"
+              },
+              "kind": "join",
+              "joinType": "LEFT",
+              "right": {
+                "kind": "tableRef",
+                "table": "t1"
+              },
+              "constraint": {
+                "kind": "on",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t2",
+                      "id"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t1",
+                      "fid"
+                    ]
+                  }
+                }
+              }
+            },
+            "kind": "join",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "tableRef",
+              "table": "t3"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t1",
+                    "tid"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t3",
+                    "id"
+                  ]
+                }
+              }
+            }
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "literal",
+                "type": "Bool",
+                "value": "1"
+              },
+              {
+                "kind": "functionCall",
+                "name": "isNotNull",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t2",
+                      "resource_id"
+                    ]
+                  }
+                ],
+                "parenthesized": true
+              },
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t2",
+                    "status"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "OPEN"
+                  }
+                ],
+                "parenthesized": true
+              },
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t3",
+                    "status"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "BACKLOG"
+                  }
+                ],
+                "parenthesized": true
+              }
+            ]
+          },
+          "settings": [
+            {
+              "name": "enable_join_runtime_filters",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "ilike",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "step"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Join%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "ilike",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "step"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Filter%"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

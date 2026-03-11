@@ -1,0 +1,5 @@
+SELECT d
+FROM test
+ORDER BY d::String ASC
+LIMIT 32213
+FORMAT Null;

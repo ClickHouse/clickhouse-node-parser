@@ -1,0 +1,31 @@
+SELECT 1;
+
+SELECT '--';
+
+SELECT
+    1,
+    'test';
+
+SELECT
+    1,
+    'test',
+    [1, 2, 3];
+
+SELECT
+    1,
+    'test',
+    [1, 2, 3],
+    ['1', '2', '3'];
+
+SELECT NULL;
+
+SELECT (1, 1);
+
+SELECT [(1, 1)];
+
+SELECT
+    NULL,
+    1,
+    'test',
+    [1, 2, 3],
+    [(1, 1), (1, 1)];

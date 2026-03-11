@@ -1,0 +1,42 @@
+SELECT DISTINCT
+    _partition_id,
+    _partition_value
+FROM weird_partitions_02245
+ORDER BY _partition_id ASC;
+
+SELECT
+    _partition_id,
+    min(d),
+    max(d),
+    min(d1),
+    max(d1),
+    count()
+FROM weird_partitions_02245
+GROUP BY _partition_id
+ORDER BY _partition_id ASC;
+
+SELECT DISTINCT _partition_id
+FROM weird_partitions_02245
+WHERE d >= '2021-12-31 00:00:00'
+    AND d < '2022-01-01 00:00:00'
+ORDER BY _partition_id ASC;
+
+SELECT DISTINCT _partition_id
+FROM weird_partitions_02245
+WHERE d >= '2022-01-01 00:00:00'
+    AND d1 >= '2021-12-31 00:00:00'
+    AND d1 < '2022-01-01 00:00:00'
+ORDER BY _partition_id ASC;
+
+SELECT DISTINCT _partition_id
+FROM weird_partitions_02245
+WHERE d1 >= '2021-12-31 00:00:00'
+    AND d1 < '2022-01-01 00:00:00'
+ORDER BY _partition_id ASC;
+
+SELECT DISTINCT _partition_id
+FROM weird_partitions_02245
+WHERE d >= '2022-01-01 00:00:00'
+    AND d1 >= '2021-12-31 00:00:00'
+    AND d1 < '2020-01-01 00:00:00'
+ORDER BY _partition_id ASC;

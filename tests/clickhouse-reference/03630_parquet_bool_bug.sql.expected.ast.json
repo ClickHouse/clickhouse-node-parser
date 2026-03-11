@@ -1,0 +1,196 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tags"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableFunction",
+        "name": "file",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "current_database",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "03630_parquet_bool_bug.parquet"
+              }
+            ]
+          }
+        ]
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "tags"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "input_format_parquet_use_native_reader_v3",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "arraySum",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayMap",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "i"
+                        ],
+                        "body": {
+                          "kind": "functionCall",
+                          "name": "bitShiftLeft",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "arrayElement",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "bits"
+                                  ]
+                                },
+                                {
+                                  "kind": "binaryExpr",
+                                  "op": "+",
+                                  "left": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "i"
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "literal",
+                                    "type": "UInt64",
+                                    "value": "1"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "i"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "range",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "8"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "alias": "ok"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "file",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "current_database",
+              "args": []
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "03630_parquet_bool_bug.parquet"
+            }
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "input_format_parquet_use_native_reader_v3",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "schema_inference_make_columns_nullable",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  }
+]

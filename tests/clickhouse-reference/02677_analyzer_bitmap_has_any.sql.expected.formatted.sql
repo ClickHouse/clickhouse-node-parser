@@ -1,0 +1,33 @@
+SELECT
+    bitmapHasAny(bitmapBuild([toUInt8(1)]), (
+        SELECT groupBitmapState(toUInt8(1))
+    )) AS has1,
+    bitmapHasAny(bitmapBuild([toUInt64(1)]), (
+        SELECT groupBitmapState(toUInt64(2))
+    )) AS has2;
+
+SELECT '--------------';
+
+SELECT *
+FROM (
+        SELECT
+            bitmapHasAny(bitmapBuild([toUInt8(1)]), (
+                SELECT groupBitmapState(toUInt8(1))
+            )) AS has1,
+            bitmapHasAny(bitmapBuild([toUInt64(1)]), (
+                SELECT groupBitmapState(toUInt64(2))
+            )) AS has2
+    )
+SETTINGS enable_analyzer = 0;
+
+SELECT *
+FROM (
+        SELECT
+            bitmapHasAny(bitmapBuild([toUInt8(1)]), (
+                SELECT groupBitmapState(toUInt8(1))
+            )) AS has1,
+            bitmapHasAny(bitmapBuild([toUInt64(1)]), (
+                SELECT groupBitmapState(toUInt64(2))
+            )) AS has2
+    )
+SETTINGS enable_analyzer = 1;

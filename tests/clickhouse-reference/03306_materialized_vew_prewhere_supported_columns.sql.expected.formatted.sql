@@ -1,0 +1,11 @@
+SELECT *
+FROM v
+PREWHERE c0 = 1;
+
+SELECT *
+FROM v
+PREWHERE c1 = 1;
+
+SELECT *
+FROM v
+PREWHERE c0 = c1;

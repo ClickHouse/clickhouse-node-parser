@@ -1,0 +1,3 @@
+SELECT c18
+FROM t
+WHERE c1 < 0;

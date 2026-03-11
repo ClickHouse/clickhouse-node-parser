@@ -1,0 +1,40 @@
+SELECT * FROM test
+WHERE document.name = 'aaa' OR document.name = 'boo'
+ORDER BY id
+SETTINGS apply_patch_parts = 1;
+SELECT trim(explain) AS s FROM (
+    EXPLAIN indexes = 1
+    SELECT * FROM test
+    WHERE document.name = 'aaa' OR document.name = 'boo'
+    ORDER BY id
+    SETTINGS apply_patch_parts = 1
+) WHERE s LIKE 'Granules: %';
+SELECT * FROM test
+WHERE document.name = 'aaa' OR document.name = 'boo'
+ORDER BY id
+SETTINGS apply_patch_parts = 0;
+SELECT trim(explain) AS s FROM (
+    EXPLAIN indexes = 1
+    SELECT * FROM test
+    WHERE document.name = 'aaa' OR document.name = 'boo'
+    ORDER BY id
+    SETTINGS apply_patch_parts = 0
+) WHERE s LIKE 'Granules: %';
+SELECT count()FROM test
+WHERE document.country::String = 'USA'
+SETTINGS apply_patch_parts = 1;
+SELECT trim(explain) AS s FROM (
+    EXPLAIN indexes = 1
+    SELECT count()FROM test
+    WHERE document.country::String = 'USA'
+    SETTINGS apply_patch_parts = 1
+) WHERE s LIKE 'Granules: %';
+SELECT count() FROM test
+WHERE document.country::String = 'USA'
+SETTINGS apply_patch_parts = 0;
+SELECT trim(explain) AS s FROM (
+    EXPLAIN indexes = 1
+    SELECT count() FROM test
+    WHERE document.country::String = 'USA'
+    SETTINGS apply_patch_parts = 0
+) WHERE s LIKE 'Granules: %';

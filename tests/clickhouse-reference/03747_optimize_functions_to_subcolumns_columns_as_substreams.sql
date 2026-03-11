@@ -1,0 +1,36 @@
+-- { echo }
+select id from test_empty_array where empty(a) settings optimize_functions_to_subcolumns=1;
+select id from test_empty_array where empty(a) settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id from test_notempty_array where notEmpty(a) settings optimize_functions_to_subcolumns=1;
+select id from test_notempty_array where notEmpty(a) settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id, length(a) from test_length_array settings optimize_functions_to_subcolumns=1;
+select id, length(a) from test_length_array settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id from test_empty_string where empty(s) settings optimize_functions_to_subcolumns=1;
+select id from test_empty_string where empty(s) settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id from test_notempty_string where notEmpty(s) settings optimize_functions_to_subcolumns=1;
+select id from test_notempty_string where notEmpty(s) settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id, length(s) from test_length_string settings optimize_functions_to_subcolumns=1;
+select id, length(s) from test_length_string settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id from test_empty_map where empty(m) settings optimize_functions_to_subcolumns=1;
+select id from test_empty_map where empty(m) settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id from test_notempty_map where notEmpty(m) settings optimize_functions_to_subcolumns=1;
+select id from test_notempty_map where notEmpty(m) settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id, length(m) from test_length_map settings optimize_functions_to_subcolumns=1;
+select id, length(m) from test_length_map settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id from test_isnull where isNull(n) settings optimize_functions_to_subcolumns=1;
+select id from test_isnull where isNull(n) settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select id from test_isnotnull where isNotNull(n) settings optimize_functions_to_subcolumns=1;
+select id from test_isnotnull where isNotNull(n) settings optimize_functions_to_subcolumns=0;
+-- { echo }
+select count(n) from test_count_nullable settings optimize_functions_to_subcolumns=1;
+select count(n) from test_count_nullable settings optimize_functions_to_subcolumns=0;

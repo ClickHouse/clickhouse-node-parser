@@ -1,0 +1,7 @@
+SELECT *
+FROM t;
+
+SELECT '---';
+
+SELECT *
+FROM d;

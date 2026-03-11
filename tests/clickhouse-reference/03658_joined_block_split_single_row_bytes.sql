@@ -1,0 +1,14 @@
+SELECT
+    -- blocks with much of data are small in rows:
+    if(max(size) < 5_000_000 AND argMax(rows, size) < 10_000, 'Ok', format('Error: max_size={} rows={}', max(size), argMax(rows, size))),
+    -- but still there are large blocks with small strings
+    if(max(rows) >= 50_000, 'Ok', format('Error: {}', toString(max(rows))))
+FROM ( SELECT blockNumber() as bn, sum(byteSize(*)) as size, count() as rows FROM t1 INNER JOIN t2 ON t1.key = t2.key GROUP BY bn )
+SETTINGS joined_block_split_single_row = 1
+    , max_joined_block_size_bytes = '4M'
+    , max_joined_block_size_rows = 65_000;
+SELECT
+    -- limit is 4M but minimum block size is 6Mb, so it will be single row block
+    if(argMax(rows, size) = 1 AND max(size) < 10_000_000, 'Ok', format('Error: max_size={} rows={}', max(size), argMax(rows, size)))
+FROM ( SELECT blockNumber() as bn, sum(byteSize(*)) as size, count() as rows FROM t1 INNER JOIN t2 ON t1.key = t2.key GROUP BY bn )
+SETTINGS joined_block_split_single_row = 1, max_joined_block_size_bytes = '4M';

@@ -1,0 +1,144 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "quantile",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.9"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "price"
+              ]
+            }
+          ],
+          "window": {},
+          "parenthesized": true
+        },
+        "alias": "price_quantile"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "uk_price_paid"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toYear",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "date"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2023"
+      }
+    },
+    "qualify": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "price_quantile"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "uk_price_paid"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toYear",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "date"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2023"
+      }
+    },
+    "qualify": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "quantile",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.9"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "price"
+            ]
+          }
+        ],
+        "window": {},
+        "parenthesized": true
+      }
+    }
+  }
+]

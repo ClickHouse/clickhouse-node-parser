@@ -1,0 +1,2 @@
+SELECT * FROM t_uuid ORDER BY x LIMIT 1 FORMAT RowBinary;
+SELECT * FROM t_uuid ORDER BY x FORMAT RowBinary;

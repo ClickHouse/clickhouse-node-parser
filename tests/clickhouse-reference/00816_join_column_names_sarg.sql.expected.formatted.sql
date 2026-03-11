@@ -1,0 +1,23 @@
+SELECT
+    t1_00816.a,
+    t2_00816.a
+FROM
+    t1_00816
+INNER JOIN t2_00816
+    ON t1_00816.a = t2_00816.a;
+
+SELECT
+    t1_00816.a,
+    t2_00816.*
+FROM
+    t1_00816
+INNER JOIN t2_00816
+    ON t1_00816.a = t2_00816.a;
+
+SELECT
+    t1_00816.a,
+    t2_00816.val
+FROM
+    t1_00816
+INNER JOIN t2_00816
+    ON t1_00816.a = t2_00816.a;

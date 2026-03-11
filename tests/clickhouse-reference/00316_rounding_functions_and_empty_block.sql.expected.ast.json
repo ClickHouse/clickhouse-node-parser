@@ -1,0 +1,147 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "floor",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ReferrerTimestamp"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "InstallTimestamp"
+                  ]
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "86400"
+              }
+            }
+          ]
+        },
+        "alias": "DaysSinceInstallations"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "6534090703218709881"
+                  },
+                  "alias": "DeviceIDHash"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1458586663"
+                  },
+                  "alias": "InstallTimestamp"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2697418689476658272"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1458561552"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "js1"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1034415739529768519"
+                  },
+                  "alias": "DeviceIDHash"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1458566664"
+                  },
+                  "alias": "ReferrerTimestamp"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2697418689476658272"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1458561552"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "DeviceIDHash"
+        ]
+      }
+    }
+  }
+]

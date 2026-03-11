@@ -1,0 +1,1 @@
+SELECT * FROM dt WHERE time = '100:00:00';

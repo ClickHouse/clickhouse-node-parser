@@ -1,0 +1,10 @@
+SELECT 1
+FROM
+    (
+        SELECT 1 AS c0
+    ) AS tx
+INNER JOIN (
+        SELECT 1 AS c0
+    ) AS ty
+    ON true
+WHERE toInt32(tx.c0) = ty.c0;

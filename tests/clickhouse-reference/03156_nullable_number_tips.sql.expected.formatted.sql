@@ -1,0 +1,35 @@
+SELECT 123456789 AS x
+FORMAT PrettyCompact;
+
+SELECT toNullable(123456789) AS x
+FORMAT PrettyCompact;
+
+SELECT toLowCardinality(toNullable(123456789)) AS x
+FORMAT PrettyCompact;
+
+SELECT toNullable(toLowCardinality(123456789)) AS x
+FORMAT PrettyCompact;
+
+SELECT toLowCardinality(123456789) AS x
+FORMAT PrettyCompact;
+
+SELECT DISTINCT dumpColumnStructure(*)
+FROM test;
+
+SELECT *
+FROM test
+ORDER BY `ALL` DESC
+LIMIT 1
+FORMAT PRETTY;
+
+SELECT *
+FROM test
+ORDER BY `ALL` ASC
+LIMIT 1
+FORMAT PRETTY;
+
+SELECT *
+FROM test
+ORDER BY `ALL` ASC
+LIMIT 1
+FORMAT PrettySpace;

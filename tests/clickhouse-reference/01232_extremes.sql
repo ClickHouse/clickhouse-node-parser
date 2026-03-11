@@ -1,0 +1,11 @@
+select * from remote('127.0.0.1', numbers(2));
+select * from remote('127.0.0.{1,1}', numbers(2));
+select * from remote('127.0.0.{1,2}', numbers(2));
+select * from remote('127.0.0.{2,2}', numbers(2));
+select * from remote('127.0.0.2', numbers(2));
+select '------';
+select * from (select * from numbers(2) union all select * from numbers(3) union all select * from numbers(1)) order by number;
+select * from (select * from numbers(1) union all select * from numbers(2) union all select * from numbers(3)) order by number;
+select * from (select * from numbers(3) union all select * from numbers(1) union all select * from numbers(2)) order by number;
+select * from distr order by number;
+select * from distr2 order by number;

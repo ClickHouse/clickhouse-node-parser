@@ -1,0 +1,13 @@
+select * from prewhere_column_missing;
+select *, arraySum(arr) as s from prewhere_column_missing;
+select *, arraySum(arr) as s from prewhere_column_missing where s = 0;
+select *, arraySum(arr) as s from prewhere_column_missing prewhere s = 0;
+select *, length(arr) as l from prewhere_column_missing;
+select *, length(arr) as l from prewhere_column_missing where l = 0;
+select *, length(arr) as l from prewhere_column_missing prewhere l = 0;
+select * from prewhere_column_missing where hash_x = intHash64(x);
+select * from prewhere_column_missing prewhere hash_x = intHash64(x);
+select * from prewhere_column_missing where hash_x = intHash64(x) and length(arr) = 0;
+select * from prewhere_column_missing prewhere hash_x = intHash64(x) and length(arr) = 0;
+select * from prewhere_column_missing where hash_x = intHash64(x) and length(arr) = 0 and arraySum(arr) = 0;
+select * from prewhere_column_missing prewhere hash_x = intHash64(x) and length(arr) = 0 and arraySum(arr) = 0;

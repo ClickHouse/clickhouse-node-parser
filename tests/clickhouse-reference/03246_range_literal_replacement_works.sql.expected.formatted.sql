@@ -1,0 +1,2 @@
+SELECT *
+FROM `03246_range_literal_replacement_works`;

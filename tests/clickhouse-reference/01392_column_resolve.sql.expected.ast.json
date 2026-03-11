@@ -1,0 +1,183 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "conversion",
+            "conversionId"
+          ]
+        },
+        "alias": "myConversionId"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "click",
+            "clickId"
+          ]
+        },
+        "alias": "myClickId"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "click",
+            "myValue"
+          ]
+        },
+        "alias": "myValue"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "conversionId"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                "alias": "myValue"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "tableConversion"
+            }
+          },
+          "alias": "conversion"
+        },
+        "kind": "join",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "clickId"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "conversionId"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                "alias": "myValue"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "tableClick"
+            }
+          },
+          "alias": "click"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "click",
+                "conversionId"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "conversion",
+                "conversionId"
+              ]
+            }
+          }
+        }
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "leftjoin"
+          }
+        },
+        "alias": "dummy"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "dummy",
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "conversion",
+              "conversionId"
+            ]
+          },
+          "parenthesized": true
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "myValue"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

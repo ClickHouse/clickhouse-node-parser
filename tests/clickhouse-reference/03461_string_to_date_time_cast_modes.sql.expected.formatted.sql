@@ -1,0 +1,5 @@
+SELECT '2020-02-01 20:00:00'::DateTime;
+
+SELECT '2020-02-01 20:00:00Z'::DateTime;
+
+SELECT '01-02-2020 20:00:00Z'::DateTime;

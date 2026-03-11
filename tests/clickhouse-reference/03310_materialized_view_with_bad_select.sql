@@ -1,0 +1,2 @@
+SELECT * FROM dst;
+SELECT * FROM dst ORDER BY ALL;

@@ -1,0 +1,1 @@
+SELECT replaceRegexpAll('Hello, World!', '^', 'here: ');

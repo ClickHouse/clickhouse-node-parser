@@ -1,0 +1,15 @@
+SELECT k
+FROM
+    (
+        SELECT 1 AS k
+        FROM `system`.one
+    ) AS js1
+LEFT JOIN (
+        SELECT k
+        FROM (
+                SELECT
+                    1 AS k,
+                    2 AS x
+            )
+    ) AS js2
+    USING (k);

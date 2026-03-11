@@ -1,0 +1,8 @@
+SELECT *
+FROM t
+FORMAT Null;
+
+SELECT *
+FROM t
+ORDER BY a ASC
+FORMAT Null;

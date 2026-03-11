@@ -1,0 +1,2 @@
+SELECT x FROM quorum1 ORDER BY x;
+SELECT x FROM quorum2 ORDER BY x;

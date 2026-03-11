@@ -1,0 +1,7 @@
+SELECT *
+FROM test
+ORDER BY json.d ASC;
+
+SELECT *
+FROM test
+ORDER BY `all` ASC;

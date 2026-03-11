@@ -1,0 +1,100 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "user_id"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "_sample_factor"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "sessions",
+      "sample": {
+        "ratio": {
+          "num": "10000000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniq",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "user_id"
+              ]
+            }
+          ]
+        },
+        "alias": "a"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "min",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "_sample_factor"
+              ]
+            }
+          ]
+        },
+        "alias": "x"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "*",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "sessions",
+      "sample": {
+        "ratio": {
+          "num": "10000000"
+        }
+      }
+    }
+  }
+]

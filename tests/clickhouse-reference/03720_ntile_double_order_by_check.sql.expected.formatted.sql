@@ -1,0 +1,27 @@
+SELECT
+    ntile(1) OVER (ORDER BY id ASC) AS a,
+    ntile(2) OVER (ORDER BY id ASC) AS b
+FROM (
+        SELECT 1 AS id
+    ) AS t;
+
+SELECT
+    ntile(1) OVER (ORDER BY id ASC) AS a,
+    ntile(2) OVER (ORDER BY id + 0 ASC) AS b
+FROM (
+        SELECT 1 AS id
+    ) AS t;
+
+SELECT
+    ntile(1) OVER (ORDER BY id ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING) AS a,
+    ntile(2) OVER (ORDER BY id ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING) AS b
+FROM (
+        SELECT 1 AS id
+    ) AS t;
+
+SELECT
+    id,
+    ntile(1) OVER (ORDER BY id ASC) AS a,
+    ntile(2) OVER (ORDER BY id ASC) AS b
+FROM test_ntile
+ORDER BY id ASC;

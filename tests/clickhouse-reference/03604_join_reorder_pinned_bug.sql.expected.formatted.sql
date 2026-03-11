@@ -1,0 +1,21 @@
+SELECT 1
+FROM
+    (
+        SELECT 1 AS c0
+        LIMIT 1
+    ) AS t1
+LEFT JOIN (
+        SELECT 1 AS c0
+        LIMIT 1
+    ) AS t3
+    ON t1.c0 = t3.c0
+INNER JOIN (
+        SELECT 1 AS c0
+        LIMIT 1
+    ) AS t5
+    ON t3.c0 = t5.c0
+INNER JOIN (
+        SELECT 1 AS c0
+        LIMIT 1
+    ) AS t7
+    ON t5.c0 = t7.c0;

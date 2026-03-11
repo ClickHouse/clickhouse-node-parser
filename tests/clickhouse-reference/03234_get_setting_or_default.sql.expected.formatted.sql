@@ -1,0 +1,27 @@
+SELECT getSettingOrDefault('custom_a', 'default_a');
+
+SELECT getSettingOrDefault('custom_b', 'default_b');
+
+SELECT getSettingOrDefault('custom_c', 'default_c');
+
+SELECT getSettingOrDefault('custom_d', 'default_d');
+
+SELECT getSetting('custom_e');
+
+SELECT getSettingOrDefault('custom_e', 'default_e');
+
+SELECT getSettingOrDefault('custom_e', 500);
+
+SELECT getSettingOrDefault('custom_e', NULL);
+
+SELECT isNull(getSettingOrDefault('custom_e', NULL));
+
+SELECT getSettingOrDefault('custom_e');
+
+SELECT getSettingOrDefault(115, 'name should be string');
+
+SELECT count(*)
+FROM numbers(10)
+WHERE number = getSettingOrDefault('custom_e', 5);
+
+SELECT getSettingOrDefault('custom_e', getSetting('custom_e_backup'));

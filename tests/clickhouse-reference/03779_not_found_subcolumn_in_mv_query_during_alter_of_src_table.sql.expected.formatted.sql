@@ -1,0 +1,5 @@
+SELECT *
+FROM src;
+
+SELECT *
+FROM dst;

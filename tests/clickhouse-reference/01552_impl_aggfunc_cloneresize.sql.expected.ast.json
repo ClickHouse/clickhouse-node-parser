@@ -1,0 +1,231 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dim"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "idnum"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test_bm_join"
+      },
+      "kind": "join",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dim"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitmapOrCardinality",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ids"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ids2"
+                    ]
+                  }
+                ]
+              },
+              "alias": "idnum"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dim"
+                    ]
+                  },
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "functionCall",
+                      "name": "groupBitmapState",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "alias": "ids"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "test_bm"
+                },
+                "where": {
+                  "kind": "binaryExpr",
+                  "op": ">",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dim"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "groupBy": {
+                  "kind": "expressions",
+                  "items": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dim"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "A"
+            },
+            "kind": "join",
+            "joinType": "RIGHT",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dim"
+                    ]
+                  },
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "functionCall",
+                      "name": "groupBitmapState",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "alias": "ids2"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "test_bm"
+                },
+                "where": {
+                  "kind": "binaryExpr",
+                  "op": "<",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dim"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "groupBy": {
+                  "kind": "expressions",
+                  "items": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dim"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "B"
+            },
+            "constraint": {
+              "kind": "using",
+              "columns": [
+                "dim"
+              ]
+            }
+          }
+        },
+        "alias": "C"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "dim"
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dim"
+          ]
+        }
+      ]
+    }
+  }
+]

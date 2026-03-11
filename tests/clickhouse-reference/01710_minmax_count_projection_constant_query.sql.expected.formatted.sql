@@ -1,0 +1,3 @@
+SELECT 1
+FROM t
+GROUP BY 1;

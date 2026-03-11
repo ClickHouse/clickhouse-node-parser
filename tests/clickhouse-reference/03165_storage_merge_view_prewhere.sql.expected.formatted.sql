@@ -1,0 +1,32 @@
+SELECT
+    id,
+    whatever
+FROM
+    ids AS l
+INNER JOIN merge(currentDatabase(), 'data*') AS s
+    ON l.id = s.id
+WHERE (status IN (['CREATED', 'CREATING']))
+ORDER BY event_time DESC;
+
+SELECT
+    id,
+    whatever
+FROM
+    ids AS l
+INNER JOIN clusterAllReplicas(test_cluster_two_shards, merge(currentDatabase(), 'data*')) AS s
+    ON l.id = s.id
+WHERE (status IN (['CREATED', 'CREATING']))
+ORDER BY event_time DESC;
+
+SELECT
+    id,
+    whatever
+FROM
+    ids AS l
+INNER JOIN view((
+        SELECT *
+        FROM merge(currentDatabase(), 'data*')
+    )) AS s
+    ON l.id = s.id
+WHERE (status IN (['CREATED', 'CREATING']))
+ORDER BY event_time DESC;

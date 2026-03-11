@@ -1,0 +1,1 @@
+SELECT caseWithExpression(1.1, 0.1, 'a', 1.1, 'b', 2.1, 'c', 'default') AS f;

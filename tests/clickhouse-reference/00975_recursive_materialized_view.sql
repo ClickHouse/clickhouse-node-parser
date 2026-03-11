@@ -1,0 +1,2 @@
+SELECT * FROM dst1 ORDER BY x;
+SELECT * FROM dst2 ORDER BY x;

@@ -1,0 +1,204 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "o_orderpriority"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": [
+            {
+              "kind": "asterisk"
+            }
+          ]
+        },
+        "alias": "order_count"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "o_orderpriority"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "o_orderkey"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "orders"
+        },
+        "where": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "o_orderdate"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1993-07-01"
+                  }
+                ]
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "o_orderdate"
+                ]
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDate",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "1993-07-01"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMonth",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "3"
+                    }
+                  ]
+                },
+                "parenthesized": true
+              },
+              "parenthesized": true
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "exists",
+      "args": [
+        {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "l_orderkey"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "lineitem"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "l_orderkey"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "o_orderkey"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "<",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "l_commitdate"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "l_receiptdate"
+                    ]
+                  },
+                  "parenthesized": true
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "o_orderpriority"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "o_orderpriority"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "Null"
+  }
+]

@@ -1,0 +1,154 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "table"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "argMax",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "part_type"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "event_time_microseconds"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "argMax",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "deduplication_block_ids"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "event_time_microseconds"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "part_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "values": [
+            {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "03711_join_with"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "03711_table"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "03711_mv_table_1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "03711_mv_table_2"
+                }
+              ],
+              "source": "['03711_join_with', '03711_table', '03711_mv_table_1', '03711_mv_table_2']"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "03710_database"
+          }
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "database"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "table"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

@@ -1,0 +1,365 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value_element"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test_table"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ],
+                "source": "[1,2,3]"
+              }
+            ],
+            "source": "[[1,2,3]]"
+          },
+          "alias": "value_element"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "value_element"
+            ]
+          },
+          "alias": "value"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value_element"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "test_table"
+        },
+        "kind": "arrayJoin",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ],
+                  "source": "[1,2,3]"
+                }
+              ],
+              "source": "[[1,2,3]]"
+            },
+            "alias": "value_element"
+          }
+        ]
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "value_element"
+            ]
+          },
+          "alias": "value"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value_element"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "test_table"
+        },
+        "kind": "arrayJoin",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1048577"
+                }
+              ],
+              "source": "[1048577]"
+            },
+            "alias": "value_element"
+          }
+        ]
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayMap",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "x"
+                ],
+                "body": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value_element"
+                  ]
+                }
+              },
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": ""
+                  }
+                ],
+                "source": "['']"
+              }
+            ]
+          },
+          "alias": "value"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayFilter",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "notEmpty",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "concat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ],
+            "source": "[NULL, NULL]"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "one"
+        },
+        "kind": "arrayJoin",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1048577"
+                }
+              ],
+              "source": "[1048577]"
+            },
+            "alias": "elem"
+          }
+        ]
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayMap",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "x"
+                ],
+                "body": {
+                  "kind": "functionCall",
+                  "name": "splitByChar",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "elem"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": ""
+                  }
+                ],
+                "source": "['']"
+              }
+            ]
+          },
+          "alias": "unused"
+        }
+      ]
+    }
+  }
+]

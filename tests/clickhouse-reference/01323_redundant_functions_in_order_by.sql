@@ -1,0 +1,12 @@
+SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY x, exp(x));
+SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY x, exp(x)) SETTINGS enable_analyzer=1;
+SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY x, exp(exp(x)));
+SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY x, exp(exp(x))) SETTINGS enable_analyzer=1;
+SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY exp(x), x);
+SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY exp(x), x) SETTINGS enable_analyzer=1;
+SELECT * FROM (SELECT number + 2 AS key FROM numbers(4)) s FULL JOIN test t USING(key) ORDER BY s.key, t.key;
+SELECT * FROM (SELECT number + 2 AS key FROM numbers(4)) s FULL JOIN test t USING(key) ORDER BY s.key, t.key SETTINGS enable_analyzer=1;
+SELECT key, a FROM test ORDER BY key, a, exp(key + a);
+SELECT key, a FROM test ORDER BY key, a, exp(key + a) SETTINGS enable_analyzer=1;
+SELECT key, a FROM test ORDER BY key, exp(key + a);
+SELECT key, a FROM test ORDER BY key, exp(key + a) SETTINGS enable_analyzer=1;

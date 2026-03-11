@@ -1,0 +1,6 @@
+SELECT
+    toFixedString('str', 3),
+    3,
+    CAST(if(1 = 0, toInt8(3), NULL), 'Int32') AS x
+FROM numbers(10)
+GROUP BY GROUPING SETS ((CAST(toInt32(1), 'Int32')), ('str', 3), (CAST(toFixedString('str', 3), 'Dynamic')), (CAST(toFixedString(toFixedString('str', 3), 3), 'Dynamic')));

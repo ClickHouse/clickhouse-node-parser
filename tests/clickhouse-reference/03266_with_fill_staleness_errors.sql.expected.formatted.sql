@@ -1,0 +1,20 @@
+SELECT
+    1 AS a,
+    2 AS b
+ORDER BY
+    a ASC,
+    b ASC WITH FILL FROM 0 TO 10 STALENESS 3;
+
+SELECT
+    1 AS a,
+    2 AS b
+ORDER BY
+    a ASC,
+    b DESC WITH FILL TO 10 STALENESS 3;
+
+SELECT
+    1 AS a,
+    2 AS b
+ORDER BY
+    a ASC,
+    b ASC WITH FILL TO 10 STALENESS -3;

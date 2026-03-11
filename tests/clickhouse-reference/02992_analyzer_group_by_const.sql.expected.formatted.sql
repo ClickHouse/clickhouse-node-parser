@@ -1,0 +1,69 @@
+SELECT concatWithSeparator('a', 'b')
+GROUP BY 'a';
+
+SELECT concatWithSeparator('|', 'a', concatWithSeparator('|', CAST('a', 'LowCardinality(String)')))
+GROUP BY 'a';
+
+SELECT concatWithSeparator('|', 'a', concatWithSeparator('|', CAST('x', 'LowCardinality(String)')))
+GROUP BY 'a';
+
+SELECT dumpColumnStructure('x')
+GROUP BY 'x';
+
+SELECT dumpColumnStructure('x');
+
+SELECT cityHash64('limit', _CAST(materialize('World'), 'LowCardinality(String)'))
+FROM `system`.one
+GROUP BY GROUPING SETS (('limit'));
+
+SELECT
+    count(),
+    now() AS c1
+FROM remote('127.0.0.{1,2}', currentDatabase(), ttt)
+GROUP BY c1
+FORMAT Null;
+
+SELECT
+    count(),
+    now() AS c1
+FROM remote('127.0.0.{3,2}', currentDatabase(), ttt)
+GROUP BY c1
+FORMAT Null;
+
+SELECT
+    count(),
+    now() AS c1
+FROM remote('127.0.0.{1,2}', currentDatabase(), ttt)
+GROUP BY c1 + 1
+FORMAT Null;
+
+SELECT
+    count(),
+    now() AS c1
+FROM remote('127.0.0.{3,2}', currentDatabase(), ttt)
+GROUP BY c1 + 1
+FORMAT Null;
+
+SELECT
+    count(),
+    tuple(nullIf(toDateTime(formatDateTime(hr, '%F %T', 'America/Los_Angeles'), 'America/Los_Angeles'), toDateTime(0))) AS c1,
+    defaultValueOfArgumentType(toTimeZone(ts, 'America/Los_Angeles')) AS c2,
+    formatDateTime(hr, '%F %T', 'America/Los_Angeles') AS c3
+FROM remote('127.0.0.{1,2}', currentDatabase(), ttt)
+GROUP BY
+    c1,
+    c2,
+    c3
+FORMAT Null;
+
+SELECT
+    count(),
+    tuple(nullIf(toDateTime(formatDateTime(hr, '%F %T', 'America/Los_Angeles'), 'America/Los_Angeles'), toDateTime(0))) AS c1,
+    defaultValueOfArgumentType(toTimeZone(ts, 'America/Los_Angeles')) AS c2,
+    formatDateTime(hr, '%F %T', 'America/Los_Angeles') AS c3
+FROM remote('127.0.0.{3,2}', currentDatabase(), ttt)
+GROUP BY
+    c1,
+    c2,
+    c3
+FORMAT Null;

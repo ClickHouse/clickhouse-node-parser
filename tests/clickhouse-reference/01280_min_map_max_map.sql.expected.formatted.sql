@@ -1,0 +1,98 @@
+SELECT
+    minMap([toInt32(number % 10), number % 10 + 1], [number, 1]) AS m,
+    toTypeName(m)
+FROM numbers(1, 100);
+
+SELECT minMap([1], [toInt32(number) - 50])
+FROM numbers(1, 100);
+
+SELECT minMap([cast(1, 'Decimal(10, 2)')], [cast(toInt32(number) - 50, 'Decimal(10, 2)')])
+FROM numbers(1, 100);
+
+SELECT
+    maxMap([toInt32(number % 10), number % 10 + 1], [number, 1]) AS m,
+    toTypeName(m)
+FROM numbers(1, 100);
+
+SELECT maxMap([1], [toInt32(number) - 50])
+FROM numbers(1, 100);
+
+SELECT maxMap([cast(1, 'Decimal(10, 2)')], [cast(toInt32(number) - 50, 'Decimal(10, 2)')])
+FROM numbers(1, 100);
+
+SELECT minMap(val, cnt)
+FROM values('val Array(UUID), cnt Array(UUID)', (['01234567-89ab-cdef-0123-456789abcdef'], ['01111111-89ab-cdef-0123-456789abcdef']), (['01234567-89ab-cdef-0123-456789abcdef'], ['02222222-89ab-cdef-0123-456789abcdef']));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(String), cnt Array(String)', (['1'], ['1']), (['1'], ['2']));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(FixedString(1)), cnt Array(FixedString(1))', (['1'], ['1']), (['1'], ['2']));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(UInt64), cnt Array(UInt64)', ([1], [1]), ([1], [2]));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(Float64), cnt Array(Int8)', ([1], [1]), ([1], [2]));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(Date), cnt Array(Int16)', ([1], [1]), ([1], [2]));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(DateTime(''Asia/Istanbul'')), cnt Array(Int32)', ([1], [1]), ([1], [2]));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(Decimal(10, 2)), cnt Array(Int16)', (['1.01'], [1]), (['1.01'], [2]));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(Enum16(''a''=1)), cnt Array(Int16)', (['a'], [1]), (['a'], [2]));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(UUID), cnt Array(UUID)', (['01234567-89ab-cdef-0123-456789abcdef'], ['01111111-89ab-cdef-0123-456789abcdef']), (['01234567-89ab-cdef-0123-456789abcdef'], ['02222222-89ab-cdef-0123-456789abcdef']));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(String), cnt Array(String)', (['1'], ['1']), (['1'], ['2']));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(FixedString(1)), cnt Array(FixedString(1))', (['1'], ['1']), (['1'], ['2']));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(UInt64), cnt Array(UInt64)', ([1], [1]), ([1], [2]));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(Float64), cnt Array(Int8)', ([1], [1]), ([1], [2]));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(Date), cnt Array(Int16)', ([1], [1]), ([1], [2]));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(DateTime(''Asia/Istanbul'')), cnt Array(Int32)', ([1], [1]), ([1], [2]));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(Decimal(10, 2)), cnt Array(Int16)', (['1.01'], [1]), (['1.01'], [2]));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(Enum16(''a''=1)), cnt Array(Int16)', (['a'], [1]), (['a'], [2]));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(UInt64), cnt Array(UInt64)', ([1], [0]), ([2], [0]));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(UInt64), cnt Array(UInt64)', ([1], [0]), ([2], [0]));
+
+SELECT minMap(val, cnt)
+FROM values('val Array(String), cnt Array(String)', (['A'], ['']), (['B'], ['']));
+
+SELECT maxMap(val, cnt)
+FROM values('val Array(String), cnt Array(String)', (['A'], ['']), (['B'], ['']));
+
+SELECT sumMap(val, cnt)
+FROM values('val Array(UInt64), cnt Array(UInt64)', ([1], [0]), ([2], [0]));
+
+SELECT minMap([1, 1, 1], [[1, 2], [1], [1, 2, 3]]);
+
+SELECT maxMap([1, 1, 1], [[1, 2], [1], [1, 2, 3]]);
+
+SELECT minMap([1, 1, 1], [(1, 2), (1, 1), (1, 3)]);
+
+SELECT maxMap([1, 1, 1], [(1, 2), (1, 1), (1, 3)]);

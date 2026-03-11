@@ -1,0 +1,91 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "map"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "key"
+                }
+              ]
+            },
+            "alias": "key"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "CAST",
+              "args": [
+                {
+                  "kind": "tuple",
+                  "elements": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "key"
+                        }
+                      ],
+                      "source": "['key']"
+                    },
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "value"
+                        }
+                      ],
+                      "source": "['value']"
+                    }
+                  ],
+                  "source": "(['key'], ['value'])"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Map(String, String)"
+                }
+              ]
+            },
+            "alias": "map"
+          }
+        ]
+      }
+    }
+  }
+]

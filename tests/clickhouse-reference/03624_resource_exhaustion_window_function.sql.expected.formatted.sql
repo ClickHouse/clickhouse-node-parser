@@ -1,0 +1,30 @@
+SELECT
+    *,
+    ROW_NUMBER() OVER (PARTITION BY c2, c4 ORDER BY c5 DESC, c3 DESC) AS row_n
+FROM (
+        SELECT
+            t1.c1 AS account_id,
+            t1.c2 AS c2,
+            t1.c3 AS c3,
+            t1.c4 AS c4,
+            t1.c5 AS c5,
+            ROW_NUMBER() OVER (PARTITION BY t1.c2, t1.c3, t1.c4 ORDER BY t1.c5 DESC) AS rn
+        FROM table_test AS t1
+        GROUP BY
+            t1.c1,
+            t1.c2,
+            t1.c3,
+            t1.c4,
+            t1.c5
+        ORDER BY
+            t1.c2 ASC,
+            t1.c4 ASC,
+            t1.c5 ASC
+    )
+WHERE rn = 1
+ORDER BY
+    c2 ASC,
+    c4 ASC,
+    c5 ASC,
+    c3 ASC
+FORMAT Null;

@@ -1,0 +1,72 @@
+SELECT
+    t.a,
+    u.a
+FROM
+    (
+        SELECT 1 AS a
+    ) AS t
+CROSS JOIN (
+        SELECT 1 AS a
+        QUALIFY 0 = ((t.a AS alias668))
+    ) AS u;
+
+SELECT
+    t.a,
+    u.a
+FROM
+    (
+        SELECT 1 AS a
+    ) AS t
+CROSS JOIN (
+        SELECT DISTINCT
+            *,
+            *,
+            27,
+            '======Before Truncate======',
+            materialize(27),
+            27,
+            *,
+            isZeroOrNull(27),
+            27,
+            materialize(27),
+            *,
+            isNotNull(*),
+            *,
+            27,
+            *,
+            toFixedString('======Before Truncate======', 27),
+            27,
+            27,
+            27,
+            27,
+            toLowCardinality(27),
+            toNullable(materialize(27)),
+            isNotNull(*),
+            1 AS a
+        QUALIFY (isNull((
+                    *,
+                    27,
+                    materialize(27),
+                    27,
+                    '======Before Truncate======',
+                    27,
+                    27,
+                    (27 IS NOT NULL),
+                    * IS NOT NULL
+                ))) = ((t.a AS alias668))
+    ) AS u;
+
+SELECT
+    c,
+    a AS c
+FROM
+    (
+        SELECT 1 AS a
+    ) AS X
+CROSS JOIN (
+        SELECT 1
+        WHERE c = 1
+    ) AS Y
+CROSS JOIN (
+        SELECT 1 AS c
+    ) AS Z;

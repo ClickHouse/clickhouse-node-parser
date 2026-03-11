@@ -1,0 +1,1 @@
+select dictGet({CLICKHOUSE_DATABASE:String} || '.test_dict_01051_d', 'value', toUInt64(4));

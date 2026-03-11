@@ -1,0 +1,7 @@
+SELECT *
+FROM mv
+ORDER BY a ASC;
+
+SELECT *
+FROM mv_target
+ORDER BY a ASC;

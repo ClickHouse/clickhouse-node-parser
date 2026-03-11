@@ -1,0 +1,14 @@
+SELECT sleep(1.1)
+FORMAT Null;
+
+SELECT
+    a,
+    b
+FROM ttl_00933_1;
+
+SELECT *
+FROM ttl_00933_1
+ORDER BY d ASC;
+
+SELECT *
+FROM ttl_00933_1;

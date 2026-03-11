@@ -1,0 +1,92 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ],
+                  "source": "[1, 2]"
+                },
+                "alias": "a"
+              }
+            ]
+          },
+          "alias": "aa"
+        },
+        "kind": "join",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "4"
+                    }
+                  ],
+                  "source": "[3, 4]"
+                },
+                "alias": "b"
+              }
+            ]
+          },
+          "alias": "bb"
+        }
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "aa",
+            "a"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bb",
+            "b"
+          ]
+        }
+      ]
+    }
+  }
+]

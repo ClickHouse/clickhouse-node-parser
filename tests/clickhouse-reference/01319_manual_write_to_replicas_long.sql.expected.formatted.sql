@@ -1,0 +1,7 @@
+SELECT *
+FROM r1;
+
+SELECT *
+FROM r2;
+
+SELECT '---';

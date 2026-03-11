@@ -1,0 +1,5 @@
+SELECT h3EdgeLengthM(100);
+
+SELECT h3HexAreaM2(100);
+
+SELECT h3HexAreaKm2(100);

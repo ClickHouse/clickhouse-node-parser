@@ -1,0 +1,5 @@
+SELECT * FROM nullable_00457 ORDER BY s;
+SELECT s FROM nullable_00457 ORDER BY s;
+SELECT ns FROM nullable_00457 ORDER BY s;
+SELECT narr FROM nullable_00457 ORDER BY s;
+SELECT s, narr FROM nullable_00457 ORDER BY s;

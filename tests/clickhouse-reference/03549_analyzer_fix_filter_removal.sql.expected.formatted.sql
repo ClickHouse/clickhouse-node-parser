@@ -1,0 +1,6 @@
+SELECT *
+FROM
+    m
+INNER JOIN b
+    USING (key)
+WHERE ID = 1;

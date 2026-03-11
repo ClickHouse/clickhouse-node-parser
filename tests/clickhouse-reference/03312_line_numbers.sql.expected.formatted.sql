@@ -1,0 +1,31 @@
+SELECT
+    'This is the first query, and it is located on line 4',
+    1,
+    2,
+    3;
+
+SELECT
+    type,
+    script_query_number,
+    script_line_number,
+    query
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND event_date >= yesterday()
+ORDER BY
+    event_time_microseconds ASC,
+    type ASC;
+
+SELECT 'Ok'
+FROM `system`.text_log
+WHERE event_date >= yesterday()
+    AND like(message, '%(query 1, line 4)%')
+    AND like(message, '%This is the first query%')
+LIMIT 1;
+
+SELECT 'Ok'
+FROM `system`.text_log
+WHERE event_date >= yesterday()
+    AND like(message, '%(query 2, line 8)%')
+    AND like(message, '%This is the second query%')
+LIMIT 1;

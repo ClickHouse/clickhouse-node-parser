@@ -1,0 +1,1 @@
+SELECT sum(l._part_offset = r._parent_part_offset) FROM test l JOIN mergeTreeProjection(currentDatabase(), test, p) r USING (a) SETTINGS enable_analyzer = 1, enable_shared_storage_snapshot_in_query = 1;

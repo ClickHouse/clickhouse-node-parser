@@ -1,0 +1,158 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "AA"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "b"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "BB"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "other"
+            }
+          ]
+        },
+        "alias": "key1"
+      },
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableFunction",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.{2,3}"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t1"
+            ]
+          }
+        ],
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              },
+              "alias": "key1"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attr"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t2"
+          }
+        },
+        "alias": "a"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "key1"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a",
+            "attr"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "analyzer_compatibility_join_using_top_level_identifier",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

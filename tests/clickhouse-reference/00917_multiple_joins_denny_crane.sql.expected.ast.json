@@ -1,0 +1,348 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x",
+                "b"
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "countDistinct",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x",
+                    "c"
+                  ]
+                }
+              ]
+            },
+            "alias": "ANIMAL"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "ANIMAL"
+                  ]
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "CAT"
+                },
+                "alias": "b"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c",
+                    "ANIMAL"
+                  ]
+                },
+                "alias": "c"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d",
+                    "ANIMAL"
+                  ]
+                },
+                "alias": "d"
+              }
+            ],
+            "from": {
+              "left": {
+                "left": {
+                  "left": {
+                    "kind": "tableRef",
+                    "table": "ANIMAL",
+                    "alias": "a"
+                  },
+                  "kind": "join",
+                  "joinType": "INNER",
+                  "right": {
+                    "kind": "tableRef",
+                    "table": "ANIMAL",
+                    "alias": "b"
+                  },
+                  "constraint": {
+                    "kind": "on",
+                    "expr": {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "a",
+                          "ANIMAL"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "b",
+                          "ANIMAL"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "kind": "join",
+                "joinType": "LEFT",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "ANIMAL",
+                  "alias": "c"
+                },
+                "constraint": {
+                  "kind": "on",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b",
+                        "ANIMAL"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c",
+                        "ANIMAL"
+                      ]
+                    },
+                    "parenthesized": true
+                  }
+                }
+              },
+              "kind": "join",
+              "joinType": "RIGHT",
+              "right": {
+                "kind": "subqueryFrom",
+                "query": {
+                  "kind": "union",
+                  "queries": [
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "ANIMAL"
+                      }
+                    },
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "ANIMAL"
+                      }
+                    },
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "ANIMAL"
+                      }
+                    }
+                  ]
+                },
+                "alias": "d"
+              },
+              "constraint": {
+                "kind": "on",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a",
+                      "ANIMAL"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d",
+                      "ANIMAL"
+                    ]
+                  },
+                  "parenthesized": true
+                }
+              }
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "<>",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d",
+                      "ANIMAL"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "CAT"
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "<>",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c",
+                      "ANIMAL"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DOG"
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "<>",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b",
+                      "ANIMAL"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "FISH"
+                  }
+                }
+              ]
+            }
+          },
+          "alias": "x"
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "x",
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "CAT"
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x",
+                "b"
+              ]
+            }
+          ]
+        },
+        "having": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "ANIMAL"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      },
+      "alias": "ANIMAL"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "ANIMAL",
+          "ANIMAL"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  }
+]

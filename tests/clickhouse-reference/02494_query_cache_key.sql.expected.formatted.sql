@@ -1,0 +1,42 @@
+SELECT *
+FROM tab
+SETTINGS use_query_cache = 1;
+
+SELECT 1
+SETTINGS
+    use_query_cache = 1,
+    limit = 1,
+    use_skip_indexes = 0
+FORMAT Null;
+
+SELECT 1
+SETTINGS
+    use_query_cache = 1,
+    use_skip_indexes = 0
+FORMAT Null;
+
+SELECT 1
+SETTINGS
+    use_query_cache = 1,
+    use_skip_indexes = 1
+FORMAT Null;
+
+SELECT 1
+SETTINGS
+    use_query_cache = 1,
+    max_block_size = 1
+FORMAT Null;
+
+SELECT count(query)
+FROM `system`.query_cache;
+
+SELECT 1
+SETTINGS use_skip_indexes = 0
+FORMAT Null;
+
+SELECT 1
+FORMAT Null;
+
+SELECT 1
+SETTINGS use_skip_indexes = 1
+FORMAT Null;

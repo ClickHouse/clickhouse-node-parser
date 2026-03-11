@@ -1,0 +1,61 @@
+SELECT CAST('True', 'Bool');
+
+SELECT CAST('On', 'Bool');
+
+SELECT CAST('Yes', 'Bool');
+
+SELECT CAST('T', 'Bool');
+
+SELECT CAST('Y', 'Bool');
+
+SELECT CAST('1', 'Bool');
+
+SELECT CAST('enabled', 'Bool');
+
+SELECT CAST('enable', 'Bool');
+
+SELECT CAST('False', 'Bool');
+
+SELECT CAST('Off', 'Bool');
+
+SELECT CAST('No', 'Bool');
+
+SELECT CAST('N', 'Bool');
+
+SELECT CAST('F', 'Bool');
+
+SELECT CAST('0', 'Bool');
+
+SELECT CAST('disabled', 'Bool');
+
+SELECT CAST('disable', 'Bool');
+
+SELECT CAST('true', 'Bool')
+FORMAT CSV;
+
+SELECT CAST('true', 'Bool')
+FORMAT TSV;
+
+SELECT CAST('true', 'Bool')
+FORMAT Values;
+
+SELECT CAST('true', 'Bool')
+FORMAT Vertical;
+
+SELECT CAST('true', 'Bool')
+FORMAT Pretty;
+
+SELECT CAST('true', 'Bool')
+FORMAT JSONEachRow;
+
+SELECT CAST(CAST(2, 'Bool'), 'UInt8');
+
+SELECT CAST(CAST(toUInt32(2), 'Bool'), 'UInt8');
+
+SELECT CAST(CAST(toInt8(2), 'Bool'), 'UInt8');
+
+SELECT CAST(CAST(toFloat32(2), 'Bool'), 'UInt8');
+
+SELECT CAST(CAST(toDecimal32(2, 2), 'Bool'), 'UInt8');
+
+SELECT CAST(CAST(materialize(2), 'Bool'), 'UInt8');

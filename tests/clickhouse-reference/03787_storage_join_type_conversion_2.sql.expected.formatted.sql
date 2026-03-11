@@ -1,0 +1,7 @@
+SELECT t1.k1
+FROM
+    t0
+FULL JOIN t2 AS t1
+    USING (k1)
+FULL JOIN t2 AS t2
+    USING (k1);

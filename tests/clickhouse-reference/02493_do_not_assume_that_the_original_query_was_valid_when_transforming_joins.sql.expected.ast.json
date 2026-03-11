@@ -1,0 +1,148 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "column1"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "table1"
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "column1"
+                  ]
+                }
+              ]
+            }
+          },
+          "alias": "a"
+        },
+        "kind": "join",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "table2"
+            }
+          },
+          "alias": "b"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b",
+                    "column1"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "column1"
+                  ]
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b",
+                    "column2"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "column2"
+                  ]
+                },
+                "parenthesized": true
+              }
+            ]
+          }
+        }
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "table3"
+          }
+        },
+        "alias": "c"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c",
+              "column3"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "b",
+              "column3"
+            ]
+          }
+        }
+      }
+    }
+  }
+]

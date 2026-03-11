@@ -1,0 +1,97 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "ParsedParams",
+                "Key1"
+              ]
+            },
+            "alias": "p"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "test",
+          "table": "visits"
+        },
+        "where": {
+          "kind": "functionCall",
+          "name": "arrayAll",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "y"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "arrayExists",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x"
+                    ],
+                    "body": {
+                      "kind": "binaryExpr",
+                      "op": "!=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "y"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "p"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

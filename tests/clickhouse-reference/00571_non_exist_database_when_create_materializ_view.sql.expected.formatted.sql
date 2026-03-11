@@ -1,0 +1,5 @@
+SELECT *
+FROM {CLICKHOUSE_DATABASE:Identifier}.test_00571;
+
+SELECT *
+FROM {CLICKHOUSE_DATABASE:Identifier}.test_materialized_00571;

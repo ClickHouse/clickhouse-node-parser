@@ -1,0 +1,673 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_column_function_filter"
+    },
+    "prewhere": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "and",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "greaterOrEquals",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "filter_val"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "lessOrEquals",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "filter_val"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "80"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "multiSearchAny",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "name"
+                    ]
+                  },
+                  {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "123"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "456"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "789"
+                      }
+                    ],
+                    "source": "['123', '456', '789']"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "functionCall",
+              "name": "arrayExists",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "arrayExists",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "y"
+                        ],
+                        "body": {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "position",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "y"
+                                ]
+                              },
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "mapKeys",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "attrs"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "12"
+                    }
+                  ],
+                  "source": "['12']"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "arrayExists",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "arrayExists",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "y"
+                        ],
+                        "body": {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "position",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "y"
+                                ]
+                              },
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "mapValues",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "attrs"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "12"
+                    }
+                  ],
+                  "source": "['12']"
+                }
+              ]
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "functionCall",
+              "name": "arrayExists",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "arrayExists",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "y"
+                        ],
+                        "body": {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "position",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "y"
+                                ]
+                              },
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "mapKeys",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "attrs"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "key"
+                    }
+                  ],
+                  "source": "['key']"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "arrayExists",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "arrayExists",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "y"
+                        ],
+                        "body": {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "position",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "y"
+                                ]
+                              },
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "mapValues",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "attrs"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "key"
+                    }
+                  ],
+                  "source": "['key']"
+                }
+              ]
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_column_function_filter"
+    },
+    "prewhere": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "and",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "greaterOrEquals",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "filter_val"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "lessOrEquals",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "filter_val"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "80"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "multiSearchAny",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "name"
+                    ]
+                  },
+                  {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "123"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "456"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "789"
+                      }
+                    ],
+                    "source": "['123', '456', '789']"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "functionCall",
+              "name": "arrayExists",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "arrayExists",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "y"
+                        ],
+                        "body": {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "position",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "y"
+                                ]
+                              },
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "mapKeys",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "attrs"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "12"
+                    }
+                  ],
+                  "source": "['12']"
+                }
+              ]
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "functionCall",
+          "name": "arrayExists",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "arrayExists",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "y"
+                    ],
+                    "body": {
+                      "kind": "binaryExpr",
+                      "op": ">",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "position",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "y"
+                            ]
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "x"
+                            ]
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      }
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "mapKeys",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "attrs"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "key"
+                }
+              ],
+              "source": "['key']"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

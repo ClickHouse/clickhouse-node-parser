@@ -1,0 +1,5 @@
+SELECT *
+FROM
+    t1
+LEFT JOIN t0
+    ON 1 = 1;

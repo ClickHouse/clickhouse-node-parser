@@ -1,0 +1,8 @@
+SELECT count() FROM data WHERE str NOT LIKE 'a%' SETTINGS force_primary_key=1;
+SELECT count() FROM data WHERE str NOT LIKE 'a%%' SETTINGS force_primary_key=1;
+SELECT count() FROM data WHERE str NOT LIKE 'a' SETTINGS force_primary_key=1; -- { serverError INDEX_NOT_USED }
+SELECT count() FROM data WHERE str NOT LIKE '%a' SETTINGS force_primary_key=1; -- { serverError INDEX_NOT_USED }
+SELECT count() FROM data WHERE str NOT LIKE 'a_' SETTINGS force_primary_key=1; -- { serverError INDEX_NOT_USED }
+SELECT count() FROM data WHERE str NOT LIKE 'a%_' SETTINGS force_primary_key=1; -- { serverError INDEX_NOT_USED }
+SELECT count() FROM data WHERE str NOT LIKE '_a' SETTINGS force_primary_key=1; -- { serverError INDEX_NOT_USED }
+SELECT count() FROM data WHERE str NOT LIKE 'a%\_' SETTINGS force_primary_key=1; -- { serverError INDEX_NOT_USED }

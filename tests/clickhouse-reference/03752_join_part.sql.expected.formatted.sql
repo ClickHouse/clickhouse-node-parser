@@ -1,0 +1,11 @@
+SELECT t0.c0
+FROM
+    t0
+INNER JOIN t0 AS tx
+    ON t0.c0 = tx.c0
+WHERE tx._part_offset = 1
+    AND randomFixedString(5) = tx._part
+SETTINGS
+    query_plan_use_logical_join_step = 0,
+    use_join_disjunctions_push_down = 1,
+    enable_analyzer = 1;

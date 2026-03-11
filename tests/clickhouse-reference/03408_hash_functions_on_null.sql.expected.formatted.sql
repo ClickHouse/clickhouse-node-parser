@@ -1,0 +1,107 @@
+SELECT xxHash32(NULL);
+
+SELECT xxHash64(NULL);
+
+SELECT xxHash64([]);
+
+SELECT xxHash64([null]);
+
+SELECT xxHash64([null, null]);
+
+SELECT xxHash64([null::Nullable(Int64)]);
+
+SELECT xxHash64([null::Nullable(String)]);
+
+SELECT xxHash64(tuple());
+
+SELECT xxHash64(tuple(NULL));
+
+SELECT xxHash64(tuple(NULL, NULL));
+
+SELECT xxHash64(tuple(NULL::Nullable(Int64)));
+
+SELECT xxHash64(tuple(NULL::Nullable(String)));
+
+SELECT xxHash32(materialize(NULL));
+
+SELECT xxHash64(materialize(NULL));
+
+SELECT xxHash64(materialize([]));
+
+SELECT xxHash64(materialize([null]));
+
+SELECT xxHash64(materialize([null, null]));
+
+SELECT xxHash64(materialize([null::Nullable(Int64)]));
+
+SELECT xxHash64(materialize([null::Nullable(String)]));
+
+SELECT xxHash64(materialize(tuple()));
+
+SELECT xxHash64(materialize(tuple(NULL)));
+
+SELECT xxHash64(materialize(tuple(NULL, NULL)));
+
+SELECT xxHash64(materialize(tuple(NULL::Nullable(Int64))));
+
+SELECT xxHash64(materialize(tuple(NULL::Nullable(String))));
+
+SELECT xxHash32(a)
+FROM test_hash_on_null;
+
+SELECT cityHash64([1]);
+
+SELECT cityHash64([toNullable(1)]);
+
+SELECT cityHash64('hi');
+
+SELECT cityHash64(tuple('hi'));
+
+SELECT cityHash64(tuple(toNullable('hi')));
+
+SELECT cityHash64(tuple(toLowCardinality(toNullable('hi'))));
+
+SELECT cityHash64(materialize(tuple(toLowCardinality(toNullable('hi')))));
+
+SELECT
+    a,
+    xxHash32(a),
+    xxHash32(tuple(a))
+FROM test_mix_null;
+
+SELECT reinterpret(sipHash128(tuple(*)), 'UInt128')
+FROM t;
+
+SELECT cityHash64(tuple(*))
+FROM t;
+
+SELECT cityHash64(*)
+FROM t;
+
+SELECT cityHash64(a.x)
+FROM t;
+
+SELECT cityHash64(a.y)
+FROM t;
+
+SELECT cityHash64(a.z)
+FROM t;
+
+SELECT sipHash64Keyed(materialize((1::UInt64, 2::UInt64)), NULL)
+FROM numbers(2);
+
+SELECT sipHash64Keyed((1::UInt64, 2::UInt64), tuple(NULL))
+FROM numbers(2);
+
+SELECT sipHash64Keyed(materialize((1::UInt64, 2::UInt64)), tuple(NULL))
+FROM numbers(2);
+
+SELECT sipHash64Keyed((1::UInt64, number), tuple(NULL))
+FROM numbers(3);
+
+SELECT sum(ignore(cityHash64(tuple(*))))
+FROM (
+        SELECT *
+        FROM generateRandom()
+        LIMIT 100
+    );

@@ -1,0 +1,15 @@
+SELECT count()
+FROM numbers(3) AS t
+WHERE 1 IN (
+        SELECT 1
+        FROM numbers(3)
+        WHERE number = t.number
+    );
+
+SELECT count()
+FROM numbers(3) AS t
+WHERE (
+        SELECT count()
+        FROM numbers(3)
+        WHERE number = t.number
+    ) IN (1);

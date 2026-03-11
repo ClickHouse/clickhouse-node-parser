@@ -1,0 +1,128 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "quantile",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.1"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "quantile",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.5"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "datetime"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "functionCall",
+          "name": "max",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "cityHash64",
+              "args": [
+                {
+                  "kind": "asterisk"
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "quantile",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.1"
+              }
+            ],
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "quantile",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.5"
+              }
+            ],
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "datetime"
+        }
+      }
+    }
+  }
+]

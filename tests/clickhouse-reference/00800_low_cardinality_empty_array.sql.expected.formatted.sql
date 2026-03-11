@@ -1,0 +1,2 @@
+SELECT *
+FROM lc_00800_1;

@@ -1,0 +1,25 @@
+SELECT number
+FROM
+    `system`.numbers
+LEFT JOIN (
+        SELECT
+            number,
+            ['test']
+        FROM `system`.numbers
+        LIMIT 1
+    ) AS js2
+    USING (number)
+LIMIT 1;
+
+SELECT number
+FROM
+    `system`.numbers
+LEFT JOIN (
+        SELECT
+            number,
+            ['test']
+        FROM `system`.numbers
+        LIMIT 1
+    ) AS js2
+    USING (number)
+LIMIT 1;

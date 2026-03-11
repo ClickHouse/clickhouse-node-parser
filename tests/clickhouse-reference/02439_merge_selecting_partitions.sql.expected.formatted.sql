@@ -1,0 +1,18 @@
+SELECT sleepEachRow(3) AS higher_probability_of_reproducing_the_issue
+FORMAT Null;
+
+SELECT *
+FROM `system`.zookeeper_log
+WHERE like(path, concat('/test/02439/', getMacro('shard'), '/', currentDatabase(), '/block_numbers/%'))
+    AND op_num IN ('List', 'SimpleList', 'FilteredList')
+    AND notLike(path, '%/block_numbers/1')
+    AND notLike(path, '%/block_numbers/123')
+    AND event_time >= now() - toIntervalMinute(1)
+    AND ((isNull(query_id)
+    OR query_id = ''
+    OR query_id IN (
+        SELECT query_id
+        FROM `system`.query_log
+        WHERE event_time >= now() - toIntervalMinute(1)
+            AND current_database = currentDatabase()
+    )));

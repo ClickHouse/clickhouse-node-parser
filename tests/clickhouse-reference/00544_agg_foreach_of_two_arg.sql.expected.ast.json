@@ -1,0 +1,168 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sumForEach",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumForEachIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumIfForEach",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "arrayMap",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "x"
+                ],
+                "body": {
+                  "kind": "binaryExpr",
+                  "op": "!=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "arr"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      ],
+                      "source": "[1, 2, 3]"
+                    },
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "4"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "5"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "6"
+                        }
+                      ],
+                      "source": "[4, 5, 6]"
+                    }
+                  ],
+                  "source": "[[1, 2, 3], [4, 5, 6]]"
+                }
+              ]
+            },
+            "alias": "arr"
+          }
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,273 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "host"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "port"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "index"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "is_expired"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "keeper_api_version"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "and",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "greaterOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "connected_time"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "yesterday",
+                "args": []
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "lessOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "connected_time"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "now",
+                  "args": []
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "parenthesized": true
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "functionCall",
+          "name": "abs",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "session_uptime_elapsed_seconds"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "zookeeperSessionUptime",
+                "args": []
+              }
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "parenthesized": true
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "enabled_feature_flags"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "zookeeper_connection"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "default"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "host"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "port"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "index"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "is_expired"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "keeper_api_version"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "and",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "greaterOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "connected_time"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "yesterday",
+                "args": []
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "lessOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "connected_time"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "now",
+                  "args": []
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "parenthesized": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "zookeeper_connection"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "default"
+      }
+    }
+  }
+]

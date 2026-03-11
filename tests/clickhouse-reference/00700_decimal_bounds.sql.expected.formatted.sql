@@ -1,0 +1,13 @@
+SELECT *
+FROM decimal
+ORDER BY
+    a ASC,
+    b ASC,
+    c ASC,
+    d ASC,
+    e ASC,
+    f ASC,
+    g ASC,
+    h ASC,
+    i ASC,
+    j ASC;

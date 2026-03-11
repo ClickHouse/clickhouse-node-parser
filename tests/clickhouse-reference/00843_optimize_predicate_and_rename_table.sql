@@ -1,0 +1,1 @@
+SELECT * FROM view_00843;

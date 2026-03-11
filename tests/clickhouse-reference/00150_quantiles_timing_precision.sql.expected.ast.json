@@ -1,0 +1,408 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "CounterID"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "quantileTiming",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "SendTiming"
+              ]
+            }
+          ]
+        },
+        "alias": "qt"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "least",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "30000"
+            },
+            {
+              "kind": "functionCall",
+              "name": "quantileExact",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.5"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "SendTiming"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "qe"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "c"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "round",
+          "args": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "abs",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "qt"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "qe"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "greatest",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "qt"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "qe"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "diff"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        },
+        "alias": "rounded_diff"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "SendTiming"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "Int64",
+        "value": "-1"
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        }
+      ]
+    },
+    "having": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "diff"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "diff"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "CounterID"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "quantileTiming",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "SendTiming"
+              ]
+            }
+          ]
+        },
+        "alias": "qt"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "least",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "30000"
+            },
+            {
+              "kind": "functionCall",
+              "name": "quantileExact",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.5"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "SendTiming"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "qe"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "c"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "round",
+          "args": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "abs",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "qt"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "qe"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "greatest",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "qt"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "qe"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "diff"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        },
+        "alias": "rounded_diff"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "SendTiming"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "Int64",
+        "value": "-1"
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        }
+      ]
+    },
+    "having": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "diff"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "diff"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "optimize_aggregation_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

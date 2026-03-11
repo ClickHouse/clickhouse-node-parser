@@ -1,0 +1,2 @@
+SELECT mannWhitneyUTest(salary, salary) OVER (ORDER BY salary ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED PRECEDING) AS func
+FROM `01802_empsalary`;

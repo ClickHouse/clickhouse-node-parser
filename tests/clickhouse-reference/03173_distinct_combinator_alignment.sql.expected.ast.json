@@ -1,0 +1,194 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "topKDistinctState",
+            "params": [
+              {
+                "kind": "functionCall",
+                "name": "toNullable",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              }
+            ],
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "map",
+                  "args": [
+                    {
+                      "kind": "tuple",
+                      "elements": [
+                        {
+                          "kind": "functionCall",
+                          "name": "materialize",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "toNullable",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      ],
+                      "source": "(materialize(toNullable(1)), 2)"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "4"
+                    },
+                    {
+                      "kind": "tuple",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "4"
+                        }
+                      ],
+                      "source": "(3, 4)"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ],
+              "source": "(map((materialize(toNullable(1)), 2), 4, (3, 4), 5), 3)"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "map",
+          "args": [
+            {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ],
+              "source": "(1, 2)"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            },
+            {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                }
+              ],
+              "source": "(3, 4)"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "withTotals": true,
+    "withCube": true,
+    "format": "Null"
+  }
+]

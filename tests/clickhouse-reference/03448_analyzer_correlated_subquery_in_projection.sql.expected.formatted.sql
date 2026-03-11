@@ -1,0 +1,25 @@
+SELECT (
+        SELECT count()
+        FROM `system`.one
+        WHERE number = 2
+    )
+FROM numbers(2);
+
+SELECT (
+        SELECT count()
+        FROM `system`.one
+        WHERE number = 2
+    )
+FROM numbers(2)
+GROUP BY number % 2;
+
+SELECT
+    A.id AS a_id,
+    (
+        SELECT groupArraySorted(5)(B.id)
+        FROM B
+        WHERE has(B.A_ids, A.id)
+    ) AS b_ids_containing_a_id
+FROM A
+ORDER BY a_id ASC
+LIMIT 20;

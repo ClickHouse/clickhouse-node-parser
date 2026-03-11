@@ -1,0 +1,2 @@
+SELECT 1 FROM t3 WHERE x=1;
+SELECT 1 FROM t0 tx JOIN t0 ON tx.c0 = t0.c0;

@@ -1,0 +1,3 @@
+SELECT `02103_test_function_with_nested_function_empty_args`();
+
+SELECT `02103_test_function_with_nested_function_arg`(1);

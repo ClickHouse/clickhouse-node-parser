@@ -1,0 +1,258 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "empty",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toUUID",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "00000000-0000-0000-0000-000000000000"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "notEmpty",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toUUID",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "00000000-0000-0000-0000-000000000000"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "uuid"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "empty",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "uuid"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "uniqIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "uuid"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "notEmpty",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "uuid"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toUUID",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "00000000-0000-0000-0000-000000000002"
+                    }
+                  ]
+                },
+                "alias": "uuid"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toUUID",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "00000000-0000-0000-0000-000000000000"
+                    }
+                  ]
+                },
+                "alias": "uuid"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toUUID",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "00000000-0000-0000-0000-000000000001"
+                    }
+                  ]
+                },
+                "alias": "uuid"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniq",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "user_id"
+              ]
+            }
+          ]
+        },
+        "alias": "users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniqIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "order_id"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "notEmpty",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "order_id"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "orders"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "users"
+          }
+        },
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "orders"
+          }
+        },
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "user_id"
+        ]
+      }
+    }
+  }
+]

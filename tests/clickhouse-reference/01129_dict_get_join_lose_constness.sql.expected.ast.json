@@ -1,0 +1,155 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "join_key"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTimeZone",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "dictGetDateTime",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "system.dict1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "loading_start_time"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dict_key"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        },
+        "alias": "datetime"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "dictGetInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "system.dict1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "element_count"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt64",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "dict_key"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "join_key"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "dict_key"
+            }
+          ]
+        },
+        "alias": "js1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              "alias": "join_key"
+            }
+          ]
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "join_key"
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "now",
+        "args": []
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "datetime"
+        ]
+      }
+    }
+  }
+]

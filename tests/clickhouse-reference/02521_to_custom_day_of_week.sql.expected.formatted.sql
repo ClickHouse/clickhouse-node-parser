@@ -1,0 +1,1 @@
+SELECT toDayOfWeek(today(), -1);

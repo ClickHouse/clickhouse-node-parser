@@ -1,0 +1,30 @@
+SELECT *
+FROM
+    ints AS l
+LEFT JOIN ints AS r
+    USING (i64)
+ORDER BY
+    l.i32 ASC,
+    r.i32 ASC;
+
+SELECT *
+FROM
+    ints AS l
+INNER JOIN ints AS r
+    USING (i64)
+ORDER BY
+    l.i32 ASC,
+    r.i32 ASC;
+
+SELECT count()
+FROM
+    (
+        SELECT
+            [1],
+            count(1)
+    ) AS t1
+RIGHT JOIN (
+        SELECT number AS s
+        FROM numbers(2)
+    ) AS t2
+    USING (s);

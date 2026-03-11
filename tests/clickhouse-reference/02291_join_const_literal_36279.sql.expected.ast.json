@@ -1,0 +1,253 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "COUNT",
+          "args": []
+        },
+        "alias": "count"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test_distributed"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "text"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_distributed"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "functionCall",
+                "name": "ilike",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "text"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%text-for-search%"
+                  }
+                ],
+                "parenthesized": true
+              },
+              {
+                "kind": "functionCall",
+                "name": "ilike",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "text2"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%text-for-search%"
+                  }
+                ],
+                "parenthesized": true
+              }
+            ]
+          }
+        }
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "text"
+        ]
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "ilike",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "text"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%text-for-search%"
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "functionCall",
+          "name": "ilike",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "text2"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%text-for-search%"
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u",
+            "name"
+          ]
+        },
+        "alias": "user_name"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20"
+        },
+        "alias": "age_group"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "user_all",
+        "alias": "u"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "event",
+        "alias": "e"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "u",
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "user_id"
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "u",
+                  "age"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "20"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "u",
+                  "age"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "30"
+              }
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "created_time"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2022-01-01"
+          }
+        }
+      ]
+    }
+  }
+]

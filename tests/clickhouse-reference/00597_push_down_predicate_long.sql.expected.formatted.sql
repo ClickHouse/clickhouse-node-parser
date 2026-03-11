@@ -1,0 +1,457 @@
+SELECT *
+FROM (
+        SELECT
+            floor(floor(1, floor(NULL), id = 257), floor(floor(floor(floor(NULL), '10485.76', '9223372036854775807', NULL), floor(10, floor(65535, NULL), 100.0000991821289), NULL)), '2.56'),
+            b.*
+        FROM (
+                SELECT
+                    floor(floor(floor(floor(NULL), 1000.0001220703125))),
+                    *
+                FROM test_00597
+            ) AS b
+    )
+WHERE id = 257;
+
+SELECT '-------No need for predicate optimization, but still works-------';
+
+SELECT 1;
+
+SELECT 1 AS id
+WHERE id = 1;
+
+SELECT arrayJoin([1,2,3]) AS id
+WHERE id = 1;
+
+SELECT *
+FROM test_00597
+WHERE id = 1;
+
+SELECT count()
+FROM
+    (
+        SELECT
+            [number] AS a,
+            [number * 2] AS b
+        FROM `system`.numbers
+        LIMIT 1
+    ) AS t
+ARRAY JOIN a, b
+WHERE NOT ignore(a + b);
+
+SELECT
+    a,
+    b
+FROM
+    (
+        SELECT 1 AS a
+    )
+LEFT JOIN (
+        SELECT
+            1 AS a,
+            1 AS b
+    )
+    USING (a)
+WHERE b = 0;
+
+SELECT
+    a,
+    b
+FROM
+    (
+        SELECT
+            1 AS a,
+            1 AS b
+    )
+RIGHT JOIN (
+        SELECT 1 AS a
+    )
+    USING (a)
+WHERE b = 0;
+
+SELECT
+    a,
+    b
+FROM
+    (
+        SELECT 1 AS a
+    )
+FULL JOIN (
+        SELECT
+            1 AS a,
+            1 AS b
+    )
+    USING (a)
+WHERE b = 0;
+
+SELECT toString(value) AS value
+FROM (
+        SELECT 1 AS value
+    )
+WHERE value = '1';
+
+SELECT *
+FROM (
+        SELECT 1 AS id
+        UNION ALL
+        SELECT 2
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT arrayJoin([1, 2, 3]) AS id
+    )
+WHERE id = 1;
+
+SELECT id
+FROM (
+        SELECT arrayJoin([1, 2, 3]) AS id
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT
+            1 AS id,
+            (
+                SELECT 1
+            ) AS subquery
+    )
+WHERE subquery = 1;
+
+SELECT *
+FROM (
+        SELECT
+            toUInt64(b) AS a,
+            sum(id) AS b
+        FROM test_00597
+    )
+WHERE a = 3;
+
+SELECT
+    date,
+    id,
+    name,
+    value
+FROM (
+        SELECT
+            date,
+            name,
+            value,
+            min(id) AS id
+        FROM test_00597
+        GROUP BY
+            date,
+            name,
+            value
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT
+            toUInt64(b) AS a,
+            sum(id) AS b
+        FROM test_00597 AS table_alias
+    ) AS outer_table_alias
+WHERE outer_table_alias.b = 3;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM test_00597
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM (
+                SELECT *
+                FROM test_00597
+            )
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT b.*
+        FROM (
+                SELECT *
+                FROM test_00597
+            ) AS b
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT
+            date,
+            id,
+            name,
+            value
+        FROM test_00597
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT
+            date,
+            id,
+            name,
+            value
+        FROM (
+                SELECT
+                    date,
+                    id,
+                    name,
+                    value
+                FROM test_00597
+            )
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM test_00597
+    ) AS b
+WHERE b.id = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM (
+                SELECT *
+                FROM test_00597
+            ) AS a
+    ) AS b
+WHERE b.id = 1;
+
+SELECT *
+FROM (
+        SELECT
+            id,
+            date,
+            min(value) AS value
+        FROM test_00597
+        GROUP BY
+            id,
+            date
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM test_00597
+        UNION ALL
+        SELECT *
+        FROM test_00597
+    )
+WHERE id = 1;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    )
+    USING (id)
+WHERE id = 1
+SETTINGS enable_analyzer = 0;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    )
+    USING (id)
+WHERE id = 1
+SETTINGS enable_analyzer = 1;
+
+SELECT *
+FROM
+    (
+        SELECT toInt8(1) AS id
+    )
+LEFT JOIN test_00597
+    USING (id)
+WHERE value = 1;
+
+SELECT b.value
+FROM
+    (
+        SELECT toInt8(1) AS id
+    )
+LEFT JOIN test_00597 AS b
+    USING (id)
+WHERE value = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            (
+                SELECT *
+                FROM test_00597
+            )
+        LEFT JOIN (
+                SELECT *
+                FROM test_00597
+            )
+            USING (id)
+    )
+WHERE id = 1
+SETTINGS enable_analyzer = 0;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            (
+                SELECT *
+                FROM test_00597
+            )
+        LEFT JOIN (
+                SELECT *
+                FROM test_00597
+            )
+            USING (id)
+    )
+WHERE id = 1
+SETTINGS enable_analyzer = 1;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    ) AS b
+    USING (id)
+WHERE b.id = 1
+SETTINGS enable_analyzer = 0;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    ) AS b
+    USING (id)
+WHERE b.id = 1
+SETTINGS enable_analyzer = 1;
+
+SELECT *
+FROM
+    (
+        SELECT
+            toInt8(1) AS id,
+            toDate('2000-01-01') AS date
+        FROM `system`.numbers
+        LIMIT 1
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    ) AS b
+    USING (date, id)
+WHERE b.date = toDate('2000-01-01')
+SETTINGS enable_analyzer = 0;
+
+SELECT *
+FROM
+    (
+        SELECT
+            toInt8(1) AS id,
+            toDate('2000-01-01') AS date
+        FROM `system`.numbers
+        LIMIT 1
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    ) AS b
+    USING (date, id)
+WHERE b.date = toDate('2000-01-01')
+SETTINGS enable_analyzer = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            (
+                SELECT *
+                FROM test_00597
+            ) AS a
+        LEFT JOIN (
+                SELECT *
+                FROM test_00597
+            ) AS b
+            ON a.id = b.id
+    )
+WHERE id = 1;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+INNER JOIN (
+        SELECT *
+        FROM (
+                SELECT *
+                FROM test_00597
+            )
+    ) AS r
+    USING (id)
+WHERE r.id = 1
+SETTINGS enable_analyzer = 0;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+INNER JOIN (
+        SELECT *
+        FROM (
+                SELECT *
+                FROM test_00597
+            )
+    ) AS r
+    USING (id)
+WHERE r.id = 1
+SETTINGS enable_analyzer = 1;
+
+SELECT value + t1.value AS expr
+FROM (
+        SELECT
+            t0.value,
+            t1.value
+        FROM
+            test_00597 AS t0
+        FULL JOIN test_00597 AS t1
+            USING (date)
+    )
+WHERE expr < 3;

@@ -1,0 +1,17 @@
+select tupleElement('{"a" : 42}'::JSON, 'a');
+select tupleElement('{"a" : 42}'::JSON(a UInt32), 'a');
+select tupleElement(materialize('{"a" : 42}')::JSON, 'a');
+select tupleElement(materialize('{"a" : 42}')::JSON(a UInt32), 'a');
+select '{"a" : 42}'::JSON.a;
+select '{"a" : 42}'::JSON(a UInt32).a;
+select materialize('{"a" : 42}')::JSON.a;
+select materialize('{"a" : 42}')::JSON(a UInt32).a;
+select ['{"a" : 42}']::Array(JSON)[1].a;
+select ['{"a" : 42}']::Array(JSON(a UInt32))[1].a;
+select materialize(['{"a" : 42}'])::Array(JSON)[1].a;
+select materialize(['{"a" : 42}'])::Array(JSON(a UInt32))[1].a;
+select tupleElement(json, 'a') from test;
+select tupleElement(json, 'b') from test;
+select tupleElement(json, 'c') from test;
+select tupleElement(json, 'c.:`Array(JSON)`') from test;
+select json.c[1].d from test;

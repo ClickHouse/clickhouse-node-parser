@@ -1,0 +1,17 @@
+SELECT
+    s,
+    count()
+FROM t_00284_str
+GROUP BY s
+ORDER BY s ASC
+LIMIT 10
+OFFSET 42;
+
+SELECT
+    s,
+    count()
+FROM t_00284_lc_str
+GROUP BY s
+ORDER BY s ASC
+LIMIT 10
+OFFSET 42;

@@ -1,0 +1,1 @@
+SELECT arrayWithConstant(2, materialize(toFixedString('qwerty', 6)));

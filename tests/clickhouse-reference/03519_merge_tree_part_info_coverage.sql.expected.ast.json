@@ -1,0 +1,223 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tag1"
+          ]
+        },
+        "alias": "part_name"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tag1"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "is_covered"
+                  ]
+                }
+              ]
+            },
+            "alias": "is_covered"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "tag1"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "tag2"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "isMergeTreePartCoveredBy",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tag1"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tag2"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "is_covered"
+              }
+            ],
+            "from": {
+              "left": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "mt"
+                },
+                "kind": "arrayJoin",
+                "joinType": "ARRAY",
+                "expressions": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "names"
+                      ]
+                    },
+                    "alias": "tag1"
+                  }
+                ]
+              },
+              "kind": "arrayJoin",
+              "joinType": "ARRAY",
+              "expressions": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "names"
+                    ]
+                  },
+                  "alias": "tag2"
+                }
+              ]
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "!=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tag1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tag2"
+                ]
+              }
+            }
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tag1"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "is_covered"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "mergeTreePartInfo",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "part_name"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "partition_id"
+            }
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "mergeTreePartInfo",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "part_name"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "min_block"
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+SELECT '----- START -----';
+select mortonEncode((1,2,3,1), 1,2,3,4);
+select mortonDecode((1, 2, 3, 1), 4205569);
+select mortonEncode((1,1), 65534, 65533);
+select mortonDecode((1,1), 4294967286);
+select mortonEncode(tuple(1), 4294967286);
+select mortonDecode(tuple(1), 4294967286);
+select mortonEncode(tuple(4), 128);
+select mortonDecode(tuple(4), 2147483648);
+select mortonEncode((4,4,4,4), 128, 128, 128, 128);

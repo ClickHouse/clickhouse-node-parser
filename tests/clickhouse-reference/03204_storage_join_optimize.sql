@@ -1,0 +1,1 @@
+SELECT * FROM dict_03204 ORDER BY k;

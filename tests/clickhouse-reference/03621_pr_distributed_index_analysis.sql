@@ -1,0 +1,34 @@
+-- { echo }
+select sum(key) from test_10m settings allow_experimental_parallel_reading_from_replicas=0, distributed_index_analysis=1, cluster_for_parallel_replicas='parallel_replicas';
+select sum(key) from test_10m settings allow_experimental_parallel_reading_from_replicas=1, distributed_index_analysis=1, cluster_for_parallel_replicas='parallel_replicas';
+select sum(key) from test_10m settings allow_experimental_parallel_reading_from_replicas=1, distributed_index_analysis=1, cluster_for_parallel_replicas='test_cluster_one_shard_two_replicas';
+select
+  anyIf(normalizeQuery(query), is_initial_query) q,
+  if(
+    -- in case of parallel replicas, it is possible that there will be less subqueries then max, but should not exceed it
+    any(Settings['allow_experimental_parallel_reading_from_replicas']) = '1',
+    if(any(Settings['cluster_for_parallel_replicas']) = 'parallel_replicas',
+      -- the max is hosts in parallel_replicas (10) * 2 (one for the query itself and one for mergeTreeAnalyzeIndexes()) - 1 * 2 (for local replica we do not issue a separate query) + 1 (query itself)
+      max2(count(), 19)::UInt64,
+      -- the max is hosts in test_cluster_one_shard_two_replicas (2) * 2 (one for the query itself and one for mergeTreeAnalyzeIndexes()) - 1 * 2 (for local replica we do not issue a separate query) + 1 (query itself)
+      max2(count(), 3)::UInt64,
+    ),
+    -- in case of distributed index analyss, it is possible that there will be less subqueries then max, due to failures on remote
+    if(any(Settings['cluster_for_parallel_replicas']) = 'parallel_replicas',
+      max2(count(), 10)::UInt64,
+      max2(count(), 2)::UInt64
+    )
+  ) queries_with_subqueries,
+  anyIf(ProfileEvents['DistributedIndexAnalysisScheduledReplicas'] > 0, is_initial_query) distributed_index_analysis_replicas,
+  anyIf(ProfileEvents['ParallelReplicasUsedCount'] > 0, is_initial_query) read_with_parallel_replicas
+from system.query_log
+where
+  event_date >= yesterday()
+  and type = 'QueryFinish'
+  and query_kind = 'Select'
+  and Settings['distributed_index_analysis'] = '1'
+  -- SKIP: current_database = currentDatabase() (it will filter out non-initial queries)
+  and endsWith(log_comment, '-' || currentDatabase())
+group by initial_query_id
+order by min(event_time_microseconds)
+format Vertical;

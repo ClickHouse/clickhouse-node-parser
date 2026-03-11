@@ -1,0 +1,38 @@
+SELECT arrayFilter(x -> notEmpty(concat(x, 'hello')), [''])
+FROM
+    `system`.one
+ARRAY JOIN [0] AS elem, arrayMap(x -> concat(x, 'hello'), ['']) AS unused
+WHERE NOT ignore(elem);
+
+SELECT '---';
+
+SELECT arrayFilter(x -> x = 'hello', [''])
+FROM
+    `system`.one
+ARRAY JOIN [0] AS elem
+WHERE NOT ignore(elem)
+    AND arrayExists(x -> x = 'hello', ['']);
+
+SELECT
+    arrayJoin([0]),
+    replicate('hello', [1])
+WHERE NOT ignore(replicate('hello', [1]));
+
+SELECT
+    arrayJoin([0]),
+    replicate('hello', emptyArrayString())
+FROM
+    `system`.one
+ARRAY JOIN emptyArrayString() AS unused
+WHERE NOT ignore(replicate('hello', emptyArrayString()));
+
+SELECT
+    arrayJoin([0]),
+    replicate('hello', emptyArrayString())
+WHERE NOT ignore(replicate('hello', emptyArrayString()));
+
+SELECT replicate('hello', emptyArrayString())
+FROM
+    `system`.one
+ARRAY JOIN emptyArrayString() AS unused
+WHERE NOT ignore(replicate('hello', emptyArrayString()));

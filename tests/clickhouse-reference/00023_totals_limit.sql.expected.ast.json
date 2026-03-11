@@ -1,0 +1,160 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "goals_alias",
+            "ID"
+          ]
+        },
+        "alias": "ym:s:goalDimension"
+      },
+      {
+        "kind": "functionCall",
+        "name": "uniqIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "UserID"
+            ]
+          },
+          {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "UserID"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "_uniq_Goals"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "parenthesized": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "visits"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "Goals"
+            ]
+          },
+          "alias": "goals_alias"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayEnumerateUniq",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "Goals",
+                  "ID"
+                ]
+              }
+            ]
+          },
+          "alias": "_uniq_Goals"
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "CounterID"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "842440"
+      },
+      "parenthesized": true
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ym:s:goalDimension"
+          ]
+        }
+      ]
+    },
+    "withTotals": true,
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ym:s:goalDimension"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "1"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      },
+      "commaSyntax": true
+    },
+    "format": "JSONCompact"
+  }
+]

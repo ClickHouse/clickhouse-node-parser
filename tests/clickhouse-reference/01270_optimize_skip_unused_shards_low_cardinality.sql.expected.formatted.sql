@@ -1,0 +1,3 @@
+SELECT *
+FROM dist_01270
+WHERE key = 1;

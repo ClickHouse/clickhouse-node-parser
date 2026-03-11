@@ -1,0 +1,17 @@
+select arrayJoin(distinctJSONPathsAndTypes(json)) from test;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k1[]))) from test;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k2[]))) from test;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k9[]))) from test;
+select json.k1[], json.k1[].k1_1[], json.k1[].k1_1[].k1_1_1, json.k1[].k1_2[], json.k1[].k1_2[].k1_2_1, json.k2[], json.k2[].k2_1[], json.k2[].k2_1[].k2_1_1, json.k2[].k2_2[], json.k2[].k2_2[].k2_2_1, json.k9[], json.k9[].k9_1[], json.k9[].k9_1[].k9_1_1, json.k9[].k9_2[], json.k9[].k9_2[].k9_2_1 from test format JSONColumns;
+select arrayJoin(distinctJSONPathsAndTypes(json)) from test2;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k1[]))) from test2;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k2[]))) from test2;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k9[]))) from test2;
+select arrayJoin(distinctJSONPathsAndTypes(json)) from test3;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k1[]))) from test3;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k2[]))) from test3;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k9[]))) from test3;
+select arrayJoin(distinctJSONPathsAndTypes(json)) from test4;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k1[]))) from test4;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k2[]))) from test4;
+select arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.k9[]))) from test4;

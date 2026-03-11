@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM testx WHERE NOT a AND t < (SELECT tkey FROM dt);

@@ -1,0 +1,123 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val2"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "functionCall",
+            "name": "assumeNotNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "val1"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "val2"
+            ]
+          }
+        },
+        "alias": "x1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "val1"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "val2"
+            ]
+          }
+        },
+        "alias": "x2"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "data",
+      "final": true
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "functionCall",
+        "name": "assumeNotNull",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "val1"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "x1"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "x2"
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

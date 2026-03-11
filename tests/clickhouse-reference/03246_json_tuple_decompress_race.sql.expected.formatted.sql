@@ -1,0 +1,5 @@
+SELECT 1
+FROM
+    t1
+CROSS JOIN t0
+FORMAT Null;

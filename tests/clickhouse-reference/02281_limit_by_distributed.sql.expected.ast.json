@@ -1,0 +1,197 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "abs",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "v"
+                  ]
+                }
+              ]
+            },
+            "alias": "_v"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.{1,2}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "view",
+              "args": [
+                {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "materialize",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "foo"
+                            }
+                          ]
+                        },
+                        "alias": "k"
+                      },
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "literal",
+                          "type": "Int64",
+                          "value": "-1"
+                        },
+                        "alias": "v"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "_v"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ],
+        "limitBy": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "by": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dummy"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.{1,2}"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system",
+            "one"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "dummy"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        }
+      }
+    },
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dummy"
+          ]
+        }
+      ]
+    }
+  }
+]

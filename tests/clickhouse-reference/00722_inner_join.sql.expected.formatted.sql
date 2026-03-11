@@ -1,0 +1,230 @@
+SELECT
+    database,
+    t.name
+FROM
+    `system`.tables AS t
+INNER JOIN (
+        SELECT name AS database
+        FROM `system`.databases
+    ) AS db
+    USING (database)
+WHERE database = 'system'
+    AND t.name = 'one'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    database,
+    t.name
+FROM
+    (
+        SELECT name AS database
+        FROM `system`.databases
+    ) AS db
+INNER JOIN `system`.tables AS t
+    USING (database)
+WHERE database = 'system'
+    AND t.name = 'one'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    database,
+    t.name
+FROM
+    (
+        SELECT
+            name,
+            database
+        FROM `system`.tables
+    ) AS t
+INNER JOIN (
+        SELECT name AS database
+        FROM `system`.databases
+    ) AS db
+    USING (database)
+WHERE database = 'system'
+    AND t.name = 'one'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    x,
+    t.name
+FROM
+    (
+        SELECT
+            name,
+            database AS x
+        FROM `system`.tables
+    ) AS t
+INNER JOIN (
+        SELECT name AS x
+        FROM `system`.databases
+    ) AS db
+    USING (x)
+WHERE x = 'system'
+    AND t.name = 'one'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    database,
+    t.name
+FROM
+    (
+        SELECT
+            name,
+            database
+        FROM `system`.tables
+    ) AS t
+INNER JOIN (
+        SELECT name AS database
+        FROM `system`.databases
+    ) AS db
+    USING (database)
+WHERE database = 'system'
+    AND t.name = 'one'
+SETTINGS join_default_strictness = 'ALL'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    x,
+    t.name
+FROM
+    (
+        SELECT
+            name,
+            database AS x
+        FROM `system`.tables
+    ) AS t
+INNER JOIN (
+        SELECT name AS x
+        FROM `system`.databases
+    ) AS db
+    USING (x)
+WHERE x = 'system'
+    AND t.name = 'one'
+SETTINGS join_default_strictness = 'ALL'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    database,
+    t.name
+FROM
+    (
+        SELECT *
+        FROM `system`.tables
+    ) AS t
+INNER JOIN (
+        SELECT
+            name,
+            name AS database
+        FROM `system`.databases
+    ) AS db
+    USING (database)
+WHERE db.name = 'system'
+    AND t.name = 'one'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    db.x,
+    t.name
+FROM
+    (
+        SELECT
+            name,
+            database AS x
+        FROM `system`.tables
+    ) AS t
+INNER JOIN (
+        SELECT name AS x
+        FROM `system`.databases
+    ) AS db
+    USING (x)
+WHERE x = 'system'
+    AND t.name = 'one'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    db.name,
+    t.name
+FROM
+    (
+        SELECT
+            name,
+            database
+        FROM `system`.tables
+        WHERE name = 'one'
+    ) AS t
+INNER JOIN (
+        SELECT name
+        FROM `system`.databases
+        WHERE name = 'system'
+    ) AS db
+    ON t.database = db.name
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    db.name,
+    t.name
+FROM
+    `system`.tables AS t
+INNER JOIN (
+        SELECT *
+        FROM `system`.databases
+        WHERE name = 'system'
+    ) AS db
+    ON t.database = db.name
+WHERE t.name = 'one'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    t.database,
+    t.name
+FROM
+    `system`.tables AS t
+INNER JOIN (
+        SELECT
+            name,
+            name AS database
+        FROM `system`.databases
+    ) AS db
+    ON t.database = db.name
+WHERE t.database = 'system'
+    AND t.name = 'one'
+FORMAT PrettyCompactNoEscapes;
+
+SELECT
+    t.database,
+    t.name
+FROM
+    `system`.tables AS t
+LEFT JOIN (
+        SELECT
+            'system' AS base,
+            'one' AS name
+    ) AS db
+    USING (name)
+WHERE t.database = db.base
+FORMAT PrettyCompactNoEscapes;
+
+SELECT count(t.database)
+FROM
+    (
+        SELECT *
+        FROM `system`.tables
+        WHERE name = 'one'
+    ) AS t
+INNER JOIN `system`.databases AS db
+    ON t.database = db.name;
+
+SELECT count(db.name)
+FROM
+    `system`.tables AS t
+INNER JOIN `system`.databases AS db
+    ON t.database = db.name
+WHERE t.name = 'one';
+
+SELECT count()
+FROM
+    `system`.tables AS t
+INNER JOIN `system`.databases AS db
+    ON db.name = t.database
+WHERE t.name = 'one';

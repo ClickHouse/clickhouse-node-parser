@@ -1,0 +1,3 @@
+SELECT *
+FROM dist
+GROUP BY key;

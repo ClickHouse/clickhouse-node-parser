@@ -1,0 +1,1 @@
+SELECT like('r\\a1bbb', '%r\\\\a1%bbb%') AS res;

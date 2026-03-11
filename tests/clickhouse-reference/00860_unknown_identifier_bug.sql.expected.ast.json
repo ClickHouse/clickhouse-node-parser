@@ -1,0 +1,197 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_appointment_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_status"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_set_by_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_company_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_client_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_at"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_vacancy_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_set_at"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_job_requisition_id"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "appointment_events",
+        "alias": "A"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "_appointment_id"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "MAX",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "_set_at"
+                    ]
+                  }
+                ]
+              },
+              "alias": "max_set_at"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "appointment_events"
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "_status"
+              ]
+            },
+            "values": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Created"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Transferred"
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "_appointment_id"
+                ]
+              }
+            ]
+          }
+        },
+        "alias": "B"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "_appointment_id"
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "A",
+          "_set_at"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "B",
+          "max_set_at"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

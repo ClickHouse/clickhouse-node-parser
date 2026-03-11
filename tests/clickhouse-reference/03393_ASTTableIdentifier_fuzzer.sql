@@ -1,0 +1,1 @@
+SELECT * FROM {CLICKHOUSE_DATABASE:Identifier}.null;

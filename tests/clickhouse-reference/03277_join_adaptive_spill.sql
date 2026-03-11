@@ -1,0 +1,1 @@
+select * from (select t1.k as k, t1.x as x1, t2.x as x2, t3.x as x3 from adaptive_spill_03277_1 as t1 left join adaptive_spill_03277_2 as t2 on t1.k = t2.k left join adaptive_spill_03277_3 as t3 on t1.k = t3.k) order by k, x1, x2, x3 limit 100;

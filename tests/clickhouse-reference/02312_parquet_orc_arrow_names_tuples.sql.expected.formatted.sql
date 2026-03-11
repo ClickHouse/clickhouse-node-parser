@@ -1,0 +1,2 @@
+SELECT *
+FROM test_02312;

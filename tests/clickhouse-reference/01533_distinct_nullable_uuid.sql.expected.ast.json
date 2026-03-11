@@ -1,0 +1,112 @@
+[
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "meta_source_req_uuid"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bug_14144"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "meta_source_type"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "missing"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "meta_source_req_uuid"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "COUNT",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "distinct": {
+          "kind": "distinct"
+        },
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "meta_source_req_uuid"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "bug_14144"
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "meta_source_type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "missing"
+          }
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "meta_source_req_uuid"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ],
+        "limit": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        }
+      }
+    }
+  }
+]

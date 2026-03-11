@@ -1,0 +1,17 @@
+SELECT 1
+FROM
+    t0
+INNER JOIN t0
+    ON *;
+
+SELECT 1
+FROM
+    t0
+INNER JOIN t0
+    ON tuple(*);
+
+SELECT 1
+FROM
+    t0
+INNER JOIN t0
+    USING *;

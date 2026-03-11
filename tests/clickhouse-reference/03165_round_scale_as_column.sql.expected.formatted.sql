@@ -1,0 +1,508 @@
+SELECT
+    toUInt8(number) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt16(number) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt32(number) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt64(number) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt8(number - 10) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt16(number - 10) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt32(number - 10) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt64(number - 10) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat32(number - 10) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat64(number - 10) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat32(((number - 10)) / 10) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat64(((number - 10)) / 10) AS x,
+    round(x),
+    roundBankers(x),
+    floor(x),
+    ceil(x),
+    trunc(x)
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat32(((number - 10)) / 10) AS x,
+    round(x, materialize(1)),
+    roundBankers(x, materialize(1)),
+    floor(x, materialize(1)),
+    ceil(x, materialize(1)),
+    trunc(x, materialize(1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat64(((number - 10)) / 10) AS x,
+    round(x, materialize(1)),
+    roundBankers(x, materialize(1)),
+    floor(x, materialize(1)),
+    ceil(x, materialize(1)),
+    trunc(x, materialize(1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt8(number) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt16(number) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt32(number) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt64(number) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt8(number - 10) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt16(number - 10) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt32(number - 10) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt64(number - 10) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat32(number - 10) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat64(number - 10) AS x,
+    round(x, materialize(-1)),
+    roundBankers(x, materialize(-1)),
+    floor(x, materialize(-1)),
+    ceil(x, materialize(-1)),
+    trunc(x, materialize(-1))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt8(number) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt16(number) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt32(number) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toUInt64(number) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt8(number - 10) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt16(number - 10) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt32(number - 10) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toInt64(number - 10) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat32(number - 10) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT
+    toFloat64(number - 10) AS x,
+    round(x, materialize(-2)),
+    roundBankers(x, materialize(-2)),
+    floor(x, materialize(-2)),
+    ceil(x, materialize(-2)),
+    trunc(x, materialize(-2))
+FROM `system`.numbers
+LIMIT 20;
+
+SELECT toString('CHECKPOINT1');
+
+SELECT toString('id u8 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    u8 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id u16 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    u16 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id u32 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    u32 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id u64 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    u64 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id i8 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    i8 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id i16 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    i16 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id i32 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    i32 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id i64 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    i64 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id f32 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    f32 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('id f64 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
+
+SELECT
+    id,
+    f64 AS x,
+    scale,
+    round(x, scale),
+    roundBankers(x, scale),
+    floor(x, scale),
+    ceil(x, scale),
+    trunc(x, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT toString('CHECKPOINT2');
+
+SELECT
+    id,
+    round(d32, scale),
+    round(d64, scale),
+    round(d128, scale),
+    round(d256, scale)
+FROM tab
+ORDER BY id ASC;
+
+SELECT round(1, 1);
+
+SELECT round(materialize(1), materialize(1));
+
+SELECT round(pi(), number)
+FROM numbers(10);
+
+SELECT round(toDecimal32(42.42, 2), number)
+FROM numbers(3);
+
+SELECT round(materialize(1), 1);
+
+SELECT
+    materialize(10.1) AS x,
+    ceil(x, toUInt256(123));

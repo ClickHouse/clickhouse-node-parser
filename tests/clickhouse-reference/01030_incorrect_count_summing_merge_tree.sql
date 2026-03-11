@@ -1,0 +1,14 @@
+select '-- SummingMergeTree with Nullable column without duplicates.';
+select * from tst final order by timestamp;
+select count() from tst;
+select count() from tst final;
+select count() from tst where timestamp is not null;
+select count() from tst final where timestamp is not null;
+select count() from tst where val is not null;
+select count() from tst final where val is not null;
+select count() from tst final where timestamp>0;
+select count() from tst final prewhere timestamp > 0;
+select count() from tst final where timestamp > '2017-01-01 00:00:00';
+select count() from tst final prewhere timestamp > '2017-01-01 00:00:00';
+select count() from tst final where val>0;
+select count() from tst final prewhere val>0;

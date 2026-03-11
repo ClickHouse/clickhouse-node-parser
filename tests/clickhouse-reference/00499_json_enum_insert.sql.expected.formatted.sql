@@ -1,0 +1,3 @@
+SELECT *
+FROM json
+ORDER BY y ASC;

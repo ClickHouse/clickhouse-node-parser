@@ -1,0 +1,5 @@
+SELECT '-- Before DROP PARTITION --';
+
+SELECT *
+FROM mv_00610
+ORDER BY y ASC;

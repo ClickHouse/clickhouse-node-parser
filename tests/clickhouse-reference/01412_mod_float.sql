@@ -1,0 +1,2 @@
+SELECT 3.5 % 0;
+SELECT 3.5 MOD 0;

@@ -1,0 +1,30 @@
+SELECT * from test_enum_string_functions WHERE e LIKE '%abc%';
+SELECT * from test_enum_string_functions WHERE e NOT LIKE '%abc%';
+SELECT * from test_enum_string_functions WHERE e iLike '%a%';
+SELECT position(e, 'a') FROM test_enum_string_functions;
+SELECT match(e, 'a') FROM test_enum_string_functions;
+SELECT locate('a', e) FROM test_enum_string_functions;
+SELECT countSubstrings(e, 'a') FROM test_enum_string_functions;
+SELECT countSubstringsCaseInsensitive(e, 'a') FROM test_enum_string_functions;
+SELECT countSubstringsCaseInsensitiveUTF8(e, 'a') FROM test_enum_string_functions;
+SELECT hasToken(e, 'a') FROM test_enum_string_functions;
+SELECT hasTokenOrNull(e, 'a') FROM test_enum_string_functions;
+SELECT simpleJSONHas(json, 'foo') as res FROM jsons order by res;
+SELECT simpleJSONHas(json, 'a') as res FROM jsons order by res;
+SELECT simpleJSONExtractUInt(json, 'a') as res FROM jsons order by res;
+SELECT simpleJSONExtractUInt(json, 'not exsits') as res FROM jsons order by res;
+SELECT simpleJSONExtractInt(json, 'a') as res FROM jsons order by res;
+SELECT simpleJSONExtractInt(json, 'not exsits') as res FROM jsons order by res;
+SELECT simpleJSONExtractFloat(json, 'a') as res FROM jsons order by res;
+SELECT simpleJSONExtractFloat(json, 'not exsits') as res FROM jsons order by res;
+SELECT simpleJSONExtractBool(json, 'a') as res FROM jsons order by res;
+SELECT simpleJSONExtractBool(json, 'not exsits') as res FROM jsons order by res;
+SELECT positionUTF8(json, 'a') as res FROM jsons order by res;
+SELECT positionCaseInsensitiveUTF8(json, 'A') as res FROM jsons order by res;
+SELECT positionCaseInsensitive(json, 'A') as res FROM jsons order by res;
+SELECT materialize(CAST('a', 'Enum(\'a\' = 1)')) LIKE randomString(0) from numbers(10);
+SELECT CAST('a', 'Enum(\'a\' = 1)') LIKE randomString(0); -- {serverError ILLEGAL_COLUMN}
+SELECT materialize(CAST('a', 'Enum16(\'a\' = 1)')) LIKE randomString(0) from numbers(10);
+SELECT CAST('a', 'Enum16(\'a\' = 1)') LIKE randomString(0); -- {serverError ILLEGAL_COLUMN}
+SELECT CAST('a', 'Enum(\'a\' = 1)') LIKE 'a';
+SELECT materialize(CAST('a', 'Enum(\'a\' = 1)')) LIKE 'a' from numbers(10);

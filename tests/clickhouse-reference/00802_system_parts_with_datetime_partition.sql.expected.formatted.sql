@@ -1,0 +1,23 @@
+SELECT
+    `partition`,
+    toTimeZone(MIN(min_time), 'UTC') AS min_time,
+    toTimeZone(MAX(max_time), 'UTC') AS max_time
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'datetime_table'
+    AND active = 1
+GROUP BY `partition`
+ORDER BY `partition` ASC
+FORMAT CSV;
+
+SELECT
+    `partition`,
+    toUnixTimestamp(MIN(min_time)) AS min_unix_time,
+    toUnixTimestamp(MAX(max_time)) AS max_unix_time
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'datetime_table'
+    AND active = 1
+GROUP BY `partition`
+ORDER BY `partition` ASC
+FORMAT CSV;

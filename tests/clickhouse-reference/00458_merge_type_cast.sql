@@ -1,0 +1,13 @@
+SELECT x FROM merge_32_64 WHERE x = 1;
+SELECT x FROM merge_32_64 WHERE x IN (1);
+SELECT x FROM merge_32_64 WHERE x IN (4294967290);
+SELECT x FROM merge_32_64 WHERE x IN (4294967299);
+SELECT x FROM merge_s64_u64 WHERE x IN (1);
+SELECT x FROM merge_s64_u64 WHERE x IN (-1);
+SELECT * FROM merge_one_two WHERE x IN (1);
+SELECT x FROM merge_one_two WHERE x IN (2147483650);
+SELECT x FROM merge_one_two WHERE x IN (-1);
+SELECT * FROM merge_one_two WHERE x IN ('1');
+SELECT x, y FROM merge_one_two WHERE arrayExists(_ -> _ IN (1), x);
+SELECT x, y FROM merge_one_two WHERE arrayExists(_ -> _ IN (4294967290), x);
+SELECT x, y FROM merge_one_two WHERE arrayExists(_ -> _ IN (4294967299), x);

@@ -1,0 +1,2 @@
+SELECT ID FROM readonly00542 ORDER BY ID;
+SELECT '---';

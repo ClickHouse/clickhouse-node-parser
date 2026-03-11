@@ -1,0 +1,96 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "user_level"
+          ]
+        },
+        "alias": "level_alias"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "uniq",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ]
+        },
+        "alias": "name_alias"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "grouping",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "level_alias"
+              ]
+            }
+          ]
+        },
+        "alias": "_totals"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "users"
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "groupingSets",
+      "sets": [
+        [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "level_alias"
+            ]
+          }
+        ]
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name_alias"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ]
+  }
+]

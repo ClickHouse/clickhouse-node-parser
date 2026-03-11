@@ -1,0 +1,14 @@
+select table from system.dropped_tables where table = '02681_undrop_mergetree' limit 1;
+select * from 02681_undrop_mergetree order by id;
+select command from system.mutations where table='02681_undrop_detach' and database=currentDatabase() limit 1;
+select table from system.dropped_tables where table = '02681_undrop_uuid_on_cluster' limit 1;
+select * from 02681_undrop_uuid_on_cluster order by id;
+select table from system.dropped_tables where table = '02681_undrop_no_uuid_on_cluster' limit 1;
+select * from 02681_undrop_no_uuid_on_cluster order by id;
+select table from system.dropped_tables where table = '02681_undrop_replicatedmergetree' limit 1;
+select * from 02681_undrop_replicatedmergetree order by id;
+select table from system.dropped_tables where table = '02681_undrop_log' limit 1;
+select * from 02681_undrop_log order by id;
+select table from system.dropped_tables where table = '02681_undrop_distributed' limit 1;
+select table from system.dropped_tables where table = '02681_undrop_multiple' limit 1;
+select * from 02681_undrop_multiple order by id;

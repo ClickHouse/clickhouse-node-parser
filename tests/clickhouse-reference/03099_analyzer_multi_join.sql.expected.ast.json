@@ -1,0 +1,193 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tb1",
+            "owner_id"
+          ]
+        },
+        "alias": "owner_id"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "alias": "owner_id"
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              ]
+            }
+          },
+          "alias": "tb1"
+        },
+        "kind": "join",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "tableFunction",
+          "name": "values",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "type varchar"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "type1"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "type2"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "type3"
+            }
+          ],
+          "alias": "pt"
+        }
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "tb2",
+                  "owner_id"
+                ]
+              },
+              "alias": "owner_id"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "alias": "owner_id"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "100"
+                  }
+                ]
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "owner_id"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "tb2"
+          }
+        },
+        "alias": "merged"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "owner_id"
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "tb1",
+          "owner_id"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "merged",
+          "owner_id"
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "tb1",
+            "owner_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "type"
+          ]
+        }
+      ]
+    },
+    "format": "Null"
+  }
+]

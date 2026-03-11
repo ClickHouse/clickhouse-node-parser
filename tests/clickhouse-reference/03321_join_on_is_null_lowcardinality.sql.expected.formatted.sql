@@ -1,0 +1,16 @@
+SELECT *
+FROM
+    test
+FULL JOIN test2
+    ON isNull(test.value)
+    AND isNull(test2.value)
+    OR test.value == test2.value
+SETTINGS join_use_nulls = 1;
+
+SELECT *
+FROM
+    test
+FULL JOIN test2
+    ON test.value == test2.value
+ORDER BY `ALL` ASC
+SETTINGS join_use_nulls = 1;

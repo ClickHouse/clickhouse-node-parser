@@ -1,0 +1,234 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "splitByChar",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "*"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "data_path"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpOne",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "data_path"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "^.*/([^/]*)/"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\\\\1"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "extract",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "last_exception"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "AUTHENTICATION_FAILED"
+          }
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "functionCall",
+          "name": "dateDiff",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "s"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "last_exception_time"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "now",
+              "args": []
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3600"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "distribution_queue"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "dist_01555"
+          }
+        }
+      ]
+    },
+    "format": "CSV"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "splitByChar",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "*"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "data_path"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpOne",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "data_path"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "^.*/([^/]*)/"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\\\\1"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "distribution_queue"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "dist_01555"
+          }
+        }
+      ]
+    },
+    "format": "CSV"
+  }
+]

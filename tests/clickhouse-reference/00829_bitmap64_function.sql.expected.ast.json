@@ -1,0 +1,1089 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pickup_date"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "groupBitmapMerge",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "uv"
+              ]
+            }
+          ]
+        },
+        "alias": "users"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bitmap_state_test"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pickup_date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pickup_date"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "groupBitmap",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "uid"
+              ]
+            }
+          ]
+        },
+        "alias": "user_num"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bitmap_test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pickup_date"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "groupBitmap",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "uid"
+              ]
+            }
+          ]
+        },
+        "alias": "user_num"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapToArray",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "groupBitmapState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "uid"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "users"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bitmap_test"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pickup_date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pickup_date"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapCardinality",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_today"
+              ]
+            }
+          ]
+        },
+        "alias": "today_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapCardinality",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_before"
+              ]
+            }
+          ]
+        },
+        "alias": "before_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapOrCardinality",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_today"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_before"
+              ]
+            }
+          ]
+        },
+        "alias": "all_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapAndCardinality",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_today"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_before"
+              ]
+            }
+          ]
+        },
+        "alias": "old_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapAndnotCardinality",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_today"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_before"
+              ]
+            }
+          ]
+        },
+        "alias": "new_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapXorCardinality",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_today"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_before"
+              ]
+            }
+          ]
+        },
+        "alias": "diff_users"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "city_id"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uid"
+                    ]
+                  }
+                ]
+              },
+              "alias": "day_today"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "bitmap_test"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "pickup_date"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "2019-01-02"
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "city_id"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "city_id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        },
+        "alias": "js1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "city_id"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uid"
+                    ]
+                  }
+                ]
+              },
+              "alias": "day_before"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "bitmap_test"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "pickup_date"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "2019-01-01"
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "city_id"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "city_id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "city_id"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapCardinality",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_today"
+              ]
+            }
+          ]
+        },
+        "alias": "today_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapCardinality",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "day_before"
+              ]
+            }
+          ]
+        },
+        "alias": "before_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapCardinality",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "bitmapOr",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "day_today"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "day_before"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "ll_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapCardinality",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "bitmapAnd",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "day_today"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "day_before"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "old_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapCardinality",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "bitmapAndnot",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "day_today"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "day_before"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "new_users"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bitmapCardinality",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "bitmapXor",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "day_today"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "day_before"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "diff_users"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "city_id"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uid"
+                    ]
+                  }
+                ]
+              },
+              "alias": "day_today"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "bitmap_test"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "pickup_date"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "2019-01-02"
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "city_id"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "city_id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        },
+        "alias": "js1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "city_id"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uid"
+                    ]
+                  }
+                ]
+              },
+              "alias": "day_before"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "bitmap_test"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "pickup_date"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "2019-01-01"
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "city_id"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "city_id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "city_id"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bitmap_test"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "bitmapHasAny",
+      "args": [
+        {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uid"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "bitmap_test"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "pickup_date"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-01-01"
+              }
+            }
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "bitmapBuild",
+          "args": [
+            {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "uid"
+                  ]
+                }
+              ],
+              "source": "[uid]"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bitmap_test"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "bitmapHasAny",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "bitmapBuild",
+          "args": [
+            {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "uid"
+                  ]
+                }
+              ],
+              "source": "[uid]"
+            }
+          ]
+        },
+        {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uid"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "bitmap_test"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "pickup_date"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-01-01"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bitmap_test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "bitmapHasAny",
+        "args": [
+          {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "groupBitmapState",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "uid"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "bitmap_test"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "pickup_date"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2019-01-01"
+                }
+              }
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "bitmapBuild",
+            "args": [
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uid"
+                    ]
+                  }
+                ],
+                "source": "[uid]"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "bitmapToArray",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "bitmapAnd",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uid"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "bitmapBuild",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "CAST",
+                    "args": [
+                      {
+                        "kind": "array",
+                        "elements": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "4294967296"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "4294967297"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "4294967298"
+                          }
+                        ],
+                        "source": "[4294967296, 4294967297, 4294967298]"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "Array(UInt64)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bitmap_test"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "city_id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "city_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

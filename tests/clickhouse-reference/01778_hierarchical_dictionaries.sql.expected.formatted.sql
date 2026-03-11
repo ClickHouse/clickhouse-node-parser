@@ -1,0 +1,55 @@
+SELECT dictGetHierarchy('01778_db.hierarchy_flat_dictionary', number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictIsIn('01778_db.hierarchy_flat_dictionary', number, number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetChildren('01778_db.hierarchy_flat_dictionary', number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetDescendants('01778_db.hierarchy_flat_dictionary', number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetDescendants('01778_db.hierarchy_flat_dictionary', number, 1)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetHierarchy('01778_db.hierarchy_hashed_dictionary', number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictIsIn('01778_db.hierarchy_hashed_dictionary', number, number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetChildren('01778_db.hierarchy_hashed_dictionary', number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetDescendants('01778_db.hierarchy_hashed_dictionary', number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetDescendants('01778_db.hierarchy_hashed_dictionary', number, 1)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetHierarchy('01778_db.hierarchy_cache_dictionary', number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictIsIn('01778_db.hierarchy_cache_dictionary', number, number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictGetHierarchy('01778_db.hierarchy_direct_dictionary', number)
+FROM `system`.numbers
+LIMIT 6;
+
+SELECT dictIsIn('01778_db.hierarchy_direct_dictionary', number, number)
+FROM `system`.numbers
+LIMIT 6;

@@ -1,0 +1,2 @@
+SELECT countMerge(*)
+FROM b;

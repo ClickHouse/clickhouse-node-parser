@@ -1,0 +1,5 @@
+SELECT *
+FROM cast1;
+
+SELECT *
+FROM cast2;

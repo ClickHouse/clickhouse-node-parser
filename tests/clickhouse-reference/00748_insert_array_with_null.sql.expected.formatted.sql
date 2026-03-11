@@ -1,0 +1,2 @@
+SELECT strings
+FROM arraytest;

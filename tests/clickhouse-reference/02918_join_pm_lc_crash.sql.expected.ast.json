@@ -1,0 +1,90 @@
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "dummy"
+                ]
+              },
+              "alias": "val"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "one"
+          }
+        }
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toNullable",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "dummy"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "val"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "one"
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "val"
+                ]
+              }
+            ]
+          },
+          "withTotals": true
+        }
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "val"
+        ]
+      }
+    }
+  }
+]

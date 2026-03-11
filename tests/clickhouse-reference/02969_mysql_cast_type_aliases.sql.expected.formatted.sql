@@ -1,0 +1,66 @@
+SELECT '-- Uppercase tests';
+
+SELECT
+    'Binary(N)' AS mysql_type,
+    CAST('foo' AS BINARY(3)) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Char' AS mysql_type,
+    CAST(44 AS CHAR) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Date' AS mysql_type,
+    CAST('2021-02-03' AS DATE) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'DateTime' AS mysql_type,
+    CAST('2021-02-03 12:01:02' AS DATETIME) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Decimal' AS mysql_type,
+    CAST(45.1 AS DECIMAL) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Decimal(M)' AS mysql_type,
+    CAST(46.2 AS DECIMAL(4)) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Decimal(M, D)' AS mysql_type,
+    CAST(47.21 AS DECIMAL(4, 2)) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Double' AS mysql_type,
+    CAST(48.11 AS DOUBLE) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'JSON' AS mysql_type,
+    CAST('{"foo":"bar"}' AS JSON) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Real' AS mysql_type,
+    CAST(49.22 AS REAL) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Signed' AS mysql_type,
+    CAST(50 AS SIGNED) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Unsigned' AS mysql_type,
+    CAST(52 AS UNSIGNED) AS result,
+    toTypeName(result) AS native_type;
+
+SELECT
+    'Year' AS mysql_type,
+    CAST(2007 AS YEAR) AS result,
+    toTypeName(result) AS native_type;

@@ -1,0 +1,11 @@
+SELECT
+    'Q1',
+    *
+FROM mt
+WHERE d = '2106-02-07';
+
+SELECT
+    'Q2',
+    *
+FROM mt
+WHERE d = '1970-01-01';
