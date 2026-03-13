@@ -1407,6 +1407,11 @@ export interface ASTNodeKindMap {
  */
 export type ASTNodeKind = keyof ASTNodeKindMap;
 
+/**
+ * Union of all AST node types. Every member has a `kind` discriminator field.
+ */
+export type ASTNode = ASTNodeKindMap[ASTNodeKind];
+
 // ── Zod schemas for statement types ──────────────────────────────────────────
 
 const CommentFieldsSchema = {
