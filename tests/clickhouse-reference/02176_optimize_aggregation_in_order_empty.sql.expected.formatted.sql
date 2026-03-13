@@ -1,3 +1,8 @@
+-- regression for optimize_aggregation_in_order with empty result set
+-- that cause at first
+--   "Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform"
+-- at first and after
+--   "Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform"
 SELECT count()
 FROM remote('127.{1,2}', currentDatabase(), data_02176)
 WHERE key = 0

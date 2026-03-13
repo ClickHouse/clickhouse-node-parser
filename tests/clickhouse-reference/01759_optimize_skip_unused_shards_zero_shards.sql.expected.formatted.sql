@@ -1,3 +1,5 @@
+-- Tags: shard
+-- { echo }
 SELECT *
 FROM remote('127.{1,2}', `system`, one, dummy)
 WHERE 0

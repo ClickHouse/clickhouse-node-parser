@@ -1,3 +1,4 @@
+-- implicit toDateTime (always saturate)
 SELECT count()
 FROM test
 WHERE stamp >= parseDateTimeBestEffort('2024-11-01');
@@ -15,8 +16,9 @@ SETTINGS date_time_overflow_behavior = 'ignore';
 SELECT count()
 FROM test
 WHERE toDateTime(stamp) >= parseDateTimeBestEffort('2024-11-01')
-SETTINGS date_time_overflow_behavior = 'throw';
+SETTINGS date_time_overflow_behavior = 'throw'; -- { serverError VALUE_IS_OUT_OF_RANGE_OF_DATA_TYPE }
 
+-- Boundary at UNIX epoch
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime(0)
@@ -26,6 +28,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime(0);
 
+-- Arbitrary DateTime
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime('2024-10-24 21:30:00')
@@ -35,6 +38,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime('2024-10-24 21:30:00');
 
+-- Extreme value beyond supported range
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime(4294967295)
@@ -44,6 +48,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime(4294967295);
 
+-- Negative timestamp
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime(-1)
@@ -53,6 +58,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime(-1);
 
+-- Pre-Gregorian date
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime('1000-01-01 00:00:00')
@@ -62,6 +68,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime('1000-01-01 00:00:00');
 
+-- UNIX epoch
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime('1970-01-01 00:00:00')
@@ -71,6 +78,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime('1970-01-01 00:00:00');
 
+-- Modern date within supported range
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime('2023-01-01 00:00:00')
@@ -80,6 +88,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime('2023-01-01 00:00:00');
 
+-- Far future but still valid
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime('2100-12-31 23:59:59')
@@ -89,6 +98,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime('2100-12-31 23:59:59');
 
+-- Maximum 32-bit timestamp
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime(2147483647)
@@ -98,6 +108,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime(2147483647);
 
+-- Minimum Date boundary
 SELECT count()
 FROM test
 WHERE stamp >= toDate('0000-01-01')
@@ -107,6 +118,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDate('0000-01-01');
 
+-- Maximum Date boundary
 SELECT count()
 FROM test
 WHERE stamp >= toDate('9999-12-31')
@@ -116,6 +128,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDate('9999-12-31');
 
+-- Convert stamp to Date
 SELECT count()
 FROM test
 WHERE toDate(stamp) >= toDateTime(0)
@@ -125,15 +138,17 @@ SELECT count()
 FROM test
 WHERE toDate(identity(stamp)) >= toDateTime(0);
 
+-- Convert stamp to DateTime (This will overflow and should not use primary key)
 SELECT count()
 FROM test
 WHERE toDateTime(stamp) >= toDateTime(0)
-SETTINGS force_primary_key = 1;
+SETTINGS force_primary_key = 1; -- { serverError INDEX_NOT_USED }
 
 SELECT count()
 FROM test
 WHERE toDateTime(identity(stamp)) >= toDateTime(0);
 
+-- Exact Date match
 SELECT count()
 FROM test
 WHERE stamp = toDate('2023-01-01')
@@ -143,6 +158,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) = toDate('2023-01-01');
 
+-- Exact DateTime match
 SELECT count()
 FROM test
 WHERE stamp = toDateTime('2023-01-01 00:00:00')
@@ -152,6 +168,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) = toDateTime('2023-01-01 00:00:00');
 
+-- Invalid DateTime (negative)
 SELECT count()
 FROM test
 WHERE stamp < toDateTime(-1)
@@ -161,6 +178,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) < toDateTime(-1);
 
+-- Extremely large DateTime
 SELECT count()
 FROM test
 WHERE stamp > toDateTime(9999999999)
@@ -170,6 +188,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) > toDateTime(9999999999);
 
+-- NULL DateTime
 SELECT count()
 FROM test
 WHERE stamp >= toDateTime(NULL)
@@ -179,6 +198,7 @@ SELECT count()
 FROM test
 WHERE identity(stamp) >= toDateTime(NULL);
 
+-- NULL Date
 SELECT count()
 FROM test
 WHERE stamp <= toDate(NULL)

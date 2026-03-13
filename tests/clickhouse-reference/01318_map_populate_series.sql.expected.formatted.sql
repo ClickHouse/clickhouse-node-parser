@@ -74,16 +74,17 @@ SELECT
     mapPopulateSeries([toInt64(-10), 2], [toInt64(1), 1], toInt64(-5)) AS res,
     toTypeName(res);
 
+-- empty
 SELECT mapPopulateSeries(cast([], 'Array(UInt8)'), cast([], 'Array(UInt8)'), 5);
 
 SELECT
     mapPopulateSeries(['1', '2'], [1, 1]) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     mapPopulateSeries([1, 2, 3], [1, 1]) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     mapPopulateSeries([1, 2], [1, 1, 1]) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError BAD_ARGUMENTS }

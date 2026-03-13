@@ -1,3 +1,4 @@
+-- make sure the system.query_log table is created
 SELECT 1;
 
 SELECT
@@ -15,4 +16,4 @@ WHERE current_database = currentDatabase()
     OR (positionCaseInsensitive(query, 'all') = 1)))
 GROUP BY query
 ORDER BY usage DESC
-LIMIT 5;
+LIMIT 5; -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

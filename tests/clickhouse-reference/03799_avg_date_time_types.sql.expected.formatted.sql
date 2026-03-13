@@ -190,14 +190,14 @@ FROM (
         SELECT toTime('00:00:00') AS t
         UNION ALL
         SELECT toTime('00:00:01') AS t
-    );
+    ); -- 0.5 -> 0
 
 SELECT avg(t)
 FROM (
         SELECT toTime('00:00:01') AS t
         UNION ALL
         SELECT toTime('00:00:02') AS t
-    );
+    ); -- 1.5 -> 2
 
 SELECT avg(dt64)
 FROM (

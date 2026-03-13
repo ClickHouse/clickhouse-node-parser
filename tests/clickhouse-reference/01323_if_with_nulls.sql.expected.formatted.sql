@@ -134,6 +134,7 @@ SELECT
     IF(test = 0, 1, 0)
 FROM test_nullable_float_issue7347;
 
+-- test case from https://github.com/ClickHouse/ClickHouse/issues/10846
 SELECT if(isFinite(toUInt64OrZero(toNullable('123'))), 1, 0);
 
 SELECT if(materialize(isFinite(toUInt64OrZero(toNullable('123')))), 1, 0);

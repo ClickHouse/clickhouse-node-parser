@@ -1,6 +1,6 @@
 SELECT *
 FROM dist_01528
-WHERE dummy = 2;
+WHERE dummy = 2; -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }
 
 SELECT *
 FROM dist_01528

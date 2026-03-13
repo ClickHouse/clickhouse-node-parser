@@ -1,3 +1,4 @@
+-- trivial
 SELECT categoricalInformationValue(x.1, x.2)
 FROM (
         SELECT arrayJoin(arrayPopBack([(1, 0)])) AS x
@@ -13,7 +14,8 @@ FROM (
         SELECT arrayJoin([(1, 0)]) AS x
     );
 
-SELECT arrayMap(x -> if(x = 0, 0, x), categoricalInformationValue(x.1, x.2))
+-- single category
+SELECT arrayMap(x -> if(x = 0, 0, x), categoricalInformationValue(x.1, x.2)) -- remove negative zeros
 FROM (
         SELECT arrayJoin([(1, 0), (1, 0), (1, 0), (1, 1), (1, 1)]) AS x
     );
@@ -50,6 +52,7 @@ FROM (
         SELECT arrayJoin([(0, 0), (1, 0), (1, 0), (1, 1), (1, 1)]) AS x
     );
 
+-- multiple category
 SELECT categoricalInformationValue(x.1, x.2, x.3)
 FROM (
         SELECT arrayJoin([(1, 0, 0), (1, 0, 0), (1, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 1)]) AS x
@@ -64,6 +67,7 @@ FROM (
         SELECT arrayJoin([(1, 0, 0), (1, 0, 0), (1, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 1), (0, 1, 1)]) AS x
     );
 
+-- multiple category, larger data size
 SELECT categoricalInformationValue(x.1, x.2, x.3)
 FROM (
         SELECT arrayJoin([(1, 0, 0), (1, 0, 0), (1, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 1)]) AS x

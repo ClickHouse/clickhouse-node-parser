@@ -14,7 +14,7 @@ INNER JOIN test_table_join_2 AS t2
     USING (id, id, id)
 ORDER BY
     id ASC,
-    t1.value ASC;
+    t1.value ASC; -- { serverError BAD_ARGUMENTS }
 
 SELECT '--';
 

@@ -1,3 +1,5 @@
+-- We need to make sure that query plan creates the JOIN filter only with the optimization enabled, and WHERE filter in both cases
+---------- CASE A ----------
 SELECT '--- CASE A: plan (enabled) ---';
 
 SELECT REGEXP_REPLACE(trimLeft(`explain`), '__set_Int32_\\d+_\\d+', '__set_Int32_UNIQ_ID')

@@ -38,7 +38,7 @@ SELECT like('\\', '%\\\\');
 
 SELECT like('\\', '\\\\');
 
-SELECT like('\\', '\\');
+SELECT like('\\', '\\'); -- { serverError CANNOT_PARSE_ESCAPE_SEQUENCE }
 
 SELECT like('\\xyz\\', '\\\\%\\\\');
 

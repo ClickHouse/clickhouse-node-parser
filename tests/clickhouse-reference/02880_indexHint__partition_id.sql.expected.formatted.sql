@@ -2,6 +2,7 @@ SELECT *
 FROM data
 PREWHERE indexHint(_partition_id = '1');
 
+-- TODO: optimize_use_implicit_projections ignores indexHint (with analyzer) because source columns might be aliased.
 SELECT count()
 FROM data
 PREWHERE indexHint(_partition_id = '1')

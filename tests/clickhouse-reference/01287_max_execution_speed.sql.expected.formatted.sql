@@ -1,5 +1,5 @@
 SELECT count()
-FROM `system`.numbers;
+FROM `system`.numbers; -- { serverError TOO_SLOW }
 
 SELECT count()
 FROM numbers(2000000);

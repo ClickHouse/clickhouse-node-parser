@@ -1,3 +1,4 @@
+-- { echo }
 SELECT extractTextFromHTML('');
 
 SELECT extractTextFromHTML(' ');

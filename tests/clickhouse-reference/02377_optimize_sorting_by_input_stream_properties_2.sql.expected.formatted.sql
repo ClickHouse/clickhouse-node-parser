@@ -1,3 +1,4 @@
+-- Nothing is working here :(
 SELECT sum(y) AS s
 FROM remote('127.0.0.{1,2}', currentDatabase(), tab)
 GROUP BY x

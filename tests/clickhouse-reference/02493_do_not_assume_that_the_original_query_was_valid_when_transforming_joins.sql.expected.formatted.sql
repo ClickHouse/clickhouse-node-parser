@@ -15,4 +15,4 @@ LEFT JOIN (
         SELECT *
         FROM table3
     ) AS c
-    ON c.column3 = b.column3;
+    ON c.column3 = b.column3; -- {serverError UNKNOWN_IDENTIFIER}

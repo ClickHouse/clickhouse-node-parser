@@ -2,4 +2,4 @@ SELECT getMaxTableNameLengthForDatabase('default');
 
 SELECT getMaxTableNameLengthForDatabase('default21');
 
-SELECT getMaxTableNameLengthForDatabase('');
+SELECT getMaxTableNameLengthForDatabase(''); -- { serverError INCORRECT_DATA }

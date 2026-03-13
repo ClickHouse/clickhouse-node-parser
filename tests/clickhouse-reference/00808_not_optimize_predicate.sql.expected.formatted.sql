@@ -31,7 +31,7 @@ FROM (
         FROM test_00808
         LIMIT 1
     )
-WHERE id = 1;
+WHERE id = 1; -- { serverError INDEX_NOT_USED }
 
 SELECT
     n,

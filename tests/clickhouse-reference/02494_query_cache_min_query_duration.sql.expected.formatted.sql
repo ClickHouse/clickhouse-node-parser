@@ -1,3 +1,4 @@
+-- This creates an entry in the query cache ...
 SELECT 1
 SETTINGS use_query_cache = true;
 
@@ -6,6 +7,7 @@ FROM `system`.query_cache;
 
 SELECT '---';
 
+-- ... but this does not because the query executes much faster than the specified minumum query duration for caching the result
 SELECT 1
 SETTINGS
     use_query_cache = true,

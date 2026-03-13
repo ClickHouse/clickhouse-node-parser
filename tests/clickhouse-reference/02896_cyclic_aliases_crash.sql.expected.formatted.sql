@@ -4,7 +4,7 @@ SELECT
     val + prev AS val
 FROM (
         SELECT 1 AS val
-    );
+    ); -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER, TOO_DEEP_RECURSION }
 
 SELECT
     val,

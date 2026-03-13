@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT ISNULL(NULL);
 
 SELECT '---';

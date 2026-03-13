@@ -4,6 +4,7 @@ FROM (
         FROM table1
     );
 
+-- check that parallel_replicas_for_non_replicated_merge_tree(off by default) is respected in subquery
 SELECT count()
 FROM (
         SELECT *

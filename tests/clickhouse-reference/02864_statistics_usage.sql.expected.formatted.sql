@@ -6,7 +6,7 @@ FROM (
         WHERE b < 10
             AND a < 10
     )
-WHERE like(`explain`, '%Prewhere%');
+WHERE like(`explain`, '%Prewhere%'); -- checks a first, then b (statistics used)
 
 SELECT
     name,
@@ -24,4 +24,4 @@ FROM (
         WHERE c < 10
             AND a < 10
     )
-WHERE like(`explain`, '%Prewhere%');
+WHERE like(`explain`, '%Prewhere%'); -- checks a first, then c (statistics used)

@@ -2,4 +2,4 @@ SELECT count(*)
 FROM users
 WINDOW
     w AS (ORDER BY uid),
-    w AS (ORDER BY name);
+    w AS (ORDER BY name); -- { serverError BAD_ARGUMENTS }

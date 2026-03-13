@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     GoalsReached AS k,
     count() AS c

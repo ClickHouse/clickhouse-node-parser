@@ -247,7 +247,7 @@ ORDER BY color_id ASC;
 SELECT
     *,
     dictGetUInt16('dict', 'c0', t1.c0) = true
-FROM dict AS t1;
+FROM dict AS t1; -- { serverError BAD_ARGUMENTS }
 
 SELECT equals(materialize(9), CAST('red' AS Nullable(String)) = dictGetString('colors', 'payload', color_id))
 FROM t__fuzz_0;

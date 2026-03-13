@@ -19,7 +19,8 @@ SELECT a
 FROM (
         WITH a + 1 AS aa,
 
-        sum(if(b > 0, c, 0)) AS aaif2
+        -- , sumIf(c, b > 0) as aaif
+          sum(if(b > 0, c, 0)) AS aaif2
 
         SELECT
             a,
@@ -38,6 +39,8 @@ FROM (
         WITH a + 1 AS aa
 
         SELECT
+            -- , sumIf(c, b > 0) as aaif
+            -- , sum(if(b>0,c,0))  as aaif2
             a,
             sumIf(c, b > 0) AS aaif3
         FROM (

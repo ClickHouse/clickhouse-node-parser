@@ -14,6 +14,7 @@ FROM
 LEFT JOIN joinbug_join
     USING (id2);
 
+-- type conversion
 SELECT *
 FROM
     (
@@ -22,10 +23,11 @@ FROM
 LEFT JOIN joinbug_join
     USING (id2);
 
+-- can't convert right side in case on storage join
 SELECT *
 FROM
     (
         SELECT toInt64(11) AS id2
     ) AS js1
 LEFT JOIN joinbug_join
-    USING (id2);
+    USING (id2); -- { serverError TYPE_MISMATCH, 386 }

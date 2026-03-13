@@ -1,3 +1,4 @@
+-- Check cache size
 SELECT
     metric,
     value
@@ -5,6 +6,7 @@ FROM `system`.metrics
 WHERE metric IN ('PrimaryIndexCacheFiles', 'PrimaryIndexCacheBytes')
 ORDER BY metric ASC;
 
+-- Trigger index reload
 SELECT max(length(concat(a, b)))
 FROM t_primary_index_cache
 WHERE a > '1'

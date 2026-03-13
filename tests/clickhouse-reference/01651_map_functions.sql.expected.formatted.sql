@@ -11,7 +11,7 @@ SELECT mapContains(a, b)
 FROM table_map;
 
 SELECT mapContains(a, 10)
-FROM table_map;
+FROM table_map; -- { serverError NO_COMMON_TYPE }
 
 SELECT mapKeys(a)
 FROM table_map;
@@ -26,10 +26,10 @@ SELECT
 FROM table_map;
 
 SELECT mapContains(a, 'aaa')
-FROM table_map;
+FROM table_map; -- { serverError NO_COMMON_TYPE }
 
 SELECT mapContains(b, 'aaa')
-FROM table_map;
+FROM table_map; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT mapValues(a)
 FROM table_map;
@@ -37,6 +37,7 @@ FROM table_map;
 SELECT mapFromArrays(d, e)
 FROM table_map;
 
+-- Map(String, UInt8)
 SELECT
     map('aa', 4, 'bb', 5) AS m,
     mapKeys(m),
@@ -47,6 +48,7 @@ SELECT
     mapContains(m, 'aa'),
     mapContains(m, 'k');
 
+-- Map(Float32, UInt8)
 SELECT
     map(0.1::Float32, 4, 0.2::Float32, 5) AS m,
     mapKeys(m),
@@ -69,6 +71,7 @@ SELECT
     mapContains(m, 1::LowCardinality(UInt8)),
     mapContains(m, 3::LowCardinality(UInt8));
 
+-- Map(Array(UInt8), UInt8)
 SELECT
     map(array(1, 2), 4, array(3, 4), 5) AS m,
     mapKeys(m),
@@ -79,6 +82,7 @@ SELECT
     mapContains(m, array(1, 2)),
     mapContains(m, array(1, 3));
 
+-- Map(Map(UInt8, UInt8), UInt8)
 SELECT
     map(map(1, 2), 4, map(3, 4), 5) AS m,
     mapKeys(m),
@@ -89,6 +93,7 @@ SELECT
     mapContains(m, map(1, 2)),
     mapContains(m, map(1, 3));
 
+-- Map(Tuple(UInt8, UInt8), UInt8)
 SELECT
     map(tuple(1, 2), 4, tuple(3, 4), 5) AS m,
     mapKeys(m),
@@ -120,23 +125,23 @@ FROM numbers(2);
 SELECT mapFromArrays(materialize(['aa', 'bb']), materialize([4, 5]))
 FROM numbers(2);
 
-SELECT mapFromArrays('aa', [4, 5]);
+SELECT mapFromArrays('aa', [4, 5]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFromArrays(['aa', 'bb'], 5);
+SELECT mapFromArrays(['aa', 'bb'], 5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFromArrays(['aa', 'bb'], [4, 5], [6, 7]);
+SELECT mapFromArrays(['aa', 'bb'], [4, 5], [6, 7]); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT mapFromArrays(['aa', 'bb'], [4, 5, 6]);
+SELECT mapFromArrays(['aa', 'bb'], [4, 5, 6]); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }
 
-SELECT mapFromArrays([[1,2], [3,4]], [4, 5, 6]);
+SELECT mapFromArrays([[1,2], [3,4]], [4, 5, 6]); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }
 
-SELECT mapFromArrays(['a', 2], [4, 5]);
+SELECT mapFromArrays(['a', 2], [4, 5]); -- { serverError NO_COMMON_TYPE}
 
-SELECT mapFromArrays([1, 2], [4, 'a']);
+SELECT mapFromArrays([1, 2], [4, 'a']); -- { serverError NO_COMMON_TYPE}
 
-SELECT mapFromArrays(['aa', 'bb'], map('a', 4));
+SELECT mapFromArrays(['aa', 'bb'], map('a', 4)); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }
 
-SELECT mapFromArrays([1,null]::Array(Nullable(UInt8)), [3,4]);
+SELECT mapFromArrays([1,null]::Array(Nullable(UInt8)), [3,4]); -- { serverError BAD_ARGUMENTS }
 
 SELECT mapFromArrays(['aa', 'bb'], map('a', 4, 'b', 5));
 

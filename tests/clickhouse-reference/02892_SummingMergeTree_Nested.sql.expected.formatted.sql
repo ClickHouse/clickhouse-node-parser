@@ -1,3 +1,4 @@
+-- { echo }
 SELECT *
 FROM nested_smt
 ORDER BY val ASC;

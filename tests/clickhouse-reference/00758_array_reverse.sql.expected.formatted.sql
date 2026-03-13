@@ -38,4 +38,4 @@ SELECT
     (
         SELECT *
         FROM file()
-    );
+    ); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

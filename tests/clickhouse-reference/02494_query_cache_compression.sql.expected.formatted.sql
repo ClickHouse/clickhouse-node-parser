@@ -1,3 +1,4 @@
+-- Run query which, store *compressed* result in query cache
 SELECT '-- insert with enabled compression';
 
 SELECT *

@@ -1,3 +1,4 @@
+-- { echo }
 SELECT uniqCombinedIfMerge(n)
 FROM (
         SELECT
@@ -20,7 +21,7 @@ FROM (
             uniqCombinedIfState(number, number % 2) AS n,
             max(number) AS `last`
         FROM numbers(10)
-    );
+    ); -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT uniqCombinedIfMergeIf(n, `last` > 50)
 FROM (
@@ -44,7 +45,7 @@ FROM (
             uniqCombinedIfState(number, number % 2) AS n,
             max(number) AS `last`
         FROM numbers(10)
-    );
+    ); -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT uniqCombinedIfMergeIfIf(n, `last` > 5, 1)
 FROM (
@@ -52,4 +53,4 @@ FROM (
             uniqCombinedIfState(number, number % 2) AS n,
             max(number) AS `last`
         FROM numbers(10)
-    );
+    ); -- { serverError ILLEGAL_AGGREGATION }

@@ -1,3 +1,4 @@
+-- before inserting data, it may produce empty header
 SELECT
     child_key,
     parent_key,
@@ -76,6 +77,7 @@ SETTINGS
     max_threads = 1,
     optimize_aggregation_in_order = 0;
 
+-- fuzzer
 SELECT
     child_key,
     parent_key,

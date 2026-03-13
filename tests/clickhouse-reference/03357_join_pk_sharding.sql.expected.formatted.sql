@@ -1,3 +1,5 @@
+-- { echo On }
+-- two tables
 SELECT *
 FROM
     tab_l AS l
@@ -25,6 +27,7 @@ WHERE like(e, '%ReadFromMergeTree%')
     OR like(e, '%Clauses%')
     OR like(e, '%Sharding%');
 
+-- three tables
 SELECT *
 FROM
     tab_l AS l
@@ -61,6 +64,7 @@ WHERE like(e, '%ReadFromMergeTree%')
     OR like(e, '%Clauses%')
     OR like(e, '%Sharding%');
 
+--- three tables, where m table matches one key, so that r table can match only one key as well
 SELECT *
 FROM
     tab_l AS l
@@ -95,6 +99,7 @@ WHERE like(e, '%ReadFromMergeTree%')
     OR like(e, '%Clauses%')
     OR like(e, '%Sharding%');
 
+--- three tables, right table matches one key
 SELECT *
 FROM
     tab_l AS l
@@ -129,6 +134,7 @@ WHERE like(e, '%ReadFromMergeTree%')
     OR like(e, '%Clauses%')
     OR like(e, '%Sharding%');
 
+--- three tables, tab_m table matches noting, so right table can match both keys
 SELECT *
 FROM
     tab_l AS l
@@ -161,6 +167,7 @@ WHERE like(e, '%ReadFromMergeTree%')
     OR like(e, '%Clauses%')
     OR like(e, '%Sharding%');
 
+-- two tables
 SELECT *
 FROM
     tab_l AS l
@@ -188,6 +195,7 @@ WHERE like(e, '%ReadFromMergeTree%')
     OR like(e, '%Clauses%')
     OR like(e, '%Sharding%');
 
+-- three tables
 SELECT *
 FROM
     tab_l AS l

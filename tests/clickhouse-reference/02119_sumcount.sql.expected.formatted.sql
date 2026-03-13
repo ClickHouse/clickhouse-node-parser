@@ -1,3 +1,4 @@
+-- Integer types are added as integers
 SELECT
     toTypeName(sumCount(v)),
     sumCount(v)
@@ -58,6 +59,7 @@ FROM (
         ORDER BY v ASC
     );
 
+-- -- Float64 types are added as Float64
 SELECT
     toTypeName(sumCount(v)),
     sumCount(v)
@@ -118,6 +120,7 @@ FROM (
         ORDER BY v ASC
     );
 
+-- -- Float32 are added as Float64
 SELECT
     toTypeName(sumCount(v)),
     sumCount(v)
@@ -178,6 +181,7 @@ FROM (
         ORDER BY v ASC
     );
 
+-- Small integer types use their sign/unsigned 64 byte supertype
 SELECT
     toTypeName(sumCount(number::Int8)),
     sumCount(number::Int8)
@@ -188,6 +192,7 @@ SELECT
     sumCount(number::UInt8)
 FROM numbers(250);
 
+-- Greater integers use their own type
 SELECT
     toTypeName(sumCount(v)),
     sumCount(v)
@@ -220,6 +225,7 @@ FROM (
         FROM numbers(100)
     );
 
+-- Decimal types
 SELECT
     toTypeName(sumCount(v)),
     sumCount(v)
@@ -228,20 +234,22 @@ FROM (
         FROM numbers(100)
     );
 
+-- Other types
 SELECT
     toTypeName(sumCount(v)),
     sumCount(v)
 FROM (
         SELECT 'a'::String AS v
-    );
+    ); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toTypeName(sumCount(v)),
     sumCount(v)
 FROM (
         SELECT now()::DateTime AS v
-    );
+    ); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- SumCountIf
 SELECT sumCountIf(n, n > 10)
 FROM (
         SELECT number AS n

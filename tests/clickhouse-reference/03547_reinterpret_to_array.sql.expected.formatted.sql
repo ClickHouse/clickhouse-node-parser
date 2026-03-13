@@ -16,9 +16,9 @@ SELECT toTypeName(reinterpret('', 'Array(Decimal)'));
 
 SELECT toTypeName(reinterpret('', 'Array(Decimal64(4))'));
 
-SELECT toTypeName(reinterpret('', 'Array(String)'));
+SELECT toTypeName(reinterpret('', 'Array(String)')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toTypeName(reinterpret('', 'Array(Array(Int32))'));
+SELECT toTypeName(reinterpret('', 'Array(Array(Int32))')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT reinterpret('', 'Int32');
 
@@ -40,13 +40,13 @@ SELECT reinterpret('abab', 'Array(FixedString(4))');
 
 SELECT length(reinterpret(repeat('abab', 100), 'Array(FixedString(4))')) = 100;
 
-SELECT reinterpret('ababc', 'Array(FixedString(4))');
+SELECT reinterpret('ababc', 'Array(FixedString(4))'); -- { serverError BAD_ARGUMENTS }
 
-SELECT reinterpret('1�', 'Array(Float32)');
+SELECT reinterpret('1�', 'Array(Float32)'); -- { serverError BAD_ARGUMENTS }
 
-SELECT reinterpret(concat(repeat('1�@1�@1�@1�@', 10), '�'), 'Array(Float32)');
+SELECT reinterpret(concat(repeat('1�@1�@1�@1�@', 10), '�'), 'Array(Float32)'); -- { serverError BAD_ARGUMENTS }
 
-SELECT reinterpret(95, 'Array(FixedString(4))');
+SELECT reinterpret(95, 'Array(FixedString(4))'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT reinterpret(s, 'Array(Float32)')
 FROM tab1

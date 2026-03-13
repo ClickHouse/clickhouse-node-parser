@@ -8,6 +8,7 @@ FROM (
     )
 WHERE a <> '';
 
+-- the same query, but after syntax optimization
 SELECT
     a,
     value

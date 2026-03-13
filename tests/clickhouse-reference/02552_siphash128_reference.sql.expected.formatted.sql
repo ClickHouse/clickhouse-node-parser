@@ -1,3 +1,9 @@
+-- Test Vectors from the SipHash reference C implementation:
+-- Written by
+-- Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+-- Daniel J. Bernstein <djb@cr.yp.to>
+-- Released under CC0
+-- https://github.com/veorq/SipHash/blob/eee7d0d84dc7731df2359b243aa5e75d85f6eaef/vectors.h#L645
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(506097522914230528), toUInt64(1084818905618843912)), ''));
 
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(506097522914230528), toUInt64(1084818905618843912)), char(0)));
@@ -126,6 +132,7 @@ SELECT hex(sipHash128ReferenceKeyed((toUInt64(506097522914230528), toUInt64(1084
 
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(506097522914230528), toUInt64(1084818905618843912)), char(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62)));
 
+-- CH tests
 SELECT sipHash128ReferenceKeyed((toUInt64(0),toUInt64(0)), char(0)) == sipHash128Reference(char(0));
 
 SELECT sipHash128ReferenceKeyed((toUInt64(0),toUInt64(0)), char(0, 1)) == sipHash128Reference(char(0, 1));
@@ -254,9 +261,9 @@ SELECT sipHash128ReferenceKeyed((toUInt64(0),toUInt64(0)), char(0, 1, 2, 3, 4, 5
 
 SELECT sipHash128ReferenceKeyed((toUInt64(0),toUInt64(0)), char(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63)) == sipHash128Reference(char(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63));
 
-SELECT sipHash128ReferenceKeyed((0, 0), '1');
+SELECT sipHash128ReferenceKeyed((0, 0), '1'); -- { serverError BAD_ARGUMENTS }
 
-SELECT sipHash128ReferenceKeyed(toUInt64(0), '1');
+SELECT sipHash128ReferenceKeyed(toUInt64(0), '1'); -- { serverError BAD_ARGUMENTS }
 
 SELECT hex(sipHash128Reference()) = hex(reverse(unhex('1CE422FEE7BD8DE20000000000000000')))
     OR hex(sipHash128()) = '1CE422FEE7BD8DE20000000000000000';
@@ -264,6 +271,7 @@ SELECT hex(sipHash128Reference()) = hex(reverse(unhex('1CE422FEE7BD8DE2000000000
 SELECT hex(sipHash128ReferenceKeyed()) = hex(reverse(unhex('1CE422FEE7BD8DE20000000000000000')))
     OR hex(sipHash128Keyed()) = '1CE422FEE7BD8DE20000000000000000';
 
+-- these two statements must produce the same result
 SELECT hex(sipHash128ReferenceKeyed(key, val))
 FROM tab;
 

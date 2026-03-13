@@ -81,11 +81,11 @@ SELECT
     b + 1 AS a
 FROM (
         SELECT 10 AS a
-    );
+    ); -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }
 
 SELECT
     10 AS a,
-    a + 1 AS a;
+    a + 1 AS a; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT 0 AS t
 FROM (

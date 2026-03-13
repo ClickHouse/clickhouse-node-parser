@@ -17,29 +17,29 @@ SELECT
 
 SELECT
     1 AS value,
-    2 AS value;
+    2 AS value; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 
 SELECT
     plus(1, 1) AS value,
-    2 AS value;
+    2 AS value; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 
 SELECT
     (
         SELECT 1
     ) AS subquery,
-    1 AS subquery;
+    1 AS subquery; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 
 SELECT
     id AS value,
     value AS value
-FROM test_table;
+FROM test_table; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 
 SELECT
     id AS value_1,
     value AS value_1
-FROM test_table;
+FROM test_table; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 
 SELECT
     id AS value,
     (id + 1) AS value
-FROM test_table;
+FROM test_table; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }

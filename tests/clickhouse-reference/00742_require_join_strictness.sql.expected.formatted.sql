@@ -5,4 +5,4 @@ INNER JOIN (
         SELECT number AS k
         FROM `system`.numbers
     ) AS js2
-    ON dummy = k;
+    ON dummy = k; -- { serverError EXPECTED_ALL_OR_ANY }

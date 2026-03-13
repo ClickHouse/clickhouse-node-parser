@@ -1,1 +1,1 @@
-SELECT CAST(toIntervalDay(1) AS Nullable(Decimal(10, 10)));
+SELECT CAST(toIntervalDay(1) AS Nullable(Decimal(10, 10))); -- { serverError CANNOT_CONVERT_TYPE }

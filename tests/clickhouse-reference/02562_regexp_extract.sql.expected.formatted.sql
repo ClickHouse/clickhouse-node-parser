@@ -86,26 +86,26 @@ FROM numbers(5);
 
 SELECT regexpExtract('100-200100-200', '(\\d+)-(\\d+)(\\d+)-(\\d+)', materialize(3));
 
-SELECT regexpExtract('100-200');
+SELECT regexpExtract('100-200'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', 1, 2);
+SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', 1, 2); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT regexpExtract(CAST('100-200' AS FixedString(10)), '(\\d+)-(\\d+)', 1);
+SELECT regexpExtract(CAST('100-200' AS FixedString(10)), '(\\d+)-(\\d+)', 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT regexpExtract('100-200', CAST('(\\d+)-(\\d+)' AS FixedString(20)), 1);
+SELECT regexpExtract('100-200', CAST('(\\d+)-(\\d+)' AS FixedString(20)), 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', 'a');
+SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', 'a'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT regexpExtract(100, '(\\d+)-(\\d+)', 1);
+SELECT regexpExtract(100, '(\\d+)-(\\d+)', 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT regexpExtract('100-200', 1, 1);
+SELECT regexpExtract('100-200', 1, 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT regexpExtract('100-200', materialize('(\\d+)-(\\d+)'), 1);
+SELECT regexpExtract('100-200', materialize('(\\d+)-(\\d+)'), 1); -- { serverError ILLEGAL_COLUMN }
 
-SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', 3);
+SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', 3); -- { serverError INDEX_OF_POSITIONAL_ARGUMENT_IS_OUT_OF_RANGE }
 
-SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', -1);
+SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', -1); -- { serverError INDEX_OF_POSITIONAL_ARGUMENT_IS_OUT_OF_RANGE }
 
 SELECT regexpExtract('100-200', '\\d+-\\d+', 0);
 
-SELECT regexpExtract('100-200', '\\d+-\\d+', 1);
+SELECT regexpExtract('100-200', '\\d+-\\d+', 1); -- { serverError INDEX_OF_POSITIONAL_ARGUMENT_IS_OUT_OF_RANGE }

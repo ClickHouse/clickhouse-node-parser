@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     min(EventDate),
     max(EventDate)

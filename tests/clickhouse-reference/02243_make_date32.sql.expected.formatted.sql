@@ -32,21 +32,21 @@ SELECT makeDate32(CAST(1980.1 AS Float32), 9, 19);
 
 SELECT makeDate32(CAST(-1980.1 AS Float32), 9, 20);
 
-SELECT makeDate32(CAST(1980 AS Date), 10, 30);
+SELECT makeDate32(CAST(1980 AS Date), 10, 30); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(CAST(-1980 AS Date), 10, 30);
+SELECT makeDate32(CAST(-1980 AS Date), 10, 30); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(CAST(1980 AS Date32), 10, 30);
+SELECT makeDate32(CAST(1980 AS Date32), 10, 30); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(CAST(-1980 AS Date32), 10, 30);
+SELECT makeDate32(CAST(-1980 AS Date32), 10, 30); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(CAST(1980 AS DateTime), 10, 30);
+SELECT makeDate32(CAST(1980 AS DateTime), 10, 30); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(CAST(-1980 AS DateTime), 10, 30);
+SELECT makeDate32(CAST(-1980 AS DateTime), 10, 30); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(CAST(1980 AS DateTime64), 10, 30);
+SELECT makeDate32(CAST(1980 AS DateTime64), 10, 30); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(CAST(-1980 AS DateTime64), 10, 30);
+SELECT makeDate32(CAST(-1980 AS DateTime64), 10, 30); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT makeDate32(0.0, 1, 2);
 
@@ -110,15 +110,15 @@ SELECT makeDate32(0x7fffffffffffffff + 2010, 1, 3);
 
 SELECT makeDate32(0xffffffffffffffff + 2010, 1, 4);
 
-SELECT makeDate32('1980', '10', '20');
+SELECT makeDate32('1980', '10', '20'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32('-1980', 3, 17);
+SELECT makeDate32('-1980', 3, 17); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32('aa', 3, 24);
+SELECT makeDate32('aa', 3, 24); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(1994, 'aa', 24);
+SELECT makeDate32(1994, 'aa', 24); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT makeDate32(1984, 3, 'aa');
+SELECT makeDate32(1984, 3, 'aa'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT makeDate32(true, 3, 24);
 
@@ -138,9 +138,9 @@ SELECT makeDate32(1980, NULL, 4);
 
 SELECT makeDate32(1980, 3, NULL);
 
-SELECT makeDate32(1980);
+SELECT makeDate32(1980); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT makeDate32(1980, 1, 1, 1);
+SELECT makeDate32(1980, 1, 1, 1); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT makeDate32(year, month, day)
 FROM (

@@ -2,8 +2,9 @@ SELECT
     groupArraySortedDistinct(10)(_part),
     sum(key)
 FROM test_10m
-SETTINGS distributed_index_analysis = 1;
+SETTINGS distributed_index_analysis = 1; -- { serverError CLUSTER_DOESNT_EXIST }
 
+-- { echo }
 SELECT
     groupArraySortedDistinct(10)(_part),
     sum(key)

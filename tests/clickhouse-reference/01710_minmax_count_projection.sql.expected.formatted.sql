@@ -39,10 +39,12 @@ WHERE _partition_value.1 = 10
 GROUP BY _partition_id
 ORDER BY _partition_id ASC;
 
+-- fuzz crash
 SELECT min(i)
 FROM d
 WHERE 1 = _partition_value.1;
 
+-- fuzz crash https://github.com/ClickHouse/ClickHouse/issues/37151
 SELECT
     min(i),
     max(i),
@@ -80,6 +82,7 @@ SELECT
 FROM d
 WHERE toDate(dt) >= '2021-10-25';
 
+-- fuzz crash
 SELECT
     min(dt),
     max(dt),
@@ -91,6 +94,7 @@ SELECT count()
 FROM d
 GROUP BY toDate(dt);
 
+-- fuzz crash
 SELECT
     min(dt),
     count(ignore(ignore(ignore(tupleElement(_partition_value, 'xxxx', NULL) = NULL), NULL, NULL, NULL), 0, '10485.76', NULL)),
@@ -99,6 +103,7 @@ SELECT
 FROM d
 WHERE toDate(dt) >= '2021-10-25';
 
+-- fuzz crash
 SELECT
     pointInEllipses(min(j), NULL),
     max(dt),
@@ -131,4 +136,4 @@ SETTINGS force_optimize_projection = 1;
 
 SELECT count(if(d = 4, NULL, 1))
 FROM test
-SETTINGS force_optimize_projection = 1;
+SETTINGS force_optimize_projection = 1; -- { serverError PROJECTION_NOT_USED }

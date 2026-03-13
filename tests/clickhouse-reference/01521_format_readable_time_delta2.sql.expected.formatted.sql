@@ -12,7 +12,7 @@ SELECT formatReadableTimeDelta(negate((1 + 60 + 3600 + 86400 + 30.5 * 86400 + 36
 
 SELECT formatReadableTimeDelta(negate((1 + 60 + 3600 + 86400 + 30.5 * 86400 + 365 * 86400)), 'seconds');
 
-SELECT formatReadableTimeDelta(negate((1 + 60 + 3600 + 86400 + 30.5 * 86400 + 365 * 86400)), 'second');
+SELECT formatReadableTimeDelta(negate((1 + 60 + 3600 + 86400 + 30.5 * 86400 + 365 * 86400)), 'second'); -- { serverError BAD_ARGUMENTS }
 
 SELECT formatReadableTimeDelta(negate((60 + 3600 + 86400 + 30.5 * 86400 + 365 * 86400)));
 

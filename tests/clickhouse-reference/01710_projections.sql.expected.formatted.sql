@@ -1,5 +1,5 @@
 SELECT *
-FROM projection_test;
+FROM projection_test; -- { serverError PROJECTION_NOT_USED }
 
 SELECT
     toStartOfMinute(datetime) AS dt_m,
@@ -12,7 +12,7 @@ INNER JOIN (
     ON 1
 WHERE domain = '1'
 GROUP BY dt_m
-ORDER BY dt_m ASC;
+ORDER BY dt_m ASC; -- { serverError PROJECTION_NOT_USED }
 
 SELECT
     toStartOfMinute(datetime) AS dt_m,
@@ -23,6 +23,7 @@ WHERE domain = '1'
 GROUP BY dt_m
 ORDER BY dt_m ASC;
 
+-- prewhere with alias
 SELECT
     toStartOfMinute(datetime) AS dt_m,
     countIf(first_time = 0) / count(),
@@ -33,6 +34,7 @@ WHERE domain = '1'
 GROUP BY dt_m
 ORDER BY dt_m ASC;
 
+-- prewhere with alias with row policy (non existing)
 SELECT
     toStartOfMinute(datetime) AS dt_m,
     countIf(first_time = 0) / count(),
@@ -43,6 +45,12 @@ WHERE domain = '1'
 GROUP BY dt_m
 ORDER BY dt_m ASC;
 
+-- TODO There is a bug in row policy filter (not related to projections, crash in master)
+-- drop row policy if exists filter on projection_test;
+-- create row policy filter on projection_test using (domain != '1') to all;
+-- prewhere with alias with row policy (existing)
+-- select toStartOfMinute(datetime) dt_m, countIf(first_time = 0) / count(), avg((kbytes * 8) / duration) from projection_test prewhere domain_alias = 1 where domain = '1' group by dt_m order by dt_m;
+-- drop row policy filter on projection_test;
 SELECT
     toStartOfMinute(datetime) AS dt_m,
     count(),
@@ -52,6 +60,8 @@ FROM projection_test
 GROUP BY dt_m
 ORDER BY dt_m ASC;
 
+-- TODO figure out how to deal with conflict column names
+-- select toStartOfMinute(datetime) dt_m, count(), sum(block_count) / sum(duration), avg(block_count / duration) from projection_test where `sum(block_count)` = 1 group by dt_m order by dt_m;
 SELECT
     toStartOfMinute(datetime) AS dt_m,
     sum(buffer_time) / sum(duration),

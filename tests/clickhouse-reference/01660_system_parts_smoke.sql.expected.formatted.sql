@@ -1,3 +1,7 @@
+-- There is different code path when:
+-- - _state is not requested
+-- - _state is requested
+-- - only _state is requested
 SELECT *
 FROM `system`.parts
 FORMAT Null;
@@ -12,6 +16,7 @@ SELECT _state
 FROM `system`.parts
 FORMAT Null;
 
+-- Empty
 SELECT _state
 FROM `system`.parts
 WHERE database = currentDatabase()

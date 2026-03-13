@@ -7,8 +7,8 @@ FROM (
         LIMIT 2
     );
 
-SELECT nowInBlock(1);
+SELECT nowInBlock(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT isNull(nowInBlock(NULL));
 
-SELECT nowInBlock('UTC', 'UTC');
+SELECT nowInBlock('UTC', 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

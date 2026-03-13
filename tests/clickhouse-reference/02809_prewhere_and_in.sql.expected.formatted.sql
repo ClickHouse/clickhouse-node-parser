@@ -1,3 +1,4 @@
+-- Queries with 'IN'
 SELECT *
 FROM (
         EXPLAIN actions = 1
@@ -37,6 +38,7 @@ FROM (
     )
 WHERE like(`explain`, '%Prewhere filter');
 
+-- Queries with 'NOT IN'
 SELECT *
 FROM (
         EXPLAIN actions = 1

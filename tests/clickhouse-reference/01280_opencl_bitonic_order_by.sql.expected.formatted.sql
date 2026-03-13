@@ -1,3 +1,4 @@
+-- TODO: set special_sort = 'opencl_bitonic';
 SELECT toUInt8(number * 2) AS x
 FROM numbers(42)
 ORDER BY x DESC;

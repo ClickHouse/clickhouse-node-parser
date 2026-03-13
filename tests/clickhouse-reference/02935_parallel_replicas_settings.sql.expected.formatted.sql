@@ -1,6 +1,6 @@
 SELECT count()
 FROM test_parallel_replicas_settings
-WHERE NOT ignore(*);
+WHERE NOT ignore(*); -- { serverError CLUSTER_DOESNT_EXIST }
 
 SELECT count()
 FROM test_parallel_replicas_settings

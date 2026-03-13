@@ -4,7 +4,7 @@ SELECT
     max(x),
     sum(x),
     uniqExact(x)
-FROM modify_sample SAMPLE 0.1;
+FROM modify_sample SAMPLE 0.1; -- { serverError SAMPLING_NOT_SUPPORTED }
 
 SELECT
     count(),
@@ -12,7 +12,7 @@ SELECT
     max(x),
     sum(x),
     uniqExact(x)
-FROM modify_sample_replicated SAMPLE 0.1;
+FROM modify_sample_replicated SAMPLE 0.1; -- { serverError SAMPLING_NOT_SUPPORTED }
 
 SELECT
     count(),

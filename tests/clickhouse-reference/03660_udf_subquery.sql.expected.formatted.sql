@@ -1,3 +1,4 @@
+-- this part worked successfully
 SELECT *
 FROM (
         SELECT udf_type_of_int(1)
@@ -6,6 +7,7 @@ FROM (
     )
 ORDER BY `ALL` ASC;
 
+-- ... and this not!
 SELECT udf_type_of_int(number)
 FROM numbers(5)
 ORDER BY number ASC;

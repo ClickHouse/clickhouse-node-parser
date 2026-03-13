@@ -1,3 +1,4 @@
+-- no rows, since no active monitor
 SELECT *
 FROM `system`.distribution_queue
 WHERE database = currentDatabase();

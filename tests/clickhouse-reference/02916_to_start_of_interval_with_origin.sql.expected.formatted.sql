@@ -1,27 +1,32 @@
 SELECT '-- Negative tests';
 
-SELECT toStartOfInterval(toDate('2023-01-02 14:45:50'), toIntervalSecond(5), toDate32('2023-01-02 14:44:30'));
+-- time and origin arguments must have the same type
+SELECT toStartOfInterval(toDate('2023-01-02 14:45:50'), toIntervalSecond(5), toDate32('2023-01-02 14:44:30')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate('2023-01-02 14:45:50'), toIntervalMillisecond(12), toDateTime('2023-01-02 14:44:30'));
+SELECT toStartOfInterval(toDate('2023-01-02 14:45:50'), toIntervalMillisecond(12), toDateTime('2023-01-02 14:44:30')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate32('2023-01-02 14:45:50'), toIntervalHour(5), toDate('2023-01-02 14:44:30'));
+SELECT toStartOfInterval(toDate32('2023-01-02 14:45:50'), toIntervalHour(5), toDate('2023-01-02 14:44:30')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalMinute(1), toDateTime64('2023-01-02 14:44:30', 2));
+SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalMinute(1), toDateTime64('2023-01-02 14:44:30', 2)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDateTime64('2023-01-02 14:45:50', 2), toIntervalMinute(1), toDate('2023-01-02 14:44:30'));
+SELECT toStartOfInterval(toDateTime64('2023-01-02 14:45:50', 2), toIntervalMinute(1), toDate('2023-01-02 14:44:30')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDateTime('2023-01-02 14:42:50'), toIntervalMinute(1), toDateTime('2023-01-02 14:44:30'));
+-- the origin must be before the time
+SELECT toStartOfInterval(toDateTime('2023-01-02 14:42:50'), toIntervalMinute(1), toDateTime('2023-01-02 14:44:30')); -- { serverError BAD_ARGUMENTS }
 
+-- the origin must be constant
 SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalMinute(1), if(number % 2 == 0, toDateTime('2023-02-01 15:55:00'), toDateTime('2023-01-01 15:55:00')))
-FROM numbers(1);
+FROM numbers(1); -- { serverError ILLEGAL_COLUMN }
 
-SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalHour(1), materialize(toDateTime('2023-01-02 14:44:30')), 'Europe/Amsterdam');
+SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalHour(1), materialize(toDateTime('2023-01-02 14:44:30')), 'Europe/Amsterdam'); -- { serverError ILLEGAL_COLUMN }
 
-SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalYear(1), 'Europe/Amsterdam', 'Europe/Amsterdam');
+-- with 4 arguments, the 3rd one must not be a string or an integer
+SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalYear(1), 'Europe/Amsterdam', 'Europe/Amsterdam'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalYear(1), 5, 'Europe/Amsterdam');
+SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalYear(1), 5, 'Europe/Amsterdam'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalYear(1), toDateTime('2020-01-02 14:44:30'), 'Europe/Amsterdam', 5);
+-- too many arguments
+SELECT toStartOfInterval(toDateTime('2023-01-02 14:45:50'), toIntervalYear(1), toDateTime('2020-01-02 14:44:30'), 'Europe/Amsterdam', 5); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalYear(1), toDate('2022-02-01'));
 
@@ -33,17 +38,17 @@ SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalWeek(1), toDate('2023-1
 
 SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalDay(1), toDate('2023-10-08'));
 
-SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalHour(1), toDate('2023-10-09'));
+SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalHour(1), toDate('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalMinute(1), toDate('2023-10-09'));
+SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalMinute(1), toDate('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalSecond(1), toDate('2023-10-09'));
+SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalSecond(1), toDate('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalMillisecond(1), toDate('2023-10-09'));
+SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalMillisecond(1), toDate('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalMicrosecond(1), toDate('2023-10-09'));
+SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalMicrosecond(1), toDate('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalNanosecond(1), toDate('2023-10-09'));
+SELECT toStartOfInterval(toDate('2023-10-09'), toIntervalNanosecond(1), toDate('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalYear(1), toDate32('2022-02-01'));
 
@@ -55,17 +60,17 @@ SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalWeek(1), toDate32('20
 
 SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalDay(1), toDate32('2023-10-08'));
 
-SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalHour(1), toDate32('2023-10-09'));
+SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalHour(1), toDate32('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalMinute(1), toDate32('2023-10-09'));
+SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalMinute(1), toDate32('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalSecond(1), toDate32('2023-10-09'));
+SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalSecond(1), toDate32('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalMillisecond(1), toDate32('2023-10-09'));
+SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalMillisecond(1), toDate32('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalMicrosecond(1), toDate32('2023-10-09'));
+SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalMicrosecond(1), toDate32('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalNanosecond(1), toDate32('2023-10-09'));
+SELECT toStartOfInterval(toDate32('2023-10-09'), toIntervalNanosecond(1), toDate32('2023-10-09')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalYear(1), toDateTime('2022-02-01 09:08:07'));
 
@@ -83,11 +88,11 @@ SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalMinute(1),
 
 SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalSecond(1), toDateTime('2023-10-09 09:10:07'));
 
-SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalMillisecond(1), toDateTime('2023-10-09 10:11:12'));
+SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalMillisecond(1), toDateTime('2023-10-09 10:11:12')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalMicrosecond(1), toDateTime('2023-10-09 10:11:12'));
+SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalMicrosecond(1), toDateTime('2023-10-09 10:11:12')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalNanosecond(1), toDateTime('2023-10-09 10:11:12'));
+SELECT toStartOfInterval(toDateTime('2023-10-09 10:11:12'), toIntervalNanosecond(1), toDateTime('2023-10-09 10:11:12')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfInterval(toDateTime64('2023-10-09 10:11:12.987654321', 9), toIntervalYear(1), toDateTime64('2022-02-01 09:08:07.123456789', 9));
 

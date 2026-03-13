@@ -1,3 +1,4 @@
+-- Regression test: calling .front() on empty maps vector in tryRerangeRightTableData (UBSan, #95518)
 SELECT count()
 FROM
     (

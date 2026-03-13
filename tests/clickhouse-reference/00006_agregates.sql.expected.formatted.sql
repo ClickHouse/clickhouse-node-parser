@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     sum(AdvEngineID),
     count(),

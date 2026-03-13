@@ -3,11 +3,11 @@ FROM test_table
 SETTINGS
     max_threads = 1025,
     max_streams_to_max_threads_ratio = -9223372036854775808,
-    enable_analyzer = 1;
+    enable_analyzer = 1; -- { serverError PARAMETER_OUT_OF_BOUND }
 
 SELECT *
 FROM test_table
 SETTINGS
     max_threads = 1025,
     max_streams_to_max_threads_ratio = -9223372036854775808,
-    enable_analyzer = 0;
+    enable_analyzer = 0; -- { serverError PARAMETER_OUT_OF_BOUND }

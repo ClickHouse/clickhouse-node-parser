@@ -1,3 +1,4 @@
+-- Tags: no-parallel, no-fasttest
 SELECT quantileTiming(number)
 FROM (
         SELECT *

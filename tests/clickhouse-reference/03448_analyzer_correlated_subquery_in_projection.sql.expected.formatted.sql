@@ -11,8 +11,9 @@ SELECT (
         WHERE number = 2
     )
 FROM numbers(2)
-GROUP BY number % 2;
+GROUP BY number % 2; -- { serverError NOT_IMPLEMENTED }
 
+-- The Query using Subqueries
 SELECT
     A.id AS a_id,
     (

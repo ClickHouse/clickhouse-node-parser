@@ -1,3 +1,4 @@
+--- Despite max_block_size = 1, this will squash the blocks and output everything as a single block:
 SELECT number
 FROM numbers(10)
 FORMAT PrettyCompact

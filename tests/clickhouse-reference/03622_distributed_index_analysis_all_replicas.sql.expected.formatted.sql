@@ -1,3 +1,4 @@
+-- { echo }
 SELECT sum(key)
 FROM test_10m;
 

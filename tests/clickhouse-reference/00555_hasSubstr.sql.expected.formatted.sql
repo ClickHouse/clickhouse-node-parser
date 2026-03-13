@@ -34,9 +34,9 @@ SELECT hasSubstr(['a', 'b'], ['a', 'c']);
 
 SELECT hasSubstr(['a', 'c', 'b'], ['a', 'c']);
 
-SELECT hasSubstr([1], ['a']);
+SELECT hasSubstr([1], ['a']); -- { serverError NO_COMMON_TYPE }
 
-SELECT hasSubstr([[1, 2], [3, 4]], ['a', 'c']);
+SELECT hasSubstr([[1, 2], [3, 4]], ['a', 'c']); -- { serverError NO_COMMON_TYPE }
 
 SELECT hasSubstr([[1, 2], [3, 4], [5, 8]], [[3, 4]]);
 

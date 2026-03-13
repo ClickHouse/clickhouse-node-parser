@@ -28,26 +28,26 @@ LIMIT 0;
 
 SELECT x
 FROM `system`.numbers
-LIMIT 1;
+LIMIT 1; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT
     x,
     number
 FROM `system`.numbers
-LIMIT 1;
+LIMIT 1; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT *
 FROM `system`.number
-LIMIT 1;
+LIMIT 1; -- { serverError UNKNOWN_TABLE }
 
 SELECT *
 FROM `system`
-LIMIT 1;
+LIMIT 1; -- { serverError UNKNOWN_TABLE }
 
 SELECT *
 FROM numbers
-LIMIT 1;
+LIMIT 1; -- { serverError UNKNOWN_TABLE }
 
 SELECT sys.number
 FROM `system`.numbers AS sys_num
-LIMIT 1;
+LIMIT 1; -- { serverError UNKNOWN_IDENTIFIER }

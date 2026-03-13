@@ -1,4 +1,6 @@
-SELECT 2;
+SELECT
+    /* test=01531, enable_global_with_statement=0 */
+    2;
 
 SELECT count()
 FROM `system`.query_log

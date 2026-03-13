@@ -1,3 +1,4 @@
+-- { echo }
 SELECT 1 + number + multiIf(number == 1, cityHash64(number), number)
 FROM numbers(1)
 SETTINGS

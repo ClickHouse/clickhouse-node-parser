@@ -100,33 +100,35 @@ FROM numbers(1024);
 SELECT sparkbar(1024)(number, 0)
 FROM numbers(1024);
 
+-- { echoOff }
 SELECT sparkbar(0)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT sparkbar(1)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT sparkbar(1025)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT sparkbar(2, 10, 9)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT sparkbar(2, -5, -1)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT sparkbar(2, -5, 1)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT sparkbar(2)(toInt32(number), number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT sparkbar(2, 0)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT sparkbar(2, 0, 5, 8)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
+-- it causes overflow, just check that it doesn't crash under UBSan, do not check the result it's not really reasonable
 SELECT sparkbar(10)(number, toInt64(number))
 FROM numbers(toUInt64(9223372036854775807), 20)
 FORMAT Null;

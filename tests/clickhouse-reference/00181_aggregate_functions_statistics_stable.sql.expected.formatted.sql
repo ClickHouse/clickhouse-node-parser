@@ -1,3 +1,4 @@
+/* varSampStable */
 SELECT varSampStable(x_value)
 FROM (
         SELECT x_value
@@ -20,6 +21,7 @@ FROM (
         FROM series
     );
 
+/* stddevSampStable */
 SELECT stddevSampStable(x_value)
 FROM (
         SELECT x_value
@@ -42,6 +44,7 @@ FROM (
         FROM series
     );
 
+/* varPopStable */
 SELECT varPopStable(x_value)
 FROM (
         SELECT x_value
@@ -64,6 +67,7 @@ FROM (
         FROM series
     );
 
+/* stddevPopStable */
 SELECT stddevPopStable(x_value)
 FROM (
         SELECT x_value
@@ -86,6 +90,7 @@ FROM (
         FROM series
     );
 
+/* covarSampStable */
 SELECT covarSampStable(x_value, y_value)
 FROM (
         SELECT
@@ -138,6 +143,7 @@ INNER JOIN (
     )
     USING (ID2);
 
+/* covarPopStable */
 SELECT covarPopStable(x_value, y_value)
 FROM (
         SELECT
@@ -190,6 +196,7 @@ INNER JOIN (
     )
     USING (ID2);
 
+/* corr */
 SELECT corrStable(x_value, y_value)
 FROM (
         SELECT

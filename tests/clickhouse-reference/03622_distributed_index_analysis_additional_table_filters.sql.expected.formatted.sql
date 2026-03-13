@@ -6,6 +6,7 @@ WHERE database = currentDatabase()
     AND table = 'test_1m'
     AND active;
 
+-- { echo }
 SELECT count()
 FROM (
         SELECT *

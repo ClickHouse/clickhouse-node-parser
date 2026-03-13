@@ -72,7 +72,7 @@ SELECT
     value
 FROM `01504_test`
 WHERE k = 0
-    OR value > 0;
+    OR value > 0; -- { serverError TOO_MANY_ROWS }
 
 SELECT
     k,
@@ -80,7 +80,7 @@ SELECT
 FROM `01504_test`
 WHERE k = 0
     AND k IN (1, 3)
-    OR k > 8;
+    OR k > 8; -- { serverError TOO_MANY_ROWS }
 
 SELECT 0 == COUNT(1)
 FROM `01504_test`;

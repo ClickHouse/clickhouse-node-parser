@@ -169,8 +169,14 @@
             "value": "America/Sao_Paulo"
           }
         ]
-      }
-    }
+      },
+      "leadingComments": [
+        "-- LEFT JOIN (SELECT 2 AS x) AS anything ON x = i -- Removing the join fixes the issue."
+      ]
+    },
+    "leadingComments": [
+      "/* This was incorrect result in previous ClickHouse versions:\n┌─converted───────────┬─original────────────┐\n│ 2020-05-13 16:38:45 │ 2020-05-13 16:38:45 │ <-- toTimeZone is ignored.\n└─────────────────────┴─────────────────────┘\n*/"
+    ]
   },
   {
     "kind": "select",
@@ -266,6 +272,12 @@
         "type": "String",
         "value": "2020-05-13T00:00:00"
       }
-    }
+    },
+    "leadingComments": [
+      "/*\n┌─converted───────────┬─original────────────┐\n│ 2020-05-13 13:38:45 │ 2020-05-13 16:38:45 │ <-- toTimeZone works.\n└─────────────────────┴─────────────────────┘\n*/"
+    ],
+    "trailingComments": [
+      "-- Not using toDateTime in the WHERE also fixes the issue."
+    ]
   }
 ]

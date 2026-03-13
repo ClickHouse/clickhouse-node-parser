@@ -63,7 +63,11 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- { echo }",
+      "-- just something basic"
+    ]
   },
   {
     "kind": "select",
@@ -146,6 +150,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- proper calculation across blocks"
     ]
   },
   {
@@ -213,7 +220,13 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- not a window function"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_AGGREGATE_FUNCTION }"
+    ]
   },
   {
     "kind": "select",
@@ -267,7 +280,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- no partition by"
+    ]
   },
   {
     "kind": "select",
@@ -344,7 +360,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- no order by"
+    ]
   },
   {
     "kind": "select",
@@ -425,7 +444,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- can add an alias after window spec"
+    ]
   },
   {
     "kind": "select",
@@ -529,6 +551,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- now we should be able to compute expressions with window functions"
     ]
   },
   {
@@ -592,7 +617,10 @@
         "type": "UInt64",
         "value": "0"
       }
-    }
+    },
+    "leadingComments": [
+      "-- must work in WHERE if you wrap it in a subquery"
+    ]
   },
   {
     "kind": "select",
@@ -691,6 +719,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- should work in ORDER BY"
     ]
   },
   {
@@ -751,6 +782,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- also works in ORDER BY if you wrap it in a subquery"
     ]
   },
   {
@@ -823,6 +857,11 @@
         },
         "direction": "DESC"
       }
+    ],
+    "leadingComments": [
+      "-- Example with window function only in ORDER BY. Here we make a rank of all",
+      "-- numbers sorted descending, and then sort by this rank descending, and must get",
+      "-- the ascending order."
     ]
   },
   {
@@ -934,6 +973,11 @@
         },
         "direction": "DESC"
       }
+    ],
+    "leadingComments": [
+      "-- Aggregate functions as window function arguments. This query is semantically",
+      "-- the same as the above one, only we replace `number` with",
+      "-- `any(number) group by number` and so on."
     ]
   },
   {
@@ -976,7 +1020,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- some more simple cases w/aggregate functions"
+    ]
   },
   {
     "kind": "select",
@@ -1228,6 +1275,11 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- different windows",
+      "-- an explain test would also be helpful, but it's too immature now and I don't",
+      "-- want to change reference all the time"
     ]
   },
   {
@@ -1378,6 +1430,11 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- two functions over the same window",
+      "-- an explain test would also be helpful, but it's too immature now and I don't",
+      "-- want to change reference all the time"
     ]
   },
   {
@@ -1422,7 +1479,10 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- check that we can work with constant columns"
+    ]
   },
   {
     "kind": "select",
@@ -1458,7 +1518,10 @@
           "value": "3"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- an empty window definition is valid as well"
+    ]
   },
   {
     "kind": "select",
@@ -1544,7 +1607,11 @@
           "value": "3"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- This one tests we properly process the window  function arguments.",
+      "-- Seen errors like 'column `1` not found' from count(1)."
+    ]
   },
   {
     "kind": "select",
@@ -1582,7 +1649,10 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Should work in DISTINCT"
+    ]
   },
   {
     "kind": "select",
@@ -1637,6 +1707,9 @@
         "name": "w1",
         "body": ""
       }
+    ],
+    "leadingComments": [
+      "-- WINDOW clause"
     ]
   },
   {
@@ -1776,6 +1849,10 @@
         "name": "w1",
         "body": "partition by intDiv(number, 3) rows unbounded preceding"
       }
+    ],
+    "leadingComments": [
+      "-- FIXME both functions should use the same window, but they don't. Add an",
+      "-- EXPLAIN test for this."
     ]
   },
   {
@@ -1805,7 +1882,11 @@
           "value": "3"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- RANGE frame",
+      "-- It's the default"
+    ]
   },
   {
     "kind": "select",
@@ -1913,6 +1994,11 @@
           "value": "5"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Try some mutually prime sizes of partition, group and block, for the number",
+      "-- of rows that is their least common multiple + 1, so that we see all the",
+      "-- interesting corner cases."
     ]
   },
   {
@@ -2526,7 +2612,11 @@
           ]
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- A case where the partition end is in the current block, and the frame end",
+      "-- is triggered by the partition end."
+    ]
   },
   {
     "kind": "select",
@@ -2666,6 +2756,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- UNBOUNDED FOLLOWING frame end"
     ]
   },
   {
@@ -2891,6 +2984,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- ROWS offset frame start"
     ]
   },
   {
@@ -3036,6 +3132,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- ROWS offset frame start and end"
     ]
   },
   {
@@ -3173,7 +3272,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- frame boundaries that runs into the partition end"
+    ]
   },
   {
     "kind": "select",
@@ -3260,7 +3362,10 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- seen a use-after-free under MSan in this query once"
+    ]
   },
   {
     "kind": "select",
@@ -3271,6 +3376,9 @@
         "args": [],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- a corner case"
     ]
   },
   {
@@ -3443,6 +3551,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- RANGE CURRENT ROW frame start"
     ]
   },
   {
@@ -3599,6 +3710,10 @@
         "name": "w",
         "body": "order by x asc range between 1 preceding and 2 following"
       }
+    ],
+    "leadingComments": [
+      "-- RANGE OFFSET",
+      "-- a basic RANGE OFFSET frame"
     ]
   },
   {
@@ -3771,6 +3886,9 @@
         "name": "w",
         "body": "order by x range between 1 preceding and 2 following"
       }
+    ],
+    "leadingComments": [
+      "-- overflow conditions"
     ]
   },
   {
@@ -4182,6 +4300,11 @@
         "name": "w",
         "body": "order by x range between 255 preceding and 255 following"
       }
+    ],
+    "leadingComments": [
+      "-- We need large offsets to trigger overflow to positive direction, or",
+      "-- else the frame end runs into partition end w/o overflow and doesn't move",
+      "-- after that. The frame from this query is equivalent to the entire partition."
     ]
   },
   {
@@ -4293,6 +4416,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- RANGE OFFSET ORDER BY DESC"
     ]
   },
   {
@@ -5039,6 +5165,11 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Check that we put windows in such an order that we can reuse the sort.",
+      "-- First, check that at least the result is correct when we have many windows",
+      "-- with different sort order."
     ]
   },
   {
@@ -5107,7 +5238,10 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- A test case for the sort comparator found by fuzzer."
+    ]
   },
   {
     "kind": "select",
@@ -5418,6 +5552,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- some true window functions -- rank and friends"
     ]
   },
   {
@@ -5524,7 +5661,10 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- our replacement for lag/lead"
+    ]
   },
   {
     "kind": "select",
@@ -5782,6 +5922,9 @@
           "value": "3"
         }
       }
+    ],
+    "leadingComments": [
+      "-- variants of lag/lead that respect the frame"
     ]
   },
   {
@@ -5805,6 +5948,9 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- careful with auto-application of Null combinator"
     ]
   },
   {
@@ -5822,6 +5968,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -5872,6 +6021,9 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- this is the same as `select max(Null::Nullable(Nothing))`"
     ]
   },
   {
@@ -5980,6 +6132,10 @@
         "name": "w",
         "body": "ORDER BY number ASC"
       }
+    ],
+    "leadingComments": [
+      "-- to make lagInFrame return null for out-of-frame rows, cast the argument to",
+      "-- Nullable; otherwise, it returns default values."
     ]
   },
   {
@@ -6044,6 +6200,9 @@
         "name": "w",
         "body": "order by number range between 1 preceding and 1 following"
       }
+    ],
+    "leadingComments": [
+      "-- case-insensitive SQL-standard synonyms for any and anyLast"
     ]
   },
   {
@@ -6168,6 +6327,9 @@
         "name": "w",
         "body": "order by number"
       }
+    ],
+    "leadingComments": [
+      "-- nth_value without specific frame range given"
     ]
   },
   {
@@ -6292,6 +6454,9 @@
         "name": "w",
         "body": "order by number range between 1 preceding and 1 following"
       }
+    ],
+    "leadingComments": [
+      "-- nth_value with frame range specified"
     ]
   },
   {
@@ -6374,6 +6539,10 @@
         "name": "w",
         "body": "ORDER BY number ASC"
       }
+    ],
+    "leadingComments": [
+      "-- to make nth_value return null for out-of-frame rows, cast the argument to",
+      "-- Nullable; otherwise, it returns default values."
     ]
   },
   {
@@ -6396,6 +6565,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- nth_value UBsan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6418,6 +6593,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6430,7 +6608,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX+1 */"
+            ]
           },
           {
             "kind": "binaryExpr",
@@ -6449,6 +6630,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6461,7 +6645,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX */"
+            ]
           },
           {
             "kind": "literal",
@@ -6515,6 +6702,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- lagInFrame UBsan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6549,7 +6742,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX+1 */"
+            ]
           },
           {
             "kind": "binaryExpr",
@@ -6568,6 +6764,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6580,7 +6779,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX */"
+            ]
           },
           {
             "kind": "literal",
@@ -6634,6 +6836,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- leadInFrame UBsan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6668,7 +6876,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX+1 */"
+            ]
           },
           {
             "kind": "binaryExpr",
@@ -6687,6 +6898,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6699,7 +6913,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX */"
+            ]
           },
           {
             "kind": "literal",
@@ -6753,6 +6970,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- nth_value Msan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6775,6 +6998,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- lagInFrame Msan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6797,6 +7026,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- leadInFrame Msan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6834,7 +7069,11 @@
         "type": "UInt64",
         "value": "2"
       }
-    }
+    },
+    "leadingComments": [
+      "-- In this case, we had a problem with PartialSortingTransform returning zero-row",
+      "-- chunks for input chunks w/o columns."
+    ]
   },
   {
     "kind": "select",
@@ -7016,7 +7255,10 @@
           "value": "7"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- floating point RANGE frame"
+    ]
   },
   {
     "kind": "select",
@@ -7071,7 +7313,13 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- negative offsets should not be allowed"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7126,7 +7374,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7181,7 +7432,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7236,7 +7490,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7370,6 +7627,9 @@
           "value": "7"
         }
       }
+    ],
+    "leadingComments": [
+      "-- a test with aggregate function that allocates memory in arena"
     ]
   },
   {
@@ -7519,7 +7779,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- a test with aggregate function which is -state type"
+    ]
   },
   {
     "kind": "select",
@@ -7561,7 +7824,14 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- -INT_MIN row offset that can lead to problems with negation, found when fuzzing",
+      "-- under UBSan. Should be limited to at most INT_MAX."
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7618,7 +7888,11 @@
           "a"
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- Somehow in this case WindowTransform gets empty input chunks not marked as",
+      "-- input end, and then two (!) empty input chunks marked as input end. Whatever."
+    ]
   },
   {
     "kind": "select",
@@ -7634,7 +7908,10 @@
       "kind": "literal",
       "type": "NULL",
       "value": "NULL"
-    }
+    },
+    "leadingComments": [
+      "-- This case works as expected, one empty input chunk marked as input end."
+    ]
   },
   {
     "kind": "select",
@@ -7711,6 +7988,9 @@
         "name": "w1",
         "body": "w0 order by mod(number, 3) as o, number"
       }
+    ],
+    "leadingComments": [
+      "-- Inheriting another window."
     ]
   },
   {
@@ -7748,6 +8028,12 @@
         "name": "w",
         "body": "partition by intDiv(number, 5)"
       }
+    ],
+    "leadingComments": [
+      "-- can't redefine PARTITION BY"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -7789,6 +8075,12 @@
         "name": "w",
         "body": "partition by intDiv(number, 5) order by mod(number, 3)"
       }
+    ],
+    "leadingComments": [
+      "-- can't redefine existing ORDER BY"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -7824,6 +8116,12 @@
         "name": "w",
         "body": "partition by intDiv(number, 5) order by mod(number, 3) rows unbounded preceding"
       }
+    ],
+    "leadingComments": [
+      "-- parent window can't have frame"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -7852,6 +8150,9 @@
         "name": "w",
         "body": ""
       }
+    ],
+    "leadingComments": [
+      "-- looks weird but probably should work -- this is a window that inherits and changes nothing"
     ]
   },
   {
@@ -7870,6 +8171,12 @@
           }
         }
       }
+    ],
+    "leadingComments": [
+      "-- nonexistent parent window"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   }
 ]

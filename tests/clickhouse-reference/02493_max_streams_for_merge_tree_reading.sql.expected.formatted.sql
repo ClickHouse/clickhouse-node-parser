@@ -1,3 +1,5 @@
+-- { echo }
+-- The number of output streams is limited by max_streams_for_merge_tree_reading
 SELECT sum(x)
 FROM t
 SETTINGS
@@ -18,6 +20,7 @@ FROM (
 WHERE like(`explain`, '%Resize%')
     OR like(`explain`, '%MergeTreeSelect%');
 
+-- Without asynchronous_read, max_streams_for_merge_tree_reading limits max_streams * max_streams_to_max_threads_ratio
 SELECT sum(x)
 FROM t
 SETTINGS
@@ -40,6 +43,7 @@ FROM (
 WHERE like(`explain`, '%Resize%')
     OR like(`explain`, '%MergeTreeSelect%');
 
+-- With asynchronous_read, read in max_streams_for_merge_tree_reading async streams and resize to max_threads
 SELECT sum(x)
 FROM t
 SETTINGS
@@ -60,6 +64,7 @@ FROM (
 WHERE like(`explain`, '%Resize%')
     OR like(`explain`, '%MergeTreeSelect%');
 
+-- With asynchronous_read, read using max_streams * max_streams_to_max_threads_ratio async streams, resize to max_streams_for_merge_tree_reading outp[ut streams, resize to max_threads after aggregation
 SELECT sum(x)
 FROM t
 SETTINGS

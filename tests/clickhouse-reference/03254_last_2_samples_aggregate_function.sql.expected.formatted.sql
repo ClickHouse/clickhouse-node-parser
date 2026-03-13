@@ -6,6 +6,7 @@ ORDER BY
     metric_id ASC,
     timestamp ASC;
 
+-- Check resampled data
 SELECT
     metric_id,
     grid_timestamp,
@@ -45,6 +46,7 @@ FROM t_resampled_timeseries FINAL
 GROUP BY `step`
 ORDER BY `step` ASC;
 
+-- Compare aggregated table with timestamps and aggregated table with timestamp deltas
 SELECT
     `step`,
     count(),

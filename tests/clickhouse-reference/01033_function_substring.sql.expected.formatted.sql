@@ -1,12 +1,12 @@
 SELECT '-- argument validation';
 
-SELECT substring('hello', []);
+SELECT substring('hello', []); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT substring('hello', 1, []);
+SELECT substring('hello', 1, []); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT substring(materialize('hello'), -1, -1);
 
-SELECT substring(materialize('hello'), 0);
+SELECT substring(materialize('hello'), 0); -- { serverError ZERO_ARRAY_OR_TUPLE_INDEX }
 
 SELECT substring(toFixedString('hello', 16), 1, 8);
 
@@ -32,6 +32,7 @@ SELECT substring(toFixedString(toString(number), 4), 1 + number % 5, 1 + number 
 FROM `system`.numbers
 LIMIT 995, 10;
 
+-- positive offsets (slice from left)
 SELECT
     substring(e8, 1),
     substring(e16, 1)
@@ -42,6 +43,7 @@ SELECT
     substring(e16, 2, 10)
 FROM tab;
 
+-- negative offsets (slice from right)
 SELECT
     substring(e8, -1),
     substring(e16, -1)
@@ -52,6 +54,7 @@ SELECT
     substring(e16, -2, 10)
 FROM tab;
 
+-- zero offset/length
 SELECT
     substring(e8, 1, 0),
     substring(e16, 1, 0)
@@ -157,6 +160,15 @@ FROM t;
 SELECT substring(s, l, r)
 FROM t;
 
+/** NOTE: The behaviour of substring and substringUTF8 is inconsistent when negative offset is greater than string size:
+  * substring:
+  *      hello
+  * ^-----^ - offset -10, length 7, result: "he"
+  * substringUTF8:
+  *      hello
+  *      ^-----^ - offset -10, length 7, result: "hello"
+  * This may be subject for change.
+  */
 SELECT substringUTF8('hello, Ð¿Ñ�Ð¸Ð²ÐµÑ�', -9223372036854775808, number)
 FROM numbers(16)
 FORMAT Null;

@@ -127,6 +127,7 @@ INNER JOIN (
     USING (id)
 WHERE arrayMap(x -> x + value + value_1, [1]) = [6];
 
+-- from #10613
 SELECT
     name,
     count() AS cnt

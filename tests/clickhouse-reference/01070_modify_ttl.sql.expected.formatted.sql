@@ -19,6 +19,7 @@ SELECT
 FROM ttl
 ORDER BY i ASC;
 
+-- MATERIALIZE TTL ran only once
 SELECT count()
 FROM `system`.mutations
 WHERE database = currentDatabase()

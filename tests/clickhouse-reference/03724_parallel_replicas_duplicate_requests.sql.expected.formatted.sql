@@ -1,8 +1,8 @@
 SELECT *
 FROM t
-FORMAT Null;
+FORMAT Null; -- { serverError SOCKET_TIMEOUT }
 
 SELECT *
 FROM t
 ORDER BY a ASC
-FORMAT Null;
+FORMAT Null; -- { serverError SOCKET_TIMEOUT }

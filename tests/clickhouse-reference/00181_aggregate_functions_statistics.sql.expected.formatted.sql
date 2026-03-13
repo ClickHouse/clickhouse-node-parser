@@ -1,3 +1,4 @@
+/* varSamp */
 SELECT varSamp(x_value)
 FROM (
         SELECT x_value
@@ -20,6 +21,7 @@ FROM (
         FROM series
     );
 
+/* stddevSamp */
 SELECT stddevSamp(x_value)
 FROM (
         SELECT x_value
@@ -42,6 +44,7 @@ FROM (
         FROM series
     );
 
+/* skewSamp */
 SELECT skewSamp(x_value)
 FROM (
         SELECT x_value
@@ -64,6 +67,7 @@ FROM (
         FROM series
     );
 
+/* kurtSamp */
 SELECT kurtSamp(x_value)
 FROM (
         SELECT x_value
@@ -86,6 +90,7 @@ FROM (
         FROM series
     );
 
+/* varPop */
 SELECT varPop(x_value)
 FROM (
         SELECT x_value
@@ -108,6 +113,7 @@ FROM (
         FROM series
     );
 
+/* stddevPop */
 SELECT stddevPop(x_value)
 FROM (
         SELECT x_value
@@ -130,6 +136,7 @@ FROM (
         FROM series
     );
 
+/* skewPop */
 SELECT skewPop(x_value)
 FROM (
         SELECT x_value
@@ -152,6 +159,7 @@ FROM (
         FROM series
     );
 
+/* kurtPop */
 SELECT kurtPop(x_value)
 FROM (
         SELECT x_value
@@ -174,6 +182,7 @@ FROM (
         FROM series
     );
 
+/* covarSamp */
 SELECT covarSamp(x_value, y_value)
 FROM (
         SELECT
@@ -226,6 +235,7 @@ INNER JOIN (
     )
     USING (ID2);
 
+/* covarPop */
 SELECT covarPop(x_value, y_value)
 FROM (
         SELECT
@@ -278,6 +288,7 @@ INNER JOIN (
     )
     USING (ID2);
 
+/* corr */
 SELECT corr(x_value, y_value)
 FROM (
         SELECT
@@ -299,6 +310,7 @@ FROM (
 SELECT round(abs(corr(x_value, y_value) - covarPop(x_value, y_value) / ((stddevPop(x_value) * stddevPop(y_value)))), 6)
 FROM series;
 
+/* quantile AND quantileExact */
 SELECT '----quantile----';
 
 SELECT quantileExactIf(number, number > 0)

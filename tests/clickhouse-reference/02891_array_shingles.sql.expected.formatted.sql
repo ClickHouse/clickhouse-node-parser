@@ -1,22 +1,22 @@
 SELECT '-- negative tests';
 
-SELECT arrayShingles();
+SELECT arrayShingles(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT arrayShingles([1, 2, 3, 4, 5]);
+SELECT arrayShingles([1, 2, 3, 4, 5]); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT arrayShingles([1, 2, 3, 4, 5], 2, 3);
+SELECT arrayShingles([1, 2, 3, 4, 5], 2, 3); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT arrayShingles([1, 2, 3, 4, 5], 'str');
+SELECT arrayShingles([1, 2, 3, 4, 5], 'str'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayShingles((1, 2, 3, 4, 5), 0);
+SELECT arrayShingles((1, 2, 3, 4, 5), 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayShingles([1, 2, 3, 4, 5], 0);
+SELECT arrayShingles([1, 2, 3, 4, 5], 0); -- { serverError BAD_ARGUMENTS }
 
-SELECT arrayShingles([1, 2, 3, 4, 5], -2);
+SELECT arrayShingles([1, 2, 3, 4, 5], -2); -- { serverError BAD_ARGUMENTS }
 
-SELECT arrayShingles([1, 2, 3, 4, 5], 6);
+SELECT arrayShingles([1, 2, 3, 4, 5], 6); -- { serverError BAD_ARGUMENTS }
 
-SELECT arrayShingles([], 1);
+SELECT arrayShingles([], 1); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     [1, 2, 3, 4, 5] AS arr,

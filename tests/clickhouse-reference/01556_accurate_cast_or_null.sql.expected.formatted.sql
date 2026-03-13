@@ -74,6 +74,7 @@ SELECT toString(accurateCastOrNull(19, 'DateTime'), 'UTC');
 
 SELECT toString(accurateCastOrNull(70000, 'DateTime'), 'UTC');
 
+-- need fixed timezone in these two lines
 SELECT toString(accurateCastOrNull('1965-05-30 14:38:20', 'DateTime'), timezone())
 SETTINGS session_timezone = 'UTC';
 

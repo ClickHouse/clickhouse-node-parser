@@ -1,6 +1,7 @@
 SELECT groupArraySorted(30)((toUnixTimestamp(timestamp), value))
 FROM ts_data;
 
+-- Test for returning multiple rows in batch
 SELECT
     intDiv(toUnixTimestamp(timestamp), 130) * 130 AS fake_key,
     timeSeriesResampleToGridWithStaleness(100, 200, 10, 15)(timestamp, value)
@@ -8,6 +9,7 @@ FROM ts_data
 GROUP BY fake_key
 ORDER BY fake_key ASC;
 
+-- Compute average in each bucket
 SELECT
     avgForEach(values),
     countForEach(values) AS avg_values
@@ -25,12 +27,14 @@ SELECT
 FROM ts_data_agg FINAL
 ORDER BY k ASC;
 
+-- Check that -Merge returns the same result as the result form original table
 SELECT timeSeriesResampleToGridWithStaleness(100, 200, 10, 15)(timestamp, value)
 FROM ts_data;
 
 SELECT timeSeriesResampleToGridWithStalenessMerge(100, 200, 10, 15)(agg)
 FROM ts_data_agg;
 
+-- Check various data types for parameters and arguments
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, 50)(timestamp, value) AS res
 FROM ts_data;
 
@@ -46,6 +50,7 @@ FROM ts_data;
 SELECT timeSeriesResampleToGridWithStalenessIf(100, 150, 15, 50)(timestamp, value, value % 2 == 0) AS res
 FROM ts_data;
 
+-- Test with Nullable timestamps and values
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, 50)(if(value < 10120, NULL, timestamp), value::Float32) AS res
 FROM ts_data;
 
@@ -53,43 +58,43 @@ SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, 50)(timestamp, if(val
 FROM ts_data;
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, 50)(timestamp, value::Decimal(10,3)) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, 50)(timestamp, value::Int64) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, 50)(timestamp, value::String) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, 50)(timestamp, value::DateTime) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100::Float64, 150, 15, 50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150::Float32, 15, 50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15::Float32, 50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, 50::Float64)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(-100, 150, 15, 50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, -150, 15, 50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, -15, 50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 15, -50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT timeSeriesResampleToGridWithStaleness(200, 100, 15, 50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError BAD_ARGUMENTS }
 
 SELECT timeSeriesResampleToGridWithStaleness(100, 150, 0, 50)(timestamp, value) AS res
-FROM ts_data;
+FROM ts_data; -- { serverError BAD_ARGUMENTS }

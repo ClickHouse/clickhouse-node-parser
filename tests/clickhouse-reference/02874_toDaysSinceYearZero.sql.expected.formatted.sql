@@ -1,10 +1,10 @@
-SELECT toDaysSinceYearZero();
+SELECT toDaysSinceYearZero(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toDaysSinceYearZero(toDate('2023-09-08'), 3);
+SELECT toDaysSinceYearZero(toDate('2023-09-08'), 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toDaysSinceYearZero('str');
+SELECT toDaysSinceYearZero('str'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toDaysSinceYearZero(42);
+SELECT toDaysSinceYearZero(42); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toDaysSinceYearZero(toDate('1970-01-01'));
 

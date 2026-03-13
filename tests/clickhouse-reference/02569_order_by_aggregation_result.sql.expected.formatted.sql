@@ -1,3 +1,7 @@
+-- Github issues:
+-- - https://github.com/ClickHouse/ClickHouse/issues/46268
+-- - https://github.com/ClickHouse/ClickHouse/issues/46273
+-- Queries that the original PR (https://github.com/ClickHouse/ClickHouse/pull/42827) tried to fix
 SELECT
     (number = 1)
     AND (number = 2) AS value,
@@ -21,6 +25,7 @@ FROM (
     )
 WHERE 25;
 
+-- Query that https://github.com/ClickHouse/ClickHouse/pull/42827 broke
 SELECT
     argMax(col1, timestamp) AS col1,
     argMax(col2, timestamp) AS col2,

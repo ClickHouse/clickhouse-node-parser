@@ -1,3 +1,4 @@
+-- This is a fancy way to check that the MV hasn't been called (no functions executed by ALTER)
 SELECT
     ProfileEvents['FunctionExecute'],
     ProfileEvents['TableFunctionExecute']

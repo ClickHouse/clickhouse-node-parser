@@ -1,3 +1,5 @@
+-- Tags: no-msan, long, no-azure-blob-storage
+-- msan: too slow
 SELECT '-- Single partition by function';
 
 SELECT count()
@@ -130,6 +132,8 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_multiple_columns';
 
+-- Due to xxHash32() in WHERE condition, MinMax is unable to eliminate any parts,
+-- so partition pruning leave two parts (for key1 // 50 = 0 and key1 // 50 = 1)
 SELECT ProfileEvents['SelectedParts']
 FROM `system`.query_log
 WHERE type = 'QueryFinish'

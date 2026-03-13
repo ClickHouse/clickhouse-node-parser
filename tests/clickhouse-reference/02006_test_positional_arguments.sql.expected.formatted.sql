@@ -1,3 +1,4 @@
+-- { echo }
 SELECT
     x3,
     x2,
@@ -138,7 +139,7 @@ SELECT
 FROM test
 GROUP BY
     1,
-    2;
+    2; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 
 SELECT
     1 + max(x1),
@@ -146,7 +147,7 @@ SELECT
 FROM test
 GROUP BY
     1,
-    2;
+    2; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 
 SELECT
     max(x1),
@@ -154,7 +155,7 @@ SELECT
 FROM test
 GROUP BY
     -2,
-    -1;
+    -1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 
 SELECT
     1 + max(x1),
@@ -162,7 +163,7 @@ SELECT
 FROM test
 GROUP BY
     -2,
-    -1;
+    -1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 
 SELECT
     x1,

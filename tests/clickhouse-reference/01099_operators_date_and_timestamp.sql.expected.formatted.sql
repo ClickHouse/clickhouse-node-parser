@@ -52,15 +52,15 @@ SELECT
 
 SELECT
     (toDate('2001-09-29') + toIntervalMillisecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate('2001-09-29') + toIntervalMicrosecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate('2001-09-29') + toIntervalNanosecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate('2001-09-29') - toIntervalSecond(12345)) AS x,
@@ -68,15 +68,15 @@ SELECT
 
 SELECT
     (toDate('2001-09-29') - toIntervalMillisecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate('2001-09-29') - toIntervalMicrosecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate('2001-09-29') - toIntervalNanosecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate32('2001-09-29') + toIntervalSecond(12345)) AS x,
@@ -84,15 +84,15 @@ SELECT
 
 SELECT
     (toDate32('2001-09-29') + toIntervalMillisecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate32('2001-09-29') + toIntervalMicrosecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate32('2001-09-29') + toIntervalNanosecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate32('2001-09-29') - toIntervalSecond(12345)) AS x,
@@ -100,15 +100,15 @@ SELECT
 
 SELECT
     (toDate32('2001-09-29') - toIntervalMillisecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate32('2001-09-29') - toIntervalMicrosecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDate32('2001-09-29') - toIntervalNanosecond(12345)) AS x,
-    toTypeName(x);
+    toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     (toDateTime('2001-12-29 03:00:00') - toDateTime('2001-12-27 12:00:00')) AS x,

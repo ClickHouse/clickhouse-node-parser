@@ -51,17 +51,20 @@ ORDER BY cosineDistance(vec, (
     )) ASC
 LIMIT 4;
 
+-- Check that an index with binary quantization (1 bit / dimension) is smaller than an index with BFloat16 (2 bytes / dimension)
 SELECT if(data_uncompressed_bytes < (20 * 1536 * 2), 'Good', toString(data_uncompressed_bytes))
 FROM `system`.data_skipping_indices
 WHERE database = currentDatabase()
     AND name = 'vec_idx';
 
+-- Expect 1.
 SELECT id
 FROM tab
 ORDER BY cosineDistance(vec, [-0.25, 0.25, 0.10, 0.10, 0.9, 0.9, 0.9, 0.9]) ASC
 LIMIT 1
 SETTINGS vector_search_with_rescoring = 0;
 
+-- Expect 2
 SELECT id
 FROM tab
 ORDER BY cosineDistance(vec, [-0.25, 0.25, 0.10, 0.10, 0.9, 0.9, 0.9, 0.9]) ASC

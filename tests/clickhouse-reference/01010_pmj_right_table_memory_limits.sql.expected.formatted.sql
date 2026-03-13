@@ -12,7 +12,7 @@ LEFT JOIN (
             number AS j
         FROM numbers(1000000)
     ) AS js2
-    USING (n);
+    USING (n); -- { serverError MEMORY_LIMIT_EXCEEDED }
 
 SELECT
     n,
@@ -29,7 +29,7 @@ LEFT JOIN (
         FROM numbers(1000000)
     ) AS js2
     USING (n)
-SETTINGS max_bytes_in_join = 30000000;
+SETTINGS max_bytes_in_join = 30000000; -- { serverError MEMORY_LIMIT_EXCEEDED }
 
 SELECT
     n,

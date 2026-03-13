@@ -1,3 +1,4 @@
+-- The query works when using a single SELECT *
 SELECT *
 FROM (
         SELECT
@@ -10,6 +11,7 @@ GROUP BY
     2
 ORDER BY `ALL` ASC;
 
+-- It doesn't when the GROUP BY is nested deeper
 SELECT *
 FROM (
         SELECT *

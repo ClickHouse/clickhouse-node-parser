@@ -1,3 +1,4 @@
+-- Order after group by in order is determined
 SELECT
     a,
     b

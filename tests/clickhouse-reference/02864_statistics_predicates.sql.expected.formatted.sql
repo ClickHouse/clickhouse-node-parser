@@ -60,23 +60,23 @@ WHERE u64_uniq = '7';
 
 SELECT count(*)
 FROM tab
-WHERE u64 = '7.7';
+WHERE u64 = '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
-WHERE u64_tdigest = '7.7';
+WHERE u64_tdigest = '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
-WHERE u64_minmax = '7.7';
+WHERE u64_minmax = '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
-WHERE u64_countmin = '7.7';
+WHERE u64_countmin = '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
-WHERE u64_uniq = '7.7';
+WHERE u64_uniq = '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
@@ -140,23 +140,23 @@ WHERE u64_uniq < '7';
 
 SELECT count(*)
 FROM tab
-WHERE u64 < '7.7';
+WHERE u64 < '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
-WHERE u64_tdigest < '7.7';
+WHERE u64_tdigest < '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
-WHERE u64_minmax < '7.7';
+WHERE u64_minmax < '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
-WHERE u64_countmin < '7.7';
+WHERE u64_countmin < '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
-WHERE u64_uniq < '7.7';
+WHERE u64_uniq < '7.7'; -- { serverError TYPE_MISMATCH }
 
 SELECT count(*)
 FROM tab
@@ -480,20 +480,24 @@ WHERE b_uniq = 1.1;
 
 SELECT count(*)
 FROM tab
-WHERE s = 7;
+WHERE s = 7; -- { serverError NO_COMMON_TYPE }
+
+-- SELECT count(*) FROM tab WHERE s_tdigest = 7; -- not supported
+-- SELECT count(*) FROM tab WHERE s_minmax = 7; -- not supported
+SELECT count(*)
+FROM tab
+WHERE s_countmin = 7; -- { serverError NO_COMMON_TYPE }
 
 SELECT count(*)
 FROM tab
-WHERE s_countmin = 7;
-
-SELECT count(*)
-FROM tab
-WHERE s_uniq = 7;
+WHERE s_uniq = 7; -- { serverError NO_COMMON_TYPE }
 
 SELECT count(*)
 FROM tab
 WHERE s = '7';
 
+-- SELECT count(*) FROM tab WHERE s_tdigest = '7'; -- not supported
+-- SELECT count(*) FROM tab WHERE s_minmax = '7'; -- not supported
 SELECT count(*)
 FROM tab
 WHERE s_countmin = '7';

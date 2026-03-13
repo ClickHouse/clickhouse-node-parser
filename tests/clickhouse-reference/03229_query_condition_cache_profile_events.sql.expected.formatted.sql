@@ -1,3 +1,4 @@
+-- Tests that queries with enabled query condition cache correctly populate profile events
 SELECT '--- with move to PREWHERE';
 
 SELECT count(*)

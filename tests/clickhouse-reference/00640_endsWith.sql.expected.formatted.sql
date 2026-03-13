@@ -28,4 +28,4 @@ SELECT COUNT()
 FROM endsWith_test
 WHERE endsWith(S2, S3);
 
-SELECT endsWith([], 'str');
+SELECT endsWith([], 'str'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

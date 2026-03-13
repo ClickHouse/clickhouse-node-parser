@@ -1,3 +1,4 @@
+-- Tags: distributed
 SELECT dummy
 FROM (
         SELECT

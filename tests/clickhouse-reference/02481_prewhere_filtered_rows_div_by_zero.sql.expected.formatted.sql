@@ -5,9 +5,11 @@ SELECT
 FROM test_filter
 ORDER BY _part_offset ASC;
 
+-- Check that division by zero occurs on some rows
 SELECT intDiv(b, c)
-FROM test_filter;
+FROM test_filter; -- { serverError ILLEGAL_DIVISION }
 
+-- Filter out those rows using WHERE or PREWHERE
 SELECT intDiv(b, c)
 FROM test_filter
 WHERE c != 0;

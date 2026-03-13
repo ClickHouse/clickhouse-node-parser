@@ -1,4 +1,6 @@
+-- Tests codepath for ternary logic
 SELECT
+    -- x1, x2, x3, x4,
     xor(x1, x2, x3, x4) AS xor1,
     xor(xor(x1, x2), xor(x3, x4)) AS xor2,
     or(x1, x2, x3, x4) AS or1,
@@ -24,7 +26,9 @@ WHERE ((xor1 != xor2
     OR ((and1 != and2
     OR (isNull(and1)) != (isNull(and2))))));
 
+-- Test ternary logic over multiple batches of columns (currently batch spans over 10 columns)
 SELECT
+    -- x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11,
     xor(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11) AS xor1,
     xor(x1, xor(xor(xor(x2, x3), xor(x4, x5)), xor(xor(x6, x7), xor(x8, xor(x9, xor(x10, x11)))))) AS xor2,
     or(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11) AS or1,

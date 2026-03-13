@@ -8,27 +8,27 @@ FORMAT Null;
 
 SELECT *
 FROM remote('[::1', `system`.one)
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('::1]', `system`.one)
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('::1', `system`.one)
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('[::1][::1]', `system`.one)
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('[::1][::1', `system`.one)
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('[::1]::1]', `system`.one)
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('[::1]')
@@ -40,24 +40,24 @@ FORMAT Null;
 
 SELECT *
 FROM remote('[::1')
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('::1]')
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('::1')
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('[::1][::1]')
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('[::1][::1')
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM remote('[::1]::1]')
-FORMAT Null;
+FORMAT Null; -- { serverError BAD_ARGUMENTS }

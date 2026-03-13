@@ -32,4 +32,4 @@ WHERE 1000.0 / i = 33.4;
 
 SELECT *
 FROM x
-WHERE i > 30;
+WHERE i > 30; -- converted to i / 10 >= 3, thus needs to read 3 granules.

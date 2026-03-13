@@ -1,5 +1,5 @@
 SELECT *
-FROM test_table_for_01070_exception_code_in_query_log_table;
+FROM test_table_for_01070_exception_code_in_query_log_table; -- { serverError UNKNOWN_TABLE }
 
 SELECT exception_code
 FROM `system`.query_log

@@ -1,3 +1,4 @@
+-- Int8, Int8
 SELECT
     _shard_num,
     *
@@ -10,6 +11,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- Int8, UInt8
 SELECT
     _shard_num,
     *
@@ -22,6 +24,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- UInt8, UInt8
 SELECT
     _shard_num,
     *
@@ -34,6 +37,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- UInt8, Int8
 SELECT
     _shard_num,
     *
@@ -46,6 +50,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- Int16, Int16
 SELECT
     _shard_num,
     *
@@ -58,6 +63,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- Int16, UInt16
 SELECT
     _shard_num,
     *
@@ -70,6 +76,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- UInt16, UInt16
 SELECT
     _shard_num,
     *
@@ -82,6 +89,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- UInt16, Int16
 SELECT
     _shard_num,
     *
@@ -94,6 +102,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- Int32, Int32
 SELECT
     _shard_num,
     *
@@ -106,6 +115,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- Int32, UInt32
 SELECT
     _shard_num,
     *
@@ -118,6 +128,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- UInt32, UInt32
 SELECT
     _shard_num,
     *
@@ -130,6 +141,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- UInt32, Int32
 SELECT
     _shard_num,
     *
@@ -142,6 +154,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- Int64, Int64
 SELECT
     _shard_num,
     *
@@ -154,6 +167,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- Int64, UInt64
 SELECT
     _shard_num,
     *
@@ -166,6 +180,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- UInt64, UInt64
 SELECT
     _shard_num,
     *
@@ -178,6 +193,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- UInt64, Int64
 SELECT
     _shard_num,
     *
@@ -190,6 +206,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- modulo(Int8)
 SELECT DISTINCT
     _shard_num,
     *
@@ -202,6 +219,7 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- modulo(UInt8)
 SELECT DISTINCT
     _shard_num,
     *
@@ -214,6 +232,10 @@ ORDER BY
     _shard_num ASC,
     id ASC;
 
+-- { echoOff }
+-- those two had been reported initially by amosbird:
+-- (the problem is that murmurHash3_32() returns different value to toInt64(1) and toUInt64(1))
+---- error for local node
 SELECT *
 FROM remote('127.{1..4}', view((
         SELECT number AS id
@@ -221,6 +243,7 @@ FROM remote('127.{1..4}', view((
     )), bitAnd(murmurHash3_32(id), 2147483647))
 WHERE id IN (2, 3);
 
+---- error for remote node
 SELECT *
 FROM remote('127.{1..8}', view((
         SELECT number AS id

@@ -12,7 +12,7 @@ WHERE like(name, '%tablefunc%')
 ORDER BY name ASC;
 
 SELECT count()
-FROM {CLICKHOUSE_DATABASE:Identifier}.tablefunc01;
+FROM {CLICKHOUSE_DATABASE:Identifier}.tablefunc01; -- { serverError POSTGRESQL_CONNECTION_FAILURE }
 
 SELECT engine
 FROM `system`.tables

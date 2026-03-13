@@ -1,3 +1,4 @@
+-- Tags: stateful, distributed
 SELECT
     RegionID,
     uniqExact(UserID) AS u1,

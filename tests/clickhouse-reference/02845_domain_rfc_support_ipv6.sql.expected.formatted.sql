@@ -10,6 +10,7 @@ FORMAT CSV;
 SELECT domainRFC('[2001:db8::1]')
 FORMAT CSV;
 
+-- Does not conform to the IPv6 format.
 SELECT domainRFC('[2001db81]:80')
 FORMAT CSV;
 

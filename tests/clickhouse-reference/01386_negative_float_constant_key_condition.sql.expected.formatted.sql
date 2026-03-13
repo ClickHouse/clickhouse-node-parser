@@ -8,7 +8,7 @@ SELECT t0.c1
 FROM t0
 WHERE NOT(t0.c1
     OR (t0.c0
-    AND -1.0));
+    AND -1.0)); -- { serverError CANNOT_CONVERT_TYPE }
 
 SELECT t0.c1
 FROM t0

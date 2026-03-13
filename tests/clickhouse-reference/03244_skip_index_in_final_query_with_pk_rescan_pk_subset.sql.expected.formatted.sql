@@ -1,3 +1,4 @@
+-- Verify granules selected for the next 5 queries
 SELECT splitByChar('/', trimLeft(`explain`))[1]
 FROM (
         EXPLAIN indexes = 1
@@ -18,6 +19,7 @@ FROM (
     )
 WHERE like(`explain`, '%Granules:%');
 
+-- PK selects more granules but intersection will be lesser
 SELECT splitByChar('/', trimLeft(`explain`))[1]
 FROM (
         EXPLAIN indexes = 1
@@ -52,6 +54,7 @@ FROM (
     )
 WHERE like(`explain`, '%Granules:%');
 
+-- execute the queries to verify ranges are correctly added
 SELECT count(*)
 FROM rmt1 FINAL
 WHERE id = 25

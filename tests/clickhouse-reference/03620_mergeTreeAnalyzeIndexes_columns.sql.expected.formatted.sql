@@ -1,3 +1,4 @@
+-- { echo }
 SELECT part_name
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data, key >= 1000);
 

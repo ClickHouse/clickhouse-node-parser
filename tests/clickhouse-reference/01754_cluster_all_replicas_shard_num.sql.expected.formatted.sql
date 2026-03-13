@@ -1,3 +1,4 @@
+-- Tags: replica, shard
 SELECT _shard_num
 FROM cluster('test_shard_localhost', `system`.one);
 

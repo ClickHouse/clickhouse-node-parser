@@ -1,3 +1,4 @@
+-- { echo }
 SELECT *
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), 'with_skip_index', value > 0);
 

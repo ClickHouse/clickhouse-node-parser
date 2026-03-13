@@ -12,8 +12,9 @@ INNER JOIN t0
     USING (c1)
 ORDER BY c0 ASC;
 
+-- Cannot join using alias column defined in Distributed table
 SELECT c0
 FROM
     t1_dist AS tx
 INNER JOIN t0
-    USING (c2);
+    USING (c2); -- { serverError UNKNOWN_IDENTIFIER }

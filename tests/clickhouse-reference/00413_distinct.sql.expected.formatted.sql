@@ -1,3 +1,4 @@
+-- String field
 SELECT Name
 FROM (
         SELECT DISTINCT Name
@@ -5,6 +6,7 @@ FROM (
     )
 ORDER BY Name ASC;
 
+-- Num field
 SELECT Num
 FROM (
         SELECT DISTINCT Num
@@ -12,6 +14,7 @@ FROM (
     )
 ORDER BY Num ASC;
 
+-- all const columns
 SELECT DISTINCT
     1 AS a,
     2 AS b

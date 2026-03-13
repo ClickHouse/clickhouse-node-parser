@@ -13,4 +13,4 @@ FROM numbers(exists((
                     OR 1
             )
         LIMIT 1
-    )) = t1.i1, 5);
+    )) = t1.i1, 5); -- { serverError UNKNOWN_IDENTIFIER }

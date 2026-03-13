@@ -11,7 +11,7 @@ WHERE id > 0
         FROM numbers(10)
         WHERE number > 10
     ))
-SETTINGS execute_exists_as_scalar_subquery = 0;
+SETTINGS execute_exists_as_scalar_subquery = 0; -- { serverError INDEX_NOT_USED }
 
 SELECT *
 FROM tab

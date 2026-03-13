@@ -210,7 +210,7 @@ SELECT
     toUInt32(2147483648) AS x,
     a == x
 FROM decimal
-WHERE a = 42;
+WHERE a = 42; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     toUInt64(2147483648) AS x,
@@ -223,7 +223,7 @@ SELECT
     toUInt64(9223372036854775808) AS x,
     b == x
 FROM decimal
-WHERE a = 42;
+WHERE a = 42; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     toUInt64(9223372036854775808) AS x,
@@ -246,11 +246,11 @@ WHERE a = 42;
 
 SELECT g = 30000
 FROM decimal
-WHERE a = 42;
+WHERE a = 42; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT 30000 = g
 FROM decimal
-WHERE a = 42;
+WHERE a = 42; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     h = 30000,
@@ -266,7 +266,7 @@ WHERE a = 42;
 
 SELECT h = 10000000000
 FROM decimal
-WHERE a = 42;
+WHERE a = 42; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     i = 10000000000,

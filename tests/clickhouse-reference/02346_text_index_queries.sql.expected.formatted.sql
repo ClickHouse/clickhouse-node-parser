@@ -1,3 +1,4 @@
+-- check text index was created
 SELECT
     name,
     type
@@ -6,6 +7,7 @@ WHERE table == 'tab'
     AND database = currentDatabase()
 LIMIT 1;
 
+-- search text index with ==
 SELECT *
 FROM tab
 WHERE s == 'Alick a01';
@@ -19,6 +21,7 @@ WHERE query_kind = 'Select'
     AND result_rows == 1
 LIMIT 1;
 
+-- search text index with LIKE
 SELECT *
 FROM tab
 WHERE like(s, '%01%')
@@ -33,6 +36,7 @@ WHERE query_kind = 'Select'
     AND result_rows == 2
 LIMIT 1;
 
+-- search text index with hasToken
 SELECT *
 FROM tab
 WHERE hasToken(s, 'Click')
@@ -47,6 +51,7 @@ WHERE query_kind = 'Select'
     AND result_rows == 4
 LIMIT 1;
 
+-- check text index was created
 SELECT
     name,
     type
@@ -55,6 +60,7 @@ WHERE table == 'tab_x'
     AND database = currentDatabase()
 LIMIT 1;
 
+-- search text index with hasToken
 SELECT *
 FROM tab_x
 WHERE hasToken(s, 'Alick')
@@ -69,6 +75,7 @@ WHERE query_kind = 'Select'
     AND result_rows == 4
 LIMIT 1;
 
+-- search text index with IN operator
 SELECT *
 FROM tab_x
 WHERE s IN ('x Alick a01 y', 'x Alick a06 y')
@@ -83,6 +90,7 @@ WHERE query_kind = 'Select'
     AND result_rows == 2
 LIMIT 1;
 
+-- check text index was created
 SELECT
     name,
     type
@@ -100,6 +108,7 @@ WHERE query_kind = 'Select'
     AND result_rows == 3
 LIMIT 1;
 
+-- search text index
 SELECT *
 FROM tab
 WHERE like(s, '%你好%')
@@ -114,6 +123,7 @@ WHERE query_kind = 'Select'
     AND result_rows == 1
 LIMIT 1;
 
+-- search text index
 SELECT *
 FROM tab
 WHERE like(s, '%house你好%')

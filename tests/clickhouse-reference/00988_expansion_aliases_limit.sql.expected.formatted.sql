@@ -24,4 +24,4 @@ SELECT
     v + v AS w,
     w + w AS x,
     x + x AS y,
-    y + y AS z;
+    y + y AS z; -- { serverError BAD_ARGUMENTS, 168 }

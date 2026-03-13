@@ -127,6 +127,7 @@ FROM (
         WHERE day = '2020-01-01'
     );
 
+-- lambda parameters in filter should not be rewrite
 SELECT count() == 10
 FROM test_table
 WHERE arrayMap(day -> day + 1, [1,2,3])[1] = 2

@@ -9,6 +9,11 @@
     'EXCEPT', 'WINDOW', 'OVER', 'QUALIFY', 'SAMPLE',
   ]);
 
+  // Flatten a whitespace result { trailing: [...], leading: [...] } into a single array
+  function flattenWs(ws) {
+    return ws.trailing.concat(ws.leading);
+  }
+
   // Interval unit name lookup (lowercase key → capitalized unit name)
   const INTERVAL_UNITS = {
     nanosecond: 'Nanosecond', nanoseconds: 'Nanosecond', ns: 'Nanosecond',
@@ -34,8 +39,44 @@
 // Statements is the top-level rule, supporting UNION ALL and FORMAT clauses
 // Allows empty input (e.g., SQL files containing only comments)
 Statements
-  = _ head:TopLevelStatement rest:(_ ";"+ _ TopLevelStatement)* _ ";"* _ {
-      return [head, ...rest.map(function(r) { return r[3]; })];
+  = pre:_ head:TopLevelStatement headWs:_
+    rest:(";"+ ws2:_ TopLevelStatement ws3:_)*
+    ";"* finalWs:_ {
+      var preComments = flattenWs(pre);
+      if (preComments.length > 0) head.leadingComments = preComments.concat(head.leadingComments || []);
+      // headWs: .trailing = same-line after head → trailing on head
+      // headWs: .leading = after-newline before ";" → deferred to next stmt (or trailing on last if single stmt)
+      if (headWs.trailing.length > 0) head.trailingComments = (head.trailingComments || []).concat(headWs.trailing);
+      var pendingLeading = headWs.leading;
+      var stmts = [head];
+      for (var i = 0; i < rest.length; i++) {
+        var ws2val = rest[i][1]; // after ";"
+        var stmt = rest[i][2];
+        var ws3val = rest[i][3]; // after stmt
+        // Same-line after ";" → trailing on prev stmt
+        if (ws2val.trailing.length > 0) {
+          var prev = stmts[stmts.length - 1];
+          prev.trailingComments = (prev.trailingComments || []).concat(ws2val.trailing);
+        }
+        // Pending from prev iteration + after-newline after ";" → leading on this stmt
+        var leading = pendingLeading.concat(ws2val.leading);
+        if (leading.length > 0) {
+          stmt.leadingComments = leading.concat(stmt.leadingComments || []);
+        }
+        // Same-line after stmt → trailing on this stmt
+        if (ws3val.trailing.length > 0) {
+          stmt.trailingComments = (stmt.trailingComments || []).concat(ws3val.trailing);
+        }
+        // After-newline after stmt → deferred to next iteration
+        pendingLeading = ws3val.leading;
+        stmts.push(stmt);
+      }
+      var last = stmts[stmts.length - 1];
+      var endComments = pendingLeading.concat(flattenWs(finalWs));
+      if (endComments.length > 0) {
+        last.trailingComments = (last.trailingComments || []).concat(endComments);
+      }
+      return stmts;
     }
   / _ { return []; }
 
@@ -142,6 +183,12 @@ UnionQuery
       for (var i = 0; i < tail.length; i++) {
         var op = tail[i][1];
         var right = tail[i][3];
+        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+        if (comments.length > 0) {
+          right = Object.assign({}, right, {
+            leadingComments: comments.concat(right.leadingComments || [])
+          });
+        }
         if (op === 'UNION') {
           // UNION ALL: flatten into existing union (if it's also ALL)
           if (result.kind === 'union' && !result.unionMode) {
@@ -165,7 +212,14 @@ IntersectQuery
       if (tail.length === 0) return head;
       var result = head;
       for (var i = 0; i < tail.length; i++) {
-        result = { kind: 'intersect', op: 'INTERSECT', left: result, right: tail[i][3] };
+        var right = tail[i][3];
+        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+        if (comments.length > 0) {
+          right = Object.assign({}, right, {
+            leadingComments: comments.concat(right.leadingComments || [])
+          });
+        }
+        result = { kind: 'intersect', op: 'INTERSECT', left: result, right: right };
       }
       return result;
     }
@@ -187,7 +241,19 @@ UnionAllOrDistinct
 
 // UnionQueryAtom: a single SELECT or EXPLAIN statement, optionally wrapped in parentheses
 UnionQueryAtom
-  = "(" _ query:UnionQuery _ ")" {
+  = "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
+      var bq = flattenWs(beforeQuery);
+      if (bq.length > 0) {
+        query = Object.assign({}, query, {
+          leadingComments: bq.concat(query.leadingComments || [])
+        });
+      }
+      var aq = flattenWs(afterQuery);
+      if (aq.length > 0) {
+        query = Object.assign({}, query, {
+          trailingComments: (query.trailingComments || []).concat(aq)
+        });
+      }
       // Mark bare parenthesized selects so they can be wrapped in SelectWithUnionQuery
       // when they appear inside INTERSECT/EXCEPT or UNION DISTINCT
       if (query.kind === 'select') return Object.assign({}, query, { parenthesized: true });
@@ -205,8 +271,8 @@ UnionQueryAtom
 // e.g. SELECT TOP 5 WITH TIES * FROM t ORDER BY score DESC
 SelectStatement
   = withClause:( CTEClause _ )?
-    KW_SELECT _ distinct:( DistinctClause _ )? top:( "TOP"i ![a-zA-Z0-9_] _ UnaryExpr _ ( KW_WITH _ "TIES"i ![a-zA-Z0-9_] _ )? )?
-    select:SelectItemList
+    KW_SELECT selectComments:_ distinct:( DistinctClause _ )? top:( "TOP"i ![a-zA-Z0-9_] _ UnaryExpr _ ( KW_WITH _ "TIES"i ![a-zA-Z0-9_] _ )? )?
+    select:SelectItemList selectTrailing:_HWS
     withModifier1:( _ WithModifierClause )?
     from:( _ FromClause )?
     prewhere:( _ PrewhereClause )?
@@ -226,7 +292,14 @@ SelectStatement
     settings:( _ SettingsClause )? {
       var result = {};
       result.kind = 'select';
-      if (withClause !== null) result.with = withClause[0];
+      var withTrailingComments = [];
+      if (withClause !== null) {
+        var wcd = withClause[0];
+        result.with = wcd.items;
+        var kwComments = flattenWs(wcd.keywordComments);
+        if (kwComments.length > 0) result.leadingComments = kwComments;
+        withTrailingComments = flattenWs(withClause[1]);
+      }
       // Distinct clause
       var distVal = distinct !== null ? distinct[0] : null;
       if (distVal !== null && typeof distVal === 'object' && distVal.kind === 'distinctOn') {
@@ -236,10 +309,26 @@ SelectStatement
         if (distStr !== null && distStr !== undefined && distStr.toString().toUpperCase() === 'DISTINCT') result.distinct = { kind: 'distinct' };
       }
       result.select = select;
-      if (from !== null) result.from = from[1];
+      // selectTrailing: same-line comments after the last select item (from _HWS)
+      var _selectTrailing = selectTrailing;
+      if (from !== null) {
+        result.from = from[1];
+        var fromLeading = flattenWs(from[0]);
+        if (fromLeading.length > 0) result.fromLeadingComments = fromLeading;
+      }
       // Keep prewhere and where as separate fields for correct explain output
-      if (prewhere !== null) result.prewhere = prewhere[1];
-      if (where !== null) result.where = where[1];
+      if (prewhere !== null) {
+        var pw = prewhere[1];
+        var pwc = flattenWs(prewhere[0]);
+        if (pwc.length > 0) pw = Object.assign({}, pw, { leadingComments: pwc.concat(pw.leadingComments || []) });
+        result.prewhere = pw;
+      }
+      if (where !== null) {
+        var w = where[1];
+        var wc = flattenWs(where[0]);
+        if (wc.length > 0) w = Object.assign({}, w, { leadingComments: wc.concat(w.leadingComments || []) });
+        result.where = w;
+      }
       // WITH TOTALS/CUBE/ROLLUP modifiers (can appear without GROUP BY)
       var wm = withModifier1 !== null ? withModifier1[1] : (withModifier2 !== null ? withModifier2[1] : null);
       if (wm !== null) {
@@ -250,6 +339,7 @@ SelectStatement
       // GROUP BY clause (discriminated union)
       if (groupBy !== null) {
         var gb = groupBy[1];
+        var gbc = flattenWs(groupBy[0]);
         if (gb.all) {
           result.groupBy = { kind: 'all' };
           if (gb.withTotals) result.withTotals = true;
@@ -259,14 +349,30 @@ SelectStatement
           result.groupBy = { kind: 'groupingSets', sets: gb.groupingSets };
           if (gb.withTotals) result.withTotals = true;
         } else {
-          result.groupBy = { kind: 'expressions', items: gb.items };
+          // Attach pre-GROUP BY whitespace comments to first item
+          var gbItems = gb.items;
+          if (gbc.length > 0 && gbItems.length > 0) {
+            var gbFirst = gbItems[0];
+            gbItems = gbItems.slice();
+            gbItems[0] = Object.assign({}, gbFirst, {
+              leadingComments: gbc.concat(gbFirst.leadingComments || [])
+            });
+          }
+          result.groupBy = { kind: 'expressions', items: gbItems };
           if (gb.withTotals) result.withTotals = true;
           if (gb.withCube) result.withCube = true;
           if (gb.withRollup) result.withRollup = true;
         }
       }
-      if (having !== null) result.having = having[1];
-      if (orderBy !== null) result.orderBy = orderBy[1];
+      if (having !== null) {
+        var hv = having[1];
+        var hvc = flattenWs(having[0]);
+        if (hvc.length > 0) hv = Object.assign({}, hv, { leadingComments: hvc.concat(hv.leadingComments || []) });
+        result.having = hv;
+      }
+      if (orderBy !== null) {
+        result.orderBy = orderBy[1];
+      }
       // LIMIT BY clause
       if (limitBy !== null) {
         var lb = limitBy[1];
@@ -293,10 +399,39 @@ SelectStatement
       var windows = window1 !== null ? window1[1] : (window2 !== null ? window2[1] : null);
       if (windows !== null) result.windows = windows;
       var qualify = qualify1 !== null ? qualify1 : qualify2;
-      if (qualify !== null) result.qualify = qualify[1];
+      if (qualify !== null) {
+        var qe = qualify[1];
+        var qec = flattenWs(qualify[0]);
+        if (qec.length > 0) qe = Object.assign({}, qe, { leadingComments: qec.concat(qe.leadingComments || []) });
+        result.qualify = qe;
+      }
       if (settings !== null) result.settings = settings[1];
       // SELECT TOP n — sets the limit (SQL Server compat syntax)
       if (top !== null && result.limit === undefined) result.limit = { count: top[3] };
+      // Comments between WITH block/SELECT keyword and first item → leadingComments on first select item
+      var selectCommentsFlat = withTrailingComments.concat(flattenWs(selectComments));
+      if (selectCommentsFlat.length > 0 && result.select.length > 0) {
+        var firstItem = result.select[0];
+        result.select[0] = Object.assign({}, firstItem, {
+          leadingComments: selectCommentsFlat.concat(firstItem.leadingComments || [])
+        });
+      }
+      // Trailing same-line comment after the last select item:
+      // If clauses follow, attach to the last select item (it will appear inline before the next clause).
+      // If no clauses follow, store as statement-level trailingComments (Statements rule will merge).
+      if (_selectTrailing.length > 0) {
+        var hasFollowingClause = result.from || result.prewhere || result.where || result.groupBy
+          || result.having || result.orderBy || result.limitBy || result.limit || result.offset
+          || result.windows || result.qualify || result.settings;
+        if (hasFollowingClause) {
+          var lastItem = result.select[result.select.length - 1];
+          result.select[result.select.length - 1] = Object.assign({}, lastItem, {
+            trailingComments: (lastItem.trailingComments || []).concat(_selectTrailing)
+          });
+        } else {
+          result.trailingComments = _selectTrailing;
+        }
+      }
       return result;
     }
 
@@ -312,21 +447,67 @@ DistinctClause
 // ── Clauses ──────────────────────────────────────────────────────────────────
 
 CTEClause
-  = KW_WITH _ "RECURSIVE"i ![a-zA-Z0-9_] _ items:CTEItemList { return items; }
-  / KW_WITH _ items:CTEItemList { return items; }
+  = KW_WITH wc:_ "RECURSIVE"i ![a-zA-Z0-9_] _ items:CTEItemList { return { items: items, keywordComments: wc }; }
+  / KW_WITH wc:_ items:CTEItemList { return { items: items, keywordComments: wc }; }
 
 CTEItemList
-  = head:CTEItem tail:(_ "," _ CTEItem)* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+  = head:CTEItem tail:(_ "," _ CTEItem)* lastWs:_HWS {
+      var items = [head];
+      for (var i = 0; i < tail.length; i++) {
+        // ws1 (before comma): all comments → leading on next item (preserves old behavior)
+        // ws2 (after comma): .trailing → trailing on prev item, .leading → leading on next
+        var ws1 = tail[i][0];
+        var ws2 = tail[i][2];
+        var trailing = ws2.trailing;
+        var leading = flattenWs(ws1).concat(ws2.leading);
+        if (trailing.length > 0) {
+          var prev = items[items.length - 1];
+          items[items.length - 1] = Object.assign({}, prev, {
+            trailingComments: (prev.trailingComments || []).concat(trailing)
+          });
+        }
+        var next = tail[i][3];
+        if (leading.length > 0) {
+          next = Object.assign({}, next, {
+            leadingComments: leading.concat(next.leadingComments || [])
+          });
+        }
+        items.push(next);
+      }
+      if (lastWs.length > 0) {
+        var lastItem = items[items.length - 1];
+        items[items.length - 1] = Object.assign({}, lastItem, {
+          trailingComments: (lastItem.trailingComments || []).concat(lastWs)
+        });
+      }
+      return items;
     }
 
 CTEItem
 // Subquery CTE: name AS (SELECT ...)
-  = name:Identifier _ KW_AS _ "(" _ query:UnionQuery _ ")" {
+  = name:Identifier _ KW_AS _ "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
+      var bq = flattenWs(beforeQuery);
+      if (bq.length > 0) {
+        query = Object.assign({}, query, {
+          leadingComments: bq.concat(query.leadingComments || [])
+        });
+      }
+      var aq = flattenWs(afterQuery);
+      if (aq.length > 0) {
+        query = Object.assign({}, query, {
+          trailingComments: (query.trailingComments || []).concat(aq)
+        });
+      }
       return { kind: 'subquery', name: name, query: query };
     }
   // Expression CTE: expr AS name (ClickHouse extension)
-  / expr:TernaryExpr _ KW_AS _ name:Identifier {
+  / expr:TernaryExpr afterExpr:_ KW_AS _ name:Identifier {
+      var ae = flattenWs(afterExpr);
+      if (ae.length > 0) {
+        expr = Object.assign({}, expr, {
+          trailingComments: (expr.trailingComments || []).concat(ae)
+        });
+      }
       return { kind: 'expr', name: name, expr: expr };
     }
 
@@ -334,8 +515,26 @@ CTEItem
 // The !SelectClauseKeyword guard prevents clause-starting keywords (FROM, WHERE, etc.)
 // from being consumed as select items via the last-resort AliasName rule.
 SelectItemList
-  = head:SelectItem tail:(_ "," _ !SelectClauseKeyword SelectItem)* _ ("," _)? {
-      return [head, ...tail.map(function(t) { return t[4]; })];
+  = head:SelectItem tail:(_ "," _ !SelectClauseKeyword SelectItem)* (_ "," _)? {
+      var items = [head];
+      for (var i = 0; i < tail.length; i++) {
+        var ws1 = tail[i][0]; // before comma
+        var ws2 = tail[i][2]; // after comma
+        var trailing = ws2.trailing;
+        var leading = flattenWs(ws1).concat(ws2.leading);
+        if (trailing.length > 0) {
+          var prev = items[items.length - 1];
+          items[items.length - 1] = Object.assign({}, prev, {
+            trailingComments: (prev.trailingComments || []).concat(trailing)
+          });
+        }
+        var next = tail[i][4];
+        if (leading.length > 0) {
+          next = Object.assign({}, next, { leadingComments: leading });
+        }
+        items.push(next);
+      }
+      return items;
     }
 
 // SelectClauseKeyword: keywords that start SELECT sub-clauses (used as negative lookahead
@@ -361,7 +560,15 @@ SelectItemAlias
   / _ !KW_FORMAT alias:Identifier { return alias; }
 
 FromClause
-  = KW_FROM _ expr:JoinExpr { return expr; }
+  = KW_FROM comments:_ expr:JoinExpr {
+      var c = flattenWs(comments);
+      if (c.length > 0 && expr && typeof expr === 'object') {
+        expr = Object.assign({}, expr, {
+          leadingComments: c.concat(expr.leadingComments || [])
+        });
+      }
+      return expr;
+    }
 
 JoinExpr
   = head:FromAtom tail:( _ JoinPart )* {
@@ -374,7 +581,19 @@ JoinExpr
 // Each can have an optional alias, FINAL modifier (for ReplacingMergeTree dedup), and SAMPLE clause.
 // e.g. (SELECT 1) AS t, numbers(10), system.one FINAL, my_table SAMPLE 0.1
 FromAtom
-  = "(" _ query:UnionQuery _ ")" alias:FromAtomAlias? final:( _ KW_FINAL )? sample:( _ SampleClause )? {
+  = "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" alias:FromAtomAlias? final:( _ KW_FINAL )? sample:( _ SampleClause )? {
+      var bq = flattenWs(beforeQuery);
+      if (bq.length > 0) {
+        query = Object.assign({}, query, {
+          leadingComments: bq.concat(query.leadingComments || [])
+        });
+      }
+      var aq = flattenWs(afterQuery);
+      if (aq.length > 0) {
+        query = Object.assign({}, query, {
+          trailingComments: (query.trailingComments || []).concat(aq)
+        });
+      }
       var result = { kind: 'subqueryFrom', query: query };
       if (final !== null) result.final = true;
       if (sample !== null) result.sample = sample[1];
@@ -456,7 +675,27 @@ TableFunctionRef
 // TableFunctionArgList: like FunctionCallArgList but stops before a trailing ", SETTINGS ..."
 TableFunctionArgList
   = head:FunctionCallArgGuarded tail:(_ "," _ FunctionCallArgGuarded)* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      var items = [head];
+      for (var i = 0; i < tail.length; i++) {
+        var ws1 = tail[i][0];
+        var ws2 = tail[i][2];
+        var trailing = ws2.trailing;
+        var leading = flattenWs(ws1).concat(ws2.leading);
+        if (trailing.length > 0) {
+          var prev = items[items.length - 1];
+          items[items.length - 1] = Object.assign({}, prev, {
+            trailingComments: (prev.trailingComments || []).concat(trailing)
+          });
+        }
+        var next = tail[i][3];
+        if (leading.length > 0) {
+          next = Object.assign({}, next, {
+            leadingComments: leading.concat(next.leadingComments || [])
+          });
+        }
+        items.push(next);
+      }
+      return items;
     }
 
 JoinPart
@@ -505,7 +744,15 @@ ArrayJoinKeyword
 // USING () with empty list is valid in ClickHouse (treated as a full cross join with renaming)
 // USING also supports aliased columns: USING (a AS b) — the alias is discarded for AST purposes
 JoinConstraint
-  = KW_ON _ expr:Expression { return { kind: 'on', expr: expr }; }
+  = KW_ON comments:_ expr:Expression {
+      var c = flattenWs(comments);
+      if (c.length > 0) {
+        expr = Object.assign({}, expr, {
+          leadingComments: c.concat(expr.leadingComments || [])
+        });
+      }
+      return { kind: 'on', expr: expr };
+    }
   / KW_USING _ "(" _ cols:UsingColumnList? _ ")" { return { kind: 'using', columns: cols !== null ? cols : [] }; }
   // USING * — wildcard join key (ClickHouse extension)
   / KW_USING _ "*" { return { kind: 'using', columns: ['*'] }; }
@@ -528,10 +775,26 @@ IdentifierList
 
 // PrewhereClause: PREWHERE expr (treated same as WHERE for AST purposes)
 PrewhereClause
-  = KW_PREWHERE _ expr:Expression { return expr; }
+  = KW_PREWHERE comments:_ expr:Expression {
+      var c = flattenWs(comments);
+      if (c.length > 0) {
+        expr = Object.assign({}, expr, {
+          leadingComments: c.concat(expr.leadingComments || [])
+        });
+      }
+      return expr;
+    }
 
 WhereClause
-  = KW_WHERE _ expr:Expression { return expr; }
+  = KW_WHERE comments:_ expr:Expression {
+      var c = flattenWs(comments);
+      if (c.length > 0) {
+        expr = Object.assign({}, expr, {
+          leadingComments: c.concat(expr.leadingComments || [])
+        });
+      }
+      return expr;
+    }
 
 GroupByClause
   = KW_GROUP _ KW_BY _ KW_ALL modifiers:GroupByModifier* {
@@ -544,10 +807,19 @@ GroupByClause
       var withTotals = modifiers.some(function(m) { return m === 'TOTALS'; });
       return { groupingSets: sets, withTotals: withTotals };
     }
-  / KW_GROUP _ KW_BY _ items:ExpressionList modifiers:GroupByModifier* {
+  / KW_GROUP _ KW_BY keywordComments:_ exprList:ExpressionList modifiers:GroupByModifier* {
       var withTotals = modifiers.some(function(m) { return m === 'TOTALS'; });
       var withCube = modifiers.some(function(m) { return m === 'CUBE'; });
       var withRollup = modifiers.some(function(m) { return m === 'ROLLUP'; });
+      // Attach keyword comments as leadingComments on the first item
+      var items = exprList;
+      var kc = flattenWs(keywordComments);
+      if (kc.length > 0 && items.length > 0) {
+        var first = items[0];
+        items[0] = Object.assign({}, first, {
+          leadingComments: kc.concat(first.leadingComments || [])
+        });
+      }
       return { items: items, withTotals: withTotals, withCube: withCube, withRollup: withRollup };
     }
 
@@ -576,11 +848,27 @@ WithModifierClause
   / KW_WITH _ "CUBE"i   ![a-zA-Z0-9_] { return 'CUBE'; }
 
 HavingClause
-  = KW_HAVING _ expr:Expression { return expr; }
+  = KW_HAVING comments:_ expr:Expression {
+      var c = flattenWs(comments);
+      if (c.length > 0) {
+        expr = Object.assign({}, expr, {
+          leadingComments: c.concat(expr.leadingComments || [])
+        });
+      }
+      return expr;
+    }
 
 // QualifyClause: QUALIFY expr — filters rows after window functions, analogous to HAVING for aggregations
 QualifyClause
-  = "QUALIFY"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+  = "QUALIFY"i ![a-zA-Z0-9_] comments:_ expr:Expression {
+      var c = flattenWs(comments);
+      if (c.length > 0) {
+        expr = Object.assign({}, expr, {
+          leadingComments: c.concat(expr.leadingComments || [])
+        });
+      }
+      return expr;
+    }
 
 OrderByClause
   = KW_ORDER _ KW_BY _ items:OrderByItemList { return items; }
@@ -726,14 +1014,38 @@ InterpolateItem
 
 ExpressionList
   = head:Expression tail:(_ "," _ Expression)* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      var items = [head];
+      for (var i = 0; i < tail.length; i++) {
+        var ws1 = tail[i][0]; // before comma
+        var ws2 = tail[i][2]; // after comma
+        var trailing = ws2.trailing;
+        var leading = flattenWs(ws1).concat(ws2.leading);
+        if (trailing.length > 0) {
+          var prev = items[items.length - 1];
+          items[items.length - 1] = Object.assign({}, prev, {
+            trailingComments: (prev.trailingComments || []).concat(trailing)
+          });
+        }
+        var next = tail[i][3];
+        if (leading.length > 0) {
+          next = Object.assign({}, next, { leadingComments: leading });
+        }
+        items.push(next);
+      }
+      return items;
     }
 
 // Expression: alias form or ternary expression
 Expression
-  = expr:TernaryExpr _ KW_AS _ alias:AliasName {
+  = expr:TernaryExpr asWs:_ KW_AS _ alias:AliasName {
       // Unwrap auto-alias (e.g. @@varname) if an explicit AS alias is provided
       var inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+      var ac = flattenWs(asWs);
+      if (ac.length > 0) {
+        inner = Object.assign({}, inner, {
+          trailingComments: (inner.trailingComments || []).concat(ac)
+        });
+      }
       return { kind: 'alias', expr: inner, alias: alias };
     }
   / TernaryExpr
@@ -742,19 +1054,43 @@ Expression
 // (ClickHouse extension). Used in function call args and special function syntax (SUBSTRING, TRIM, etc.)
 // The implicit alias must be followed by a delimiter (, ) FROM FOR) to avoid ambiguity.
 ExpressionWithImplicitAlias
-  = expr:TernaryExpr _ KW_AS _ alias:AliasName {
+  = expr:TernaryExpr asWs:_ KW_AS _ alias:AliasName {
       var inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+      var ac = flattenWs(asWs);
+      if (ac.length > 0) {
+        inner = Object.assign({}, inner, {
+          trailingComments: (inner.trailingComments || []).concat(ac)
+        });
+      }
       return { kind: 'alias', expr: inner, alias: alias };
     }
   // Bare alias without AS: must be followed by , ) FROM FOR (as delimiter of the argument context)
-  / expr:TernaryExpr _ alias:Identifier &( _ ( "," / ")" / "FROM"i ![a-zA-Z0-9_] / "FOR"i ![a-zA-Z0-9_] ) ) {
+  / expr:TernaryExpr aliasWs:_ alias:Identifier &( _ ( "," / ")" / "FROM"i ![a-zA-Z0-9_] / "FOR"i ![a-zA-Z0-9_] ) ) {
+      var ac2 = flattenWs(aliasWs);
+      if (ac2.length > 0) {
+        expr = Object.assign({}, expr, {
+          trailingComments: (expr.trailingComments || []).concat(ac2)
+        });
+      }
       return { kind: 'alias', expr: expr, alias: alias };
     }
   / TernaryExpr
 
 // TernaryExpr: ternary ? : operator, maps to Function if(cond, then, else)
 TernaryExpr
-  = cond:OrExpr _ "?" _ then:TernaryExpr _ ":" _ else_:TernaryExpr {
+  = cond:OrExpr ws1:_ "?" ws2:_ then:TernaryExpr ws3:_ ":" ws4:_ else_:TernaryExpr {
+      var thenComments = flattenWs(ws1).concat(flattenWs(ws2));
+      if (thenComments.length > 0) {
+        then = Object.assign({}, then, {
+          leadingComments: thenComments.concat(then.leadingComments || [])
+        });
+      }
+      var elseComments = flattenWs(ws3).concat(flattenWs(ws4));
+      if (elseComments.length > 0) {
+        else_ = Object.assign({}, else_, {
+          leadingComments: elseComments.concat(else_.leadingComments || [])
+        });
+      }
       return { kind: 'functionCall', name: 'if', args: [cond, then, else_] };
     }
   / OrExpr
@@ -766,7 +1102,14 @@ OrExpr
   = head:AndExpr tail:(_ KW_OR _ AndExpr)+ {
       var operands = [head];
       for (var i = 0; i < tail.length; i++) {
-        operands.push(tail[i][3]);
+        var next = tail[i][3];
+        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+        if (comments.length > 0) {
+          next = Object.assign({}, next, {
+            leadingComments: comments.concat(next.leadingComments || [])
+          });
+        }
+        operands.push(next);
       }
       return { kind: 'naryExpr', op: 'OR', operands: operands };
     }
@@ -778,7 +1121,14 @@ AndExpr
   = head:NotExpr tail:(_ KW_AND _ NotExpr)+ {
       var operands = [head];
       for (var i = 0; i < tail.length; i++) {
-        operands.push(tail[i][3]);
+        var next = tail[i][3];
+        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+        if (comments.length > 0) {
+          next = Object.assign({}, next, {
+            leadingComments: comments.concat(next.leadingComments || [])
+          });
+        }
+        operands.push(next);
       }
       return { kind: 'naryExpr', op: 'AND', operands: operands };
     }
@@ -787,7 +1137,15 @@ AndExpr
 NotExpr
   // NOT followed by "(" is handled as a high-precedence function-call-like NOT in PrimaryBase;
   // exclude that case here so NOT (0) + NOT (0) parses as plus(not(0), not(0)) like ClickHouse does.
-  = KW_NOT !( _ "(" ) _ expr:NotExpr { return { kind: 'unaryExpr', op: 'NOT', expr: expr }; }
+  = KW_NOT !( _ "(" ) comments:_ expr:NotExpr {
+      var c = flattenWs(comments);
+      if (c.length > 0) {
+        expr = Object.assign({}, expr, {
+          leadingComments: c.concat(expr.leadingComments || [])
+        });
+      }
+      return { kind: 'unaryExpr', op: 'NOT', expr: expr };
+    }
   / CompareExpr
 
 // CompareExpr: handles IN, LIKE, IS, BETWEEN, and comparison operators.
@@ -798,7 +1156,14 @@ NotExpr
 CompareExpr
   = base:CompareBase rest:(_ op:CompareOp _ CompareRightExpr)* {
       return rest.reduce(function(acc, t) {
-        return { kind: 'binaryExpr', op: t[1], left: acc, right: t[3] };
+        var right = t[3];
+        var comments = flattenWs(t[0]).concat(flattenWs(t[2]));
+        if (comments.length > 0) {
+          right = Object.assign({}, right, {
+            leadingComments: comments.concat(right.leadingComments || [])
+          });
+        }
+        return { kind: 'binaryExpr', op: t[1], left: acc, right: right };
       }, base);
     }
 
@@ -888,7 +1253,41 @@ CompareBaseSuffix
 // InTarget: the target expression for IN — array literal, parenthesized list, or bare expression
 InTarget
   = arr:ArrayLiteral { return { values: [arr] }; }
-  / "(" _ values:InValues _ ")" { return { values: values }; }
+  / "(" beforeValues:_ values:InValues afterValues:_ ")" {
+      // Attach comments to first/last value if they are expression nodes
+      if (Array.isArray(values)) {
+        var bv = flattenWs(beforeValues);
+        if (bv.length > 0 && values.length > 0) {
+          var first = values[0];
+          values = values.slice();
+          values[0] = Object.assign({}, first, {
+            leadingComments: bv.concat(first.leadingComments || [])
+          });
+        }
+        var av = flattenWs(afterValues);
+        if (av.length > 0 && values.length > 0) {
+          var last = values[values.length - 1];
+          values = values.slice();
+          values[values.length - 1] = Object.assign({}, last, {
+            trailingComments: (last.trailingComments || []).concat(av)
+          });
+        }
+      } else if (values && values.kind === 'subqueryExpr') {
+        var bv2 = flattenWs(beforeValues);
+        if (bv2.length > 0) {
+          values = Object.assign({}, values, {
+            leadingComments: bv2.concat(values.leadingComments || [])
+          });
+        }
+        var av2 = flattenWs(afterValues);
+        if (av2.length > 0) {
+          values = Object.assign({}, values, {
+            trailingComments: (values.trailingComments || []).concat(av2)
+          });
+        }
+      }
+      return { values: values };
+    }
   / single:PrimaryExpr { return { values: [single] }; }
 
 CompareOp = "<=>" / ">=" / "<=" / "<>" / "!=" / "==" / ">" / "<" / "="
@@ -912,7 +1311,14 @@ InValues
 AddExpr
   = head:ConcatExpr tail:(_ op:AddOp _ right:NotPrefixExpr)* {
       return tail.reduce(function(acc, t) {
-        return { kind: 'binaryExpr', op: t[1], left: acc, right: t[3] };
+        var right = t[3];
+        var comments = flattenWs(t[0]).concat(flattenWs(t[2]));
+        if (comments.length > 0) {
+          right = Object.assign({}, right, {
+            leadingComments: comments.concat(right.leadingComments || [])
+          });
+        }
+        return { kind: 'binaryExpr', op: t[1], left: acc, right: right };
       }, head);
     }
 
@@ -931,14 +1337,31 @@ AddOp
 ConcatExpr
   = head:MulExpr tail:(_ "||" _ MulExpr)* {
       if (tail.length === 0) return head;
-      var parts = [head].concat(tail.map(function(t) { return t[3]; }));
+      var parts = [head];
+      for (var i = 0; i < tail.length; i++) {
+        var next = tail[i][3];
+        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+        if (comments.length > 0) {
+          next = Object.assign({}, next, {
+            leadingComments: comments.concat(next.leadingComments || [])
+          });
+        }
+        parts.push(next);
+      }
       return { kind: 'functionCall', name: 'concat', args: parts };
     }
 
 MulExpr
   = head:UnaryExpr tail:(_ op:MulOp _ right:UnaryExpr)* {
       return tail.reduce(function(acc, t) {
-        return { kind: 'binaryExpr', op: t[1], left: acc, right: t[3] };
+        var right = t[3];
+        var comments = flattenWs(t[0]).concat(flattenWs(t[2]));
+        if (comments.length > 0) {
+          right = Object.assign({}, right, {
+            leadingComments: comments.concat(right.leadingComments || [])
+          });
+        }
+        return { kind: 'binaryExpr', op: t[1], left: acc, right: right };
       }, head);
     }
 
@@ -1273,7 +1696,19 @@ ParenGroup
   // Empty tuple: ()
   = "(" _ ")" { return { kind: 'functionCall', name: 'tuple', args: [] }; }
   // Subquery: (SELECT ...) / (WITH ... SELECT ...) / (EXPLAIN ...)
-  / "(" _ &(KW_SELECT / KW_WITH / "EXPLAIN"i ![a-zA-Z0-9_]) query:UnionQuery _ ")" {
+  / "(" beforeQuery:_ &(KW_SELECT / KW_WITH / "EXPLAIN"i ![a-zA-Z0-9_]) query:UnionQuery afterQuery:_ ")" {
+      var bq = flattenWs(beforeQuery);
+      if (bq.length > 0) {
+        query = Object.assign({}, query, {
+          leadingComments: bq.concat(query.leadingComments || [])
+        });
+      }
+      var aq = flattenWs(afterQuery);
+      if (aq.length > 0) {
+        query = Object.assign({}, query, {
+          trailingComments: (query.trailingComments || []).concat(aq)
+        });
+      }
       return { kind: 'subqueryExpr', query: query };
     }
   // Lambda with parens: (x, y, ...) -> expr
@@ -1281,9 +1716,21 @@ ParenGroup
       return { kind: 'lambdaExpr', params: [head].concat(tail.map(function(t) { return t[3]; })), body: body };
     }
   // Tuple or parenthesized expression: parse first expression, then branch on comma vs close paren
-  / "(" _ first:Expression rest:(_ "," _ Expression)* trailing:(_ ",")? _ ")" {
+  / "(" beforeFirst:_ first:Expression rest:(_ "," _ Expression)* trailing:(_ ",")? afterLast:_ ")" {
+      var bf = flattenWs(beforeFirst);
+      if (bf.length > 0) {
+        first = Object.assign({}, first, {
+          leadingComments: bf.concat(first.leadingComments || [])
+        });
+      }
       if (rest.length === 0 && trailing === null) {
         // (expr) — parenthesized expression
+        var al = flattenWs(afterLast);
+        if (al.length > 0) {
+          first = Object.assign({}, first, {
+            trailingComments: (first.trailingComments || []).concat(al)
+          });
+        }
         return Object.assign({}, first, { parenthesized: true });
       } else if (rest.length === 0) {
         // (expr,) — single-element tuple
@@ -1310,7 +1757,23 @@ ArrayLiteral
   = "[" _ "]" {
       return { kind: 'array', elements: [], source: text() };
     }
-  / "[" _ items:ExpressionList _ "]" {
+  / "[" beforeItems:_ items:ExpressionList afterItems:_ "]" {
+      var bi = flattenWs(beforeItems);
+      if (bi.length > 0 && items.length > 0) {
+        var first = items[0];
+        items = items.slice();
+        items[0] = Object.assign({}, first, {
+          leadingComments: bi.concat(first.leadingComments || [])
+        });
+      }
+      var ai = flattenWs(afterItems);
+      if (ai.length > 0 && items.length > 0) {
+        var last = items[items.length - 1];
+        items = items.slice();
+        items[items.length - 1] = Object.assign({}, last, {
+          trailingComments: (last.trailingComments || []).concat(ai)
+        });
+      }
       return { kind: 'array', elements: items, source: text() };
     }
 
@@ -1601,11 +2064,21 @@ FunctionCall
   // FILTER(WHERE cond) transforms f(args) → fIf(args, cond) (SQL standard aggregate filter)
   // The !(")" / ",") guard after DISTINCT/ALL prevents them from being consumed as modifiers
   // when they're actually arguments: has(Settings, 'x') or func(DISTINCT) where DISTINCT is a value.
-  / name:FunctionName _ "(" _ modifier:( ( KW_DISTINCT / KW_ALL ) !( _ ( ")" / "," ) ) _ )? first:FunctionCallArgList? funcSettings:( _ KW_SETTINGS _ SettingsList )? _ ")" second:( _ "(" _ ( ( KW_DISTINCT / KW_ALL ) !( _ ( ")" / "," ) ) _ )? FunctionCallArgList? _ ")" )? filter:FilterClause? {
+  / name:FunctionName _ "(" openComments:_ modifier:( ( KW_DISTINCT / KW_ALL ) !( _ ( ")" / "," ) ) _ )? first:FunctionCallArgList? funcSettings:( _ KW_SETTINGS _ SettingsList )? _ ")" second:( _ "(" _ ( ( KW_DISTINCT / KW_ALL ) !( _ ( ")" / "," ) ) _ )? FunctionCallArgList? _ ")" )? filter:FilterClause? {
       var modVal = modifier !== null ? modifier[0] : null;
       var modStr = Array.isArray(modVal) ? modVal[0] : modVal;
       var isDistinct = modStr !== null && modStr !== undefined && modStr.toString().toUpperCase() === 'DISTINCT';
       var effectiveName = isDistinct ? name + 'Distinct' : name;
+      // Attach comments between "(" and first arg as leadingComments on first arg
+      var args1 = first || [];
+      var oc = flattenWs(openComments);
+      if (oc.length > 0 && args1.length > 0) {
+        var firstArg = args1[0];
+        args1 = args1.slice();
+        args1[0] = Object.assign({}, firstArg, {
+          leadingComments: oc.concat(firstArg.leadingComments || [])
+        });
+      }
       var call;
       if (second !== null) {
         // second[3] = modifier2 group, second[4] = FunctionCallArgList?
@@ -1614,9 +2087,9 @@ FunctionCall
         var mod2Str = Array.isArray(mod2Val) ? mod2Val[0] : mod2Val;
         var isDistinct2 = mod2Str !== null && mod2Str !== undefined && mod2Str.toString().toUpperCase() === 'DISTINCT';
         var curryName = isDistinct2 ? effectiveName + 'Distinct' : effectiveName;
-        call = { kind: 'functionCall', name: curryName, params: first || [], args: second[4] || [] };
+        call = { kind: 'functionCall', name: curryName, params: args1, args: second[4] || [] };
       } else {
-        call = { kind: 'functionCall', name: effectiveName, args: first || [] };
+        call = { kind: 'functionCall', name: effectiveName, args: args1 };
       }
       if (funcSettings !== null) call.funcSettings = funcSettings[3];
       if (filter !== null) {
@@ -1665,7 +2138,27 @@ FunctionCallArgGuarded
 // Trailing comma is allowed (e.g. if(a, b, c,) — ClickHouse extension).
 FunctionCallArgList
   = head:FunctionCallArgGuarded tail:(_ "," _ FunctionCallArgGuarded)* ( _ "," )? {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      var items = [head];
+      for (var i = 0; i < tail.length; i++) {
+        var ws1 = tail[i][0]; // before comma
+        var ws2 = tail[i][2]; // after comma
+        var trailing = ws2.trailing;
+        var leading = flattenWs(ws1).concat(ws2.leading);
+        if (trailing.length > 0) {
+          var prev = items[items.length - 1];
+          items[items.length - 1] = Object.assign({}, prev, {
+            trailingComments: (prev.trailingComments || []).concat(trailing)
+          });
+        }
+        var next = tail[i][3];
+        if (leading.length > 0) {
+          next = Object.assign({}, next, {
+            leadingComments: leading.concat(next.leadingComments || [])
+          });
+        }
+        items.push(next);
+      }
+      return items;
     }
 
 FunctionCallArg
@@ -2022,20 +2515,40 @@ KW_FORMAT    = "FORMAT"i    ![a-zA-Z0-9_]
 KW_WINDOW    = "WINDOW"i    ![a-zA-Z0-9_]
 
 // Whitespace rule: matches zero or more whitespace characters and comments.
-// Used between all tokens as optional separator (_ is referenced throughout the grammar).
-// Consuming comments here means they are silently discarded during parsing.
+// Returns { trailing: string[], leading: string[] } where:
+//   trailing = comments on the same line as the preceding token (before any newline)
+//   leading  = comments after a newline (on their own line or leading the next token)
+// Use flattenWs(ws) to get all comments as a flat array.
 _ "whitespace"
-  // Includes common Unicode whitespace: U+00A0 non-breaking, U+3000 ideographic, U+2003 em-space, etc.
-  // U+FEFF is the BOM character, sometimes appearing at the start of files or after SELECT.
-  = ([ \t\n\r\u00A0\u2003\u3000\uFEFF] / SingleLineComment / MultiLineComment)*
+  = trailing:_HWS newlineContent:_NLC* {
+      var leading = [];
+      for (var i = 0; i < newlineContent.length; i++) {
+        for (var j = 0; j < newlineContent[i].length; j++) {
+          if (newlineContent[i][j] !== null) leading.push(newlineContent[i][j]);
+        }
+      }
+      return { trailing: trailing, leading: leading };
+    }
+
+// Horizontal whitespace + comments (no newlines consumed)
+_HWS
+  = items:([ \t\u00A0\u2003\u3000\uFEFF]+ { return null; } / SingleLineComment / MultiLineComment)* {
+      return items.filter(function(item) { return item !== null; });
+    }
+
+// Newline(s) followed by optional horizontal whitespace + comments
+_NLC
+  = [\n\r]+ items:([ \t\u00A0\u2003\u3000\uFEFF]+ { return null; } / SingleLineComment / MultiLineComment)* {
+      return items;
+    }
 
 SingleLineComment
   // Supports --, #!, #<space>, and // comment styles (all used in ClickHouse SQL files)
-  = ("--" / "#!" / "# " / "//") (![\n] .)*
+  = ("--" / "#!" / "# " / "//") (![\n] .)* { return text(); }
 
 // MultiLineComment supports nested block comments: /* ... /* ... */ ... */
 MultiLineComment
-  = "/*" MultiLineCommentContent* "*/"
+  = "/*" MultiLineCommentContent* "*/" { return text(); }
 
 MultiLineCommentContent
   = MultiLineComment

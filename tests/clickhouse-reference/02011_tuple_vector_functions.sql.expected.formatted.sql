@@ -32,7 +32,7 @@ SELECT 5.5 * (2, 4);
 
 SELECT (1, 2) / 2;
 
-SELECT 2 / (1, 1);
+SELECT 2 / (1, 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT tuple(1, 2, 3) * tuple(2, 3, 4);
 
@@ -126,53 +126,55 @@ SELECT cosineDistance((NULL, 1), (NULL, NULL));
 
 SELECT max2(NULL, 1) - min2(NULL, 1);
 
-SELECT L1Norm(1);
+SELECT L1Norm(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT (1, 1) / toString(1);
+SELECT (1, 1) / toString(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT negate((1, toString(1)));
+SELECT negate((1, toString(1))); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT LpNorm((1, 2), toDecimal32(2, 4));
+SELECT LpNorm((1, 2), toDecimal32(2, 4)); -- { serverError ILLEGAL_COLUMN }
 
 SELECT (1, 2) * toDecimal32(3.1, 8);
 
-SELECT cosineDistance((1, 2), (2, 3, 4));
+SELECT cosineDistance((1, 2), (2, 3, 4)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT LpNorm((1, 2, 3));
+-- TODO: what's the expected value of () + ()? Currently it returns 0.
+-- SELECT tuple() + tuple(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+SELECT LpNorm((1, 2, 3)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT max2(1, 2, -1);
+SELECT max2(1, 2, -1); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT '-- Test excess arguments for binary tuple operators';
 
-SELECT tuplePlus((1, 2), (3, 4), 5);
+SELECT tuplePlus((1, 2), (3, 4), 5); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tupleMinus((1, 2), (3, 4), 5);
+SELECT tupleMinus((1, 2), (3, 4), 5); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tupleMultiply((1, 2), (3, 4), 5);
+SELECT tupleMultiply((1, 2), (3, 4), 5); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tupleDivide((1, 2), (3, 4), 5);
+SELECT tupleDivide((1, 2), (3, 4), 5); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tuplePlus(1, (3, 4));
+SELECT tuplePlus(1, (3, 4)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tupleMinus((1, 2), 3);
+SELECT tupleMinus((1, 2), 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tupleNegate((1, 2), (3, 4));
+SELECT tupleNegate((1, 2), (3, 4)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tupleNegate(5);
+SELECT tupleNegate(5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tupleMultiplyByNumber((1, 2), 3, 4);
+SELECT tupleMultiplyByNumber((1, 2), 3, 4); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tupleDivideByNumber((1, 2), 3, 4);
+SELECT tupleDivideByNumber((1, 2), 3, 4); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tupleMultiplyByNumber(5, 3);
+SELECT tupleMultiplyByNumber(5, 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT LpNorm((1, 2, 3), materialize(4.));
+SELECT LpNorm((1, 2, 3), materialize(4.)); -- { serverError ILLEGAL_COLUMN }
 
 SELECT tuple(*, 1) + tuple(2, *)
 FROM numbers(3);
 
 SELECT LpDistance(tuple(*, 1), tuple(2, *), * + 1.)
-FROM numbers(3, 2);
+FROM numbers(3, 2); -- { serverError ILLEGAL_COLUMN }
 
 SELECT cosineDistance(tuple(*, * + 1), tuple(1, 2))
 FROM numbers(1, 3);
@@ -203,16 +205,16 @@ SELECT LpNorm((1, 2, 3), 2.2);
 
 SELECT LpNorm((1.5, 2.5, 4), pi());
 
-SELECT LpNorm((3, 1, 4), 0);
+SELECT LpNorm((3, 1, 4), 0); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT LpNorm((1, 2, 3), 0.5);
+SELECT LpNorm((1, 2, 3), 0.5); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT LpNorm((1, 2, 3), inf);
+SELECT LpNorm((1, 2, 3), inf); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT LpNorm((1, 2, 3), -1.);
+SELECT LpNorm((1, 2, 3), -1.); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT LpNorm((1, 2, 3), -1);
+SELECT LpNorm((1, 2, 3), -1); -- { serverError ILLEGAL_COLUMN }
 
-SELECT LpNorm((1, 2, 3), 0.);
+SELECT LpNorm((1, 2, 3), 0.); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT cosineDistance(materialize((NULL, -2147483648)), (1048577, 1048575));

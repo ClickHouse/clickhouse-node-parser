@@ -1,3 +1,4 @@
+-- Create an entry in the query cache
 SELECT 1
 SETTINGS use_query_cache = true
 FORMAT Null;

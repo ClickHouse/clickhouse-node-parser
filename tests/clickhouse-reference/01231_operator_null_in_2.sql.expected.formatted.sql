@@ -30,6 +30,7 @@ WHERE i GLOBAL NOT IN (
         WHERE dt = 0
     );
 
+-- For index column
 SELECT count() == 33333
 FROM null_in_subquery
 WHERE idx IN (

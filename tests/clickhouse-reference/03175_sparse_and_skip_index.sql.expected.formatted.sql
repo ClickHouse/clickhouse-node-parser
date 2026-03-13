@@ -1,3 +1,4 @@
+-- Check sparse serialization
 SELECT
     column,
     serialization_kind
@@ -11,6 +12,7 @@ SELECT COUNT()
 FROM t_bloom_filter
 WHERE key = 1;
 
+-- Check bloom filter non-zero size
 SELECT COUNT()
 FROM `system`.parts
 WHERE database = currentDatabase()

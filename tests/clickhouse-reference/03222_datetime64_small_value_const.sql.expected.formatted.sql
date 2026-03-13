@@ -38,6 +38,7 @@ SELECT
 FROM remote('127.0.0.1', `system`.one)
 SETTINGS prefer_localhost_replica = 0;
 
+--Output : 1,5 2,3,4 4 1,2,3,5 0 0 5
 SELECT
     id,
     dt

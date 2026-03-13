@@ -278,7 +278,7 @@ GROUP BY
 ORDER BY revenue DESC
 LIMIT 20;
 
-SELECT 11;
+SELECT 11; -- TODO: remove toDecimal()
 
 SELECT
     ps_partkey,
@@ -293,6 +293,9 @@ WHERE ps_suppkey = s_suppkey
 GROUP BY ps_partkey
 HAVING sum(ps_supplycost * ps_availqty) > (
         SELECT sum(ps_supplycost * ps_availqty) * toDecimal64('0.0100000000', 2)
+        --                                                  ^^^^^^^^^^^^
+        -- The above constant needs to be adjusted according
+        -- to the scale factor (SF): constant = 0.0001 / SF.
         FROM
             partsupp
         CROSS JOIN supplier

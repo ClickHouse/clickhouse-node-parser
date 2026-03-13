@@ -25,16 +25,16 @@ ORDER BY id ASC;
 
 SELECT
     char(228) AS value,
-    normalizeUTF8NFC(value);
+    normalizeUTF8NFC(value); -- { serverError CANNOT_NORMALIZE_STRING }
 
 SELECT
     char(228) AS value,
-    normalizeUTF8NFD(value);
+    normalizeUTF8NFD(value); -- { serverError CANNOT_NORMALIZE_STRING }
 
 SELECT
     char(228) AS value,
-    normalizeUTF8NFKC(value);
+    normalizeUTF8NFKC(value); -- { serverError CANNOT_NORMALIZE_STRING }
 
 SELECT
     char(228) AS value,
-    normalizeUTF8NFKD(value);
+    normalizeUTF8NFKD(value); -- { serverError CANNOT_NORMALIZE_STRING }

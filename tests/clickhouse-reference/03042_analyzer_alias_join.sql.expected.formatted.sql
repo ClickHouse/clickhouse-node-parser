@@ -10,6 +10,7 @@ LEFT JOIN (
     ON t1.id = t2.id
 WHERE t2.t2value = 'test';
 
+-- workaround should work too
 SELECT NULL AS _svalue
 FROM
     test1 AS t1

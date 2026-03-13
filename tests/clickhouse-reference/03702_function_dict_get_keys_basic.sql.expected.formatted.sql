@@ -1,23 +1,23 @@
 SELECT dictGetKeys(toString(number), 'u64', toUInt64(7))
-FROM numbers(1);
+FROM numbers(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT dictGetKeys('dict_neg', toString(number), toUInt64(7))
-FROM numbers(1);
+FROM numbers(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT dictGetKeys('dict_neg', 'no_such_attr', toUInt64(7));
+SELECT dictGetKeys('dict_neg', 'no_such_attr', toUInt64(7)); -- { serverError ILLEGAL_COLUMN }
 
-SELECT dictGetKeys('dict_neg', 'u64');
+SELECT dictGetKeys('dict_neg', 'u64'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT dictGetKeys('dict_neg', 'u64', toUInt64(7), 1);
+SELECT dictGetKeys('dict_neg', 'u64', toUInt64(7), 1); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT dictGetKeys('dict_neg', 'i32n', tuple(number))
-FROM numbers(3);
+FROM numbers(3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT dictGetKeys('non_a_dict_name', 'i32n', tuple(number))
-FROM numbers(3);
+FROM numbers(3); -- { serverError BAD_ARGUMENTS }
 
 SELECT dictGetKeys('dict_neg', 'not_a_attr_col', tuple(number))
-FROM numbers(3);
+FROM numbers(3); -- { serverError ILLEGAL_COLUMN }
 
 SELECT dictGetKeys('dict_simple_kv', 'attr', toUInt32(10));
 
@@ -117,9 +117,9 @@ SELECT dictGetKeys('dict_valexpr', 'i32n', CAST(10 AS Nullable(Int32)));
 
 SELECT dictGetKeys('dict_valexpr', 'i32n', CAST('10' AS Nullable(String)));
 
-SELECT dictGetKeys('dict_valexpr', 'u64', CAST(NULL AS Nullable(Int32)));
+SELECT dictGetKeys('dict_valexpr', 'u64', CAST(NULL AS Nullable(Int32))); -- { serverError CANNOT_INSERT_NULL_IN_ORDINARY_COLUMN }
 
-SELECT dictGetKeys('dict_valexpr', 'u64', CAST(-42 AS Nullable(Int32)));
+SELECT dictGetKeys('dict_valexpr', 'u64', CAST(-42 AS Nullable(Int32))); -- { serverError CANNOT_CONVERT_TYPE }
 
 SELECT dictGetKeys('dict_valexpr', 'u64', CAST('42' AS Nullable(String)));
 

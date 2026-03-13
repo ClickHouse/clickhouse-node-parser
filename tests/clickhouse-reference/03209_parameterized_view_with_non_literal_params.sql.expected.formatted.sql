@@ -78,9 +78,11 @@ FROM uuid_pv(uuidparam = (
         WHERE id = 2
     ));
 
+-- generateUUIDv4() is not constant foldable, hence cannot be used as parameter value
 SELECT id
-FROM uuid_pv(uuidparam = generateUUIDv4());
+FROM uuid_pv(uuidparam = generateUUIDv4()); -- { serverError UNKNOWN_QUERY_PARAMETER }
 
+-- But nested "select generateUUIDv4()"  works!
 SELECT id
 FROM uuid_pv(uuidparam = (
         SELECT generateUUIDv4()

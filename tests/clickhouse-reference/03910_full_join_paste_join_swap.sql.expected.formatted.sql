@@ -1,3 +1,4 @@
+-- Original failing query from the stress test
 SELECT 1
 FROM
     t0
@@ -14,6 +15,7 @@ ORDER BY
     ty.c0 ASC,
     ty.c1 ASC;
 
+-- SELECT * variant to force all columns through the pipeline
 SELECT *
 FROM
     t0
@@ -30,6 +32,7 @@ ORDER BY
     ty.c0 ASC,
     ty.c1 ASC;
 
+-- With join_use_nulls (always set in some stress test threads)
 SELECT *
 FROM
     t0
@@ -77,6 +80,7 @@ FROM (
             ty.c1 ASC
     );
 
+-- Without swap for comparison
 SELECT
     count(),
     sum(t0_c0),

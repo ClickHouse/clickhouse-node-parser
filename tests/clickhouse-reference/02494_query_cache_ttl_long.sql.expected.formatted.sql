@@ -1,14 +1,17 @@
+-- Cache query result into query cache with a TTL of 3 sec
 SELECT 1
 SETTINGS
     use_query_cache = true,
     query_cache_ttl = 3;
 
+-- Expect one non-stale cache entry
 SELECT COUNT(*)
 FROM `system`.query_cache;
 
 SELECT stale
 FROM `system`.query_cache;
 
+-- Wait until entry is expired
 SELECT sleep(3);
 
 SELECT '---';

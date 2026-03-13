@@ -1,3 +1,9 @@
+-- Regression test for a bug where a constant-false HAVING filter caused
+-- the pipeline to shut down prematurely via DelayedPortsProcessor, aborting
+-- set creation, while LimitTransform with always_read_till_end continued
+-- pulling data through a FilterTransform that needed the unbuilt set.
+-- The fix ensures LimitTransform does not continue reading when the limit
+-- has not been reached and the output is already finished.
 SELECT 1
 FROM (
         SELECT 1 AS c0

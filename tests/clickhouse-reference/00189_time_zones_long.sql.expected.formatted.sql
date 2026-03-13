@@ -28,7 +28,7 @@ SELECT toMonday(toDateTime(1419800400), 'Asia/Tokyo');
 
 SELECT toMonday(toDateTime(1419800400), 'Pacific/Pitcairn');
 
-SELECT toMonday(toDate(16433), 'Asia/Istanbul');
+SELECT toMonday(toDate(16433), 'Asia/Istanbul'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toMonday(toDate(16433));
 
@@ -42,7 +42,7 @@ SELECT toStartOfWeek(toDateTime(1419800400), 0, 'Asia/Tokyo');
 
 SELECT toStartOfWeek(toDateTime(1419800400), 0, 'Pacific/Pitcairn');
 
-SELECT toStartOfWeek(toDate(16433), 0, 'Asia/Istanbul');
+SELECT toStartOfWeek(toDate(16433), 0, 'Asia/Istanbul'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfWeek(toDate(16433), 0);
 
@@ -56,7 +56,7 @@ SELECT toStartOfWeek(toDateTime(1419800400), 1, 'Asia/Tokyo');
 
 SELECT toStartOfWeek(toDateTime(1419800400), 1, 'Pacific/Pitcairn');
 
-SELECT toStartOfWeek(toDate(16433), 1, 'Asia/Istanbul');
+SELECT toStartOfWeek(toDate(16433), 1, 'Asia/Istanbul'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfWeek(toDate(16433), 1);
 
@@ -70,7 +70,7 @@ SELECT toLastDayOfWeek(toDateTime(1419800400), 0, 'Asia/Tokyo');
 
 SELECT toLastDayOfWeek(toDateTime(1419800400), 0, 'Pacific/Pitcairn');
 
-SELECT toLastDayOfWeek(toDate(16433), 0, 'Asia/Istanbul');
+SELECT toLastDayOfWeek(toDate(16433), 0, 'Asia/Istanbul'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toLastDayOfWeek(toDate(16433), 0);
 
@@ -84,7 +84,7 @@ SELECT toLastDayOfWeek(toDateTime(1419800400), 1, 'Asia/Tokyo');
 
 SELECT toLastDayOfWeek(toDateTime(1419800400), 1, 'Pacific/Pitcairn');
 
-SELECT toLastDayOfWeek(toDate(16433), 1, 'Asia/Istanbul');
+SELECT toLastDayOfWeek(toDate(16433), 1, 'Asia/Istanbul'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toLastDayOfWeek(toDate(16433), 1);
 
@@ -98,7 +98,7 @@ SELECT toStartOfMonth(toDateTime(1419800400), 'Asia/Tokyo');
 
 SELECT toStartOfMonth(toDateTime(1419800400), 'Pacific/Pitcairn');
 
-SELECT toStartOfMonth(toDate(16433), 'Asia/Istanbul');
+SELECT toStartOfMonth(toDate(16433), 'Asia/Istanbul'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfMonth(toDate(16433));
 
@@ -112,7 +112,7 @@ SELECT toStartOfQuarter(toDateTime(1412106600), 'Asia/Tokyo');
 
 SELECT toStartOfQuarter(toDateTime(1412106600), 'Pacific/Pitcairn');
 
-SELECT toStartOfQuarter(toDate(16343), 'Asia/Istanbul');
+SELECT toStartOfQuarter(toDate(16343), 'Asia/Istanbul'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfQuarter(toDate(16343));
 
@@ -126,7 +126,7 @@ SELECT toStartOfYear(toDateTime(1419800400), 'Asia/Tokyo');
 
 SELECT toStartOfYear(toDateTime(1419800400), 'Pacific/Pitcairn');
 
-SELECT toStartOfYear(toDate(16433), 'Asia/Istanbul');
+SELECT toStartOfYear(toDate(16433), 'Asia/Istanbul'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfYear(toDate(16433));
 
@@ -392,6 +392,7 @@ SELECT toRelativeDayNum(toDateTime(1412106600), 'Europe/London') - toRelativeDay
 
 SELECT toRelativeDayNum(toDateTime(1412106600), 'Asia/Tokyo') - toRelativeDayNum(toDateTime(0), 'Asia/Tokyo');
 
+-- NOTE: toRelativeDayNum(toDateTime(0), 'Pacific/Pitcairn') overflows from -1 to 65535
 SELECT toUInt16(toRelativeDayNum(toDateTime(1412106600), 'Pacific/Pitcairn') - toRelativeDayNum(toDateTime(0), 'Pacific/Pitcairn'));
 
 SELECT toRelativeHourNum(toDateTime(1412106600), 'Asia/Istanbul') - toRelativeHourNum(toDateTime(0), 'Asia/Istanbul');

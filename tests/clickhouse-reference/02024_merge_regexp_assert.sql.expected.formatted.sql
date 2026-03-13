@@ -1,11 +1,11 @@
 SELECT a
-FROM merge(REGEXP('.'), '^t$');
+FROM merge(REGEXP('.'), '^t$'); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT a
-FROM merge(REGEXP('\0'), '^t$');
+FROM merge(REGEXP('\0'), '^t$'); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT a
-FROM merge(REGEXP('\0a'), '^t$');
+FROM merge(REGEXP('\0a'), '^t$'); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT a
-FROM merge(REGEXP('\0a'), '^$');
+FROM merge(REGEXP('\0a'), '^$'); -- { serverError CANNOT_EXTRACT_TABLE_STRUCTURE }

@@ -7,6 +7,7 @@ ORDER BY number ASC
 LIMIT 1
 SETTINGS prefer_localhost_replica = 1;
 
+-- Now, sharding key optimization is not supported for distributed over distributed with serialized plan.
 SELECT
     count(),
     *

@@ -22,6 +22,7 @@ LEFT JOIN events0 AS e
     ON p.ts >= e.begin
 ORDER BY p.ts ASC;
 
+-- SETTINGS join_use_nulls = 1
 SELECT
     p.key,
     p.ts,

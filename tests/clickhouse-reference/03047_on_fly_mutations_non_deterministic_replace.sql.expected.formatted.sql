@@ -15,7 +15,7 @@ SELECT
     id,
     length(v)
 FROM t_lightweight_mut_5
-ORDER BY id ASC;
+ORDER BY id ASC; -- { serverError BAD_ARGUMENTS }
 
 SELECT
     id,
@@ -37,7 +37,7 @@ ORDER BY command ASC;
 
 SELECT *
 FROM t_lightweight_mut_5
-ORDER BY id ASC;
+ORDER BY id ASC; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM t_lightweight_mut_5

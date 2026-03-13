@@ -2,6 +2,7 @@ SELECT *
 FROM tab
 SETTINGS use_query_cache = 1;
 
+-- test with query-level settings
 SELECT 1
 SETTINGS
     use_query_cache = 1,
@@ -27,6 +28,7 @@ SETTINGS
     max_block_size = 1
 FORMAT Null;
 
+-- 4x the same query but with different settings each. There should yield four entries in the query cache.
 SELECT count(query)
 FROM `system`.query_cache;
 

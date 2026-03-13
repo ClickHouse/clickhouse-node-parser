@@ -21,6 +21,7 @@ FULL JOIN Beta
     ON Alpha.foo = Beta.foo
 ORDER BY foo ASC;
 
+-- https://github.com/ClickHouse/ClickHouse/issues/20315#issuecomment-789579457
 SELECT materialize(js2.k)
 FROM
     (

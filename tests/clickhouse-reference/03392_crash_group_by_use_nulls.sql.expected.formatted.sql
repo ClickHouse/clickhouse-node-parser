@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/77485
 SELECT min(c0 >= ANY((
         SELECT '1'
         GROUP BY GROUPING SETS ((1))

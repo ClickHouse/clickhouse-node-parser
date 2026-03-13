@@ -1,8 +1,8 @@
-SELECT toDecimal32('e', 1);
+SELECT toDecimal32('e', 1); -- { serverError CANNOT_PARSE_NUMBER }
 
-SELECT toDecimal64('e', 2);
+SELECT toDecimal64('e', 2); -- { serverError CANNOT_PARSE_NUMBER }
 
-SELECT toDecimal128('e', 3);
+SELECT toDecimal128('e', 3); -- { serverError CANNOT_PARSE_NUMBER }
 
 SELECT
     toDecimal32OrNull('e', 1) AS x,

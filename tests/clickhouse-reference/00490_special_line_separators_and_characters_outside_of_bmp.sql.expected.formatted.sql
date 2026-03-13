@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT
     visitParamExtractString('{"x":"\\uD800\\udf38"}', 'x') AS x,
     visitParamExtractString('{"x":"Hello \\u2028 World \\u2029 !"}', 'x') AS y

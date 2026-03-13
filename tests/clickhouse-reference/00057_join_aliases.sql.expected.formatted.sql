@@ -24,4 +24,4 @@ FROM (
         LIMIT 10
     )
 ORDER BY n ASC
-SETTINGS join_algorithm = 'hash';
+SETTINGS join_algorithm = 'hash'; -- the query does not finish with merge join

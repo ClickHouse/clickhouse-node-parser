@@ -1,3 +1,5 @@
+-- Tags: distributed
+-- { echo }
 SELECT row_number() OVER (ORDER BY dummy ASC) AS x
 FROM (
         SELECT *
@@ -57,6 +59,7 @@ ORDER BY
     y ASC
 WINDOW w AS (partition by p);
 
+-- window functions + aggregation w/shards
 SELECT groupArray(groupArray(number)) OVER (ROWS UNBOUNDED PRECEDING) AS x
 FROM remote('127.0.0.{1,2}', '', t_01568)
 GROUP BY mod(number, 3)
@@ -72,8 +75,9 @@ SELECT groupArray(groupArray(number)) OVER (ROWS UNBOUNDED PRECEDING) AS x
 FROM remote('127.0.0.{1,2}', '', t_01568)
 GROUP BY mod(number, 3)
 ORDER BY x ASC
-SETTINGS distributed_group_by_no_merge = 2;
+SETTINGS distributed_group_by_no_merge = 2; -- { serverError NOT_IMPLEMENTED }
 
+-- proper ORDER BY w/window functions
 SELECT
     p,
     o,

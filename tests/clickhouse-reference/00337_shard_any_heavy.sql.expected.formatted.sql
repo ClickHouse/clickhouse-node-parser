@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT anyHeavy(x)
 FROM (
         SELECT if(intHash64(number) % 100 < 60, 999, number) AS x

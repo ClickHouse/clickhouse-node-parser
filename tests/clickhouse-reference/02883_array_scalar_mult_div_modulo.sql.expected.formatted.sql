@@ -45,4 +45,4 @@ SELECT [6, 6, 3] % 2;
 
 SELECT [6, 6, 3] / 2.5::Decimal(1, 1);
 
-SELECT [1] / 'a';
+SELECT [1] / 'a'; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

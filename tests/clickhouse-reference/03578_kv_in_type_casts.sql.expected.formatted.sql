@@ -26,7 +26,7 @@ FROM `03578_rocksdb`
 WHERE key IN ('0', 'non-number')
 ORDER BY
     1 ASC,
-    2 ASC;
+    2 ASC; -- { serverError TYPE_MISMATCH }
 
 SELECT *
 FROM `03578_rocksdb`
@@ -152,7 +152,7 @@ FROM `03578_keepermap`
 WHERE key IN ('0', 'non-number')
 ORDER BY
     1 ASC,
-    2 ASC;
+    2 ASC; -- { serverError TYPE_MISMATCH }
 
 SELECT *
 FROM `03578_keepermap`

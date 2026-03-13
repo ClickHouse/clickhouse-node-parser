@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/57193
 SELECT
     2147483647,
     count(pow(NULL, 1.0001))

@@ -6,7 +6,7 @@ SELECT arrayZipUnaligned(['a', 'b', 'c'], ['d', 'e', 'f'], ['g', 'h', 'i']);
 
 SELECT arrayZipUnaligned();
 
-SELECT arrayZipUnaligned('a', 'b', 'c');
+SELECT arrayZipUnaligned('a', 'b', 'c'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayZipUnaligned(['a', 'b', 'c'], ['d', 'e', 'f', 'g']);
 

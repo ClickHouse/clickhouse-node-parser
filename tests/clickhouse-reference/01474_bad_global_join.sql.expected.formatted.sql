@@ -2,7 +2,7 @@ SELECT uniq(d.val)
 FROM
     dist_table AS d
 LEFT JOIN numbers(100) AS t
-    USING (id);
+    USING (id); -- { serverError UNKNOWN_IDENTIFIER, 284 }
 
 SELECT uniq(d.val)
 FROM

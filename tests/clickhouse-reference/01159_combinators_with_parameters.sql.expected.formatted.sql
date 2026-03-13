@@ -17,7 +17,7 @@ FROM (
     );
 
 SELECT toTypeName(topKOrNullState(10)(toString(number)))
-FROM numbers(100);
+FROM numbers(100); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toTypeName(topKOrDefaultState(10)(toString(number)))
 FROM numbers(100);

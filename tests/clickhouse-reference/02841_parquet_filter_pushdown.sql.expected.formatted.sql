@@ -246,6 +246,7 @@ SELECT
 FROM file('02841.parquet')
 WHERE indexHint(never_null_lc < 150);
 
+-- Quirk with infinities: this reads too much because KeyCondition represents NULLs as infinities.
 SELECT
     count(),
     sum(number)
@@ -262,7 +263,7 @@ SELECT
     count(),
     sum(number)
 FROM file('02841.parquet')
-WHERE indexHint(positive_or_null < 50);
+WHERE indexHint(positive_or_null < 50); -- quirk with infinities
 
 SELECT
     count(),
@@ -286,8 +287,9 @@ SELECT
     count(),
     sum(number)
 FROM file('02841.parquet')
-WHERE indexHint(string_or_null == '');
+WHERE indexHint(string_or_null == ''); -- quirk with infinities
 
+-- Parquet index analysis doesn't support empty() function yet
 SELECT
     count(),
     sum(number)

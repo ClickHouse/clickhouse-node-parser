@@ -1,3 +1,4 @@
+-- { echo  }
 SELECT *
 FROM tt_m
 ORDER BY a ASC;

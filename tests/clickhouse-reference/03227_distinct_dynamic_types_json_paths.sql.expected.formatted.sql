@@ -107,28 +107,28 @@ GROUP BY dynamicType(json.a2)
 ORDER BY dynamicType(json.a2) ASC;
 
 SELECT distinctJSONPaths()
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT distinctJSONPaths(json, 42)
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT distinctJSONPaths(42)
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT distinctJSONPathsAndTypes()
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT distinctJSONPathsAndTypes(json, 42)
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT distinctJSONPathsAndTypes(42)
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT distinctDynamicTypes()
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT distinctDynamicTypes(json.a2, 42)
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT distinctDynamicTypes(42)
-FROM test_json_dynamic_aggregate_functions;
+FROM test_json_dynamic_aggregate_functions; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}

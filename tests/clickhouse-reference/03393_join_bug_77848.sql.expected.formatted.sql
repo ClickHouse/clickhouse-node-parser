@@ -1,3 +1,5 @@
+-- TODO(@vdimir): NOT_FOUND_COLUMN_IN_BLOCK is a bug, should be fixed
+-- This tests ensures that query does not crash at least
 SELECT 1
 FROM
     BadTable AS i

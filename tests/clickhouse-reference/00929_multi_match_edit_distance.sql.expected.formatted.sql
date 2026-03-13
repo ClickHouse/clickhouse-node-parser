@@ -1,3 +1,4 @@
+-- run queries multiple times to test the pattern caching
 SELECT multiFuzzyMatchAny('abc', 0, ['a1c'])
 FROM `system`.numbers
 LIMIT 3;
@@ -12,11 +13,11 @@ LIMIT 3;
 
 SELECT multiFuzzyMatchAny('abc', 3, ['a1c'])
 FROM `system`.numbers
-LIMIT 3;
+LIMIT 3; -- { serverError BAD_ARGUMENTS }
 
 SELECT multiFuzzyMatchAny('abc', 4, ['a1c'])
 FROM `system`.numbers
-LIMIT 3;
+LIMIT 3; -- { serverError BAD_ARGUMENTS }
 
 SELECT multiFuzzyMatchAny('leftabcright', 1, ['a1c'])
 FROM `system`.numbers
@@ -34,11 +35,11 @@ SELECT multiFuzzyMatchAny('halo some wrld', 2, ['^halo.*world$', '^hello.*world$
 
 SELECT multiFuzzyMatchAny('halo some wrld', 3, ['^hello.*world$']);
 
-SELECT multiFuzzyMatchAny('hello some world', 10, ['^hello.*world$']);
+SELECT multiFuzzyMatchAny('hello some world', 10, ['^hello.*world$']); -- { serverError BAD_ARGUMENTS }
 
-SELECT multiFuzzyMatchAny('hello some world', -1, ['^hello.*world$']);
+SELECT multiFuzzyMatchAny('hello some world', -1, ['^hello.*world$']); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT multiFuzzyMatchAny('hello some world', 10000000000, ['^hello.*world$']);
+SELECT multiFuzzyMatchAny('hello some world', 10000000000, ['^hello.*world$']); -- { serverError ILLEGAL_COLUMN }
 
 SELECT multiFuzzyMatchAny('http://hyperscan_is_nice.de/st', 2, ['http://hyperscan_is_nice.de/(st\\d\\d$|st\\d\\d\\.|st1[0-4]\\d|st150|st\\d$|gl|rz|ch)']);
 
@@ -52,6 +53,7 @@ SELECT multiFuzzyMatchAnyIndex('halo some wrld', 2, ['^hello.*world$', '^halo.*w
 
 SELECT multiFuzzyMatchAnyIndex('halo some wrld', 2, ['^halo.*world$', '^hello.*world$']);
 
+--
 SELECT arraySort(multiFuzzyMatchAllIndices('halo some wrld', 2, ['some random string', '^halo.*world$', '^halo.*world$', '^halo.*world$', '^hallllo.*world$']));
 
 SELECT multiFuzzyMatchAllIndices('halo some wrld', 2, ['^halllllo.*world$', 'some random string']);
@@ -70,11 +72,11 @@ LIMIT 3;
 
 SELECT multiFuzzyMatchAny(materialize('abc'), 3, materialize(['a1c']))
 FROM `system`.numbers
-LIMIT 3;
+LIMIT 3; -- { serverError BAD_ARGUMENTS}
 
 SELECT multiFuzzyMatchAny(materialize('abc'), 4, materialize(['a1c']))
 FROM `system`.numbers
-LIMIT 3;
+LIMIT 3; -- { serverError BAD_ARGUMENTS}
 
 SELECT multiFuzzyMatchAny(materialize('leftabcright'), 1, materialize(['a1c']));
 
@@ -90,11 +92,11 @@ SELECT multiFuzzyMatchAny(materialize('halo some wrld'), 2, materialize(['^halo.
 
 SELECT multiFuzzyMatchAny(materialize('halo some wrld'), 3, materialize(['^hello.*world$']));
 
-SELECT multiFuzzyMatchAny(materialize('hello some world'), 10, materialize(['^hello.*world$']));
+SELECT multiFuzzyMatchAny(materialize('hello some world'), 10, materialize(['^hello.*world$'])); -- { serverError BAD_ARGUMENTS }
 
-SELECT multiFuzzyMatchAny(materialize('hello some world'), -1, materialize(['^hello.*world$']));
+SELECT multiFuzzyMatchAny(materialize('hello some world'), -1, materialize(['^hello.*world$'])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT multiFuzzyMatchAny(materialize('hello some world'), 10000000000, materialize(['^hello.*world$']));
+SELECT multiFuzzyMatchAny(materialize('hello some world'), 10000000000, materialize(['^hello.*world$'])); -- { serverError ILLEGAL_COLUMN }
 
 SELECT multiFuzzyMatchAny(materialize('http://hyperscan_is_nice.de/st'), 2, materialize(['http://hyperscan_is_nice.de/(st\\d\\d$|st\\d\\d\\.|st1[0-4]\\d|st150|st\\d$|gl|rz|ch)']));
 

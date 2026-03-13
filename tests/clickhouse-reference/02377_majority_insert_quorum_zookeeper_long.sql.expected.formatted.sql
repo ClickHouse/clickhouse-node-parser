@@ -8,4 +8,4 @@ ORDER BY x ASC;
 
 SELECT x
 FROM quorum3
-ORDER BY x ASC;
+ORDER BY x ASC; -- {serverError REPLICA_IS_NOT_IN_QUORUM}

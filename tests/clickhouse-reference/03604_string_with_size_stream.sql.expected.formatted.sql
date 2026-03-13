@@ -1,6 +1,8 @@
+-- Old string type also supports .size subcolumn
 SELECT s.size
 FROM test;
 
+-- system.parts_columns table only lists physical subcolumns/substreams
 SELECT
     column,
     substreams,

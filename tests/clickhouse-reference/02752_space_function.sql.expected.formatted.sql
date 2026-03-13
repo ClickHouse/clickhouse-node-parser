@@ -46,13 +46,13 @@ SELECT
     space(-3::Int64),
     length(space(-3::Int64));
 
-SELECT space('abc');
+SELECT space('abc'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT space(['abc']);
+SELECT space(['abc']); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT space(('abc'));
+SELECT space(('abc')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT space(30303030303030303030303030303030::UInt64);
+SELECT space(30303030303030303030303030303030::UInt64); -- { serverError TOO_LARGE_STRING_SIZE }
 
 SELECT space(NULL);
 

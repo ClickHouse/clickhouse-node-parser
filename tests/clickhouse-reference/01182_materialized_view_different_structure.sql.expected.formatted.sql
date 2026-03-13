@@ -43,7 +43,7 @@ SELECT
     sum(toInt64(n)),
     max(n),
     min(n)
-FROM dist;
+FROM dist; -- { serverError CANNOT_CONVERT_TYPE }
 
 SELECT
     count(),

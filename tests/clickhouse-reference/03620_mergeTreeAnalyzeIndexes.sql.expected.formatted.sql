@@ -1,3 +1,4 @@
+-- { echo }
 SELECT *
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data);
 
@@ -21,6 +22,7 @@ FROM mergeTreeAnalyzeIndexes(currentDatabase(), data, key = 8193, 'all_1_1_0');
 SELECT *
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data, key = 8193, 'no_such_part');
 
+-- Columns not from PK is allowed and ignored.
 SELECT *
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data, value = 0);
 
@@ -28,5 +30,6 @@ SELECT *
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data, key = 8193
     AND value = 0);
 
+-- Set
 SELECT *
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data, key IN (8193, 16385));

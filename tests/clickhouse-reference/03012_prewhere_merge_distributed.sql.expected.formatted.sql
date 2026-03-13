@@ -21,4 +21,4 @@ PREWHERE name GLOBAL IN (
 
 SELECT count()
 FROM merge(currentDatabase(), '^test_log$')
-PREWHERE a = 3;
+PREWHERE a = 3; -- { serverError 182 }

@@ -1,3 +1,8 @@
+-- Tags: long
+-- We use temporary files that uses NativeReader, with a block slightly bigger
+-- then power of two, previously it rounds the allocation up to power of 2,
+-- which leads to excessive memory usage.
+-- This will create a temporary buffer of two columns for the total of 5m rows
 SELECT number
 FROM numbers(5e6)
 ORDER BY number * 1234567890123456789 ASC

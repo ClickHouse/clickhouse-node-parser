@@ -1,3 +1,3 @@
 SELECT *
 FROM dist_01320
-WHERE key = 0;
+WHERE key = 0; -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }

@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on AWS
 SELECT
     id,
     data,
@@ -85,7 +87,7 @@ SELECT
     _size,
     _file,
     _path
-FROM s3(s3_conn, filename = '03036_archive2.zip :: nonexistent.csv');
+FROM s3(s3_conn, filename = '03036_archive2.zip :: nonexistent.csv'); -- { serverError CANNOT_EXTRACT_TABLE_STRUCTURE }
 
 SELECT
     id,
@@ -93,7 +95,7 @@ SELECT
     _size,
     _file,
     _path
-FROM s3(s3_conn, filename = '03036_archive2.zip :: nonexistent{2..3}.csv');
+FROM s3(s3_conn, filename = '03036_archive2.zip :: nonexistent{2..3}.csv'); -- { serverError CANNOT_EXTRACT_TABLE_STRUCTURE }
 
 SELECT
     id,

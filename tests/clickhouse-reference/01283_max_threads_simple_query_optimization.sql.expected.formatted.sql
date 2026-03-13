@@ -3,6 +3,7 @@ FROM data_01283
 LIMIT 1
 FORMAT Null;
 
+-- 1 for PullingAsyncPipelineExecutor::pull
 SELECT
     throwIf(count() != 1, 'no query was logged'),
     throwIf(length(thread_ids) > 2, 'too many threads used')

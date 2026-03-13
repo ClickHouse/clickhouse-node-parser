@@ -1,31 +1,36 @@
-SELECT compareSubstrings();
+-- Negative tests
+-- Five arguments are expected
+SELECT compareSubstrings(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT compareSubstrings('abc');
+SELECT compareSubstrings('abc'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT compareSubstrings('abc', 'abc');
+SELECT compareSubstrings('abc', 'abc'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT compareSubstrings('abc', 'abc', 0);
+SELECT compareSubstrings('abc', 'abc', 0); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT compareSubstrings('abc', 'abc', 0, 0);
+SELECT compareSubstrings('abc', 'abc', 0, 0); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT compareSubstrings('abc', 'abc', 0, 0, 0, 0);
+SELECT compareSubstrings('abc', 'abc', 0, 0, 0, 0); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT compareSubstrings(0, 'abc', 0, 0, 0);
+-- 1st/2nd argument must be string, 3rd/4th/5th argument must be integer
+SELECT compareSubstrings(0, 'abc', 0, 0, 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT compareSubstrings('abc', 0, 0, 0, 0);
+SELECT compareSubstrings('abc', 0, 0, 0, 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT compareSubstrings('abc', 'abc', 'abc', 0, 0);
+SELECT compareSubstrings('abc', 'abc', 'abc', 0, 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT compareSubstrings('abc', 'abc', 0, 'abc', 0);
+SELECT compareSubstrings('abc', 'abc', 0, 'abc', 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT compareSubstrings('abc', 'abc', 0, 0, 'abc');
+SELECT compareSubstrings('abc', 'abc', 0, 0, 'abc'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT compareSubstrings('abc', 'abc', -1, 0, 0);
+-- 3rd, 4th, 5th argument must be non-negative
+SELECT compareSubstrings('abc', 'abc', -1, 0, 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT compareSubstrings('abc', 'abc', 0, -1, 0);
+SELECT compareSubstrings('abc', 'abc', 0, -1, 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT compareSubstrings('abc', 'abc', 0, 0, -1);
+SELECT compareSubstrings('abc', 'abc', 0, 0, -1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- {echoOn }
 SELECT compareSubstrings('abc', 'abc', 0, 0, 3);
 
 SELECT compareSubstrings('abd', 'abc', 0, 0, 3);

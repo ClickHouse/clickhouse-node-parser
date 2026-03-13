@@ -7,6 +7,8 @@ WHERE database = 'shard_0'
     AND active
 ORDER BY name ASC;
 
+-- Doesn't lead to test flakyness, because we don't check content in table
+-- which doesn't depend on any background operation
 SELECT sleep(3);
 
 SELECT

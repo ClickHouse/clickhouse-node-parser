@@ -1,39 +1,45 @@
-SELECT toTime('12:34:56', 'UTC');
+-- 1. Test toTime with various types of inputs and timezone parameter
+SELECT toTime('12:34:56', 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime(toDateTime('2023-01-01 12:34:56'), 'UTC');
+SELECT toTime(toDateTime('2023-01-01 12:34:56'), 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime(toDateTime64('2023-01-01 12:34:56.789', 3), 'UTC');
+SELECT toTime(toDateTime64('2023-01-01 12:34:56.789', 3), 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime(45296, 'UTC');
+SELECT toTime(45296, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime(now(), 'UTC');
+SELECT toTime(now(), 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64('12:34:56.789', 3, 'UTC');
+-- 2. Test toTime64 with various types of inputs and timezone parameter
+SELECT toTime64('12:34:56.789', 3, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64(toDateTime('2023-01-01 12:34:56'), 3, 'UTC');
+SELECT toTime64(toDateTime('2023-01-01 12:34:56'), 3, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64(toDateTime64('2023-01-01 12:34:56.789', 3), 3, 'UTC');
+SELECT toTime64(toDateTime64('2023-01-01 12:34:56.789', 3), 3, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64(45296789, 3, 'UTC');
+SELECT toTime64(45296789, 3, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64(now(), 3, 'UTC');
+SELECT toTime64(now(), 3, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTimeOrNull('12:34:56', 'UTC');
+-- 3. Test OrNull variants with timezone parameter
+SELECT toTimeOrNull('12:34:56', 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64OrNull('12:34:56.789', 3, 'UTC');
+SELECT toTime64OrNull('12:34:56.789', 3, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTimeOrZero('12:34:56', 'UTC');
+-- 4. Test OrZero variants with timezone parameter
+SELECT toTimeOrZero('12:34:56', 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64OrZero('12:34:56.789', 3, 'UTC');
+SELECT toTime64OrZero('12:34:56.789', 3, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime(['12:34:56', '01:23:45'], 'UTC');
+-- 5. Test array inputs with timezone parameter
+SELECT toTime(['12:34:56', '01:23:45'], 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64(['12:34:56.789', '01:23:45.678'], 3, 'UTC');
+SELECT toTime64(['12:34:56.789', '01:23:45.678'], 3, 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime('12:34:56', 'Europe/Moscow');
+-- 6. Test with different timezone formats to ensure all are rejected
+SELECT toTime('12:34:56', 'Europe/Moscow'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64('12:34:56.789', 3, 'Europe/Moscow');
+SELECT toTime64('12:34:56.789', 3, 'Europe/Moscow'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime('12:34:56', '+03:00');
+SELECT toTime('12:34:56', '+03:00'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT toTime64('12:34:56.789', 3, '+03:00');
+SELECT toTime64('12:34:56.789', 3, '+03:00'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

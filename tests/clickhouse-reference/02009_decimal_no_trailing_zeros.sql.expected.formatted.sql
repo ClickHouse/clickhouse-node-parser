@@ -1,3 +1,4 @@
+-- { echo }
 SELECT 1.123::Decimal64(1);
 
 SELECT 1.123::Decimal64(2);

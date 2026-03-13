@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/9810
 SELECT CAST(1 AS String)
 FROM
     (
@@ -8,6 +9,7 @@ INNER JOIN (
     ) AS t2
     ON t2.sid = CAST(t1.iid AS String);
 
+-- even simpler cases
 SELECT
     CAST(7 AS String),
     *
@@ -30,6 +32,7 @@ FROM (
         SELECT 2 AS `'xyz'`
     );
 
+-- https://github.com/ClickHouse/ClickHouse/issues/9953
 SELECT
     1,
     *
@@ -88,6 +91,7 @@ RIGHT JOIN (
     ) AS b
     ON y = x;
 
+-- other cases with joins and constants
 SELECT cast(1, 'UInt8')
 FROM
     (
@@ -97,7 +101,7 @@ LEFT JOIN (
         SELECT 1 AS b
     ) AS t2
     ON b = ignore('UInt8')
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT cast(1, 'UInt8')
 FROM
@@ -121,7 +125,7 @@ LEFT JOIN (
         SELECT 1 AS b
     ) AS t2
     ON b = ignore('UInt8')
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT
     isConstant('UInt8'),
@@ -136,6 +140,7 @@ LEFT JOIN (
     ON b = ignore('UInt8')
 SETTINGS enable_analyzer = 1;
 
+-- https://github.com/ClickHouse/ClickHouse/issues/20624
 SELECT
     2 AS `toString(x)`,
     x

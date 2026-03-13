@@ -10,6 +10,7 @@ FROM (
 GROUP BY k
 ORDER BY k ASC;
 
+-- different seed
 SELECT
     k,
     groupArraySample(10, 1)(v)

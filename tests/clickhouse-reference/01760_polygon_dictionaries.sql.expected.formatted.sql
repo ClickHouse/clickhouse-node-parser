@@ -30,16 +30,16 @@ ORDER BY
 
 SELECT
     tuple(nan, inf) AS key,
-    dictGet('01760_db.dict_array', 'name', key);
+    dictGet('01760_db.dict_array', 'name', key); --{serverError BAD_ARGUMENTS}
 
 SELECT
     tuple(nan, nan) AS key,
-    dictGet('01760_db.dict_array', 'name', key);
+    dictGet('01760_db.dict_array', 'name', key); --{serverError BAD_ARGUMENTS}
 
 SELECT
     tuple(inf, nan) AS key,
-    dictGet('01760_db.dict_array', 'name', key);
+    dictGet('01760_db.dict_array', 'name', key); --{serverError BAD_ARGUMENTS}
 
 SELECT
     tuple(inf, inf) AS key,
-    dictGet('01760_db.dict_array', 'name', key);
+    dictGet('01760_db.dict_array', 'name', key); --{serverError BAD_ARGUMENTS}

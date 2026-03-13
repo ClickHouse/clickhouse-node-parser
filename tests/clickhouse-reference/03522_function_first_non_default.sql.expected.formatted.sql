@@ -94,17 +94,17 @@ SELECT
     firstNonDefault([]::Array(UInt8)) AS result,
     toTypeName(result);
 
-SELECT firstNonDefault();
+SELECT firstNonDefault(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT firstNonDefault(0, 'hello');
+SELECT firstNonDefault(0, 'hello'); -- { serverError NO_COMMON_TYPE }
 
-SELECT firstNonDefault([]::Array(UInt8), 42);
+SELECT firstNonDefault([]::Array(UInt8), 42); -- { serverError NO_COMMON_TYPE }
 
-SELECT firstNonDefault([]::Array(UInt8), 'hello');
+SELECT firstNonDefault([]::Array(UInt8), 'hello'); -- { serverError NO_COMMON_TYPE }
 
-SELECT firstNonDefault(0::UInt64, 1::Int64);
+SELECT firstNonDefault(0::UInt64, 1::Int64); -- { serverError NO_COMMON_TYPE }
 
-SELECT firstNonDefault(NULL::Nullable(Array(UInt8)), []::Array(UInt8));
+SELECT firstNonDefault(NULL::Nullable(Array(UInt8)), []::Array(UInt8)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT firstNonDefault(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, number)
 FROM numbers(3);

@@ -3,7 +3,7 @@ FROM data_02771;
 
 SELECT *
 FROM data_02771
-SETTINGS ignore_data_skipping_indices = '';
+SETTINGS ignore_data_skipping_indices = ''; -- { serverError CANNOT_PARSE_TEXT }
 
 SELECT *
 FROM data_02771
@@ -19,7 +19,7 @@ WHERE x = 1
     AND y = 1
 SETTINGS
     ignore_data_skipping_indices = 'xy_idx',
-    force_data_skipping_indices = 'xy_idx';
+    force_data_skipping_indices = 'xy_idx'; -- { serverError INDEX_NOT_USED }
 
 SELECT *
 FROM data_02771

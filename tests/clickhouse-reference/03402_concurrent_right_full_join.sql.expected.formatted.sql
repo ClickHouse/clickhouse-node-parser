@@ -83,8 +83,8 @@ RIGHT JOIN (
 
 SELECT
     count(),
-    countIf(isNull(l.id)),
-    countIf(isNull(r.id))
+    countIf(isNull(l.id)), -- right-only
+    countIf(isNull(r.id)) -- left-only
 FROM
     (
         SELECT number AS id

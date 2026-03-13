@@ -8,13 +8,13 @@ SELECT fromModifiedJulianDay(NULL);
 
 SELECT fromModifiedJulianDay(CAST(NULL, 'Nullable(Int64)'));
 
-SELECT fromModifiedJulianDay(-678942);
+SELECT fromModifiedJulianDay(-678942); -- { serverError CANNOT_FORMAT_DATETIME }
 
 SELECT fromModifiedJulianDay(-678941);
 
 SELECT fromModifiedJulianDay(2973483);
 
-SELECT fromModifiedJulianDay(2973484);
+SELECT fromModifiedJulianDay(2973484); -- { serverError CANNOT_FORMAT_DATETIME }
 
 SELECT fromModifiedJulianDayOrNull(59154);
 

@@ -20,6 +20,7 @@ WHERE database = currentDatabase()
     AND table = 't_index'
     AND active;
 
+-- Check that column 'data' was materialized on MATERIALIZE INDEX query.
 SELECT column
 FROM `system`.parts_columns
 WHERE database = currentDatabase()

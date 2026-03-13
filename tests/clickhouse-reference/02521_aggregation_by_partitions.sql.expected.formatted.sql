@@ -1,3 +1,4 @@
+-- { echoOff }
 SELECT count()
 FROM (
         SELECT throwIf(count() != 2)
@@ -5,6 +6,7 @@ FROM (
         GROUP BY a
     );
 
+-- { echoOff }
 SELECT count()
 FROM (
         SELECT throwIf(count() != 2)
@@ -12,6 +14,7 @@ FROM (
         GROUP BY a
     );
 
+-- { echoOff }
 SELECT count()
 FROM (
         SELECT throwIf(count() != 2)
@@ -24,6 +27,7 @@ FROM remote('127.0.0.{1,2}', currentDatabase(), t3)
 GROUP BY a
 FORMAT Null;
 
+-- if we happened to switch to external aggregation at some point, merging will happen as usual
 SELECT count()
 FROM (
         SELECT throwIf(count() != 2)
@@ -34,6 +38,7 @@ SETTINGS
     max_bytes_before_external_group_by = '1Ki',
     max_bytes_ratio_before_external_group_by = 0;
 
+-- { echoOff }
 SELECT count()
 FROM (
         SELECT throwIf(count() != 2)
@@ -41,6 +46,7 @@ FROM (
         GROUP BY a
     );
 
+-- { echoOff }
 SELECT count()
 FROM (
         SELECT throwIf(count() != 2)
@@ -48,6 +54,7 @@ FROM (
         GROUP BY a
     );
 
+-- { echoOff }
 SELECT count()
 FROM (
         SELECT throwIf(count() != 2)

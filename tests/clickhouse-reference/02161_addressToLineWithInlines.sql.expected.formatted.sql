@@ -1,4 +1,4 @@
-SELECT addressToLineWithInlines(1);
+SELECT addressToLineWithInlines(1); -- { serverError FUNCTION_NOT_ALLOWED }
 
 SELECT count()
 FROM numbers_mt(10000000000)

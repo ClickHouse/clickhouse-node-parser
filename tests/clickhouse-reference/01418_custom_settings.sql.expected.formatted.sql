@@ -11,7 +11,7 @@ ORDER BY name ASC;
 
 SELECT
     getSetting('custom_e') AS v,
-    toTypeName(v);
+    toTypeName(v); -- { serverError UNKNOWN_SETTING } -- Setting not found.
 
 SELECT
     name,
@@ -21,7 +21,7 @@ WHERE name = 'custom_e';
 
 SELECT
     getSetting('custom_f') AS v,
-    toTypeName(v);
+    toTypeName(v); -- { serverError UNKNOWN_SETTING } -- Setting not found.
 
 SELECT COUNT()
 FROM `system`.`settings`

@@ -50,7 +50,7 @@ SELECT dictGetOrDefault('direct_dictionary', 'value', toUInt64(2), NULL);
 SELECT dictGetOrDefault('direct_dictionary', 'value', id, value)
 FROM dictionary_nullable_default_source_table;
 
-SELECT dictGet('ip_trie_dictionary', 'value', tuple(IPv4StringToNum('127.0.0.0')));
+SELECT dictGet('ip_trie_dictionary', 'value', tuple(IPv4StringToNum('127.0.0.0'))); --{serverError UNSUPPORTED_METHOD}
 
 SELECT dictGet('polygon_dictionary', 'value', tuple(0.5, 0.5));
 

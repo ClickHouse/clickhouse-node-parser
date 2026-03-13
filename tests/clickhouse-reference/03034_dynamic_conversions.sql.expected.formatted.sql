@@ -18,7 +18,7 @@ SELECT number::Dynamic::Date AS v
 FROM numbers(3);
 
 SELECT number::Dynamic::Array(UInt64) AS v
-FROM numbers(3);
+FROM numbers(3); -- {serverError TYPE_MISMATCH}
 
 SELECT
     number::Dynamic::Variant(UInt64, String) AS v,
@@ -79,10 +79,10 @@ SELECT d::Nullable(String)
 FROM test;
 
 SELECT d::UInt64
-FROM test;
+FROM test; -- {serverError CANNOT_PARSE_TEXT}
 
 SELECT d::Nullable(UInt64)
 FROM test;
 
 SELECT d::Date
-FROM test;
+FROM test; -- {serverError CANNOT_PARSE_DATE}

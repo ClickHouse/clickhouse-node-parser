@@ -25,7 +25,7 @@ SELECT
 
 SELECT
     a AS b,
-    b AS a;
+    b AS a; -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }
 
 SELECT
     id_alias_2,
@@ -43,13 +43,13 @@ FROM test_table;
 SELECT
     (id + b) AS id,
     id AS b
-FROM test_table;
+FROM test_table; -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }
 
 SELECT
     (1 + b + 1 + id) AS id,
     b AS c,
     id AS b
-FROM test_table;
+FROM test_table; -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }
 
 SELECT id AS id
 FROM test_table;

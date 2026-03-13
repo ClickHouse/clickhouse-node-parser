@@ -115,4 +115,4 @@ SELECT
 
 SELECT reinterpret(toDateTime64(0, 0), 'Decimal64(2)');
 
-SELECT reinterpret('123', 'FixedString(1)');
+SELECT reinterpret('123', 'FixedString(1)'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}

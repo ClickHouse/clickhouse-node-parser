@@ -1,3 +1,4 @@
+-- Test normal COLUMNS() ARRAY JOIN (should work)
 SELECT
     x,
     arr1,
@@ -9,7 +10,8 @@ ORDER BY
     arr1 ASC,
     arr2 ASC;
 
+-- Test COLUMNS() matching no columns (should fail)
 SELECT *
 FROM
     t1
-ARRAY JOIN COLUMNS('nonexistent');
+ARRAY JOIN COLUMNS('nonexistent'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

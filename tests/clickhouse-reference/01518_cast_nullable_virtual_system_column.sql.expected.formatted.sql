@@ -1,3 +1,4 @@
+-- NOTE: database = currentDatabase() is not mandatory
 SELECT database
 FROM `system`.tables
 WHERE like(database, '%')

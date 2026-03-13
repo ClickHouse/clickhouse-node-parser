@@ -1,3 +1,4 @@
+-- In worst case doesn't check anything, but it's not flaky
 SELECT sleep(3)
 FORMAT Null;
 

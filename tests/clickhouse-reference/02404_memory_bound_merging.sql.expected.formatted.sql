@@ -12,6 +12,7 @@ ORDER BY a ASC
 LIMIT 5
 OFFSET 100500;
 
+-- actual block size might be slightly bigger than the limit --
 SELECT max(bs) < 70000
 FROM (
         SELECT

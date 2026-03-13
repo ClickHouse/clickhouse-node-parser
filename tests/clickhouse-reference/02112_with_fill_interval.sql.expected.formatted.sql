@@ -35,7 +35,7 @@ SELECT
 FROM with_fill_date
 GROUP BY d
 ORDER BY d ASC WITH FILL STEP toIntervalHour(1)
-LIMIT 5;
+LIMIT 5; -- { serverError INVALID_WITH_FILL_EXPRESSION }
 
 SELECT
     d32,
@@ -118,7 +118,7 @@ LIMIT 5;
 
 SELECT number
 FROM numbers(100)
-ORDER BY number ASC WITH FILL STEP toIntervalHour(1);
+ORDER BY number ASC WITH FILL STEP toIntervalHour(1); -- { serverError INVALID_WITH_FILL_EXPRESSION }
 
 SELECT
     toStartOfMonth(d) AS d,

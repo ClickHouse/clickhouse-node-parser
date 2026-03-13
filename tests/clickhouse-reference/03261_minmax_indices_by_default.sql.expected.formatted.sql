@@ -1,3 +1,4 @@
+-- Expect x_idx and two implicit minmax indices
 SELECT
     name,
     type,

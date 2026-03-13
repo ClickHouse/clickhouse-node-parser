@@ -1,3 +1,4 @@
+-- Tags: no-fasttest, use-vectorscan
 SELECT '-- With const pattern';
 
 SELECT 0 = multiMatchAny(materialize('mpnsguhwsitzvuleiwebwjfitmsg'), ['wbirxqoabpblrnvvmjizj', 'cfcxhuvrexyzyjsh', 'oldhtubemyuqlqbwvwwkwin', 'bumoozxdkjglzu', 'intxlfohlxmajjomw', 'dxkeghohv', 'arsvmwwkjeopnlwnan', 'ouugllgowpqtaxslcopkytbfhifaxbgt', 'hkedmjlbcrzvryaopjqdjjc', 'tbqkljywstuahzh', 'o', 'wowoclosyfcuwotmvjygzuzhrery', 'vpefjiffkhlggntcu', 'ytdixvasrorhripzfhjdmlhqksmctyycwp'])
@@ -268,6 +269,7 @@ SELECT multiMatchAny(materialize('/odezhda-dlya-bega/'), ['/odezhda-dlya-bega/',
 
 SELECT 1 = multiMatchAny('фабрикант', ['f[ae]b[ei]rl', 'ф[иаэе]б[еэи][рпл]', 'афиукд', 'a[ft],th', '^ф[аиеэ]?б?[еэи]?$', 'берлик', 'fab', 'фа[беьв]+е?[рлко]']);
 
+-- All indices tests
 SELECT [] = multiMatchAllIndices(materialize('Butterbrot!'), []::Array(String))
 FROM `system`.numbers
 LIMIT 5;
@@ -564,6 +566,7 @@ SELECT multiMatchAny(materialize('/odezhda-dlya-bega/'), materialize(['/odezhda-
 
 SELECT 1 = multiMatchAny(materialize('фабрикант'), materialize(['f[ae]b[ei]rl', 'ф[иаэе]б[еэи][рпл]', 'афиукд', 'a[ft],th', '^ф[аиеэ]?б?[еэи]?$', 'берлик', 'fab', 'фа[беьв]+е?[рлко]']));
 
+-- All indices tests
 SELECT [] = multiMatchAllIndices(materialize('Butterbrot!'), materialize([]::Array(String)))
 FROM `system`.numbers
 LIMIT 5;

@@ -1,12 +1,12 @@
-SELECT arraySymmetricDifference();
+SELECT arraySymmetricDifference(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT arraySymmetricDifference(1);
+SELECT arraySymmetricDifference(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arraySymmetricDifference(1, 2);
+SELECT arraySymmetricDifference(1, 2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arraySymmetricDifference(1, [1, 2]);
+SELECT arraySymmetricDifference(1, [1, 2]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arraySymmetricDifference([1, 2], 1);
+SELECT arraySymmetricDifference([1, 2], 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arraySort(arraySymmetricDifference([]));
 

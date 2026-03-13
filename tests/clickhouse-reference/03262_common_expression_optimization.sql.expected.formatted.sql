@@ -1,3 +1,4 @@
+-- Test multiple cases
 SELECT *
 FROM x
 WHERE A
@@ -121,6 +122,7 @@ WHERE A
 ORDER BY x ASC
 LIMIT 10;
 
+-- Without AND as a root
 SELECT *
 FROM x
 WHERE ((B
@@ -234,6 +236,7 @@ WHERE ((B
 ORDER BY x ASC
 LIMIT 10;
 
+-- Complex expression
 SELECT *
 FROM x
 WHERE (A
@@ -253,6 +256,7 @@ WHERE (A
 ORDER BY x ASC
 LIMIT 10;
 
+-- Flattening is only happening if something can be extracted
 SELECT *
 FROM x
 WHERE ((A
@@ -299,6 +303,7 @@ WHERE ((A
 ORDER BY x ASC
 LIMIT 10;
 
+-- Duplicates
 SELECT *
 FROM x
 WHERE (A
@@ -375,6 +380,8 @@ WHERE (((A
 ORDER BY x ASC
 LIMIT 10;
 
+-- JOIN expressions
+-- As the optimization code is shared between ON and WHERE, it is enough to test that the optimization is done also in ON
 SELECT *
 FROM
     x
@@ -398,6 +405,7 @@ INNER JOIN y
 ORDER BY `ALL` ASC
 LIMIT 10;
 
+-- Duplicated subexpressions, found by fuzzer
 SELECT *
 FROM x
 WHERE (D
@@ -421,6 +429,7 @@ WHERE (D
 ORDER BY `ALL` ASC
 LIMIT 3;
 
+-- HAVING
 SELECT
     x,
     max(A) AS mA,
@@ -450,6 +459,7 @@ HAVING (mA
 ORDER BY x ASC
 LIMIT 10;
 
+-- QUALIFY
 SELECT
     x,
     max(A) OVER (PARTITION BY x % 1000) AS mA,

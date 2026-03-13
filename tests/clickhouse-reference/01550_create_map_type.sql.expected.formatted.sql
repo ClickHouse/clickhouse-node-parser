@@ -32,4 +32,4 @@ FROM table_map;
 
 SELECT
     CAST(([2, 1, 1023], ['', '']), 'Map(UInt8, String)') AS map,
-    map[10];
+    map[10]; -- { serverError TYPE_MISMATCH}

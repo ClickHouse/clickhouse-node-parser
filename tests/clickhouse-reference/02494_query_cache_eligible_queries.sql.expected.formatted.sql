@@ -1,3 +1,4 @@
+-- check that SELECT statements create entries in the query cache ...
 SELECT 1
 SETTINGS use_query_cache = true;
 

@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT map(1, 2, 3, 4) AS m
 FORMAT JSONEachRow;
 

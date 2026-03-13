@@ -1,3 +1,4 @@
+-- Tags: no-replicated-database
 SELECT least(value, 0)
 FROM `system`.metrics
 WHERE metric = 'MemoryTracking';

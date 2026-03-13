@@ -176,7 +176,7 @@ PASTE JOIN (
 PASTE JOIN (
         SELECT 3 AS a
     )
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- { serverError AMBIGUOUS_COLUMN_NAME }
 
 SELECT *
 FROM
@@ -194,7 +194,7 @@ PASTE JOIN test2;
 SELECT *
 FROM
     test1 AS `test2.a`
-PASTE JOIN test2 AS `test2.a`;
+PASTE JOIN test2 AS `test2.a`; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 
 SELECT *
 FROM
@@ -203,4 +203,4 @@ PASTE JOIN (
         SELECT number AS a
         FROM numbers(2)
         ORDER BY number DESC
-    );
+    ); -- { serverError AMBIGUOUS_COLUMN_NAME }

@@ -16,6 +16,7 @@ ORDER BY
     value2 ASC
 LIMIT 10;
 
+-- Parallel inner query alone without analyzer
 SELECT
     key,
     value1,
@@ -53,6 +54,7 @@ WHERE event_date >= yesterday()
             AND like(query, '-- Parallel inner query alone without analyzer%')
     );
 
+-- Parallel inner query alone with analyzer
 SELECT
     key,
     value1,
@@ -113,6 +115,7 @@ ORDER BY
     value1 ASC,
     value2 ASC;
 
+-- Parallel full query without analyzer
 SELECT
     value1,
     value2,
@@ -156,6 +159,7 @@ SETTINGS
     enable_analyzer = 0,
     parallel_replicas_only_with_analyzer = 0;
 
+-- Parallel full query with analyzer
 SELECT
     value1,
     value2,

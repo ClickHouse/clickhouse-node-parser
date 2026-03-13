@@ -62,4 +62,4 @@ SELECT if(rand() % 2 = 0, number, number)
 FROM numbers(5);
 
 SELECT if(rand() % 2 = 0, number, toString(number))
-FROM numbers(5);
+FROM numbers(5); -- { serverError NO_COMMON_TYPE }

@@ -24,4 +24,4 @@ FROM
 INNER JOIN v1 AS t2
     USING (id)
 INNER JOIN v1 AS t3
-    USING (value);
+    USING (value); -- { serverError UNKNOWN_IDENTIFIER }

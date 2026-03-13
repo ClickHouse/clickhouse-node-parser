@@ -1,5 +1,6 @@
 SELECT '--';
 
+-- corner case in which sub-WITH gets initialized first
 SELECT *
 FROM (
         WITH q AS (

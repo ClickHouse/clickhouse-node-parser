@@ -8,6 +8,7 @@ INNER JOIN attributes AS t1
     ON t1.EventId = t0.Id
 SETTINGS log_comment = '03712_nested_loop_join_merge_tree_indexed';
 
+-- Select without attributes
 SELECT count() + sum(ignore(a + 1))
 FROM (
         SELECT 1 AS a
@@ -17,6 +18,7 @@ FROM (
             ON t1.EventId = t0.Id
     );
 
+-- Different key
 SELECT
     count(),
     countIf(t1.Attribute != ''),
@@ -84,6 +86,7 @@ LEFT JOIN attributes AS t1
 SETTINGS log_comment = '03712_nested_loop_join_merge_tree_full_scan';
 
 SELECT
+    -- Indexed lookup, right table is not fully scanned
     if(read_rows < 1000000, 'OK', format('Fail: {} rows read, query_id={}', read_rows, query_id)),
     if(and(greaterOrEquals(ProfileEvents['JoinBuildTableRowCount'], 10), lessOrEquals(ProfileEvents['JoinBuildTableRowCount'], 1000000)), 'OK', format('Fail: JoinBuildTableRowCount={}, query_id={}', ProfileEvents['JoinBuildTableRowCount'], query_id))
 FROM `system`.query_log
@@ -94,6 +97,7 @@ WHERE type = 'QueryFinish'
     AND log_comment == '03712_nested_loop_join_merge_tree_indexed';
 
 SELECT
+    -- Full scan on each lookup
     if(read_rows > 2000000, 'OK', format('Fail: {} rows read, query_id="{}"', read_rows, query_id)),
     if(and(greaterOrEquals(ProfileEvents['JoinBuildTableRowCount'], 1100000), lessOrEquals(ProfileEvents['JoinBuildTableRowCount'], 2100000)), 'OK', format('Fail: JoinBuildTableRowCount={}, query_id="{}"', ProfileEvents['JoinBuildTableRowCount'], query_id))
 FROM `system`.query_log

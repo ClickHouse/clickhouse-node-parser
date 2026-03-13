@@ -1,18 +1,18 @@
 SELECT '-- negative tests';
 
-SELECT splitByChar(',', '1,2,3', '');
+SELECT splitByChar(',', '1,2,3', ''); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT splitByRegexp('[ABC]', 'oneAtwoBthreeC', '');
+SELECT splitByRegexp('[ABC]', 'oneAtwoBthreeC', ''); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT alphaTokens('abca1abc', '');
+SELECT alphaTokens('abca1abc', ''); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT splitByAlpha('abca1abc', '');
+SELECT splitByAlpha('abca1abc', ''); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT splitByNonAlpha('  1!  a,  b.  ', '');
+SELECT splitByNonAlpha('  1!  a,  b.  ', ''); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT splitByWhitespace('  1!  a,  b.  ', '');
+SELECT splitByWhitespace('  1!  a,  b.  ', ''); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT splitByString(', ', '1, 2 3, 4,5, abcde', '');
+SELECT splitByString(', ', '1, 2 3, 4,5, abcde', ''); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT splitByChar('=', 'a==b=c=d');
 

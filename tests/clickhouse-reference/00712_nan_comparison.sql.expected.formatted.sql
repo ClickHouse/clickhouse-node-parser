@@ -158,6 +158,7 @@ SELECT
     -nan <= toFloat64(0.0),
     -nan >= toFloat64(0.0);
 
+--SELECT 1 % nan, nan % 1, pow(x, 1), pow(1, x); -- TODO
 SELECT
     1 + nan,
     1 - nan,
@@ -169,6 +170,7 @@ SELECT
 SELECT
     nan AS x,
     isFinite(exp(x)),
+    /* exp(nan) is allowed to return inf */
     exp2(x),
     exp10(x),
     log(x),

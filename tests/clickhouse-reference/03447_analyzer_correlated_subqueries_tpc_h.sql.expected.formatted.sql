@@ -1,3 +1,4 @@
+-- Q2
 SELECT
     s_acctbal,
     s_name,
@@ -40,6 +41,7 @@ ORDER BY
     p_partkey ASC
 FORMAT Null;
 
+-- Q4
 SELECT
     o_orderpriority,
     count(*) AS order_count
@@ -56,6 +58,7 @@ GROUP BY o_orderpriority
 ORDER BY o_orderpriority ASC
 FORMAT Null;
 
+-- Q17
 SELECT sum(l_extendedprice) / 7.0 AS avg_yearly
 FROM
     lineitem
@@ -70,6 +73,7 @@ WHERE p_partkey = l_partkey
     )
 FORMAT Null;
 
+-- Q20
 SELECT
     s_name,
     s_address
@@ -98,6 +102,7 @@ WHERE s_suppkey IN (
 ORDER BY s_name ASC
 FORMAT Null;
 
+-- Q21
 SELECT
     s_name,
     count(*) AS numwait
@@ -131,6 +136,7 @@ ORDER BY
     s_name ASC
 FORMAT Null;
 
+-- Q22
 SELECT
     cntrycode,
     count(*) AS numcust,

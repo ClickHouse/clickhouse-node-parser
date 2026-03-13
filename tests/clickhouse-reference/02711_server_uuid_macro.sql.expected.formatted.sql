@@ -1,3 +1,4 @@
+-- The server UUID is correctly substituted.
 SELECT like(engine_full, ('%replica-{server_uuid}%'))
 FROM `system`.tables
 WHERE database = currentDatabase()
@@ -8,4 +9,5 @@ FROM `system`.zookeeper
 WHERE path = concat('/clickhouse/tables/', currentDatabase(), '/test/s1/replicas/')
     AND like(name, concat('replica-', serverUUID()::String, '%'));
 
-SELECT getMacro('server_uuid');
+-- The macro {server_uuid} is special, not a configuration-type macro. It's normal that it is inaccessible with the getMacro function.
+SELECT getMacro('server_uuid'); -- { serverError NO_ELEMENTS_IN_CONFIG }

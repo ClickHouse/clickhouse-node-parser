@@ -1,3 +1,6 @@
+--
+-- The same as before, but without relying on enable_global_with_statement
+--
 SELECT uniq(id2) AS count
 FROM (
         WITH cte AS (

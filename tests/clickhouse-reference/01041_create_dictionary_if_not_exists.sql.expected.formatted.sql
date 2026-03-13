@@ -1,1 +1,1 @@
-SELECT dictGetFloat64(concat({CLICKHOUSE_DATABASE: String}, '.dict_exists'), 'value', toUInt64(1));
+SELECT dictGetFloat64(concat({CLICKHOUSE_DATABASE:String}, '.dict_exists'), 'value', toUInt64(1));

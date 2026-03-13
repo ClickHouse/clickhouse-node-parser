@@ -20,7 +20,7 @@ WHERE has([10, 50000, 90000, NULL, NULL], toUInt64(id + 2));
 
 SELECT count()
 FROM test_has_idx_simple
-WHERE has([10, 50000, 90000, 'a'], id);
+WHERE has([10, 50000, 90000, 'a'], id); -- { serverError NO_COMMON_TYPE }
 
 SELECT count()
 FROM test_has_idx_tuple_col

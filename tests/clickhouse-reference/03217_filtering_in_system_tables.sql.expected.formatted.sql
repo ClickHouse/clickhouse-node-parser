@@ -1,3 +1,4 @@
+-- If filtering is not done correctly on databases, then this query report to read 3 rows, which are: `system.tables`, `information_schema.tables` and `INFORMATION_SCHEMA.tables`
 SELECT
     database,
     table
@@ -5,6 +6,9 @@ FROM `system`.tables
 WHERE database = 'information_schema'
     AND table = 'tables';
 
+-- Make sure we can read both replicas
+-- The replica name might be altered because of `_functional_tests_helper_database_replicated_replace_args_macros`,
+-- thus we need to use `left`
 SELECT
     'both',
     database,
@@ -13,6 +17,7 @@ SELECT
 FROM `system`.replicas
 WHERE database = currentDatabase();
 
+-- If filtering is not done correctly on database-table column, then this query report to read 2 rows, which are the above tables
 SELECT
     database,
     table,
@@ -22,6 +27,8 @@ WHERE database = currentDatabase()
     AND table = 'test_03217_system_tables_replica_1'
     AND like(replica_name, 'r1%');
 
+-- argMax is necessary to make the test repeatable
+-- StorageSystemTables
 SELECT argMax(read_rows, event_time_microseconds)
 FROM `system`.query_log
 WHERE 1
@@ -29,6 +36,7 @@ WHERE 1
     AND like(query, '%SELECT database, table FROM system.tables WHERE database = ''information_schema'' AND table = ''tables'';')
     AND type = 'QueryFinish';
 
+-- StorageSystemReplicas
 SELECT argMax(read_rows, event_time_microseconds)
 FROM `system`.query_log
 WHERE 1

@@ -1,3 +1,5 @@
+-- DISTINCT for explain outputs are required due to parallel replicas tests, as there
+-- are created multiple LimitByTransforms (pushed down to replicas and the global one)
 SELECT DISTINCT concat('Unsorted ORDER BY key LIMIT BY key: ', trimBoth(`explain`, ' '))
 FROM (
         EXPLAIN PIPELINE

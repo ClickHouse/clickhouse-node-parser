@@ -442,7 +442,7 @@ SELECT
     toFixedString('Hello', 10),
     bin(bitShiftRight(toFixedString('Hello', 10), 80));
 
-SELECT bin(bitShiftRight('Hello', 40));
+SELECT bin(bitShiftRight('Hello', 40)); --A blank line
 
 SELECT
     id AS shift_right_bit,

@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/62890
 SELECT sum(if(materialize(0), toNullable(1), 0));
 
 SELECT sum(if(materialize(0), toNullable(1), materialize(0)));

@@ -44,11 +44,11 @@ SELECT unbin('');
 
 SELECT unbin('0') == '\0';
 
-SELECT unbin('00110000');
+SELECT unbin('00110000'); -- 0
 
-SELECT unbin('0011000100110000');
+SELECT unbin('0011000100110000'); -- 10
 
-SELECT unbin('111001101011010110001011111010001010111110010101');
+SELECT unbin('111001101011010110001011111010001010111110010101'); -- 测试
 
 SELECT unbin(materialize('00110000'));
 
@@ -62,12 +62,14 @@ SELECT bin(unbin('')) == '';
 
 SELECT bin(unbin('0')) == '00000000';
 
+-- hex and bin consistent for corner cases
 SELECT hex('') == bin('');
 
 SELECT unhex('') == unbin('');
 
 SELECT unhex('0') == unbin('0');
 
+-- hex and bin support AggregateFunction
 SELECT hex(sumState(number)) == hex(toString(sumState(number)))
 FROM numbers(10);
 

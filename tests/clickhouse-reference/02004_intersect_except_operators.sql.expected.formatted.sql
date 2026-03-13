@@ -1,3 +1,4 @@
+-- { echo }
 SELECT 1
 INTERSECT
 SELECT 1;

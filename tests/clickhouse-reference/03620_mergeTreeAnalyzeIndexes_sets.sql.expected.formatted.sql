@@ -1,3 +1,4 @@
+-- { echo }
 SELECT *
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data, key IN (
         SELECT key

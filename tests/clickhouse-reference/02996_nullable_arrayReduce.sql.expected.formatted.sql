@@ -1,14 +1,15 @@
-SELECT arrayReduce(toNullable('stddevSampOrNull'), [1]);
+-- https://github.com/ClickHouse/ClickHouse/issues/59600
+SELECT arrayReduce(toNullable('stddevSampOrNull'), [1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayReduce(toNullable('median'), [toDecimal32OrNull(toFixedString('1', 1), 2), 8]);
+SELECT arrayReduce(toNullable('median'), [toDecimal32OrNull(toFixedString('1', 1), 2), 8]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toFixedString('--- Int Empty ---', toLowCardinality(17)),
-    arrayReduce(toNullable('avgOrNull'), [1]);
+    arrayReduce(toNullable('avgOrNull'), [1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayReduce('any', toNullable(3));
+SELECT arrayReduce('any', toNullable(3)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayReduce(toLowCardinality('median'), [toLowCardinality(toNullable(8))]);
+SELECT arrayReduce(toLowCardinality('median'), [toLowCardinality(toNullable(8))]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     arrayReduce('sum', []::Array(UInt8)) AS a,

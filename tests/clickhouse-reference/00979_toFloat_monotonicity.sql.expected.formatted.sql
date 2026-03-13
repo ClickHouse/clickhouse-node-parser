@@ -1,3 +1,5 @@
+-- Set `parallel_replicas_index_analysis_only_on_coordinator = 0` to prevent remote replicas from skipping index analysis in Parallel Replicas.
+-- Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
 SELECT n
 FROM test1
 WHERE toFloat64(n) = 7777.0

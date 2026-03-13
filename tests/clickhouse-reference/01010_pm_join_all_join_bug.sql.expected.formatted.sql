@@ -27,4 +27,4 @@ RIGHT JOIN (
         SELECT number AS s
         FROM numbers(2)
     ) AS t2
-    USING (s);
+    USING (s); -- { serverError NOT_FOUND_COLUMN_IN_BLOCK, UNKNOWN_IDENTIFIER }

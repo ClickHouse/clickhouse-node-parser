@@ -1,4 +1,4 @@
 SELECT
     *,
     oldest_before(users.age)
-FROM users;
+FROM users; -- { serverError UNSUPPORTED_METHOD }

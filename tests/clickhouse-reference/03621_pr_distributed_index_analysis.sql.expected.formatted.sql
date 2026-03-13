@@ -1,3 +1,4 @@
+-- { echo }
 SELECT sum(key)
 FROM test_10m
 SETTINGS
@@ -21,7 +22,19 @@ SETTINGS
 
 SELECT
     anyIf(normalizeQuery(query), is_initial_query) AS q,
-    if(any(`Settings`['allow_experimental_parallel_reading_from_replicas']) = '1', if(any(`Settings`['cluster_for_parallel_replicas']) = 'parallel_replicas', max2(count(), 19)::UInt64, max2(count(), 3)::UInt64), if(any(`Settings`['cluster_for_parallel_replicas']) = 'parallel_replicas', max2(count(), 10)::UInt64, max2(count(), 2)::UInt64)) AS queries_with_subqueries,
+    if(
+    -- in case of parallel replicas, it is possible that there will be less subqueries then max, but should not exceed it
+    any(`Settings`['allow_experimental_parallel_reading_from_replicas']) = '1',
+    if(
+    any(`Settings`['cluster_for_parallel_replicas']) = 'parallel_replicas',
+    -- the max is hosts in parallel_replicas (10) * 2 (one for the query itself and one for mergeTreeAnalyzeIndexes()) - 1 * 2 (for local replica we do not issue a separate query) + 1 (query itself)
+    max2(count(), 19)::UInt64,
+    -- the max is hosts in test_cluster_one_shard_two_replicas (2) * 2 (one for the query itself and one for mergeTreeAnalyzeIndexes()) - 1 * 2 (for local replica we do not issue a separate query) + 1 (query itself)
+    max2(count(), 3)::UInt64
+),
+    -- in case of distributed index analyss, it is possible that there will be less subqueries then max, due to failures on remote
+    if(any(`Settings`['cluster_for_parallel_replicas']) = 'parallel_replicas', max2(count(), 10)::UInt64, max2(count(), 2)::UInt64)
+) AS queries_with_subqueries,
     anyIf(ProfileEvents['DistributedIndexAnalysisScheduledReplicas'] > 0, is_initial_query) AS distributed_index_analysis_replicas,
     anyIf(ProfileEvents['ParallelReplicasUsedCount'] > 0, is_initial_query) AS read_with_parallel_replicas
 FROM `system`.query_log
@@ -29,6 +42,7 @@ WHERE event_date >= yesterday()
     AND type = 'QueryFinish'
     AND query_kind = 'Select'
     AND `Settings`['distributed_index_analysis'] = '1'
+    -- SKIP: current_database = currentDatabase() (it will filter out non-initial queries)
     AND endsWith(log_comment, concat('-', currentDatabase()))
 GROUP BY initial_query_id
 ORDER BY min(event_time_microseconds) ASC

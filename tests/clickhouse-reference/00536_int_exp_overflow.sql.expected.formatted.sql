@@ -8,7 +8,7 @@ SELECT
     toTypeName(x),
     intExp2(x);
 
-SELECT intExp2(nan);
+SELECT intExp2(nan); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     arrayJoin([-inf, -1000.5, -1000, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5, 1000, 1000.5, inf]) AS x,
@@ -20,4 +20,4 @@ SELECT
     toTypeName(x),
     intExp10(x);
 
-SELECT intExp10(nan);
+SELECT intExp10(nan); -- { serverError BAD_ARGUMENTS }

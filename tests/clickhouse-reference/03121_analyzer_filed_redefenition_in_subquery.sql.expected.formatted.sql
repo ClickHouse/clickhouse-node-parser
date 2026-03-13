@@ -1,3 +1,4 @@
+-- query 1
 SELECT my_field
 FROM (
         SELECT
@@ -6,6 +7,7 @@ FROM (
         FROM test_subquery
     );
 
+-- query 2
 SELECT my_field
 FROM (
         SELECT
@@ -14,6 +16,7 @@ FROM (
         FROM test_subquery
     );
 
+-- query 3
 SELECT my_field
 FROM (
         SELECT

@@ -1,2 +1,2 @@
 SELECT 1
-FROM d1;
+FROM d1; -- { serverError DEADLOCK_AVOIDED }

@@ -24,11 +24,11 @@ SELECT
 
 SELECT
     CAST('hello' AS IPv4) AS v,
-    toTypeName(v);
+    toTypeName(v); -- { serverError CANNOT_PARSE_IPV4 }
 
 SELECT
     CAST('hello' AS IPv6) AS v,
-    toTypeName(v);
+    toTypeName(v); -- { serverError CANNOT_PARSE_IPV6 }
 
 SELECT
     CAST('1.1.1.1' AS IPv6) AS v,

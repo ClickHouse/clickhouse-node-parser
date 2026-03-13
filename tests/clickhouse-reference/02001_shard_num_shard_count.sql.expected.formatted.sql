@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT
     shardNum() AS n,
     shardCount() AS c;

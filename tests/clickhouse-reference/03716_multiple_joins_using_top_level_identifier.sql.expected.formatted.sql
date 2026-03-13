@@ -65,4 +65,4 @@ INNER JOIN t2
     ON t1.id = t2.id
 LEFT JOIN t3
     USING (id)
-ORDER BY t1.val ASC;
+ORDER BY t1.val ASC; -- { serverError AMBIGUOUS_IDENTIFIER }

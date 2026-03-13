@@ -72,4 +72,4 @@ WHERE a = 7;
 SELECT
     number,
     cume_dist() OVER (ORDER BY number ASC ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
-FROM numbers(5);
+FROM numbers(5); -- { serverError BAD_ARGUMENTS }

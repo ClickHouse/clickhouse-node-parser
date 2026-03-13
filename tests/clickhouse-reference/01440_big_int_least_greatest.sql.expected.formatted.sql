@@ -64,8 +64,8 @@ SELECT
 
 SELECT
     least(toUInt32(0), toInt256(0)),
-    greatest(toInt32(0), toUInt256(0));
+    greatest(toInt32(0), toUInt256(0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     least(toInt32(0), toUInt256(0)),
-    greatest(toInt32(0), toUInt256(0));
+    greatest(toInt32(0), toUInt256(0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

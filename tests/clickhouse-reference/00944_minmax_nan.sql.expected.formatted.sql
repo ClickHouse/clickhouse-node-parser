@@ -32,7 +32,7 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
@@ -44,7 +44,7 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
@@ -56,7 +56,7 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
@@ -68,4 +68,4 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.

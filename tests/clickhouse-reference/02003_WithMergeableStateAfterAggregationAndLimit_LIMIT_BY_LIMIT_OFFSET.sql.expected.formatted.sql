@@ -1,6 +1,12 @@
+-- Here we use a trick with shardNum() to generate unique data on each shard.
+-- Since distributed_group_by_no_merge=2 will use WithMergeableStateAfterAggregationAndLimit,
+-- which assume that the data on shards is unique
+-- (LIMIT BY will be applied only on shards, not on the initiator).
+-- To distinguish echoing from the comments above we use SELECT FORMAT Null.
 SELECT ''
 FORMAT Null;
 
+-- { echo }
 SELECT *
 FROM remote('127.{1,2}', view((
         SELECT number % 20 AS number

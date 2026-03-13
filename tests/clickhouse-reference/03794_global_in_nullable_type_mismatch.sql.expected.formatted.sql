@@ -1,3 +1,7 @@
+-- Test GLOBAL IN with nullable subquery (materialize(toNullable(...)))
+-- This used to crash because when building external table from a ready set,
+-- the set elements (non-nullable) were written directly without converting
+-- them to match the external table's expected Nullable types.
 SELECT sum(y)
 FROM (
         SELECT *
@@ -8,6 +12,7 @@ WHERE x GLOBAL IN (
         FROM numbers(1)
     );
 
+-- Additional test cases
 SELECT sum(y)
 FROM (
         SELECT *

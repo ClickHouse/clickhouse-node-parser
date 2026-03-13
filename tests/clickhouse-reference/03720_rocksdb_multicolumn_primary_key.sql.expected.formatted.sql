@@ -1,10 +1,10 @@
 SELECT COUNT(1) == 100
-FROM `03720_test`;
+FROM `03720_test`; -- Full scan
 
 SELECT COUNT(1) == 5
 FROM `03720_test`
 WHERE k1 = 5
-    AND k2 IN (15, 35, 55, 75, 95);
+    AND k2 IN (15, 35, 55, 75, 95); -- Key scan
 
 SELECT COUNT(1) == 0
 FROM `03720_test`
@@ -41,7 +41,7 @@ ORDER BY val ASC;
 
 SELECT COUNT(*)
 FROM `03720_tuple_equality`
-WHERE (k1, k2) = (3, 30);
+WHERE (k1, k2) = (3, 30); -- non-existent
 
 SELECT COUNT(*)
 FROM `03720_tuple_equality`
@@ -55,7 +55,7 @@ ORDER BY val ASC;
 
 SELECT COUNT(*)
 FROM `03720_tuple_in`
-WHERE (k1, k2) IN ((1, 10), (5, 50));
+WHERE (k1, k2) IN ((1, 10), (5, 50)); -- partial match
 
 SELECT val
 FROM `03720_three_columns`
@@ -71,7 +71,7 @@ SELECT COUNT(*)
 FROM `03720_three_columns`
 WHERE k1 = 1
     AND k2 = 1
-    AND k3 IN (1, 2);
+    AND k3 IN (1, 2); -- Cartesian with 3 keys
 
 SELECT COUNT(*)
 FROM `03720_three_columns`
@@ -80,7 +80,7 @@ WHERE (k1 = 1
     AND k3 = 1)
     OR (k1 = 1
     AND k2 = 2
-    AND k3 = 1);
+    AND k3 = 1); -- OR with all 3 keys specified
 
 SELECT val
 FROM `03720_four_columns`
@@ -181,82 +181,84 @@ FROM `03720_mutations`
 WHERE (k1, k2) = (1, 1)
 ORDER BY val ASC;
 
+-- Only k1 specified - should trigger full scan
 SELECT COUNT(*)
 FROM `03720_partial_key`
 WHERE k1 = 1;
 
 SELECT COUNT(*)
-FROM `03720_deletes`;
+FROM `03720_deletes`; -- Should be 4
 
 SELECT val
 FROM `03720_deletes`
 WHERE k1 = 1
-ORDER BY val ASC;
+ORDER BY val ASC; -- Should be 'b'
 
 SELECT val
 FROM `03720_deletes`
 WHERE k1 = 2
-ORDER BY val ASC;
+ORDER BY val ASC; -- Should be 'c'
 
 SELECT val
 FROM `03720_deletes`
-ORDER BY val ASC;
+ORDER BY val ASC; -- Should be 'c'
 
 SELECT COUNT(*)
-FROM `03720_deletes_three_col`;
+FROM `03720_deletes_three_col`; -- Should be 3
 
 SELECT val
 FROM `03720_deletes_three_col`
-ORDER BY val ASC;
+ORDER BY val ASC; -- Should be 'c'
 
 SELECT COUNT(*)
-FROM `03720_deletes_string`;
+FROM `03720_deletes_string`; -- Should be 2
 
 SELECT val
 FROM `03720_deletes_string`
 WHERE k1 = 'foo'
-ORDER BY val ASC;
+ORDER BY val ASC; -- Should be 2
 
 SELECT val
 FROM `03720_updates`
-WHERE (k1, k2) = (1, 1);
+WHERE (k1, k2) = (1, 1); -- Should be 'updated'
 
 SELECT val
 FROM `03720_updates`
-WHERE (k1, k2) = (1, 2);
+WHERE (k1, k2) = (1, 2); -- Should be 'modified'
 
 SELECT val
 FROM `03720_updates`
-WHERE (k1, k2) = (2, 1);
+WHERE (k1, k2) = (2, 1); -- Should be 'test'
 
 SELECT COUNT(*)
-FROM `03720_updates`;
+FROM `03720_updates`; -- Should be 3
 
 SELECT val
 FROM `03720_updates_three_col`
-WHERE (k1, k2, k3) = (1, 1, 1);
+WHERE (k1, k2, k3) = (1, 1, 1); -- Should be 'updated_v1'
 
 SELECT COUNT(*)
-FROM `03720_updates_three_col`;
+FROM `03720_updates_three_col`; -- Should be 3
 
 SELECT val
 FROM `03720_updates_string`
-WHERE (k1, k2) = ('foo', 'bar');
+WHERE (k1, k2) = ('foo', 'bar'); -- Should be 999
 
 SELECT COUNT(*)
-FROM `03720_updates_string`;
+FROM `03720_updates_string`; -- Should be 2
 
 SELECT val
 FROM `03720_upsert`
-WHERE (k1, k2) = (1, 1);
+WHERE (k1, k2) = (1, 1); -- Should be 'upserted'
 
 SELECT val
 FROM `03720_upsert`
-WHERE (k1, k2) = (2, 2);
+WHERE (k1, k2) = (2, 2); -- Should be 'new'
 
 SELECT COUNT(*)
-FROM `03720_upsert`;
+FROM `03720_upsert`; -- Should be 3
 
+-- INNER JOIN on multi-column keys
 SELECT
     l.val,
     r.info
@@ -267,6 +269,7 @@ INNER JOIN `03720_join_right` AS r
     AND l.k2 = r.k2
 ORDER BY l.val ASC;
 
+-- LEFT JOIN on multi-column keys
 SELECT
     l.val,
     r.info
@@ -277,6 +280,7 @@ LEFT JOIN `03720_join_right` AS r
     AND l.k2 = r.k2
 ORDER BY l.val ASC;
 
+-- COUNT with INNER JOIN
 SELECT COUNT(*)
 FROM
     `03720_join_left` AS l

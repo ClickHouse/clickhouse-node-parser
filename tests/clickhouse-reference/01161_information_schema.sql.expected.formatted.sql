@@ -46,6 +46,8 @@ FROM information_schema.referential_constraints;
 SELECT *
 FROM information_schema.statistics;
 
+--
+-- mixed upper/lowercase schema and table name:
 SELECT count()
 FROM information_schema.TABLES
 WHERE table_schema = currentDatabase()
@@ -54,4 +56,4 @@ WHERE table_schema = currentDatabase()
 SELECT count()
 FROM information_schema.taBLES
 WHERE table_schema = currentDatabase()
-    AND table_name = 't';
+    AND table_name = 't'; -- { serverError UNKNOWN_TABLE }

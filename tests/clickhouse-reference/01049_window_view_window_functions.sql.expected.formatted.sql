@@ -1,3 +1,4 @@
+-- { echo }
 SELECT tumble(toDateTime('2020-01-09 12:00:01', 'US/Samoa'), toIntervalSecond(1), 'US/Samoa');
 
 SELECT tumble(toDateTime('2020-01-09 12:00:01', 'US/Samoa'), toIntervalMinute(1), 'US/Samoa');
@@ -56,25 +57,25 @@ SELECT toDateTime(hopEnd(toDateTime('2020-01-09 12:00:01', 'US/Samoa'), toInterv
 
 SELECT hopEnd(hop(toDateTime('2019-01-09 12:00:01', 'US/Samoa'), toIntervalDay('1'), toIntervalDay('3'), 'US/Samoa'));
 
-SELECT hopStart(tuple());
+SELECT hopStart(tuple()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT hopEnd(tuple());
+SELECT hopEnd(tuple()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tumbleStart(tuple());
+SELECT tumbleStart(tuple()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tumbleEnd(tuple());
+SELECT tumbleEnd(tuple()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT tumbleStart(toUInt32(42))
 SETTINGS session_timezone = 'UTC';
 
-SELECT tumbleStart((now(), now(), 'meow'));
+SELECT tumbleStart((now(), now(), 'meow')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tumbleStart(now());
+SELECT tumbleStart(now()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT hopEnd((makeDateTime(null), toDateTime('2025-02-07 17:23:42')))
-SETTINGS session_timezone = 'UTC';
+SETTINGS session_timezone = 'UTC'; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT hopStart((toDateTime('2025-02-07 17:23:42'), makeDateTime(null)))
-SETTINGS session_timezone = 'UTC';
+SETTINGS session_timezone = 'UTC'; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT hopEnd((toDateTime('2025-02-07 17:23:42'), makeDateTime(null)));
+SELECT hopEnd((toDateTime('2025-02-07 17:23:42'), makeDateTime(null))); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

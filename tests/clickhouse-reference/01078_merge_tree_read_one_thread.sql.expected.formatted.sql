@@ -1,5 +1,5 @@
 SELECT sleep(1)
-FORMAT Null;
+FORMAT Null; -- sleep a bit to wait possible merges after insert
 
 SELECT sum(a)
 FROM t

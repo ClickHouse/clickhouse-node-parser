@@ -1,1 +1,1 @@
-SELECT plus(1, 1);
+SELECT plus(1, 1); -- { serverError SYNTAX_ERROR }

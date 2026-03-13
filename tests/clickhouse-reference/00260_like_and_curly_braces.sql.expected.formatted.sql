@@ -1,3 +1,4 @@
+-- Tags: race
 SELECT
     'a}a' AS x,
     like(x, (concat('%', x, '%') AS pat)),

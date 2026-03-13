@@ -18,13 +18,13 @@ SELECT arrayExcept([1, NULL, 2], [2]) AS result;
 
 SELECT arrayExcept([1, 2, 3], [2, NULL]) AS result;
 
-SELECT arrayExcept(materialize(['11','2','3','4','0']), materialize([1.5]));
+SELECT arrayExcept(materialize(['11','2','3','4','0']), materialize([1.5])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayExcept(materialize('11'), materialize('1'));
+SELECT arrayExcept(materialize('11'), materialize('1')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayExcept(materialize(['11','2','3','4','0']), materialize('1'));
+SELECT arrayExcept(materialize(['11','2','3','4','0']), materialize('1')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayExcept(materialize([['11','2','3','4','0']]), materialize([['1']]));
+SELECT arrayExcept(materialize([['11','2','3','4','0']]), materialize([['1']])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayExcept([1, 2, 3, 4], [3, 5]) AS result
 FROM numbers(3);

@@ -21,7 +21,7 @@ FROM (
             ignore(*, *, 10, *, 10, 10, 10, 10, 10, *, toUInt128(10), 10, *, 10, isNull(NULL), 10, 10) ASC,
             x ASC
     )
-ORDER BY `ALL` DESC;
+ORDER BY `ALL` DESC; -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT `explain`
 FROM (
@@ -32,4 +32,4 @@ FROM (
                 WHERE a
             ))
     )
-WHERE equals(id AS a);
+WHERE equals(id AS a); -- { serverError BAD_ARGUMENTS }

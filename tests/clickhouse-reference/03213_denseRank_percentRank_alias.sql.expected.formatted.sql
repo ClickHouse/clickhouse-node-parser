@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/67042
+-- Reference generated using percent_rank() and dense_rank()
+-- From ClickHouse/tests/queries/0_stateless/01591_window_functions.sql  (for deterministic query)
 SELECT '---- denseRank() ----';
 
 SELECT

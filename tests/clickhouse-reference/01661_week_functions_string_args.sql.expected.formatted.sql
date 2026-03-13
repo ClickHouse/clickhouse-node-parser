@@ -1,3 +1,4 @@
+-- Tests that functions `toDayOfWeek()`, 'toWeek()' and 'toYearWeek()' accepts a date given as string (for compatibility with MySQL)
 SELECT '-- Constant argument';
 
 SELECT
@@ -18,11 +19,11 @@ SELECT
     toYearWeek('2016-06-15 23:00:00'),
     toYearWeek('2016-06-15 23:00:00.123456');
 
-SELECT toDayOfWeek('invalid');
+SELECT toDayOfWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT toWeek('invalid');
+SELECT toWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT toYearWeek('invalid');
+SELECT toYearWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT
     toDayOfWeek(d),
@@ -55,10 +56,10 @@ FROM tab
 ORDER BY d ASC;
 
 SELECT toDayOfWeek(invalid)
-FROM tab;
+FROM tab; -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT toWeek(invalid)
-FROM tab;
+FROM tab; -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT toYearWeek(invalid)
-FROM tab;
+FROM tab; -- { serverError CANNOT_PARSE_DATETIME }

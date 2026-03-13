@@ -4,7 +4,7 @@ SELECT
 FROM
     test_table_join_1 AS t1
 INNER JOIN test_table_join_2
-    USING (id);
+    USING (id); -- { serverError UNKNOWN_IDENTIFIER };
 
 SELECT
     toTypeName(t2_value),

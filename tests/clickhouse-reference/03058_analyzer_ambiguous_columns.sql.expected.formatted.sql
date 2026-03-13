@@ -19,7 +19,7 @@ LEFT JOIN (
             color_name
         FROM colors
     ) AS c
-    ON (a.color_key = c.color_key);
+    ON (a.color_key = c.color_key); -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT
     id,
@@ -42,4 +42,4 @@ LEFT JOIN (
             color_name
         FROM colors
     ) AS c
-    ON (a.color_key = c.color_key);
+    ON (a.color_key = c.color_key); -- { serverError AMBIGUOUS_IDENTIFIER }

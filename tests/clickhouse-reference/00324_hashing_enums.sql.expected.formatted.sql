@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT cityHash64(*)
 FROM (
         SELECT

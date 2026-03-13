@@ -6,11 +6,11 @@ SETTINGS force_optimize_projection_name = 'projection_name';
 SELECT name
 FROM test
 GROUP BY name
-SETTINGS force_optimize_projection_name = 'non_existing_projection';
+SETTINGS force_optimize_projection_name = 'non_existing_projection'; -- { serverError INCORRECT_DATA }
 
 SELECT name
 FROM test
-SETTINGS force_optimize_projection_name = 'projection_name';
+SETTINGS force_optimize_projection_name = 'projection_name'; -- { serverError INCORRECT_DATA }
 
 SELECT 1
 SETTINGS force_optimize_projection_name = 'projection_name';

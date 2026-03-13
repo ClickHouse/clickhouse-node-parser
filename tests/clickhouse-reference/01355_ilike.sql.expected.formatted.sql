@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT ilike('Hello', '');
 
 SELECT ilike('Hello', '%');

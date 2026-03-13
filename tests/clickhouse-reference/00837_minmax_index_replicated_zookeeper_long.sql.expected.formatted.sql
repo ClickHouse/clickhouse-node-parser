@@ -1,3 +1,4 @@
+/* simple select */
 SELECT *
 FROM minmax_idx1
 WHERE i32 = 5
@@ -18,6 +19,7 @@ WHERE i32 = 5
     OR s = 'cba'))
 ORDER BY dt ASC;
 
+/* select with hole made by primary key */
 SELECT *
 FROM minmax_idx1
 WHERE ((u64 < 2

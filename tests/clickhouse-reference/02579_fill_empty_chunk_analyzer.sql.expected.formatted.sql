@@ -1,3 +1,4 @@
+-- With analyzer this special query has correct output
 SELECT
     2 AS x,
     arrayJoin([NULL, NULL, NULL])

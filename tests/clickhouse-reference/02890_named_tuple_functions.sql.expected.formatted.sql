@@ -22,11 +22,12 @@ FROM x;
 SELECT tupleNames(tuple(i, i, j, j))
 FROM x;
 
-SELECT tupleNames(1);
+SELECT tupleNames(1); -- { serverError 43 }
 
 SELECT *
 FROM tbl;
 
+-- Avoid generating named tuple for special keywords
 SELECT
     toTypeName(tuple(NULL)),
     toTypeName(tuple(true)),

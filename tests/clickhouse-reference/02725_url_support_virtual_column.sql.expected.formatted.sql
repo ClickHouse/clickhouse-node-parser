@@ -20,4 +20,4 @@ SELECT
     _path,
     _file,
     s
-FROM url('http://127.0.0.1:8123/?query=select+1&user=default&password=wrong', LineAsString, 's String');
+FROM url('http://127.0.0.1:8123/?query=select+1&user=default&password=wrong', LineAsString, 's String'); -- { serverError RECEIVED_ERROR_FROM_REMOTE_IO_SERVER }

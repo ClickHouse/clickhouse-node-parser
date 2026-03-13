@@ -2,8 +2,10 @@ SELECT countMatches('', 'foo');
 
 SELECT countMatches('foo', '');
 
+-- simply stop if zero bytes was processed
 SELECT countMatches('foo', '[f]{0}');
 
+-- but this is ok
 SELECT countMatches('foo', '[f]{0}foo');
 
 SELECT countMatches('foobarfoo', 'foo');
@@ -41,12 +43,12 @@ SELECT countMatchesCaseInsensitive('foo.com@foo.com bar.com@foo.com BAZ.com@foo.
 SELECT countMatchesCaseInsensitive(materialize('foobarfoo'), 'FOo');
 
 SELECT countMatches(1, 'foo')
-FROM numbers(1);
+FROM numbers(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT countMatches('foobarfoo', toString(number))
-FROM numbers(1);
+FROM numbers(1); -- { serverError ILLEGAL_COLUMN }
 
-SELECT countMatches('foo', materialize('foo'));
+SELECT countMatches('foo', materialize('foo')); -- { serverError ILLEGAL_COLUMN }
 
 SELECT countMatches(toFixedString('foobarfoo', 9), 'foo');
 

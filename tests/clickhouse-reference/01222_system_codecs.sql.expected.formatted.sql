@@ -1,3 +1,4 @@
+-- Tags: no-object-storage, no-fasttest
 SELECT *
 FROM `system`.codecs
 ORDER BY `all` ASC;

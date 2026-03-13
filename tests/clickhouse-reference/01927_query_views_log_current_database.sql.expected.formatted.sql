@@ -1,3 +1,4 @@
+-- CHECK LOGS OF INSERT 1
 SELECT
     'Query log rows' AS stage,
     read_rows,
@@ -44,6 +45,7 @@ WHERE initial_query_id = (
 ORDER BY view_name ASC
 FORMAT Vertical;
 
+-- CHECK LOGS OF INSERT 2
 SELECT
     'Query log rows 2' AS stage,
     read_rows,

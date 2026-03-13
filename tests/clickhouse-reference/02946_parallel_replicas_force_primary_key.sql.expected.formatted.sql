@@ -1,3 +1,4 @@
+-- w/o parallel replicas
 SELECT
     k,
     count()
@@ -18,10 +19,11 @@ GROUP BY k
 ORDER BY k ASC
 SETTINGS force_primary_key = 1;
 
+-- parallel replicas, primary key is NOT used
 SELECT
     k,
     count()
 FROM t1
 GROUP BY k
 ORDER BY k ASC
-SETTINGS force_primary_key = 1;
+SETTINGS force_primary_key = 1; -- { serverError INDEX_NOT_USED }

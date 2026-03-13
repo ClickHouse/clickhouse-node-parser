@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT *
 FROM remote('127.{1,2}', view((
         SELECT 'foo.com' AS key

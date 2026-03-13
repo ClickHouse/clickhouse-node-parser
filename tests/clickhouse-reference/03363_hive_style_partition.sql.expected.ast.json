@@ -61,6 +61,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- distinct because minio isn't cleaned up"
     ]
   },
   {
@@ -248,7 +251,14 @@
         }
       ]
     },
-    "format": "null"
+    "format": "null",
+    "leadingComments": [
+      "-- Depends on the above two inserts, should throw exception because it could not find the hive partition columns it was looking for",
+      "-- The format is null because one of the files contains the requested columns and might return the data before we throw the exception"
+    ],
+    "trailingComments": [
+      "-- {serverError INCORRECT_DATA}"
+    ]
   },
   {
     "kind": "select",
@@ -261,7 +271,10 @@
       "kind": "tableRef",
       "table": "t_03363_mixed_partitioning"
     },
-    "format": "null"
+    "format": "null",
+    "trailingComments": [
+      "-- {serverError INCORRECT_DATA}"
+    ]
   },
   {
     "kind": "select",
@@ -322,7 +335,10 @@
         "type": "UInt64",
         "value": "1"
       }
-    }
+    },
+    "leadingComments": [
+      "-- should output 1 because partition columns are not written down to the file by default when hive style is being used"
+    ]
   },
   {
     "kind": "select",
@@ -463,6 +479,9 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- hive partitioning = 0 so we know it is not reading columns from the path"
     ]
   },
   {
@@ -478,7 +497,10 @@
     "from": {
       "kind": "tableRef",
       "table": "s3_table_half_schema_with_format"
-    }
+    },
+    "leadingComments": [
+      "-- Should succeed and not return hive columns (as nothing else is in schema - then no columns at all). Distinct because maybe MinIO isn't cleaned up"
+    ]
   },
   {
     "kind": "select",
@@ -511,7 +533,13 @@
     "from": {
       "kind": "tableRef",
       "table": "s3_table_half_schema_with_format"
-    }
+    },
+    "leadingComments": [
+      "-- Should fail because the column year does not exist"
+    ],
+    "trailingComments": [
+      "-- {serverError UNKNOWN_IDENTIFIER}"
+    ]
   },
   {
     "kind": "select",
@@ -577,6 +605,12 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- hive partition strategy can't be set in select statement?"
+    ],
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
   }
 ]

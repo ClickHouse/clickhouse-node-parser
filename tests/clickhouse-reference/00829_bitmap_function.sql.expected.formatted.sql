@@ -129,6 +129,7 @@ WHERE 0 = bitmapContains((
         WHERE pickup_date = '2019-01-01'
     ), uid);
 
+-- PR#8082
 SELECT bitmapToArray(bitmapAnd(groupBitmapState(uid), bitmapBuild(CAST([1, 2, 3], 'Array(UInt32)'))))
 FROM bitmap_test
 GROUP BY city_id
@@ -194,22 +195,27 @@ SELECT
 FROM bitmap_column_expr_test3
 ORDER BY tag_id ASC;
 
+-- bitmapHasAny:
+---- Empty
 SELECT bitmapHasAny(bitmapBuild([1, 2, 3, 5]), bitmapBuild(emptyArrayUInt8()));
 
 SELECT bitmapHasAny(bitmapBuild(emptyArrayUInt32()), bitmapBuild(emptyArrayUInt32()));
 
 SELECT bitmapHasAny(bitmapBuild(emptyArrayUInt16()), bitmapBuild([1, 2, 3, 500]));
 
+---- Small x Small
 SELECT bitmapHasAny(bitmapBuild([1, 2, 3, 5]), bitmapBuild([0, 3, 7]));
 
 SELECT bitmapHasAny(bitmapBuild([1, 2, 3, 5]), bitmapBuild([0, 4, 7]));
 
+---- Small x Large
 SELECT bitmapHasAny(bitmapBuild([100,110,120]), bitmapBuild([ 99, 100, 101,
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]));
 
 SELECT bitmapHasAny(bitmapBuild([100,200,500]), bitmapBuild([ 99, 101, 600,
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]));
 
+---- Large x Small
 SELECT bitmapHasAny(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,230]), bitmapBuild([ 99, 100, 101]));
@@ -218,6 +224,7 @@ SELECT bitmapHasAny(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), bitmapBuild([ 99, 101, 600]));
 
+---- Large x Large
 SELECT bitmapHasAny(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     40,50,60]), bitmapBuild([ 41, 50, 61,
@@ -228,26 +235,32 @@ SELECT bitmapHasAny(bitmapBuild([
     40,50,60]), bitmapBuild([ 41, 49, 51, 61,
     99,98,97,96,95,94,93,92,91,90,89,88,87,86,85,84,83,82,81,80,79,78,77,76,75,74,73,72,71,70,69,68,67,66,65]));
 
+-- bitmapHasAll:
+---- Empty
 SELECT bitmapHasAll(bitmapBuild([1, 2, 3, 5]), bitmapBuild(emptyArrayUInt8()));
 
 SELECT bitmapHasAll(bitmapBuild(emptyArrayUInt32()), bitmapBuild(emptyArrayUInt32()));
 
 SELECT bitmapHasAll(bitmapBuild(emptyArrayUInt16()), bitmapBuild([1, 2, 3, 500]));
 
+---- Small x Small
 SELECT bitmapHasAll(bitmapBuild([1,5,7,9]), bitmapBuild([5,7]));
 
 SELECT bitmapHasAll(bitmapBuild([1,5,7,9]), bitmapBuild([5,7,2]));
 
+---- Small x Large
 SELECT bitmapHasAll(bitmapBuild([100,110,120]), bitmapBuild([ 99, 100, 101,
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]));
 
 SELECT bitmapHasAll(bitmapBuild([100,200,500]), bitmapBuild([ 99, 101, 600,
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]));
 
+---- Small x LargeSmall
 SELECT bitmapHasAll(bitmapBuild([1,5,7,9]), bitmapXor(bitmapBuild([1,5,7]), bitmapBuild([5,7,9])));
 
 SELECT bitmapHasAll(bitmapBuild([1,5,7,9]), bitmapXor(bitmapBuild([1,5,7]), bitmapBuild([2,5,7])));
 
+---- Large x Small
 SELECT bitmapHasAll(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), bitmapBuild([100, 500]));
@@ -256,10 +269,12 @@ SELECT bitmapHasAll(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), bitmapBuild([ 99, 100, 500]));
 
+---- LargeSmall x Small
 SELECT bitmapHasAll(bitmapXor(bitmapBuild([1,7]), bitmapBuild([5,7,9])), bitmapBuild([1,5]));
 
 SELECT bitmapHasAll(bitmapXor(bitmapBuild([1,7]), bitmapBuild([5,7,9])), bitmapBuild([1,5,7]));
 
+---- Large x Large
 SELECT bitmapHasAll(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), bitmapBuild([ 100, 200, 500,
@@ -270,14 +285,18 @@ SELECT bitmapHasAll(bitmapBuild([
     100,200,500]), bitmapBuild([ 100, 200, 501,
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]));
 
+-- bitmapContains:
+---- Empty
 SELECT bitmapContains(bitmapBuild(emptyArrayUInt32()), toUInt8(0));
 
 SELECT bitmapContains(bitmapBuild(emptyArrayUInt16()), toUInt16(5));
 
+---- Small
 SELECT bitmapContains(bitmapBuild([1,5,7,9]), toUInt32(0));
 
 SELECT bitmapContains(bitmapBuild([1,5,7,9]), toUInt64(9));
 
+---- Large
 SELECT bitmapContains(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), toUInt32(100));
@@ -290,16 +309,20 @@ SELECT bitmapContains(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), toUInt32(500));
 
+-- bitmapSubsetInRange:
+---- Empty
 SELECT bitmapToArray(bitmapSubsetInRange(bitmapBuild(emptyArrayUInt32()), toUInt64(0), toUInt32(10)));
 
 SELECT bitmapToArray(bitmapSubsetInRange(bitmapBuild(emptyArrayUInt16()), toUInt32(0), toUInt64(10)));
 
+---- Small
 SELECT bitmapToArray(bitmapSubsetInRange(bitmapBuild([1,5,7,9]), toUInt8(0), toUInt16(4)));
 
 SELECT bitmapToArray(bitmapSubsetInRange(bitmapBuild([1,5,7,9]), toUInt32(10), toUInt64(10)));
 
 SELECT bitmapToArray(bitmapSubsetInRange(bitmapBuild([1,5,7,9]), toUInt64(3), toUInt32(7)));
 
+---- Large
 SELECT bitmapToArray(bitmapSubsetInRange(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), toUInt8(0), toUInt32(100)));
@@ -312,16 +335,20 @@ SELECT bitmapToArray(bitmapSubsetInRange(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), toUInt32(100), toUInt64(200)));
 
+-- bitmapSubsetLimit:
+---- Empty
 SELECT bitmapToArray(bitmapSubsetLimit(bitmapBuild(emptyArrayUInt32()), toUInt8(0), toUInt32(10)));
 
 SELECT bitmapToArray(bitmapSubsetLimit(bitmapBuild(emptyArrayUInt16()), toUInt32(0), toUInt64(10)));
 
+---- Small
 SELECT bitmapToArray(bitmapSubsetLimit(bitmapBuild([1,5,7,9]), toUInt8(0), toUInt32(4)));
 
 SELECT bitmapToArray(bitmapSubsetLimit(bitmapBuild([1,5,7,9]), toUInt32(10), toUInt64(10)));
 
 SELECT bitmapToArray(bitmapSubsetLimit(bitmapBuild([1,5,7,9]), toUInt16(3), toUInt32(7)));
 
+---- Large
 SELECT bitmapToArray(bitmapSubsetLimit(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), toUInt32(0), toUInt32(100)));
@@ -334,16 +361,20 @@ SELECT bitmapToArray(bitmapSubsetLimit(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), toUInt32(100), toUInt16(200)));
 
+-- subBitmap:
+---- Empty
 SELECT bitmapToArray(subBitmap(bitmapBuild(emptyArrayUInt32()), toUInt8(0), toUInt32(10)));
 
 SELECT bitmapToArray(subBitmap(bitmapBuild(emptyArrayUInt16()), toUInt32(0), toUInt64(10)));
 
+---- Small
 SELECT bitmapToArray(subBitmap(bitmapBuild([1,5,7,9]), toUInt8(0), toUInt32(4)));
 
 SELECT bitmapToArray(subBitmap(bitmapBuild([1,5,7,9]), toUInt32(1), toUInt64(4)));
 
 SELECT bitmapToArray(subBitmap(bitmapBuild([1,5,7,9]), toUInt16(1), toUInt32(2)));
 
+---- Large
 SELECT bitmapToArray(subBitmap(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), toUInt32(0), toUInt32(10)));
@@ -356,6 +387,8 @@ SELECT bitmapToArray(subBitmap(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]), toUInt32(34), toUInt16(3)));
 
+-- bitmapMin:
+---- Empty
 SELECT bitmapMin(bitmapBuild(emptyArrayUInt8()));
 
 SELECT bitmapMin(bitmapBuild(emptyArrayUInt16()));
@@ -364,20 +397,26 @@ SELECT bitmapMin(bitmapBuild(emptyArrayUInt32()));
 
 SELECT bitmapMin(bitmapBuild(emptyArrayUInt64()));
 
+---- Small
 SELECT bitmapMin(bitmapBuild([1,5,7,9]));
 
+---- Large
 SELECT bitmapMin(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]));
 
+-- bitmapMax:
+---- Empty
 SELECT bitmapMax(bitmapBuild(emptyArrayUInt8()));
 
 SELECT bitmapMax(bitmapBuild(emptyArrayUInt16()));
 
 SELECT bitmapMax(bitmapBuild(emptyArrayUInt32()));
 
+---- Small
 SELECT bitmapMax(bitmapBuild([1,5,7,9]));
 
+---- Large
 SELECT bitmapMax(bitmapBuild([
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
     100,200,500]));

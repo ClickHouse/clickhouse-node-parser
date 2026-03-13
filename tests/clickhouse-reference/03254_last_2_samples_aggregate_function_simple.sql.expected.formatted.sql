@@ -1,3 +1,4 @@
+-- Check raw data
 SELECT *
 FROM t_raw_timeseries
 WHERE metric_id = 3
@@ -6,6 +7,7 @@ ORDER BY
     metric_id ASC,
     timestamp ASC;
 
+-- Check re-sampled data
 SELECT
     metric_id,
     grid_timestamp,

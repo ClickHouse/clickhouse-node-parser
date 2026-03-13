@@ -1,7 +1,9 @@
+-- This SELECT should not crash (was causing segfault before fix)
 SELECT count()
 FROM test_duplicate_partition_keys
 WHERE c1 = 1;
 
+-- Test the SELECT with different conditions
 SELECT
     c0,
     c1
@@ -9,10 +11,12 @@ FROM test_duplicate_partition_keys
 WHERE c1 = 2
 ORDER BY c0 ASC;
 
+-- This should also work without crashing
 SELECT count()
 FROM test_duplicate_partition_keys2
 WHERE b = 10;
 
+-- Test SELECT with triple duplicate partition keys
 SELECT count()
 FROM test_triple_duplicate
 WHERE x = 1;

@@ -1,3 +1,4 @@
+-- { echo }
 SELECT dummy AS foo
 FROM remote('127.{2,3}', currentDatabase(), dist)
 LIMIT 1

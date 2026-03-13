@@ -37,6 +37,7 @@ FROM grouping_sets
 GROUP BY GROUPING SETS ((fact_3_id, fact_4_id))
 ORDER BY fact_3_id ASC;
 
+-- Following two queries were fuzzed
 SELECT 'w\0\0ldworldwo\0l\0world'
 FROM grouping_sets
 GROUP BY GROUPING SETS ((fact_4_id), (NULL), (fact_3_id, fact_4_id))

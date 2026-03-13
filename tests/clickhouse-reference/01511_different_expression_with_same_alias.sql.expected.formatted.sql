@@ -1,3 +1,4 @@
+-- From https://github.com/ClickHouse/ClickHouse/issues/12513#issue-657202535
 SELECT
     date AS period,
     1 AS having_check,

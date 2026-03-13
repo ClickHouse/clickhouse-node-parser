@@ -97,16 +97,17 @@ SELECT arraySort(geohashesInBox(20.0, 20.0, 20.000001, 20.000001, 11));
 
 SELECT arraySort(geohashesInBox(20.0, 20.0, 20.000001, 20.000001, 12));
 
+-- precision greater than 12 is truncated to 12, so these two calls would produce same result as above
 SELECT arraySort(geohashesInBox(20.0, 20.0, 20.000001, 20.000001, 13));
 
 SELECT arraySort(geohashesInBox(20.0, 20.0, 20.000001, 20.000001, 14));
 
 SELECT length(geohashesInBox(-inf, -inf, inf, inf, 3));
 
-SELECT geohashesInBox();
+SELECT geohashesInBox(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH } -- not enough arguments
 
-SELECT geohashesInBox(1, 2, 3, 4, 5);
+SELECT geohashesInBox(1, 2, 3, 4, 5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }  -- wrong types of arguments
 
-SELECT geohashesInBox(toFloat32(1.0), 2.0, 3.0, 4.0, 5);
+SELECT geohashesInBox(toFloat32(1.0), 2.0, 3.0, 4.0, 5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } -- all lats and longs should be of the same type
 
-SELECT geohashesInBox(24.48, 40.56, 24.785, 40.81, 12);
+SELECT geohashesInBox(24.48, 40.56, 24.785, 40.81, 12); -- { serverError TOO_LARGE_ARRAY_SIZE } -- to many elements in array

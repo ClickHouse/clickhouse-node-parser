@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT
     1 AS x,
     [2, 3] AS y,

@@ -6,6 +6,7 @@ INNER JOIN foo
 WHERE bar.seq > foo.seq
 SETTINGS final = 1;
 
+-- { echo ON }
 SELECT
     arrayJoin([(k1, v), (k2, v)]) AS `row`,
     `row`.1 AS k

@@ -5,7 +5,7 @@ FROM (
         LIMIT 1048576
     )
 ORDER BY result DESC
-FORMAT Null;
+FORMAT Null; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT DISTINCT result
 FROM (

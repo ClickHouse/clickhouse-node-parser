@@ -29,6 +29,7 @@ SELECT '---';
 SELECT soundex(col)
 FROM tab;
 
-SELECT soundex(toFixedString('Smith', 5));
+-- negative tests
+SELECT soundex(toFixedString('Smith', 5)); -- { serverError ILLEGAL_COLUMN }
 
-SELECT soundex(5);
+SELECT soundex(5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

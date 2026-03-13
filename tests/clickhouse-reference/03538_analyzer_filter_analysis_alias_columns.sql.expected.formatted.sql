@@ -2,7 +2,7 @@ SELECT c0
 FROM
     remote('localhost', currentDatabase(), 't0') AS tx
 INNER JOIN t0__fuzz_42
-    USING (c1);
+    USING (c1); -- { serverError NOT_IMPLEMENTED }
 
 SELECT 1
 FROM

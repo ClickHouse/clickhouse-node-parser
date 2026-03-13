@@ -1,14 +1,14 @@
-SELECT overlay('hello', 'world');
+SELECT overlay('hello', 'world'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT overlay('hello', 'world', 2, 3, 'extra');
+SELECT overlay('hello', 'world', 2, 3, 'extra'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT overlay(123, 'world', 2, 3);
+SELECT overlay(123, 'world', 2, 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT overlay('hello', 456, 2, 3);
+SELECT overlay('hello', 456, 2, 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT overlay('hello', 'world', 'two', 3);
+SELECT overlay('hello', 'world', 'two', 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT overlay('hello', 'world', 2, 'three');
+SELECT overlay('hello', 'world', 2, 'three'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     overlay('Spark SQL', '_', 6),

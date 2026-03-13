@@ -197,4 +197,4 @@ ORDER BY key ASC;
 
 SELECT *
 FROM d1
-PREWHERE _table = 'd1';
+PREWHERE _table = 'd1'; -- { serverError ILLEGAL_PREWHERE }

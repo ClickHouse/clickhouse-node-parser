@@ -40,4 +40,4 @@ INNER JOIN (
         SELECT _shard_num
         FROM `system`.one
     ) AS b
-    USING (dummy);
+    USING (dummy); -- { serverError NOT_IMPLEMENTED, UNKNOWN_IDENTIFIER }

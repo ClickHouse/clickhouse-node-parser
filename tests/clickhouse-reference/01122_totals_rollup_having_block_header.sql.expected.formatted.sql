@@ -8,7 +8,7 @@ GROUP BY
     b
 WITH ROLLUP
 WITH TOTALS
-HAVING isNotNull(a);
+HAVING isNotNull(a); -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     a,
@@ -21,4 +21,4 @@ GROUP BY
 WITH ROLLUP
 WITH TOTALS
 HAVING isNotNull(a)
-    AND isNotNull(b);
+    AND isNotNull(b); -- { serverError NOT_IMPLEMENTED }

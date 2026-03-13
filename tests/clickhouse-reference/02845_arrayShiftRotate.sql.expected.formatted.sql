@@ -94,6 +94,6 @@ SELECT arrayShiftLeft([30000], 3, 5);
 
 SELECT arrayShiftLeft([[1]], 3, []);
 
-SELECT arrayShiftLeft(['foo'], 3, 3);
+SELECT arrayShiftLeft(['foo'], 3, 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayShiftLeft([1], 3, 'foo');
+SELECT arrayShiftLeft([1], 3, 'foo'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

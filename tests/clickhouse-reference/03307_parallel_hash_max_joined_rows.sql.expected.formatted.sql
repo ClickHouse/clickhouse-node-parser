@@ -1,3 +1,4 @@
+-- without this limit (i.e. max_joined_block_size_rows=0) consumption is ~8-10G
 SELECT *
 FROM
     t AS t1

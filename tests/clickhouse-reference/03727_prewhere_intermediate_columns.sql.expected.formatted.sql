@@ -1,3 +1,8 @@
+-- Reproduces prewhere optimization bug where intermediate columns are kept in outputs:
+-- 1. Virtual column (_row_number) in SELECT affects optimizer cost calculations
+-- 2. Same expression (x < 60) used in both WHERE and ORDER BY
+-- 3. Optimizer preserves intermediate less(x, 60) column to avoid recomputation
+-- 4. This intermediate column appears in format_header as a new column, triggering the bug
 SELECT DISTINCT
     x,
     _row_number

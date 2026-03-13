@@ -43,6 +43,7 @@ FROM map_comb
 GROUP BY a
 ORDER BY a ASC;
 
+-- check different types
 SELECT minMap(val)
 FROM values('val Map(UUID, Int32)', (map('01234567-89ab-cdef-0123-456789abcdef', 1)), (map('01234567-89ab-cdef-0123-456789abcdef', 2)));
 
@@ -79,21 +80,22 @@ FROM values('val Map(UInt128, UInt128)', (map(1, 1)), (map(1, 2)));
 SELECT minMap(val)
 FROM values('val Map(UInt256, UInt256)', (map(1, 1)), (map(1, 2)));
 
-SELECT sumMap(map(1, 2), 1, 2);
+SELECT sumMap(map(1, 2), 1, 2); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT sumMap(map(1, 2), map(1, 3));
+SELECT sumMap(map(1, 2), map(1, 3)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT avgMap([1,1,1], [2,2,2]);
+-- array and tuple arguments
+SELECT avgMap([1,1,1], [2,2,2]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT minMap((1,1));
+SELECT minMap((1,1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT minMap(([1,1,1],1));
+SELECT minMap(([1,1,1],1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT minMap([1,1,1], 1);
+SELECT minMap([1,1,1], 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT minMap([1,1,1]);
+SELECT minMap([1,1,1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT minMap(([1,1,1]));
+SELECT minMap(([1,1,1])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT sumMap(statusMap)
 FROM sum_map_decimal;

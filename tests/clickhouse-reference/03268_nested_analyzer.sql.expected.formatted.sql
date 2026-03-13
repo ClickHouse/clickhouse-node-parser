@@ -1,3 +1,4 @@
+-- {echoOn }
 SELECT nested(['a', 'b'], [1, 2], [3, 4]);
 
 SELECT nested(['a', 'b'], [1, 2], materialize([3, 4]));
@@ -6,7 +7,7 @@ SELECT nested(['a', 'b'], materialize([1, 2]), materialize([3, 4]));
 
 SELECT nested([['a', 'b']], [[1, 2], [3]], [[4, 5], [6]]);
 
-SELECT nested([['a'], ['b']], [[1, 2], [3]], [[4, 5], [6]]);
+SELECT nested([['a'], ['b']], [[1, 2], [3]], [[4, 5], [6]]); -- {serverError BAD_ARGUMENTS}
 
 SELECT
     x,
@@ -24,7 +25,7 @@ FORMAT Pretty;
 
 SELECT nested(['a', 'b'], [[1, 2], [3, 4]], [[5], [6]]);
 
-SELECT nested([['a', 'b']], [[1, 2], [3, 4]], [[5], [6]]);
+SELECT nested([['a', 'b']], [[1, 2], [3, 4]], [[5], [6]]); -- {serverError SIZES_OF_ARRAYS_DONT_MATCH}
 
 SELECT *
 FROM

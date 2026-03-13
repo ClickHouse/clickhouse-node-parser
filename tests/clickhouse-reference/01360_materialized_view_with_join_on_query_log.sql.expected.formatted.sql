@@ -1,7 +1,7 @@
 SELECT 1;
 
 SELECT 1
-WHERE NOT ignore(sleep(0.520));
+WHERE NOT ignore(sleep(0.520)); /* QUERY_GROUP_ID:main_dashboard_top_query */
 
 SELECT
     extract(query, '/\\*\\s*QUERY_GROUP_ID:(.*?)\\s*\\*/') AS QUERY_GROUP_ID,

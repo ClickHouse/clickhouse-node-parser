@@ -1,6 +1,8 @@
 SELECT *
 FROM explain_indexes;
 
+--
+--hasAnyTokens:
 SELECT arraySort(groupArray(id))
 FROM tab
 WHERE hasAnyTokens(message, ['foo']);
@@ -21,6 +23,8 @@ SELECT arraySort(groupArray(id))
 FROM tab
 WHERE hasAnyTokens(message, ['fo', 'ba']);
 
+--
+--hasAllTokens:
 SELECT arraySort(groupArray(id))
 FROM tab
 WHERE hasAllTokens(message, ['foo']);
@@ -39,7 +43,7 @@ WHERE hasAllTokens(message, ['abc', 'fo']);
 
 SELECT arraySort(groupArray(id))
 FROM tab
-WHERE hasAnyTokens(message, ['bar$']);
+WHERE hasAnyTokens(message, ['bar$']); -- test default tokenizer
 
 SELECT arraySort(groupArray(id))
 FROM tab
@@ -47,7 +51,7 @@ WHERE hasAnyTokens(message, tokens('bar$', 'splitByNonAlpha'));
 
 SELECT arraySort(groupArray(id))
 FROM tab
-WHERE hasAllTokens(message, ['bar$']);
+WHERE hasAllTokens(message, ['bar$']); -- test default tokenizer
 
 SELECT arraySort(groupArray(id))
 FROM tab

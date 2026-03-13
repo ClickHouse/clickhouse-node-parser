@@ -19,10 +19,10 @@ SELECT *
 FROM VALUES('a Decimal(4, 4), b String, c String', (divide(toDecimal32(5, 3), 3), 'a', 'b'));
 
 SELECT *
-FROM VALUES('x Float64', toUInt64(-1));
+FROM VALUES('x Float64', toUInt64(-1)); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT *
-FROM VALUES('x Float64', NULL);
+FROM VALUES('x Float64', NULL); -- { serverError TYPE_MISMATCH }
 
 SELECT *
 FROM VALUES('x Nullable(Float64)', NULL);

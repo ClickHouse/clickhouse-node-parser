@@ -1,3 +1,5 @@
+-- This query used to cause "QueryPlan was not initialized" error
+-- when filter push-down optimization tried to add filter to an uninitialized child plan
 SELECT count() > 0
 FROM viewExplain('EXPLAIN', '', (
         SELECT count()

@@ -1,3 +1,5 @@
+-- {echoOn}
+-- Check that with these settings the plan contains a join
 SELECT `explain`
 FROM (
         EXPLAIN keep_logical_steps = 1, description = 0
@@ -35,7 +37,7 @@ SELECT number IN (
             number
         FROM numbers(2)
     )
-FROM numbers(3);
+FROM numbers(3); -- {serverError NUMBER_OF_COLUMNS_DOESNT_MATCH,BAD_ARGUMENTS, ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT number IN (
         SELECT number IN (
@@ -56,6 +58,7 @@ SELECT number IN (
     )
 FROM numbers(3);
 
+-- NOT IN
 SELECT number NOT IN (
         SELECT *
         FROM numbers(2)
@@ -75,7 +78,7 @@ SELECT number NOT IN (
             number
         FROM numbers(2)
     )
-FROM numbers(3);
+FROM numbers(3); -- {serverError NUMBER_OF_COLUMNS_DOESNT_MATCH,BAD_ARGUMENTS, ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT number NOT IN (
         SELECT number IN (
@@ -114,6 +117,7 @@ SELECT number IN (
     )
 FROM numbers(3);
 
+-- Tuple
 SELECT *
 FROM numbers(8)
 WHERE (number+1, number+2) IN (
@@ -123,6 +127,7 @@ WHERE (number+1, number+2) IN (
         FROM numbers(5)
     );
 
+-- Mismatching number of elements 
 SELECT *
 FROM numbers(8)
 WHERE (number+1, number+2, number+3) IN (
@@ -130,8 +135,9 @@ WHERE (number+1, number+2, number+3) IN (
             number,
             number + 1
         FROM numbers(5)
-    );
+    ); -- {serverError NUMBER_OF_COLUMNS_DOESNT_MATCH,BAD_ARGUMENTS, ILLEGAL_TYPE_OF_ARGUMENT}
 
+-- Inside IF function condition and arguments
 SELECT if(c0 = ANY((
         SELECT 1
     )), 1, 2)

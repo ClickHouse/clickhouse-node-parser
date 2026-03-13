@@ -9,6 +9,7 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+-- Wait for mutations to finish
 SELECT count()
 FROM `02581_trips`
 SETTINGS select_sequential_consistency = 1;

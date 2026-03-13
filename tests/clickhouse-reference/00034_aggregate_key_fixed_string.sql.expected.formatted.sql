@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     toFixedString(substring(SearchPhrase, 1, 17), 17) AS k1,
     count() AS c

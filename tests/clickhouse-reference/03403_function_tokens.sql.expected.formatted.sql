@@ -1,42 +1,50 @@
-SELECT tokens();
+-- Must accept one to three arguments
+SELECT tokens(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tokens('a', 'b', 'c', 'd');
+SELECT tokens('a', 'b', 'c', 'd'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tokens(1);
+-- 1st arg must be String or FixedString
+SELECT tokens(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 1);
+-- 2nd arg (if given) must be const String
+SELECT tokens('a', 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', toFixedString('b', 1));
+SELECT tokens('a', toFixedString('b', 1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', materialize('b'));
+SELECT tokens('a', materialize('b')); -- { serverError ILLEGAL_COLUMN }
 
-SELECT tokens('a', 'unsupported_tokenizer');
+-- 2nd arg (if given) must be a supported tokenizer
+SELECT tokens('a', 'unsupported_tokenizer'); -- { serverError BAD_ARGUMENTS }
 
-SELECT tokens('a', 'ngrams', 'c');
+-- 3rd arg (if given) must be
+--    const UInt8 (for "ngram")
+SELECT tokens('a', 'ngrams', 'c'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 'ngrams', toInt8(-1));
+SELECT tokens('a', 'ngrams', toInt8(-1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 'ngrams', toFixedString('c', 1));
+SELECT tokens('a', 'ngrams', toFixedString('c', 1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 'ngrams', materialize(1));
+SELECT tokens('a', 'ngrams', materialize(1)); -- { serverError ILLEGAL_COLUMN }
 
-SELECT tokens('a', 'ngrams', 0);
+-- If 2nd arg is "ngram", then the 3rd arg must be larger than 0
+SELECT tokens('a', 'ngrams', 0); -- { serverError BAD_ARGUMENTS}
 
-SELECT tokens('a', 'ngrams', -1);
+SELECT tokens('a', 'ngrams', -1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 'ngrams', 18446744073709551616);
+SELECT tokens('a', 'ngrams', 18446744073709551616); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 'splitByString', 'c');
+--    const Array (for "split")
+SELECT tokens('a', 'splitByString', 'c'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 'splitByString', toInt8(-1));
+SELECT tokens('a', 'splitByString', toInt8(-1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 'splitByString', toFixedString('c', 1));
+SELECT tokens('a', 'splitByString', toFixedString('c', 1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tokens('a', 'splitByString', materialize(['c']));
+SELECT tokens('a', 'splitByString', materialize(['c'])); -- { serverError ILLEGAL_COLUMN }
 
-SELECT tokens('a', 'splitByString', [1, 2]);
+SELECT tokens('a', 'splitByString', [1, 2]); -- { serverError BAD_ARGUMENTS }
 
-SELECT tokens('  a  bc d', 'splitByString', []);
+SELECT tokens('  a  bc d', 'splitByString', []); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     tokens('') AS tokenized,

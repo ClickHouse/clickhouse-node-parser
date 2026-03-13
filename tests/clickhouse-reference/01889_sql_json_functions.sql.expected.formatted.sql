@@ -1,6 +1,8 @@
+-- Tags: no-fasttest
+-- { echo }
 SELECT '--JSON_VALUE--';
 
-SELECT JSON_VALUE('{"hello":1}', '$');
+SELECT JSON_VALUE('{"hello":1}', '$'); -- root is a complex object => default value (empty string)
 
 SELECT JSON_VALUE('{"hello":1}', '$.hello');
 
@@ -16,7 +18,7 @@ SELECT JSON_VALUE('{"hello":["world","world2"]}', '$.hello');
 
 SELECT JSON_VALUE('{"hello":{"world":"!"}}', '$.hello');
 
-SELECT JSON_VALUE('{hello:world}', '$.hello');
+SELECT JSON_VALUE('{hello:world}', '$.hello'); -- invalid json => default value (empty string)
 
 SELECT JSON_VALUE('', '$.hello');
 
@@ -49,13 +51,13 @@ SELECT JSON_VALUE('{"hello":1}', '$[''hello'']');
 
 SELECT JSON_VALUE('{"hello 1":1}', '$["hello 1"]');
 
-SELECT JSON_VALUE('{"1key":1}', '$..1key');
+SELECT JSON_VALUE('{"1key":1}', '$..1key'); -- { serverError BAD_ARGUMENTS }
 
-SELECT JSON_VALUE('{"1key":1}', '$1key');
+SELECT JSON_VALUE('{"1key":1}', '$1key'); -- { serverError BAD_ARGUMENTS }
 
-SELECT JSON_VALUE('{"1key":1}', '$key');
+SELECT JSON_VALUE('{"1key":1}', '$key'); -- { serverError BAD_ARGUMENTS }
 
-SELECT JSON_VALUE('{"1key":1}', '$.[key]');
+SELECT JSON_VALUE('{"1key":1}', '$.[key]'); -- { serverError BAD_ARGUMENTS }
 
 SELECT JSON_QUERY('{"hello":1}', '$');
 
@@ -73,7 +75,7 @@ SELECT JSON_QUERY('{"hello":["world","world2"]}', '$.hello');
 
 SELECT JSON_QUERY('{"hello":{"world":"!"}}', '$.hello');
 
-SELECT JSON_QUERY('{hello:{"world":"!"}}}', '$.hello');
+SELECT JSON_QUERY('{hello:{"world":"!"}}}', '$.hello'); -- invalid json => default value (empty string)
 
 SELECT JSON_QUERY('', '$.hello');
 
@@ -109,13 +111,13 @@ SELECT JSON_QUERY('{"hello":1}', '$[''hello'']');
 
 SELECT JSON_QUERY('{"hello 1":1}', '$["hello 1"]');
 
-SELECT JSON_QUERY('{"1key":1}', '$..1key');
+SELECT JSON_QUERY('{"1key":1}', '$..1key'); -- { serverError BAD_ARGUMENTS }
 
-SELECT JSON_QUERY('{"1key":1}', '$1key');
+SELECT JSON_QUERY('{"1key":1}', '$1key'); -- { serverError BAD_ARGUMENTS }
 
-SELECT JSON_QUERY('{"1key":1}', '$key');
+SELECT JSON_QUERY('{"1key":1}', '$key'); -- { serverError BAD_ARGUMENTS }
 
-SELECT JSON_QUERY('{"1key":1}', '$.[key]');
+SELECT JSON_QUERY('{"1key":1}', '$.[key]'); -- { serverError BAD_ARGUMENTS }
 
 SELECT JSON_EXISTS('{"hello":1}', '$');
 
@@ -131,7 +133,7 @@ SELECT JSON_EXISTS('{"hello":{"world":1}}', '$.world');
 
 SELECT JSON_EXISTS('{"hello":{"world":1}}', '$.hello.world');
 
-SELECT JSON_EXISTS('{hello:world}', '$.hello');
+SELECT JSON_EXISTS('{hello:world}', '$.hello'); -- invalid json => default value (zero integer)
 
 SELECT JSON_EXISTS('', '$.hello');
 

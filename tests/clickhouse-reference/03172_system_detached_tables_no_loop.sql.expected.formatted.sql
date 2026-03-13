@@ -1,3 +1,4 @@
+-- Tags: no-parallel
 SELECT '-----------------------';
 
 SELECT count(*)

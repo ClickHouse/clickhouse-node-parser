@@ -1,3 +1,4 @@
+-- { echo }
 SELECT formatDateTime(toDateTime64('1935-12-12 12:12:12', 0, 'Asia/Istanbul'), '%C');
 
 SELECT formatDateTime(toDateTime64('1969-12-12 12:12:12', 0, 'Asia/Istanbul'), '%C');
@@ -10,6 +11,7 @@ SELECT formatDateTime(toDateTime64('2105-12-12 12:12:12', 0, 'Asia/Istanbul'), '
 
 SELECT formatDateTime(toDateTime64('2205-12-12 12:12:12', 0, 'Asia/Istanbul'), '%C');
 
+-- non-zero scale
 SELECT formatDateTime(toDateTime64('1935-12-12 12:12:12', 6, 'Asia/Istanbul'), '%C');
 
 SELECT formatDateTime(toDateTime64('1969-12-12 12:12:12', 6, 'Asia/Istanbul'), '%C');

@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     CounterID,
     count() AS c,

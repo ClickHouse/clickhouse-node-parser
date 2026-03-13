@@ -1,3 +1,4 @@
+-- We expect to see 8 parts inserted
 SELECT count()
 FROM `system`.part_log
 WHERE table = 'test_max_insert_bytes'
@@ -10,6 +11,7 @@ WHERE table = 'test_max_insert_bytes'
             AND current_database = currentDatabase()
     ));
 
+-- We expect to see 4 parts inserted
 SELECT count()
 FROM `system`.part_log
 WHERE table = 'test_min_insert_rows_bytes'
@@ -22,6 +24,7 @@ WHERE table = 'test_min_insert_rows_bytes'
             AND current_database = currentDatabase()
     ));
 
+-- We expect to see 2 parts inserted
 SELECT count()
 FROM `system`.part_log
 WHERE table = 'test_min_insert_rows'
@@ -34,6 +37,7 @@ WHERE table = 'test_min_insert_rows'
             AND current_database = currentDatabase()
     ));
 
+-- We expect to see 2 parts inserted
 SELECT count()
 FROM `system`.part_log
 WHERE table = 'test_min_insert_bytes'

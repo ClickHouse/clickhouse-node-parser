@@ -1,3 +1,4 @@
+-- 1 shard
 SELECT '-- 1 shard, 3 replicas';
 
 SELECT

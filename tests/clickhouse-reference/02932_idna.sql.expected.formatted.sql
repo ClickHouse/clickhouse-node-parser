@@ -1,29 +1,36 @@
+-- Tags: no-fasttest
+-- no-fasttest: requires idna library
+-- See also 02932_punycode.sql
 SELECT '-- Negative tests';
 
-SELECT idnaEncode();
+SELECT idnaEncode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tryIdnaEncode();
+SELECT tryIdnaEncode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT idnaDecode();
+SELECT idnaDecode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT idnaEncode(1);
+SELECT idnaEncode(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tryIdnaEncode(1);
+SELECT tryIdnaEncode(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT idnaDecode(1);
+SELECT idnaDecode(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT idnaEncode('two', 'strings');
+SELECT idnaEncode('two', 'strings'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tryIdnaEncode('two', 'strings');
+SELECT tryIdnaEncode('two', 'strings'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT idnaDecode('two', 'strings');
+SELECT idnaDecode('two', 'strings'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT idnaEncode(toFixedString('two', 3));
+SELECT idnaEncode(toFixedString('two', 3)); -- { serverError NOT_IMPLEMENTED }
 
-SELECT tryIdnaEncode(toFixedString('two', 3));
+SELECT tryIdnaEncode(toFixedString('two', 3)); -- { serverError NOT_IMPLEMENTED }
 
-SELECT idnaDecode(toFixedString('two', 3));
+SELECT idnaDecode(toFixedString('two', 3)); -- { serverError NOT_IMPLEMENTED }
 
+-- The test cases originate from the ada idna unit tests:
+-- - https://github.com/ada-url/idna/blob/8cd03ef867dbd06be87bd61df9cf69aa1182ea21/tests/fixtures/to_ascii_alternating.txt
+-- - https://github.com/ada-url/idna/blob/8cd03ef867dbd06be87bd61df9cf69aa1182ea21/tests/fixtures/to_unicode_alternating.txt
+--
 SELECT
     'straße.de' AS idna,
     idnaEncode(idna) AS ascii,
@@ -198,11 +205,12 @@ SELECT tryIdnaEncode(NULL);
 
 SELECT idnaDecode(NULL);
 
-SELECT idnaEncode('xn--');
+-- - https://github.com/ada-url/idna/blob/8cd03ef867dbd06be87bd61df9cf69aa1182ea21/tests/fixtures/to_ascii_invalid.txt
+SELECT idnaEncode('xn--'); -- { serverError BAD_ARGUMENTS }
 
 SELECT tryIdnaEncode('xn--');
 
-SELECT idnaEncode('ﻱa');
+SELECT idnaEncode('ﻱa'); -- { serverError BAD_ARGUMENTS }
 
 SELECT tryIdnaEncode('ﻱa');
 
@@ -225,7 +233,7 @@ FROM tab;
 SELECT
     idna,
     idnaEncode(idna) AS ascii
-FROM tab;
+FROM tab; -- { serverError BAD_ARGUMENTS }
 
 SELECT
     idna,

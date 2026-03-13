@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     CounterID AS k,
     quantileBFloat16(0.5)(ResolutionWidth)

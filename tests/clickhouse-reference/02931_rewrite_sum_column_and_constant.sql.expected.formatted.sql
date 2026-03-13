@@ -289,6 +289,7 @@ FROM test_table;
 SELECT (2 * count(decimal32) - sum(decimal32)) + ((3 * count(decimal32) - sum(decimal32)))
 FROM test_table;
 
+-- https://github.com/ClickHouse/ClickHouse/issues/59414
 SELECT
     sum(uint64 + 2) AS j,
     j + 5 AS t

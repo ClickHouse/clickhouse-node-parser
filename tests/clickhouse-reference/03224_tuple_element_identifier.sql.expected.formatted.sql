@@ -11,7 +11,7 @@ SELECT
 SELECT
     JSONExtract('{"hello":[{" wow ":"wtf"}]}', 'Tuple(hello Array(Tuple(` wow ` String)))') AS x,
     x.hello,
-    tupleElement(x.hello[1], 'wow');
+    tupleElement(x.hello[1], 'wow'); -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 SELECT tupleElement(tuple('Hello' AS world), 'world');
 

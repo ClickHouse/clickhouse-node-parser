@@ -1,3 +1,4 @@
+-- {echoOn}
 SELECT arrayExists(x -> (x IN (
         SELECT '2'
     )), [2])

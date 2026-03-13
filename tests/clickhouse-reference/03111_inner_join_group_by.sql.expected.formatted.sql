@@ -12,4 +12,4 @@ INNER JOIN (
     ) AS s1
     ON s0.number = s1.number
 GROUP BY s0.number > 5
-LIMIT 10;
+LIMIT 10; -- {serverError NOT_AN_AGGREGATE}

@@ -38,14 +38,14 @@ SELECT isIPAddressInRange('::1', '127.0.0.0/8');
 
 SELECT isIPAddressInRange('::127.0.0.1', '127.0.0.1/32');
 
-SELECT isIPAddressInRange('unparsable', '127.0.0.0/8');
+SELECT isIPAddressInRange('unparsable', '127.0.0.0/8'); -- { serverError CANNOT_PARSE_TEXT }
 
-SELECT isIPAddressInRange('127.0.0.1', 'unparsable');
+SELECT isIPAddressInRange('127.0.0.1', 'unparsable'); -- { serverError CANNOT_PARSE_TEXT }
 
-SELECT isIPAddressInRange(100, '127.0.0.0/8');
+SELECT isIPAddressInRange(100, '127.0.0.0/8'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT isIPAddressInRange(NULL, '127.0.0.0/8');
+SELECT isIPAddressInRange(NULL, '127.0.0.0/8'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT isIPAddressInRange('127.0.0.1', 100);
+SELECT isIPAddressInRange('127.0.0.1', 100); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT isIPAddressInRange(100, NULL);
+SELECT isIPAddressInRange(100, NULL); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

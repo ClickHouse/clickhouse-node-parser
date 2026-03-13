@@ -31,11 +31,11 @@ WHERE key = toInt32(toInt32(toInt32(xxHash32(0))));
 
 SELECT *
 FROM dist_01072
-WHERE key = value;
+WHERE key = value; -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }
 
 SELECT *
 FROM dist_01072
-WHERE key = toInt32(value);
+WHERE key = toInt32(value); -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }
 
 SELECT *
 FROM dist_01072

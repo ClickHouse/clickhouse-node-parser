@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     arrayJoin([SearchEngineID]) AS search_engine,
     URL

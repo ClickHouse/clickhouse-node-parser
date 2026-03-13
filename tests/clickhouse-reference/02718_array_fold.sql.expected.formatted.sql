@@ -1,22 +1,22 @@
 SELECT '-- Negative tests';
 
-SELECT arrayFold();
+SELECT arrayFold(); -- { serverError TOO_FEW_ARGUMENTS_FOR_FUNCTION }
 
-SELECT arrayFold(1);
+SELECT arrayFold(1); -- { serverError TOO_FEW_ARGUMENTS_FOR_FUNCTION }
 
-SELECT arrayFold(1, toUInt64(0));
+SELECT arrayFold(1, toUInt64(0)); -- { serverError TOO_FEW_ARGUMENTS_FOR_FUNCTION }
 
-SELECT arrayFold(1, emptyArrayUInt64(), toUInt64(0));
+SELECT arrayFold(1, emptyArrayUInt64(), toUInt64(0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayFold((acc, x) -> x, emptyArrayString(), toInt8(0));
+SELECT arrayFold((acc, x) -> x, emptyArrayString(), toInt8(0)); -- { serverError TYPE_MISMATCH }
 
-SELECT arrayFold((acc, x) -> x, 'not an array', toUInt8(0));
+SELECT arrayFold((acc, x) -> x, 'not an array', toUInt8(0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayFold((acc, x, y) -> x, [0, 1], 'not an array', toUInt8(0));
+SELECT arrayFold((acc, x, y) -> x, [0, 1], 'not an array', toUInt8(0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayFold((acc, x) -> x, [0, 1], [2, 3], toUInt8(0));
+SELECT arrayFold((acc, x) -> x, [0, 1], [2, 3], toUInt8(0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayFold((acc, x, y) -> x, [0, 1], [2, 3, 4], toUInt8(0));
+SELECT arrayFold((acc, x, y) -> x, [0, 1], [2, 3, 4], toUInt8(0)); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }
 
 SELECT arrayFold((acc, x) -> acc + x * 2, [1, 2, 3, 4], toInt64(3));
 

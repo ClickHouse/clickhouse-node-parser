@@ -1,9 +1,9 @@
 SELECT untuple(x)
 FROM test_empty
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- { serverError EMPTY_LIST_OF_COLUMNS_QUERIED }
 
 SELECT untuple(CAST(tuple() AS Nullable(Tuple())))
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- { serverError EMPTY_LIST_OF_COLUMNS_QUERIED }
 
 SELECT untuple(x)
 FROM test_untuple_nullable_tuple

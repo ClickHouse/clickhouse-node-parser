@@ -6,7 +6,7 @@ FROM
 INNER JOIN (
         SELECT 1 AS b
     ) AS B
-    ON equals(a);
+    ON equals(a); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH, 62 }
 
 SELECT 1
 FROM
@@ -16,7 +16,7 @@ FROM
 INNER JOIN (
         SELECT 1 AS b
     ) AS B
-    ON less(a);
+    ON less(a); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH, 62 }
 
 SELECT 1
 FROM
@@ -29,4 +29,4 @@ INNER JOIN (
             1 AS c
     ) AS B
     ON a = b
-    OR a = c;
+    OR a = c; -- { serverError NOT_IMPLEMENTED }

@@ -1,3 +1,6 @@
+-- Test for issue #75852: window function with large PRECEDING offset
+-- that exceeds the number of rows in the partition, combined with small
+-- max_block_size that causes early block cleanup.
 SELECT
     number,
     p,

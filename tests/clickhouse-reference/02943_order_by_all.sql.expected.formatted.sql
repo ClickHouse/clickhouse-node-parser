@@ -45,7 +45,7 @@ SELECT
     b,
     `all`
 FROM order_by_all
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT
     a,
@@ -57,7 +57,7 @@ SETTINGS enable_order_by_all = false;
 
 SELECT a
 FROM order_by_all
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT a
 FROM order_by_all
@@ -73,7 +73,7 @@ SELECT
     a,
     b AS `all`
 FROM order_by_all
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT
     a,
@@ -84,7 +84,7 @@ SETTINGS enable_order_by_all = false;
 
 SELECT format('{} {}', a, b) AS `all`
 FROM order_by_all
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT format('{} {}', a, b) AS `all`
 FROM order_by_all

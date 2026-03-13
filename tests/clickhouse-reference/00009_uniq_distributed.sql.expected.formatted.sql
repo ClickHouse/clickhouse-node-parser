@@ -1,3 +1,4 @@
+-- Tags: stateful, distributed
 SELECT
     uniq(UserID),
     uniqIf(UserID, CounterID = 800784),

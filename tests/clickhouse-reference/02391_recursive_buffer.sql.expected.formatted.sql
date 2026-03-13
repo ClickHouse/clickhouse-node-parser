@@ -1,5 +1,5 @@
 SELECT *
-FROM test;
+FROM test; -- { serverError INFINITE_LOOP }
 
 SELECT *
 FROM `system`.tables

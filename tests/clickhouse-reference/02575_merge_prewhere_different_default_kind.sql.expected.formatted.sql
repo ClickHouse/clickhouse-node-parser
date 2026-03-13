@@ -1,10 +1,11 @@
+-- for pure PREWHERE it is not addressed yet.
 SELECT *
 FROM m
 PREWHERE a = 'OK';
 
 SELECT *
 FROM m
-PREWHERE f = 0;
+PREWHERE f = 0; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM m

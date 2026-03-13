@@ -1,3 +1,4 @@
+-- Simple types
 SELECT x
 FROM format(JSONEachRow, 'x Date', '{"x":""}');
 
@@ -26,9 +27,11 @@ SELECT *
 FROM table1
 ORDER BY address ASC;
 
+-- Nullable
 SELECT x
 FROM format(JSONEachRow, 'x Nullable(IPv6)', '{"x":""}');
 
+-- Compound types
 SELECT x
 FROM format(JSONEachRow, 'x Array(UUID)', '{"x":["00000000-0000-0000-0000-000000000000","b15f852c-c41a-4fd6-9247-1929c841715e",""]}');
 
@@ -44,6 +47,7 @@ FROM format(JSONEachRow, 'x Map(String, IPv6)', '{"x":{"abc": ""}}');
 SELECT x
 FROM format(JSONEachRow, 'x Variant(Date, UUID)', '{"x":""}');
 
+-- Deep composition
 SELECT x
 FROM format(JSONEachRow, 'x Array(Array(IPv6))', '{"x":[["2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF", ""], ["", "2001:db8:3333:4444:5555:6666:7777:8888"]]}');
 

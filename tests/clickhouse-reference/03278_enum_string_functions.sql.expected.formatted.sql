@@ -89,12 +89,12 @@ ORDER BY res ASC;
 SELECT like(materialize(CAST('a', 'Enum(''a'' = 1)')), randomString(0))
 FROM numbers(10);
 
-SELECT like(CAST('a', 'Enum(''a'' = 1)'), randomString(0));
+SELECT like(CAST('a', 'Enum(''a'' = 1)'), randomString(0)); -- {serverError ILLEGAL_COLUMN}
 
 SELECT like(materialize(CAST('a', 'Enum16(''a'' = 1)')), randomString(0))
 FROM numbers(10);
 
-SELECT like(CAST('a', 'Enum16(''a'' = 1)'), randomString(0));
+SELECT like(CAST('a', 'Enum16(''a'' = 1)'), randomString(0)); -- {serverError ILLEGAL_COLUMN}
 
 SELECT like(CAST('a', 'Enum(''a'' = 1)'), 'a');
 

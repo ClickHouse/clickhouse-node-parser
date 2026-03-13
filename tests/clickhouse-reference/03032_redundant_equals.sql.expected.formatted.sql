@@ -54,6 +54,7 @@ FROM test_table
 WHERE (((k NOT IN (99) = 1)
     AND (k IN (100) = 1))) = 1;
 
+-- we skip optimizing queries with toNullable(0 or 1) but lets make sure they still work
 SELECT *
 FROM test_table
 WHERE (k = 101) = toLowCardinality(toNullable(1));

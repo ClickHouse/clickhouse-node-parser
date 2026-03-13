@@ -1,3 +1,4 @@
+-- Test for bug https://github.com/ClickHouse/ClickHouse/issues/92043
 SELECT DISTINCT kafkaMurmurHash(*)
 FROM
     numbers(10) AS y

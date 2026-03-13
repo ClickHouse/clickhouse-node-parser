@@ -11,6 +11,10 @@
         },
         "type": "String"
       }
+    ],
+    "leadingComments": [
+      "-- Type conversion functions and operators.",
+      "-- 1. SQL standard CAST operator: `CAST(value AS Type)`."
     ]
   },
   {
@@ -25,6 +29,9 @@
         },
         "type": "DateTime('Europe/Amsterdam')"
       }
+    ],
+    "leadingComments": [
+      "-- It converts between various data types, including parameterized data types"
     ]
   },
   {
@@ -39,6 +46,9 @@
         },
         "type": "Array(UInt8)"
       }
+    ],
+    "leadingComments": [
+      "-- and composite data types:"
     ]
   },
   {
@@ -107,6 +117,10 @@
         },
         "type": "UInt8"
       }
+    ],
+    "leadingComments": [
+      "-- There are various type conversion rules, some worth noting.",
+      "-- Conversion between numeric types can involve implementation-defined overflow:"
     ]
   },
   {
@@ -135,6 +149,9 @@
         },
         "type": "Array(String)"
       }
+    ],
+    "leadingComments": [
+      "-- Conversion from string acts like parsing, and for composite data types like Array, Tuple, it works in the same way as from the `Values` data format:"
     ]
   },
   {
@@ -158,6 +175,10 @@
         },
         "type": "UInt8"
       }
+    ],
+    "leadingComments": [
+      "-- '",
+      "-- While for simple data types, it does not interpret escape sequences:"
     ]
   },
   {
@@ -172,6 +193,9 @@
         },
         "type": "UInt8"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_PARSE_NUMBER }"
     ]
   },
   {
@@ -186,6 +210,9 @@
         },
         "type": "UInt8"
       }
+    ],
+    "leadingComments": [
+      "-- In some cases it still allows overflows, but it is implementation defined:"
     ]
   },
   {
@@ -200,6 +227,12 @@
         },
         "type": "UInt8"
       }
+    ],
+    "leadingComments": [
+      "-- Parsing from a string does not tolerate extra whitespace characters:"
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_PARSE_TEXT }"
     ]
   },
   {
@@ -214,6 +247,9 @@
         },
         "type": "UInt8"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_PARSE_TEXT }"
     ]
   },
   {
@@ -228,6 +264,9 @@
         },
         "type": "Array(UInt16)"
       }
+    ],
+    "leadingComments": [
+      "-- But for composite data types, it involves a more featured parser, that takes care of whitespace inside the data structures:"
     ]
   },
   {
@@ -265,6 +304,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Conversion from a floating point value to an integer will involve truncation towards zero:"
     ]
   },
   {
@@ -317,6 +359,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Conversion from NULL into a non-Nullable type will throw an exception, as well as conversions from denormal floating point numbers (NaN, inf, -inf) to an integer, or conversion between arrays of different dimensions.",
+      "-- However, you might find it amusing that an empty array of Nothing data type can be converted to arrays of any dimensions:"
     ]
   },
   {
@@ -331,6 +377,12 @@
         },
         "type": "DateTime('Europe/Amsterdam')"
       }
+    ],
+    "leadingComments": [
+      "-- Conversion between numbers and DateTime/Date data types interprets the number as the number of seconds/days from the Unix epoch,",
+      "-- where Unix epoch starts from 1970-01-01T00:00:00Z (the midnight of Gregorian year 1970 in UTC),",
+      "-- and the number of seconds don't count the coordination seconds, as in Unix.",
+      "-- For example, it is 1 AM in Amsterdam:"
     ]
   },
   {
@@ -345,6 +397,9 @@
         },
         "type": "DateTime64(6, 'Europe/Amsterdam')"
       }
+    ],
+    "leadingComments": [
+      "-- The numbers can be fractional and negative (for DateTime64):"
     ]
   },
   {
@@ -373,6 +428,9 @@
         },
         "type": "DateTime('Europe/Amsterdam')"
       }
+    ],
+    "leadingComments": [
+      "-- If the result does not fit in the range of the corresponding time data types, it is truncated and saturated to the boundaries:"
     ]
   },
   {
@@ -415,6 +473,13 @@
         },
         "type": "DateTime64(9, 'Europe/Amsterdam')"
       }
+    ],
+    "leadingComments": [
+      "-- A special case is DateTime64(9) - the maximum resolution, where is does not cover the usual range,",
+      "-- and in this case, it throws an exception on overflow (I don't mind if we change this behavior in the future):"
+    ],
+    "trailingComments": [
+      "-- { serverError DECIMAL_OVERFLOW }"
     ]
   },
   {
@@ -429,6 +494,13 @@
         },
         "type": "Date"
       }
+    ],
+    "leadingComments": [
+      "-- If a number is converted to a Date data type, the value is interpreted as the number of days since the Unix epoch,",
+      "-- but if the number is larger than the range of the data type, it is interpreted as a unix timestamp",
+      "-- (the number of seconds since the Unix epoch), similarly how it is done for the DateTime data type,",
+      "-- for convenience (while the internal representation of Date is the number of days,",
+      "-- often people want the unix timestamp to be also parsed into the Date data type):"
     ]
   },
   {
@@ -458,7 +530,10 @@
         "type": "FixedString(5)"
       }
     ],
-    "format": "TSV"
+    "format": "TSV",
+    "leadingComments": [
+      "-- When converting to a FixedString, if the length of the result data type is larger than the value, the result is padded with zero bytes:"
+    ]
   },
   {
     "kind": "select",
@@ -473,7 +548,13 @@
         "type": "FixedString(3)"
       }
     ],
-    "format": "TSV"
+    "format": "TSV",
+    "leadingComments": [
+      "-- But if it does not fit, an exception is thrown:"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_LARGE_STRING_SIZE }"
+    ]
   },
   {
     "kind": "select",
@@ -494,6 +575,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- 2. The functional form of this operator: `CAST(value, 'Type')`:"
     ]
   },
   {
@@ -526,6 +610,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- This form is equivalent. Keep in mind that the type has to be a constant expression:"
+    ],
+    "trailingComments": [
+      "-- this works."
     ]
   },
   {
@@ -540,6 +630,9 @@
         },
         "type": "String"
       }
+    ],
+    "leadingComments": [
+      "-- Or as a MySQL or PostgreSQL quoted identifiers:"
     ]
   },
   {
@@ -576,6 +669,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
     ]
   },
   {
@@ -607,6 +703,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- However, you can cheat:"
     ]
   },
   {
@@ -668,7 +767,12 @@
           "parenthesized": true
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- 3. The internal function `_CAST` which is different from `CAST` only by being not dependent on the value of `cast_keep_nullable` setting and other settings.",
+      "-- This is needed when ClickHouse has to persist an expression for future use, like in table definitions, including primary and partition keys and other indices.",
+      "-- The function is not intended to be used directly. When a user uses a regular `CAST` operator or function in a table definition, it is transparently converted to `_CAST` to persist its behavior. However, the user can still use the internal version directly:"
+    ]
   },
   {
     "kind": "select",
@@ -688,6 +792,13 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- There is no operator form of this function:",
+      "--  does not work, here UInt8 is interpreted as an alias for the value:"
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -702,6 +813,9 @@
         },
         "type": "UInt8"
       }
+    ],
+    "trailingComments": [
+      "-- works"
     ]
   },
   {
@@ -717,6 +831,9 @@
         "type": "String",
         "operator": true
       }
+    ],
+    "leadingComments": [
+      "-- 4. PostgreSQL-style cast syntax `::`"
     ]
   },
   {
@@ -732,6 +849,10 @@
         "type": "Decimal(30, 20)",
         "operator": true
       }
+    ],
+    "leadingComments": [
+      "-- It has a difference from the `CAST` operator: if it is applied to a simple literal value, instead of performing a type conversion, it invokes the SQL parser directly on the corresponding text fragment of the query. The most important case will be the floating-point and decimal types.",
+      "-- In this example, we parse `1.1` as Decimal and do not involve any type conversion:"
     ]
   },
   {
@@ -746,6 +867,9 @@
         },
         "type": "Decimal(30, 20)"
       }
+    ],
+    "leadingComments": [
+      "-- In this example, `1.1` is first parsed as usual, yielding a Float64 value, and then converted to Decimal, producing a wrong result:"
     ]
   },
   {
@@ -761,6 +885,13 @@
         "type": "UInt64",
         "operator": true
       }
+    ],
+    "leadingComments": [
+      "-- We can change this behavior in the future.",
+      "-- Another example:"
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_PARSE_NUMBER }"
     ]
   },
   {
@@ -775,6 +906,9 @@
         },
         "type": "UInt64"
       }
+    ],
+    "trailingComments": [
+      "-- conversion with overflow"
     ]
   },
   {
@@ -801,6 +935,9 @@
         "type": "Array(Decimal(30, 20))",
         "operator": true
       }
+    ],
+    "leadingComments": [
+      "-- For composite data types, if a value is a literal, it is parsed directly:"
     ]
   },
   {
@@ -836,6 +973,9 @@
         "type": "Array(Decimal(30, 20))",
         "operator": true
       }
+    ],
+    "leadingComments": [
+      "-- But if the value contains expressions, the usage of the `::` operator will be equivalent to invoking the CAST operator on the expression:"
     ]
   },
   {
@@ -881,7 +1021,10 @@
         "operator": true
       }
     ],
-    "format": "Vertical"
+    "format": "Vertical",
+    "leadingComments": [
+      "-- The automatic column name for the result of an application of the `::` operator may be the same as for the result of an application of the CAST operator to a string containing the corresponding fragment of the query or to a corresponding expression:"
+    ]
   },
   {
     "kind": "select",
@@ -905,6 +1048,12 @@
           "operator": true
         }
       }
+    ],
+    "leadingComments": [
+      "-- The operator has the highest priority among others:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -920,6 +1069,9 @@
         "type": "String",
         "operator": true
       }
+    ],
+    "leadingComments": [
+      "-- But one interesting example is the unary minus. Here the minus is not an operator but part of the numeric literal:"
     ]
   },
   {
@@ -951,6 +1103,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Here it is an operator:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -972,6 +1130,14 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- 5. Accurate casting functions: `accurateCast`, `accurateCastOrNull`, `accurateCastOrDefault`.",
+      "-- These functions check if the value is exactly representable in the target data type.",
+      "-- The function `accurateCast` performs the conversion or throws an exception if the value is not exactly representable:"
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_CONVERT_TYPE }"
     ]
   },
   {
@@ -993,6 +1159,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- The function `accurateCastOrNull` always wraps the target type into Nullable, and returns NULL if the value is not exactly representable:"
     ]
   },
   {
@@ -1024,6 +1193,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- The function `accurateCastOrDefault` takes an additional parameter, which must be of the target type, and returns it if the value is not exactly representable:"
     ]
   },
   {
@@ -1045,6 +1217,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- If this parameter is omitted, it is assumed to be the default value of the corresponding data type:"
     ]
   },
   {
@@ -1087,6 +1262,14 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Unfortunately, this does not work as expected: SELECT accurateCastOrDefault(-1, $$Enum8('None' = 1, 'Hello' = 2, 'World' = 3)$$);",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/61495",
+      "-- These functions are case-sensitive, and there are no corresponding operators:"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_FUNCTION }."
     ]
   },
   {
@@ -1103,6 +1286,20 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- 6. Explicit conversion functions:",
+      "-- `toString`, `toFixedString`,",
+      "-- `toUInt8`, `toUInt16`, `toUInt32`, `toUInt64`, `toUInt128`, `toUInt256`,",
+      "-- `toInt8`, `toInt16`, `toInt32`, `toInt64`, `toInt128`, `toInt256`,",
+      "-- `toFloat32`, `toFloat64`,",
+      "-- `toDecimal32`, `toDecimal64`, `toDecimal128`, `toDecimal256`,",
+      "-- `toDate`, `toDate32`, `toDateTime`, `toDateTime64`,",
+      "-- `toUUID`, `toIPv4`, `toIPv6`,",
+      "-- `toIntervalNanosecond`, `toIntervalMicrosecond`, `toIntervalMillisecond`,",
+      "-- `toIntervalSecond`, `toIntervalMinute`, `toIntervalHour`,",
+      "-- `toIntervalDay`, `toIntervalWeek`, `toIntervalMonth`, `toIntervalQuarter`, `toIntervalYear`",
+      "-- These functions work under the same rules as the CAST operator and can be thought as elementary implementation parts of that operator. They allow implementation-defined overflow while converting between numeric types."
     ]
   },
   {
@@ -1119,6 +1316,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- These are ClickHouse-native conversion functions. They take an argument with the input value, and for some of the data types (`FixedString`, `DateTime`, `DateTime64`, `Decimal`s), the subsequent arguments are constant expressions, defining the parameters of these data types, or the rules to interpret the source value."
+    ],
+    "trailingComments": [
+      "-- no arguments"
     ]
   },
   {
@@ -1141,7 +1344,10 @@
         ]
       }
     ],
-    "format": "TSV"
+    "format": "TSV",
+    "trailingComments": [
+      "-- the parameter of the FixedString data type, the function returns FixedString(10)"
+    ]
   },
   {
     "kind": "select",
@@ -1172,7 +1378,10 @@
         ]
       }
     ],
-    "format": "TSV"
+    "format": "TSV",
+    "trailingComments": [
+      "-- it can be a constant expression"
+    ]
   },
   {
     "kind": "select",
@@ -1193,6 +1402,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- the scale of the Decimal data type"
     ]
   },
   {
@@ -1214,6 +1426,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- the time zone of DateTime"
     ]
   },
   {
@@ -1240,6 +1455,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- the scale of DateTime64 and its time zone"
     ]
   },
   {
@@ -1256,6 +1474,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- The length of FixedString and the scale of Decimal and DateTime64 types are mandatory arguments, while the time zone of the DateTime data type is optional.",
+      "-- If the time zone is not specified, the time zone of the argument's data type is used, and if the argument is not a date time, the session time zone is used."
     ]
   },
   {
@@ -1303,6 +1525,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Here, the time zone can be specified as the rule of interpretation of the value during conversion:"
     ]
   },
   {
@@ -1372,7 +1597,11 @@
           "value": "America/Los_Angeles"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- In the case when the time zone is not the part of the resulting data type, but a rule of interpretation of the source value,",
+      "-- it can be non-constant. Let's clarify: in this example, the resulting data type is a String; it does not have a time zone parameter:"
+    ]
   },
   {
     "kind": "select",
@@ -1421,6 +1650,11 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Functions converting to numeric types, date and datetime, IP and UUID, also have versions with -OrNull, -OrZero, and -OrDefault fallbacks,",
+      "-- that don't throw exceptions on parsing errors.",
+      "-- They use the same rules to the accurateCast operator:"
     ]
   },
   {
@@ -1643,6 +1877,13 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- These functions are only applicable to string data types.",
+      "-- Although it is a room for extension:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1664,6 +1905,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- String and FixedString work:"
     ]
   },
   {
@@ -1685,6 +1929,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- For the FixedString data type trailing zero bytes are allowed, because they are the padding for FixedString:"
     ]
   },
   {
@@ -1722,6 +1969,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- While for String, they don't:"
     ]
   },
   {
@@ -1771,6 +2021,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- 7. SQL-compatibility type-defining operators:"
     ]
   },
   {
@@ -1809,6 +2062,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- These operators are interpreted as the corresponding explicit conversion functions.",
+      "-- 8. SQL-compatibility aliases for explicit conversion functions:"
     ]
   },
   {
@@ -1847,6 +2104,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- These functions exist for compatibility with MySQL. They are case-insensitive."
     ]
   },
   {
@@ -1863,6 +2123,11 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- 9. Specialized conversion functions:",
+      "-- `parseDateTimeBestEffort`, `parseDateTimeBestEffortUS`, `parseDateTime64BestEffort`, `parseDateTime64BestEffortUS`, `toUnixTimestamp`",
+      "-- These functions are similar to explicit conversion functions but provide special rules on how the conversion is performed."
     ]
   },
   {
@@ -1885,6 +2150,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- 10. Functions for converting between different components or rounding of date and time data types."
     ]
   }
 ]

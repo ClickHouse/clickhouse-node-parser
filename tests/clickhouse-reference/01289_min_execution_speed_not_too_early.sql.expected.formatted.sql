@@ -1,3 +1,4 @@
+-- Exception about execution speed is not thrown from these queries.
 SELECT *
 FROM ES
 LIMIT 1

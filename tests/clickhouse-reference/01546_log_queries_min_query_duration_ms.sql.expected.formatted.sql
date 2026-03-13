@@ -1,6 +1,10 @@
+--
+-- fast -- no logging
+--
 SELECT '01546_log_queries_min_query_duration_ms-fast'
 FORMAT Null;
 
+-- No logging, since the query is fast enough.
 SELECT count()
 FROM `system`.query_log
 WHERE like(query, 'select ''01546_log_queries_min_query_duration_ms-fast%')
@@ -18,12 +22,15 @@ SELECT
     sleep(0.4)
 FORMAT Null;
 
+-- With the limit on minimum execution time, "query start" and "exception before start" events are not logged, only query finish.
 SELECT count()
 FROM `system`.query_log
 WHERE like(query, 'select ''01546_log_queries_min_query_duration_ms-slow%')
     AND current_database = currentDatabase()
     AND event_date >= yesterday();
 
+-- There at least two threads involved in a simple query
+-- (one thread just waits another, sigh)
 SELECT if(count() == 2, 'OK', concat('Fail: ', toString(count())))
 FROM `system`.query_thread_log
 WHERE like(query, 'select ''01546_log_queries_min_query_duration_ms-slow%')

@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     SearchEngineID AS k1,
     count() AS c

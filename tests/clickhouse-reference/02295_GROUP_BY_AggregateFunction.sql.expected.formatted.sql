@@ -36,6 +36,7 @@ ORDER BY a ASC
 SETTINGS optimize_aggregation_in_order = 1
 FORMAT JSONEachRow;
 
+-- regression for incorrect positions passed to finalizeChunk()
 SELECT
     a,
     min(b),

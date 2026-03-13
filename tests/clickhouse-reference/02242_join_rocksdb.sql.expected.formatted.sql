@@ -72,6 +72,7 @@ INNER JOIN rdb
     ON rdb.key == t2.k
 ORDER BY rdb.key ASC;
 
+-- can't promote right table type
 SELECT *
 FROM
     (
@@ -79,7 +80,7 @@ FROM
         FROM t2
     ) AS t2
 INNER JOIN rdb
-    ON rdb.key == t2.k;
+    ON rdb.key == t2.k; -- { serverError NOT_IMPLEMENTED,TYPE_MISMATCH }
 
 SELECT
     rdb.key % 2,
@@ -96,7 +97,7 @@ SELECT *
 FROM
     t1
 RIGHT JOIN rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -110,7 +111,7 @@ SELECT *
 FROM
     t1
 FULL JOIN rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -124,7 +125,7 @@ SELECT *
 FROM
     t1
 INNER JOIN rdb
-    ON rdb.key + 1 == t1.k;
+    ON rdb.key + 1 == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -141,7 +142,7 @@ INNER JOIN (
         SELECT *
         FROM rdb
     ) AS rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -161,7 +162,7 @@ RIGHT JOIN (
         SELECT *
         FROM rdb
     ) AS rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -170,4 +171,4 @@ RIGHT JOIN (
         SELECT *
         FROM rdb
     ) AS rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }

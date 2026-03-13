@@ -1,4 +1,4 @@
-SELECT randomStringUTF8('string');
+SELECT randomStringUTF8('string'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT lengthUTF8(randomStringUTF8(100));
 

@@ -60,13 +60,13 @@ SELECT hasAny(['a', 'b'], ['a', 'c']);
 
 SELECT hasAll(['a', 'b'], ['a', 'c']);
 
-SELECT hasAny([1], ['a']);
+SELECT hasAny([1], ['a']); -- { serverError NO_COMMON_TYPE }
 
-SELECT hasAll([1], ['a']);
+SELECT hasAll([1], ['a']); -- { serverError NO_COMMON_TYPE }
 
-SELECT hasAll([[1, 2], [3, 4]], ['a', 'c']);
+SELECT hasAll([[1, 2], [3, 4]], ['a', 'c']); -- { serverError NO_COMMON_TYPE }
 
-SELECT hasAny([[1, 2], [3, 4]], ['a', 'c']);
+SELECT hasAny([[1, 2], [3, 4]], ['a', 'c']); -- { serverError NO_COMMON_TYPE }
 
 SELECT hasAll([[1, 2], [3, 4]], [[1, 2], [3, 5]]);
 

@@ -1,2 +1,2 @@
 SELECT *
-FROM vv;
+FROM vv; -- { serverError STORAGE_REQUIRES_PARAMETER }

@@ -1,3 +1,4 @@
+-- Regression for PartialSortingTransform optimization that requires at least 1500 rows.
 SELECT *
 FROM (
         SELECT *

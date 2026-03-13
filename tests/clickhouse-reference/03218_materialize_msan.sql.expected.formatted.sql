@@ -6,7 +6,7 @@ SELECT
 GROUP BY
     materialize([(NULL, '1')]),
     '',
-    (materialize((t[1023]).2), (materialize(''), (t[2147483647]).1, materialize(9223372036854775807)), (materialize(''), materialize(NULL, 2147483647, t[65535], 256)), materialize(NULL));
+    (materialize((t[1023]).2), (materialize(''), (t[2147483647]).1, materialize(9223372036854775807)), (materialize(''), materialize(NULL, 2147483647, t[65535], 256)), materialize(NULL)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT
     materialize([(NULL, '11\01111111\011111', '1111')]) AS t,

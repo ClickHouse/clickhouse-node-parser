@@ -6,7 +6,7 @@ SELECT getSettingOrDefault('custom_c', 'default_c');
 
 SELECT getSettingOrDefault('custom_d', 'default_d');
 
-SELECT getSetting('custom_e');
+SELECT getSetting('custom_e'); -- { serverError UNKNOWN_SETTING }
 
 SELECT getSettingOrDefault('custom_e', 'default_e');
 
@@ -16,9 +16,9 @@ SELECT getSettingOrDefault('custom_e', NULL);
 
 SELECT isNull(getSettingOrDefault('custom_e', NULL));
 
-SELECT getSettingOrDefault('custom_e');
+SELECT getSettingOrDefault('custom_e'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT getSettingOrDefault(115, 'name should be string');
+SELECT getSettingOrDefault(115, 'name should be string'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT count(*)
 FROM numbers(10)

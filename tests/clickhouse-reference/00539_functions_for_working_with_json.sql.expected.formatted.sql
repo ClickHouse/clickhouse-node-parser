@@ -1,3 +1,4 @@
+-- VisitParam with basic type
 SELECT visitParamExtractInt('{"myparam":-1}', 'myparam');
 
 SELECT visitParamExtractUInt('{"myparam":-1}', 'myparam');
@@ -12,6 +13,7 @@ SELECT visitParamExtractString('{"myparam":"test_string"}', 'myparam');
 
 SELECT visitParamExtractString('{"myparam":"test\\"string"}', 'myparam');
 
+-- VisitParam with complex type
 SELECT visitParamExtractRaw('{"myparam":"test_string"}', 'myparam');
 
 SELECT visitParamExtractRaw('{"myparam": "test_string"}', 'myparam');

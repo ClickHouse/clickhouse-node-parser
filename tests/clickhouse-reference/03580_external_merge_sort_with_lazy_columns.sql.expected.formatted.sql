@@ -1,3 +1,4 @@
+-- weird settings to force external sort
 SELECT *
 FROM test
 ORDER BY c3 ASC

@@ -14,6 +14,7 @@ WHERE database = currentDatabase()
     AND table = 'test'
 FORMAT Vertical;
 
+-- Run a query that doesn use indexes
 SELECT s != ''
 FROM test
 LIMIT 1;

@@ -24,6 +24,7 @@ ORDER BY grouping(num1) DESC;
 SELECT arrayStringConcat(groupArray('-'))
 FROM numbers(67);
 
+-- Query A
 SELECT
     uid,
     name,
@@ -36,6 +37,7 @@ FROM users
 GROUP BY GROUPING SETS ((*), ())
 ORDER BY `ALL` ASC;
 
+-- Query B
 SELECT
     uid,
     name,

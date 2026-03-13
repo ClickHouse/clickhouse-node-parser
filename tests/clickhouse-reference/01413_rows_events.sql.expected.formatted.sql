@@ -17,7 +17,9 @@ ORDER BY event_time DESC
 LIMIT 1;
 
 SELECT *
-FROM rows_events_test
+FROM
+    /* test 01413, query 3 */
+    rows_events_test
 WHERE v = 2;
 
 SELECT read_rows

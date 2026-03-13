@@ -1,3 +1,4 @@
+-- Repro for https://github.com/ClickHouse/ClickHouse/issues/89062
 SELECT 1
 FROM numbers(1) AS t0
 WHERE EXISTS((

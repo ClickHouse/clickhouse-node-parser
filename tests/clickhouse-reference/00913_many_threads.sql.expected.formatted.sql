@@ -5,4 +5,4 @@ SELECT count()
 FROM t;
 
 SELECT sum(sleep(0.1))
-FROM t;
+FROM t; -- All threads have time to be created.

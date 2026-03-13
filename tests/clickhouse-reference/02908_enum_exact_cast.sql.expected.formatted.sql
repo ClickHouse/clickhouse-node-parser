@@ -12,7 +12,7 @@ SELECT (('second'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt6
 
 SELECT (('third'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64;
 
-SELECT (('fifth'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64;
+SELECT (('fifth'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64; -- { serverError UNKNOWN_ELEMENT_OF_ENUM }
 
 SELECT ((9::Int8)::Enum('first' = 10, 'second' = 50, 'third' = 100))::UInt64;
 

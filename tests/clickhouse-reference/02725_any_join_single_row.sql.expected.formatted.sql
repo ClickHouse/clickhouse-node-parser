@@ -1,9 +1,11 @@
+-- Check that table size is less than 100K
 SELECT
     engine_full,
     total_rows,
     total_bytes < 100000
 FROM initial_table_size;
 
+-- Check that table size is less than 2x after inserting one row
 SELECT
     engine_full,
     total_rows,
@@ -13,6 +15,7 @@ SELECT
     )
 FROM one_row_table_size;
 
+-- Check that rows with the same key are not duplicated
 SELECT
     engine_full,
     total_rows,

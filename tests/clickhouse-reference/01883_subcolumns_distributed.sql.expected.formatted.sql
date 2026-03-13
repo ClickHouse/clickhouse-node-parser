@@ -19,4 +19,4 @@ SELECT
     t.s1,
     t.s2
 FROM t_subcolumns_dist
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- {serverError UNKNOWN_IDENTIFIER}

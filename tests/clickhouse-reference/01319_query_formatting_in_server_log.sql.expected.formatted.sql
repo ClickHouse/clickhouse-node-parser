@@ -1,6 +1,8 @@
 SELECT
     'ab
 cd',
+    /* hello */
+    -- world
     1;
 
 SELECT extract(message, 'SeL.+?;')

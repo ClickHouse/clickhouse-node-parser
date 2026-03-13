@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT
     name,
     is_output,

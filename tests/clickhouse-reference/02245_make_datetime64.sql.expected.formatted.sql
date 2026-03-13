@@ -24,11 +24,11 @@ SELECT makeDateTime64(1899, 12, 31, 23, 59, 59, 999999999, 9, 'UTC');
 
 SELECT makeDateTime64(2299, 12, 31, 23, 59, 59, 99999999, 8, 'UTC');
 
-SELECT makeDateTime64(2299, 12, 31, 23, 59, 59, 999999999, 9, 'UTC');
+SELECT makeDateTime64(2299, 12, 31, 23, 59, 59, 999999999, 9, 'UTC'); -- { serverError DECIMAL_OVERFLOW }
 
 SELECT makeDateTime64(2262, 4, 11, 23, 47, 16, 854775807, 9, 'UTC');
 
-SELECT makeDateTime64(2262, 4, 11, 23, 47, 16, 854775808, 9, 'UTC');
+SELECT makeDateTime64(2262, 4, 11, 23, 47, 16, 854775808, 9, 'UTC'); -- { serverError DECIMAL_OVERFLOW }
 
 SELECT makeDateTime64(2262, 4, 11, 23, 47, 16, 85477581, 8, 'UTC');
 
@@ -50,9 +50,9 @@ SELECT makeDateTime64(1991, 8, 24, 21, 4, 0, 1234, 8, 'CET');
 
 SELECT makeDateTime64(1991, 8, 24, 21, 4, 0, 1234, 9, 'CET');
 
-SELECT makeDateTime64(1991, 8, 24, 21, 4, 0, 1234, 10, 'CET');
+SELECT makeDateTime64(1991, 8, 24, 21, 4, 0, 1234, 10, 'CET'); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT makeDateTime64(1991, 8, 24, 21, 4, 0, 1234, -1, 'CET');
+SELECT makeDateTime64(1991, 8, 24, 21, 4, 0, 1234, -1, 'CET'); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT makeDateTime64(1984, 0, 1, 0, 0, 0, 0, 9, 'UTC');
 
@@ -68,7 +68,7 @@ SELECT makeDateTime64(1984, 1, 1, 0, 70, 0, 0, 9, 'UTC');
 
 SELECT makeDateTime64(1984, 1, 1, 0, 0, 70, 0, 9, 'UTC');
 
-SELECT makeDateTime64(1984, 1, 1, 0, 0, 0, 0, 9, 'not a timezone');
+SELECT makeDateTime64(1984, 1, 1, 0, 0, 0, 0, 9, 'not a timezone'); -- { serverError BAD_ARGUMENTS }
 
 SELECT makeDateTime64(1984, 1, 1, 2, 3, 4, 5, 9, 'UTC');
 
@@ -144,6 +144,7 @@ SELECT makeDateTime64(1991, 8, 24, 21, 65537, 0);
 
 SELECT makeDateTime64(1991, 8, 24, 21, 4, 65537);
 
+-- bug 58590
 SELECT makeDateTime64(2024, 1, 8, 11, 12, 13, materialize(14));
 
 SELECT makeDateTime64(year, 1, 1, 1, 0, 0, 0, precision, timezone)
@@ -157,4 +158,4 @@ FROM (
             1985 AS year,
             5 AS precision,
             'UTC' AS timezone
-    );
+    ); -- { serverError ILLEGAL_COLUMN }

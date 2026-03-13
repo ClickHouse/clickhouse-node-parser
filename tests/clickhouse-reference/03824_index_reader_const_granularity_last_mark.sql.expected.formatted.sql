@@ -1,3 +1,6 @@
+-- This query triggers lazy materialization with index reader as the first reader in the chain.
+-- The bug was that the index reader reported 64 rows for the last granule (instead of 16),
+-- causing a mismatch with the actual data reader.
 SELECT
     id,
     v1

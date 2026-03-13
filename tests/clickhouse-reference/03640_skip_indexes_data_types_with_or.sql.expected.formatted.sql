@@ -1,4 +1,4 @@
-SELECT '-- Simple OR condition';
+SELECT '-- Simple OR condition'; -- surviving granules: 100, but only 1 granule is real match
 
 SELECT `explain` AS `explain`
 FROM (

@@ -1,3 +1,4 @@
+-- Test for case-insensitive prefix and suffix matching functions, (starts|endswith)(UTF8)?CaseInsensitive
 SELECT '-- Test startsWithCaseInsensitive ASCII';
 
 SELECT

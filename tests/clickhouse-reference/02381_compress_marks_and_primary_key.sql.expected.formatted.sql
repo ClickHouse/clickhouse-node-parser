@@ -3,6 +3,7 @@ FROM test_02381_compress
 WHERE a = 1000
 LIMIT 1;
 
+-- Compare the size of marks on disk
 SELECT
     table,
     sum(`rows`),

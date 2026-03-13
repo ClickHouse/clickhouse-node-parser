@@ -10,4 +10,4 @@ UNION ALL
 UNION ALL
 SELECT
     1 AS c1,
-    2 AS c2);
+    2 AS c2); -- { serverError UNION_ALL_RESULT_STRUCTURES_MISMATCH }

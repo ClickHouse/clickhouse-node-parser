@@ -2,6 +2,7 @@ SELECT *
 FROM test_local_blob_log
 ORDER BY a ASC;
 
+-- Check that upload events were logged
 SELECT
     'Upload events:',
     count() > 0
@@ -13,6 +14,7 @@ WHERE event_type = 'Upload'
     AND event_date >= yesterday()
     AND event_time > now() - toIntervalMinute(5);
 
+-- Check that delete events were logged
 SELECT
     'Delete events:',
     count() > 0

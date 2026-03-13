@@ -8,7 +8,7 @@ SELECT tuple(1, 'a').*;
 
 SELECT CAST(('hello', 1) AS Tuple(name String, count UInt32)).*;
 
-SELECT untuple(CAST(('hello', 1) AS Tuple(name String, count UInt32)));
+SELECT untuple(CAST(('hello', 1) AS Tuple(name String, count UInt32))); -- will give two columns `name` and `count`.
 
 SELECT * EXCEPT('hello|world');
 
@@ -72,7 +72,7 @@ SELECT
     x,
     y,
     z
-FROM aliased2;
+FROM aliased2; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT
     x,

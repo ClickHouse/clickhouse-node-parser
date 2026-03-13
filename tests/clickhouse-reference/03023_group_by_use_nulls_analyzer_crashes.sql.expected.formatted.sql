@@ -24,7 +24,7 @@ FROM `system`.parts
 WHERE database = currentDatabase()
 GROUP BY GROUPING SETS ((2))
 FORMAT Null
-SETTINGS optimize_injective_functions_in_group_by = 1, optimize_group_by_function_keys = 1, group_by_use_nulls = 1;
+SETTINGS optimize_injective_functions_in_group_by = 1, optimize_group_by_function_keys = 1, group_by_use_nulls = 1; -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT
     toLowCardinality(materialize('a' AS key)),
@@ -112,7 +112,7 @@ FROM (
 GROUP BY GROUPING SETS ((toLowCardinality(0)), (toLowCardinality(toNullable(28))), (1))
 HAVING nullIf(c, 10) < 50
 ORDER BY c ASC
-SETTINGS group_by_use_nulls = 1;
+SETTINGS group_by_use_nulls = 1; -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT arraySplit(x -> 0, [])
 WHERE materialize(1)
@@ -138,7 +138,7 @@ GROUP BY
     number,
     [number]
 WITH ROLLUP
-SETTINGS group_by_use_nulls = 1;
+SETTINGS group_by_use_nulls = 1; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT count(arraySplit(x -> toUInt8(number), []))
 FROM numbers(10)

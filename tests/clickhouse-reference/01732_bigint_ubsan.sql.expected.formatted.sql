@@ -7,7 +7,7 @@ SELECT
     f / 21,
     f / 84
 FROM decimal
-WHERE f > 0;
+WHERE f > 0; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     f + -2,
@@ -18,4 +18,4 @@ SELECT
     f / 9223372036854775807,
     f / 84
 FROM decimal
-WHERE f > 0;
+WHERE f > 0; -- { serverError DECIMAL_OVERFLOW }

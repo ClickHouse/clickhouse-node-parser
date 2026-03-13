@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on AWS
 SELECT *
 FROM s3(s3_conn, filename = '03036_archive1.zip :: example{1,2}.csv')
 ORDER BY tuple(*) ASC;

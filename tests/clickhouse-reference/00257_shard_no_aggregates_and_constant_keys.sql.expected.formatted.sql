@@ -43,6 +43,14 @@ FROM (
 GROUP BY z
 WITH TOTALS;
 
+-- NOTE: non-analyzer preserves the original header (i.e. 41) for TOTALS in
+-- case of remote queries with GROUP BY some_requested_const and there were no
+-- aggregate functions, the query above. But everything else works in the same
+-- way, i.e.:
+--
+--     select 41 as z, count() from remote('127.0.0.{2,3}', system.one) group by z WITH TOTALS;
+--     select 41 as z from remote('127.0.0.{2,3}', system.one) group by 1 WITH TOTALS;
+--
 SELECT 41 AS z
 FROM remote('127.0.0.{2,3}', `system`.one)
 GROUP BY z

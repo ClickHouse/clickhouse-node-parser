@@ -1,3 +1,4 @@
+-- Tags: replica
 SELECT
     x,
     arrayJoin(x)

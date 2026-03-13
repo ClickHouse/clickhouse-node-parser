@@ -3,14 +3,14 @@ FROM data_01801
 WHERE key = 0
 ORDER BY key ASC
 SETTINGS max_rows_to_read = 9
-FORMAT Null;
+FORMAT Null; -- { serverError TOO_MANY_ROWS }
 
 SELECT *
 FROM data_01801
 WHERE key = 0
 ORDER BY key DESC
 SETTINGS max_rows_to_read = 9
-FORMAT Null;
+FORMAT Null; -- { serverError TOO_MANY_ROWS }
 
 SELECT *
 FROM data_01801

@@ -14,4 +14,4 @@ SETTINGS
     cluster_for_parallel_replicas = 'not_exists',
     max_parallel_replicas = 2,
     enable_analyzer = 1,
-    parallel_replicas_for_non_replicated_merge_tree = 1;
+    parallel_replicas_for_non_replicated_merge_tree = 1; -- { serverError CLUSTER_DOESNT_EXIST }

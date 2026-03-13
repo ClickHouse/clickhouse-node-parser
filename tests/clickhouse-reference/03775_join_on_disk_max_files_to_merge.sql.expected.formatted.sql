@@ -1,3 +1,4 @@
+-- Fixes issue: https://github.com/ClickHouse/ClickHouse/issues/84668
 SELECT count()
 FROM
     (

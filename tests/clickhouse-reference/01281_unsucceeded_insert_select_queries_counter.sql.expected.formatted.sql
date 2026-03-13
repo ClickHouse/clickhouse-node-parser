@@ -1,7 +1,7 @@
 SELECT *
-FROM table_that_do_not_exists;
+FROM table_that_do_not_exists; -- { serverError UNKNOWN_TABLE }
 
-SELECT throwIf(1);
+SELECT throwIf(1); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 
 SELECT
     normalizeQuery(query),

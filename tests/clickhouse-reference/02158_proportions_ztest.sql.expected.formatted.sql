@@ -6,4 +6,4 @@ FROM proportions_ztest;
 SELECT
     NULL,
     proportionsZTest(257, 1048575, 1048575, 257, -inf, NULL),
-    proportionsZTest(1024, 1025, 2, 2, 'unpooled');
+    proportionsZTest(1024, 1025, 2, 2, 'unpooled'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

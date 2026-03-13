@@ -1,3 +1,4 @@
+-- Tags: distributed
 SELECT *
 FROM (
         SELECT *
