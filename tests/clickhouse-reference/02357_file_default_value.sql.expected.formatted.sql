@@ -1,4 +1,4 @@
-SELECT file('nonexistent.txt');
+SELECT file('nonexistent.txt'); -- { serverError FILE_DOESNT_EXIST }
 
 SELECT file('nonexistent.txt', 'default');
 

@@ -1,3 +1,6 @@
+-- 9 groups of (a = X AND b = X) connected by OR produce 35 RPN elements:
+-- 9 * 3 (leaf, leaf, AND) + 8 OR = 35, exceeding the limit of 32.
+-- optimize_min_equality_disjunction_chain_length = 100 prevents OR-to-IN conversion.
 SELECT count()
 FROM t_skip_index_disj_oob
 WHERE (a = 1

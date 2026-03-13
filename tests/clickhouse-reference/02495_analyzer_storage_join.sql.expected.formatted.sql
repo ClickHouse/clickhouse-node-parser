@@ -169,7 +169,7 @@ FROM
 RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT x
 FROM
@@ -177,7 +177,7 @@ FROM
 RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT y
 FROM
@@ -219,7 +219,7 @@ RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT
     t.key1,
@@ -317,7 +317,7 @@ RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT x
 FROM
@@ -326,7 +326,7 @@ RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT y
 FROM
@@ -361,7 +361,7 @@ FROM
 RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2 + 1
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
@@ -372,7 +372,7 @@ RIGHT JOIN tj
 ORDER BY
     t.key1 ASC,
     tj.key2 ASC
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- Ok: expression on the left table
 
 SELECT *
 FROM
@@ -383,7 +383,7 @@ RIGHT JOIN tj
     AND 1 == 1
 ORDER BY `ALL` ASC
 SETTINGS query_plan_use_new_logical_join_step = 0
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
@@ -405,7 +405,7 @@ RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 1 == 2
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
@@ -414,7 +414,7 @@ RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND tj.a == 20
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
@@ -426,7 +426,7 @@ RIGHT JOIN tj
 ORDER BY
     t.key1 ASC,
     tj.key2 ASC
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- Ok: t.b from the left table
 
 SELECT *
 FROM
@@ -435,7 +435,7 @@ RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 1 != 1
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
@@ -446,7 +446,7 @@ RIGHT JOIN tj
     AND NULL
 ORDER BY `ALL` ASC
 SETTINGS query_plan_use_new_logical_join_step = 0
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
@@ -468,14 +468,14 @@ RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 'aaa'
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
 FROM
     t
 RIGHT JOIN tj
     ON 'aaa'
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
@@ -486,7 +486,7 @@ RIGHT JOIN tj
     AND 1
 ORDER BY `ALL` ASC
 SETTINGS query_plan_use_new_logical_join_step = 0
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
@@ -506,11 +506,11 @@ FROM
     t
 RIGHT JOIN tj
     ON 0
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
     t
 RIGHT JOIN tj
     ON 1
-FORMAT TSVWithNames;
+FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }

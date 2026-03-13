@@ -1,3 +1,4 @@
+-- default coordinator
 SELECT
     count(),
     min(k),
@@ -18,6 +19,8 @@ WHERE query_id IN (
     AND like(message, '%Total rows to read: 3000%')
     AND event_date >= yesterday();
 
+-- reading in order coordinator
+-- disable parallel_replicas_local_plan since the test relay on traces which only present in case of no local plan
 SELECT
     k,
     sipHash64(v)

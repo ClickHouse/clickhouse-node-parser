@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/65035
 SELECT
     *,
     toTypeName(*)

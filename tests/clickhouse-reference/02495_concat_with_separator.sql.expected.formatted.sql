@@ -1,7 +1,9 @@
-SELECT concatWithSeparator(materialize('|'), 'a', 'b');
+-- negative tests
+SELECT concatWithSeparator(materialize('|'), 'a', 'b'); -- { serverError ILLEGAL_COLUMN }
 
-SELECT concatWithSeparator();
+SELECT concatWithSeparator(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
+-- special cases
 SELECT concatWithSeparator('|') = '';
 
 SELECT concatWithSeparator('|', 'a') == 'a';
@@ -44,6 +46,7 @@ SELECT concatWithSeparator('1', NULL, 'b') == NULL;
 
 SELECT concatWithSeparator('1', 'a', NULL) == NULL;
 
+-- Const String + non-const non-String/non-FixedString type'
 SELECT concatWithSeparator('|', 'a', materialize(42::Int8)) == 'a|42';
 
 SELECT concatWithSeparator('|', 'a', materialize(43::Int16)) == 'a|43';

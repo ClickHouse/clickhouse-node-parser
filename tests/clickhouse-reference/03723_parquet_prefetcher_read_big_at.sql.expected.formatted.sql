@@ -1,3 +1,4 @@
+-- Check profiling data to visualize what logic has been used
 SELECT
     ProfileEvents['ParquetPrefetcherReadRandomRead'],
     ProfileEvents['ParquetPrefetcherReadSeekAndRead'],

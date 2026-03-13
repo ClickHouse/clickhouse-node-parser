@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT count()
 FROM test.hits
 WHERE EventDate = '2014-03-18';

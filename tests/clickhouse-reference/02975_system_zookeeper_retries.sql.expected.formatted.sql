@@ -1,3 +1,4 @@
+-- Tags: zookeeper, no-parallel, no-fasttest
 SELECT
     path,
     name
@@ -13,6 +14,7 @@ SETTINGS
     insert_keeper_fault_injection_seed = 4,
     log_comment = '02975_system_zookeeper_retries';
 
+-- Check that there where zk session failures
 SELECT ProfileEvents['ZooKeeperHardwareExceptions'] > 0
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

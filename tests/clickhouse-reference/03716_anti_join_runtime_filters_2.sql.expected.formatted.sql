@@ -1,3 +1,4 @@
+-- RIGHT ANTI JOIN
 SELECT REGEXP_REPLACE(`explain`, '_runtime_filter_\\d+', '_runtime_filter_UNIQ_ID')
 FROM (
         EXPLAIN actions = 1
@@ -20,6 +21,7 @@ WHERE NOT EXISTS((
     ))
 SETTINGS correlated_subqueries_default_join_kind = 'right';
 
+-- LEFT ANTI JOIN
 SELECT REGEXP_REPLACE(`explain`, '_runtime_filter_\\d+', '_runtime_filter_UNIQ_ID')
 FROM (
         EXPLAIN actions = 1

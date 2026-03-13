@@ -1,3 +1,5 @@
+-- Tags: no-random-merge-tree-settings
+----- Group of very similar simple tests ------
 SELECT '----HORIZONTAL MERGE TESTS----';
 
 SELECT COUNT(*)

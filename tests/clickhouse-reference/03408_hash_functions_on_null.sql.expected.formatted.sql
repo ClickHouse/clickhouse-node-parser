@@ -87,6 +87,7 @@ FROM t;
 SELECT cityHash64(a.z)
 FROM t;
 
+--- Keyed.
 SELECT sipHash64Keyed(materialize((1::UInt64, 2::UInt64)), NULL)
 FROM numbers(2);
 
@@ -99,6 +100,7 @@ FROM numbers(2);
 SELECT sipHash64Keyed((1::UInt64, number), tuple(NULL))
 FROM numbers(3);
 
+-- Make sure all types are allowed.
 SELECT sum(ignore(cityHash64(tuple(*))))
 FROM (
         SELECT *

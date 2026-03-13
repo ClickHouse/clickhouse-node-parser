@@ -1,12 +1,12 @@
 SELECT '-- negative tests';
 
-SELECT sqidEncode();
+SELECT sqidEncode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT sqidDecode();
+SELECT sqidDecode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT sqidEncode('1');
+SELECT sqidEncode('1'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT sqidDecode(1);
+SELECT sqidDecode(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     sqidEncode(1) AS sqid,

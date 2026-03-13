@@ -1,3 +1,4 @@
+-- { echo }
 SELECT id
 FROM test_empty_array
 WHERE empty(a)
@@ -8,6 +9,7 @@ FROM test_empty_array
 WHERE empty(a)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT id
 FROM test_notempty_array
 WHERE notEmpty(a)
@@ -18,6 +20,7 @@ FROM test_notempty_array
 WHERE notEmpty(a)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT
     id,
     length(a)
@@ -30,6 +33,7 @@ SELECT
 FROM test_length_array
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT id
 FROM test_empty_string
 WHERE empty(s)
@@ -40,6 +44,7 @@ FROM test_empty_string
 WHERE empty(s)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT id
 FROM test_notempty_string
 WHERE notEmpty(s)
@@ -50,6 +55,7 @@ FROM test_notempty_string
 WHERE notEmpty(s)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT
     id,
     length(s)
@@ -62,6 +68,7 @@ SELECT
 FROM test_length_string
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT id
 FROM test_empty_map
 WHERE empty(m)
@@ -72,6 +79,7 @@ FROM test_empty_map
 WHERE empty(m)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT id
 FROM test_notempty_map
 WHERE notEmpty(m)
@@ -82,6 +90,7 @@ FROM test_notempty_map
 WHERE notEmpty(m)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT
     id,
     length(m)
@@ -94,6 +103,7 @@ SELECT
 FROM test_length_map
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT id
 FROM test_isnull
 WHERE isNull(n)
@@ -104,6 +114,7 @@ FROM test_isnull
 WHERE isNull(n)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT id
 FROM test_isnotnull
 WHERE isNotNull(n)
@@ -114,6 +125,7 @@ FROM test_isnotnull
 WHERE isNotNull(n)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echo }
 SELECT count(n)
 FROM test_count_nullable
 SETTINGS optimize_functions_to_subcolumns = 1;

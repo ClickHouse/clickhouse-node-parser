@@ -67,13 +67,13 @@ SELECT
     trimRight(toFixedString('#@hello#@', 9), '#@#@') = '#@hello' AS right_fixed_custom_ok,
     trimBoth(toFixedString('#@hello#@', 9), '#@#@') = 'hello' AS both_fixed_custom_ok;
 
-SELECT trimLeft('hello', 'a', 'b');
+SELECT trimLeft('hello', 'a', 'b'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT trimRight(123, 'a');
+SELECT trimRight(123, 'a'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT trimBoth('hello', 123);
+SELECT trimBoth('hello', 123); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT trimBoth('hello', materialize('a'));
+SELECT trimBoth('hello', materialize('a')); -- { serverError ILLEGAL_COLUMN }
 
 SELECT trimRight(col, char(0))
 FROM tab;
@@ -81,4 +81,5 @@ FROM tab;
 SELECT trimBoth(col, 'ac')
 FROM tab;
 
+-- Bug 78796
 SELECT isConstant(trimBoth(''));

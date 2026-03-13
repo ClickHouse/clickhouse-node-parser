@@ -7,6 +7,7 @@ SELECT
 FROM test_tbl
 ORDER BY x ASC;
 
+-- timestamp convert between DST timezone and UTC
 SELECT
     to_utc_timestamp(toDateTime('2024-02-24 11:22:33'), 'Europe/Madrid'),
     from_utc_timestamp(toDateTime('2024-02-24 11:22:33'), 'Europe/Madrid')
@@ -58,6 +59,7 @@ SELECT
     from_utc_timestamp(toDateTime('2024-01-01 01:01:01'), 'EST')
 SETTINGS session_timezone = 'Europe/Moscow';
 
+-- Test cases for dates before Unix epoch (1970-01-01)
 SELECT
     'before epoch 1:',
     to_utc_timestamp(toDateTime('1969-12-31 23:59:59'), 'UTC'),
@@ -76,6 +78,7 @@ SELECT
     from_utc_timestamp(toDateTime('1900-01-01 00:00:00'), 'UTC')
 SETTINGS session_timezone = 'UTC';
 
+-- Test cases for dates after maximum date (2106-02-07 06:28:15)
 SELECT
     'after max 1:',
     to_utc_timestamp(toDateTime('2106-02-07 06:28:16'), 'UTC'),
@@ -94,6 +97,7 @@ SELECT
     from_utc_timestamp(toDateTime('2107-01-01 00:00:00'), 'UTC')
 SETTINGS session_timezone = 'UTC';
 
+-- Test cases for dates before epoch with different timezones
 SELECT
     'before epoch with timezone 1:',
     to_utc_timestamp(toDateTime('1969-12-31 23:59:59'), 'America/New_York'),
@@ -106,6 +110,7 @@ SELECT
     from_utc_timestamp(toDateTime('1969-12-31 23:59:59'), 'Asia/Tokyo')
 SETTINGS session_timezone = 'UTC';
 
+-- Test cases for dates after max with different timezones
 SELECT
     'after max with timezone 1:',
     to_utc_timestamp(toDateTime('2106-02-07 06:28:16'), 'America/New_York'),

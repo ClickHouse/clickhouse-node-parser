@@ -1,3 +1,4 @@
+-- Only 10 granules should be read
 SELECT
     id,
     v1
@@ -20,6 +21,7 @@ SETTINGS
     use_skip_indexes_for_top_k = 1,
     use_skip_indexes_on_data_read = 0;
 
+-- Verify EXPLAIN indexes=1 output to confirm skip index usage for top-n
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
         EXPLAIN indexes = 1
@@ -35,6 +37,7 @@ FROM (
     )
 WHERE like(`explain`, '%TopK%');
 
+--  If WHERE clause is present, TopN via skip index only optimization not possible - row should not seen
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
         EXPLAIN indexes = 1
@@ -51,6 +54,7 @@ FROM (
     )
 WHERE like(`explain`, '%TopK%');
 
+-- Verify that dynamic filter injects PREWHERE dynamic filter
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
         EXPLAIN actions = 1
@@ -67,6 +71,7 @@ FROM (
     )
 WHERE like(`explain`, '%topK%');
 
+-- Verify execution of dynamic filter
 SELECT
     id,
     v1

@@ -28,15 +28,15 @@ SELECT
 
 SELECT
     1 AS x,
-    roundDown(x, []);
+    roundDown(x, []); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     1 AS x,
-    roundDown(x, emptyArrayUInt8());
+    roundDown(x, emptyArrayUInt8()); -- { serverError ILLEGAL_COLUMN }
 
 SELECT roundDown(number, [number])
 FROM `system`.numbers
-LIMIT 10;
+LIMIT 10; -- { serverError ILLEGAL_COLUMN }
 
 SELECT
     1 AS x,

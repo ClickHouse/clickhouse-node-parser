@@ -1,3 +1,4 @@
+-- different combinations of conditions on key/attribute columns for the left/right tables
 SELECT count()
 FROM
     t1

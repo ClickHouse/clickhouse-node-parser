@@ -1,3 +1,4 @@
+-- { echo }
 SELECT count()
 FROM (
         SELECT *

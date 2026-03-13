@@ -22,7 +22,7 @@ WHERE _table = 'test_local_1';
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1')
-PREWHERE _table = 'test_local_1';
+PREWHERE _table = 'test_local_1'; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1')
@@ -30,7 +30,7 @@ WHERE _table IN ('test_local_1', 'test_local_2');
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1')
-PREWHERE _table IN ('test_local_1', 'test_local_2');
+PREWHERE _table IN ('test_local_1', 'test_local_2'); -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1');
@@ -54,7 +54,7 @@ WHERE _table = 'test_local_1';
 
 SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1')
-PREWHERE _table = 'test_local_1';
+PREWHERE _table = 'test_local_1'; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1')
@@ -62,7 +62,7 @@ WHERE _table IN ('test_local_1', 'test_local_2');
 
 SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1')
-PREWHERE _table IN ('test_local_1', 'test_local_2');
+PREWHERE _table IN ('test_local_1', 'test_local_2'); -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1|test_local_2')
@@ -87,7 +87,7 @@ WHERE _table = 'test_local_1';
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1|test_local_2')
-PREWHERE _table = 'test_local_1';
+PREWHERE _table = 'test_local_1'; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1|test_local_2')
@@ -97,7 +97,7 @@ ORDER BY value ASC;
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1|test_local_2')
 PREWHERE _table IN ('test_local_1', 'test_local_2')
-ORDER BY value ASC;
+ORDER BY value ASC; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1|test_distributed_2')
@@ -122,7 +122,7 @@ WHERE _table = 'test_local_1';
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1|test_distributed_2')
-PREWHERE _table = 'test_local_1';
+PREWHERE _table = 'test_local_1'; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1|test_distributed_2')
@@ -132,7 +132,7 @@ ORDER BY value ASC;
 SELECT *
 FROM merge(currentDatabase(), 'test_local_1|test_distributed_2')
 PREWHERE _table IN ('test_local_1', 'test_local_2')
-ORDER BY value ASC;
+ORDER BY value ASC; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2')
@@ -157,7 +157,7 @@ WHERE _table = 'test_local_1';
 
 SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2')
-PREWHERE _table = 'test_local_1';
+PREWHERE _table = 'test_local_1'; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2')
@@ -167,7 +167,7 @@ ORDER BY value ASC;
 SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2')
 PREWHERE _table IN ('test_local_1', 'test_local_2')
-ORDER BY value ASC;
+ORDER BY value ASC; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT *
 FROM merge(currentDatabase(), 'test_s64_distributed|test_u64_distributed')

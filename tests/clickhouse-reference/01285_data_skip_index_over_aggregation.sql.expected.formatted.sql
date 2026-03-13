@@ -19,6 +19,8 @@ FROM data_01285
 WHERE assumeNotNull(value) = 3
 ORDER BY `ALL` ASC;
 
+-- before the fix value_idx contains one range {0, 0}
+-- and hence cannot find these record.
 SELECT *
 FROM data_01285
 WHERE assumeNotNull(value) = 3;

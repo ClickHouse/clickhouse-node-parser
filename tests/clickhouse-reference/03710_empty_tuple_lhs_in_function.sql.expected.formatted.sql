@@ -6,7 +6,7 @@ SELECT CAST(tuple(), 'Tuple()') IN ([tuple(), tuple()]);
 
 SELECT CAST(tuple(), 'Tuple()') NOT IN (tuple());
 
-SELECT CAST(tuple(), 'Tuple()') IN (tuple(1));
+SELECT CAST(tuple(), 'Tuple()') IN (tuple(1)); -- { serverError TYPE_MISMATCH }
 
 SELECT CAST(tuple(), 'Tuple()') IN ([()]);
 

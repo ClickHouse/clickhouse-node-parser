@@ -1,3 +1,4 @@
+-- 1 element in filter
 SELECT count()
 FROM
     customer
@@ -18,6 +19,7 @@ FROM
 RIGHT JOIN customer
     ON c_nationkey = n.n_nationkey;
 
+-- 0 elements in filter ('WAKANDA' is not present in `nations` table)
 SELECT count()
 FROM
     customer
@@ -38,6 +40,7 @@ FROM
 RIGHT JOIN customer
     ON c_nationkey = n.n_nationkey;
 
+-- again 1 element in filter
 SELECT count()
 FROM
     customer
@@ -58,6 +61,7 @@ FROM
 RIGHT JOIN customer
     ON c_nationkey = n.n_nationkey;
 
+-- 2 elements in filter
 SELECT count()
 FROM
     customer

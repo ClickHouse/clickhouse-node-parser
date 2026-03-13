@@ -163,6 +163,7 @@ SELECT
     toTypeName([[], [1,2], [0,0x10000]]),
     byteSize([[], [1,2], [0,0x10000]]);
 
+-- select key, byteSize(*), strs, byteSize(strs), str_strs, byteSize(str_strs) from test_byte_size_complex_array order by key;
 SELECT
     key,
     byteSize(*),

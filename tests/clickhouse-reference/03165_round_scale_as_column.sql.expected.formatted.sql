@@ -1,3 +1,4 @@
+-- Tests functions round(), roundBankers(), floor(), ceil() and trunc() with default 'scale' argument
 SELECT
     toUInt8(number) AS x,
     round(x),
@@ -118,6 +119,7 @@ SELECT
 FROM `system`.numbers
 LIMIT 20;
 
+-- Functions round(), roundBankers(), floor(), ceil() and trunc() accept non-const 'scale' arguments
 SELECT
     toFloat32(((number - 10)) / 10) AS x,
     round(x, materialize(1)),
@@ -480,6 +482,7 @@ SELECT
 FROM tab
 ORDER BY id ASC;
 
+--
 SELECT toString('CHECKPOINT2');
 
 SELECT
@@ -505,4 +508,4 @@ SELECT round(materialize(1), 1);
 
 SELECT
     materialize(10.1) AS x,
-    ceil(x, toUInt256(123));
+    ceil(x, toUInt256(123)); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}

@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT count()
 FROM (
         SELECT Goals.ID

@@ -1,3 +1,5 @@
+-- Tags: long, no-msan
+/* Trivial case */
 SELECT multiIf(1, 2, 3, 4, 5);
 
 SELECT multiIf(1, 'A', 2, 'BC', 'DEF');
@@ -8,6 +10,7 @@ SELECT multiIf(1, [1,2], 2, [3,4], [5,6]);
 
 SELECT multiIf(1, ['A','B'], 2, ['C','D'], ['E','F']);
 
+/* No CASE expression. Numeric clauses */
 SELECT multiIf((number % 2) = 0, toInt8(1), (number % 3) = 0, toInt8(2), toInt8(3))
 FROM `system`.numbers
 LIMIT 10;
@@ -2712,6 +2715,7 @@ SELECT multiIf((number % 2) = 0, toFloat64(1), (number % 3) = 0, toFloat64(2), t
 FROM `system`.numbers
 LIMIT 10;
 
+/* No CASE expression. Numeric array clauses. */
 SELECT multiIf((number % 2) = 0, [toInt8(1), toInt8(2)], (number % 3) = 0, [toInt8(2), toInt8(3)], [toInt8(3), toInt8(3)])
 FROM `system`.numbers
 LIMIT 10;
@@ -6955,5 +6959,6 @@ FROM multi_if_check;
 SELECT caseWithExpression(col1, 0, 1, 1, 2, 3)
 FROM multi_if_check;
 
+/* CASE expression. String clauses. */
 SELECT caseWithExpression(col1, 1, 'A', 2, 'AB', 'ABC')
 FROM multi_if_check;

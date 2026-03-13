@@ -37,4 +37,4 @@ FROM dest_dictionary;
 SELECT *
 FROM dest_view_set
 ORDER BY x ASC
-LIMIT 1;
+LIMIT 1; -- {serverError UNKNOWN_TABLE}

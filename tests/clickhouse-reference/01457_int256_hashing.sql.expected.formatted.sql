@@ -34,6 +34,10 @@ INNER JOIN (
 
 SELECT arrayEnumerateUniq([toInt256(123), toInt256(456), toInt256(123)]);
 
+-- SELECT toUInt128(123) IN (NULL);
+-- SELECT toUInt128(123) AS k GROUP BY k;
+-- SELECT toUInt128(123) AS k FROM system.one INNER JOIN (SELECT toUInt128(123) AS k) t USING k;
+-- SELECT arrayEnumerateUniq([toUInt128(123), toUInt128(456), toUInt128(123)]);
 SELECT toInt128(123) IN (NULL);
 
 SELECT toInt128(123) AS k
@@ -88,6 +92,10 @@ INNER JOIN (
 
 SELECT arrayEnumerateUniq([toNullable(toInt256(321)), toNullable(toInt256(456)), toNullable(toInt256(321))]);
 
+-- SELECT toNullable(toUInt128(321)) IN (NULL);
+-- SELECT toNullable(toUInt128(321)) AS k GROUP BY k;
+-- SELECT toNullable(toUInt128(321)) AS k FROM system.one INNER JOIN (SELECT toUInt128(321) AS k) t USING k;
+-- SELECT arrayEnumerateUniq([toNullable(toUInt128(321)), toNullable(toUInt128(456)), toNullable(toUInt128(321))]);
 SELECT toNullable(toInt128(321)) IN (NULL);
 
 SELECT toNullable(toInt128(321)) AS k

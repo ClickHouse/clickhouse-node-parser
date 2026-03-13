@@ -1,3 +1,4 @@
+-- Test for empty and short strings in domain functions to catch use-of-uninitialized-value errors (MSan)
 SELECT domainRFC('');
 
 SELECT domainRFC('a');

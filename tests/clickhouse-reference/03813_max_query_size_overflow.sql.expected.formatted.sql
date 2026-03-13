@@ -1,1 +1,1 @@
-SELECT {undefined_param: UInt64};
+SELECT {undefined_param:UInt64}; -- {serverError UNKNOWN_QUERY_PARAMETER}

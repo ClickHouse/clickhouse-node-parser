@@ -43,7 +43,7 @@ FROM
     probe0 AS p
 RIGHT JOIN events0 AS e
     ON p.begin >= e.begin
-ORDER BY e.begin ASC;
+ORDER BY e.begin ASC; -- { serverError NOT_IMPLEMENTED}
 
 SELECT
     p.begin,
@@ -52,7 +52,7 @@ FROM
     probe0 AS p
 RIGHT JOIN events0 AS e
     USING (begin)
-ORDER BY e.begin ASC;
+ORDER BY e.begin ASC; -- { serverError NOT_IMPLEMENTED}
 
 SELECT
     p.begin,

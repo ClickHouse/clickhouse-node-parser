@@ -1,8 +1,10 @@
-SELECT toIntervalMillisecond(CAST(1 AS Decimal(18, 3)));
+-- https://github.com/ClickHouse/ClickHouse/issues/75451
+-- Decimal types should produce a clear error when converting to Interval, even on empty tables.
+SELECT toIntervalMillisecond(CAST(1 AS Decimal(18, 3))); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toIntervalSecond(CAST(1 AS Decimal(18, 3)));
+SELECT toIntervalSecond(CAST(1 AS Decimal(18, 3))); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT toIntervalMillisecond(CAST(1 AS Nullable(Decimal(18, 3))));
+SELECT toIntervalMillisecond(CAST(1 AS Nullable(Decimal(18, 3)))); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toIntervalMillisecond(d)
-FROM t;
+FROM t; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

@@ -10,7 +10,7 @@ FROM numbers(2);
 SELECT
     number,
     COLUMNS('ber')
-FROM numbers(2);
+FROM numbers(2); -- It works for unanchored regular expressions.
 
 SELECT
     number,
@@ -22,7 +22,7 @@ FROM numbers(2);
 
 SELECT COLUMNS('x')
 FROM numbers(10)
-WHERE number > 5;
+WHERE number > 5; -- { serverError EMPTY_LIST_OF_COLUMNS_QUERIED }
 
 SELECT *
 FROM numbers(2)
@@ -49,7 +49,7 @@ FROM (
         SELECT
             1 AS a,
             2 AS b
-    );
+    ); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT COLUMNS('a') + COLUMNS('b')
 FROM (
@@ -77,7 +77,7 @@ FROM (
         SELECT
             1 AS a,
             2 AS b
-    );
+    ); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT plus(COLUMNS('^(a|b)$'))
 FROM (

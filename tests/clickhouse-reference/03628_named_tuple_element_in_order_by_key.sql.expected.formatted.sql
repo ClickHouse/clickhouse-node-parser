@@ -14,6 +14,8 @@ SELECT *
 FROM test
 WHERE x.a = 2;
 
+-- Set `parallel_replicas_index_analysis_only_on_coordinator = 0` to prevent remote replicas from skipping index analysis in Parallel Replicas.
+-- Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
 SELECT *
 FROM test
 WHERE x.b = 'World'

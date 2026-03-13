@@ -9,6 +9,7 @@ FROM (
         WHERE x = 42
     );
 
+--- lambdas are not supported
 SELECT *
 FROM (
         SELECT *
@@ -48,6 +49,7 @@ FROM (
         WHERE x = 42
     );
 
+--- IN is supported
 SELECT *
 FROM (
         EXPLAIN indexes = 1, distributed = 1
@@ -62,6 +64,7 @@ FROM (
             )
     );
 
+--- GLOBAL IN is replaced to temporary table
 SELECT sum(y)
 FROM (
         SELECT *

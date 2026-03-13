@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     RegionID,
     uniqHLL12(WatchID) AS X

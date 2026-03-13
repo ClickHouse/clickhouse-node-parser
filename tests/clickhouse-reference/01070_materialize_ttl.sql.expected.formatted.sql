@@ -1,3 +1,4 @@
+-- TTL should not be applied
 SELECT *
 FROM ttl
 ORDER BY a ASC;

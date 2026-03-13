@@ -49,7 +49,7 @@ FROM (
         FROM numbers(2000)
         ORDER BY number > 100 ASC
         LIMIT 1, 7 WITH TIES
-    );
+    ); --TODO replace "number > 100" with "number > 100 as n"
 
 SELECT count()
 FROM (

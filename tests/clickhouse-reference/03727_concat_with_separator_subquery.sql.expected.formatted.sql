@@ -1,3 +1,4 @@
+-- { echoOn}
 SELECT concatWithSeparator(c0, 'b', 1)
 FROM (
         SELECT 'a' AS c0

@@ -1,3 +1,4 @@
+-- inside subqueries
 SELECT count(*)
 FROM (
         WITH t AS (

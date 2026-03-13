@@ -37,45 +37,46 @@ LIMIT 10;
 SELECT count()
 FROM `02918_table_str`;
 
+--
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, max_output_length = Hello)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, max_output_length = 65537)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, probability = 10)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, probability = -0.1)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, probability = 1.1)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, max_string_value_length = 65537)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, max_key_length = 65537)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, max_key_length = 10, min_key_length = 0)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, max_key_length = 10, min_key_length = 11)
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, equals(random_seed, viewExplain('EXPLAIN', 'actions = 1', (
         SELECT count(*)
         FROM numbers(10)
     )), 54321))
-LIMIT 10;
+LIMIT 10; -- { serverError BAD_ARGUMENTS }

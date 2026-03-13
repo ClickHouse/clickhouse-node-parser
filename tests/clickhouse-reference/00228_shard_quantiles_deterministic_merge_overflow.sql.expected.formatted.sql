@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT quantilesDeterministic(0.5, 0.9)(number, number)
 FROM (
         SELECT number
@@ -5,6 +6,7 @@ FROM (
         LIMIT 101
     );
 
+-- test merge does not cause overflow
 SELECT ignore(quantilesDeterministic(0.5, 0.9)(number, number))
 FROM (
         SELECT number

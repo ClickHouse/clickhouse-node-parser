@@ -1,3 +1,4 @@
+-- aliases clash without CTE
 SELECT
     avg(a) OVER () AS a,
     id

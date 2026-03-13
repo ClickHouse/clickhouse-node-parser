@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT number
 FROM numbers(11)
 ORDER BY

@@ -81,10 +81,10 @@ SELECT
     mapPopulateSeries(map(toInt64(-10), toInt64(1), 2, 1), toInt64(-5)) AS res,
     toTypeName(res);
 
-SELECT mapPopulateSeries();
+SELECT mapPopulateSeries(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT mapPopulateSeries('asdf');
+SELECT mapPopulateSeries('asdf'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     mapPopulateSeries(map('1', 1, '2', 1)) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

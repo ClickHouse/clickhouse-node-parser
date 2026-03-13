@@ -1,14 +1,14 @@
 SELECT c0
 FROM test_limit_by_validation
 GROUP BY c0
-LIMIT 1 BY c1;
+LIMIT 1 BY c1; -- { serverError NOT_AN_AGGREGATE }
 
 SELECT
     c0,
     sum(c2) AS s
 FROM test_limit_by_validation
 GROUP BY c0
-LIMIT 1 BY c1;
+LIMIT 1 BY c1; -- { serverError NOT_AN_AGGREGATE }
 
 SELECT
     c0,

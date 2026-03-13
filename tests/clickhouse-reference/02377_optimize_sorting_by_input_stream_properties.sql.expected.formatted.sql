@@ -1,3 +1,4 @@
+-- order by for MergeTree w/o sorting key
 SELECT
     a,
     b
@@ -14,6 +15,7 @@ SELECT c
 FROM optimize_sorting
 ORDER BY c ASC;
 
+-- queries with unary function in order by
 SELECT a
 FROM optimize_sorting
 ORDER BY negate(a) ASC;
@@ -22,6 +24,7 @@ SELECT a
 FROM optimize_sorting
 ORDER BY toFloat64(a) ASC;
 
+-- queries with non-unary function in order by
 SELECT
     a,
     a + 1
@@ -40,6 +43,7 @@ SELECT
 FROM optimize_sorting
 ORDER BY sipHash64(a, 'a') ASC;
 
+-- queries with aliases
 SELECT a AS a
 FROM optimize_sorting
 ORDER BY a ASC;
@@ -56,6 +60,7 @@ SELECT sipHash64(a) AS a
 FROM optimize_sorting
 ORDER BY a ASC;
 
+-- queries with filter
 SELECT a
 FROM optimize_sorting
 WHERE a > 0
@@ -81,6 +86,7 @@ FROM (
 WHERE a != 0
 ORDER BY a ASC;
 
+-- queries with non-trivial action's chain in expression
 SELECT
     a,
     z

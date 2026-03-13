@@ -38,7 +38,7 @@ SELECT
 FROM non_const_needle
 ORDER BY id ASC;
 
-SELECT multiSearchAny(materialize('Hello World'), materialize([]));
+SELECT multiSearchAny(materialize('Hello World'), materialize([])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT 0 = multiSearchAny('Hello World', CAST([], 'Array(String)'));
 
@@ -54,7 +54,7 @@ SELECT 1 = multiSearchAnyUTF8(materialize('Hello World £'), materialize(['WORLD
 
 SELECT 1 = multiSearchAnyCaseInsensitiveUTF8(materialize('Hello World £'), materialize(['WORLD']));
 
-SELECT multiSearchFirstIndex(materialize('Hello World'), materialize([]));
+SELECT multiSearchFirstIndex(materialize('Hello World'), materialize([])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT 0 = multiSearchFirstIndex('Hello World', CAST([], 'Array(String)'));
 
@@ -70,7 +70,7 @@ SELECT 2 = multiSearchFirstIndexUTF8(materialize('Hello World £'), materialize(
 
 SELECT 1 = multiSearchFirstIndexCaseInsensitiveUTF8(materialize('Hello World £'), materialize(['WORLD']));
 
-SELECT multiSearchFirstPosition(materialize('Hello World'), materialize([]));
+SELECT multiSearchFirstPosition(materialize('Hello World'), materialize([])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT 0 = multiSearchFirstPosition('Hello World', CAST([], 'Array(String)'));
 

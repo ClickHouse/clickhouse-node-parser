@@ -6,13 +6,13 @@ FROM test
 LIMIT 1;
 
 SELECT variantType()
-FROM test;
+FROM test; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT variantType(v, v)
-FROM test;
+FROM test; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT variantType(v.String)
-FROM test;
+FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT variantType(v::Variant(UInt64, String, Array(UInt64), Date)) AS type
 FROM test;

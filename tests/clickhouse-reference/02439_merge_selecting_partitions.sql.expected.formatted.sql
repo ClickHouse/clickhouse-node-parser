@@ -1,6 +1,7 @@
 SELECT sleepEachRow(3) AS higher_probability_of_reproducing_the_issue
 FORMAT Null;
 
+-- it should not list unneeded partitions where we cannot merge anything
 SELECT *
 FROM `system`.zookeeper_log
 WHERE like(path, concat('/test/02439/', getMacro('shard'), '/', currentDatabase(), '/block_numbers/%'))
@@ -8,6 +9,7 @@ WHERE like(path, concat('/test/02439/', getMacro('shard'), '/', currentDatabase(
     AND notLike(path, '%/block_numbers/1')
     AND notLike(path, '%/block_numbers/123')
     AND event_time >= now() - toIntervalMinute(1)
+    -- avoid race with tests like 02311_system_zookeeper_insert
     AND ((isNull(query_id)
     OR query_id = ''
     OR query_id IN (

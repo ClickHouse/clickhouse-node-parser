@@ -5,7 +5,7 @@ FROM
         FROM numbers(10)
     ) AS js1
 INNER JOIN testJoinTable
-    USING (number);
+    USING (number); -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM

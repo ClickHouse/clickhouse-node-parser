@@ -177,6 +177,8 @@ SELECT *
 FROM v_numbers
 SETTINGS additional_table_filters = map('system.numbers', 'number != 3', 'v_numbers', 'x != 3');
 
+-- additional filter for inner tables for Materialized View does not work because it does not create internal interpreter
+-- probably it is expected
 SELECT *
 FROM mv_table;
 
@@ -192,6 +194,8 @@ SELECT *
 FROM mv_table
 SETTINGS additional_table_filters = map('table_2', 'x != 5');
 
+-- additional filter for inner tables for Merge does not work because it does not create internal interpreter
+-- probably it is expected
 SELECT *
 FROM m_table
 ORDER BY x ASC;
@@ -236,6 +240,7 @@ FROM m_table
 ORDER BY x ASC
 SETTINGS additional_table_filters = map('m_table', 'x != 4', 'table_1', 'x != 2', 'table_2', 'x != 5');
 
+-- additional_result_filter
 SELECT *
 FROM table_1
 SETTINGS additional_result_filter = 'x != 2';

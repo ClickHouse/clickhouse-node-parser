@@ -1,3 +1,4 @@
+-- { echo }
 SELECT sum(y)
 FROM (
         SELECT *
@@ -106,6 +107,7 @@ FROM (
             )
     );
 
+-- SKIP: current_database = currentDatabase()
 SELECT normalizeQuery(replace(query, currentDatabase(), 'default'))
 FROM `system`.query_log
 WHERE event_date >= yesterday()

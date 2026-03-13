@@ -1,11 +1,14 @@
+-- Should correctly read 1st granule in 2nd part and return no rows
 SELECT id
 FROM tab1 FINAL
 WHERE v = 0;
 
+-- Should correctly read last granule in 2nd part and return no rows
 SELECT id
 FROM tab1 FINAL
 WHERE v = 9;
 
+-- All these queries will return 0 rows by correctly reading extra granule from 2nd part
 SELECT id
 FROM tab1 FINAL
 WHERE v = 1;
@@ -38,6 +41,7 @@ SELECT id
 FROM tab1 FINAL
 WHERE v = 8;
 
+-- Rows with id = 0 and id = 9 should be printed
 SELECT id
 FROM tab1 FINAL
 WHERE v = 8888;
@@ -46,6 +50,7 @@ SELECT id
 FROM tab1 FINAL
 WHERE v = 9999;
 
+-- No rows should be selected by below queries as 'v' does not have value < 10000 due to updates in 2nd part
 SELECT
     id1,
     id2,
@@ -58,8 +63,9 @@ SELECT
     value
 FROM tab3 FINAL
 WHERE value = 1
-SETTINGS max_rows_to_read = 1;
+SETTINGS max_rows_to_read = 1; -- 1,1
 
+-- Next statements return 0 rows. Read 1 range each from 2 parts
 SELECT
     key,
     value

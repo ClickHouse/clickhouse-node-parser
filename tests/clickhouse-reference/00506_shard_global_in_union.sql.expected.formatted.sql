@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT X
 FROM (
         SELECT *

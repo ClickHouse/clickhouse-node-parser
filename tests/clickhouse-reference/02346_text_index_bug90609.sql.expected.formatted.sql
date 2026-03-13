@@ -14,4 +14,4 @@ PREWHERE (
         SELECT 1
         FROM tab
         PREWHERE hasAllTokens(text, ['Alick'])
-    ) = '1';
+    ) = '1'; -- { serverError INCORRECT_RESULT_OF_SCALAR_SUBQUERY }

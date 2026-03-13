@@ -1,3 +1,4 @@
+-- { echo }
 SELECT exists((
         SELECT 1
     ));

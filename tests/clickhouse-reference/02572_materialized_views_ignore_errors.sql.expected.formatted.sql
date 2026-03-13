@@ -2,6 +2,7 @@ SELECT *
 FROM data_02572
 ORDER BY key ASC;
 
+-- lower(status) to pass through clickhouse-test "exception" check
 SELECT
     lower(status::String),
     errorCodeToName(exception_code)

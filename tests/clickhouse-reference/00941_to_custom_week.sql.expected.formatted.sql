@@ -1,3 +1,4 @@
+-- week mode [0,7],  week test case. refer to the mysql test case
 SELECT
     toWeek(toDate('1998-01-01')),
     toWeek(toDate('1997-01-01')),
@@ -166,6 +167,7 @@ SELECT
     toYearWeek(toDate('2000-12-31'), 6),
     toYearWeek(toDate('2000-12-31'), 7);
 
+-- week mode 8,9	
 SELECT
     toDate('2016-12-21') + number AS d,
     toWeek(d, 8) AS week8,

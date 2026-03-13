@@ -1,3 +1,4 @@
+-- FIXME Cannot convert column `1` because it is non constant in source stream but must be constant in result
 SELECT *
 FROM (
         SELECT
@@ -36,9 +37,9 @@ SELECT
 FROM merge('test_01155_atomic', '')
 ORDER BY
     _table ASC,
-    s ASC;
+    s ASC; -- { serverError UNKNOWN_DATABASE }
 
-SELECT dictGet('test_01155_ordinary.dict', 'x', 'after moving tables');
+SELECT dictGet('test_01155_ordinary.dict', 'x', 'after moving tables'); -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM (

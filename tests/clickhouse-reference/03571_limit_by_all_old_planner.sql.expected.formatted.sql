@@ -1,3 +1,5 @@
+-- Test 1: Test that LIMIT BY ALL throws an exception when using the old planner
+-- This tests the changes in TreeWriter.cpp
 SELECT
     id,
     category,
@@ -5,8 +7,9 @@ SELECT
     name
 FROM test_limit_by_all_old_planner
 LIMIT 1 BY ALL
-SETTINGS allow_experimental_analyzer = 0;
+SETTINGS allow_experimental_analyzer = 0; -- {serverError NOT_IMPLEMENTED}
 
+-- Test 2: Basic LIMIT BY usage.
 SELECT
     id,
     category,
@@ -18,6 +21,7 @@ ORDER BY
     value ASC
 LIMIT 1 BY id, category, value;
 
+-- Test 3: LIMIT BY with computed column - make deterministic by ordering by value
 SELECT
     id,
     category,
@@ -29,6 +33,7 @@ ORDER BY
     value ASC
 LIMIT 2 BY id, category, combined;
 
+-- Test 4: LIMIT BY with window function - make deterministic
 SELECT
     id,
     category,
@@ -43,6 +48,7 @@ ORDER BY
 LIMIT 1 BY id, category, value, rn
 LIMIT 3;
 
+-- Test 5: LIMIT BY with WHERE clause - make deterministic
 SELECT
     id,
     category,
@@ -55,6 +61,7 @@ ORDER BY
     value ASC
 LIMIT 1 BY id, category, value;
 
+-- Test 6: LIMIT BY with unique values
 SELECT id
 FROM (
         SELECT DISTINCT
@@ -67,6 +74,7 @@ ORDER BY
     category ASC
 LIMIT 1 BY id;
 
+-- Test 7: LIMIT BY with DISTINCT clause
 SELECT DISTINCT
     id,
     category
@@ -77,6 +85,7 @@ ORDER BY
 LIMIT 1 BY id, category
 LIMIT 2;
 
+-- Test 8: Negative LIMIT BY should throw an exception
 SELECT
     id,
     category,
@@ -86,8 +95,9 @@ ORDER BY
     id ASC,
     category ASC,
     value ASC
-LIMIT -1 BY id;
+LIMIT -1 BY id; -- { serverError NOT_IMPLEMENTED }
 
+-- Test 9: LIMIT BY with OFFSET
 SELECT
     id,
     category
@@ -98,6 +108,7 @@ ORDER BY
     value ASC
 LIMIT 1, 2 BY id, category;
 
+-- Test 10: LIMIT BY with DESC ORDER BY
 SELECT
     id,
     category
@@ -106,6 +117,7 @@ ORDER BY value DESC
 LIMIT 1 BY id, category
 LIMIT 2;
 
+-- Test 11: 0 LIMIT BY - Should give no result
 SELECT
     id,
     category,
@@ -117,6 +129,7 @@ ORDER BY
     value ASC
 LIMIT 0 BY id, category, value;
 
+-- Test 12: Misc
 SELECT
     id,
     category,

@@ -20,6 +20,7 @@ SELECT geohashEncode(-5.60302734375, materialize(42.593994140625), 0);
 
 SELECT geohashEncode(materialize(-5.60302734375), 42.593994140625, 0);
 
+-- here results are strings, so reference may contain values to match for equality.
 SELECT
     1 AS p,
     geohashEncode(longitude, latitude, p) AS actual,

@@ -20,7 +20,7 @@ FROM (
             number,
             number * 2
         FROM numbers(2)
-    ) AS x (a);
+    ) AS x (a); -- { serverError BAD_ARGUMENTS }
 
 SELECT c
 FROM (
@@ -28,7 +28,7 @@ FROM (
             number,
             number * 2
         FROM numbers(2)
-    ) AS x (a, b);
+    ) AS x (a, b); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT a
 FROM test_view_03280;
@@ -37,4 +37,4 @@ SELECT b
 FROM test_view_03280;
 
 SELECT c
-FROM test_view_03280;
+FROM test_view_03280; -- { serverError UNKNOWN_IDENTIFIER }

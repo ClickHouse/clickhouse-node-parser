@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT CounterID
 FROM
     test.visits

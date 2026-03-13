@@ -1,5 +1,7 @@
 SELECT '-- Uppercase tests';
 
+-- Not supported as it is translated to FixedString without arguments
+-- SELECT 'Binary' AS mysql_type, CAST('' AS BINARY) AS result, toTypeName(result) AS native_type;
 SELECT
     'Binary(N)' AS mysql_type,
     CAST('foo' AS BINARY(3)) AS result,
@@ -60,6 +62,10 @@ SELECT
     CAST(52 AS UNSIGNED) AS result,
     toTypeName(result) AS native_type;
 
+-- Could be added as an alias, but SIGNED INTEGER in CAST context means UInt64,
+-- while INTEGER SIGNED as a column definition means UInt32.
+-- SELECT 'Signed integer' AS mysql_type, CAST(51 AS SIGNED INTEGER) AS result, toTypeName(result) AS native_type;
+-- SELECT 'Unsigned integer' AS mysql_type, CAST(53 AS UNSIGNED INTEGER) AS result, toTypeName(result) AS native_type;
 SELECT
     'Year' AS mysql_type,
     CAST(2007 AS YEAR) AS result,

@@ -19,8 +19,8 @@ WHERE _partition_value.3 = 4
 SETTINGS max_rows_to_read = 1;
 
 SELECT _partition_value
-FROM tbl2;
+FROM tbl2; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT _partition_value
 FROM tbl2
-GROUP BY 1;
+GROUP BY 1; -- { serverError UNKNOWN_IDENTIFIER }

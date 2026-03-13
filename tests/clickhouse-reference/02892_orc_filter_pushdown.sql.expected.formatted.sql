@@ -1,3 +1,4 @@
+-- Go over all types individually
 SELECT
     count(),
     sum(number)
@@ -273,6 +274,7 @@ SELECT
 FROM file('02892.orc')
 WHERE (and(greaterOrEquals(d128, '-0.00000000000011'::Decimal128(20)), lessOrEquals(d128, 0.00000000000006::Decimal128(20))));
 
+-- Some random other cases.
 SELECT
     count(),
     sum(number)
@@ -502,7 +504,7 @@ SELECT
     count(),
     sum(number)
 FROM file('02892.orc')
-WHERE indexHint(positive_or_null < 50);
+WHERE indexHint(positive_or_null < 50); -- quirk with infinities
 
 SELECT
     count(),
@@ -554,7 +556,7 @@ SELECT
     count(),
     sum(number)
 FROM file('02892.orc')
-WHERE indexHint(string_or_null == '');
+WHERE indexHint(string_or_null == ''); -- quirk with infinities
 
 SELECT
     count(),

@@ -43,7 +43,7 @@ INNER JOIN t2
 
 SELECT
     tuple(1, 'a') AS a1,
-    NOT(tuple(1, 'a') AS a1);
+    NOT(tuple(1, 'a') AS a1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     1,

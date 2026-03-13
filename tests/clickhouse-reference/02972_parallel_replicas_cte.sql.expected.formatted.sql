@@ -1,3 +1,4 @@
+-- Sanitizer
 SELECT count()
 FROM
     pr_2
@@ -9,6 +10,7 @@ SETTINGS
     cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
     max_parallel_replicas = 3;
 
+-- Parallel replicas detection should work inside subqueries
 SELECT *
 FROM (
         WITH filtered_groups AS (
@@ -29,6 +31,7 @@ SETTINGS
     cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
     max_parallel_replicas = 3;
 
+-- Subquery + subquery
 SELECT count()
 FROM (
         SELECT c + 1

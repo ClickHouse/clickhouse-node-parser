@@ -8,7 +8,7 @@ SELECT count(*)
 FROM database_for_dict.dict3;
 
 SELECT count(*)
-FROM database_for_dict.dict4;
+FROM database_for_dict.dict4; -- {serverError UNKNOWN_TABLE}
 
 SELECT name
 FROM `system`.tables

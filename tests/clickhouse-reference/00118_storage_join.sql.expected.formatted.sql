@@ -109,4 +109,4 @@ FROM
 LEFT JOIN t2
     ON js1.k == t2.k
     OR js1.s == t2.k
-ORDER BY k ASC;
+ORDER BY k ASC; -- { serverError NOT_IMPLEMENTED, INCOMPATIBLE_TYPE_OF_JOIN }

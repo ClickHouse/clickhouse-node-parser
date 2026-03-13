@@ -1,3 +1,4 @@
+-- Compare equal and unequal values of different precicion/scale
 SELECT
     dt6,
     dt3,

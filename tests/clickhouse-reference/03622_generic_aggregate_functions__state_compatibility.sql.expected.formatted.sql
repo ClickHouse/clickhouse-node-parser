@@ -14,6 +14,7 @@ SELECT hex(groupUniqArrayState(['str']));
 
 SELECT hex(groupArrayIntersectState(['str']));
 
+--- Check different data types
 SELECT hex(maxDistinctState(tuple('str', true)));
 
 SELECT hex(maxDistinctState(tuple('str', 42::Int8)));

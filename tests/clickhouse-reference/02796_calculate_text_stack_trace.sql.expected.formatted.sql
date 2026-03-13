@@ -1,6 +1,6 @@
 SELECT
     'Hello',
-    throwIf(1);
+    throwIf(1); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 
 SELECT length(stack_trace) > 1000
 FROM `system`.query_log
@@ -28,7 +28,7 @@ LIMIT 10;
 
 SELECT
     'World',
-    throwIf(1);
+    throwIf(1); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 
 SELECT length(stack_trace)
 FROM `system`.query_log

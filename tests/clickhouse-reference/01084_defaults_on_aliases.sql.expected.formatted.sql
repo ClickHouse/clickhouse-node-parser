@@ -10,7 +10,7 @@ FROM table_with_defaults_on_aliases
 WHERE col1 = 1;
 
 SELECT col3
-FROM table_with_defaults_on_aliases;
+FROM table_with_defaults_on_aliases; -- important to check without WHERE
 
 SELECT *
 FROM table_with_defaults_on_aliases

@@ -1,3 +1,4 @@
+-- { echo }
 SELECT
     avgWeighted(number, number) AS t,
     toTypeName(t)

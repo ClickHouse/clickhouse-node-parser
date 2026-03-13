@@ -20,4 +20,4 @@ SELECT 1000000 IN (
 
 SELECT 1 IN (
         SELECT file(materialize('a'))
-    );
+    ); -- { serverError FILE_DOESNT_EXIST }

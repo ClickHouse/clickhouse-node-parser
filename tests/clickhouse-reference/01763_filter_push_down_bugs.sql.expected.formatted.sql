@@ -104,6 +104,7 @@ INNER JOIN t AS t2
     ON t1.a = t2.a
 WHERE t1.a;
 
+-- expected to get row (1, 3, 1, 4) from JOIN and empty result from the query
 SELECT *
 FROM
     (

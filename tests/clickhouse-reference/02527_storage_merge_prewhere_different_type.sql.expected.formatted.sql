@@ -1,7 +1,7 @@
 SELECT Val
 FROM merge1
 PREWHERE Val = 65536
-    OR Val = 2;
+    OR Val = 2; -- { serverError ILLEGAL_PREWHERE }
 
 SELECT Val
 FROM merge2

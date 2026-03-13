@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     PP.Key1 AS `ym:s:paramsLevel1`,
     sum(arrayAll(x_1 -> x_1 = '', ParsedParams.Key2)) AS `ym:s:visits`

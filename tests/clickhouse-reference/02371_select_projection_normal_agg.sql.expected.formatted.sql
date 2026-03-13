@@ -10,7 +10,9 @@ FROM
         FROM video_log
         WHERE (toDate(hour) = '2022-07-22')
             AND (device_id = '100')
-        GROUP BY hour
+        GROUP BY
+            --(device_id = '100') Make sure it's not good and doesn't go into prewhere.
+            hour
     )
 LEFT JOIN (
         SELECT

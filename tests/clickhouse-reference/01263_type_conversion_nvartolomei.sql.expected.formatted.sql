@@ -9,4 +9,4 @@ FROM (
         FROM d
         ORDER BY v ASC
     )
-FORMAT Null;
+FORMAT Null; -- { serverError UNKNOWN_ELEMENT_OF_ENUM}

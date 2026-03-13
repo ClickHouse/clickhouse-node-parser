@@ -1,26 +1,27 @@
-SELECT extractAllGroupsHorizontal();
+-- error cases
+SELECT extractAllGroupsHorizontal(); --{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH} not enough arguments
 
-SELECT extractAllGroupsHorizontal('hello');
+SELECT extractAllGroupsHorizontal('hello'); --{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH} not enough arguments
 
-SELECT extractAllGroupsHorizontal('hello', 123);
+SELECT extractAllGroupsHorizontal('hello', 123); --{serverError ILLEGAL_TYPE_OF_ARGUMENT} invalid argument type
 
-SELECT extractAllGroupsHorizontal(123, 'world');
+SELECT extractAllGroupsHorizontal(123, 'world'); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}  invalid argument type
 
-SELECT extractAllGroupsHorizontal('hello world', '(((');
+SELECT extractAllGroupsHorizontal('hello world', '((('); --{serverError CANNOT_COMPILE_REGEXP}  invalid re
 
-SELECT extractAllGroupsHorizontal('hello world', materialize('\\w+'));
+SELECT extractAllGroupsHorizontal('hello world', materialize('\\w+')); --{serverError ILLEGAL_COLUMN} non-cons needle
 
-SELECT extractAllGroupsHorizontal('hello world', '\\w+');
-
-SELECT extractAllGroupsHorizontal('hello world', '(\\w+)')
-SETTINGS regexp_max_matches_per_row = 0;
+SELECT extractAllGroupsHorizontal('hello world', '\\w+'); -- { serverError BAD_ARGUMENTS } 0 groups
 
 SELECT extractAllGroupsHorizontal('hello world', '(\\w+)')
-SETTINGS regexp_max_matches_per_row = 1;
+SETTINGS regexp_max_matches_per_row = 0; -- { serverError TOO_LARGE_ARRAY_SIZE } to many groups matched per row
+
+SELECT extractAllGroupsHorizontal('hello world', '(\\w+)')
+SETTINGS regexp_max_matches_per_row = 1; -- { serverError TOO_LARGE_ARRAY_SIZE } to many groups matched per row
 
 SELECT extractAllGroupsHorizontal('hello world', '(\\w+)')
 SETTINGS regexp_max_matches_per_row = 1000000
-FORMAT Null;
+FORMAT Null; -- users now can set limit bigger than previous 1000 matches per row
 
 SELECT extractAllGroupsHorizontal('hello world', '(\\w+)');
 

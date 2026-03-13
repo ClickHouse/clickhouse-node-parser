@@ -1,3 +1,4 @@
+-- Checks that the random seed is different for multiple states of aggregation:
 SELECT uniq(x) > 50
 FROM (
         SELECT

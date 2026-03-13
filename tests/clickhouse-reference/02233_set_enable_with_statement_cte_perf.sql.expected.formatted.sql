@@ -1,3 +1,4 @@
+-- test_enable_global_with_statement_performance_2
 SELECT count()
 FROM ev
 WHERE a IN (

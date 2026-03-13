@@ -1,3 +1,4 @@
+-- Check that max length works
 SELECT max(length(mapKeys(a)))
 FROM (
         SELECT a

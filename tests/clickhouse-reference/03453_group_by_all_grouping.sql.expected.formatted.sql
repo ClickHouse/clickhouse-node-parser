@@ -1,3 +1,4 @@
+-- Basic functionality with GROUPING and GROUP BY ALL WITH ROLLUP
 SELECT
     l.number,
     sum(r.number),
@@ -9,6 +10,7 @@ INNER JOIN numbers(2) AS r
 GROUP BY ALL
 WITH ROLLUP;
 
+-- Multiple GROUPING functions
 SELECT
     l.number,
     r.number % 3 AS mod3,
@@ -23,6 +25,7 @@ INNER JOIN numbers(2) AS r
 GROUP BY ALL
 WITH ROLLUP;
 
+-- GROUPING with CUBE
 SELECT
     l.number,
     r.number % 3 AS mod3,
@@ -36,6 +39,7 @@ INNER JOIN numbers(2) AS r
 GROUP BY ALL
 WITH CUBE;
 
+-- Mix of regular columns and expressions with GROUPING
 SELECT
     l.number,
     l.number % 2 AS parity,
@@ -50,6 +54,7 @@ INNER JOIN numbers(2) AS r
 GROUP BY ALL
 WITH ROLLUP;
 
+-- Verify error is still thrown when GROUPING is explicitly in GROUP BY
 SELECT
     l.number,
     sum(r.number),
@@ -61,4 +66,4 @@ INNER JOIN numbers(2) AS r
 GROUP BY
     l.number,
     g
-WITH ROLLUP;
+WITH ROLLUP; -- { serverError ILLEGAL_AGGREGATION }

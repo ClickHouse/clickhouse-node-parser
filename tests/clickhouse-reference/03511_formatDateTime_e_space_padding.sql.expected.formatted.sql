@@ -1,6 +1,6 @@
 SELECT
     formatDateTime(toDate('2024-05-07'), '%e/%m/%Y') AS _date,
-    length(_date);
+    length(_date); -- default behavior
 
 SELECT
     formatDateTime(toDate('2024-05-07'), '%e/%m/%Y') AS _date,

@@ -1,5 +1,5 @@
 SELECT *
-FROM v;
+FROM v; -- was failing long time ago
 
 SELECT *
-FROM merge('', 'f');
+FROM merge('', 'f'); -- was failing long time ago

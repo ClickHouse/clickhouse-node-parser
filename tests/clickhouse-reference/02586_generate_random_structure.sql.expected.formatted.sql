@@ -8,15 +8,15 @@ SELECT *
 FROM generateRandom(generateRandomStructure(5, 42), 42)
 LIMIT 1;
 
-SELECT generateRandomStructure(5, 42, 42);
+SELECT generateRandomStructure(5, 42, 42); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
-SELECT generateRandomStructure('5');
+SELECT generateRandomStructure('5'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT generateRandomStructure(5, '42');
+SELECT generateRandomStructure(5, '42'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT generateRandomStructure(materialize(5), 42);
+SELECT generateRandomStructure(materialize(5), 42); -- {serverError ILLEGAL_COLUMN}
 
-SELECT generateRandomStructure(5, materialize(42));
+SELECT generateRandomStructure(5, materialize(42)); -- {serverError ILLEGAL_COLUMN}
 
 SELECT *
 FROM generateRandom(10000000)
@@ -32,6 +32,6 @@ LIMIT 1;
 
 SELECT *
 FROM generateRandom(10000000, 2, 2, 2)
-LIMIT 1;
+LIMIT 1; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT generateRandomStructure(5, 4);

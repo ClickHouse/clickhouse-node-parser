@@ -15,6 +15,7 @@ WHERE region = 'europe'
     AND user_id = 101
 ORDER BY `ALL` ASC;
 
+-- region_proj is enough to filter part
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -32,6 +33,7 @@ WHERE region = 'zzz'
     AND user_id = 101
 ORDER BY `ALL` ASC;
 
+-- narrowing filter via user_id_proj
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -49,6 +51,7 @@ WHERE region = 'us_west'
     AND user_id = 106
 ORDER BY `ALL` ASC;
 
+-- it's not possible to use different projection indexes with or filter
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -66,6 +69,7 @@ WHERE region = 'asia'
     OR user_id = 101
 ORDER BY `ALL` ASC;
 
+-- Fuzzer
 SELECT
     *,
     _part_offset = ((isNullable(1) = toUInt128(6))),

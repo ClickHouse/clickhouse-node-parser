@@ -1,7 +1,7 @@
 SELECT *
 FROM `02183_dictionary_test_table`;
 
-SELECT dictGet('02183_flat_dictionary', 'value', 0);
+SELECT dictGet('02183_flat_dictionary', 'value', 0); -- {serverError BAD_ARGUMENTS}
 
 SELECT dictHas('02183_flat_dictionary', 0);
 

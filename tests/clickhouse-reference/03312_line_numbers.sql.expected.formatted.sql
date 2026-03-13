@@ -1,6 +1,8 @@
+-- Tags: no-fasttest
+-- ^ due to the usage of system logs
 SELECT
     'This is the first query, and it is located on line 4',
-    1,
+    1, -- Just random stuff to ensure proper counting of lines.
     2,
     3;
 

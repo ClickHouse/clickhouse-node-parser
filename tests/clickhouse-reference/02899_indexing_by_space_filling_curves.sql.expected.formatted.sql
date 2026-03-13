@@ -5,6 +5,7 @@ WHERE x >= 10
     AND y >= 20
     AND y <= 30;
 
+-- Various other conditions
 SELECT count()
 FROM test
 WHERE x = 10

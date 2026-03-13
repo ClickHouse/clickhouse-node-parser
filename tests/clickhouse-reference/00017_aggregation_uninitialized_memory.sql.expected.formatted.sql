@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT DISTINCT
     (URLHierarchy(URL)[1]) AS q,
     'x' AS w

@@ -25,6 +25,7 @@ SETTINGS
     force_data_skipping_indices = 'value_1_idx, value_2_idx',
     enable_analyzer = 1;
 
+-- Distributed queries currently return one row with count()==0
 SELECT
     count('9223372036854775806'),
     7

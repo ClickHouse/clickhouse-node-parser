@@ -99,8 +99,9 @@ FROM test_table
 WHERE concat(concat(concat(toString(id), '___\0_______\0____'), toString(id)), concat(toString(id), NULL), toString(id));
 
 SELECT arrayMap(x -> splitByChar(toString(id), arrayMap(x -> toString(1), [NULL])), [NULL])
-FROM test_table;
+FROM test_table; -- { serverError ILLEGAL_COLUMN };
 
+-- { echoOff }
 SELECT
     groupArray(number) AS counts,
     arraySum(arrayMap(x -> (x + 1), counts)) AS hello,

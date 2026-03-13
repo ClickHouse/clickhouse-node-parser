@@ -1,8 +1,8 @@
 SELECT vec.0
-FROM qbit;
+FROM qbit; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 SELECT vec.17
-FROM qbit;
+FROM qbit; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 SELECT bin(vec.1)
 FROM qbit;

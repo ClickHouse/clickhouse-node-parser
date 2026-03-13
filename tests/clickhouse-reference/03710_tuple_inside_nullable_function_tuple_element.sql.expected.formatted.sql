@@ -14,7 +14,7 @@ SELECT [CAST(([1, 2, 3], 'a') AS Nullable(Tuple(Array(Int32), String))), CAST(NU
 
 SELECT toTypeName([CAST(([1, 2, 3], 'a') AS Nullable(Tuple(Array(Int32), String))), CAST(NULL AS Nullable(Tuple(Array(Int32), String))), NULL].1);
 
-SELECT CAST(NULL AS Nullable(Tuple(Int8, String))).3;
+SELECT CAST(NULL AS Nullable(Tuple(Int8, String))).3; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 SELECT tupleElement(CAST([(1, 7), (3, 4), (2, 8)] AS Array(Nullable(Tuple(x Int8, y Int8)))), 'y');
 
@@ -48,7 +48,7 @@ SELECT [[CAST((1, 'a') AS Nullable(Tuple(Int32, String))), NULL], [NULL, CAST((2
 
 SELECT toTypeName([[CAST((1, 'a') AS Nullable(Tuple(Int32, String))), NULL], [NULL, CAST((2, 'b') AS Nullable(Tuple(Int32, String)))]].1);
 
-SELECT CAST(tuple() AS Nullable(Tuple())).1;
+SELECT CAST(tuple() AS Nullable(Tuple())).1; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 SELECT [CAST(NULL AS Nullable(Tuple(Int32, String))), NULL, NULL].1;
 

@@ -3,6 +3,7 @@ SELECT
     arrayMap(a -> (a + 1), [1, 2, 3]),
     a + 10 AS c;
 
+-- https://github.com/ClickHouse/ClickHouse/issues/5046
 SELECT sum(c1) AS v
 FROM (
         SELECT

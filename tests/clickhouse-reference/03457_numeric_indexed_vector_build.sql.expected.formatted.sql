@@ -26,10 +26,10 @@ SELECT numericIndexedVectorCardinality(groupNumericIndexedVectorState('BSI', 16,
 FROM uin_value_details;
 
 SELECT numericIndexedVectorCardinality(groupNumericIndexedVectorState('BSI', 32, 14)(uin, value))
-FROM uin_value_details;
+FROM uin_value_details; -- { serverError BAD_ARGUMENTS }
 
 SELECT numericIndexedVectorCardinality(groupNumericIndexedVectorState('RawSum', 32, 14)(uin, value))
-FROM uin_value_details;
+FROM uin_value_details; -- { serverError BAD_ARGUMENTS }
 
 SELECT numericIndexedVectorCardinality(groupNumericIndexedVectorState('BSI', 64, 14)(uin, value))
-FROM uin_value_details;
+FROM uin_value_details; -- { serverError BAD_ARGUMENTS }

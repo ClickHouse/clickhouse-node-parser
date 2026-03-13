@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT varSamp(ResolutionWidth)
 FROM (
         SELECT ResolutionWidth

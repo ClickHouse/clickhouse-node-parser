@@ -411,13 +411,13 @@ SELECT
 FROM test;
 
 SELECT d + 1
-FROM test;
+FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT length(d)
-FROM test;
+FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT d[1]
-FROM test;
+FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT sipHash64(d)
 FROM test;

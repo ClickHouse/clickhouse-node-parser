@@ -1,3 +1,4 @@
+-- Tags: stateful, replica
 SELECT count() > 0
 FROM (
         SELECT ParsedParams.Key1 AS p

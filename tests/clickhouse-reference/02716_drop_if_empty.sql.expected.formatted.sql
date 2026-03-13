@@ -1,6 +1,6 @@
 SELECT count()
 FROM `system`.tables
-WHERE database = {CLICKHOUSE_DATABASE_1: String};
+WHERE database = {CLICKHOUSE_DATABASE_1:String};
 
 SELECT count()
 FROM `system`.tables

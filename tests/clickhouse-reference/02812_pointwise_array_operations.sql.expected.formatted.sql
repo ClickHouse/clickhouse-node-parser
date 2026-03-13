@@ -22,12 +22,12 @@ SELECT values - [1,2,3]
 FROM my_table
 WHERE arrayExists(x -> x > 5, values);
 
-SELECT ([12,13] % [5,6]);
+SELECT ([12,13] % [5,6]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT ([2,3,4] - [1,-2,10,29]);
+SELECT ([2,3,4] - [1,-2,10,29]); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }
 
 SELECT
     x,
     y,
     x + y
-FROM a;
+FROM a; -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }

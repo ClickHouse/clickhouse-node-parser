@@ -1,3 +1,4 @@
+/** Results of these two queries must match: */
 SELECT uniq(number)
 FROM (
         SELECT *

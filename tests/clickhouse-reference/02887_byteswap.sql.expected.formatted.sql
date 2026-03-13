@@ -60,30 +60,33 @@ SELECT byteSwap(340282366920938463463374607431768211456::UInt256);
 
 SELECT byteSwap(-170141183460469231731687303715884105729::Int256);
 
+-- Booleans are interpreted as UInt8
 SELECT byteSwap(false);
 
 SELECT byteSwap(true);
 
-SELECT byteSwap();
+-- Number of arguments should equal 1
+SELECT byteSwap(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT byteSwap(128, 129);
+SELECT byteSwap(128, 129); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT byteSwap('abc');
+-- Input should be integral
+SELECT byteSwap('abc'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT byteSwap(toFixedString('abc', 3));
+SELECT byteSwap(toFixedString('abc', 3)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT byteSwap(toDate('2019-01-01'));
+SELECT byteSwap(toDate('2019-01-01')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT byteSwap(toDate32('2019-01-01'));
+SELECT byteSwap(toDate32('2019-01-01')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT byteSwap(toDateTime32(1546300800));
+SELECT byteSwap(toDateTime32(1546300800)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT byteSwap(toDateTime64(1546300800, 3));
+SELECT byteSwap(toDateTime64(1546300800, 3)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT byteSwap(generateUUIDv4());
+SELECT byteSwap(generateUUIDv4()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT byteSwap(toDecimal32(2, 4));
+SELECT byteSwap(toDecimal32(2, 4)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT byteSwap(toFloat32(123.456));
+SELECT byteSwap(toFloat32(123.456)); -- { serverError NOT_IMPLEMENTED }
 
-SELECT byteSwap(toFloat64(123.456));
+SELECT byteSwap(toFloat64(123.456)); -- { serverError NOT_IMPLEMENTED }

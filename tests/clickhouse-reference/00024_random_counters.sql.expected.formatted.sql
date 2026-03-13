@@ -1,3 +1,5 @@
+-- Tags: stateful, no-parallel, no-msan
+-- no-parallel: Heavy
 SELECT
     uniq(UserID),
     sum(Sign)

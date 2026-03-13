@@ -1,3 +1,4 @@
+-- { echo }
 SELECT
     CAST('33.3', 'Decimal64(1)') IN (CAST('33.33', 'Decimal64(2)')),
     CAST('33.3', 'Decimal64(1)') IN (CAST('33.30', 'Decimal64(2)'));

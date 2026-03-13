@@ -1,3 +1,4 @@
+-- primary key analysis was wrong in previous versions and did not take the timezone argument into account, so empty result was given.
 SELECT
     toDate(time, 'UTC') AS dt,
     min(toDateTime(time, 'UTC')),

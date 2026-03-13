@@ -1,3 +1,4 @@
+--- EXPLAIN SYNTAX (old AST based optimization)
 SELECT
     countIf(like(`explain`, '%COMMA%')
     OR like(`explain`, '%CROSS%')),
@@ -225,6 +226,8 @@ FROM (
         CROSS JOIN t3
     );
 
+-- {echoOn}
+--- EXPLAIN QUERY TREE
 SELECT
     countIf(like(`explain`, '%COMMA%')
     OR like(`explain`, '%CROSS%')),

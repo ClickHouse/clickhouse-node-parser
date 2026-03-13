@@ -224,7 +224,7 @@ FROM remote('127.{1,2}', view((
     )), cityHash64(k1, k2))
 GROUP BY
     k1,
-    k2;
+    k2; -- optimization applied
 
 SELECT
     k1,
@@ -236,7 +236,7 @@ FROM remote('127.{1,2}', view((
             2 AS k2,
             3 AS v
     )), cityHash64(k1, k2))
-GROUP BY k1;
+GROUP BY k1; -- optimization does not applied
 
 SELECT DISTINCT
     k1,
@@ -246,7 +246,7 @@ FROM remote('127.{1,2}', view((
             1 AS k1,
             2 AS k2,
             3 AS v
-    )), cityHash64(k1, k2));
+    )), cityHash64(k1, k2)); -- optimization applied
 
 SELECT DISTINCT ON (k1) k2
 FROM remote('127.{1,2}', view((
@@ -254,7 +254,7 @@ FROM remote('127.{1,2}', view((
             1 AS k1,
             2 AS k2,
             3 AS v
-    )), cityHash64(k1, k2));
+    )), cityHash64(k1, k2)); -- optimization does not applied
 
 SELECT
     key,

@@ -1,3 +1,4 @@
+-- { echo }
 SELECT
     multiIf(number = 0, (
         SELECT 0

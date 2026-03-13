@@ -12,11 +12,11 @@ ORDER BY `ALL` ASC;
 
 SELECT sum(amount) = 100
 FROM realtimebuff__fuzz_19
-ORDER BY `ALL` ASC;
+ORDER BY `ALL` ASC; -- { serverError CANNOT_CONVERT_TYPE }
 
 SELECT sum(amount) = 100
 FROM realtimebuff__fuzz_20
-ORDER BY `ALL` ASC;
+ORDER BY `ALL` ASC; -- { serverError CANNOT_CONVERT_TYPE }
 
 SELECT amount
 FROM
@@ -27,7 +27,7 @@ INNER JOIN (
     ) AS t2
     ON t1.amount = t2.amount
 ORDER BY `ALL` ASC
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT amount
 FROM
@@ -49,7 +49,7 @@ INNER JOIN (
     ) AS t2
     ON t1.amount = t2.amount
 ORDER BY `ALL` ASC
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT amount
 FROM
@@ -86,7 +86,7 @@ SELECT amount
 FROM
     realtimebuff__fuzz_19 AS t1
 INNER JOIN realtimebuff__fuzz_19 AS t2
-    ON t1.amount = t2.amount;
+    ON t1.amount = t2.amount; -- { serverError NOT_IMPLEMENTED,UNKNOWN_IDENTIFIER }
 
 SELECT amount
 FROM
@@ -94,8 +94,9 @@ FROM
 INNER JOIN realtimebuff__fuzz_19 AS t2
     ON t1.amount = t2.amount
 INNER JOIN realtimebuff__fuzz_19 AS t3
-    ON t1.amount = t3.amount;
+    ON t1.amount = t3.amount; -- { serverError NOT_IMPLEMENTED,AMBIGUOUS_COLUMN_NAME }
 
+-- fuzzers:
 SELECT toLowCardinality(1) + materialize(toLowCardinality(2))
 FROM realtimebuff__fuzz_19
 GROUP BY toLowCardinality(1)

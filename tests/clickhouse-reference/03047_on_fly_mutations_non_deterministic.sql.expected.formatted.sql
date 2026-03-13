@@ -1,5 +1,5 @@
 SELECT *
-FROM t_lightweight_mut_2;
+FROM t_lightweight_mut_2; -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM t_lightweight_mut_2

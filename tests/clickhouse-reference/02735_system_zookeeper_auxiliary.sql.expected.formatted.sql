@@ -11,7 +11,7 @@ WHERE path = '/'
 SELECT count()
 FROM `system`.zookeeper
 WHERE path IN ('/')
-    AND zookeeperName = 'zookeeper3';
+    AND zookeeperName = 'zookeeper3'; -- { serverError BAD_ARGUMENTS }
 
 SELECT count() = 0
 FROM `system`.zookeeper

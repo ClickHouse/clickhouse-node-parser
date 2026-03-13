@@ -1,3 +1,4 @@
+-- 1 row in filter
 SELECT count()
 FROM
     customer
@@ -21,6 +22,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- 2 rows in exact set
 SELECT count()
 FROM
     customer
@@ -44,6 +46,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- 3 rows in bloom filter
 SELECT count()
 FROM
     customer
@@ -67,6 +70,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- Too many rows in bloom filter
 SELECT count()
 FROM
     customer
@@ -90,6 +94,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- ANTI JOIN with 1 row
 SELECT count()
 FROM
     (
@@ -119,6 +124,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- ANTI JOIN with exact set
 SELECT count()
 FROM
     (
@@ -148,6 +154,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- Change pass ratio to >1 to turn of auto-disabling
 SELECT count()
 FROM
     customer

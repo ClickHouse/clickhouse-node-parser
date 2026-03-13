@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     SearchEngineID AS k1,
     SearchPhrase AS k2,

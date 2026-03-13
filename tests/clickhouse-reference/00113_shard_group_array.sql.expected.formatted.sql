@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT
     intDiv(number, 100) AS k,
     length(groupArray(number))

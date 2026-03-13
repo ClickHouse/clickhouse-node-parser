@@ -35,7 +35,7 @@ LEFT JOIN (
     ON t0.c0 = t1.c0
 SETTINGS
     query_plan_optimize_join_order_algorithm = 'dpsize',
-    enable_parallel_replicas = 0;
+    enable_parallel_replicas = 0; --{serverError EXPERIMENTAL_FEATURE_ERROR}
 
 SELECT 1
 FROM

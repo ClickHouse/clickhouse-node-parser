@@ -51,4 +51,4 @@ WHERE e NOT IN ('c');
 
 SELECT *
 FROM t_enum_in_unknown_value
-WHERE e IN ('a', 'b', 3);
+WHERE e IN ('a', 'b', 3); -- { serverError UNKNOWN_ELEMENT_OF_ENUM }

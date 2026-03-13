@@ -1,3 +1,4 @@
+-- Expect that these queries don't time out
 SELECT number
 FROM `system`.numbers
 LIMIT 1;

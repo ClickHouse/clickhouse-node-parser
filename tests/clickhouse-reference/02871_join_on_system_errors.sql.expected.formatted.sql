@@ -1,3 +1,4 @@
+-- Unique table alias to distinguish between errors from different queries
 SELECT *
 FROM
     (

@@ -2,6 +2,7 @@ SELECT *
 FROM numbers(4)
 WHERE sleepEachRow(1);
 
+/* we can now check that r1 waits for r2 */
 SELECT
     table,
     type,
@@ -14,6 +15,7 @@ WHERE like(table, 'execute\\_on\\_single\\_replica\\_r%')
 ORDER BY table ASC
 FORMAT Vertical;
 
+/* we have execute_merges_on_single_replica_time_threshold exceeded */
 SELECT *
 FROM numbers(10)
 WHERE sleepEachRow(1);

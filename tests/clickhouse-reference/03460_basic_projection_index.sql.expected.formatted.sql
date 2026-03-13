@@ -1,3 +1,4 @@
+-- Pick projection based on both filters
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -15,6 +16,7 @@ WHERE region = 'eu'
     AND user_id = 101
 ORDER BY `ALL` ASC;
 
+-- Region only
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -30,6 +32,7 @@ FROM t_proj
 WHERE region = 'zzz'
 ORDER BY `ALL` ASC;
 
+-- User only
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -45,6 +48,7 @@ FROM t_proj
 WHERE user_id = 106
 ORDER BY `ALL` ASC;
 
+-- OR → projection index disabled
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -107,6 +111,7 @@ FROM t_gran
 WHERE region = 'bot'
 ORDER BY `ALL` ASC;
 
+-- Should use projection for rows 4–6 only
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -122,6 +127,7 @@ FROM t_partial
 WHERE region = 'ru'
 ORDER BY `ALL` ASC;
 
+-- CN appears in both partial and full materialized parts
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -137,6 +143,7 @@ FROM t_partial
 WHERE region = 'cn'
 ORDER BY `ALL` ASC;
 
+-- check projection part exists on both replicas
 SELECT
     table,
     name

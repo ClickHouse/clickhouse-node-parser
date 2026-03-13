@@ -1,3 +1,4 @@
+-- We are not interested in the result of this query, but it should not produce a logical error.
 SELECT
     avg_duration1,
     avg_duration1 = avg_duration2

@@ -1,3 +1,4 @@
+-- read from StorageJoin
 SELECT '--------read--------';
 
 SELECT *
@@ -22,6 +23,7 @@ FROM numbers(3);
 SELECT joinGet('join_any_left_null', 's', number)
 FROM numbers(3);
 
+-- Using identifier as the first argument
 SELECT joinGet(join_any_left, 's', number)
 FROM numbers(3);
 
@@ -34,4 +36,4 @@ SELECT
 
 SELECT joinGet('join_test', 'b', 1);
 
-SELECT joinGet(concat({CLICKHOUSE_DATABASE: String}, '.join_test'), 'b', 1);
+SELECT joinGet(concat({CLICKHOUSE_DATABASE:String}, '.join_test'), 'b', 1);

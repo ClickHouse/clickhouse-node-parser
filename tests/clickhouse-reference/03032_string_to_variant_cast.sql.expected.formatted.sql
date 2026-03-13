@@ -20,7 +20,7 @@ SELECT
 
 SELECT
     CAST('42', 'Variant(Date)') AS v,
-    variantType(v);
+    variantType(v); -- {serverError INCORRECT_DATA}
 
 SELECT
     accurateCastOrNull('42', 'Variant(Date)') AS v,

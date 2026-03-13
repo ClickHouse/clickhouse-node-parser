@@ -1,3 +1,4 @@
+-- Query with ANTI JOIN that has a predicate left_col==right_col and a predicate that is not left_col==right_col
 SELECT count()
 FROM
     customer

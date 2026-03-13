@@ -1,7 +1,8 @@
-SELECT toStartOfSecond('123');
+-- Error cases
+SELECT toStartOfSecond('123'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT toStartOfSecond(now());
+SELECT toStartOfSecond(now()); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT toStartOfSecond();
+SELECT toStartOfSecond(); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
-SELECT toStartOfSecond(now64(), 123);
+SELECT toStartOfSecond(now64(), 123); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}

@@ -1,6 +1,8 @@
 SELECT
+    -- blocks with much of data are small in rows:
     if(max(size) < 5000000
     AND argMax(`rows`, size) < 10000, 'Ok', format('Error: max_size={} rows={}', max(size), argMax(`rows`, size))),
+    -- but still there are large blocks with small strings
     if(max(`rows`) >= 50000, 'Ok', format('Error: {}', toString(max(`rows`))))
 FROM (
         SELECT
@@ -18,7 +20,9 @@ SETTINGS
     max_joined_block_size_bytes = '4M',
     max_joined_block_size_rows = 65000;
 
-SELECT if(argMax(`rows`, size) = 1
+SELECT
+    -- limit is 4M but minimum block size is 6Mb, so it will be single row block
+    if(argMax(`rows`, size) = 1
     AND max(size) < 10000000, 'Ok', format('Error: max_size={} rows={}', max(size), argMax(`rows`, size)))
 FROM (
         SELECT

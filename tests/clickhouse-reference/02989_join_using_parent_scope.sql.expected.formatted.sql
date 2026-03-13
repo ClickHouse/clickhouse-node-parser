@@ -59,8 +59,9 @@ SELECT 1 AS b
 FROM
     tb
 INNER JOIN ta
-    USING (b);
+    USING (b); -- { serverError UNKNOWN_IDENTIFIER }
 
+-- SELECT * returns all columns from both tables in new analyzer
 SELECT
     3 AS a,
     a,
@@ -207,14 +208,18 @@ PREWHERE a > 2
 ORDER BY `ALL` ASC
 SETTINGS enable_analyzer = 1;
 
+-- It's a default behavior for old analyzer and new with analyzer_compatibility_join_using_top_level_identifier
+-- Column `b` actually exists in left table, but `b` from USING is resoled to `a + 2` and `a` is not in left table
+-- so we get UNKNOWN_IDENTIFIER error.
 SELECT a + 2 AS b
 FROM
     tb
 INNER JOIN tabc
     USING (b)
 ORDER BY `ALL` ASC
-SETTINGS analyzer_compatibility_join_using_top_level_identifier = 1;
+SETTINGS analyzer_compatibility_join_using_top_level_identifier = 1; -- { serverError UNKNOWN_IDENTIFIER }
 
+-- In new analyzer with `analyzer_compatibility_join_using_top_level_identifier = 0` we get `b` from left table
 SELECT a + 2 AS b
 FROM
     tb

@@ -1,3 +1,4 @@
+-- { echo }
 SELECT (*)
 EXCEPT
 SELECT 1;

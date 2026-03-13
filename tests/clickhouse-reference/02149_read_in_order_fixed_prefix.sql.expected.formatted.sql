@@ -16,6 +16,7 @@ ORDER BY
     negate(i) ASC
 LIMIT 5;
 
+-- Here FinishSorting is used, because directions don't match.
 SELECT
     toStartOfMonth(date) AS d,
     i
@@ -82,7 +83,7 @@ FROM (
         ORDER BY
             date ASC,
             round(d) ASC
-        LIMIT 50000000000
+        LIMIT 50000000000 -- subquery with limit 50000000 to stabilize a test result and prevent order by d pushdown
     )
 ORDER BY d ASC
 LIMIT 5;
@@ -95,7 +96,7 @@ FROM (
         FROM t_read_in_order
         WHERE date = '2020-10-10'
         ORDER BY round(d) ASC
-        LIMIT 50000000000
+        LIMIT 50000000000 -- subquery with limit 50000000 to stabilize a test result and prevent order by d pushdown
     )
 ORDER BY d ASC
 LIMIT 5;

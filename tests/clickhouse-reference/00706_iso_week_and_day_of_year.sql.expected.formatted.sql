@@ -1,3 +1,4 @@
+-- International Programmers' Day
 SELECT toDayOfYear(toDate('2018-09-13'));
 
 SELECT
@@ -38,6 +39,7 @@ SELECT
 FROM `system`.numbers
 LIMIT 10;
 
+-- ISO year always begins at monday.
 SELECT DISTINCT toDayOfWeek(toStartOfISOYear(toDateTime(1000000000 + rand64() % 1000000000)))
 FROM numbers(10000);
 

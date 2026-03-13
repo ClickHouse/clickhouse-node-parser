@@ -16,7 +16,7 @@ FROM merge()
 ORDER BY
     _database ASC,
     _table ASC,
-    n ASC;
+    n ASC; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
 SELECT
     _database,
@@ -26,4 +26,4 @@ FROM merge('^t')
 ORDER BY
     _database ASC,
     _table ASC,
-    n ASC;
+    n ASC; -- {serverError CANNOT_EXTRACT_TABLE_STRUCTURE}

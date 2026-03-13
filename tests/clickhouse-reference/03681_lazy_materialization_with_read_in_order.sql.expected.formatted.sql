@@ -151,6 +151,7 @@ ORDER BY
     a + 1 ASC
 LIMIT 5;
 
+-- With both optimizations enabled
 SELECT
     id,
     value,
@@ -159,6 +160,7 @@ FROM test_correctness
 ORDER BY id ASC
 LIMIT 5;
 
+-- DESC should also work
 SELECT
     id,
     value,
@@ -167,6 +169,7 @@ FROM test_correctness
 ORDER BY id DESC
 LIMIT 5;
 
+-- Filter and order
 SELECT
     id,
     value,
@@ -175,6 +178,7 @@ FROM test_correctness
 WHERE score >= 50
 ORDER BY id ASC;
 
+-- Same query with optimizations disabled should give same results
 SELECT
     id,
     value,

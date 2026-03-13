@@ -1,3 +1,4 @@
+-- Tags: no-fasttest, no-openssl-fips
 SELECT halfMD5(123456);
 
 SELECT sipHash64(123456);

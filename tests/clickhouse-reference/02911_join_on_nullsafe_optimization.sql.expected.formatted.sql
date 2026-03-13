@@ -127,6 +127,7 @@ SETTINGS
     query_plan_use_new_logical_join_step = 0,
     use_join_disjunctions_push_down = 0;
 
+-- aliases defined in the join condition are valid
 SELECT
     *,
     e,
@@ -157,6 +158,7 @@ ORDER BY
     t1.x ASC,
     t2.x ASC;
 
+-- check for non-nullable columns for which `is null` is replaced with constant
 SELECT *
 FROM
     t1n AS t1
@@ -168,8 +170,10 @@ INNER JOIN t2n AS t2
     AND (isNull(t1.x)))
 ORDER BY t1.x ASC;
 
+-- { echoOff }
 SELECT '--';
 
+-- IS NOT NULL and constants are optimized out
 SELECT count()
 FROM (
         EXPLAIN QUERY TREE
@@ -198,6 +202,7 @@ FROM (
 WHERE like(`explain`, '%CONSTANT%')
     OR ilike(`explain`, '%is%null%');
 
+-- this is not optimized out
 SELECT count()
 FROM (
         EXPLAIN QUERY TREE

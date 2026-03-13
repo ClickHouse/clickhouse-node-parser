@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT
     length(groupArray(number)),
     count()

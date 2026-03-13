@@ -1,3 +1,4 @@
+-- Tags: stateful, no-parallel-replicas
 SELECT
     transform(SearchEngineID, [2, 3], ['Яндекс', 'Google'], 'Остальные') AS title,
     count() AS c

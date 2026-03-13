@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     URL AS `ym:ah:URL`,
     sum((NOT DontCountHits

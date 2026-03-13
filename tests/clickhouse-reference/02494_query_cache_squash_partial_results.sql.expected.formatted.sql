@@ -1,3 +1,4 @@
+-- Run query which reads multiple chunks (small max_block_size), cache result in query cache, force squashing of partial results
 SELECT '-- insert with enabled squashing';
 
 SELECT *

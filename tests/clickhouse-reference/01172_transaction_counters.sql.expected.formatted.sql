@@ -88,7 +88,7 @@ SELECT
     thread_id != 0,
     length(query_id) = length(queryID())
     OR type = 'Commit'
-    AND query_id = '',
+    AND query_id = '', -- ignore fault injection after commit
     tid_hash != 0,
     csn = 0,
     part

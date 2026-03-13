@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT *
 FROM format(JSONEachRow, '
 {"a": "Hello", "b": 111}

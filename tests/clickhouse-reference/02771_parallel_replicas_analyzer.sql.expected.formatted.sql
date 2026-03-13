@@ -1,3 +1,4 @@
+-- Simple query with analyzer and pure parallel replicas
 SELECT number
 FROM join_inner_table__fuzz_146_replicated
 SETTINGS

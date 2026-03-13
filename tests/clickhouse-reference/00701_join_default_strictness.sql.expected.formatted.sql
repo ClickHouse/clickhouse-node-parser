@@ -25,4 +25,4 @@ LEFT JOIN (
         FROM a2
     ) AS js2
     USING (a)
-ORDER BY b ASC;
+ORDER BY b ASC; -- default SETTINGS join_default_strictness='ALL';

@@ -29,6 +29,7 @@ export type {
   QueryParam,
   SelectStatement,
   Statement,
+  CommentFields,
   ASTNodeKind,
   ASTNodeKindMap,
 } from './ast';

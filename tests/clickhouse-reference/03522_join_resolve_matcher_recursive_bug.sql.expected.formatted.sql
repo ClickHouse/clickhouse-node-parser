@@ -4,7 +4,7 @@ FROM
         SELECT 1
     ) AS tx
 INNER JOIN VALUES((*)) AS ty
-    USING (c0);
+    USING (c0); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT *
 FROM

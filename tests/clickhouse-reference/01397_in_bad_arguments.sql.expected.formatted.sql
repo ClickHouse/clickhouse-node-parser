@@ -1,7 +1,7 @@
-SELECT in((1, 1, 1, 1));
+SELECT in((1, 1, 1, 1)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT in(1);
+SELECT in(1); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT in();
+SELECT in(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT in(1, 2, 3);
+SELECT in(1, 2, 3); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

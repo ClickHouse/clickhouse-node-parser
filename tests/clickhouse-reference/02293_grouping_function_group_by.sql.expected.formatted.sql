@@ -5,7 +5,7 @@ FROM remote('127.0.0.{2,3}', numbers(10))
 GROUP BY
     number,
     number % 2
-ORDER BY number ASC;
+ORDER BY number ASC; -- { serverError BAD_ARGUMENTS }
 
 SELECT
     number,
@@ -94,7 +94,7 @@ WITH TOTALS
 HAVING grouping(number) != 0
 ORDER BY
     number ASC,
-    gr ASC;
+    gr ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     number,
@@ -116,7 +116,7 @@ WITH TOTALS
 HAVING grouping(number) != 0
 ORDER BY
     number ASC,
-    gr ASC;
+    gr ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     number,

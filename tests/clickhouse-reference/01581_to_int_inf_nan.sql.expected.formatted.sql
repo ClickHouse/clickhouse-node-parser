@@ -1,19 +1,19 @@
-SELECT toInt64(inf);
+SELECT toInt64(inf); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toInt128(inf);
+SELECT toInt128(inf); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toInt256(inf);
+SELECT toInt256(inf); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toInt64(nan);
+SELECT toInt64(nan); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toInt128(nan);
+SELECT toInt128(nan); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toInt256(nan);
+SELECT toInt256(nan); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toUInt64(inf);
+SELECT toUInt64(inf); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toUInt256(inf);
+SELECT toUInt256(inf); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toUInt64(nan);
+SELECT toUInt64(nan); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT toUInt256(nan);
+SELECT toUInt256(nan); -- { serverError CANNOT_CONVERT_TYPE }

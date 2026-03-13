@@ -1,6 +1,6 @@
 SELECT base32Encode('This is a test string');
 
-SELECT base32Encode('This is a test string', 'Second arg');
+SELECT base32Encode('This is a test string', 'Second arg'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT
     id,
@@ -37,37 +37,37 @@ SELECT
     result == str
 FROM t3447;
 
-SELECT base32Decode('========');
+SELECT base32Decode('========'); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YT!');
+SELECT base32Decode('MZXW6YT!'); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6Y=B');
+SELECT base32Decode('MZXW6Y=B'); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6Y=!');
+SELECT base32Decode('MZXW6Y=!'); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6Y===');
+SELECT base32Decode('MZXW6Y==='); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ=Q');
+SELECT base32Decode('MZXW6YQ=Q'); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ======');
+SELECT base32Decode('MZXW6YQ======'); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('12345678');
+SELECT base32Decode('12345678'); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ');
+SELECT base32Decode('MZXW6YQ'); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ==');
+SELECT base32Decode('MZXW6YQ=='); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ===');
+SELECT base32Decode('MZXW6YQ==='); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ====');
+SELECT base32Decode('MZXW6YQ===='); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ=====');
+SELECT base32Decode('MZXW6YQ====='); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ=======');
+SELECT base32Decode('MZXW6YQ======='); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ====!==');
+SELECT base32Decode('MZXW6YQ====!=='); -- { serverError INCORRECT_DATA }
 
-SELECT base32Decode('MZXW6YQ====A==');
+SELECT base32Decode('MZXW6YQ====A=='); -- { serverError INCORRECT_DATA }
 
 SELECT tryBase32Decode('========');
 
@@ -234,7 +234,7 @@ SELECT base32Encode('���#') == 'VPG66AJD';
 
 SELECT base32Encode(toFixedString('Hold my beer...', 15));
 
-SELECT base32Decode(toFixedString('t1Zv2yaZ', 8));
+SELECT base32Decode(toFixedString('t1Zv2yaZ', 8)); -- { serverError INCORRECT_DATA }
 
 SELECT tryBase32Decode(toFixedString('t1Zv2yaZ', 8));
 
@@ -250,7 +250,7 @@ FROM (
 
 SELECT base32Encode(reinterpretAsFixedString(byteSwap(toUInt256('256')))) == 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA====';
 
-SELECT base32Encode(reinterpretAsString(byteSwap(toUInt256('256')))) == 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE======';
+SELECT base32Encode(reinterpretAsString(byteSwap(toUInt256('256')))) == 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE======'; -- { reinterpretAsString drops the last null byte hence, encoded value is different than the FixedString version above }
 
 SELECT base32Encode('Testing') == 'KRSXG5DJNZTQ====';
 

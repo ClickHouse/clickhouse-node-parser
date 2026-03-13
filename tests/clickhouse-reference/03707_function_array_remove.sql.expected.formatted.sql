@@ -63,17 +63,17 @@ FROM test;
 
 SELECT arrayRemove([(1,2), (3,4)], (1,2));
 
-SELECT arrayRemove([1,2,3]);
+SELECT arrayRemove([1,2,3]); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
-SELECT arrayRemove([1,2,3], 2, 3);
+SELECT arrayRemove([1,2,3], 2, 3); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
-SELECT arrayRemove(1, 1);
+SELECT arrayRemove(1, 1); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT arrayRemove([1,2,3], [1]);
+SELECT arrayRemove([1,2,3], [1]); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT arrayRemove([1,2,3], '1');
+SELECT arrayRemove([1,2,3], '1'); -- {serverError NO_COMMON_TYPE}
 
-SELECT arrayRemove(['a', 'b', 'c'], 1);
+SELECT arrayRemove(['a', 'b', 'c'], 1); -- {serverError NO_COMMON_TYPE}
 
 SELECT arrayRemove(CAST(['a', NULL, 'b'] AS Array(LowCardinality(Nullable(String)))), 'a');
 
@@ -83,12 +83,14 @@ SELECT arrayRemove([CAST(1 AS Dynamic), CAST(NULL AS Dynamic), CAST(2 AS Dynamic
 
 SELECT arrayRemove([CAST(1 AS Dynamic), CAST(NULL AS Dynamic), CAST(2 AS Dynamic)], NULL);
 
+-- Variant with incompatible types throws on comparison (strict behavior like Dynamic)
 SELECT arrayRemove([
         1::Variant(UInt8, String),
         'x'::Variant(UInt8, String),
         NULL::Variant(UInt8, String)
-    ], 'x'::Variant(UInt8, String));
+    ], 'x'::Variant(UInt8, String)); -- {serverError NO_COMMON_TYPE}
 
+-- NULL comparison works (doesn't require type compatibility)
 SELECT arrayRemove([
         1::Variant(UInt8, String),
         'x'::Variant(UInt8, String),

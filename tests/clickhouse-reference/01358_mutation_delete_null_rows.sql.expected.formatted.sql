@@ -1,3 +1,4 @@
+-- Tags: no-parallel-replicas
 SELECT '--------';
 
 SELECT

@@ -53,6 +53,7 @@ INNER JOIN v1 AS t2
     USING (id)
 CROSS JOIN v2 AS n1;
 
+-- from fuzzer
 SELECT 10
 FROM
     `system`.query_log AS a

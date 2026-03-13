@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT `ParsedParams.Key2` AS x
 FROM
     test.hits

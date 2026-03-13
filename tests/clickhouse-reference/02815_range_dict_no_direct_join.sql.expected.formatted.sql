@@ -32,4 +32,4 @@ INNER JOIN discounts_dict
 ORDER BY
     id ASC,
     amount ASC
-SETTINGS join_algorithm = 'direct';
+SETTINGS join_algorithm = 'direct'; -- { serverError NOT_IMPLEMENTED }

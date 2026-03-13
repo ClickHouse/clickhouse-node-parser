@@ -64,13 +64,13 @@ SELECT toTypeName([
 SELECT toTypeName([
     CAST((1, 2), 'Tuple(Int32, Int32)'),
     CAST((3, 4, 5), 'Nullable(Tuple(Int32, Int32, Int32))')
-]);
+]); -- { serverError NO_COMMON_TYPE }
 
 SELECT toTypeName([
     NULL,
     CAST((1, 2), 'Tuple(Int32, Int32)'),
     CAST((3, 4, 5), 'Nullable(Tuple(Int32, Int32, Int32))')
-]);
+]); -- { serverError NO_COMMON_TYPE }
 
 SELECT toTypeName([
     CAST([(1, 2), (3, 4)], 'Array(Tuple(Int32, Int32))'),

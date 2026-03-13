@@ -1,3 +1,4 @@
+-- Both interpolate expression are removed
 SELECT group_id
 FROM (
         SELECT
@@ -9,6 +10,7 @@ FROM (
         ORDER BY group_id ASC WITH FILL STEP 1 INTERPOLATE (open, close)
     );
 
+-- `close` interpolate expression is removed
 SELECT
     group_id,
     open
@@ -22,6 +24,7 @@ FROM (
         ORDER BY group_id ASC WITH FILL STEP 1 INTERPOLATE (open, close)
     );
 
+-- Both interpolate expressions are kept
 SELECT
     group_id,
     open,

@@ -3,14 +3,14 @@ FROM
     t1
 RIGHT JOIN t0
     USING (x)
-ORDER BY x ASC;
+ORDER BY x ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 FULL JOIN t0
     USING (x)
-ORDER BY x ASC;
+ORDER BY x ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -31,14 +31,14 @@ FROM
     t1
 RIGHT JOIN t0
     ON t1.x = t0.x
-ORDER BY x ASC;
+ORDER BY x ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 FULL JOIN t0
     ON t1.x = t0.x
-ORDER BY x ASC;
+ORDER BY x ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -58,13 +58,13 @@ SELECT *
 FROM
     t0
 RIGHT JOIN t1
-    USING (x);
+    USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 FULL JOIN t1
-    USING (x);
+    USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -82,13 +82,13 @@ SELECT *
 FROM
     t0
 RIGHT JOIN t1
-    ON t1.x = t0.x;
+    ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 FULL JOIN t1
-    ON t1.x = t0.x;
+    ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM

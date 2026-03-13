@@ -1,13 +1,13 @@
-SELECT formatRow('RawBLOB', [[[33]], []]);
+SELECT formatRow('RawBLOB', [[[33]], []]); -- { serverError NOT_IMPLEMENTED }
 
-SELECT formatRow('RawBLOB', [[[]], []]);
+SELECT formatRow('RawBLOB', [[[]], []]); -- { serverError NOT_IMPLEMENTED }
 
-SELECT formatRow('RawBLOB', [[[[[[[0x48, 0x65, 0x6c, 0x6c, 0x6f]]]]]], []]);
+SELECT formatRow('RawBLOB', [[[[[[[0x48, 0x65, 0x6c, 0x6c, 0x6f]]]]]], []]); -- { serverError NOT_IMPLEMENTED }
 
-SELECT formatRow('RawBLOB', []::Array(Array(Nothing)));
+SELECT formatRow('RawBLOB', []::Array(Array(Nothing))); -- { serverError NOT_IMPLEMENTED }
 
-SELECT formatRow('RawBLOB', [[], [['Hello']]]);
+SELECT formatRow('RawBLOB', [[], [['Hello']]]); -- { serverError NOT_IMPLEMENTED }
 
-SELECT formatRow('RawBLOB', [[['World']], []]);
+SELECT formatRow('RawBLOB', [[['World']], []]); -- { serverError NOT_IMPLEMENTED }
 
-SELECT formatRow('RawBLOB', []::Array(String));
+SELECT formatRow('RawBLOB', []::Array(String)); -- { serverError NOT_IMPLEMENTED }

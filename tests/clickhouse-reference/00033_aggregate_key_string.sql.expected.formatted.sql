@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     SearchPhrase AS k1,
     count() AS c

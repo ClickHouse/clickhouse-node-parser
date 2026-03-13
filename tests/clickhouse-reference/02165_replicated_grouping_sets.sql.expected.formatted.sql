@@ -30,6 +30,7 @@ ORDER BY
     sum_value ASC,
     count_value ASC;
 
+-- { echo On }
 SELECT
     count(),
     arrayMap(x -> '.', range(number % 10)) AS k

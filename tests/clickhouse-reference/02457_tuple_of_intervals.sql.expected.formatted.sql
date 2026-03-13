@@ -28,4 +28,4 @@ SELECT '2022-10-11'::Date - tuple(toIntervalDay(1));
 
 SELECT tuple(toIntervalDay(1)) + '2022-10-11'::Date;
 
-SELECT tuple(toIntervalDay(1)) - '2022-10-11'::Date;
+SELECT tuple(toIntervalDay(1)) - '2022-10-11'::Date; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

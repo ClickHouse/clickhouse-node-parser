@@ -1,3 +1,4 @@
+-- x is supertupe for `t.x` and `nr.x` from left and right since `x` is inside `USING`.
 SELECT
     x,
     l.s,
@@ -70,6 +71,7 @@ FULL JOIN t AS r
     USING (x)
 ORDER BY t.x ASC;
 
+-- t.x is supertupe for `x` from left and right since `x` is inside `USING`.
 SELECT
     t.x,
     l.s,

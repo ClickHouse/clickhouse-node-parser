@@ -1,3 +1,4 @@
+-- { echo }
 SELECT left('Hello', 3);
 
 SELECT left('Hello', -3);

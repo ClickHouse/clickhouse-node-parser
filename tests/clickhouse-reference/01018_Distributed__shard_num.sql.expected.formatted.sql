@@ -66,6 +66,7 @@ ORDER BY
     key ASC
 SETTINGS serialize_query_plan = 0;
 
+-- distributed over distributed does not work, because _shard_num is not analyzed from QueryPlan.
 SELECT
     _shard_num,
     key
@@ -114,6 +115,7 @@ SELECT
     key
 FROM dist_1 AS a;
 
+-- the same with JOIN, just in case
 SELECT
     a._shard_num,
     a.key,

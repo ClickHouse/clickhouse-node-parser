@@ -1,4 +1,4 @@
-SELECT '-- Simple OR condition';
+SELECT '-- Simple OR condition'; -- surviving granules: 159
 
 SELECT `explain` AS `explain`
 FROM (
@@ -67,6 +67,7 @@ WHERE like(`explain`, '%Granules%')
     OR like(`explain`, '%PrimaryKey%')
     OR like(`explain`, '%Name%');
 
+-- Test with RPN size of 23 - only 6 granules and 6x64=384 rows should be read
 SELECT count(*)
 FROM tab
 WHERE (v1 = 1
@@ -83,6 +84,7 @@ WHERE (v1 = 1
     AND v2 = 1001)
 SETTINGS max_rows_to_read = 384;
 
+-- 1
 SELECT `explain` AS `explain`
 FROM (
         EXPLAIN indexes = 1

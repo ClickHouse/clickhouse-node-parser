@@ -48,6 +48,7 @@ FROM (
             USING (k)
     );
 
+-- Because of the optimizations in the analyzer the following queries started to run without issues. To keep the essence of the test, we test both cases.
 SELECT count(1)
 FROM (
         SELECT
@@ -63,7 +64,7 @@ FROM (
             ) AS j
             USING (k)
     )
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError MEMORY_LIMIT_EXCEEDED }
 
 SELECT count(1)
 FROM (
@@ -80,7 +81,7 @@ FROM (
             ) AS j
             USING (k)
     )
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError MEMORY_LIMIT_EXCEEDED }
 
 SELECT count(1)
 FROM (

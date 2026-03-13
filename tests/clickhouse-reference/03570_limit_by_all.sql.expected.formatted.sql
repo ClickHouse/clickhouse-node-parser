@@ -1,3 +1,4 @@
+-- Test 1: Basic LIMIT BY ALL usage
 SELECT
     id,
     category,
@@ -9,6 +10,7 @@ ORDER BY
     value ASC
 LIMIT 1 BY ALL;
 
+-- Test 2: LIMIT BY ALL with aggregate functions (should ignore aggregates)
 SELECT
     id,
     category,
@@ -22,6 +24,7 @@ ORDER BY
     category ASC
 LIMIT 1 BY ALL;
 
+-- Test 3: LIMIT BY ALL with computed column - make deterministic by ordering by value
 SELECT
     id,
     category,
@@ -33,6 +36,7 @@ ORDER BY
     value ASC
 LIMIT 2 BY ALL;
 
+-- Test 5: Explicit column list (should be equivalent to test 4)
 SELECT
     id,
     category,
@@ -44,6 +48,7 @@ ORDER BY
     value ASC
 LIMIT 1 BY id, category, value;
 
+-- Test 8: LIMIT BY ALL with window function - make deterministic
 SELECT
     id,
     category,
@@ -58,6 +63,7 @@ ORDER BY
 LIMIT 1 BY ALL
 LIMIT 3;
 
+-- Test 9: LIMIT BY ALL with WHERE clause - make deterministic
 SELECT
     id,
     category,
@@ -165,9 +171,10 @@ ORDER BY value DESC
 LIMIT 1 BY ALL
 LIMIT 2;
 
+-- Only-aggregate SELECT -> expect syntax error 62
 SELECT count()
 FROM test_limit_by_all
-LIMIT 1 BY ALL;
+LIMIT 1 BY ALL; -- { serverError 62 }
 
 SELECT
     t.id,
@@ -237,8 +244,9 @@ ORDER BY
     id ASC,
     category ASC,
     value ASC
-LIMIT -1 BY id;
+LIMIT -1 BY id; -- { serverError NOT_IMPLEMENTED }
 
+-- Should give no result
 SELECT
     id,
     category,

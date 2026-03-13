@@ -6,7 +6,7 @@ SELECT
 SELECT
     flattenTuple(CAST(NULL AS Nullable(Tuple()))) AS res,
     toTypeName(res),
-    isNull(res);
+    isNull(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     flattenTuple(CAST(NULL AS Nullable(Tuple(a Nullable(Int32))))) AS res,

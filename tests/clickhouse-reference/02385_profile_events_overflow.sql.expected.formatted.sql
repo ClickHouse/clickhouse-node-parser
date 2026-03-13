@@ -10,7 +10,7 @@ SELECT count()
 FROM `system`.numbers
 SETTINGS
     max_rows_to_read = 1,
-    read_overflow_mode = 'throw';
+    read_overflow_mode = 'throw'; -- { serverError TOO_MANY_ROWS }
 
 SELECT
     number,

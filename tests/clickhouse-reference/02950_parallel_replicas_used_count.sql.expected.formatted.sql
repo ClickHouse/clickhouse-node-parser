@@ -1,3 +1,4 @@
+-- default coordinator
 SELECT
     count(),
     sum(k)
@@ -17,6 +18,7 @@ WHERE type = 'QueryFinish'
     )
 SETTINGS enable_parallel_replicas = 0;
 
+-- In order coordinator
 SELECT k
 FROM test
 ORDER BY k ASC
@@ -41,6 +43,7 @@ WHERE type = 'QueryFinish'
     )
 SETTINGS enable_parallel_replicas = 0;
 
+-- In reverse order coordinator
 SELECT k
 FROM test
 ORDER BY k DESC

@@ -248,7 +248,7 @@ FROM (
     )
 ORDER BY tuple() ASC;
 
-SELECT arrayElementOrNull([(1, 'a'), (2, 'b')], 'x');
+SELECT arrayElementOrNull([(1, 'a'), (2, 'b')], 'x'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT
     id,
@@ -384,7 +384,7 @@ FROM (
         SELECT [(3, 'c')] AS arr
         UNION ALL
         SELECT [] AS arr
-    );
+    ); -- {serverError ZERO_ARRAY_OR_TUPLE_INDEX}
 
 SELECT
     arr[0],
@@ -395,7 +395,7 @@ FROM (
         SELECT [(3, 'c')] AS arr
         UNION ALL
         SELECT [NULL] AS arr
-    );
+    ); -- {serverError ZERO_ARRAY_OR_TUPLE_INDEX}
 
 SELECT
     arr[1],
@@ -539,7 +539,7 @@ FROM (
     )
 ORDER BY tuple() ASC;
 
-SELECT [(1, 'a'), (2, 'b')]['x'];
+SELECT [(1, 'a'), (2, 'b')]['x']; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT
     id,

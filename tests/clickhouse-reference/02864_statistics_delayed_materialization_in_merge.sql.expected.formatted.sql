@@ -6,4 +6,4 @@ FROM (
         WHERE b < 10
             AND a < 10
     )
-WHERE like(`explain`, '%Prewhere%');
+WHERE like(`explain`, '%Prewhere%'); -- checks b first, then a (statistics not used)

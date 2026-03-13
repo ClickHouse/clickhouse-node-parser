@@ -52,31 +52,31 @@ SELECT *
 FROM
     t1
 INNER JOIN t2
-    ON toUInt16(1);
+    ON toUInt16(1); -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
-    ON toInt8(1);
+    ON toInt8(1); -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
-    ON 256;
+    ON 256; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
-    ON -1;
+    ON -1; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
-    ON toString(1);
+    ON toString(1); -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
@@ -163,69 +163,72 @@ ORDER BY
     t2.id ASC
 SETTINGS join_use_nulls = 1;
 
+-- in this cases in old analyzer we have AMBIGUOUS_COLUMN_NAME instead of INVALID_JOIN_ON_EXPRESSION
+-- because there's some function in ON expression is not constant itself (result is constant)
 SELECT *
 FROM
     t1
 INNER JOIN t2
     ON 1 = 1
-SETTINGS join_algorithm = 'full_sorting_merge';
+SETTINGS join_algorithm = 'full_sorting_merge'; -- { serverError AMBIGUOUS_COLUMN_NAME,NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
     ON 1 = 1
-SETTINGS join_algorithm = 'partial_merge';
+SETTINGS join_algorithm = 'partial_merge'; -- { serverError AMBIGUOUS_COLUMN_NAME,NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
     ON 1 = 1
-SETTINGS join_algorithm = 'auto';
+SETTINGS join_algorithm = 'auto'; -- { serverError AMBIGUOUS_COLUMN_NAME,NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
     ON NULL
-SETTINGS join_algorithm = 'full_sorting_merge';
+SETTINGS join_algorithm = 'full_sorting_merge'; -- { serverError INVALID_JOIN_ON_EXPRESSION,NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
     ON NULL
-SETTINGS join_algorithm = 'partial_merge';
+SETTINGS join_algorithm = 'partial_merge'; -- { serverError INVALID_JOIN_ON_EXPRESSION,NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 LEFT JOIN t2
     ON NULL
-SETTINGS join_algorithm = 'partial_merge';
+SETTINGS join_algorithm = 'partial_merge'; -- { serverError INVALID_JOIN_ON_EXPRESSION,NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 RIGHT JOIN t2
     ON NULL
-SETTINGS join_algorithm = 'auto';
+SETTINGS join_algorithm = 'auto'; -- { serverError INVALID_JOIN_ON_EXPRESSION,NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
 FULL JOIN t2
     ON NULL
-SETTINGS join_algorithm = 'partial_merge';
+SETTINGS join_algorithm = 'partial_merge'; -- { serverError INVALID_JOIN_ON_EXPRESSION,NOT_IMPLEMENTED }
 
+-- mixing of constant and non-constant expressions in ON is not allowed
 SELECT *
 FROM
     t1
 INNER JOIN t2
     ON t1.id = t2.id
     AND 1 == 1
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError AMBIGUOUS_COLUMN_NAME }
 
 SELECT *
 FROM
@@ -241,7 +244,7 @@ FROM
 INNER JOIN t2
     ON t1.id = t2.id
     AND 1 == 2
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError AMBIGUOUS_COLUMN_NAME }
 
 SELECT *
 FROM
@@ -257,7 +260,7 @@ FROM
 INNER JOIN t2
     ON t1.id = t2.id
     AND 1 != 1
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
@@ -272,13 +275,13 @@ FROM
     t1
 INNER JOIN t2
     ON t1.id = t2.id
-    AND 'aaa';
+    AND 'aaa'; -- { serverError INVALID_JOIN_ON_EXPRESSION,ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
 FROM
     t1
 INNER JOIN t2
-    ON 'aaa';
+    ON 'aaa'; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
@@ -286,7 +289,7 @@ FROM
 INNER JOIN t2
     ON t1.id = t2.id
     AND 0
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
@@ -302,7 +305,7 @@ FROM
 INNER JOIN t2
     ON t1.id = t2.id
     AND 1
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
@@ -432,6 +435,7 @@ INNER JOIN (
     ON NULL
 ORDER BY 2 ASC;
 
+-- { echoOff }
 SELECT a + 1
 FROM
     (

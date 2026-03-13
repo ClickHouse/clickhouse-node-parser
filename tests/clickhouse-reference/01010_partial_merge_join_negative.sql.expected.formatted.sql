@@ -62,13 +62,13 @@ SELECT *
 FROM
     t0
 RIGHT JOIN t1
-    ON t1.x = t0.x;
+    ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 FULL JOIN t1
-    ON t1.x = t0.x;
+    ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -86,13 +86,13 @@ SELECT *
 FROM
     t0
 RIGHT JOIN t1
-    USING (x);
+    USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 FULL JOIN t1
-    USING (x);
+    USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -104,7 +104,7 @@ SELECT *
 FROM
     t0
 RIGHT JOIN t1
-    ON t1.x = t0.x;
+    ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -116,41 +116,41 @@ SELECT *
 FROM
     t0
 RIGHT JOIN t1
-    USING (x);
+    USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 LEFT JOIN t1
-    ON t1.x = t0.x;
+    ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 RIGHT JOIN t1
-    ON t1.x = t0.x;
+    ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 LEFT JOIN t1
-    USING (x);
+    USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 RIGHT JOIN t1
-    USING (x);
+    USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 LEFT JOIN t1
     ON t1.x = t0.x
-    AND t0.y > t1.y;
+    AND t0.y > t1.y; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
 LEFT JOIN t1
-    USING (x, y);
+    USING (x, y); -- { serverError NOT_IMPLEMENTED }

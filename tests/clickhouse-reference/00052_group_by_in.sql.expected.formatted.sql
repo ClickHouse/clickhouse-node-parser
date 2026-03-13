@@ -1,3 +1,5 @@
+-- Tags: stateful, no-parallel-replicas
+-- https://github.com/ClickHouse/ClickHouse/issues/74716
 SELECT
     StartDate,
     if(TraficSourceID IN (0), 'type_in', 'other') AS traf_type,

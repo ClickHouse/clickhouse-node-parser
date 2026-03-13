@@ -1,3 +1,4 @@
+-- This exact combination (WHERE + ORDER BY DESC + small LIMIT) was the failing pattern
 SELECT count()
 FROM (
         SELECT *

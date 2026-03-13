@@ -10,4 +10,4 @@ SELECT
     jd.a.:`Array(Nullable(Int64))`.size0,
     jd.`b[]`.c.:`Array(Array(Nullable(Int64)))`.size0,
     jd.`b[]`.c.:`Array(Array(Nullable(Int64)))`.size1
-FROM test;
+FROM test; -- {serverError UNKNOWN_IDENTIFIER}

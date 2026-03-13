@@ -11,9 +11,10 @@ FROM viewExplain('EXPLAIN', '', (
         WINDOW w0 AS ()
     ));
 
+-- Fuzzed, fails, but shouldn't crash server
 SELECT number
 FROM numbers(assumeNotNull(viewExplain('EXPLAIN', '', (
         SELECT 1
         WINDOW w0 AS ()
         QUALIFY number
-    ))));
+    )))); -- { serverError UNKNOWN_IDENTIFIER }

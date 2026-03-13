@@ -1,3 +1,4 @@
+-- Check that Float32 and BFloat16 return the same values for calculations with special values
 SELECT
     toFloat32(0.0) == toFloat32(-0.0),
     toBFloat16(0.0) == toBFloat16(-0.0);

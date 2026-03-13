@@ -1,3 +1,5 @@
+-- Tags: shard
+-- GROUP BY _shard_num
 SELECT
     _shard_num,
     count()

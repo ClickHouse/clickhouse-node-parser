@@ -9,4 +9,4 @@ PREWHERE *
 GROUP BY
     toLowCardinality(materialize(2)),
     1,
-    toTime64(isNullable(materialize(materialize(13))), isNull(*)) <= *;
+    toTime64(isNullable(materialize(materialize(13))), isNull(*)) <= *; -- { serverError ILLEGAL_PREWHERE }

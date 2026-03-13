@@ -1,13 +1,13 @@
-SELECT JSONExtractKeysAndValuesRaw(arrayJoin([]));
+SELECT JSONExtractKeysAndValuesRaw(arrayJoin([])); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT JSONHas(arrayJoin([]));
+SELECT JSONHas(arrayJoin([])); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT isValidJSON(arrayJoin([]));
+SELECT isValidJSON(arrayJoin([])); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT concat(arrayJoin([]), arrayJoin([NULL, '']));
+SELECT concat(arrayJoin([]), arrayJoin([NULL, ''])); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT plus(arrayJoin([]), arrayJoin([NULL, 1]));
+SELECT plus(arrayJoin([]), arrayJoin([NULL, 1])); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT sipHash64(arrayJoin([]), [NULL], arrayJoin(['', NULL, '', NULL]));
+SELECT sipHash64(arrayJoin([]), [NULL], arrayJoin(['', NULL, '', NULL])); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT [concat(NULL, arrayJoin([]))];

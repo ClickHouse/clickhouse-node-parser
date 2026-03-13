@@ -4,6 +4,7 @@ FORMAT Null;
 SELECT sleep(1)
 FORMAT Null;
 
+-- to avoid flakiness we only check that number of logs < 20, instead of some strict values
 SELECT
     extractAll(logger_name, 'StorageBuffer \\([^.]+\\.([^)]+)\\)')[1] AS table_name,
     max2(count(), 20)

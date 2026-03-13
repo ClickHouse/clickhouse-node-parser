@@ -77,6 +77,7 @@ WHERE t1.a = t2.a
     AND t3.a = t5.a
     AND t4.a = t5.a;
 
+-- { echoOff }
 SELECT *
 FROM
     t1
@@ -87,4 +88,4 @@ CROSS JOIN (
         WHERE a + 1 = b
     ) AS t3
 WHERE t1.a = if(t2.b > 0, t2.a, 0)
-SETTINGS cross_to_inner_join_rewrite = 2;
+SETTINGS cross_to_inner_join_rewrite = 2; -- { serverError INCORRECT_QUERY }

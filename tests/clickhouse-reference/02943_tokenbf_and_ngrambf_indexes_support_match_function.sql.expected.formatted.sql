@@ -8,6 +8,10 @@ FROM ngrambf_tab
 WHERE match(str, 'Hello (ClickHouse|World)')
 ORDER BY id ASC;
 
+-- Read 2/6 granules
+-- Required string: 'Hello '
+-- Alternatives: 'Hello ClickHouse', 'Hello World'
+-- Surrounded by spaces for tokenbf
 SELECT *
 FROM (
         EXPLAIN PLAN indexes = 1
@@ -64,6 +68,10 @@ FROM ngrambf_tab
 WHERE match(str, '.*(ClickHouse|World)')
 ORDER BY id ASC;
 
+-- Read 3/6 granules
+-- Required string: -
+-- Alternatives: 'ClickHouse', 'World'
+-- Surrounded by spaces for tokenbf
 SELECT *
 FROM (
         EXPLAIN PLAN indexes = 1
@@ -118,6 +126,10 @@ FROM ngrambf_tab
 WHERE match(str, 'OLAP.*')
 ORDER BY id ASC;
 
+-- Read 1/6 granules
+-- Required string: 'OLAP'
+-- Alternatives: -
+-- Surrounded by spaces for tokenbf
 SELECT *
 FROM (
         EXPLAIN PLAN indexes = 1

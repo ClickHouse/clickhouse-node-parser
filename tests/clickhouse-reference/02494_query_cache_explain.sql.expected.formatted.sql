@@ -1,3 +1,4 @@
+-- Run a silly query with a non-trivial plan and put the result into the query cache QC
 SELECT 1 + number
 FROM `system`.numbers
 LIMIT 1

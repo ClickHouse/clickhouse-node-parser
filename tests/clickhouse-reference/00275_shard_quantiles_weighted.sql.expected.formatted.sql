@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT quantileExactWeighted(0.5)(number, 1)
 FROM (
         SELECT number

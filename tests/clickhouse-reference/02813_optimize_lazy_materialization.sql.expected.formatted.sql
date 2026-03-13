@@ -3,6 +3,7 @@ FROM optimize_lazy_materialization
 ORDER BY c ASC
 LIMIT 3;
 
+-- queries with _part_offset column in projection
 SELECT
     a,
     b,
@@ -21,6 +22,7 @@ FROM optimize_lazy_materialization
 ORDER BY c ASC
 LIMIT 3;
 
+-- queries with filter
 SELECT *
 FROM optimize_lazy_materialization
 WHERE d > 1
@@ -33,6 +35,7 @@ PREWHERE d > 1
 ORDER BY c ASC
 LIMIT 3;
 
+-- queries with function in order by
 SELECT *
 FROM optimize_lazy_materialization
 WHERE d > 1
@@ -51,12 +54,14 @@ WHERE d > 1
 ORDER BY c + 1 ASC
 LIMIT 3;
 
+-- queries with function in filter
 SELECT *
 FROM optimize_lazy_materialization
 WHERE d % 3 > 1
 ORDER BY c ASC
 LIMIT 3;
 
+-- queries with aliases
 SELECT
     a AS a,
     b AS b,
@@ -77,6 +82,7 @@ WHERE d > 1
 ORDER BY c ASC
 LIMIT 3;
 
+-- queries with non-trivial action's chain in expression
 SELECT
     y,
     z
@@ -96,6 +102,7 @@ FROM optimize_lazy_materialization_with_compact_mt
 ORDER BY c ASC
 LIMIT 3;
 
+-- queries with _part_offset column in projection
 SELECT
     a,
     b,
@@ -114,6 +121,7 @@ FROM optimize_lazy_materialization_with_compact_mt
 ORDER BY c ASC
 LIMIT 3;
 
+-- queries with filter
 SELECT *
 FROM optimize_lazy_materialization_with_compact_mt
 WHERE d > 1
@@ -245,6 +253,7 @@ FROM optimize_lazy_materialization_with_variant_data_type
 ORDER BY b ASC
 LIMIT 10;
 
+-- queries with subcolumn of variant data type
 SELECT
     a,
     b,
@@ -288,6 +297,7 @@ FROM optimize_lazy_materialization_with_dynamic_data_type
 ORDER BY b ASC
 LIMIT 10;
 
+-- queries with subcolumn of dynamic data type
 SELECT
     a,
     b,

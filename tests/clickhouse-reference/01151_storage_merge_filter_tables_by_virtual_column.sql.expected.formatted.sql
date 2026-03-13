@@ -3,6 +3,7 @@ SELECT
     sum(n)
 FROM merge(currentDatabase(), 'src_table');
 
+-- FIXME #21401 select count(), sum(n) from merge(currentDatabase(), 'src_table') where _table = 'src_table_1' or toInt8(substr(_table, 11, 1)) = 2;
 SELECT
     count(),
     sum(n)

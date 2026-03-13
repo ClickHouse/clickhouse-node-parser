@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     CounterID AS k,
     round(quantileDD(0.01, 0.5)(ResolutionWidth), 2)

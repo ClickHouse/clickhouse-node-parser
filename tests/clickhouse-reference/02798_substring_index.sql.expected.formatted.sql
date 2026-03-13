@@ -72,13 +72,13 @@ SELECT substringIndex('www.clickhouse.com', '.', materialize(4));
 
 SELECT SUBSTRING_INDEX('www.clickhouse.com', '.', 2);
 
-SELECT substringIndex('www.clickhouse.com', '..', 2);
+SELECT substringIndex('www.clickhouse.com', '..', 2); -- { serverError BAD_ARGUMENTS }
 
-SELECT substringIndex('www.clickhouse.com', '', 2);
+SELECT substringIndex('www.clickhouse.com', '', 2); -- { serverError BAD_ARGUMENTS }
 
-SELECT substringIndex('www.clickhouse.com', materialize('.'), 2);
+SELECT substringIndex('www.clickhouse.com', materialize('.'), 2); -- { serverError ILLEGAL_COLUMN }
 
-SELECT substringIndex('www.clickhouse.com', '.', CAST(2 AS Int128));
+SELECT substringIndex('www.clickhouse.com', '.', CAST(2 AS Int128)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT substringIndexUTF8('富强，民主，文明', '，', -4);
 
@@ -152,10 +152,10 @@ SELECT substringIndexUTF8(materialize('富强，民主，文明'), '，', materi
 
 SELECT substringIndexUTF8(materialize('富强，民主，文明'), '，', materialize(4));
 
-SELECT substringIndexUTF8('富强，民主，文明', '，，', 2);
+SELECT substringIndexUTF8('富强，民主，文明', '，，', 2); -- { serverError BAD_ARGUMENTS }
 
-SELECT substringIndexUTF8('富强，民主，文明', '', 2);
+SELECT substringIndexUTF8('富强，民主，文明', '', 2); -- { serverError BAD_ARGUMENTS }
 
-SELECT substringIndexUTF8('富强，民主，文明', materialize('，'), 2);
+SELECT substringIndexUTF8('富强，民主，文明', materialize('，'), 2); -- { serverError ILLEGAL_COLUMN }
 
-SELECT substringIndexUTF8('富强，民主，文明', '，', CAST(2 AS Int128));
+SELECT substringIndexUTF8('富强，民主，文明', '，', CAST(2 AS Int128)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

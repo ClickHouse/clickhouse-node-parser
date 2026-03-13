@@ -1,3 +1,5 @@
+-- { echo }
+-- Normal cases
 SELECT
     a,
     b,
@@ -65,6 +67,7 @@ FROM (
     )
 LIMIT 100;
 
+-- Bad arguments
 SELECT
     a,
     b,
@@ -74,7 +77,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -85,7 +88,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -96,7 +99,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -107,7 +110,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -118,7 +121,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -129,7 +132,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT
     a,
@@ -140,8 +143,9 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
+-- Bad window type
 SELECT
     a,
     b,
@@ -151,7 +155,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -162,7 +166,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -173,7 +177,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -184,7 +188,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -195,7 +199,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     a,
@@ -206,4 +210,4 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    );
+    ); -- { serverError BAD_ARGUMENTS }

@@ -4,7 +4,7 @@ SELECT
     value
 FROM
     test_table
-ARRAY JOIN [[1,2,3]] AS value_element, value_element AS value;
+ARRAY JOIN [[1,2,3]] AS value_element, value_element AS value; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT
     id,
@@ -27,4 +27,4 @@ SELECT arrayFilter(x -> notEmpty(concat(x)), [NULL, NULL])
 FROM
     `system`.one
 ARRAY JOIN [1048577] AS elem
-ARRAY JOIN arrayMap(x -> splitByChar(x, elem), ['']) AS unused;
+ARRAY JOIN arrayMap(x -> splitByChar(x, elem), ['']) AS unused; -- { serverError ILLEGAL_COLUMN }

@@ -1,9 +1,12 @@
+-- { echo }
+-- BAD_ARGUMENTS
 SELECT groupArrayLast(number + 1)
-FROM numbers(5);
+FROM numbers(5); -- { serverError BAD_ARGUMENTS }
 
 SELECT groupArrayLastArray([number+1])
-FROM numbers(5);
+FROM numbers(5); -- { serverError BAD_ARGUMENTS }
 
+-- groupArrayLast by number
 SELECT groupArrayLast(1)(number + 1)
 FROM numbers(5);
 
@@ -13,16 +16,22 @@ FROM numbers(5);
 SELECT groupArrayLast(3)(number + 1)
 FROM numbers(10);
 
+-- groupArrayLast by String
 SELECT groupArrayLast(3)(((number + 1))::String)
 FROM numbers(5);
 
 SELECT groupArrayLast(3)(((number + 1))::String)
 FROM numbers(10);
 
+-- groupArrayLastArray
 SELECT groupArrayLastArray(3)([1,2,3,4,5,6]);
 
 SELECT groupArrayLastArray(3)(['1','2','3','4','5','6']);
 
+-- groupArrayLastMerge
+-- [10,8,9] + [10,8,9]     => [10,10,9] => [10,10,8] => [9,10,8]
+--     ^          ^                  ^      ^^
+-- (position to insert at)
 SELECT groupArrayLast(3)(number + 1) AS state
 FROM remote('127.{1,1}', view((
         SELECT *

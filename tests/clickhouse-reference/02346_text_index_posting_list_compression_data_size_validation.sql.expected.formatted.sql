@@ -1,3 +1,4 @@
+-- Compare the size of the text index for the same dataset with vs. without compression.
 SELECT
     table,
     sum(`rows`),

@@ -1,4 +1,4 @@
 SELECT *
 FROM (
         SELECT 1
-    ) SAMPLE 1/2;
+    ) SAMPLE 1/2; -- { serverError SAMPLING_NOT_SUPPORTED, UNSUPPORTED_METHOD }

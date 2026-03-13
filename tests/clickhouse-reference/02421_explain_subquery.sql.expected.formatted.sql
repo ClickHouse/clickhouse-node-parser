@@ -76,16 +76,16 @@ SELECT (
     ) == 'SELECT 1';
 
 SELECT *
-FROM viewExplain('', '');
+FROM viewExplain('', ''); -- { serverError BAD_ARGUMENTS }
 
 SELECT *
-FROM viewExplain('EXPLAIN AST', '');
+FROM viewExplain('EXPLAIN AST', ''); -- { serverError BAD_ARGUMENTS }
 
 SELECT *
-FROM viewExplain('EXPLAIN AST', '', 1);
+FROM viewExplain('EXPLAIN AST', '', 1); -- { serverError BAD_ARGUMENTS }
 
 SELECT *
-FROM viewExplain('EXPLAIN AST', '', '');
+FROM viewExplain('EXPLAIN AST', '', ''); -- { serverError BAD_ARGUMENTS }
 
 SELECT `rows` > 1000
 FROM (

@@ -36,7 +36,7 @@ ORDER BY key ASC;
 
 SELECT *
 FROM `01686_test`
-WHERE key = 'Hello';
+WHERE key = 'Hello'; -- { serverError TYPE_MISMATCH }
 
 SELECT *
 FROM `01686_test`

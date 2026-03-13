@@ -111,4 +111,4 @@ FROM (
         SELECT
             1,
             2
-    ) AS t (a, a);
+    ) AS t (a, a); -- { serverError BAD_ARGUMENTS }

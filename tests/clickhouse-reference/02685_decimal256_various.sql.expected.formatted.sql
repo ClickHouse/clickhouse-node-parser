@@ -76,11 +76,11 @@ SELECT toTypeName(arraySort(arrayIntersect([1, 2, 3]::Array(UInt256), [2, 3, 4]:
 
 SELECT arraySort(arrayIntersect([1.1::Decimal256(70), 2.34::Decimal256(60), 3.456::Decimal256(50)], [2.34::Decimal256(65), 3.456::Decimal256(55), 4.5678::Decimal256(45)]));
 
-SELECT arraySort(arrayIntersect([1.1::Decimal256(1)], [1.12::Decimal256(2)]));
+SELECT arraySort(arrayIntersect([1.1::Decimal256(1)], [1.12::Decimal256(2)])); -- Note: this is correct but the semantics has to be clarified in the docs.
 
 SELECT arraySort(arrayIntersect([1.1::Decimal256(2)], [1.12::Decimal256(2)]));
 
-SELECT arraySort(arrayIntersect([1.1::Decimal128(1)], [1.12::Decimal128(2)]));
+SELECT arraySort(arrayIntersect([1.1::Decimal128(1)], [1.12::Decimal128(2)])); -- Note: this is correct but the semantics has to be clarified in the docs.
 
 SELECT arraySort(arrayIntersect([1.1::Decimal128(2)], [1.12::Decimal128(2)]));
 

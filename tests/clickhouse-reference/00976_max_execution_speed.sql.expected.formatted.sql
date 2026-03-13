@@ -1,2 +1,2 @@
 SELECT count()
-FROM `system`.numbers;
+FROM `system`.numbers; -- { serverError TIMEOUT_EXCEEDED }

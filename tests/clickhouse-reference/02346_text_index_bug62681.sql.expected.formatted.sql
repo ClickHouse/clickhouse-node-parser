@@ -1,3 +1,8 @@
+-- to double check: `ll -h $(find . -name "*text_idx*")` from build dir
+-- sum up .mrk* or .cmrk* files to get marks_bytes
+-- sum up .idx files for data_compressed_bytes
+-- note that `du` rounds to nearest 4KB so it is not accurate here
+-- also note that different runs of db might all show up, only sum up one set
 SELECT
     database,
     table,
@@ -13,6 +18,8 @@ WHERE database = currentDatabase()
     AND type = 'text'
 FORMAT Vertical;
 
+-- to double check: `ll -h $(find . -name "*skp_idx*")` from build dir
+-- see above notes
 SELECT
     `partition`,
     name,

@@ -1,3 +1,5 @@
+-- { echo }
+-- 25 is the size of marks in case constant index granularity
 SELECT count()
 FROM test_materialize;
 

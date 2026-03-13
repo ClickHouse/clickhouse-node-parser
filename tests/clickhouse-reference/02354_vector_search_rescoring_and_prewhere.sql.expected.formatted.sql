@@ -6,6 +6,7 @@ SELECT
 FROM tab
 ORDER BY L2Distance(vec, [0.2, 0.3]) ASC;
 
+-- Expect IDs 16 & 19 for next 2 queries
 SELECT id
 FROM tab
 WHERE attr1 > 110
@@ -24,6 +25,7 @@ SETTINGS
     query_plan_optimize_prewhere = 1,
     optimize_move_to_prewhere = 1;
 
+-- Expect 16 & 19, and additionally 18 and 17 because they are in the same granules
 SELECT id
 FROM tab
 WHERE attr1 > 110
@@ -40,6 +42,7 @@ SETTINGS
     vector_search_with_rescoring = 1,
     vector_search_index_fetch_multiplier = 3;
 
+-- Expect no _distance column in result
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
         EXPLAIN header = 1

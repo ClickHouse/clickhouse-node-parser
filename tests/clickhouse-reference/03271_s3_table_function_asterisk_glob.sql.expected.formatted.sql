@@ -18,6 +18,8 @@ FROM s3Cluster('test_cluster_two_shards_localhost', s3_conn, filename = 'dir1/03
 ORDER BY `ALL` ASC
 SETTINGS max_threads = 4;
 
+-- Empty "directory" files created implicitly by S3 console:
+-- https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-folders.html
 SELECT *
 FROM s3('https://clickhouse-public-datasets.s3.amazonaws.com/wikistat/original/*', NOSIGN)
 LIMIT 1

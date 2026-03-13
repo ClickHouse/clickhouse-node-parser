@@ -10,6 +10,6 @@ SELECT
     json.a.b,
     json.`^a`;
 
-SELECT '{"a" : 42, "a" : {"b" : 42}, "a" : 42}'::JSON;
+SELECT '{"a" : 42, "a" : {"b" : 42}, "a" : 42}'::JSON; -- {serverError INCORRECT_DATA}
 
-SELECT '{"a" : 42, "a" : {"b" : 42}, "a" : {"c" : 42}}'::JSON;
+SELECT '{"a" : 42, "a" : {"b" : 42}, "a" : {"c" : 42}}'::JSON; -- {serverError INCORRECT_DATA}

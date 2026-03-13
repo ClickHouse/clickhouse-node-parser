@@ -3,4 +3,4 @@ FROM
     m
 INNER JOIN b
     USING (key)
-WHERE ID = 1;
+WHERE ID = 1; -- { serverError UNKNOWN_TABLE, ALL_CONNECTION_TRIES_FAILED }

@@ -1,50 +1,53 @@
+-- Must accept two arguments
 SELECT id
 FROM tab
-WHERE hasAnyTokens();
+WHERE hasAnyTokens(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT id
 FROM tab
-WHERE hasAnyTokens('a', 'b', 'c');
+WHERE hasAnyTokens('a', 'b', 'c'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT id
 FROM tab
-WHERE hasAllTokens();
+WHERE hasAllTokens(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT id
 FROM tab
-WHERE hasAllTokens('a', 'b', 'c');
+WHERE hasAllTokens('a', 'b', 'c'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
+-- 1st arg must be String or FixedString
+SELECT id
+FROM tab
+WHERE hasAnyTokens(1, ['a']); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT id
 FROM tab
-WHERE hasAnyTokens(1, ['a']);
+WHERE hasAllTokens(1, ['a']); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+-- 2nd arg must be const const String or const Array(String)
+SELECT id
+FROM tab
+WHERE hasAnyTokens(message, 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT id
 FROM tab
-WHERE hasAllTokens(1, ['a']);
+WHERE hasAnyTokens(message, materialize('b')); -- { serverError ILLEGAL_COLUMN }
 
 SELECT id
 FROM tab
-WHERE hasAnyTokens(message, 1);
+WHERE hasAnyTokens(message, materialize(['b'])); -- { serverError ILLEGAL_COLUMN }
 
 SELECT id
 FROM tab
-WHERE hasAnyTokens(message, materialize('b'));
+WHERE hasAllTokens(message, 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT id
 FROM tab
-WHERE hasAnyTokens(message, materialize(['b']));
+WHERE hasAllTokens(message, materialize('b')); -- { serverError ILLEGAL_COLUMN }
 
 SELECT id
 FROM tab
-WHERE hasAllTokens(message, 1);
-
-SELECT id
-FROM tab
-WHERE hasAllTokens(message, materialize('b'));
-
-SELECT id
-FROM tab
-WHERE hasAllTokens(message, materialize(['b']));
+WHERE hasAllTokens(message, materialize(['b'])); -- { serverError ILLEGAL_COLUMN }
 
 SELECT id
 FROM tab
@@ -74,6 +77,7 @@ FORMAT Null;
 SELECT hasAllToken('a b', ['b'])
 FORMAT Null;
 
+-- We expected that the default tokenizer is used
 SELECT hasAnyTokens('a b', ['b']);
 
 SELECT hasAnyTokens('a b', ['c']);
@@ -90,6 +94,7 @@ SELECT hasAnyTokens(materialize('a b'), 'b');
 
 SELECT hasAnyTokens(materialize('a b'), 'c');
 
+--
 SELECT hasAllTokens('a b', ['a', 'b']);
 
 SELECT hasAllTokens('a b', ['a', 'c']);
@@ -106,6 +111,9 @@ SELECT hasAllTokens(materialize('a b'), 'a b');
 
 SELECT hasAllTokens(materialize('a b'), 'a c');
 
+-- These are equivalent to the lines above, but using Search{Any,All} in the filter step.
+-- We keep this test because the direct read optimization substituted Search{Any,All} only
+-- when they are in the filterStep, and we want to detect any variation eagerly.
 SELECT id
 FROM tab
 WHERE hasAnyTokens('a b', ['b']);
@@ -170,6 +178,7 @@ SELECT id
 FROM tab
 WHERE hasAllTokens(col_str, 'b c');
 
+-- Test search without needle on non-empty columns (all are expected to match nothing)
 SELECT count()
 FROM tab
 WHERE hasAnyTokens(col_str, []);
@@ -361,11 +370,11 @@ WHERE hasAnyTokens(message, ['defg']);
 
 SELECT groupArray(id)
 FROM tab
-WHERE hasAnyTokens(message, ['cdef', 'defg']);
+WHERE hasAnyTokens(message, ['cdef', 'defg']); -- search cdefg
 
 SELECT groupArray(id)
 FROM tab
-WHERE hasAnyTokens(message, ['efgh', 'cdef', 'defg']);
+WHERE hasAnyTokens(message, ['efgh', 'cdef', 'defg']); --search for either cdefg or defgh
 
 SELECT groupArray(id)
 FROM tab
@@ -681,11 +690,11 @@ WHERE hasAnyTokens(message, tokens('defg', 'ngrams', 4));
 
 SELECT groupArray(id)
 FROM tab
-WHERE hasAnyTokens(message, tokens('cdefg', 'ngrams', 4));
+WHERE hasAnyTokens(message, tokens('cdefg', 'ngrams', 4)); -- search cdefg
 
 SELECT groupArray(id)
 FROM tab
-WHERE hasAnyTokens(message, arrayConcat(tokens('cdefg', 'ngrams', 4), tokens('defgh', 'ngrams', 4)));
+WHERE hasAnyTokens(message, arrayConcat(tokens('cdefg', 'ngrams', 4), tokens('defgh', 'ngrams', 4))); --search for either cdefg or defgh
 
 SELECT groupArray(id)
 FROM tab
@@ -801,7 +810,7 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
@@ -813,7 +822,7 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
@@ -844,7 +853,7 @@ FROM (
         EXPLAIN indexes = 1
         SELECT count()
         FROM tab
-        WHERE hasAnyTokens(message, ['Hallo', 'Word'])
+        WHERE hasAnyTokens(message, ['Hallo', 'Word']) -- Word does not exist in terms
     )
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
@@ -856,7 +865,7 @@ FROM (
         EXPLAIN indexes = 1
         SELECT count()
         FROM tab
-        WHERE hasAnyTokens(message, 'Hallo Word')
+        WHERE hasAnyTokens(message, 'Hallo Word') -- Word does not exist in terms
     )
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
@@ -1000,7 +1009,7 @@ FROM (
         EXPLAIN indexes = 1
         SELECT count()
         FROM tab
-        WHERE hasAllTokens(message, ['Hallo', 'Word'])
+        WHERE hasAllTokens(message, ['Hallo', 'Word']) -- Word does not exist in terms
     )
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
@@ -1012,7 +1021,7 @@ FROM (
         EXPLAIN indexes = 1
         SELECT count()
         FROM tab
-        WHERE hasAllTokens(message, 'Hallo Word')
+        WHERE hasAllTokens(message, 'Hallo Word') -- Word does not exist in terms
     )
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')

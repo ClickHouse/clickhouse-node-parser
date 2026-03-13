@@ -100,20 +100,21 @@ CROSS JOIN vec2d AS v2
 WHERE length(v1.v) == length(v2.v)
 ORDER BY `ALL` ASC;
 
-SELECT L1Distance([0, 0], [1]);
+SELECT L1Distance([0, 0], [1]); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }
 
-SELECT L2Distance([1, 2], (3,4));
+SELECT L2Distance([1, 2], (3,4)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT L2SquaredDistance([1, 2], (3,4));
+SELECT L2SquaredDistance([1, 2], (3,4)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT LpDistance([1, 2], [3,4]);
+SELECT LpDistance([1, 2], [3,4]); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT LpDistance([1, 2], [3,4], -1.);
+SELECT LpDistance([1, 2], [3,4], -1.); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT LpDistance([1, 2], [3,4], 'aaa');
+SELECT LpDistance([1, 2], [3,4], 'aaa'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT LpDistance([1, 2], [3,4], materialize(2.7));
+SELECT LpDistance([1, 2], [3,4], materialize(2.7)); -- { serverError ILLEGAL_COLUMN }
 
+-- Queries which trigger manually vectorized implementation
 SELECT L2Distance([toFloat32(0.0), toFloat32(1.0), toFloat32(2.0), toFloat32(3.0), toFloat32(4.0), toFloat32(5.0), toFloat32(6.0), toFloat32(7.0), toFloat32(8.0), toFloat32(9.0), toFloat32(10.0), toFloat32(11.0), toFloat32(12.0), toFloat32(13.0), toFloat32(14.0), toFloat32(15.0), toFloat32(16.0), toFloat32(17.0), toFloat32(18.0), toFloat32(19.0), toFloat32(20.0), toFloat32(21.0), toFloat32(22.0), toFloat32(23.0), toFloat32(24.0), toFloat32(25.0), toFloat32(26.0), toFloat32(27.0), toFloat32(28.0), toFloat32(29.0), toFloat32(30.0), toFloat32(31.0), toFloat32(32.0), toFloat32(33.0)], materialize([toFloat32(1.0), toFloat32(2.0), toFloat32(3.0), toFloat32(4.0), toFloat32(5.0), toFloat32(6.0), toFloat32(7.0), toFloat32(8.0), toFloat32(9.0), toFloat32(10.0), toFloat32(11.0), toFloat32(12.0), toFloat32(13.0), toFloat32(14.0), toFloat32(15.0), toFloat32(16.0), toFloat32(17.0), toFloat32(18.0), toFloat32(19.0), toFloat32(20.0), toFloat32(21.0), toFloat32(22.0), toFloat32(23.0), toFloat32(24.0), toFloat32(25.0), toFloat32(26.0), toFloat32(27.0), toFloat32(28.0), toFloat32(29.0), toFloat32(30.0), toFloat32(31.0), toFloat32(32.0), toFloat32(33.0), toFloat32(34.0)]));
 
 SELECT cosineDistance([toFloat32(0.0), toFloat32(1.0), toFloat32(2.0), toFloat32(3.0), toFloat32(4.0), toFloat32(5.0), toFloat32(6.0), toFloat32(7.0), toFloat32(8.0), toFloat32(9.0), toFloat32(10.0), toFloat32(11.0), toFloat32(12.0), toFloat32(13.0), toFloat32(14.0), toFloat32(15.0), toFloat32(16.0), toFloat32(17.0), toFloat32(18.0), toFloat32(19.0), toFloat32(20.0), toFloat32(21.0), toFloat32(22.0), toFloat32(23.0), toFloat32(24.0), toFloat32(25.0), toFloat32(26.0), toFloat32(27.0), toFloat32(28.0), toFloat32(29.0), toFloat32(30.0), toFloat32(31.0), toFloat32(32.0), toFloat32(33.0)], materialize([toFloat32(1.0), toFloat32(2.0), toFloat32(3.0), toFloat32(4.0), toFloat32(5.0), toFloat32(6.0), toFloat32(7.0), toFloat32(8.0), toFloat32(9.0), toFloat32(10.0), toFloat32(11.0), toFloat32(12.0), toFloat32(13.0), toFloat32(14.0), toFloat32(15.0), toFloat32(16.0), toFloat32(17.0), toFloat32(18.0), toFloat32(19.0), toFloat32(20.0), toFloat32(21.0), toFloat32(22.0), toFloat32(23.0), toFloat32(24.0), toFloat32(25.0), toFloat32(26.0), toFloat32(27.0), toFloat32(28.0), toFloat32(29.0), toFloat32(30.0), toFloat32(31.0), toFloat32(32.0), toFloat32(33.0), toFloat32(34.0)]));

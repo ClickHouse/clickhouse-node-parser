@@ -33,4 +33,4 @@ INNER JOIN (
         FROM numbers(1)
         WHERE tbl.number >= number
     ) AS alias4
-    ON alias4.number = number;
+    ON alias4.number = number; -- { serverError NOT_IMPLEMENTED}

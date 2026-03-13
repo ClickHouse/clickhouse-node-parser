@@ -16,7 +16,7 @@ WHERE str IN (
             str
         FROM bloom_filter_nullable_index
     )
-SETTINGS transform_null_in = 1;
+SETTINGS transform_null_in = 1; -- { serverError NUMBER_OF_COLUMNS_DOESNT_MATCH }
 
 SELECT *
 FROM bloom_filter_nullable_index

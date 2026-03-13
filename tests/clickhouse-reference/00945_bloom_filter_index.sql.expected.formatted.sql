@@ -66,10 +66,12 @@ WHERE (i64, (i64, i32)) IN (
     )
 SETTINGS max_rows_to_read = 7;
 
+-- Check that indexHint() works (but it doesn't work with COUNT()).
 SELECT SUM(ignore(*) + 1)
 FROM single_column_bloom_filter
 WHERE indexHint(i32 IN (3, 15, 50));
 
+-- The index doesn't understand expressions like these, but it shouldn't break the query.
 SELECT COUNT()
 FROM single_column_bloom_filter
 WHERE (i32 = 200) = ((i32 = 200));

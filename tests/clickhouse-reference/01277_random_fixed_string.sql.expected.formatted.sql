@@ -1,8 +1,8 @@
-SELECT randomFixedString('string');
+SELECT randomFixedString('string'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT randomFixedString(0);
+SELECT randomFixedString(0); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT randomFixedString(rand() % 10);
+SELECT randomFixedString(rand() % 10); -- { serverError ILLEGAL_COLUMN }
 
 SELECT toTypeName(randomFixedString(10));
 

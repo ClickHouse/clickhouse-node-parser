@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT x
 FROM (
         SELECT count() AS x

@@ -2,16 +2,16 @@ SELECT 1
 FROM
     t0
 INNER JOIN t0
-    ON *;
+    ON *; -- { serverError BAD_ARGUMENTS,INVALID_JOIN_ON_EXPRESSION }
 
 SELECT 1
 FROM
     t0
 INNER JOIN t0
-    ON tuple(*);
+    ON tuple(*); -- { serverError AMBIGUOUS_COLUMN_NAME,ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT 1
 FROM
     t0
 INNER JOIN t0
-    USING *;
+    USING *; -- { serverError BAD_ARGUMENTS,UNSUPPORTED_JOIN_KEYS }

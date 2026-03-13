@@ -1,35 +1,35 @@
 SELECT *
 FROM (
         SELECT 1
-    ) FINAL;
+    ) FINAL; -- { serverError UNSUPPORTED_METHOD }
 
 SELECT *
 FROM (
         SELECT 1
-    ) SAMPLE 1/2;
+    ) SAMPLE 1/2; -- { serverError UNSUPPORTED_METHOD }
 
 SELECT *
 FROM (
         SELECT 1
-    ) FINAL SAMPLE 1/2;
-
-SELECT *
-FROM (
-        SELECT 1
-        UNION ALL
-        SELECT 1
-    ) FINAL;
+    ) FINAL SAMPLE 1/2; -- { serverError UNSUPPORTED_METHOD }
 
 SELECT *
 FROM (
         SELECT 1
         UNION ALL
         SELECT 1
-    ) SAMPLE 1/2;
+    ) FINAL; -- { serverError UNSUPPORTED_METHOD }
 
 SELECT *
 FROM (
         SELECT 1
         UNION ALL
         SELECT 1
-    ) FINAL SAMPLE 1/2;
+    ) SAMPLE 1/2; -- { serverError UNSUPPORTED_METHOD }
+
+SELECT *
+FROM (
+        SELECT 1
+        UNION ALL
+        SELECT 1
+    ) FINAL SAMPLE 1/2; -- { serverError UNSUPPORTED_METHOD }

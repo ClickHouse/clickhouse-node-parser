@@ -4,6 +4,8 @@ WHERE AdvEngineID <> 0
 FORMAT Null
 SETTINGS log_comment = 'query_1';
 
+-- Unsupported at the moment, refer to comments in `RuntimeDataflowStatisticsCacheUpdater::recordAggregationStateSizes`
+-- SELECT COUNT(DISTINCT SearchPhrase) FROM test.hits FORMAT Null SETTINGS log_comment='query_5';
 SELECT
     MobilePhoneModel,
     COUNTDistinct(UserID) AS u
@@ -106,12 +108,14 @@ LIMIT 10
 FORMAT Null
 SETTINGS log_comment = 'query_34';
 
+-- Just checking that statistics are collected with read in order
 SELECT CounterID
 FROM test.hits
 ORDER BY CounterID DESC
 FORMAT Null
 SETTINGS optimize_read_in_order = 1, query_plan_read_in_order = 1, log_comment = 'query_43';
 
+-- Just checking that the estimation is not too far off
 SELECT format('{} {} {}', log_comment, compressed_bytes, statistics_input_bytes)
 FROM (
         SELECT

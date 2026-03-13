@@ -7,6 +7,7 @@ FROM {CLICKHOUSE_DATABASE:Identifier}.table;
 SELECT {CLICKHOUSE_DATABASE:Identifier}.table.column
 FROM table;
 
+--
 SELECT
     t1.x,
     t2.x,
@@ -37,6 +38,7 @@ SELECT `system`.one.dummy;
 
 SELECT *;
 
+--
 SELECT nest.key.subkey
 FROM table;
 

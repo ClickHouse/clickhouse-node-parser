@@ -1,21 +1,27 @@
-SELECT neighbor();
+-- no arguments
+SELECT neighbor(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT neighbor(1);
+-- single argument
+SELECT neighbor(1); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT neighbor(1, 2, 3, 4);
+-- greater than 3 arguments
+SELECT neighbor(1, 2, 3, 4); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT neighbor(dummy, 1, 'hello');
+-- bad default value
+SELECT neighbor(dummy, 1, 'hello'); -- { serverError NO_COMMON_TYPE }
 
+-- types without common supertype (UInt64 and Int8)
 SELECT
     number,
     neighbor(number, 1, -10)
-FROM numbers(3);
+FROM numbers(3); -- { serverError NO_COMMON_TYPE }
 
+-- nullable offset is not allowed
 SELECT
     number,
     if(number > 1, number, NULL) AS `offset`,
     neighbor(number, `offset`)
-FROM numbers(3);
+FROM numbers(3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     number,

@@ -1,3 +1,4 @@
+-- Tags: no-object-storage
 SELECT *
 FROM `system`.`settings`
 WHERE name = 'send_timeout';

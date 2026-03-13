@@ -22,13 +22,13 @@ SELECT toDayOfYear(x1)
 FROM t1;
 
 SELECT toHour(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toMinute(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toSecond(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfDay(x1, 'Asia/Istanbul')
 FROM t1;
@@ -64,22 +64,22 @@ SELECT toStartOfYear(x1)
 FROM t1;
 
 SELECT toStartOfSecond(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfMinute(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfFiveMinutes(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfTenMinutes(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfFifteenMinutes(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfHour(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toStartOfISOYear(x1)
 FROM t1;
@@ -109,7 +109,7 @@ SELECT toRelativeSecondNum(x1, 'Asia/Istanbul')
 FROM t1;
 
 SELECT toTimeWithFixedDate(x1)
-FROM t1;
+FROM t1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toYYYYMM(x1)
 FROM t1;

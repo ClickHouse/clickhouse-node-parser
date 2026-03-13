@@ -249,6 +249,7 @@ SELECT
     dictGetOrDefault(dict_name, 'u64', k, toUInt64(42)),
     dictGetOrDefault(dict_name, ('i8', 'i16', 'i32'), k, (toInt8(42), toInt16(42), toInt32(42)));
 
+--
 SELECT
     'dictGet',
     'flat_strings' AS dict_name,
@@ -354,6 +355,7 @@ SELECT
     dictGetOrDefault(dict_name, 'str', tuple(k), '*'),
     dictGetOrDefault(dict_name, ('str'), tuple(k), ('*'));
 
+--
 SELECT
     'dictGet',
     'flat_decimals' AS dict_name,

@@ -126,6 +126,8 @@ ORDER BY
     b DESC,
     c DESC;
 
+-- Currently checking number of read rows while reading in pk order not working precise. TODO: fix it.
+-- SET max_rows_to_read = 10;
 SELECT d
 FROM pk_order
 ORDER BY d ASC

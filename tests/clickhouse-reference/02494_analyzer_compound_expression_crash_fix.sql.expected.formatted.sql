@@ -10,4 +10,4 @@ SELECT
 FROM (
         SELECT fields.name
         FROM test_table
-    );
+    ); -- { serverError UNKNOWN_IDENTIFIER }

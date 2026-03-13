@@ -1,5 +1,5 @@
 SELECT sleep(1)
-FORMAT Null;
+FORMAT Null; -- wait if very fast merge happen
 
 SELECT *
 FROM ttl

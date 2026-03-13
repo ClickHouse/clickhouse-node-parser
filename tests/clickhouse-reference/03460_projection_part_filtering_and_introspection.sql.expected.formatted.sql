@@ -1,3 +1,4 @@
+-- region projection is enough effective for filtering
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -9,6 +10,7 @@ FROM (
 WHERE like(`explain`, '%ReadFromMergeTree%')
     OR match(`explain`, '^\\s+[A-Z][a-z]+(\\s+[A-Z][a-z]+)*:');
 
+-- Only user_id projection is effective for filtering
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -20,6 +22,7 @@ FROM (
 WHERE like(`explain`, '%ReadFromMergeTree%')
     OR match(`explain`, '^\\s+[A-Z][a-z]+(\\s+[A-Z][a-z]+)*:');
 
+-- Both region and user_id projections are effective for filtering
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -31,6 +34,7 @@ FROM (
 WHERE like(`explain`, '%ReadFromMergeTree%')
     OR match(`explain`, '^\\s+[A-Z][a-z]+(\\s+[A-Z][a-z]+)*:');
 
+-- Neither projection is effective for filtering
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1

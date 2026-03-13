@@ -1,27 +1,41 @@
+-- Tags: no-fasttest
+-- baseline test, encode of value should match expected val
 SELECT bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'));
 
+-- different hrp value should yield a different result
 SELECT bech32Encode('tb', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'));
 
+-- exactly the max amount of characters (50) should work
 SELECT bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6751e76e8199196d454941c45d1b3a323f1433bd6751e76e8199196d45494'));
 
+-- strange, but valid
 SELECT bech32Encode('bcrt', unhex(''));
 
+-- test other hrps
 SELECT bech32Encode('bcrt', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'));
 
 SELECT bech32Encode('tltc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'));
 
 SELECT bech32Encode('tltssdfsdvjnasdfnjkbhksdfasnbdfkljhaksdjfnakjsdhasdfnasdkfasdfasdfasdf', unhex('751e'));
 
+-- negative tests
+-- too many chars
 SELECT bech32Encode('tltssdfsdvjnasdfnjkbhksdfasnbdfkljhaksdjfnakjsdhasdfnasdkfasdfasdfasdfdljsdfasdfahc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'));
 
+-- empty hrp
 SELECT bech32Encode('', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'));
 
+-- 51 chars should return nothing
 SELECT bech32Encode('', unhex('751e76e8199196d454941c45d1b3a323f1433bd6751e76e8199196d454941c45d1b3a323f1433bd6751e76e8199196d45494a'));
 
+-- test with explicit witver = 1, should be same as default
 SELECT bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'), 1) == bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'));
 
+-- testing old bech32 algo
 SELECT bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'), 0);
 
+-- different witvers will not match perfectly, but the encoded data should match, so we strip off the first 4 chars (hrp and prepended witver)
+-- as well as the last 6 chars (checksum)
 SELECT substring(s1, 5, -6) == substring(s2, 5, -6)
 FROM (
         SELECT
@@ -29,6 +43,7 @@ FROM (
             bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'), 10) AS s2
     );
 
+-- roundtrip
 SELECT
     tup.1 AS hrp,
     hex(tup.2) AS data
@@ -36,14 +51,17 @@ FROM (
         SELECT bech32Decode(bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'))) AS tup
     );
 
+-- test const hrp with column data
 SELECT bech32Encode('bc', unhex(data))
 FROM hex_data
 LIMIT 1;
 
+-- test const data with column hrp
 SELECT bech32Encode(hrp, unhex('6687112a6eadb4d88d29c7a45da56eff0c23b0e14e757d408e'))
 FROM hex_data
 LIMIT 1;
 
+-- test column hrp and data with const witver
 SELECT bech32Encode(hrp, unhex(data), 1)
 FROM hex_data
 LIMIT 1;
@@ -56,6 +74,7 @@ SELECT
     bech32Encode(hrp, unhex(data), witver) = bech32Encode(hrp_fixed, unhex(data), witver) AS match3
 FROM bech32_test;
 
+-- sanity check, should return hrp and data used to create it
 SELECT
     tup.1,
     hex(tup.2)
@@ -76,10 +95,12 @@ FROM (
         FROM bech32_test
     ) AS round_trip;
 
+-- negative tests
 SELECT bech32Decode('');
 
 SELECT bech32Decode('foo');
 
+-- decode valid string, witver 0, hrp=bc
 SELECT
     tup.1 AS hrp,
     hex(tup.2) AS data
@@ -87,6 +108,7 @@ FROM (
         SELECT bech32Decode('bc1pw508d6qejxtdg4y5r3zarvary0c5xw7kj9wkru') AS tup
     );
 
+-- decode valid string, witver 1, hrp=tb
 SELECT
     tup.1 AS hrp,
     hex(tup.2) AS data
@@ -94,6 +116,7 @@ FROM (
         SELECT bech32Decode('tb1pw508d6qejxtdg4y5r3zarvary0c5xw7kcr49c0') AS tup
     );
 
+-- decoding address created with same data but different witvers should be same
 SELECT
     t1.1 != '',
     t1.1 == t2.1,
@@ -104,6 +127,7 @@ FROM (
             bech32Decode('bc1pw508d6qejxtdg4y5r3zarvary0c5xw7kj9wkru') AS t2
     );
 
+-- decoding address created with same data but different witvers should be same
 SELECT
     t1.1 != '',
     t1.1 == t2.1,
@@ -114,6 +138,7 @@ FROM (
             bech32Decode('tb1pw508d6qejxtdg4y5r3zarvary0c5xw7kcr49c0') AS t2
     );
 
+-- testing max length, this should work
 SELECT
     tup.1 AS hrp,
     hex(tup.2) AS data
@@ -121,6 +146,7 @@ FROM (
         SELECT bech32Decode('b1pw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y565gdg8') AS tup
     );
 
+-- testing max length, this should return nothing
 SELECT
     tup.1 AS hrp,
     hex(tup.2) AS data

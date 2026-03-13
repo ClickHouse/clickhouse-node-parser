@@ -2,6 +2,8 @@ SELECT
     ifNull(fun_res, 0),
     count(*)
 FROM (
+        -- getEventLevelStrictOnce <- AggregateFunctionWindowFunnel<T, Data>::insertResultInto
+        -- will allocate more than 1GB for every list of ~4M events, which is more than the limit we set (800Mi)
         SELECT
             a,
             windowFunnel(86400000, 'strict_increase', 'strict_once')((b = '10')
@@ -23,4 +25,4 @@ FROM (
     )
 GROUP BY fun_res
 FORMAT Null
-SETTINGS log_queries = 1, max_memory_usage = '800Mi';
+SETTINGS log_queries = 1, max_memory_usage = '800Mi'; -- { serverError MEMORY_LIMIT_EXCEEDED }

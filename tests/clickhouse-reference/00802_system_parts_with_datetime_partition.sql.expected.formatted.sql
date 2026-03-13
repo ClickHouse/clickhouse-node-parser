@@ -1,3 +1,4 @@
+-- min_time and max_time are not filled
 SELECT
     `partition`,
     toTimeZone(MIN(min_time), 'UTC') AS min_time,
@@ -10,6 +11,7 @@ GROUP BY `partition`
 ORDER BY `partition` ASC
 FORMAT CSV;
 
+-- min_time and max_time are now filled
 SELECT
     `partition`,
     toUnixTimestamp(MIN(min_time)) AS min_unix_time,

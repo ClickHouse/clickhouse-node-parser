@@ -1,3 +1,4 @@
+-- after PR#10441
 SELECT toTypeName(alias)
 FROM data_01269;
 

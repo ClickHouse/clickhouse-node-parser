@@ -28,16 +28,17 @@ FROM dictionary_source_table;
 SELECT dictGetOrDefault('hashed_array_dictionary', 'v3', id + 1, intDiv(NULL, id))
 FROM dictionary_source_table;
 
+-- Fuzzer
 SELECT dictGetOrDefault('hashed_array_dictionary', ('v1', 'v2'), toUInt128(0), (materialize(toNullable(NULL)), intDiv(1, id), intDiv(1, id)))
-FROM dictionary_source_table;
+FROM dictionary_source_table; -- { serverError TYPE_MISMATCH }
 
 SELECT
     materialize(materialize(toLowCardinality(15))),
     dictGetOrDefault('hashed_array_dictionary', ('v1', 'v2'), 0, (intDiv(materialize(NULL), id), intDiv(1, id), intDiv(1, id)))
-FROM dictionary_source_table;
+FROM dictionary_source_table; -- { serverError TYPE_MISMATCH }
 
 SELECT dictGetOrDefault('hashed_array_dictionary', ('v1', 'v2'), 0, (toNullable(NULL), intDiv(1, id), intDiv(1, id)))
-FROM dictionary_source_table;
+FROM dictionary_source_table; -- { serverError TYPE_MISMATCH }
 
 SELECT dictGetOrDefault('range_hashed_dictionary', 'val', id, toDate('2023-01-02'), intDiv(NULL, id))
 FROM range_dictionary_source_table;
@@ -74,5 +75,6 @@ FROM points;
 SELECT dictGetOrDefault('regexp_dict', 'name', concat(toString(number), '/tclwebkit', toString(number)), intDiv(1, number))
 FROM numbers(2);
 
+-- Fuzzer
 SELECT dictGetOrDefault('regexp_dict', 'name', concat('/tclwebkit', toString(number)), intDiv(1, number))
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_DIVISION }

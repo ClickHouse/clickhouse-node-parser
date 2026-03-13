@@ -40,7 +40,7 @@ SELECT toIntervalNanosecond(1) > toIntervalDay(2);
 
 SELECT toIntervalNanosecond(5) > toIntervalWeek(1);
 
-SELECT toIntervalNanosecond(1) < toIntervalMonth(2);
+SELECT toIntervalNanosecond(1) < toIntervalMonth(2); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing microseconds');
 
@@ -72,7 +72,7 @@ SELECT toIntervalMicrosecond(36000000000000) < toIntervalDay(2);
 
 SELECT toIntervalMicrosecond(1209600000000) != toIntervalWeek(2);
 
-SELECT toIntervalMicrosecond(36000000000000) < toIntervalQuarter(1);
+SELECT toIntervalMicrosecond(36000000000000) < toIntervalQuarter(1); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing milliseconds');
 
@@ -100,7 +100,7 @@ SELECT toIntervalMillisecond(1728000000) != toIntervalDay(20);
 
 SELECT toIntervalMillisecond(1198599999) > toIntervalWeek(2);
 
-SELECT toIntervalMillisecond(36000000000000) < toIntervalYear(1);
+SELECT toIntervalMillisecond(36000000000000) < toIntervalYear(1); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing seconds');
 
@@ -124,7 +124,7 @@ SELECT toIntervalSecond(86401) < toIntervalDay(1);
 
 SELECT toIntervalSecond(1209600) != toIntervalWeek(2);
 
-SELECT toIntervalSecond(36000000000000) < toIntervalMonth(1);
+SELECT toIntervalSecond(36000000000000) < toIntervalMonth(1); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing minutes');
 
@@ -144,7 +144,7 @@ SELECT toIntervalMinute(1440) != toIntervalDay(1);
 
 SELECT toIntervalMinute(30241) < toIntervalWeek(3);
 
-SELECT toIntervalMinute(2) = toIntervalQuarter(120);
+SELECT toIntervalMinute(2) = toIntervalQuarter(120); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing hours');
 
@@ -160,7 +160,7 @@ SELECT toIntervalHour(48) < toIntervalDay(2);
 
 SELECT toIntervalHour(672) != toIntervalWeek(4);
 
-SELECT toIntervalHour(2) < toIntervalYear(1);
+SELECT toIntervalHour(2) < toIntervalYear(1); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing days');
 
@@ -172,7 +172,7 @@ SELECT toIntervalDay(1) > toIntervalDay(23);
 
 SELECT toIntervalDay(25) < toIntervalWeek(3);
 
-SELECT toIntervalDay(2) = toIntervalMonth(48);
+SELECT toIntervalDay(2) = toIntervalMonth(48); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing weeks');
 
@@ -180,7 +180,7 @@ SELECT toIntervalWeek(1) < toIntervalWeek(6);
 
 SELECT toIntervalWeek(1) > toIntervalWeek(6);
 
-SELECT toIntervalWeek(124) > toIntervalQuarter(8);
+SELECT toIntervalWeek(124) > toIntervalQuarter(8); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing months');
 
@@ -196,7 +196,7 @@ SELECT toIntervalMonth(124) < toIntervalQuarter(5);
 
 SELECT toIntervalMonth(36) != toIntervalYear(3);
 
-SELECT toIntervalMonth(6) = toIntervalMicrosecond(26);
+SELECT toIntervalMonth(6) = toIntervalMicrosecond(26); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing quarters');
 
@@ -208,7 +208,7 @@ SELECT toIntervalQuarter(5) < toIntervalQuarter(4);
 
 SELECT toIntervalQuarter(20) != toIntervalYear(5);
 
-SELECT toIntervalQuarter(2) = toIntervalNanosecond(6);
+SELECT toIntervalQuarter(2) = toIntervalNanosecond(6); -- { serverError NO_COMMON_TYPE }
 
 SELECT ('Comparing years');
 
@@ -216,4 +216,4 @@ SELECT toIntervalYear(1) < toIntervalYear(3);
 
 SELECT toIntervalYear(1) > toIntervalYear(3);
 
-SELECT toIntervalYear(2) = toIntervalSecond(8);
+SELECT toIntervalYear(2) = toIntervalSecond(8); -- { serverError NO_COMMON_TYPE }

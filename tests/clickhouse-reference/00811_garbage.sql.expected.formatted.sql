@@ -4,4 +4,4 @@ SELECT
     (
         SELECT toDecimal128([], rowNumberInBlock())
     ),
-    lcm('', [[(CAST(('>A') AS String))]]);
+    lcm('', [[(CAST(('>A') AS String))]]); -- { serverError ILLEGAL_COLUMN }

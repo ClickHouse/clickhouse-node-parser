@@ -42,12 +42,15 @@ SELECT IPv6StringToNum('not an ip string') == toFixedString(materialize(''), 16)
 
 SELECT IPv6StringToNum(materialize('not an ip string')) == toFixedString(materialize(''), 16);
 
+/* IPv4ToIPv6 */
 SELECT hex(IPv4ToIPv6(1297626935));
 
 SELECT hex(IPv4ToIPv6(addr))
 FROM addresses
 ORDER BY addr ASC;
 
+/* cutIPv6 */
+/*  Реальный IPv6-адрес */
 SELECT cutIPv6(IPv6StringToNum('2001:0DB8:AC10:FE01:FEED:BABE:CAFE:F00D'), 0, 0);
 
 SELECT cutIPv6(IPv6StringToNum('2001:0DB8:AC10:FE01:FEED:BABE:CAFE:F00D'), 1, 0);
@@ -114,6 +117,7 @@ SELECT cutIPv6(IPv6StringToNum('2001:0DB8:AC10:FE01:FEED:BABE:CAFE:F00D'), 0, 15
 
 SELECT cutIPv6(IPv6StringToNum('2001:0DB8:AC10:FE01:FEED:BABE:CAFE:F00D'), 0, 16);
 
+/*  IPv4-mapped IPv6-адрес */
 SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 0, 0);
 
 SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 1, 0);

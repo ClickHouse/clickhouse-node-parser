@@ -10,7 +10,7 @@ INNER JOIN (
             2 AS b,
             3 AS c
     ) AS r
-    USING (b);
+    USING (b); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT r.a
 FROM
@@ -24,7 +24,7 @@ INNER JOIN (
             2 AS b,
             3 AS c
     ) AS r
-    USING (b);
+    USING (b); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT
     l.a,

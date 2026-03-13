@@ -49,4 +49,4 @@ FROM (
 
 SELECT transform(number, NULL, ['google', 'censor.net', 'yahoo'], 'other')
 FROM `system`.numbers
-LIMIT 10;
+LIMIT 10; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

@@ -1,12 +1,13 @@
+-- { echo }
 SELECT
     (1, 2).-1,
     (1, 2).-2;
 
-SELECT tuple().-1;
+SELECT tuple().-1; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
-SELECT (1, 2, 3).-4;
+SELECT (1, 2, 3).-4; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
-SELECT tupleElement((1, 2), negate(1e42));
+SELECT tupleElement((1, 2), negate(1e42)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT tupleElement((1, 'hello'), -10, 2);
 

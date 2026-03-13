@@ -147,7 +147,7 @@ FROM
     t1
 INNER JOIN t2
     ON talias = t2.time
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError AMBIGUOUS_COLUMN_NAME }
 
 SELECT time AS talias
 FROM

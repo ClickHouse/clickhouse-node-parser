@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on AWS
 SELECT *
 FROM urlCluster('test_cluster_two_shards_localhost', 'http://localhost:11111/test/{a,b,c}.tsv')
 ORDER BY

@@ -25,7 +25,7 @@ SETTINGS apply_patch_parts = 0;
 
 SELECT
     ProfileEvents['MutationSomePartColumns'],
-    ProfileEvents['MutatedUncompressedBytes']
+    ProfileEvents['MutatedUncompressedBytes'] -- 2 * 8 * 10000 = 160000, because only 2 columns must be affected.
 FROM `system`.part_log
 WHERE database = currentDatabase()
     AND table = 't_apply_patches'
@@ -46,7 +46,7 @@ ORDER BY
 
 SELECT
     ProfileEvents['MutationSomePartColumns'],
-    ProfileEvents['MutatedUncompressedBytes']
+    ProfileEvents['MutatedUncompressedBytes'] -- 2 * 8 * 10000 = 160000, because only 2 columns must be affected.
 FROM `system`.part_log
 WHERE database = currentDatabase()
     AND table = 't_apply_patches_smt'

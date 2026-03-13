@@ -56,7 +56,7 @@ GROUP BY GROUPING SETS ((fact_1_id), (fact_1_id, fact_3_id))
 WITH TOTALS
 ORDER BY
     fact_1_id ASC,
-    fact_3_id ASC;
+    fact_3_id ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     fact_1_id,
@@ -67,7 +67,7 @@ GROUP BY GROUPING SETS ((fact_1_id), (fact_1_id, fact_3_id))
 WITH TOTALS
 ORDER BY
     fact_1_id ASC,
-    fact_3_id ASC;
+    fact_3_id ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     SUM(number) AS sum_value,

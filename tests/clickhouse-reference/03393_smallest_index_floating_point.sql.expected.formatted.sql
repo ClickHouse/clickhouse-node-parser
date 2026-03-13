@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/77699
 SELECT argMin(1 + toNullable(1), number / number)
 FROM numbers(1);
 

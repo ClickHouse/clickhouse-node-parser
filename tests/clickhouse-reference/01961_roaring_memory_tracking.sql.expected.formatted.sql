@@ -3,4 +3,4 @@ SELECT
     groupBitmapState(number)
 FROM numbers_mt(200000000)
 GROUP BY n
-FORMAT Null;
+FORMAT Null; -- { serverError MEMORY_LIMIT_EXCEEDED }

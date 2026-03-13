@@ -1,3 +1,4 @@
+-- verify _part_starting_offset and _part_offset in parent part and projection
 SELECT
     _part,
     _part_starting_offset,
@@ -13,6 +14,7 @@ FROM test
 WHERE j = 8
 ORDER BY `all` ASC;
 
+-- make sure key analysis works correctly
 SELECT
     *,
     _part_starting_offset + _part_offset
@@ -31,6 +33,7 @@ SETTINGS
     parallel_replicas_local_plan = 0,
     max_rows_to_read = 1;
 
+-- from fuzzer
 SELECT *
 FROM test
 PREWHERE 8 = (_part_offset + _part_starting_offset)

@@ -111,4 +111,4 @@ FROM (
             sumState(b) AS y
         FROM mult_aggregation
         GROUP BY a
-    );
+    ); -- { serverError ILLEGAL_COLUMN}

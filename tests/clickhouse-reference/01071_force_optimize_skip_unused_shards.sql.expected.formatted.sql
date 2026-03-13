@@ -3,8 +3,8 @@ FROM dist_01071;
 
 SELECT *
 FROM dist_01071
-WHERE key = 0;
+WHERE key = 0; -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }
 
 SELECT *
 FROM dist2_01071
-WHERE key = 1;
+WHERE key = 1; -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }

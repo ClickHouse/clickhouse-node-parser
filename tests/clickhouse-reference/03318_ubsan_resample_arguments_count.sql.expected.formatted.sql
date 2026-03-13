@@ -2,4 +2,4 @@ SELECT quantileResampleMerge(0.5, 257, 65536, 1)(tuple(*).1)
 FROM (
         SELECT quantileResampleState(0.1, 1, 2, 42)(murmurHash3_128(88, NULL), number, number)
         FROM numbers(100)
-    );
+    ); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

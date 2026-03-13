@@ -30,6 +30,7 @@ WHERE current_database = currentDatabase()
     AND endsWith(log_comment, concat('-', currentDatabase()))
 ORDER BY event_time_microseconds ASC;
 
+-- Presence of this metric confirms vector index was used after index analysis
 SELECT sum(ProfileEvents['USearchSearchCount']) > 0
 FROM `system`.query_log
 WHERE initial_query_id = (

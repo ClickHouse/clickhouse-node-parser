@@ -1,3 +1,4 @@
+-- Tags: no-asan, no-tsan, no-msan, no-ubsan
 SELECT number
 FROM (
         SELECT zero AS number

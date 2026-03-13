@@ -1,6 +1,7 @@
 SELECT *
-FROM test_02302;
+FROM test_02302; -- { serverError NOT_IMPLEMENTED }
 
+-- Test s3 table function with glob
 SELECT *
 FROM s3(s3_conn, filename = 'test_02302_*', `format` = Parquet)
 WHERE like(_file, '%5');

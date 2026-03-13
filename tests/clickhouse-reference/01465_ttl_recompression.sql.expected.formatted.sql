@@ -37,6 +37,7 @@ WHERE table = 'recompression_table_compact'
     AND database = currentDatabase()
 ORDER BY name ASC;
 
+-- merge level and mutation in part name is not important
 SELECT
     substring(name, 1, length(name) - 4),
     default_compression_codec

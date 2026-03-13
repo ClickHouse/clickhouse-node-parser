@@ -7,10 +7,10 @@ SELECT one.dummy;
 SELECT `system`.one.dummy;
 
 SELECT test_id
-FROM test_table;
+FROM test_table; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT test_id
-FROM test_unknown_table;
+FROM test_unknown_table; -- { serverError UNKNOWN_TABLE }
 
 SELECT id
 FROM test_table;

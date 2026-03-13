@@ -1,3 +1,4 @@
+-- should be about 4MB
 SELECT
     formatReadableSize(peak_memory_usage),
     *

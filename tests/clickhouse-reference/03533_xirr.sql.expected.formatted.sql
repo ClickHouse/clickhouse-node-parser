@@ -8,19 +8,19 @@ SELECT
     round(financialInternalRateOfReturnExtended([100000, -110000], [toDate('2020-01-01'), toDate('2021-01-01')], 0.1, 'ACT_365F'), 6) AS xirr_365,
     round(financialInternalRateOfReturnExtended([100000, -110000], [toDate('2020-01-01'), toDate('2021-01-01')], 0.1, 'ACT_365_25'), 6) AS xirr_365_25;
 
-SELECT financialInternalRateOfReturnExtended(123, toDate('2020-01-01'));
+SELECT financialInternalRateOfReturnExtended(123, toDate('2020-01-01')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialInternalRateOfReturnExtended([123], toDate('2020-01-01'));
+SELECT financialInternalRateOfReturnExtended([123], toDate('2020-01-01')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialInternalRateOfReturnExtended(123, [toDate('2020-01-01')]);
+SELECT financialInternalRateOfReturnExtended(123, [toDate('2020-01-01')]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT round(financialInternalRateOfReturnExtended([-10000], [toDate32('2020-01-01'), toDate32('2020-03-01'), toDate32('2020-10-30'), toDate32('2021-02-15')]), 6) AS xirr_rate;
+SELECT round(financialInternalRateOfReturnExtended([-10000], [toDate32('2020-01-01'), toDate32('2020-03-01'), toDate32('2020-10-30'), toDate32('2021-02-15')]), 6) AS xirr_rate; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT round(financialInternalRateOfReturnExtended([-10000, NULL, 4250, 3250], [toDate32('2020-01-01'), toDate32('2020-03-01'), toDate32('2020-10-30'), toDate32('2021-02-15')]), 6) AS xirr_rate;
+SELECT round(financialInternalRateOfReturnExtended([-10000, NULL, 4250, 3250], [toDate32('2020-01-01'), toDate32('2020-03-01'), toDate32('2020-10-30'), toDate32('2021-02-15')]), 6) AS xirr_rate; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialInternalRateOfReturnExtended([-100, 110], [toDate('2020-01-01'), toDate('2020-02-01')], 1);
+SELECT financialInternalRateOfReturnExtended([-100, 110], [toDate('2020-01-01'), toDate('2020-02-01')], 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialInternalRateOfReturnExtended([-100, 110], [toDate('2020-01-01'), toDate('2020-02-01')], 1.0, 'QWERTY');
+SELECT financialInternalRateOfReturnExtended([-100, 110], [toDate('2020-01-01'), toDate('2020-02-01')], 1.0, 'QWERTY'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT financialInternalRateOfReturnExtended([]::Array(Float32), []::Array(Date));
 
@@ -54,11 +54,11 @@ FROM (
 GROUP BY tag
 ORDER BY tag ASC;
 
-SELECT financialInternalRateOfReturn(123);
+SELECT financialInternalRateOfReturn(123); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialInternalRateOfReturn([1,2,NULL]);
+SELECT financialInternalRateOfReturn([1,2,NULL]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialInternalRateOfReturn([]);
+SELECT financialInternalRateOfReturn([]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     [-100, 39, 59, 55, 20] AS cf,
@@ -67,13 +67,13 @@ SELECT
 
 SELECT financialInternalRateOfReturn([0., 39., 59., 55., 20.]);
 
-SELECT financialNetPresentValueExtended(0.1, 123., [toDate('2020-01-01')]);
+SELECT financialNetPresentValueExtended(0.1, 123., [toDate('2020-01-01')]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialNetPresentValueExtended(0.1, [123.], toDate('2020-01-01'));
+SELECT financialNetPresentValueExtended(0.1, [123.], toDate('2020-01-01')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialNetPresentValueExtended(0.1, [-100, 110], [toDate('2020-01-01'), toDate('2020-02-01')], 'QWERTY');
+SELECT financialNetPresentValueExtended(0.1, [-100, 110], [toDate('2020-01-01'), toDate('2020-02-01')], 'QWERTY'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialNetPresentValueExtended(0.1, [], []);
+SELECT financialNetPresentValueExtended(0.1, [], []); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT financialNetPresentValueExtended(0.1, [-10], [toDate('2020-01-01')]);
 
@@ -103,13 +103,13 @@ FROM (
 GROUP BY tag
 ORDER BY tag ASC;
 
-SELECT financialNetPresentValue(0.1, 123., true);
+SELECT financialNetPresentValue(0.1, 123., true); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialNetPresentValue(0.1, [1.,2.], 2.);
+SELECT financialNetPresentValue(0.1, [1.,2.], 2.); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialNetPresentValue(0.1, [1.,NULL]);
+SELECT financialNetPresentValue(0.1, [1.,NULL]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT financialNetPresentValue(0.1, []);
+SELECT financialNetPresentValue(0.1, []); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT round(financialNetPresentValue(0.08, [-40_000., 5_000., 8_000., 12_000., 30_000.]), 6);
 

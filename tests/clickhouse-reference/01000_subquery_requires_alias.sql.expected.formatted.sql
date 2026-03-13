@@ -24,7 +24,7 @@ LEFT JOIN (
             3 AS A,
             2 AS B
     )
-    USING (B);
+    USING (B); -- { serverError ALIAS_REQUIRED }
 
 SELECT *
 FROM
@@ -38,4 +38,4 @@ LEFT JOIN (
             3 AS A,
             2 AS B
     ) AS Y
-    USING (B);
+    USING (B); -- { serverError ALIAS_REQUIRED }

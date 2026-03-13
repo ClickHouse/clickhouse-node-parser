@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT '-- check that distinct with and w/o optimization produce the same result';
 
 SELECT DISTINCT *

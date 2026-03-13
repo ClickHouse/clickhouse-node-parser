@@ -5,6 +5,7 @@ SELECT
 FROM t_data_version
 ORDER BY a ASC;
 
+-- Check parts pruning.
 SELECT
     _part,
     _part_data_version,

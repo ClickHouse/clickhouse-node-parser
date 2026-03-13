@@ -20,7 +20,7 @@ SELECT
     '01231_log_queries_min_type/EXCEPTION_WHILE_PROCESSING',
     max(number)
 FROM `system`.numbers
-LIMIT 1e6;
+LIMIT 1e6; -- { serverError TOO_MANY_ROWS }
 
 SELECT count()
 FROM `system`.query_log
@@ -35,7 +35,7 @@ SELECT
     '01231_log_queries_min_type w/ Settings/EXCEPTION_WHILE_PROCESSING',
     max(number)
 FROM `system`.numbers
-LIMIT 1e6;
+LIMIT 1e6; -- { serverError TOO_MANY_ROWS }
 
 SYSTEM flush logs query_log;
 

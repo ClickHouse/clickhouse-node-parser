@@ -1,3 +1,5 @@
+-- For function count, rewrite countState to countStateIf changes the type from AggregateFunction(count, Nullable(UInt64)) to AggregateFunction(count, UInt64)
+-- We can cast AggregateFunction(count, UInt64) back to AggregateFunction(count, Nullable(UInt64)) with additional _CAST
 SELECT hex(countState(if(toNullable(number % 2 = 0), number, NULL)))
 FROM numbers(5)
 SETTINGS optimize_rewrite_aggregate_function_with_if = 1;
@@ -15,6 +17,8 @@ FROM (
     )
 WHERE like(`explain`, '%AggregateFunction%');
 
+-- For function uniq, rewrite uniqState to uniqStateIf changes the type from AggregateFunction(uniq, Nullable(UInt64)) to AggregateFunction(uniq, UInt64)
+-- We can't cast AggregateFunction(uniq, UInt64) back to AggregateFunction(uniq, Nullable(UInt64)) so rewrite is not happening.
 SELECT toTypeName(uniqState(if(toNullable(number % 2 = 0), number, NULL)))
 FROM numbers(5)
 SETTINGS optimize_rewrite_aggregate_function_with_if = 1;

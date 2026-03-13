@@ -2,7 +2,7 @@ SELECT
     'test1',
     number
 FROM `system`.numbers
-GROUP BY number;
+GROUP BY number; -- { serverError TOO_MANY_ROWS }
 
 SELECT
     'test2',
@@ -23,7 +23,7 @@ SELECT
     number
 FROM numbers(1000)
 GROUP BY number
-ORDER BY number ASC;
+ORDER BY number ASC; -- { serverError TOO_MANY_ROWS }
 
 SELECT
     'test5',

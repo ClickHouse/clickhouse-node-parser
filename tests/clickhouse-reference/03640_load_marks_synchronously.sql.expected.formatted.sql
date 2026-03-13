@@ -1,7 +1,7 @@
 SELECT *
 FROM data
 SETTINGS load_marks_asynchronously = 1
-FORMAT Null;
+FORMAT Null; /* 1 */
 
 SELECT
     query,

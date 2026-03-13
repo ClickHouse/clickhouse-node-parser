@@ -146,9 +146,109 @@ function escapeString(s: string): string {
   return s.replace(/'/g, "''");
 }
 
+// Accumulates trailing comments from the very last expression of a statement.
+// These must be placed after the semicolon to avoid `;` being swallowed by the comment.
+let _endComments: string[] = [];
+
+// Flush pending end comments into the lines array (appended to last line).
+// Call this when a new clause starts, meaning the previous end comments are no longer
+// at the end of the statement and can be safely placed inline.
+function flushEndComments(lines: string[]): void {
+  if (_endComments.length > 0 && lines.length > 0) {
+    lines[lines.length - 1] += ' ' + _endComments.join(' ');
+    _endComments = [];
+  }
+}
+
 export function format(statements: Statement[]): string {
   StatementsSchema.parse(statements);
-  return statements.map((s) => formatStatement(s, '') + ';').join('\n\n');
+  return statements
+    .map((s) => {
+      let result = '';
+      if (s.leadingComments && s.leadingComments.length > 0) {
+        result += s.leadingComments.join('\n') + '\n';
+      }
+      _endComments = [];
+      result += formatStatement(s, '');
+      // Flush any remaining end comments before the semicolon
+      if (_endComments.length > 0) {
+        result += ' ' + _endComments.join(' ');
+        _endComments = [];
+      }
+      result += ';';
+      if (s.trailingComments && s.trailingComments.length > 0) {
+        result += ' ' + s.trailingComments[0];
+        for (let i = 1; i < s.trailingComments.length; i++) {
+          result += '\n' + s.trailingComments[i];
+        }
+      }
+      return result;
+    })
+    .join('\n\n');
+}
+
+// Format a comma-separated list of expressions, reading leadingComments/trailingComments
+// from each expression node. Returns [formatted string, end comments].
+// End comments are trailing comments on the very last item — they must be placed after
+// the statement's semicolon to avoid being swallowed by the comment.
+function formatExprList(items: Expression[], indent: string): [string, string[]] {
+  const parts: string[] = [];
+  const endComments: string[] = [];
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const isLast = i === items.length - 1;
+    const comma = isLast ? '' : ',';
+    // Leading comments: on their own lines before the item
+    if (item.leadingComments && item.leadingComments.length > 0) {
+      for (const c of item.leadingComments) {
+        parts.push(`${indent}${c}`);
+      }
+    }
+    // Trailing comments on the last item are returned separately
+    if (isLast && item.trailingComments && item.trailingComments.length > 0) {
+      parts.push(`${indent}${formatExprCore(item, indent)}`);
+      endComments.push(...item.trailingComments);
+    } else if (item.trailingComments && item.trailingComments.length > 0) {
+      parts.push(`${indent}${formatExprCore(item, indent)}${comma} ${item.trailingComments[0]}`);
+      for (let c = 1; c < item.trailingComments.length; c++) {
+        parts.push(`${indent}${item.trailingComments[c]}`);
+      }
+    } else {
+      parts.push(`${indent}${formatExprCore(item, indent)}${comma}`);
+    }
+  }
+  return [parts.join('\n'), endComments];
+}
+
+// Format a comma-separated list of expressions for function args.
+// Uses inline format when no comments are present, multiline otherwise.
+function formatArgList(items: Expression[], indent: string): string {
+  const hasComments = items.some(
+    (a) =>
+      (a.leadingComments && a.leadingComments.length > 0) ||
+      (a.trailingComments && a.trailingComments.length > 0),
+  );
+  if (!hasComments) {
+    return items.map((a) => formatExprCore(a, indent)).join(', ');
+  }
+  const parts: string[] = [];
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const comma = i < items.length - 1 ? ',' : '';
+    if (item.leadingComments && item.leadingComments.length > 0) {
+      for (const c of item.leadingComments) {
+        parts.push(`${indent}${c}`);
+      }
+    }
+    if (item.trailingComments && item.trailingComments.length > 0) {
+      parts.push(
+        `${indent}${formatExprCore(item, indent)}${comma} ${item.trailingComments.join(' ')}`,
+      );
+    } else {
+      parts.push(`${indent}${formatExprCore(item, indent)}${comma}`);
+    }
+  }
+  return '\n' + parts.join('\n') + '\n';
 }
 
 function formatStatement(stmt: Statement, indent: string): string {
@@ -306,57 +406,82 @@ function exprPrecedence(expr: Expression): number {
 
 // Format NOT in high-precedence form: NOT(inner) parsed by PrimaryBase
 function formatNotHighPrec(expr: Expression, indent: string): string {
-  if (expr.kind !== 'unaryExpr') return formatExpr(expr, indent);
-  const inner = formatExpr(expr.expr, indent);
+  if (expr.kind !== 'unaryExpr') return formatExprCore(expr, indent);
+  const inner = formatExprCore(expr.expr, indent);
   let result = `NOT(${inner})`;
   if (isParenthesized(expr)) result = `(${result})`;
   return result;
 }
 
-// Wrap a child expression with parentheses if needed for operator precedence
-function wrapChild(child: Expression, parentOp: string, isRight: boolean, indent: string): string {
-  // NOT in arithmetic/comparison contexts needs context-dependent formatting:
-  // - Grammar AddExpr right side uses NotPrefixExpr (splits NOT from parens, inner gets parenthesized via ParenExpr)
-  // - Grammar MulExpr uses UnaryExpr → PrimaryBase (NOT(expr) is atomic, no extra parenthesized)
-  // - Grammar CompareRightExpr uses KW_NOT prefix (NOT expr space form works)
+// Wrap a child expression with parentheses if needed for operator precedence.
+// Renders trailing comments inline after the expression (leading comments handled by caller).
+function wrapChildCore(
+  child: Expression,
+  parentOp: string,
+  isRight: boolean,
+  indent: string,
+): string {
+  let s: string;
   if (child.kind === 'unaryExpr' && !isParenthesized(child)) {
     const parentPrec = opPrecedence(parentOp);
-    // Left side of prec >= 3 (comparison/arithmetic): use NOT(inner) via PrimaryBase
-    // Right side of prec 5 (*/% DIV MOD): use NOT(inner) via PrimaryBase
     if ((!isRight && parentPrec >= 3) || (isRight && parentPrec >= 5)) {
-      return formatNotHighPrec(child, indent);
+      s = formatNotHighPrec(child, indent);
+    } else {
+      s = formatExprCore(child, indent);
     }
-    // Right side of +/- (prec 4): use space form (NotPrefixExpr handles it)
-    // Right side of comparison (prec 3): use space form (CompareRightExpr handles it)
-    // AND/OR (prec 1-2): use space form (NotExpr handles it)
+  } else {
+    s = formatExprCore(child, indent);
   }
-  const s = formatExpr(child, indent);
-  if (child.kind === 'alias') return `(${s})`;
-  const parentPrec = opPrecedence(parentOp);
-  const childPrec = exprPrecedence(child);
-  // Left child: wrap if strictly lower precedence
-  // Right child: wrap if lower or equal precedence (to preserve left-associativity)
-  if (isRight ? childPrec <= parentPrec : childPrec < parentPrec) {
-    return `(${s})`;
+  if (child.kind === 'alias') s = `(${s})`;
+  else {
+    const parentPrec = opPrecedence(parentOp);
+    const childPrec = exprPrecedence(child);
+    if (isRight ? childPrec <= parentPrec : childPrec < parentPrec) {
+      s = `(${s})`;
+    }
+  }
+  if (child.trailingComments && child.trailingComments.length > 0) {
+    s += ' ' + child.trailingComments.join(' ');
   }
   return s;
 }
 
-// Wrap naryExpr operand: wrap if same-op naryExpr (to prevent flattening),
-// lower-precedence expression, or alias
-function wrapNaryOperand(operand: Expression, parentOp: string, indent: string): string {
-  const s = formatExpr(operand, indent);
-  if (operand.kind === 'alias') return `(${s})`;
-  // Wrap same-op children to prevent flattening
-  if (operand.kind === 'naryExpr' && operand.op === parentOp) return `(${s})`;
-  // Wrap lower-precedence children (e.g., OR inside AND)
-  const childPrec = exprPrecedence(operand);
-  const parentPrec = opPrecedence(parentOp);
-  if (childPrec < parentPrec) return `(${s})`;
+// Wrap naryExpr operand, rendering trailing comments inline
+function wrapNaryOperandCore(operand: Expression, parentOp: string, indent: string): string {
+  let s = formatExprCore(operand, indent);
+  if (operand.kind === 'alias') s = `(${s})`;
+  else if (operand.kind === 'naryExpr' && operand.op === parentOp) s = `(${s})`;
+  else {
+    const childPrec = exprPrecedence(operand);
+    const parentPrec = opPrecedence(parentOp);
+    if (childPrec < parentPrec) s = `(${s})`;
+  }
+  if (operand.trailingComments && operand.trailingComments.length > 0) {
+    s += ' ' + operand.trailingComments.join(' ');
+  }
   return s;
 }
 
+// Format an expression with leading/trailing comments rendered.
+// Leading comments appear on their own lines before the expression (indented).
+// Trailing comments appear inline after the expression.
+// Call sites that handle comments themselves (formatExprList, formatArgList,
+// binaryExpr, naryExpr) should use formatExprCore instead.
 function formatExpr(expr: Expression, indent: string): string {
+  let result = formatExprCore(expr, indent);
+  if (expr.leadingComments && expr.leadingComments.length > 0) {
+    const comments = expr.leadingComments.map((c) => `${indent}${c}`).join('\n');
+    result = comments + '\n' + indent + result;
+  }
+  if (expr.trailingComments && expr.trailingComments.length > 0) {
+    result += ' ' + expr.trailingComments.join(' ');
+  }
+  return result;
+}
+
+// Format an expression without rendering its leading/trailing comments.
+// Used by list formatters and operator cases that handle comments with their own layout.
+function formatExprCore(expr: Expression, indent: string): string {
   // Handle parenthesized flag on any expression type
   const parenthesized = isParenthesized(expr);
 
@@ -414,7 +539,7 @@ function formatExpr(expr: Expression, indent: string): string {
       );
     }
     case 'queryParam':
-      return `{${expr.name}: ${expr.type}}`;
+      return `{${expr.name}:${expr.type}}`;
     case 'alias': {
       // MySQL global variables (@@varname) are formatted as @@varname directly
       if (expr.alias.startsWith('@@')) return expr.alias;
@@ -507,16 +632,50 @@ function formatExpr(expr: Expression, indent: string): string {
       if (parenthesized) result = `(${result})`;
       return result;
     }
-    case 'binaryExpr':
-      result = `${wrapChild(expr.left, expr.op, false, indent)} ${expr.op} ${wrapChild(expr.right, expr.op, true, indent)}`;
+    case 'binaryExpr': {
+      let leftStr = wrapChildCore(expr.left, expr.op, false, indent);
+      const rightStr = wrapChildCore(expr.right, expr.op, true, indent);
+      // Render leading comments on the left operand
+      if (expr.left.leadingComments && expr.left.leadingComments.length > 0) {
+        const lc = expr.left.leadingComments.map((c) => `${indent}${c}`).join('\n');
+        leftStr = lc + '\n' + indent + leftStr;
+      }
+      if (expr.right.leadingComments && expr.right.leadingComments.length > 0) {
+        const bParts: string[] = [leftStr];
+        for (const c of expr.right.leadingComments) {
+          bParts.push(`${indent}${c}`);
+        }
+        bParts.push(`${indent}${expr.op} ${rightStr}`);
+        result = bParts.join('\n');
+      } else {
+        result = `${leftStr} ${expr.op} ${rightStr}`;
+      }
       if (parenthesized) result = `(${result})`;
       return result;
-    case 'naryExpr':
-      result = expr.operands
-        .map((o) => wrapNaryOperand(o, expr.op, indent))
-        .join(`\n${indent}${expr.op} `);
+    }
+    case 'naryExpr': {
+      const parts: string[] = [];
+      // Render leading comments on the first operand
+      const first = expr.operands[0];
+      if (first.leadingComments && first.leadingComments.length > 0) {
+        for (const c of first.leadingComments) {
+          parts.push(`${indent}${c}`);
+        }
+      }
+      parts.push(wrapNaryOperandCore(first, expr.op, indent));
+      for (let i = 1; i < expr.operands.length; i++) {
+        const operand = expr.operands[i];
+        if (operand.leadingComments && operand.leadingComments.length > 0) {
+          for (const c of operand.leadingComments) {
+            parts.push(`${indent}${c}`);
+          }
+        }
+        parts.push(`${indent}${expr.op} ${wrapNaryOperandCore(operand, expr.op, indent)}`);
+      }
+      result = parts.join('\n');
       if (parenthesized) result = `(${result})`;
       return result;
+    }
     case 'subqueryExpr': {
       const innerIndent = indent + '    ';
       return `(\n${formatStatement(expr.query, innerIndent)}\n${indent})`;
@@ -584,9 +743,9 @@ function formatFunctionCall(expr: FunctionCall, indent: string): string {
       ? ` SETTINGS ${formatSettingsList(expr.funcSettings, indent)}`
       : '';
   if (expr.params) {
-    call = `${funcName}(${expr.params.map((p) => formatExpr(p, indent)).join(', ')})(${expr.args.map((a) => formatExpr(a, indent)).join(', ')}${settingsStr})`;
+    call = `${funcName}(${formatArgList(expr.params, indent)})(${formatArgList(expr.args, indent)}${settingsStr})`;
   } else {
-    call = `${funcName}(${expr.args.map((a) => formatExpr(a, indent)).join(', ')}${settingsStr})`;
+    call = `${funcName}(${formatArgList(expr.args, indent)}${settingsStr})`;
   }
   if (expr.window) {
     call += ` OVER (${formatWindowSpec(expr.window, indent)})`;
@@ -698,6 +857,9 @@ function formatTableRef(ref: TableRef): string {
   if (ref.alias) result += ` AS ${quoteIdent(ref.alias)}`;
   if (ref.final) result += ' FINAL';
   if (ref.sample) result += ` ${formatSampleClause(ref.sample)}`;
+  if (ref.trailingComments && ref.trailingComments.length > 0) {
+    result += ' ' + ref.trailingComments.join(' ');
+  }
   return result;
 }
 
@@ -711,6 +873,9 @@ function formatTableFunction(ref: TableFunctionRef, indent: string): string {
   if (ref.alias) base += ` AS ${quoteIdent(ref.alias)}`;
   if (ref.final) base += ' FINAL';
   if (ref.sample) base += ` ${formatSampleClause(ref.sample)}`;
+  if (ref.trailingComments && ref.trailingComments.length > 0) {
+    base += ' ' + ref.trailingComments.join(' ');
+  }
   return base;
 }
 
@@ -720,14 +885,31 @@ function formatSubqueryFrom(from: SubqueryFrom, indent: string): string {
   if (from.columnAliases && from.columnAliases.length > 0) {
     aliasStr += ` (${from.columnAliases.map(quoteIdent).join(', ')})`;
   }
-  const queryStr = formatStatement(from.query, innerIndent);
+  let queryStr = formatStatement(from.query, innerIndent);
+  // Flush any _endComments from the inner query
+  if (_endComments.length > 0) {
+    queryStr += ' ' + _endComments.join(' ');
+    _endComments = [];
+  }
+  // Inner query trailing comments
+  if (from.query.trailingComments && from.query.trailingComments.length > 0) {
+    queryStr += ' ' + from.query.trailingComments.join(' ');
+  }
   // Wrap parenthesized selects in extra parens: ((SELECT ...))
   const innerParen = from.query.kind === 'select' && from.query.parenthesized;
+  // Inner query leading comments
+  let leadingStr = '';
+  if (from.query.leadingComments && from.query.leadingComments.length > 0) {
+    leadingStr = from.query.leadingComments.map((c) => `${innerIndent}${c}`).join('\n') + '\n';
+  }
   let result = innerParen
-    ? `((\n${queryStr}\n${indent}))${aliasStr}`
-    : `(\n${queryStr}\n${indent})${aliasStr}`;
+    ? `((\n${leadingStr}${queryStr}\n${indent}))${aliasStr}`
+    : `(\n${leadingStr}${queryStr}\n${indent})${aliasStr}`;
   if (from.final) result += ' FINAL';
   if (from.sample) result += ` ${formatSampleClause(from.sample)}`;
+  if (from.trailingComments && from.trailingComments.length > 0) {
+    result += ' ' + from.trailingComments.join(' ');
+  }
   return result;
 }
 
@@ -752,16 +934,32 @@ function formatFromAtom(from: TableRef | SubqueryFrom | TableFunctionRef, indent
   return formatTableRef(from);
 }
 
+function formatFromLeadingComments(from: { leadingComments?: string[] }, indent: string): string[] {
+  if (from.leadingComments && from.leadingComments.length > 0) {
+    return from.leadingComments.map((c) => `${indent}${c}`);
+  }
+  return [];
+}
+
 function formatFromExpr(from: FromExpr, outerIndent: string): string[] {
   const innerIndent = outerIndent + '    ';
   if (from.kind === 'tableRef') {
-    return [`${innerIndent}${formatTableRef(from)}`];
+    return [
+      ...formatFromLeadingComments(from, innerIndent),
+      `${innerIndent}${formatTableRef(from)}`,
+    ];
   }
   if (from.kind === 'subqueryFrom') {
-    return [`${innerIndent}${formatSubqueryFrom(from, innerIndent)}`];
+    return [
+      ...formatFromLeadingComments(from, innerIndent),
+      `${innerIndent}${formatSubqueryFrom(from, innerIndent)}`,
+    ];
   }
   if (from.kind === 'tableFunction') {
-    return [`${innerIndent}${formatTableFunction(from, innerIndent)}`];
+    return [
+      ...formatFromLeadingComments(from, innerIndent),
+      `${innerIndent}${formatTableFunction(from, innerIndent)}`,
+    ];
   }
   if (from.kind === 'join') {
     const leftLines = formatFromExpr(from.left, outerIndent);
@@ -811,25 +1009,109 @@ function formatInterpolateItem(item: InterpolateItem, indent: string): string {
 }
 
 function formatCTEBlock(ctes: CTE[], indent: string): string {
+  const cteIndent = indent + '  ';
   const innerIndent = indent + '    ';
-  const parts: string[] = [];
+  const hasComments = ctes.some(
+    (c) =>
+      (c.leadingComments && c.leadingComments.length > 0) ||
+      (c.trailingComments && c.trailingComments.length > 0),
+  );
 
+  // Non-comment path: preserve original formatting behavior
+  if (!hasComments) {
+    const parts: string[] = [];
+    for (let i = 0; i < ctes.length; i++) {
+      const cte = ctes[i];
+      const prefix = i === 0 ? `${indent}WITH ` : `${indent}`;
+      if (cte.kind === 'expr') {
+        const suffix = i < ctes.length - 1 ? ',' : '';
+        parts.push(
+          `${prefix}${formatExprCore(cte.expr, innerIndent)} AS ${quoteIdent(cte.name)}${suffix}`,
+        );
+      } else {
+        const suffix = i < ctes.length - 1 ? '),' : ')';
+        parts.push(
+          `${prefix}${quoteIdent(cte.name)} AS (\n` +
+            formatStatement(cte.query, innerIndent) +
+            `\n${indent}${suffix}`,
+        );
+      }
+    }
+    return parts.join('\n\n');
+  }
+
+  // Comment path: structured layout with CTE items at cteIndent
+  const parts: string[] = [];
   for (let i = 0; i < ctes.length; i++) {
     const cte = ctes[i];
-    const prefix = i === 0 ? `${indent}WITH ` : `${indent}`;
-    if (cte.kind === 'expr') {
-      const suffix = i < ctes.length - 1 ? ',' : '';
-      parts.push(
-        `${prefix}${formatExpr(cte.expr, innerIndent)} AS ${quoteIdent(cte.name)}${suffix}`,
-      );
-    } else {
-      const suffix = i < ctes.length - 1 ? '),' : ')';
-      parts.push(
-        `${prefix}${quoteIdent(cte.name)} AS (\n` +
-          formatStatement(cte.query, innerIndent) +
-          `\n${indent}${suffix}`,
-      );
+    const lines: string[] = [];
+    const isFirst = i === 0;
+    const isLast = i === ctes.length - 1;
+
+    // CTE leading comments
+    if (cte.leadingComments && cte.leadingComments.length > 0) {
+      for (const c of cte.leadingComments) {
+        lines.push(`${indent}${c}`);
+      }
     }
+
+    const trailingStr =
+      cte.trailingComments && cte.trailingComments.length > 0
+        ? ' ' + cte.trailingComments.join(' ')
+        : '';
+
+    if (cte.kind === 'subquery') {
+      const suffix = isLast ? ')' : '),';
+      const namePrefix = isFirst ? `${indent}WITH ` : `${cteIndent}`;
+      lines.push(`${namePrefix}${quoteIdent(cte.name)} AS (`);
+
+      // Inner query leading comments
+      if (cte.query.leadingComments && cte.query.leadingComments.length > 0) {
+        for (const c of cte.query.leadingComments) {
+          lines.push(`${innerIndent}${c}`);
+        }
+      }
+
+      let queryStr = formatStatement(cte.query, innerIndent);
+      // Flush any _endComments from the inner query
+      if (_endComments.length > 0) {
+        queryStr += ' ' + _endComments.join(' ');
+        _endComments = [];
+      }
+      // Inner query trailing comments (e.g., -- 4 after SELECT 1)
+      if (cte.query.trailingComments && cte.query.trailingComments.length > 0) {
+        queryStr += ' ' + cte.query.trailingComments.join(' ');
+      }
+      lines.push(queryStr);
+      lines.push(`${indent}${suffix}${trailingStr}`);
+    } else {
+      // Expression CTE
+      const suffix = isLast ? '' : ',';
+      // Leading comments on the expression
+      if (cte.expr.leadingComments && cte.expr.leadingComments.length > 0) {
+        for (const c of cte.expr.leadingComments) {
+          lines.push(`${cteIndent}${c}`);
+        }
+      }
+      let exprStr = formatExprCore(cte.expr, cteIndent);
+      // Trailing comments on the expression (between expr and AS)
+      if (cte.expr.trailingComments && cte.expr.trailingComments.length > 0) {
+        for (const c of cte.expr.trailingComments) {
+          exprStr += `\n${cteIndent}${c}`;
+        }
+      }
+      const exprPrefix = isFirst ? `${indent}WITH ` : `${cteIndent}`;
+      const hasExprTrailing = cte.expr.trailingComments && cte.expr.trailingComments.length > 0;
+      if (hasExprTrailing) {
+        lines.push(
+          `${exprPrefix}${exprStr}\n${cteIndent}AS ${quoteIdent(cte.name)}${suffix}${trailingStr}`,
+        );
+      } else {
+        lines.push(`${exprPrefix}${exprStr} AS ${quoteIdent(cte.name)}${suffix}${trailingStr}`);
+      }
+    }
+
+    parts.push(lines.join('\n'));
   }
 
   return parts.join('\n\n');
@@ -849,14 +1131,27 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
       ? ` DISTINCT ON (${stmt.distinct.on.map((e) => formatExpr(e, innerIndent)).join(', ')})`
       : ' DISTINCT'
     : '';
-  if (stmt.select.length === 1) {
-    lines.push(`${indent}SELECT${distinctStr} ${formatExpr(stmt.select[0], innerIndent)}`);
+  const firstItemHasLeadingComments =
+    stmt.select[0]?.leadingComments && stmt.select[0].leadingComments.length > 0;
+  if (stmt.select.length === 1 && !firstItemHasLeadingComments) {
+    const item = stmt.select[0];
+    const selectLine = `${indent}SELECT${distinctStr} ${formatExprCore(item, innerIndent)}`;
+    lines.push(selectLine);
+    _endComments = item.trailingComments ? [...item.trailingComments] : [];
   } else {
     lines.push(`${indent}SELECT${distinctStr}`);
-    lines.push(stmt.select.map((e) => `${innerIndent}${formatExpr(e, innerIndent)}`).join(',\n'));
+    const [text, endComments] = formatExprList(stmt.select, innerIndent);
+    lines.push(text);
+    _endComments = endComments;
   }
 
   if (stmt.from) {
+    flushEndComments(lines);
+    if (stmt.fromLeadingComments && stmt.fromLeadingComments.length > 0) {
+      for (const c of stmt.fromLeadingComments) {
+        lines.push(`${indent}${c}`);
+      }
+    }
     const fromLines = formatFromExpr(stmt.from, indent);
     if (fromLines.length === 1) {
       lines.push(`${indent}FROM ${fromLines[0].trimStart()}`);
@@ -867,14 +1162,29 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
   }
 
   if (stmt.prewhere) {
+    flushEndComments(lines);
     lines.push(`${indent}PREWHERE ${formatExpr(stmt.prewhere, innerIndent)}`);
   }
 
   if (stmt.where) {
-    lines.push(`${indent}WHERE ${formatExpr(stmt.where, innerIndent)}`);
+    flushEndComments(lines);
+    const whereTrailing =
+      stmt.where.trailingComments && stmt.where.trailingComments.length > 0
+        ? ' ' + stmt.where.trailingComments.join(' ')
+        : '';
+    if (stmt.where.leadingComments && stmt.where.leadingComments.length > 0) {
+      lines.push(`${indent}WHERE`);
+      for (const c of stmt.where.leadingComments) {
+        lines.push(`${innerIndent}${c}`);
+      }
+      lines.push(`${innerIndent}${formatExprCore(stmt.where, innerIndent)}${whereTrailing}`);
+    } else {
+      lines.push(`${indent}WHERE ${formatExprCore(stmt.where, innerIndent)}${whereTrailing}`);
+    }
   }
 
   if (stmt.groupBy) {
+    flushEndComments(lines);
     switch (stmt.groupBy.kind) {
       case 'all':
         lines.push(`${indent}GROUP BY ALL`);
@@ -887,28 +1197,45 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
         break;
       }
       case 'expressions':
-        if (stmt.groupBy.items.length === 1) {
-          lines.push(`${indent}GROUP BY ${formatExpr(stmt.groupBy.items[0], innerIndent)}`);
+        if (
+          stmt.groupBy.items.length === 1 &&
+          !(
+            stmt.groupBy.items[0].leadingComments &&
+            stmt.groupBy.items[0].leadingComments.length > 0
+          )
+        ) {
+          const item = stmt.groupBy.items[0];
+          lines.push(`${indent}GROUP BY ${formatExprCore(item, innerIndent)}`);
+          _endComments = item.trailingComments ? [...item.trailingComments] : [];
         } else {
           lines.push(`${indent}GROUP BY`);
-          lines.push(
-            stmt.groupBy.items
-              .map((e) => `${innerIndent}${formatExpr(e, innerIndent)}`)
-              .join(',\n'),
-          );
+          const [text, endComments] = formatExprList(stmt.groupBy.items, innerIndent);
+          lines.push(text);
+          _endComments = endComments;
         }
         break;
     }
   }
-  if (stmt.withCube) lines.push(`${indent}WITH CUBE`);
-  if (stmt.withRollup) lines.push(`${indent}WITH ROLLUP`);
-  if (stmt.withTotals) lines.push(`${indent}WITH TOTALS`);
+  if (stmt.withCube) {
+    flushEndComments(lines);
+    lines.push(`${indent}WITH CUBE`);
+  }
+  if (stmt.withRollup) {
+    flushEndComments(lines);
+    lines.push(`${indent}WITH ROLLUP`);
+  }
+  if (stmt.withTotals) {
+    flushEndComments(lines);
+    lines.push(`${indent}WITH TOTALS`);
+  }
 
   if (stmt.having) {
+    flushEndComments(lines);
     lines.push(`${indent}HAVING ${formatExpr(stmt.having, innerIndent)}`);
   }
 
   if (stmt.orderBy && stmt.orderBy.length > 0) {
+    flushEndComments(lines);
     if (stmt.orderBy.length === 1) {
       lines.push(
         `${indent}ORDER BY ${formatOrderByItem(stmt.orderBy[0], innerIndent).trimStart()}`,
@@ -920,6 +1247,7 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
   }
 
   if (stmt.limitBy) {
+    flushEndComments(lines);
     const limitByOffset = stmt.limitBy.offset ? `${formatExpr(stmt.limitBy.offset, indent)}, ` : '';
     const byClause =
       stmt.limitBy.by.length === 0
@@ -931,6 +1259,7 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
   }
 
   if (stmt.limit) {
+    flushEndComments(lines);
     const lim = stmt.limit;
     if (lim.commaSyntax && stmt.offset) {
       const tiesStr = lim.withTies ? ' WITH TIES' : '';
@@ -943,10 +1272,12 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
       if (stmt.offset) lines.push(`${indent}OFFSET ${formatExpr(stmt.offset, indent)}`);
     }
   } else if (stmt.offset) {
+    flushEndComments(lines);
     lines.push(`${indent}OFFSET ${formatExpr(stmt.offset, indent)}`);
   }
 
   if (stmt.windows && stmt.windows.length > 0) {
+    flushEndComments(lines);
     if (stmt.windows.length === 1) {
       const w = stmt.windows[0];
       lines.push(`${indent}WINDOW ${quoteIdent(w.name)} AS (${w.body})`);
@@ -959,10 +1290,12 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
   }
 
   if (stmt.qualify) {
+    flushEndComments(lines);
     lines.push(`${indent}QUALIFY ${formatExpr(stmt.qualify, innerIndent)}`);
   }
 
   if (stmt.settings && stmt.settings.length > 0) {
+    flushEndComments(lines);
     if (stmt.settings.length === 1) {
       const s = stmt.settings[0];
       lines.push(`${indent}SETTINGS ${s.name} = ${formatExpr(s.value, innerIndent)}`);
@@ -974,6 +1307,15 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
           .join(',\n'),
       );
     }
+  }
+
+  const hasTrailingClauses =
+    stmt.intoOutfile ||
+    stmt.preFormatSettings?.length ||
+    stmt.format ||
+    stmt.postFormatSettings?.length;
+  if (hasTrailingClauses) {
+    flushEndComments(lines);
   }
 
   let result = lines.join('\n');

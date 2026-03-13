@@ -316,7 +316,7 @@ WHERE t1.id < t2.id
 ORDER BY
     id1 ASC,
     id2 ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
     t1.id,
@@ -330,7 +330,7 @@ LEFT JOIN tuple_test AS t2
 ORDER BY
     t1.id ASC,
     t2.id ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
     t1.id AS id1,
@@ -422,7 +422,7 @@ WHERE EXISTS((
             AND t1.id != t2.id
     ))
 ORDER BY id ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
     id,
@@ -444,7 +444,7 @@ SELECT
     ) AS count_same_u
 FROM tuple_test AS t1
 ORDER BY id ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
     id,
@@ -602,7 +602,7 @@ FROM tuple_test;
 
 SELECT arrayMap(x -> x.u, arrayFilter(x -> isNotNull(x), groupArray(tup))) AS all_u_values
 FROM tuple_test
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- Lambda tup.u notation is not recognized in old analyzer
 
 SELECT
     tup.u AS u_value,
@@ -631,7 +631,7 @@ FROM (
     )
 GROUP BY category
 ORDER BY category ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- Here, tup.u notation is not recognized in old analyzer
 
 SELECT
     data.1,

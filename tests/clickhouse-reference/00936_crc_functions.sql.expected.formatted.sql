@@ -2,7 +2,7 @@ SELECT CRC32('string');
 
 SELECT
     CrC32('string'),
-    crc32('test');
+    crc32('test'); -- We want to test, that function name is case-insensitive
 
 SELECT CRC32(str1)
 FROM table1

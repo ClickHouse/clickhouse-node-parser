@@ -21,5 +21,6 @@ FORMAT Values;
 SELECT 'foo''''bar'
 FORMAT Values;
 
+-- fix no newline at end of file
 SELECT ''
 FORMAT LineAsString;

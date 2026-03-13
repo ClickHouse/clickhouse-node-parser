@@ -1,3 +1,4 @@
+-- segmentation fault (filter on dt_close column)
 SELECT
     dt_close,
     close

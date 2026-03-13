@@ -23,4 +23,4 @@ FROM (
 
         SELECT 1
         FROM q
-    );
+    ); -- { serverError TOO_DEEP_RECURSION }

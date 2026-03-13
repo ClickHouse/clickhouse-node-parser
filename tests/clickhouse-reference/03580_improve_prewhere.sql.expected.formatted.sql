@@ -1,3 +1,4 @@
+-- Condition: lower(primary_key) = '00' can't make use of primary key index. It shouldn't be moved to the end of prewhere conditions.
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN actions = 1
@@ -10,6 +11,7 @@ FROM (
     )
 WHERE ilike(`explain`, '%Prewhere filter column%');
 
+-- Condition: primary_key = '00' can use primary key index. It should be moved to the end of prewhere conditions.
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN actions = 1
@@ -22,6 +24,8 @@ FROM (
     )
 WHERE ilike(`explain`, '%Prewhere filter column%');
 
+-- Condition: lower(primary_key) IN ('00', '01') should be placed before Condition: normal_column != 'hello' and value < 100
+-- because it has a lower estimated selectivity.
 SELECT trimLeft(replaceRegexpAll(`explain`, '__set_String_\\d+_\\d+', '__set_String'))
 FROM (
         EXPLAIN actions = 1

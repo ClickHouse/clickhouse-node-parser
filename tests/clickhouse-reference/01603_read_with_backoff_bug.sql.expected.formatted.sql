@@ -1,3 +1,4 @@
+-- optimize table t final;
 SELECT
     count(),
     sum(length(s))

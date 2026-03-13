@@ -1,3 +1,5 @@
+-- Tags: no-cpu-x86_64, no-cpu-aarch64
+-- Tag no-cpu-x86_64 and no-cpu-aarch64: Depending on the target platform, CRC32C function returns different hash values. So, should not run on X86_64 and ARM. Whenever a new test gets added here, same has to be updated in 01016_simhash_minhash.sql
 SELECT ngramSimHash('');
 
 SELECT ngramSimHash('what a cute cat.');
@@ -215,8 +217,8 @@ FROM defaults
 GROUP BY h
 ORDER BY h ASC;
 
-SELECT wordShingleSimHash('foobar', 9223372036854775807);
+SELECT wordShingleSimHash('foobar', 9223372036854775807); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT wordShingleSimHash('foobar', 1001);
+SELECT wordShingleSimHash('foobar', 1001); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SELECT wordShingleSimHash('foobar', 0);
+SELECT wordShingleSimHash('foobar', 0); -- { serverError ARGUMENT_OUT_OF_BOUND }

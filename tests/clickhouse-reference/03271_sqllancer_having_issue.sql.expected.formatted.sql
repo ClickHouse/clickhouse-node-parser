@@ -1,3 +1,4 @@
+-- These 2 queries are expected to return the same
 SELECT
     (tan(t3.c0)),
     SUM(-1017248723),

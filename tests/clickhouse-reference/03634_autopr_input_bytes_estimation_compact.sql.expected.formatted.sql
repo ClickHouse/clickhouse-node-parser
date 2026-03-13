@@ -51,6 +51,7 @@ LIMIT 10
 FORMAT Null
 SETTINGS log_comment = 'query_8';
 
+-- Just checking that the estimation is not too far off
 SELECT format('{} {} {}', log_comment, compressed_bytes, statistics_input_bytes)
 FROM (
         SELECT

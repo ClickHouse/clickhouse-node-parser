@@ -1,3 +1,4 @@
+-- Expecting 2
 SELECT
     'src_table',
     count(*)
@@ -7,6 +8,7 @@ SELECT *
 FROM src_table
 ORDER BY `all` ASC;
 
+-- Expecting 2
 SELECT
     'dst_1_0',
     count(*)
@@ -16,6 +18,7 @@ SELECT *
 FROM dst_1_0
 ORDER BY `all` ASC;
 
+-- Expecting 4
 SELECT
     'dst_1_1',
     count(*)
@@ -25,6 +28,7 @@ SELECT *
 FROM dst_1_1
 ORDER BY `all` ASC;
 
+-- Expecting 6
 SELECT
     'dst_1_2',
     count(*)
@@ -34,6 +38,7 @@ SELECT *
 FROM dst_1_2
 ORDER BY `all` ASC;
 
+-- Expecting 6
 SELECT
     'dst_2_01',
     count(*)

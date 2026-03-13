@@ -1,2 +1,2 @@
 SELECT *
-FROM file;
+FROM file; -- { serverError FILE_DOESNT_EXIST }

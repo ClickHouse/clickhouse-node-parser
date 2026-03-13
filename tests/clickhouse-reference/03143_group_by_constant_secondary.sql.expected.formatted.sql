@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/63264
 SELECT count()
 FROM remote(test_cluster_two_shards, `system`, one)
 GROUP BY 'hi'

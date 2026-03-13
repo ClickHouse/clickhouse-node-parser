@@ -47,7 +47,7 @@ SELECT
 
 SELECT
     parseDateTimeBestEffort('<Empty>', 3) AS a,
-    toTypeName(a);
+    toTypeName(a); -- {serverError CANNOT_PARSE_DATETIME}
 
 SELECT
     parseDateTimeBestEffort('2020-05-14T03:37:03', 3, 'UTC') AS a,
@@ -239,7 +239,7 @@ SELECT
 
 SELECT
     parseDateTime32BestEffort('<Empty>') AS a,
-    toTypeName(a);
+    toTypeName(a); -- {serverError CANNOT_PARSE_DATETIME}
 
 SELECT
     parseDateTime32BestEffort('2020-05-14T03:37:03', 'UTC') AS a,

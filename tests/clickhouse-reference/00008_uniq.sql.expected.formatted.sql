@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     uniq(UserID),
     uniqIf(UserID, CounterID = 800784),

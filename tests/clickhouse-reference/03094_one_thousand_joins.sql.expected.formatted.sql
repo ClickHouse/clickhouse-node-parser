@@ -1,3 +1,4 @@
+-- Bug 33446, marked as 'long' because it still runs around 10 sec
 SELECT *
 FROM
     (

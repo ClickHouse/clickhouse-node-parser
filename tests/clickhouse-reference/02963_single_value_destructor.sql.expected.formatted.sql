@@ -1,3 +1,4 @@
+-- When we use SingleValueDataBaseMemoryBlock we must ensure we call the class destructor on destroy
 SELECT argMax((number, number), (number, number))
 FROM numbers(100000)
 FORMAT Null;

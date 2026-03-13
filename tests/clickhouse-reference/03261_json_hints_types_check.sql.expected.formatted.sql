@@ -1,3 +1,3 @@
-SELECT '{}'::JSON(a LowCardinality(Int128));
+SELECT '{}'::JSON(a LowCardinality(Int128)); -- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}
 
-SELECT '{}'::JSON(a FixedString(100000));
+SELECT '{}'::JSON(a FixedString(100000)); -- {serverError ILLEGAL_COLUMN}

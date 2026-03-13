@@ -6,18 +6,18 @@ SELECT seriesDecomposeSTL(ts, period)
 FROM tb2
 ORDER BY period ASC;
 
-SELECT seriesDecomposeSTL([2,2,2,2,2,2,2,2,2,2,2,2,2,2], -5);
+SELECT seriesDecomposeSTL([2,2,2,2,2,2,2,2,2,2,2,2,2,2], -5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT seriesDecomposeSTL([2,2,2,2,2,2,2,2,2,2,2,2,2,2], -5.2);
+SELECT seriesDecomposeSTL([2,2,2,2,2,2,2,2,2,2,2,2,2,2], -5.2); --{ serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT seriesDecomposeSTL();
+SELECT seriesDecomposeSTL(); --{ serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
-SELECT seriesDecomposeSTL([]);
+SELECT seriesDecomposeSTL([]); --{ serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
-SELECT seriesDecomposeSTL([1,2,3], 2);
+SELECT seriesDecomposeSTL([1,2,3], 2); --{ serverError BAD_ARGUMENTS}
 
-SELECT seriesDecomposeSTL([2,2,2,3,3,3]);
+SELECT seriesDecomposeSTL([2,2,2,3,3,3]); --{ serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
-SELECT seriesDecomposeSTL([2,2,2,3,3,3], 9272653446478);
+SELECT seriesDecomposeSTL([2,2,2,3,3,3], 9272653446478); --{ serverError BAD_ARGUMENTS}
 
-SELECT seriesDecomposeSTL([2,2,2,3,3,3], 7);
+SELECT seriesDecomposeSTL([2,2,2,3,3,3], 7); --{ serverError BAD_ARGUMENTS}

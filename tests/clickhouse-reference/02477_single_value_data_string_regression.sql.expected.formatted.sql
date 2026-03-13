@@ -1,3 +1,4 @@
+-- Assert that the current version will write the same as 22.8.5 (last known good 22.8 minor)
 SELECT (
         SELECT hex(argMaxState('0123456789', number))
         FROM numbers(1)
@@ -5,6 +6,7 @@ SELECT (
 FROM argmaxstate_hex_small
 WHERE v = '22.8.5.29';
 
+-- Assert that the current version can read correctly both the old and the regression states
 SELECT
     v,
     length(finalizeAggregation(CAST(unhex(state) AS AggregateFunction(argMax, String, UInt64))))
@@ -34,6 +36,8 @@ SELECT
     length(finalizeAggregation(CAST(unhex(state) AS AggregateFunction(argMax, String, UInt64))))
 FROM argmaxstate_hex_empty;
 
+-- Right in the border of small and large buffers
+-- SELECT hex(argMaxState('0123456789012345678901234567890123456789012345' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV
 SELECT
     '46_OK',
     finalizeAggregation(CAST(unhex('2F0000003031323334353637383930313233343536373839303132333435363738393031323334353637383930313233343500010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
@@ -42,6 +46,7 @@ SELECT
     '46_KO',
     finalizeAggregation(CAST(unhex('2E00000030313233343536373839303132333435363738393031323334353637383930313233343536373839303132333435010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
 
+-- SELECT hex(argMaxState('01234567890123456789012345678901234567890123456' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV
 SELECT
     '47_OK',
     finalizeAggregation(CAST(unhex('30000000303132333435363738393031323334353637383930313233343536373839303132333435363738393031323334353600010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
@@ -50,6 +55,7 @@ SELECT
     '47_KO',
     finalizeAggregation(CAST(unhex('2F0000003031323334353637383930313233343536373839303132333435363738393031323334353637383930313233343536010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
 
+-- SELECT hex(argMaxState('012345678901234567890123456789012345678901234567' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV
 SELECT
     '48_OK',
     finalizeAggregation(CAST(unhex('3100000030313233343536373839303132333435363738393031323334353637383930313233343536373839303132333435363700010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
@@ -58,6 +64,8 @@ SELECT
     '48_KO',
     finalizeAggregation(CAST(unhex('30000000303132333435363738393031323334353637383930313233343536373839303132333435363738393031323334353637010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
 
+-- Right in the allocation limit (power of 2)
+-- SELECT hex(argMaxState('012345678901234567890123456789012345678901234567890123456789012' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV
 SELECT
     '63_OK',
     finalizeAggregation(CAST(unhex('4000000030313233343536373839303132333435363738393031323334353637383930313233343536373839303132333435363738393031323334353637383930313200010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
@@ -66,6 +74,7 @@ SELECT
     '63_KO',
     finalizeAggregation(CAST(unhex('3F000000303132333435363738393031323334353637383930313233343536373839303132333435363738393031323334353637383930313233343536373839303132010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
 
+-- SELECT hex(argMaxState('0123456789012345678901234567890123456789012345678901234567890123' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV
 SELECT
     '64_OK',
     finalizeAggregation(CAST(unhex('410000003031323334353637383930313233343536373839303132333435363738393031323334353637383930313233343536373839303132333435363738393031323300010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
@@ -103,36 +112,38 @@ SELECT
     maxMerge(x)
 FROM (
         SELECT CAST(concat(unhex('ffffff7f'), randomString(100500)), 'AggregateFunction(max, String)') AS x
-    );
+    ); -- { serverError CANNOT_READ_ALL_DATA }
 
 SELECT
     '2^31-2',
     maxMerge(x)
 FROM (
         SELECT CAST(concat(unhex('feffff7f'), randomString(100500)), 'AggregateFunction(max, String)') AS x
-    );
+    ); -- { serverError CANNOT_READ_ALL_DATA }
 
 SELECT
     '2^30',
     maxMerge(x)
 FROM (
         SELECT CAST(concat(unhex('00000040'), randomString(100500)), 'AggregateFunction(max, String)') AS x
-    );
+    ); -- { serverError CANNOT_READ_ALL_DATA }
 
 SELECT
     '2^30+1',
     maxMerge(x)
 FROM (
         SELECT CAST(concat(unhex('01000040'), randomString(100500)), 'AggregateFunction(max, String)') AS x
-    );
+    ); -- { serverError CANNOT_READ_ALL_DATA }
 
 SELECT
     '2^30-1',
     maxMerge(x)
 FROM (
         SELECT CAST(concat(unhex('ffffff3f'), randomString(100500)), 'AggregateFunction(max, String)') AS x
-    );
+    ); -- { serverError CANNOT_READ_ALL_DATA }
 
+-- The following query works, but it's too long and consumes to much memory
+-- SELECT '2^30-1', length(maxMerge(x)) from (select CAST(unhex('ffffff3f') || randomString(0x3FFFFFFF - 1) || 'x', 'AggregateFunction(max, String)') as x);
 SELECT
     '1M without 0',
     length(maxMerge(x))
@@ -149,7 +160,7 @@ FROM (
 
 SELECT
     'fuzz1',
-    finalizeAggregation(CAST(unhex('3000000\0303132333435363738393031323334353637383930313233343536373839303132333435363738393031323334353600010000000000000000'), 'AggregateFunction(argMax, String, UInt64)'));
+    finalizeAggregation(CAST(unhex('3000000\0303132333435363738393031323334353637383930313233343536373839303132333435363738393031323334353600010000000000000000'), 'AggregateFunction(argMax, String, UInt64)')); -- { serverError INCORRECT_DATA }
 
 SELECT
     'fuzz2',
@@ -159,16 +170,16 @@ SELECT
 SELECT
     'fuzz3',
     finalizeAggregation(CAST(unhex(concat('04000000', '30313233', '00', 'ffffffffffffffff')), 'AggregateFunction(argMax, String, UInt64)')) AS x,
-    length(x);
+    length(x); -- { serverError INCORRECT_DATA }
 
 SELECT
     'fuzz4',
     finalizeAggregation(CAST(unhex(concat('04000000', '30313233', '00')), 'AggregateFunction(argMax, String, UInt64)')) AS x,
-    length(x);
+    length(x); -- { serverError INCORRECT_DATA }
 
 SELECT
     'fuzz5',
-    finalizeAggregation(CAST(unhex('0100000000000000000FFFFFFFF0'), 'AggregateFunction(argMax, UInt64, String)'));
+    finalizeAggregation(CAST(unhex('0100000000000000000FFFFFFFF0'), 'AggregateFunction(argMax, UInt64, String)')); -- { serverError INCORRECT_DATA }
 
 SELECT
     n,

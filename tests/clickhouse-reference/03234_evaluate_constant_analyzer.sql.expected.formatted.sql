@@ -6,4 +6,4 @@ CROSS JOIN numbers(6) AS n3
 GROUP BY
     (NULL, cityHash64(inf, -2147483648, toLowCardinality(16), NULL, 10.000100135803223), cityHash64(1.1754943508222875e-38, NULL, NULL, NULL), 2147483647),
     cityHash64(0., 3, NULL, NULL, 10000000000., NULL, NULL)
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- { serverError BAD_ARGUMENTS }

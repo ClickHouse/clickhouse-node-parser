@@ -1,3 +1,4 @@
+--- REGEXP_MATCHES
 SELECT
     match('a key="v" ', 'key="(.*?)"'),
     REGEXP_MATCHES('a key="v" ', 'key="(.*?)"');
@@ -14,6 +15,7 @@ SELECT
     match(materialize('\0 key="v" '), 'key="(.*?)"'),
     REGEXP_MATCHES(materialize('\0 key="v" '), 'key="(.*?)"');
 
+--- REGEXP_REPLACE
 SELECT
     s,
     replaceAll(s, '_', 'o') AS a,

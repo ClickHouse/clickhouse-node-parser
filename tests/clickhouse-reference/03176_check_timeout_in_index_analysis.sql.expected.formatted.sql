@@ -1,9 +1,11 @@
+-- Table is partitioned by k to so it will have 5 partitions
 SELECT count()
 FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 't_03176'
     AND active;
 
+-- Check that q1 was fast, q2 was slow and q3 had timeout
 SELECT
     log_comment,
     type = 'QueryFinish',

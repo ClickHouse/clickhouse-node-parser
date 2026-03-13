@@ -12,6 +12,7 @@ LIMIT 10
 FORMAT Null
 SETTINGS max_memory_usage = '400M';
 
+--- 100 granules for reading from main table, 10 granules for lazy reading
 SELECT read_rows <= (1024 * 110)
 FROM `system`.query_log
 WHERE type = 'QueryFinish'

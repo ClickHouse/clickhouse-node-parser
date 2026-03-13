@@ -11,7 +11,7 @@ FROM tab;
 SELECT
     nested([['click'], ['house']], x.b.`first`, x.b.second) AS n,
     toTypeName(n)
-FROM tab;
+FROM tab; -- {serverError BAD_ARGUMENTS}
 
 SELECT x
 FROM tab;
@@ -22,4 +22,4 @@ SELECT
     y.b.second
 FROM
     tab
-ARRAY JOIN x AS y;
+ARRAY JOIN x AS y; -- { serverError UNKNOWN_IDENTIFIER }

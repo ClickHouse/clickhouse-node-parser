@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/81346
 SELECT (NOT divideOrNull(0, *))
     AND (NOT intDivOrNull(*, 1))
 SETTINGS

@@ -66,12 +66,17 @@ SELECT (if(1, (toUInt32(0) AS i), toUInt64(1))) = i;
 
 SELECT (if(1, (toUInt64(0) AS i), toUInt64(1))) = i;
 
+--select (1 ? (toInt8(0) as i) : toUInt64(1)) = i;
+--select (1 ? (toInt16(0) as i) : toUInt64(1)) = i;
+--select (1 ? (toInt32(0) as i) : toUInt64(1)) = i;
+--select (1 ? (toInt64(0) as i) : toUInt64(1)) = i;
 SELECT (if(1, (toUInt8(0) AS i), toInt8(1))) = i;
 
 SELECT (if(1, (toUInt16(0) AS i), toInt8(1))) = i;
 
 SELECT (if(1, (toUInt32(0) AS i), toInt8(1))) = i;
 
+--select (1 ? (toUInt64(0) as i) : toInt8(1)) = i;
 SELECT (if(1, (toInt8(0) AS i), toInt8(1))) = i;
 
 SELECT (if(1, (toInt16(0) AS i), toInt8(1))) = i;
@@ -86,6 +91,7 @@ SELECT (if(1, (toUInt16(0) AS i), toInt16(1))) = i;
 
 SELECT (if(1, (toUInt32(0) AS i), toInt16(1))) = i;
 
+--select (1 ? (toUInt64(0) as i) : toInt16(1)) = i;
 SELECT (if(1, (toInt8(0) AS i), toInt16(1))) = i;
 
 SELECT (if(1, (toInt16(0) AS i), toInt16(1))) = i;
@@ -100,6 +106,7 @@ SELECT (if(1, (toUInt16(0) AS i), toInt32(1))) = i;
 
 SELECT (if(1, (toUInt32(0) AS i), toInt32(1))) = i;
 
+--select (1 ? (toUInt64(0) as i) : toInt32(1)) = i;
 SELECT (if(1, (toInt8(0) AS i), toInt32(1))) = i;
 
 SELECT (if(1, (toInt16(0) AS i), toInt32(1))) = i;
@@ -114,6 +121,7 @@ SELECT (if(1, (toUInt16(0) AS i), toInt64(1))) = i;
 
 SELECT (if(1, (toUInt32(0) AS i), toInt64(1))) = i;
 
+--select (1 ? (toUInt64(0) as i) : toInt64(1)) = i;
 SELECT (if(1, (toInt8(0) AS i), toInt64(1))) = i;
 
 SELECT (if(1, (toInt16(0) AS i), toInt64(1))) = i;

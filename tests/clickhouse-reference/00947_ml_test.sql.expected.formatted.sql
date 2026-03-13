@@ -11,6 +11,7 @@ FROM (
         LIMIT 1
     );
 
+-- Check that returned weights are close to real
 SELECT ans > 0.49
     AND ans < 0.51
 FROM (

@@ -1,3 +1,4 @@
+-- empty result set
 SELECT a
 FROM (
         SELECT

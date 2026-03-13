@@ -42,7 +42,8 @@ FROM (
         FROM mt2
     );
 
-SELECT functionThatDoesNotExist();
+-- rollback on exception before start
+SELECT functionThatDoesNotExist(); -- { serverError UNKNOWN_FUNCTION }
 
 SELECT
     'on exception while processing',
@@ -55,10 +56,11 @@ FROM (
         FROM mt2
     );
 
+-- rollback on exception while processing
 SELECT throwIf(100 < number)
-FROM numbers(1000);
+FROM numbers(1000); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 
-SELECT 1;
+SELECT 1; -- { serverError INVALID_TRANSACTION }
 
 SELECT
     'on session close',
@@ -112,4 +114,4 @@ SELECT
 FROM mt1;
 
 SELECT *
-FROM m;
+FROM m; -- { serverError INVALID_TRANSACTION }

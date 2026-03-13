@@ -10,6 +10,7 @@ WHERE database = currentDatabase()
 SELECT sleepEachRow(2) AS higher_probablility_of_reproducing_the_issue
 FORMAT Null;
 
+-- mutation should not be finished yet
 SELECT *
 FROM mut;
 

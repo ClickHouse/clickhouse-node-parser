@@ -5,7 +5,7 @@ FROM numbers(10)
 GROUP BY GROUPING SETS ((number), (number % 2))
 ORDER BY
     number ASC,
-    gr ASC;
+    gr ASC; -- { serverError BAD_ARGUMENTS }
 
 SELECT
     number,

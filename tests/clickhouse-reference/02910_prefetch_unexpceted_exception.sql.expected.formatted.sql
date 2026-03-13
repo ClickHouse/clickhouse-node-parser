@@ -1,3 +1,3 @@
 SELECT *
 FROM prefetched_table
-FORMAT Null;
+FORMAT Null; --{serverError BAD_ARGUMENTS}

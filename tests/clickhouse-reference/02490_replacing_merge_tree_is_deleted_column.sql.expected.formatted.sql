@@ -6,6 +6,7 @@ SELECT *
 FROM test
 ORDER BY uid ASC;
 
+-- d6 has to be removed since we set clean_deleted_rows as 'Always'
 SELECT *
 FROM test
 WHERE is_deleted = 0

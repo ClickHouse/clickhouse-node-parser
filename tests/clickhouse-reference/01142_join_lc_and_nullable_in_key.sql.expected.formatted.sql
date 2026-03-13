@@ -31,6 +31,7 @@ FULL JOIN nr AS r
     USING (x)
 ORDER BY x ASC;
 
+-- lc should be supertype for l.lc and r.lc, so expect Nullable(String)
 SELECT
     x,
     lc,
@@ -70,6 +71,7 @@ FULL JOIN nr AS r
 ORDER BY x ASC
 SETTINGS enable_analyzer = 1;
 
+-- old behavior is different
 SELECT
     x,
     lc,

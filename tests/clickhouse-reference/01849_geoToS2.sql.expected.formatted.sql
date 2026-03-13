@@ -18,12 +18,12 @@ FROM (
         ORDER BY s2_index ASC
     );
 
-SELECT s2ToGeo(toUInt64(-1));
+SELECT s2ToGeo(toUInt64(-1)); -- { serverError BAD_ARGUMENTS }
 
-SELECT s2ToGeo(nan);
+SELECT s2ToGeo(nan); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT geoToS2(toFloat64(toUInt64(-1)), toFloat64(toUInt64(-1)));
+SELECT geoToS2(toFloat64(toUInt64(-1)), toFloat64(toUInt64(-1))); -- { serverError BAD_ARGUMENTS }
 
-SELECT geoToS2(nan, nan);
+SELECT geoToS2(nan, nan); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT geoToS2(-inf, 1.1754943508222875e-38);
+SELECT geoToS2(-inf, 1.1754943508222875e-38); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

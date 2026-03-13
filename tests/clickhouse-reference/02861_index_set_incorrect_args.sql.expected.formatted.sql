@@ -6,4 +6,4 @@ SETTINGS
     optimize_move_to_prewhere = 0,
     max_parallel_replicas = 2,
     parallel_replicas_for_non_replicated_merge_tree = 1,
-    enable_parallel_replicas = 2;
+    enable_parallel_replicas = 2; -- { serverError TOO_FEW_ARGUMENTS_FOR_FUNCTION }

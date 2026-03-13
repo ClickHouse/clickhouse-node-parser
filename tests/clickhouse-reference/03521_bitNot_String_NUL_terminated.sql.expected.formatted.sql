@@ -1,3 +1,5 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/80774
+-- Regression for "Logical error: 'res.data[res.size] == '\0'" (in StringValueCompatibility)
 SELECT
     uniqCombined64(bitNot(x)),
     anyHeavy(bitNot(x))

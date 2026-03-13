@@ -54,6 +54,7 @@ INNER JOIN (
     ) AS foo
     USING (arr_item);
 
+-- Fuzzed
 SELECT arr
 FROM
     remote('127.0.0.2', currentDatabase(), local_table) AS r

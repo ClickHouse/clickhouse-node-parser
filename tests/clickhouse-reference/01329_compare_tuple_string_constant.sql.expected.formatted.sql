@@ -1,6 +1,6 @@
-SELECT tuple(1) < '';
+SELECT tuple(1) < ''; -- { serverError CANNOT_PARSE_INPUT_ASSERTION_FAILED }
 
-SELECT tuple(1) < materialize('');
+SELECT tuple(1) < materialize(''); -- { serverError NO_COMMON_TYPE }
 
 SELECT (1, 2) < '(1,3)';
 

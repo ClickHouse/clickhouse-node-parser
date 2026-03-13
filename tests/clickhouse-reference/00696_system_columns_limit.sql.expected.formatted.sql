@@ -1,3 +1,4 @@
+-- NOTE: database = currentDatabase() is not mandatory
 SELECT count() > 0
 FROM (
         SELECT *

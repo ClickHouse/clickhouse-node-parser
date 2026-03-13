@@ -21,11 +21,13 @@ SELECT '---';
 SELECT *
 GROUP BY *;
 
+-- not ok as every component of ORDER BY may contain ASC/DESC and COLLATE; though can be supported in some sense
+-- but it works
 SELECT *
 ORDER BY * ASC;
 
 SELECT *
-WHERE *;
+WHERE *; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT *
 FROM
@@ -36,6 +38,7 @@ CROSS JOIN (
         SELECT 2 AS b
     ) AS u;
 
+-- equivalent to:
 SELECT
     a,
     b
@@ -56,6 +59,7 @@ CROSS JOIN (
         SELECT 1 AS a
     ) AS u;
 
+-- equivalent to:
 SELECT
     t.a,
     u.a
@@ -70,11 +74,13 @@ CROSS JOIN (
 SELECT *
 FROM t;
 
+-- equivalent to:
 SELECT
     x,
     nest.*
 FROM t;
 
+-- equivalent to:
 SELECT
     x,
     nest.a,

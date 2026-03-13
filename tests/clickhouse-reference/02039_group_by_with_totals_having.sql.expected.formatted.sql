@@ -1,3 +1,4 @@
+-- { echo }
 SELECT 'x'
 FROM numbers(2)
 GROUP BY number

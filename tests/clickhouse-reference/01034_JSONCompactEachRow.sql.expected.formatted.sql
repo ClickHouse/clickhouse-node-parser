@@ -6,6 +6,7 @@ FORMAT JSONCompactEachRow;
 
 SELECT 2;
 
+/* Check Totals */
 SELECT
     name,
     count() AS c
@@ -17,6 +18,7 @@ FORMAT JSONCompactEachRow;
 
 SELECT 3;
 
+/* Check JSONCompactEachRowWithNames and JSONCompactEachRowWithNamesAndTypes Output */
 SELECT *
 FROM test_table
 FORMAT JSONCompactEachRowWithNamesAndTypes;
@@ -29,6 +31,7 @@ FORMAT JSONCompactEachRowWithNames;
 
 SELECT 4;
 
+/* Check Totals */
 SELECT
     name,
     count() AS c

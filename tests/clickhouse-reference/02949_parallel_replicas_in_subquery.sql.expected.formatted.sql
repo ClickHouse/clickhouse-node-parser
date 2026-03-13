@@ -7,7 +7,7 @@ WHERE id IN (
     )
 SETTINGS
     enable_parallel_replicas = 2,
-    parallel_replicas_allow_in_with_subquery = 0;
+    parallel_replicas_allow_in_with_subquery = 0; -- { serverError SUPPORT_IS_DISABLED }
 
 SELECT *
 FROM merge_tree_in_subqueries
@@ -41,7 +41,7 @@ WHERE id IN (
 ORDER BY id ASC
 SETTINGS
     enable_parallel_replicas = 2,
-    parallel_replicas_allow_in_with_subquery = 0;
+    parallel_replicas_allow_in_with_subquery = 0; -- { serverError SUPPORT_IS_DISABLED };
 
 SELECT *
 FROM merge_tree_in_subqueries
@@ -73,7 +73,7 @@ WHERE id IN (
 ORDER BY id ASC
 SETTINGS
     enable_parallel_replicas = 2,
-    parallel_replicas_allow_in_with_subquery = 0;
+    parallel_replicas_allow_in_with_subquery = 0; -- { serverError SUPPORT_IS_DISABLED };
 
 SELECT *
 FROM merge_tree_in_subqueries

@@ -1,7 +1,8 @@
-SELECT mapAdd(map(1, 1));
+-- mapAdd
+SELECT mapAdd(map(1, 1)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT mapAdd(map(1, 1), m)
-FROM tab;
+FROM tab; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT mapAdd(map(toUInt64(1), toInt32(1)), m)
 FROM tab;
@@ -9,6 +10,7 @@ FROM tab;
 SELECT mapAdd(cast(m, 'Map(UInt8, UInt8)'), map(1, 1), map(2, 2))
 FROM tab;
 
+-- check types
 SELECT
     mapAdd(map(toUInt8(1), 1, 2, 1), map(toUInt8(1), 1, 2, 1)) AS res,
     toTypeName(res);
@@ -63,7 +65,7 @@ SELECT
 
 SELECT
     mapAdd(map(1.0, toFloat32(1.1), 2.0, 1), map(1.0, 2.2, 2.0, 1)) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     mapAdd(map(toLowCardinality('ab'), toFloat32(1.1), toLowCardinality('cd'), 1), map(toLowCardinality('ab'), 2.2, toLowCardinality('cd'), 1)) AS res,
@@ -75,7 +77,7 @@ SELECT
 
 SELECT
     mapAdd(map(1, toFloat64(1.1), 2, 1), map(1, 1, 2, 1)) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT mapAdd(map('a', 1, 'b', 1), map(key, 1))
 FROM values('key String', ('b'), ('c'), ('d'));
@@ -103,13 +105,14 @@ SELECT
     toTypeName(res)
 FROM values('key UUID, val Int32', ('00000000-89ab-cdef-0123-456789abcdef', 1), ('11111111-89ab-cdef-0123-456789abcdef', 2));
 
+-- mapSubtract, same rules as mapAdd
 SELECT
     mapSubtract(map(toUInt8(1), 1, 2, 1), map(toUInt8(1), 1, 2, 1)) AS res,
     toTypeName(res);
 
 SELECT
     mapSubtract(map(toUInt8(1), 1, 2, 1), map(toUInt8(1), 2, 2, 2)) AS res,
-    toTypeName(res);
+    toTypeName(res); -- overflow
 
 SELECT
     mapSubtract(map(toUInt8(1), toInt32(1), 2, 1), map(toUInt8(1), toInt16(2), 2, 2)) AS res,

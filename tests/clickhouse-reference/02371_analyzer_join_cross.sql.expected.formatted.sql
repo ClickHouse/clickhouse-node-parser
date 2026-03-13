@@ -82,9 +82,9 @@ ORDER BY `ALL` ASC;
 SELECT id
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2;
+CROSS JOIN test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT value
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2;
+CROSS JOIN test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }

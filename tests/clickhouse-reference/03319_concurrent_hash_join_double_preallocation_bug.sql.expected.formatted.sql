@@ -1,3 +1,4 @@
+-- First populate the cache of hash table sizes
 SELECT *
 FROM
     lhs AS t1
@@ -5,6 +6,7 @@ INNER JOIN rhs AS t2
     ON t1.a = t2.a
 FORMAT Null;
 
+-- For the next run we will preallocate the space
 SELECT *
 FROM
     lhs AS t1

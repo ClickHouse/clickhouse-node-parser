@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT
     jumpConsistentHash(1, 1),
     jumpConsistentHash(42, 57),

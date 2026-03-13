@@ -1,7 +1,7 @@
 SELECT
     avg(number) AS number,
     max(number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT
     sum(x) AS x,
@@ -10,7 +10,7 @@ FROM (
         SELECT 1 AS x
         UNION ALL
         SELECT 2 AS x
-    ) AS t;
+    ) AS t; -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT
     sum(C1) AS C1,
@@ -18,7 +18,7 @@ SELECT
 FROM (
         SELECT number AS C1
         FROM numbers(3)
-    ) AS ITBL;
+    ) AS ITBL; -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT
     sum(x) AS x,

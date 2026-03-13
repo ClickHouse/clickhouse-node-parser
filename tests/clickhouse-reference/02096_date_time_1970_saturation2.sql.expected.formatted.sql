@@ -1,3 +1,4 @@
+-- America/Paramaribo : partial hours timezones
 SELECT toDateTime(0, 'America/Paramaribo');
 
 SELECT toMonday(toDateTime(0, 'America/Paramaribo'));
@@ -22,6 +23,7 @@ SELECT toStartOfFifteenMinutes(toDateTime(0, 'America/Paramaribo'));
 
 SELECT toStartOfHour(toDateTime(0, 'America/Paramaribo'));
 
+-- Africa/Monrovia : partial minutes timezones
 SELECT toDateTime(0, 'Africa/Monrovia');
 
 SELECT toMonday(toDateTime(0, 'Africa/Monrovia'));

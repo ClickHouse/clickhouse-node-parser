@@ -39,7 +39,7 @@ SELECT
 FROM target;
 
 SELECT throwIf(number == 0)
-FROM numbers(100);
+FROM numbers(100); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 
 SELECT
     'in_transaction',
@@ -77,11 +77,12 @@ SELECT *
 FROM `system`.one;
 
 SELECT *
-FROM cluster('test_cluster_interserver_secret', `system`, one);
+FROM cluster('test_cluster_interserver_secret', `system`, one); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
-FROM cluster('test_cluster_two_shards', `system`, one);
+FROM cluster('test_cluster_two_shards', `system`, one); -- { serverError NOT_IMPLEMENTED }
 
+-- there's not session in the interserver mode
 SELECT *
 FROM cluster('test_cluster_interserver_secret', `system`, one)
-FORMAT Null;
+FORMAT Null; -- { serverError INVALID_TRANSACTION }

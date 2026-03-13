@@ -93,6 +93,7 @@ FROM (
             USING (id)
     );
 
+-- Cannot execute the grace hash with OR condition
 SELECT *
 FROM
     (
@@ -108,8 +109,9 @@ INNER JOIN (
         FROM t2
     ) AS t2
     ON t1.key = t2.key
-    OR t1.key2 = t2.key2;
+    OR t1.key2 = t2.key2; -- { serverError NOT_IMPLEMENTED }
 
+-- But for CROSS choose `hash` algorithm even though it's not enabled
 SELECT *
 FROM
     (
@@ -127,6 +129,7 @@ CROSS JOIN (
 FORMAT Null
 SETTINGS enable_analyzer = 1;
 
+-- ... (not for old analyzer)
 SELECT *
 FROM
     (
@@ -142,4 +145,4 @@ CROSS JOIN (
         FROM t2
     ) AS t2
 FORMAT Null
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError NOT_IMPLEMENTED }

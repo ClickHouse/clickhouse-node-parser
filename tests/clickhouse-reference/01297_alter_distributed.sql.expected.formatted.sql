@@ -10,4 +10,4 @@ SELECT
     dummy1
 FROM merge_distributed
 WHERE dummy1 <> ''
-LIMIT 10;
+LIMIT 10; -- { serverError UNKNOWN_IDENTIFIER }

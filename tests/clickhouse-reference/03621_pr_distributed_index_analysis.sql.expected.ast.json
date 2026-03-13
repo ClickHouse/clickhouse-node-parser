@@ -44,6 +44,9 @@
           "value": "parallel_replicas"
         }
       }
+    ],
+    "leadingComments": [
+      "-- { echo }"
     ]
   },
   {
@@ -207,7 +210,10 @@
                 "kind": "literal",
                 "type": "String",
                 "value": "1"
-              }
+              },
+              "leadingComments": [
+                "-- in case of parallel replicas, it is possible that there will be less subqueries then max, but should not exceed it"
+              ]
             },
             {
               "kind": "functionCall",
@@ -264,7 +270,10 @@
                     ]
                   },
                   "type": "UInt64",
-                  "operator": true
+                  "operator": true,
+                  "leadingComments": [
+                    "-- the max is hosts in parallel_replicas (10) * 2 (one for the query itself and one for mergeTreeAnalyzeIndexes()) - 1 * 2 (for local replica we do not issue a separate query) + 1 (query itself)"
+                  ]
                 },
                 {
                   "kind": "castExpr",
@@ -285,7 +294,10 @@
                     ]
                   },
                   "type": "UInt64",
-                  "operator": true
+                  "operator": true,
+                  "leadingComments": [
+                    "-- the max is hosts in test_cluster_one_shard_two_replicas (2) * 2 (one for the query itself and one for mergeTreeAnalyzeIndexes()) - 1 * 2 (for local replica we do not issue a separate query) + 1 (query itself)"
+                  ]
                 }
               ]
             },
@@ -367,6 +379,9 @@
                   "type": "UInt64",
                   "operator": true
                 }
+              ],
+              "leadingComments": [
+                "-- in case of distributed index analyss, it is possible that there will be less subqueries then max, due to failures on remote"
               ]
             }
           ]
@@ -564,6 +579,9 @@
                 }
               ]
             }
+          ],
+          "leadingComments": [
+            "-- SKIP: current_database = currentDatabase() (it will filter out non-initial queries)"
           ]
         }
       ]

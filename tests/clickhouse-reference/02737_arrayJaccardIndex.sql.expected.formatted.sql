@@ -1,17 +1,17 @@
 SELECT
     'a' AS arr1,
     2 AS arr2,
-    round(arrayJaccardIndex(arr1, arr2), 2);
+    round(arrayJaccardIndex(arr1, arr2), 2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     [] AS arr1,
     [] AS arr2,
-    round(arrayJaccardIndex(arr1, arr2), 2);
+    round(arrayJaccardIndex(arr1, arr2), 2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     ['1', '2'] AS arr1,
     [1,2] AS arr2,
-    round(arrayJaccardIndex(arr1, arr2), 2);
+    round(arrayJaccardIndex(arr1, arr2), 2); -- { serverError NO_COMMON_TYPE }
 
 SELECT
     [1,2] AS arr1,

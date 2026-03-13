@@ -62,4 +62,4 @@ ORDER BY x ASC;
 
 SELECT transform(number, [1], [null])
 FROM `system`.numbers
-LIMIT 1;
+LIMIT 1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

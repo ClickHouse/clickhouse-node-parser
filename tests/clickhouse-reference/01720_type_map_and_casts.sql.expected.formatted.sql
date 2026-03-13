@@ -48,7 +48,7 @@ FROM table_map_with_key_integer;
 SELECT
     m[257],
     m[1]
-FROM table_map_with_key_integer;
+FROM table_map_with_key_integer; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     m[toInt128(-1)],

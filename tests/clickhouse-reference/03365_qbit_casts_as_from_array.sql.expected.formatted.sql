@@ -56,10 +56,10 @@ FROM format('Values', 'qbit QBit(BFloat16, 3)', '(tuple([1,2,3,4,5,6,7,8,9]::QBi
                                                                  [1,2,3,4,5,6,7,8,9]::QBit(BFloat16, 9).13,
                                                                  [1,2,3,4,5,6,7,8,9]::QBit(BFloat16, 9).14,
                                                                  [1,2,3,4,5,6,7,8,9]::QBit(BFloat16, 9).15,
-                                                                 [1,2,3,4,5,6,7,8,9]::QBit(BFloat16, 9).16))');
+                                                                 [1,2,3,4,5,6,7,8,9]::QBit(BFloat16, 9).16))'); -- { serverError TYPE_MISMATCH }
 
 SELECT *
-FROM format('Values', 'qbit QBit(BFloat16, 9)', '(tuple([1,2,3]::QBit(BFloat16, 3).1))');
+FROM format('Values', 'qbit QBit(BFloat16, 9)', '(tuple([1,2,3]::QBit(BFloat16, 3).1))'); -- { serverError TYPE_MISMATCH }
 
 SELECT L2DistanceTransposed([1,2,3]::QBit(Float64, 3), [1,2,3]::Array(Float64), 3)
 SETTINGS enable_analyzer = 0;

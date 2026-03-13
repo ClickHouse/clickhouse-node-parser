@@ -54,49 +54,49 @@ FROM (
     );
 
 SELECT formatReadableDecimalSize(number::Date)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableSize(number::Date)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableQuantity(number::Date)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableTimeDelta(number::Date)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableDecimalSize(number::Date32)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableSize(number::Date32)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableQuantity(number::Date32)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableTimeDelta(number::Date32)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableDecimalSize(number::DateTime)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableSize(number::DateTime)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableQuantity(number::DateTime)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableTimeDelta(number::DateTime)
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableDecimalSize(number::DateTime64(3))
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableSize(number::DateTime64(3))
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableQuantity(number::DateTime64(3))
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT formatReadableTimeDelta(number::DateTime64(3))
-FROM numbers(2);
+FROM numbers(2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

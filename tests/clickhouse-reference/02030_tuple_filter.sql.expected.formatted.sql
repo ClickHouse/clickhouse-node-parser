@@ -19,6 +19,7 @@ SELECT *
 FROM test_tuple_filter
 WHERE ((id, value), log_date) = ((1, 'A'), '2021-01-01');
 
+-- not supported functions (concat) do not lost
 SELECT *
 FROM test_tuple_filter
 WHERE (id, value, value||'foo') = ('1', 'A', 'A');
@@ -53,16 +54,16 @@ WHERE (id, (id, id) = (1, NULL)) == (NULL, NULL);
 
 SELECT *
 FROM test_tuple_filter
-WHERE (log_date, value) = tuple('2021-01-01');
+WHERE (log_date, value) = tuple('2021-01-01'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
 FROM test_tuple_filter
-WHERE (id, value) = tuple(1);
+WHERE (id, value) = tuple(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
 FROM test_tuple_filter
-WHERE tuple(id, value) = tuple(value, id);
+WHERE tuple(id, value) = tuple(value, id); -- { serverError NO_COMMON_TYPE }
 
 SELECT *
 FROM test_tuple_filter
-WHERE equals((id, value));
+WHERE equals((id, value)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

@@ -1,12 +1,18 @@
+-- Run query whose result gets cached in the query cache.
+-- Besides "use_query_cache", pass two more knobs (one QC-specific knob and one non-QC-specific knob). We just care
+-- *that* they are passed and not about their effect.
 SELECT 1
 SETTINGS
     use_query_cache = true,
     query_cache_nondeterministic_function_handling = 'save',
     max_threads = 16;
 
+-- Check that entry in QC exists
 SELECT COUNT(*)
 FROM `system`.query_cache;
 
+-- Run the same SELECT but with different SETTINGS. We want its result to be served from the QC (--> passive mode, achieve it by
+-- disabling active mode)
 SELECT '---';
 
 SELECT 1

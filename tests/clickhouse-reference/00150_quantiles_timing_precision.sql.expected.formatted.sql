@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     CounterID,
     quantileTiming(0.5)(SendTiming) AS qt,

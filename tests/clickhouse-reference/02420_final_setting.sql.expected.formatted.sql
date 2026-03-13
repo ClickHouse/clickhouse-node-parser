@@ -1,18 +1,24 @@
+-- expected output is 2 because final is turned off
 SELECT count()
 FROM replacing_mt;
 
+-- expected output is 4 because select_final == 0
 SELECT count()
 FROM
     lhs
 INNER JOIN rhs
     ON lhs.x = rhs.x;
 
+-- expected output is 1, it should silently ignore final modifier
 SELECT count()
 FROM regular_mt_table;
 
 SELECT count()
 FROM nv_regular_mt_table;
 
+-- expected output
+-- 1 c a c
+-- 1 c b c
 SELECT
     left_table.id,
     val_left,
@@ -30,6 +36,7 @@ ORDER BY
     val_middle ASC,
     val_right ASC;
 
+-- extra: same with subquery
 SELECT
     left_table.id,
     val_left,
@@ -51,6 +58,9 @@ ORDER BY
     val_middle ASC,
     val_right ASC;
 
+-- expected output:
+-- 1 c 1 a 1 c
+-- 1 c 1 b 1 c
 SELECT
     left_table.*,
     middle_table.*,
@@ -67,6 +77,8 @@ ORDER BY
     val_middle ASC,
     val_right ASC;
 
+-- expected output:
+-- 1 c, 2 a, 2 b, 3 c
 SELECT *
 FROM merge_table
 ORDER BY

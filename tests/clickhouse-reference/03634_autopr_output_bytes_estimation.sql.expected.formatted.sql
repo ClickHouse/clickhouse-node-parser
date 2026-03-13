@@ -4,6 +4,8 @@ WHERE AdvEngineID <> 0
 FORMAT Null
 SETTINGS log_comment = 'query_1';
 
+-- Unsupported at the moment, refer to comments in `RuntimeDataflowStatisticsCacheUpdater::recordAggregationStateSizes`
+-- SELECT COUNT(DISTINCT SearchPhrase) FROM test.hits FORMAT Null SETTINGS log_comment='query_5';
 SELECT
     MobilePhoneModel,
     COUNTDistinct(UserID) AS u

@@ -57,16 +57,16 @@ SELECT toDateTime('2025-01-01 00:00:00') + toInterval(1.5, 'second');
 
 SELECT toDateTime('2025-01-01 00:00:00') + toInterval('5', 'second');
 
-SELECT toInterval();
+SELECT toInterval(); -- { serverError 42}
 
-SELECT toInterval('');
+SELECT toInterval(''); -- { serverError 42}
 
-SELECT toInterval('second');
+SELECT toInterval('second'); -- { serverError 42 }
 
-SELECT toInterval(5, 'second', 10);
+SELECT toInterval(5, 'second', 10); -- { serverError 42 }
 
-SELECT toInterval(10, 5);
+SELECT toInterval(10, 5); -- { serverError 43 }
 
-SELECT toInterval(5, '');
+SELECT toInterval(5, ''); -- { serverError 36 }
 
-SELECT toInterval(5, 'invalid kind');
+SELECT toInterval(5, 'invalid kind'); -- { serverError 36 }

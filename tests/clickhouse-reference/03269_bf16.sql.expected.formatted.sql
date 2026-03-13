@@ -1,3 +1,5 @@
+-- This is a smoke test, non exhaustive.
+-- Conversions
 SELECT
     1::BFloat16,
     -1::BFloat16,
@@ -13,12 +15,14 @@ SELECT
     CAST(-inf AS BFloat16),
     CAST(nan AS BFloat16);
 
+-- Conversions back
 SELECT
     CAST(1.1::BFloat16 AS BFloat16),
     CAST(1.1::BFloat16 AS Float32),
     CAST(1.1::BFloat16 AS Float64),
     CAST(1.1::BFloat16 AS Int8);
 
+-- Comparisons
 SELECT
     1.1::BFloat16 = 1.1::BFloat16,
     1.1::BFloat16 < 1.1,
@@ -26,6 +30,7 @@ SELECT
     1.1::BFloat16 > 1,
     1.1::BFloat16 = 1.09375;
 
+-- Arithmetic
 SELECT
     1.1::BFloat16 - 1.1::BFloat16 AS a,
     1.1::BFloat16 + 1.1::BFloat16 AS b,
@@ -54,6 +59,7 @@ FROM t
 WHERE n % 1000 = 0
 ORDER BY n ASC;
 
+-- Aggregate functions
 SELECT
     sum(n),
     sum(x),
@@ -69,6 +75,7 @@ SELECT
     uniqExact(x)
 FROM t;
 
+-- Introspection
 SELECT
     1.1::BFloat16 AS x,
     hex(x),
@@ -77,6 +84,7 @@ SELECT
     reinterpretAsUInt16(x),
     hex(reinterpretAsString(x));
 
+-- Rounding (this could be not towards the nearest)
 SELECT
     1.1::BFloat16 AS x,
     round(x),
