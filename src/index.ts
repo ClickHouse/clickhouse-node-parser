@@ -26,8 +26,11 @@ export type {
   FromExpr,
   OrderByItem,
   CTE,
+  QueryParam,
   SelectStatement,
   Statement,
+  ASTNodeKind,
+  ASTNodeKindMap,
 } from './ast';
 
 // ── Public API ────────────────────────────────────────────────────────────────
@@ -38,3 +41,4 @@ export function parse(sql: string): Statement[] {
 
 export { format } from './format';
 export { formatExplain } from './explain';
+export { findNodes } from './find-nodes';
