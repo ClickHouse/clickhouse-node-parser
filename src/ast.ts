@@ -1276,6 +1276,53 @@ export type Statement =
   | UseStatement
   | SystemStatement;
 
+// ── AST node kind map ────────────────────────────────────────────────────────
+
+/**
+ * Maps each AST node `kind` string to its corresponding TypeScript type.
+ *
+ * Used by {@link findNodes} to provide type-safe return values.
+ */
+export interface ASTNodeKindMap {
+  literal: Literal;
+  columnRef: ColumnRef;
+  tableRef: TableRef;
+  asterisk: Asterisk;
+  qualifiedAsterisk: QualifiedAsterisk;
+  queryParam: QueryParam;
+  tupleExpansion: TupleExpansion;
+  functionCall: FunctionCall;
+  castExpr: CastExpr;
+  lambdaExpr: LambdaExpr;
+  subqueryExpr: SubqueryExpr;
+  inExpr: InExpr;
+  unaryExpr: UnaryExpr;
+  binaryExpr: BinaryExpr;
+  naryExpr: NaryExpr;
+  alias: Alias;
+  array: ArrayLiteral;
+  tuple: TupleLiteral;
+  columnsExpr: ColumnsExpr;
+  jsonSubcolumn: JsonSubcolumn;
+  orderByItem: OrderByItem;
+  subqueryFrom: SubqueryFrom;
+  tableFunction: TableFunctionRef;
+  join: JoinExpr;
+  arrayJoin: ArrayJoinExpr;
+  select: SelectStatement;
+  union: UnionStatement;
+  intersect: IntersectStatement;
+  explain: ExplainStatement;
+  set: SetStatement;
+  use: UseStatement;
+  system: SystemStatement;
+}
+
+/**
+ * All valid AST node `kind` values.
+ */
+export type ASTNodeKind = keyof ASTNodeKindMap;
+
 // ── Zod schemas for statement types ──────────────────────────────────────────
 
 const TrailingClausesFields = {
