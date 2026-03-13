@@ -42,39 +42,39 @@ Statements
   = pre:_ head:TopLevelStatement headWs:_
     rest:(";"+ ws2:_ TopLevelStatement ws3:_)*
     ";"* finalWs:_ {
-      var preComments = flattenWs(pre);
-      if (preComments.length > 0) head.leadingComments = preComments.concat(head.leadingComments || []);
+      const preComments = flattenWs(pre);
+      if (preComments.length > 0) head.leadingComments = [...preComments, ...(head.leadingComments || [])];
       // headWs: .trailing = same-line after head → trailing on head
       // headWs: .leading = after-newline before ";" → deferred to next stmt (or trailing on last if single stmt)
-      if (headWs.trailing.length > 0) head.trailingComments = (head.trailingComments || []).concat(headWs.trailing);
-      var pendingLeading = headWs.leading;
-      var stmts = [head];
-      for (var i = 0; i < rest.length; i++) {
-        var ws2val = rest[i][1]; // after ";"
-        var stmt = rest[i][2];
-        var ws3val = rest[i][3]; // after stmt
+      if (headWs.trailing.length > 0) head.trailingComments = [...(head.trailingComments || []), ...headWs.trailing];
+      let pendingLeading = headWs.leading;
+      const stmts = [head];
+      for (const r of rest) {
+        const ws2val = r[1]; // after ";"
+        const stmt = r[2];
+        const ws3val = r[3]; // after stmt
         // Same-line after ";" → trailing on prev stmt
         if (ws2val.trailing.length > 0) {
-          var prev = stmts[stmts.length - 1];
-          prev.trailingComments = (prev.trailingComments || []).concat(ws2val.trailing);
+          const prev = stmts[stmts.length - 1];
+          prev.trailingComments = [...(prev.trailingComments || []), ...ws2val.trailing];
         }
         // Pending from prev iteration + after-newline after ";" → leading on this stmt
-        var leading = pendingLeading.concat(ws2val.leading);
+        const leading = [...pendingLeading, ...ws2val.leading];
         if (leading.length > 0) {
-          stmt.leadingComments = leading.concat(stmt.leadingComments || []);
+          stmt.leadingComments = [...leading, ...(stmt.leadingComments || [])];
         }
         // Same-line after stmt → trailing on this stmt
         if (ws3val.trailing.length > 0) {
-          stmt.trailingComments = (stmt.trailingComments || []).concat(ws3val.trailing);
+          stmt.trailingComments = [...(stmt.trailingComments || []), ...ws3val.trailing];
         }
         // After-newline after stmt → deferred to next iteration
         pendingLeading = ws3val.leading;
         stmts.push(stmt);
       }
-      var last = stmts[stmts.length - 1];
-      var endComments = pendingLeading.concat(flattenWs(finalWs));
+      const last = stmts[stmts.length - 1];
+      const endComments = [...pendingLeading, ...flattenWs(finalWs)];
       if (endComments.length > 0) {
-        last.trailingComments = (last.trailingComments || []).concat(endComments);
+        last.trailingComments = [...(last.trailingComments || []), ...endComments];
       }
       return stmts;
     }
@@ -88,21 +88,21 @@ TopLevelStatement
   / UseStatement
   / SystemStatement
   / query:UnionQuery intoOutfile:( _ IntoOutfileClause )? preSettings:( _ SettingsClause )? format:( _ FormatClause )? postSettings:( _ SettingsClause )* {
-      var result = query;
+      let result = query;
       if (intoOutfile !== null) {
-        result = Object.assign({}, result, { intoOutfile: intoOutfile[1] });
+        result = { ...result, intoOutfile: intoOutfile[1] };
       }
       if (format !== null) {
-        result = Object.assign({}, result, { format: format[1] });
+        result = { ...result, format: format[1] };
       }
       // Pre-format settings (SETTINGS clause before FORMAT)
       if (preSettings !== null) {
-        result = Object.assign({}, result, { preFormatSettings: preSettings[1] });
+        result = { ...result, preFormatSettings: preSettings[1] };
       }
       // Post-format settings (SETTINGS after FORMAT)
       if (postSettings.length > 0) {
-        var merged = postSettings.reduce(function(acc, s) { return acc.concat(s[1]); }, []);
-        result = Object.assign({}, result, { postFormatSettings: merged });
+        const merged = postSettings.reduce((acc, s) => [...acc, ...s[1]], []);
+        result = { ...result, postFormatSettings: merged };
       }
       return result;
     }
@@ -132,7 +132,7 @@ ExplainStatement
     query:UnionQuery?
     format:( _ FormatClause )?
     postSettings:( _ SettingsClause )? {
-      var result = { kind: 'explain' };
+      const result = { kind: 'explain' };
       if (type !== null) result.explainType = type;
       if (settings !== null && settings.length > 0) result.settings = settings;
       if (query !== null) result.query = query;
@@ -155,13 +155,13 @@ ExplainType
 // ExplainSettingsList: comma-separated key=value pairs immediately after EXPLAIN [type], without the SETTINGS keyword
 ExplainSettingsList
   = head:ExplainSettingItem tail:(_ "," _ ExplainSettingItem)* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      return [head, ...tail.map((t) => t[3])];
     }
 
 // ExplainSettingItem: key = value pair (must be followed by '=' to avoid consuming SELECT as a setting name)
 ExplainSettingItem
   = name:SettingName _ "=" _ value:UnaryExpr {
-      return { name: name, value: value };
+      return { name, value };
     }
 
 // FORMAT clause - specifies the output format
@@ -179,20 +179,18 @@ FormatName
 UnionQuery
   = head:IntersectQuery tail:( _ UnionExceptOp _ IntersectQuery )* {
       if (tail.length === 0) return head;
-      var result = head;
-      for (var i = 0; i < tail.length; i++) {
-        var op = tail[i][1];
-        var right = tail[i][3];
-        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+      let result = head;
+      for (const t of tail) {
+        const op = t[1];
+        let right = t[3];
+        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
         if (comments.length > 0) {
-          right = Object.assign({}, right, {
-            leadingComments: comments.concat(right.leadingComments || [])
-          });
+          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
         }
         if (op === 'UNION') {
           // UNION ALL: flatten into existing union (if it's also ALL)
           if (result.kind === 'union' && !result.unionMode) {
-            result = { kind: 'union', queries: result.queries.concat([right]) };
+            result = { kind: 'union', queries: [...result.queries, right] };
           } else {
             result = { kind: 'union', queries: [result, right] };
           }
@@ -200,7 +198,7 @@ UnionQuery
           // UNION DISTINCT: always create a new union node with mode
           result = { kind: 'union', queries: [result, right], unionMode: 'DISTINCT' };
         } else {
-          result = { kind: 'intersect', op: op, left: result, right: right };
+          result = { kind: 'intersect', op, left: result, right };
         }
       }
       return result;
@@ -210,16 +208,14 @@ UnionQuery
 IntersectQuery
   = head:UnionQueryAtom tail:( _ IntersectOp _ UnionQueryAtom )* {
       if (tail.length === 0) return head;
-      var result = head;
-      for (var i = 0; i < tail.length; i++) {
-        var right = tail[i][3];
-        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+      let result = head;
+      for (const t of tail) {
+        let right = t[3];
+        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
         if (comments.length > 0) {
-          right = Object.assign({}, right, {
-            leadingComments: comments.concat(right.leadingComments || [])
-          });
+          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
         }
-        result = { kind: 'intersect', op: 'INTERSECT', left: result, right: right };
+        result = { kind: 'intersect', op: 'INTERSECT', left: result, right };
       }
       return result;
     }
@@ -242,21 +238,17 @@ UnionAllOrDistinct
 // UnionQueryAtom: a single SELECT or EXPLAIN statement, optionally wrapped in parentheses
 UnionQueryAtom
   = "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
-      var bq = flattenWs(beforeQuery);
+      const bq = flattenWs(beforeQuery);
       if (bq.length > 0) {
-        query = Object.assign({}, query, {
-          leadingComments: bq.concat(query.leadingComments || [])
-        });
+        query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
       }
-      var aq = flattenWs(afterQuery);
+      const aq = flattenWs(afterQuery);
       if (aq.length > 0) {
-        query = Object.assign({}, query, {
-          trailingComments: (query.trailingComments || []).concat(aq)
-        });
+        query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
       }
       // Mark bare parenthesized selects so they can be wrapped in SelectWithUnionQuery
       // when they appear inside INTERSECT/EXCEPT or UNION DISTINCT
-      if (query.kind === 'select') return Object.assign({}, query, { parenthesized: true });
+      if (query.kind === 'select') return { ...query, parenthesized: true };
       return query;
     }
   / ExplainStatement
@@ -290,47 +282,47 @@ SelectStatement
     window2:( _ WindowClause )?
     qualify2:( _ QualifyClause )?
     settings:( _ SettingsClause )? {
-      var result = {};
+      const result = {};
       result.kind = 'select';
-      var withTrailingComments = [];
+      let withTrailingComments = [];
       if (withClause !== null) {
-        var wcd = withClause[0];
+        const wcd = withClause[0];
         result.with = wcd.items;
-        var kwComments = flattenWs(wcd.keywordComments);
+        const kwComments = flattenWs(wcd.keywordComments);
         if (kwComments.length > 0) result.leadingComments = kwComments;
         withTrailingComments = flattenWs(withClause[1]);
       }
       // Distinct clause
-      var distVal = distinct !== null ? distinct[0] : null;
+      const distVal = distinct !== null ? distinct[0] : null;
       if (distVal !== null && typeof distVal === 'object' && distVal.kind === 'distinctOn') {
         result.distinct = { kind: 'distinctOn', on: distVal.on };
       } else {
-        var distStr = Array.isArray(distVal) ? distVal[0] : distVal;
+        const distStr = Array.isArray(distVal) ? distVal[0] : distVal;
         if (distStr !== null && distStr !== undefined && distStr.toString().toUpperCase() === 'DISTINCT') result.distinct = { kind: 'distinct' };
       }
       result.select = select;
       // selectTrailing: same-line comments after the last select item (from _HWS)
-      var _selectTrailing = selectTrailing;
+      const _selectTrailing = selectTrailing;
       if (from !== null) {
         result.from = from[1];
-        var fromLeading = flattenWs(from[0]);
+        const fromLeading = flattenWs(from[0]);
         if (fromLeading.length > 0) result.fromLeadingComments = fromLeading;
       }
       // Keep prewhere and where as separate fields for correct explain output
       if (prewhere !== null) {
-        var pw = prewhere[1];
-        var pwc = flattenWs(prewhere[0]);
-        if (pwc.length > 0) pw = Object.assign({}, pw, { leadingComments: pwc.concat(pw.leadingComments || []) });
+        let pw = prewhere[1];
+        const pwc = flattenWs(prewhere[0]);
+        if (pwc.length > 0) pw = { ...pw, leadingComments: [...pwc, ...(pw.leadingComments || [])] };
         result.prewhere = pw;
       }
       if (where !== null) {
-        var w = where[1];
-        var wc = flattenWs(where[0]);
-        if (wc.length > 0) w = Object.assign({}, w, { leadingComments: wc.concat(w.leadingComments || []) });
+        let w = where[1];
+        const wc = flattenWs(where[0]);
+        if (wc.length > 0) w = { ...w, leadingComments: [...wc, ...(w.leadingComments || [])] };
         result.where = w;
       }
       // WITH TOTALS/CUBE/ROLLUP modifiers (can appear without GROUP BY)
-      var wm = withModifier1 !== null ? withModifier1[1] : (withModifier2 !== null ? withModifier2[1] : null);
+      const wm = withModifier1 !== null ? withModifier1[1] : (withModifier2 !== null ? withModifier2[1] : null);
       if (wm !== null) {
         if (wm === 'TOTALS') result.withTotals = true;
         if (wm === 'ROLLUP') result.withRollup = true;
@@ -338,8 +330,8 @@ SelectStatement
       }
       // GROUP BY clause (discriminated union)
       if (groupBy !== null) {
-        var gb = groupBy[1];
-        var gbc = flattenWs(groupBy[0]);
+        const gb = groupBy[1];
+        const gbc = flattenWs(groupBy[0]);
         if (gb.all) {
           result.groupBy = { kind: 'all' };
           if (gb.withTotals) result.withTotals = true;
@@ -350,13 +342,11 @@ SelectStatement
           if (gb.withTotals) result.withTotals = true;
         } else {
           // Attach pre-GROUP BY whitespace comments to first item
-          var gbItems = gb.items;
+          let gbItems = gb.items;
           if (gbc.length > 0 && gbItems.length > 0) {
-            var gbFirst = gbItems[0];
+            const gbFirst = gbItems[0];
             gbItems = gbItems.slice();
-            gbItems[0] = Object.assign({}, gbFirst, {
-              leadingComments: gbc.concat(gbFirst.leadingComments || [])
-            });
+            gbItems[0] = { ...gbFirst, leadingComments: [...gbc, ...(gbFirst.leadingComments || [])] };
           }
           result.groupBy = { kind: 'expressions', items: gbItems };
           if (gb.withTotals) result.withTotals = true;
@@ -365,9 +355,9 @@ SelectStatement
         }
       }
       if (having !== null) {
-        var hv = having[1];
-        var hvc = flattenWs(having[0]);
-        if (hvc.length > 0) hv = Object.assign({}, hv, { leadingComments: hvc.concat(hv.leadingComments || []) });
+        let hv = having[1];
+        const hvc = flattenWs(having[0]);
+        if (hvc.length > 0) hv = { ...hv, leadingComments: [...hvc, ...(hv.leadingComments || [])] };
         result.having = hv;
       }
       if (orderBy !== null) {
@@ -375,14 +365,14 @@ SelectStatement
       }
       // LIMIT BY clause
       if (limitBy !== null) {
-        var lb = limitBy[1];
+        const lb = limitBy[1];
         result.limitBy = { count: lb.count, by: lb.by };
         if (lb.limitByOffset !== undefined) result.limitBy.offset = lb.limitByOffset;
       }
       // LIMIT clause
       if (limit !== null) {
-        var lc = limit[1];
-        var limitObj = { count: lc.count };
+        const lc = limit[1];
+        const limitObj = { count: lc.count };
         if (lc.comma) { result.offset = lc.offset; limitObj.commaSyntax = true; }
         if (lc.withTies) limitObj.withTies = true;
         result.limit = limitObj;
@@ -391,43 +381,39 @@ SelectStatement
       if (offset !== null) result.offset = offset[1];
       // SQL standard FETCH NEXT n ROWS ONLY/WITH TIES — overrides limit count
       if (fetch !== null) {
-        var fc = fetch[1];
+        const fc = fetch[1];
         if (!result.limit) result.limit = {};
         result.limit.count = fc.count;
         if (fc.withTies) result.limit.withTies = true;
       }
-      var windows = window1 !== null ? window1[1] : (window2 !== null ? window2[1] : null);
+      const windows = window1 !== null ? window1[1] : (window2 !== null ? window2[1] : null);
       if (windows !== null) result.windows = windows;
-      var qualify = qualify1 !== null ? qualify1 : qualify2;
+      const qualify = qualify1 !== null ? qualify1 : qualify2;
       if (qualify !== null) {
-        var qe = qualify[1];
-        var qec = flattenWs(qualify[0]);
-        if (qec.length > 0) qe = Object.assign({}, qe, { leadingComments: qec.concat(qe.leadingComments || []) });
+        let qe = qualify[1];
+        const qec = flattenWs(qualify[0]);
+        if (qec.length > 0) qe = { ...qe, leadingComments: [...qec, ...(qe.leadingComments || [])] };
         result.qualify = qe;
       }
       if (settings !== null) result.settings = settings[1];
       // SELECT TOP n — sets the limit (SQL Server compat syntax)
       if (top !== null && result.limit === undefined) result.limit = { count: top[3] };
       // Comments between WITH block/SELECT keyword and first item → leadingComments on first select item
-      var selectCommentsFlat = withTrailingComments.concat(flattenWs(selectComments));
+      const selectCommentsFlat = [...withTrailingComments, ...flattenWs(selectComments)];
       if (selectCommentsFlat.length > 0 && result.select.length > 0) {
-        var firstItem = result.select[0];
-        result.select[0] = Object.assign({}, firstItem, {
-          leadingComments: selectCommentsFlat.concat(firstItem.leadingComments || [])
-        });
+        const firstItem = result.select[0];
+        result.select[0] = { ...firstItem, leadingComments: [...selectCommentsFlat, ...(firstItem.leadingComments || [])] };
       }
       // Trailing same-line comment after the last select item:
       // If clauses follow, attach to the last select item (it will appear inline before the next clause).
       // If no clauses follow, store as statement-level trailingComments (Statements rule will merge).
       if (_selectTrailing.length > 0) {
-        var hasFollowingClause = result.from || result.prewhere || result.where || result.groupBy
+        const hasFollowingClause = result.from || result.prewhere || result.where || result.groupBy
           || result.having || result.orderBy || result.limitBy || result.limit || result.offset
           || result.windows || result.qualify || result.settings;
         if (hasFollowingClause) {
-          var lastItem = result.select[result.select.length - 1];
-          result.select[result.select.length - 1] = Object.assign({}, lastItem, {
-            trailingComments: (lastItem.trailingComments || []).concat(_selectTrailing)
-          });
+          const lastItem = result.select[result.select.length - 1];
+          result.select[result.select.length - 1] = { ...lastItem, trailingComments: [...(lastItem.trailingComments || []), ..._selectTrailing] };
         } else {
           result.trailingComments = _selectTrailing;
         }
@@ -452,33 +438,27 @@ CTEClause
 
 CTEItemList
   = head:CTEItem tail:(_ "," _ CTEItem)* lastWs:_HWS {
-      var items = [head];
-      for (var i = 0; i < tail.length; i++) {
+      const items = [head];
+      for (const t of tail) {
         // ws1 (before comma): all comments → leading on next item (preserves old behavior)
         // ws2 (after comma): .trailing → trailing on prev item, .leading → leading on next
-        var ws1 = tail[i][0];
-        var ws2 = tail[i][2];
-        var trailing = ws2.trailing;
-        var leading = flattenWs(ws1).concat(ws2.leading);
+        const ws1 = t[0];
+        const ws2 = t[2];
+        const trailing = ws2.trailing;
+        const leading = [...flattenWs(ws1), ...ws2.leading];
         if (trailing.length > 0) {
-          var prev = items[items.length - 1];
-          items[items.length - 1] = Object.assign({}, prev, {
-            trailingComments: (prev.trailingComments || []).concat(trailing)
-          });
+          const prev = items[items.length - 1];
+          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
         }
-        var next = tail[i][3];
+        let next = t[3];
         if (leading.length > 0) {
-          next = Object.assign({}, next, {
-            leadingComments: leading.concat(next.leadingComments || [])
-          });
+          next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
         }
         items.push(next);
       }
       if (lastWs.length > 0) {
-        var lastItem = items[items.length - 1];
-        items[items.length - 1] = Object.assign({}, lastItem, {
-          trailingComments: (lastItem.trailingComments || []).concat(lastWs)
-        });
+        const lastItem = items[items.length - 1];
+        items[items.length - 1] = { ...lastItem, trailingComments: [...(lastItem.trailingComments || []), ...lastWs] };
       }
       return items;
     }
@@ -486,29 +466,23 @@ CTEItemList
 CTEItem
 // Subquery CTE: name AS (SELECT ...)
   = name:Identifier _ KW_AS _ "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
-      var bq = flattenWs(beforeQuery);
+      const bq = flattenWs(beforeQuery);
       if (bq.length > 0) {
-        query = Object.assign({}, query, {
-          leadingComments: bq.concat(query.leadingComments || [])
-        });
+        query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
       }
-      var aq = flattenWs(afterQuery);
+      const aq = flattenWs(afterQuery);
       if (aq.length > 0) {
-        query = Object.assign({}, query, {
-          trailingComments: (query.trailingComments || []).concat(aq)
-        });
+        query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
       }
-      return { kind: 'subquery', name: name, query: query };
+      return { kind: 'subquery', name, query };
     }
   // Expression CTE: expr AS name (ClickHouse extension)
   / expr:TernaryExpr afterExpr:_ KW_AS _ name:Identifier {
-      var ae = flattenWs(afterExpr);
+      const ae = flattenWs(afterExpr);
       if (ae.length > 0) {
-        expr = Object.assign({}, expr, {
-          trailingComments: (expr.trailingComments || []).concat(ae)
-        });
+        expr = { ...expr, trailingComments: [...(expr.trailingComments || []), ...ae] };
       }
-      return { kind: 'expr', name: name, expr: expr };
+      return { kind: 'expr', name, expr };
     }
 
 // SelectItemList: supports optional trailing comma (ClickHouse extension).
@@ -516,21 +490,19 @@ CTEItem
 // from being consumed as select items via the last-resort AliasName rule.
 SelectItemList
   = head:SelectItem tail:(_ "," _ !SelectClauseKeyword SelectItem)* (_ "," _)? {
-      var items = [head];
-      for (var i = 0; i < tail.length; i++) {
-        var ws1 = tail[i][0]; // before comma
-        var ws2 = tail[i][2]; // after comma
-        var trailing = ws2.trailing;
-        var leading = flattenWs(ws1).concat(ws2.leading);
+      const items = [head];
+      for (const t of tail) {
+        const ws1 = t[0]; // before comma
+        const ws2 = t[2]; // after comma
+        const trailing = ws2.trailing;
+        const leading = [...flattenWs(ws1), ...ws2.leading];
         if (trailing.length > 0) {
-          var prev = items[items.length - 1];
-          items[items.length - 1] = Object.assign({}, prev, {
-            trailingComments: (prev.trailingComments || []).concat(trailing)
-          });
+          const prev = items[items.length - 1];
+          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
         }
-        var next = tail[i][4];
+        let next = t[4];
         if (leading.length > 0) {
-          next = Object.assign({}, next, { leadingComments: leading });
+          next = { ...next, leadingComments: leading };
         }
         items.push(next);
       }
@@ -549,8 +521,8 @@ SelectItem
   = expr:TernaryExpr alias:SelectItemAlias? {
       if (alias !== null) {
         // Unwrap auto-alias from @@varname when an explicit alias is provided
-        var inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-        return { kind: 'alias', expr: inner, alias: alias };
+        const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+        return { kind: 'alias', expr: inner, alias };
       }
       return expr;
     }
@@ -561,20 +533,16 @@ SelectItemAlias
 
 FromClause
   = KW_FROM comments:_ expr:JoinExpr {
-      var c = flattenWs(comments);
+      const c = flattenWs(comments);
       if (c.length > 0 && expr && typeof expr === 'object') {
-        expr = Object.assign({}, expr, {
-          leadingComments: c.concat(expr.leadingComments || [])
-        });
+        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
       }
       return expr;
     }
 
 JoinExpr
   = head:FromAtom tail:( _ JoinPart )* {
-      return tail.reduce(function(acc, t) {
-        return Object.assign({ left: acc }, t[1]);
-      }, head);
+      return tail.reduce((acc, t) => ({ left: acc, ...t[1] }), head);
     }
 
 // FromAtom: a single table source — subquery, table function, or table reference.
@@ -582,19 +550,15 @@ JoinExpr
 // e.g. (SELECT 1) AS t, numbers(10), system.one FINAL, my_table SAMPLE 0.1
 FromAtom
   = "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" alias:FromAtomAlias? final:( _ KW_FINAL )? sample:( _ SampleClause )? {
-      var bq = flattenWs(beforeQuery);
+      const bq = flattenWs(beforeQuery);
       if (bq.length > 0) {
-        query = Object.assign({}, query, {
-          leadingComments: bq.concat(query.leadingComments || [])
-        });
+        query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
       }
-      var aq = flattenWs(afterQuery);
+      const aq = flattenWs(afterQuery);
       if (aq.length > 0) {
-        query = Object.assign({}, query, {
-          trailingComments: (query.trailingComments || []).concat(aq)
-        });
+        query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
       }
-      var result = { kind: 'subqueryFrom', query: query };
+      const result = { kind: 'subqueryFrom', query };
       if (final !== null) result.final = true;
       if (sample !== null) result.sample = sample[1];
       if (alias !== null) {
@@ -608,15 +572,15 @@ FromAtom
       return result;
     }
   / table:TableFunctionRef alias:FromAtomAlias? final:( _ KW_FINAL )? sample:( _ SampleClause )? {
-      var result = final !== null ? Object.assign({}, table, { final: true }) : table;
-      if (sample !== null) result = Object.assign({}, result, { sample: sample[1] });
-      if (alias !== null) result = Object.assign({}, result, { alias: typeof alias === 'object' ? alias.alias : alias });
+      let result = final !== null ? { ...table, final: true } : table;
+      if (sample !== null) result = { ...result, sample: sample[1] };
+      if (alias !== null) result = { ...result, alias: typeof alias === 'object' ? alias.alias : alias };
       return result;
     }
   / table:TableRef alias:FromAtomAlias? final:( _ KW_FINAL )? sample:( _ SampleClause )? {
-      var result = final !== null ? Object.assign({}, table, { final: true }) : table;
-      if (sample !== null) result = Object.assign({}, result, { sample: sample[1] });
-      if (alias !== null) result = Object.assign({}, result, { alias: typeof alias === 'object' ? alias.alias : alias });
+      let result = final !== null ? { ...table, final: true } : table;
+      if (sample !== null) result = { ...result, sample: sample[1] };
+      if (alias !== null) result = { ...result, alias: typeof alias === 'object' ? alias.alias : alias };
       return result;
     }
 
@@ -625,15 +589,15 @@ FromAtom
 // with an optional OFFSET ratio for sharding.
 SampleClause
   = "SAMPLE"i ![a-zA-Z0-9_] _ ratio:SampleRatioExpr offset:( _ "OFFSET"i ![a-zA-Z0-9_] _ SampleRatioExpr )? {
-      var result = { ratio: ratio };
+      const result = { ratio };
       if (offset !== null) result.offset = offset[4];
       return result;
     }
 
 // SampleRatioExpr: a ratio value, either a fraction (num/den) or a simple number
 SampleRatioExpr
-  = num:SampleNumber _ "/" _ den:SampleNumber { return { num: num, den: den }; }
-  / num:SampleNumber { return { num: num }; }
+  = num:SampleNumber _ "/" _ den:SampleNumber { return { num, den }; }
+  / num:SampleNumber { return { num }; }
 
 // SampleNumber: a non-negative integer or float literal (no leading sign)
 SampleNumber
@@ -656,18 +620,18 @@ SampleExponent
 // Also exclude FORMAT so it isn't consumed as an alias (FORMAT is not in Keyword to allow use as table function).
 // Optional column alias list after the table alias: AS x (a, b) — standard SQL subquery column aliases.
 FromAtomAlias
-  = _ KW_AS _ alias:AliasName cols:( _ "(" _ head:AliasName tail:( _ "," _ AliasName )* _ ")" { return [head].concat(tail.map(function(t) { return t[3]; })); } )? {
-      return cols !== null ? { alias: alias, columnAliases: cols } : alias;
+  = _ KW_AS _ alias:AliasName cols:( _ "(" _ head:AliasName tail:( _ "," _ AliasName )* _ ")" { return [head, ...tail.map((t) => t[3])]; } )? {
+      return cols !== null ? { alias, columnAliases: cols } : alias;
     }
   // Column aliases without table alias: (n1, n2) — standard SQL subquery column aliases
   / _ "(" _ head:AliasName tail:( _ "," _ AliasName )+ _ ")" {
-      return { columnAliases: [head].concat(tail.map(function(t) { return t[3]; })) };
+      return { columnAliases: [head, ...tail.map((t) => t[3])] };
     }
   / _ !JoinKeyword !ArrayJoinKeyword !KW_FORMAT alias:Identifier { return alias; }
 
 TableFunctionRef
   = name:FunctionName _ "(" _ args:TableFunctionArgList? settings:( ( _ "," )? _ KW_SETTINGS _ SettingsList )? _ ")" {
-      var result = { kind: 'tableFunction', name: name, args: args !== null ? args : [] };
+      const result = { kind: 'tableFunction', name, args: args !== null ? args : [] };
       if (settings !== null) result.settings = settings[4];
       return result;
     }
@@ -675,23 +639,19 @@ TableFunctionRef
 // TableFunctionArgList: like FunctionCallArgList but stops before a trailing ", SETTINGS ..."
 TableFunctionArgList
   = head:FunctionCallArgGuarded tail:(_ "," _ FunctionCallArgGuarded)* {
-      var items = [head];
-      for (var i = 0; i < tail.length; i++) {
-        var ws1 = tail[i][0];
-        var ws2 = tail[i][2];
-        var trailing = ws2.trailing;
-        var leading = flattenWs(ws1).concat(ws2.leading);
+      const items = [head];
+      for (const t of tail) {
+        const ws1 = t[0];
+        const ws2 = t[2];
+        const trailing = ws2.trailing;
+        const leading = [...flattenWs(ws1), ...ws2.leading];
         if (trailing.length > 0) {
-          var prev = items[items.length - 1];
-          items[items.length - 1] = Object.assign({}, prev, {
-            trailingComments: (prev.trailingComments || []).concat(trailing)
-          });
+          const prev = items[items.length - 1];
+          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
         }
-        var next = tail[i][3];
+        let next = t[3];
         if (leading.length > 0) {
-          next = Object.assign({}, next, {
-            leadingComments: leading.concat(next.leadingComments || [])
-          });
+          next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
         }
         items.push(next);
       }
@@ -703,14 +663,14 @@ JoinPart
       return { kind: 'arrayJoin', joinType: join_type, expressions: exprs };
     }
   / join_type:JoinKeyword _ right:FromAtom _ constraint:JoinConstraint {
-      return { kind: 'join', joinType: join_type, right: right, constraint: constraint };
+      return { kind: 'join', joinType: join_type, right, constraint };
     }
   / join_type:JoinKeyword _ right:FromAtom {
-      return { kind: 'join', joinType: join_type, right: right };
+      return { kind: 'join', joinType: join_type, right };
     }
   // Comma-separated tables: implicit CROSS JOIN without constraint
   / "," _ right:FromAtom {
-      return { kind: 'join', joinType: 'CROSS', right: right };
+      return { kind: 'join', joinType: 'CROSS', right };
     }
 
 // JoinKeyword: [GLOBAL] [strictness] [direction] [OUTER] JOIN — returns direction string.
@@ -745,13 +705,11 @@ ArrayJoinKeyword
 // USING also supports aliased columns: USING (a AS b) — the alias is discarded for AST purposes
 JoinConstraint
   = KW_ON comments:_ expr:Expression {
-      var c = flattenWs(comments);
+      const c = flattenWs(comments);
       if (c.length > 0) {
-        expr = Object.assign({}, expr, {
-          leadingComments: c.concat(expr.leadingComments || [])
-        });
+        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
       }
-      return { kind: 'on', expr: expr };
+      return { kind: 'on', expr };
     }
   / KW_USING _ "(" _ cols:UsingColumnList? _ ")" { return { kind: 'using', columns: cols !== null ? cols : [] }; }
   // USING * — wildcard join key (ClickHouse extension)
@@ -761,72 +719,66 @@ JoinConstraint
 // UsingColumnList: comma-separated identifiers with optional AS alias (alias is discarded)
 UsingColumnList
   = head:UsingColumn tail:( _ "," _ UsingColumn )* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      return [head, ...tail.map((t) => t[3])];
     }
 
 UsingColumn
-  = name:Identifier _ KW_AS _ alias:AliasName { return { name: name, alias: alias }; }
+  = name:Identifier _ KW_AS _ alias:AliasName { return { name, alias }; }
   / name:Identifier { return name; }
 
 IdentifierList
   = head:Identifier tail:( _ "," _ Identifier )* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      return [head, ...tail.map((t) => t[3])];
     }
 
 // PrewhereClause: PREWHERE expr (treated same as WHERE for AST purposes)
 PrewhereClause
   = KW_PREWHERE comments:_ expr:Expression {
-      var c = flattenWs(comments);
+      const c = flattenWs(comments);
       if (c.length > 0) {
-        expr = Object.assign({}, expr, {
-          leadingComments: c.concat(expr.leadingComments || [])
-        });
+        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
       }
       return expr;
     }
 
 WhereClause
   = KW_WHERE comments:_ expr:Expression {
-      var c = flattenWs(comments);
+      const c = flattenWs(comments);
       if (c.length > 0) {
-        expr = Object.assign({}, expr, {
-          leadingComments: c.concat(expr.leadingComments || [])
-        });
+        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
       }
       return expr;
     }
 
 GroupByClause
   = KW_GROUP _ KW_BY _ KW_ALL modifiers:GroupByModifier* {
-      var withTotals = modifiers.some(function(m) { return m === 'TOTALS'; });
-      var withCube = modifiers.some(function(m) { return m === 'CUBE'; });
-      var withRollup = modifiers.some(function(m) { return m === 'ROLLUP'; });
-      return { all: true, withTotals: withTotals, withCube: withCube, withRollup: withRollup };
+      const withTotals = modifiers.some((m) => m === 'TOTALS');
+      const withCube = modifiers.some((m) => m === 'CUBE');
+      const withRollup = modifiers.some((m) => m === 'ROLLUP');
+      return { all: true, withTotals, withCube, withRollup };
     }
   / KW_GROUP _ KW_BY _ "GROUPING"i ![a-zA-Z0-9_] _ "SETS"i ![a-zA-Z0-9_] _ "(" _ sets:GroupingSets _ ")" modifiers:GroupByModifier* {
-      var withTotals = modifiers.some(function(m) { return m === 'TOTALS'; });
-      return { groupingSets: sets, withTotals: withTotals };
+      const withTotals = modifiers.some((m) => m === 'TOTALS');
+      return { groupingSets: sets, withTotals };
     }
   / KW_GROUP _ KW_BY keywordComments:_ exprList:ExpressionList modifiers:GroupByModifier* {
-      var withTotals = modifiers.some(function(m) { return m === 'TOTALS'; });
-      var withCube = modifiers.some(function(m) { return m === 'CUBE'; });
-      var withRollup = modifiers.some(function(m) { return m === 'ROLLUP'; });
+      const withTotals = modifiers.some((m) => m === 'TOTALS');
+      const withCube = modifiers.some((m) => m === 'CUBE');
+      const withRollup = modifiers.some((m) => m === 'ROLLUP');
       // Attach keyword comments as leadingComments on the first item
-      var items = exprList;
-      var kc = flattenWs(keywordComments);
+      const items = exprList;
+      const kc = flattenWs(keywordComments);
       if (kc.length > 0 && items.length > 0) {
-        var first = items[0];
-        items[0] = Object.assign({}, first, {
-          leadingComments: kc.concat(first.leadingComments || [])
-        });
+        const first = items[0];
+        items[0] = { ...first, leadingComments: [...kc, ...(first.leadingComments || [])] };
       }
-      return { items: items, withTotals: withTotals, withCube: withCube, withRollup: withRollup };
+      return { items, withTotals, withCube, withRollup };
     }
 
 // GroupingSets: comma-separated list of grouping sets (each set is a parenthesized list or bare expr)
 GroupingSets
   = head:GroupingSet tail:(_ "," _ GroupingSet)* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      return [head, ...tail.map((t) => t[3])];
     }
 
 // GroupingSet: either a parenthesized list of expressions or a single bare expression
@@ -849,11 +801,9 @@ WithModifierClause
 
 HavingClause
   = KW_HAVING comments:_ expr:Expression {
-      var c = flattenWs(comments);
+      const c = flattenWs(comments);
       if (c.length > 0) {
-        expr = Object.assign({}, expr, {
-          leadingComments: c.concat(expr.leadingComments || [])
-        });
+        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
       }
       return expr;
     }
@@ -861,11 +811,9 @@ HavingClause
 // QualifyClause: QUALIFY expr — filters rows after window functions, analogous to HAVING for aggregations
 QualifyClause
   = "QUALIFY"i ![a-zA-Z0-9_] comments:_ expr:Expression {
-      var c = flattenWs(comments);
+      const c = flattenWs(comments);
       if (c.length > 0) {
-        expr = Object.assign({}, expr, {
-          leadingComments: c.concat(expr.leadingComments || [])
-        });
+        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
       }
       return expr;
     }
@@ -922,19 +870,19 @@ WindowClause
 
 WindowItemList
   = head:WindowItem tail:(_ "," _ WindowItem)* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      return [head, ...tail.map((t) => t[3])];
     }
 
 // WindowItem: name AS (window_spec) - single named window definition
 // The window spec body is captured as raw text for re-emission in formatting
 WindowItem
   = name:Identifier _ KW_AS _ "(" body:$OverBody* ")" {
-      return { name: name, body: body };
+      return { name, body };
     }
 
 SettingsList
   = head:SettingItem tail:(_ "," _ SettingItem)* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      return [head, ...tail.map((t) => t[3])];
     }
 
 // SettingName allows any identifier including reserved keywords (e.g. SETTINGS limit=5)
@@ -945,18 +893,18 @@ SettingName
 
 SettingItem
   = name:SettingName _ "=" _ value:UnaryExpr {
-      return { name: name, value: value };
+      return { name, value };
     }
   // Bare setting name without value (e.g. SETTINGS force_index_by_date) — treated as = 1
   / name:SettingName {
-      return { name: name, value: { kind: 'literal', type: 'UInt64', value: '1' } };
+      return { name, value: { kind: 'literal', type: 'UInt64', value: '1' } };
     }
 
 // ── ORDER BY items ────────────────────────────────────────────────────────────
 
 OrderByItemList
   = head:OrderByItem tail:(_ "," _ OrderByItem)* {
-      return [head, ...tail.map(function(t) { return t[3]; })];
+      return [head, ...tail.map((t) => t[3])];
     }
 
 // OrderByItem: expr [AS alias] [ASC|DESC] [NULLS FIRST|LAST] [COLLATE 'locale'] [WITH FILL [FROM a] [TO b] [STEP n]]
@@ -969,11 +917,11 @@ OrderByItem
     collate:( _ "COLLATE"i ![a-zA-Z0-9_] _ StringLiteral )?
     fill:( _ "WITH"i ![a-zA-Z0-9_] _ "FILL"i ![a-zA-Z0-9_] fillArgs:WithFillArgs? )?
     {
-      var resolvedExpr = alias !== null ? { kind: 'alias', expr: expr, alias: alias[3] } : expr;
-      var result = { kind: 'orderByItem', expr: resolvedExpr, direction: dir !== null ? dir[1].toUpperCase() : 'ASC' };
+      const resolvedExpr = alias !== null ? { kind: 'alias', expr, alias: alias[3] } : expr;
+      const result = { kind: 'orderByItem', expr: resolvedExpr, direction: dir !== null ? dir[1].toUpperCase() : 'ASC' };
       if (collate !== null) result.collate = collate[4].value;
       if (fill !== null) {
-        var fillArgs = fill[6];
+        const fillArgs = fill[6];
         if (fillArgs !== null) {
           if (fillArgs.fillFrom !== undefined) result.fillFrom = fillArgs.fillFrom;
           if (fillArgs.fillTo !== undefined) result.fillTo = fillArgs.fillTo;
@@ -992,7 +940,7 @@ WithFillArgs
     step:( _ "STEP"i ![a-zA-Z0-9_] _ TernaryExpr )?
     staleness:( _ "STALENESS"i ![a-zA-Z0-9_] _ TernaryExpr )?
     interp:( _ "INTERPOLATE"i ![a-zA-Z0-9_] _ "(" _ InterpolateList _ ")" )? {
-      var result = {};
+      const result = {};
       if (from !== null && from[4] !== null) result.fillFrom = from[4];
       if (to !== null && to[4] !== null) result.fillTo = to[4];
       if (step !== null && step[4] !== null) result.fillStep = step[4];
@@ -1003,7 +951,7 @@ WithFillArgs
 
 // InterpolateList: list of column [AS expr] items inside INTERPOLATE (...)
 InterpolateList
-  = head:InterpolateItem tail:( _ "," _ InterpolateItem )* { return [head, ...tail.map(function(t) { return t[3]; })]; }
+  = head:InterpolateItem tail:( _ "," _ InterpolateItem )* { return [head, ...tail.map((t) => t[3])]; }
   / _ { return []; }
 
 InterpolateItem
@@ -1014,21 +962,19 @@ InterpolateItem
 
 ExpressionList
   = head:Expression tail:(_ "," _ Expression)* {
-      var items = [head];
-      for (var i = 0; i < tail.length; i++) {
-        var ws1 = tail[i][0]; // before comma
-        var ws2 = tail[i][2]; // after comma
-        var trailing = ws2.trailing;
-        var leading = flattenWs(ws1).concat(ws2.leading);
+      const items = [head];
+      for (const t of tail) {
+        const ws1 = t[0]; // before comma
+        const ws2 = t[2]; // after comma
+        const trailing = ws2.trailing;
+        const leading = [...flattenWs(ws1), ...ws2.leading];
         if (trailing.length > 0) {
-          var prev = items[items.length - 1];
-          items[items.length - 1] = Object.assign({}, prev, {
-            trailingComments: (prev.trailingComments || []).concat(trailing)
-          });
+          const prev = items[items.length - 1];
+          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
         }
-        var next = tail[i][3];
+        let next = t[3];
         if (leading.length > 0) {
-          next = Object.assign({}, next, { leadingComments: leading });
+          next = { ...next, leadingComments: leading };
         }
         items.push(next);
       }
@@ -1039,14 +985,12 @@ ExpressionList
 Expression
   = expr:TernaryExpr asWs:_ KW_AS _ alias:AliasName {
       // Unwrap auto-alias (e.g. @@varname) if an explicit AS alias is provided
-      var inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-      var ac = flattenWs(asWs);
+      let inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+      const ac = flattenWs(asWs);
       if (ac.length > 0) {
-        inner = Object.assign({}, inner, {
-          trailingComments: (inner.trailingComments || []).concat(ac)
-        });
+        inner = { ...inner, trailingComments: [...(inner.trailingComments || []), ...ac] };
       }
-      return { kind: 'alias', expr: inner, alias: alias };
+      return { kind: 'alias', expr: inner, alias };
     }
   / TernaryExpr
 
@@ -1055,41 +999,33 @@ Expression
 // The implicit alias must be followed by a delimiter (, ) FROM FOR) to avoid ambiguity.
 ExpressionWithImplicitAlias
   = expr:TernaryExpr asWs:_ KW_AS _ alias:AliasName {
-      var inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-      var ac = flattenWs(asWs);
+      let inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+      const ac = flattenWs(asWs);
       if (ac.length > 0) {
-        inner = Object.assign({}, inner, {
-          trailingComments: (inner.trailingComments || []).concat(ac)
-        });
+        inner = { ...inner, trailingComments: [...(inner.trailingComments || []), ...ac] };
       }
-      return { kind: 'alias', expr: inner, alias: alias };
+      return { kind: 'alias', expr: inner, alias };
     }
   // Bare alias without AS: must be followed by , ) FROM FOR (as delimiter of the argument context)
   / expr:TernaryExpr aliasWs:_ alias:Identifier &( _ ( "," / ")" / "FROM"i ![a-zA-Z0-9_] / "FOR"i ![a-zA-Z0-9_] ) ) {
-      var ac2 = flattenWs(aliasWs);
+      const ac2 = flattenWs(aliasWs);
       if (ac2.length > 0) {
-        expr = Object.assign({}, expr, {
-          trailingComments: (expr.trailingComments || []).concat(ac2)
-        });
+        expr = { ...expr, trailingComments: [...(expr.trailingComments || []), ...ac2] };
       }
-      return { kind: 'alias', expr: expr, alias: alias };
+      return { kind: 'alias', expr, alias };
     }
   / TernaryExpr
 
 // TernaryExpr: ternary ? : operator, maps to Function if(cond, then, else)
 TernaryExpr
   = cond:OrExpr ws1:_ "?" ws2:_ then:TernaryExpr ws3:_ ":" ws4:_ else_:TernaryExpr {
-      var thenComments = flattenWs(ws1).concat(flattenWs(ws2));
+      const thenComments = [...flattenWs(ws1), ...flattenWs(ws2)];
       if (thenComments.length > 0) {
-        then = Object.assign({}, then, {
-          leadingComments: thenComments.concat(then.leadingComments || [])
-        });
+        then = { ...then, leadingComments: [...thenComments, ...(then.leadingComments || [])] };
       }
-      var elseComments = flattenWs(ws3).concat(flattenWs(ws4));
+      const elseComments = [...flattenWs(ws3), ...flattenWs(ws4)];
       if (elseComments.length > 0) {
-        else_ = Object.assign({}, else_, {
-          leadingComments: elseComments.concat(else_.leadingComments || [])
-        });
+        else_ = { ...else_, leadingComments: [...elseComments, ...(else_.leadingComments || [])] };
       }
       return { kind: 'functionCall', name: 'if', args: [cond, then, else_] };
     }
@@ -1100,18 +1036,16 @@ TernaryExpr
 // remain as separate nodes.
 OrExpr
   = head:AndExpr tail:(_ KW_OR _ AndExpr)+ {
-      var operands = [head];
-      for (var i = 0; i < tail.length; i++) {
-        var next = tail[i][3];
-        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+      const operands = [head];
+      for (const t of tail) {
+        let next = t[3];
+        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
         if (comments.length > 0) {
-          next = Object.assign({}, next, {
-            leadingComments: comments.concat(next.leadingComments || [])
-          });
+          next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
         }
         operands.push(next);
       }
-      return { kind: 'naryExpr', op: 'OR', operands: operands };
+      return { kind: 'naryExpr', op: 'OR', operands };
     }
   / AndExpr
 
@@ -1119,18 +1053,16 @@ OrExpr
 // into a flat list, matching ClickHouse's EXPLAIN AST behavior.
 AndExpr
   = head:NotExpr tail:(_ KW_AND _ NotExpr)+ {
-      var operands = [head];
-      for (var i = 0; i < tail.length; i++) {
-        var next = tail[i][3];
-        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+      const operands = [head];
+      for (const t of tail) {
+        let next = t[3];
+        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
         if (comments.length > 0) {
-          next = Object.assign({}, next, {
-            leadingComments: comments.concat(next.leadingComments || [])
-          });
+          next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
         }
         operands.push(next);
       }
-      return { kind: 'naryExpr', op: 'AND', operands: operands };
+      return { kind: 'naryExpr', op: 'AND', operands };
     }
   / NotExpr
 
@@ -1138,13 +1070,11 @@ NotExpr
   // NOT followed by "(" is handled as a high-precedence function-call-like NOT in PrimaryBase;
   // exclude that case here so NOT (0) + NOT (0) parses as plus(not(0), not(0)) like ClickHouse does.
   = KW_NOT !( _ "(" ) comments:_ expr:NotExpr {
-      var c = flattenWs(comments);
+      const c = flattenWs(comments);
       if (c.length > 0) {
-        expr = Object.assign({}, expr, {
-          leadingComments: c.concat(expr.leadingComments || [])
-        });
+        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
       }
-      return { kind: 'unaryExpr', op: 'NOT', expr: expr };
+      return { kind: 'unaryExpr', op: 'NOT', expr };
     }
   / CompareExpr
 
@@ -1155,15 +1085,13 @@ NotExpr
 // start a new comparison chain. E.g. k = (100) = 1 → equals(equals(k,100), 1).
 CompareExpr
   = base:CompareBase rest:(_ op:CompareOp _ CompareRightExpr)* {
-      return rest.reduce(function(acc, t) {
-        var right = t[3];
-        var comments = flattenWs(t[0]).concat(flattenWs(t[2]));
+      return rest.reduce((acc, t) => {
+        let right = t[3];
+        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
         if (comments.length > 0) {
-          right = Object.assign({}, right, {
-            leadingComments: comments.concat(right.leadingComments || [])
-          });
+          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
         }
-        return { kind: 'binaryExpr', op: t[1], left: acc, right: right };
+        return { kind: 'binaryExpr', op: t[1], left: acc, right };
       }, base);
     }
 
@@ -1180,74 +1108,66 @@ CompareBase
 CompareBaseSuffix
   // IN variants: [GLOBAL] [NOT] IN (array / parens / bare)
   = _ global:(KW_GLOBAL _)? negated:(KW_NOT _)? KW_IN _ target:InTarget {
-      return function(left) {
-        var result = Object.assign({ kind: 'inExpr', negated: negated !== null, expr: left }, target);
+      return (left) => {
+        const result = { kind: 'inExpr', negated: negated !== null, expr: left, ...target };
         if (global !== null) result.global = true;
         return result;
       };
     }
   // LIKE / ILIKE
   / _ negated:(KW_NOT _)? KW_ILIKE _ right:AddExpr {
-      var name = negated !== null ? 'notILike' : 'ilike';
-      return function(left) { return { kind: 'functionCall', name: name, args: [left, right] }; };
+      const name = negated !== null ? 'notILike' : 'ilike';
+      return (left) => ({ kind: 'functionCall', name, args: [left, right] });
     }
   / _ negated:(KW_NOT _)? KW_LIKE _ right:AddExpr {
-      var name = negated !== null ? 'notLike' : 'like';
-      return function(left) { return { kind: 'functionCall', name: name, args: [left, right] }; };
+      const name = negated !== null ? 'notLike' : 'like';
+      return (left) => ({ kind: 'functionCall', name, args: [left, right] });
     }
   // REGEXP
   / _ "REGEXP"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return function(left) { return { kind: 'functionCall', name: 'match', args: [left, right] }; };
+      return (left) => ({ kind: 'functionCall', name: 'match', args: [left, right] });
     }
   // BETWEEN
   / _ KW_NOT _ KW_BETWEEN _ low:AddExpr _ KW_AND _ high:AddExpr {
-      return function(left) {
-        return {
-          kind: 'functionCall', name: 'or', args: [
-            { kind: 'functionCall', name: 'less', args: [left, low] },
-            { kind: 'functionCall', name: 'greater', args: [left, high] }
-          ]
-        };
-      };
+      return (left) => ({
+        kind: 'functionCall', name: 'or', args: [
+          { kind: 'functionCall', name: 'less', args: [left, low] },
+          { kind: 'functionCall', name: 'greater', args: [left, high] }
+        ]
+      });
     }
   / _ KW_BETWEEN _ low:AddExpr _ KW_AND _ high:AddExpr {
-      return function(left) {
-        return {
-          kind: 'functionCall', name: 'and', args: [
-            { kind: 'functionCall', name: 'greaterOrEquals', args: [left, low] },
-            { kind: 'functionCall', name: 'lessOrEquals', args: [left, high] }
-          ]
-        };
-      };
+      return (left) => ({
+        kind: 'functionCall', name: 'and', args: [
+          { kind: 'functionCall', name: 'greaterOrEquals', args: [left, low] },
+          { kind: 'functionCall', name: 'lessOrEquals', args: [left, high] }
+        ]
+      });
     }
   // IS [NOT] DISTINCT FROM / IS [NOT] NULL
   / _ "IS"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "DISTINCT"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return function(left) { return { kind: 'binaryExpr', op: '<=>', left: left, right: right }; };
+      return (left) => ({ kind: 'binaryExpr', op: '<=>', left, right });
     }
   / _ "IS"i ![a-zA-Z0-9_] _ "DISTINCT"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return function(left) { return { kind: 'binaryExpr', op: 'IS DISTINCT FROM', left: left, right: right }; };
+      return (left) => ({ kind: 'binaryExpr', op: 'IS DISTINCT FROM', left, right });
     }
   // IS [NOT] NULL with optional arithmetic continuation: "x IS NOT NULL + 1" parses as plus(isNotNull(x), 1).
   // The arith tail allows arithmetic ops to bind tighter than comparison, matching ClickHouse precedence.
   / _ "IS"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] arith:( _ op:AddOp _ right:NotPrefixExpr )* {
-      return function(left) {
-        var base = { kind: 'functionCall', name: 'isNotNull', args: [left] };
-        return arith.reduce(function(acc, t) {
-          return { kind: 'binaryExpr', op: t[1], left: acc, right: t[3] };
-        }, base);
+      return (left) => {
+        const base = { kind: 'functionCall', name: 'isNotNull', args: [left] };
+        return arith.reduce((acc, t) => ({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] }), base);
       };
     }
   / _ "IS"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] arith:( _ op:AddOp _ right:NotPrefixExpr )* {
-      return function(left) {
-        var base = { kind: 'functionCall', name: 'isNull', args: [left] };
-        return arith.reduce(function(acc, t) {
-          return { kind: 'binaryExpr', op: t[1], left: acc, right: t[3] };
-        }, base);
+      return (left) => {
+        const base = { kind: 'functionCall', name: 'isNull', args: [left] };
+        return arith.reduce((acc, t) => ({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] }), base);
       };
     }
   // Plain comparison operator
   / _ op:CompareOp _ right:CompareRightExpr {
-      return function(left) { return { kind: 'binaryExpr', op: op, left: left, right: right }; };
+      return (left) => ({ kind: 'binaryExpr', op, left, right });
     }
 
 // InTarget: the target expression for IN — array literal, parenthesized list, or bare expression
@@ -1256,37 +1176,29 @@ InTarget
   / "(" beforeValues:_ values:InValues afterValues:_ ")" {
       // Attach comments to first/last value if they are expression nodes
       if (Array.isArray(values)) {
-        var bv = flattenWs(beforeValues);
+        const bv = flattenWs(beforeValues);
         if (bv.length > 0 && values.length > 0) {
-          var first = values[0];
+          const first = values[0];
           values = values.slice();
-          values[0] = Object.assign({}, first, {
-            leadingComments: bv.concat(first.leadingComments || [])
-          });
+          values[0] = { ...first, leadingComments: [...bv, ...(first.leadingComments || [])] };
         }
-        var av = flattenWs(afterValues);
+        const av = flattenWs(afterValues);
         if (av.length > 0 && values.length > 0) {
-          var last = values[values.length - 1];
+          const last = values[values.length - 1];
           values = values.slice();
-          values[values.length - 1] = Object.assign({}, last, {
-            trailingComments: (last.trailingComments || []).concat(av)
-          });
+          values[values.length - 1] = { ...last, trailingComments: [...(last.trailingComments || []), ...av] };
         }
       } else if (values && values.kind === 'subqueryExpr') {
-        var bv2 = flattenWs(beforeValues);
+        const bv2 = flattenWs(beforeValues);
         if (bv2.length > 0) {
-          values = Object.assign({}, values, {
-            leadingComments: bv2.concat(values.leadingComments || [])
-          });
+          values = { ...values, leadingComments: [...bv2, ...(values.leadingComments || [])] };
         }
-        var av2 = flattenWs(afterValues);
+        const av2 = flattenWs(afterValues);
         if (av2.length > 0) {
-          values = Object.assign({}, values, {
-            trailingComments: (values.trailingComments || []).concat(av2)
-          });
+          values = { ...values, trailingComments: [...(values.trailingComments || []), ...av2] };
         }
       }
-      return { values: values };
+      return { values };
     }
   / single:PrimaryExpr { return { values: [single] }; }
 
@@ -1310,15 +1222,13 @@ InValues
 // (e.g. NOT 0 + NOT 0 = NOT(0 + NOT(0)), consistent with ClickHouse precedence rules)
 AddExpr
   = head:ConcatExpr tail:(_ op:AddOp _ right:NotPrefixExpr)* {
-      return tail.reduce(function(acc, t) {
-        var right = t[3];
-        var comments = flattenWs(t[0]).concat(flattenWs(t[2]));
+      return tail.reduce((acc, t) => {
+        let right = t[3];
+        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
         if (comments.length > 0) {
-          right = Object.assign({}, right, {
-            leadingComments: comments.concat(right.leadingComments || [])
-          });
+          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
         }
-        return { kind: 'binaryExpr', op: t[1], left: acc, right: right };
+        return { kind: 'binaryExpr', op: t[1], left: acc, right };
       }, head);
     }
 
@@ -1337,14 +1247,12 @@ AddOp
 ConcatExpr
   = head:MulExpr tail:(_ "||" _ MulExpr)* {
       if (tail.length === 0) return head;
-      var parts = [head];
-      for (var i = 0; i < tail.length; i++) {
-        var next = tail[i][3];
-        var comments = flattenWs(tail[i][0]).concat(flattenWs(tail[i][2]));
+      const parts = [head];
+      for (const t of tail) {
+        let next = t[3];
+        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
         if (comments.length > 0) {
-          next = Object.assign({}, next, {
-            leadingComments: comments.concat(next.leadingComments || [])
-          });
+          next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
         }
         parts.push(next);
       }
@@ -1353,15 +1261,13 @@ ConcatExpr
 
 MulExpr
   = head:UnaryExpr tail:(_ op:MulOp _ right:UnaryExpr)* {
-      return tail.reduce(function(acc, t) {
-        var right = t[3];
-        var comments = flattenWs(t[0]).concat(flattenWs(t[2]));
+      return tail.reduce((acc, t) => {
+        let right = t[3];
+        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
         if (comments.length > 0) {
-          right = Object.assign({}, right, {
-            leadingComments: comments.concat(right.leadingComments || [])
-          });
+          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
         }
-        return { kind: 'binaryExpr', op: t[1], left: acc, right: right };
+        return { kind: 'binaryExpr', op: t[1], left: acc, right };
       }, head);
     }
 
@@ -1382,17 +1288,17 @@ UnaryExpr
   / ("-" / "\u2212") _ expr:UnaryExpr {
       if (expr.kind === 'literal' && expr.type === 'UInt64') {
         // Negate a non-negative integer literal: compute decimal value using BigInt for precision
-        var val = expr.value;
-        var bigNeg;
+        const val = expr.value;
+        let bigNeg;
         if (val.startsWith('0x') || val.startsWith('0X') || val.startsWith('0b') || val.startsWith('0B')) {
           bigNeg = -BigInt(val);
         } else {
           bigNeg = -BigInt(val);
         }
         // Check if fits in Int64 range [-2^63, 0]
-        var INT64_MIN = BigInt('-9223372036854775808');
+        const INT64_MIN = BigInt('-9223372036854775808');
         if (bigNeg >= INT64_MIN) {
-          var intResult = { kind: 'literal', type: 'Int64', value: String(bigNeg) };
+          const intResult = { kind: 'literal', type: 'Int64', value: String(bigNeg) };
           // Preserve source for -0 → "0" since it can't round-trip without original text
           if (bigNeg === BigInt(0)) intResult.source = text();
           return intResult;
@@ -1402,33 +1308,33 @@ UnaryExpr
       }
       if (expr.kind === 'literal' && expr.type === 'Float64' && expr.value.charAt(0) !== '-') {
         // Negate a positive float literal; update source if present to include the minus sign
-        var negResult = { kind: 'literal', type: 'Float64', value: '-' + expr.value };
+        const negResult = { kind: 'literal', type: 'Float64', value: '-' + expr.value };
         if (expr.source) negResult.source = text();
         return negResult;
       }
       if (expr.kind === 'castExpr' && expr.operator) {
         // -value::Type: fold the minus sign into the cast's innermost literal (for :: operator casts)
         // Recurse through nested casts to find the innermost literal
-        var innermost = expr;
+        let innermost = expr;
         while (innermost.kind === 'castExpr' && innermost.operator && innermost.expr.kind === 'castExpr' && innermost.expr.operator) {
           innermost = innermost.expr;
         }
-        var inner = innermost.expr;
+        const inner = innermost.expr;
         if (inner.kind === 'literal' && inner.type !== 'String' && inner.type !== 'NULL' &&
             inner.type !== 'Bool' && inner.value.charAt(0) !== '-') {
-          var negInner = Object.assign({}, inner, { value: '-' + inner.value });
+          const negInner = { ...inner, value: '-' + inner.value };
           // Update the innermost cast with the negated literal
           // Need to rebuild the chain since we can't mutate
-          var result = Object.assign({}, innermost, { expr: negInner });
+          let result = { ...innermost, expr: negInner };
           // Walk back up rebuilding if there are nested casts
-          var stack = [];
-          var cur = expr;
+          const stack = [];
+          let cur = expr;
           while (cur !== innermost) {
             stack.push(cur);
             cur = cur.expr;
           }
-          for (var si = stack.length - 1; si >= 0; si--) {
-            result = Object.assign({}, stack[si], { expr: result });
+          for (let si = stack.length - 1; si >= 0; si--) {
+            result = { ...stack[si], expr: result };
           }
           return result;
         }
@@ -1447,16 +1353,16 @@ UnaryExpr
 // e.g. arr[1], tuple.2, expr::Int32, json.:String, row.*
 PrimaryExpr
   = base:PrimaryBase suffixes:PrimaryExprSuffix* NullsHandlingClause? over:OverClause? {
-      var result = suffixes.reduce(function(acc, s) {
+      const result = suffixes.reduce((acc, s) => {
         if (s.kind === 'subscript') {
           return { kind: 'functionCall', name: 'arrayElement', args: [acc, s.index] };
         } else if (s.kind === 'tuple_element') {
-          var idxArg;
-          var absIndex = s.index.charAt(0) === '-' ? s.index.substring(1) : s.index;
+          let idxArg;
+          const absIndex = s.index.charAt(0) === '-' ? s.index.substring(1) : s.index;
           // Large numbers that exceed UInt64 range are treated as Float64
-          var idxLiteral;
+          let idxLiteral;
           if (absIndex.length > 18) {
-            var fval = Number(absIndex);
+            const fval = Number(absIndex);
             idxLiteral = { kind: 'literal', type: 'Float64', value: fval.toExponential().replace('+', '') };
           } else {
             idxLiteral = { kind: 'literal', type: 'UInt64', value: absIndex };
@@ -1473,12 +1379,12 @@ PrimaryExpr
           return { kind: 'functionCall', name: 'tupleElement', args: [acc, { kind: 'literal', type: 'String', value: s.name }] };
         } else if (s.kind === 'json_subcolumn') {
           // .:Type or .:`QuotedType` — JSON subcolumn type annotation
-          var node = { kind: 'jsonSubcolumn', expr: acc, type: s.type };
+          const node = { kind: 'jsonSubcolumn', expr: acc, type: s.type };
           if (s.path && s.path.length > 0) node.path = s.path;
           return node;
         } else if (s.kind === 'asterisk_access') {
           // expr.* — tuple/expression wildcard expansion
-          var node = { kind: 'tupleExpansion', expr: acc };
+          const node = { kind: 'tupleExpansion', expr: acc };
           if (s.transformers && s.transformers.length > 0) node.transformers = s.transformers;
           return node;
         } else {
@@ -1519,7 +1425,7 @@ WindowSpec
   = partitionBy:( "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ items:ExpressionList { return items; } )?
     _ orderBy:( "ORDER"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ items:OrderByItemList { return items; } )?
     _ frame:WindowFrameClause? {
-      var spec = {};
+      const spec = {};
       if (partitionBy !== null) spec.partitionBy = partitionBy;
       if (orderBy !== null) spec.orderBy = orderBy;
       if (frame !== null) spec.frame = frame;
@@ -1568,7 +1474,7 @@ PrimaryExprSuffix
   // Tuple/expression asterisk: expr.* — expands all fields (e.g. tuple(1,'a').* or CAST(...).*).
   // Must come after field_access and before other rules to avoid conflicts.
   / _ "." _ "*" transformers:( _ ColumnTransformer )* {
-      return { kind: 'asterisk_access', transformers: transformers.map(function(t) { return t[1]; }) };
+      return { kind: 'asterisk_access', transformers: transformers.map((t) => t[1]) };
     }
 
 // JSON subcolumn type: either a backtick-quoted type string (for complex types with parens)
@@ -1639,7 +1545,7 @@ PrimaryBase
   // {QP:Identifier}.field.col — QueryParam used as a table/db qualifier in a dotted column ref.
   // Must come before QueryParam to prevent {QP:Identifier} being consumed as a bare query param.
   / first:QueryParamIdentifier rest:( _ "." _ part:ColumnRefCont { return part; } )+ {
-      return { kind: 'columnRef', parts: [first].concat(rest) };
+      return { kind: 'columnRef', parts: [first, ...rest] };
     }
   / QueryParam
   / MapLiteral
@@ -1672,12 +1578,12 @@ PrimaryBase
 MapLiteral
   = "{" _ "}" { return { kind: 'functionCall', name: 'map', args: [] }; }
   / "{" _ first:MapEntry rest:( _ "," _ MapEntry )* _ "}" {
-      var args = [first[0], first[1]];
-      for (var i = 0; i < rest.length; i++) {
-        args.push(rest[i][3][0]);
-        args.push(rest[i][3][1]);
+      const args = [first[0], first[1]];
+      for (const r of rest) {
+        args.push(r[3][0]);
+        args.push(r[3][1]);
       }
-      return { kind: 'functionCall', name: 'map', args: args };
+      return { kind: 'functionCall', name: 'map', args };
     }
 
 MapEntry
@@ -1697,47 +1603,39 @@ ParenGroup
   = "(" _ ")" { return { kind: 'functionCall', name: 'tuple', args: [] }; }
   // Subquery: (SELECT ...) / (WITH ... SELECT ...) / (EXPLAIN ...)
   / "(" beforeQuery:_ &(KW_SELECT / KW_WITH / "EXPLAIN"i ![a-zA-Z0-9_]) query:UnionQuery afterQuery:_ ")" {
-      var bq = flattenWs(beforeQuery);
+      const bq = flattenWs(beforeQuery);
       if (bq.length > 0) {
-        query = Object.assign({}, query, {
-          leadingComments: bq.concat(query.leadingComments || [])
-        });
+        query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
       }
-      var aq = flattenWs(afterQuery);
+      const aq = flattenWs(afterQuery);
       if (aq.length > 0) {
-        query = Object.assign({}, query, {
-          trailingComments: (query.trailingComments || []).concat(aq)
-        });
+        query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
       }
-      return { kind: 'subqueryExpr', query: query };
+      return { kind: 'subqueryExpr', query };
     }
   // Lambda with parens: (x, y, ...) -> expr
   / "(" _ head:Identifier tail:(_ "," _ Identifier)* _ ")" _ "->" _ body:Expression {
-      return { kind: 'lambdaExpr', params: [head].concat(tail.map(function(t) { return t[3]; })), body: body };
+      return { kind: 'lambdaExpr', params: [head, ...tail.map((t) => t[3])], body };
     }
   // Tuple or parenthesized expression: parse first expression, then branch on comma vs close paren
   / "(" beforeFirst:_ first:Expression rest:(_ "," _ Expression)* trailing:(_ ",")? afterLast:_ ")" {
-      var bf = flattenWs(beforeFirst);
+      const bf = flattenWs(beforeFirst);
       if (bf.length > 0) {
-        first = Object.assign({}, first, {
-          leadingComments: bf.concat(first.leadingComments || [])
-        });
+        first = { ...first, leadingComments: [...bf, ...(first.leadingComments || [])] };
       }
       if (rest.length === 0 && trailing === null) {
         // (expr) — parenthesized expression
-        var al = flattenWs(afterLast);
+        const al = flattenWs(afterLast);
         if (al.length > 0) {
-          first = Object.assign({}, first, {
-            trailingComments: (first.trailingComments || []).concat(al)
-          });
+          first = { ...first, trailingComments: [...(first.trailingComments || []), ...al] };
         }
-        return Object.assign({}, first, { parenthesized: true });
+        return { ...first, parenthesized: true };
       } else if (rest.length === 0) {
         // (expr,) — single-element tuple
         return { kind: 'functionCall', name: 'tuple', args: [first] };
       } else {
         // (expr, expr, ...) — multi-element tuple
-        var elems = [first].concat(rest.map(function(r) { return r[3]; }));
+        const elems = [first, ...rest.map((r) => r[3])];
         return { kind: 'tuple', elements: elems, source: text() };
       }
     }
@@ -1758,21 +1656,17 @@ ArrayLiteral
       return { kind: 'array', elements: [], source: text() };
     }
   / "[" beforeItems:_ items:ExpressionList afterItems:_ "]" {
-      var bi = flattenWs(beforeItems);
+      const bi = flattenWs(beforeItems);
       if (bi.length > 0 && items.length > 0) {
-        var first = items[0];
+        const first = items[0];
         items = items.slice();
-        items[0] = Object.assign({}, first, {
-          leadingComments: bi.concat(first.leadingComments || [])
-        });
+        items[0] = { ...first, leadingComments: [...bi, ...(first.leadingComments || [])] };
       }
-      var ai = flattenWs(afterItems);
+      const ai = flattenWs(afterItems);
       if (ai.length > 0 && items.length > 0) {
-        var last = items[items.length - 1];
+        const last = items[items.length - 1];
         items = items.slice();
-        items[items.length - 1] = Object.assign({}, last, {
-          trailingComments: (last.trailingComments || []).concat(ai)
-        });
+        items[items.length - 1] = { ...last, trailingComments: [...(last.trailingComments || []), ...ai] };
       }
       return { kind: 'array', elements: items, source: text() };
     }
@@ -1787,10 +1681,10 @@ QueryParam
 // e.g. $$hello world$$, $heredoc$multi-line content$heredoc$
 HeredocLiteral
   = "$" tag:$([^$]*) "$" {
-      var endMarker = "$" + tag + "$";
-      var pos = input.indexOf(endMarker, peg$currPos);
-      if (pos < 0) { error("Unterminated heredoc $" + tag + "$"); }
-      var content = input.substring(peg$currPos, pos);
+      const endMarker = `$${tag}$`;
+      const pos = input.indexOf(endMarker, peg$currPos);
+      if (pos < 0) { error(`Unterminated heredoc $${tag}$`); }
+      const content = input.substring(peg$currPos, pos);
       peg$currPos = pos + endMarker.length;
       // Double backslashes so escapeStringValue in explain.ts outputs them correctly (consistent with StringChar handling of \\)
       return { kind: 'literal', type: 'String', value: content.replace(/\\/g, '\\\\') };
@@ -1811,9 +1705,9 @@ BinaryStringLiteral
   = [bB] "'" digits:$[01]* "'" {
       if (digits.length === 0) return { kind: 'literal', type: 'String', value: '' };
       // Pad to multiple of 8 bits, MSB-first, then interpret as UTF-8 bytes
-      var padded = digits.padStart(Math.ceil(digits.length / 8) * 8, '0');
-      var bytes = [];
-      for (var i = 0; i < padded.length; i += 8) {
+      const padded = digits.padStart(Math.ceil(digits.length / 8) * 8, '0');
+      const bytes = [];
+      for (let i = 0; i < padded.length; i += 8) {
         bytes.push(parseInt(padded.slice(i, i + 8), 2));
       }
       return { kind: 'literal', type: 'String', value: Buffer.from(bytes).toString('utf-8') };
@@ -1823,7 +1717,7 @@ BinaryStringLiteral
 HexStringLiteral
   = [xX] "'" digits:$[0-9a-fA-F]* "'" {
       if (digits.length === 0) return { kind: 'literal', type: 'String', value: '' };
-      var padded = digits.length % 2 === 1 ? '0' + digits : digits;
+      const padded = digits.length % 2 === 1 ? '0' + digits : digits;
       return { kind: 'literal', type: 'String', value: Buffer.from(padded, 'hex').toString('utf-8') };
     }
 
@@ -1832,22 +1726,22 @@ HexLiteral
   // Uses proper separator pattern: no trailing underscore before '.' or 'p' exponent.
   // The ![a-zA-Z0-9_] guard prevents consuming partial tokens (e.g. 0x2_p2 → identifier).
   = "0x"i int:$([0-9a-fA-F]+("_"[0-9a-fA-F]+)*) "." frac:$([0-9a-fA-F]+("_"[0-9a-fA-F]+)*)? exp:HexExponentPart? ![a-zA-Z0-9_] {
-      var cleanInt = int.replace(/_/g, '');
-      var cleanFrac = (frac || '').replace(/_/g, '');
-      var intVal = parseInt(cleanInt, 16);
-      var fracVal = cleanFrac.length > 0 ? parseInt(cleanFrac, 16) / Math.pow(16, cleanFrac.length) : 0;
-      var value = exp !== null ? (intVal + fracVal) * Math.pow(2, exp) : (intVal + fracVal);
+      const cleanInt = int.replace(/_/g, '');
+      const cleanFrac = (frac || '').replace(/_/g, '');
+      const intVal = parseInt(cleanInt, 16);
+      const fracVal = cleanFrac.length > 0 ? parseInt(cleanFrac, 16) / Math.pow(16, cleanFrac.length) : 0;
+      const value = exp !== null ? (intVal + fracVal) * Math.pow(2, exp) : (intVal + fracVal);
       return { kind: 'literal', type: 'Float64', value: value.toString(), source: text() };
     }
   / "0x"i digits:$([0-9a-fA-F]+("_"[0-9a-fA-F]+)*) exp:HexExponentPart? ![a-zA-Z0-9_] {
       // Remove underscore digit separators
-      var clean = digits.replace(/_/g, '');
+      const clean = digits.replace(/_/g, '');
       // Parse hex with optional exponent (e.g. 0x123p4) as float
       if (exp !== null) {
         return { kind: 'literal', type: 'Float64', value: parseFloat(parseInt(clean, 16) * Math.pow(2, exp)).toString(), source: text() };
       }
       // If significant hex digits exceed 16 (> 64 bits), overflows UInt64 → treat as Float64
-      var significant = clean.replace(/^0+/, '') || '0';
+      const significant = clean.replace(/^0+/, '') || '0';
       if (significant.length > 16) {
         return { kind: 'literal', type: 'Float64', value: String(Number(BigInt('0x' + clean))), source: text() };
       }
@@ -1860,7 +1754,7 @@ HexExponentPart
 BinaryNumLiteral
   = "0b"i digits:$([01]+("_"[01]+)*) ![a-zA-Z0-9_] {
       // Remove underscore digit separators
-      var clean = digits.replace(/_/g, '');
+      const clean = digits.replace(/_/g, '');
       return { kind: 'literal', type: 'UInt64', value: '0b' + clean };
     }
 
@@ -1899,22 +1793,22 @@ LambdaExprNoParens
 // The no-subject form must come first so "CASE WHEN" doesn't try to parse WHEN as the subject expression
 CaseExpr
   = "CASE"i ![a-zA-Z0-9_] _ branches:CaseWhenBranch+ elseClause:( _ "ELSE"i ![a-zA-Z0-9_] _ Expression )? _ "END"i ![a-zA-Z0-9_] {
-      var args = [];
-      for (var i = 0; i < branches.length; i++) {
-        args.push(branches[i][0]);
-        args.push(branches[i][1]);
+      const args = [];
+      for (const branch of branches) {
+        args.push(branch[0]);
+        args.push(branch[1]);
       }
       args.push(elseClause !== null ? elseClause[4] : { kind: 'literal', type: 'NULL', value: 'NULL' });
-      return { kind: 'functionCall', name: 'multiIf', args: args };
+      return { kind: 'functionCall', name: 'multiIf', args };
     }
   / "CASE"i ![a-zA-Z0-9_] _ subject:Expression _ branches:CaseWhenBranch+ elseClause:( _ "ELSE"i ![a-zA-Z0-9_] _ Expression )? _ "END"i ![a-zA-Z0-9_] {
-      var args = [subject];
-      for (var i = 0; i < branches.length; i++) {
-        args.push(branches[i][0]);
-        args.push(branches[i][1]);
+      const args = [subject];
+      for (const branch of branches) {
+        args.push(branch[0]);
+        args.push(branch[1]);
       }
       args.push(elseClause !== null ? elseClause[4] : { kind: 'literal', type: 'NULL', value: 'NULL' });
-      return { kind: 'functionCall', name: 'caseWithExpression', args: args };
+      return { kind: 'functionCall', name: 'caseWithExpression', args };
     }
 
 // CaseWhenBranch: a single WHEN ... THEN ... pair in a CASE expression
@@ -1929,16 +1823,16 @@ IntervalExpr
     }
   // INTERVAL 'N unit' MySQL-compatible syntax: single string containing value and unit
   / "INTERVAL"i ![a-zA-Z0-9_] _ str:StringLiteral {
-      var parts = str.value.trim().split(/\s+/);
-      var val = parts[0];
-      var unitStr = (parts[1] || '').toUpperCase().replace(/S$/, '');
-      var unitMap = {
+      const parts = str.value.trim().split(/\s+/);
+      const val = parts[0];
+      const unitStr = (parts[1] || '').toUpperCase().replace(/S$/, '');
+      const unitMap = {
         NANOSECOND: 'Nanosecond', MICROSECOND: 'Microsecond', MILLISECOND: 'Millisecond',
         SECOND: 'Second', MINUTE: 'Minute', HOUR: 'Hour', DAY: 'Day',
         WEEK: 'Week', MONTH: 'Month', QUARTER: 'Quarter', YEAR: 'Year'
       };
-      var unit = unitMap[unitStr] || 'Second';
-      var numVal = parseInt(val, 10);
+      const unit = unitMap[unitStr] || 'Second';
+      const numVal = parseInt(val, 10);
       return { kind: 'functionCall', name: 'toInterval' + unit, args: [{ kind: 'literal', type: 'UInt64', value: String(numVal) }] };
     }
 
@@ -1983,7 +1877,7 @@ FunctionCall
     }
   // dateDiff/DATEDIFF/DATE_DIFF with unquoted unit identifier as first arg → convert to canonical lowercase string literal
   / ("dateDiff"i / "DATEDIFF"i / "DATE_DIFF"i) _ "(" _ unit:$([a-zA-Z_][a-zA-Z0-9_]*) _ "," _ rest:FunctionCallArgList _ ")" {
-      var unitAliases = {
+      const unitAliases = {
         'ns': 'nanosecond', 'nanoseconds': 'nanosecond',
         'us': 'microsecond', 'microseconds': 'microsecond',
         'ms': 'millisecond', 'milliseconds': 'millisecond',
@@ -1997,10 +1891,10 @@ FunctionCall
         'yy': 'year', 'yyyy': 'year', 'y': 'year', 'years': 'year',
         'mcs': 'microsecond',
       };
-      var lower = unit.toLowerCase();
-      var canonical = unitAliases[lower] || lower;
-      var unitLiteral = { kind: 'literal', type: 'String', value: canonical };
-      return { kind: 'functionCall', name: 'dateDiff', args: [unitLiteral].concat(rest) };
+      const lower = unit.toLowerCase();
+      const canonical = unitAliases[lower] || lower;
+      const unitLiteral = { kind: 'literal', type: 'String', value: canonical };
+      return { kind: 'functionCall', name: 'dateDiff', args: [unitLiteral, ...rest] };
     }
   // dateDiff/DATEDIFF/DATE_DIFF with quoted string unit (normalize function name to dateDiff)
   / ("dateDiff"i / "DATEDIFF"i / "DATE_DIFF"i) _ "(" _ args:FunctionCallArgList _ ")" {
@@ -2008,14 +1902,14 @@ FunctionCall
     }
   // SUBSTRING(str FROM pos [FOR len]) — SQL standard substring syntax
   / ( "SUBSTRING"i / "SUBSTR"i / "MID"i ) _ "(" _ str:ExpressionWithImplicitAlias _ "FROM"i ![a-zA-Z0-9_] _ pos:ExpressionWithImplicitAlias len:( _ "FOR"i ![a-zA-Z0-9_] _ ExpressionWithImplicitAlias )? _ ")" {
-      var args = [str, pos];
+      const args = [str, pos];
       if (len !== null) args.push(len[4]);
-      return { kind: 'functionCall', name: 'substring', args: args };
+      return { kind: 'functionCall', name: 'substring', args };
     }
   // EXTRACT(unit FROM expr) — SQL standard date/time extraction
   // Supports implicit alias on expr (ClickHouse extension)
   / "EXTRACT"i _ "(" _ unit:ExtractUnit _ "FROM"i ![a-zA-Z0-9_] _ expr:ExpressionWithImplicitAlias _ ")" {
-      var funcMap = {
+      const funcMap = {
         YEAR: 'toYear', MONTH: 'toMonth', DAY: 'toDayOfMonth',
         HOUR: 'toHour', MINUTE: 'toMinute', SECOND: 'toSecond',
         DOW: 'toDayOfWeek', DOY: 'toDayOfYear', EPOCH: 'toUnixTimestamp',
@@ -2025,7 +1919,7 @@ FunctionCall
         YYYY: 'toYear', MM: 'toMonth', DD: 'toDayOfMonth', HH: 'toHour',
         MI: 'toMinute', SS: 'toSecond'
       };
-      var funcName = funcMap[unit.toUpperCase()] || ('to' + unit.charAt(0).toUpperCase() + unit.slice(1).toLowerCase());
+      const funcName = funcMap[unit.toUpperCase()] || ('to' + unit.charAt(0).toUpperCase() + unit.slice(1).toLowerCase());
       return { kind: 'functionCall', name: funcName, args: [expr] };
     }
   / "TRIM"i _ "(" _ direction:TrimDirection _ chars:ExpressionWithImplicitAlias _ "FROM"i ![a-zA-Z0-9_] _ str:ExpressionWithImplicitAlias _ ")" {
@@ -2033,7 +1927,7 @@ FunctionCall
       if (chars.kind === 'literal' && chars.type === 'String' && chars.value === '') {
         return str;
       }
-      var fname = direction === 'LEADING' ? 'trimLeft' : (direction === 'TRAILING' ? 'trimRight' : 'trimBoth');
+      const fname = direction === 'LEADING' ? 'trimLeft' : (direction === 'TRAILING' ? 'trimRight' : 'trimBoth');
       return { kind: 'functionCall', name: fname, args: [str, chars] };
     }
   // POSITION(needle IN haystack) — SQL standard POSITION syntax; maps to position(haystack, needle)
@@ -2055,7 +1949,7 @@ FunctionCall
   // The alias lookahead (&(KW_AS)) ensures we don't consume the final type name as an alias.
   // e.g. CAST(1 AS Int32), CAST(x AS y AS String)
   / "CAST"i _ "(" _ expr:TernaryExpr alias:( _ ( KW_AS _ )? name:AliasName &( _ KW_AS ) { return name; } )? _ KW_AS _ type:ClickHouseType _ ")" {
-      var innerExpr = alias !== null ? { kind: 'alias', expr: expr, alias: alias } : expr;
+      const innerExpr = alias !== null ? { kind: 'alias', expr, alias } : expr;
       return { kind: 'castExpr', expr: innerExpr, type: type };
     }
   // Generic function call: name([DISTINCT|ALL] args [SETTINGS ...])[(params)]? [FILTER(WHERE ...)]?
@@ -2065,28 +1959,26 @@ FunctionCall
   // The !(")" / ",") guard after DISTINCT/ALL prevents them from being consumed as modifiers
   // when they're actually arguments: has(Settings, 'x') or func(DISTINCT) where DISTINCT is a value.
   / name:FunctionName _ "(" openComments:_ modifier:( ( KW_DISTINCT / KW_ALL ) !( _ ( ")" / "," ) ) _ )? first:FunctionCallArgList? funcSettings:( _ KW_SETTINGS _ SettingsList )? _ ")" second:( _ "(" _ ( ( KW_DISTINCT / KW_ALL ) !( _ ( ")" / "," ) ) _ )? FunctionCallArgList? _ ")" )? filter:FilterClause? {
-      var modVal = modifier !== null ? modifier[0] : null;
-      var modStr = Array.isArray(modVal) ? modVal[0] : modVal;
-      var isDistinct = modStr !== null && modStr !== undefined && modStr.toString().toUpperCase() === 'DISTINCT';
-      var effectiveName = isDistinct ? name + 'Distinct' : name;
+      const modVal = modifier !== null ? modifier[0] : null;
+      const modStr = Array.isArray(modVal) ? modVal[0] : modVal;
+      const isDistinct = modStr !== null && modStr !== undefined && modStr.toString().toUpperCase() === 'DISTINCT';
+      const effectiveName = isDistinct ? name + 'Distinct' : name;
       // Attach comments between "(" and first arg as leadingComments on first arg
-      var args1 = first || [];
-      var oc = flattenWs(openComments);
+      let args1 = first || [];
+      const oc = flattenWs(openComments);
       if (oc.length > 0 && args1.length > 0) {
-        var firstArg = args1[0];
+        const firstArg = args1[0];
         args1 = args1.slice();
-        args1[0] = Object.assign({}, firstArg, {
-          leadingComments: oc.concat(firstArg.leadingComments || [])
-        });
+        args1[0] = { ...firstArg, leadingComments: [...oc, ...(firstArg.leadingComments || [])] };
       }
-      var call;
+      let call;
       if (second !== null) {
         // second[3] = modifier2 group, second[4] = FunctionCallArgList?
-        var mod2 = second[3];
-        var mod2Val = mod2 !== null ? mod2[0] : null;
-        var mod2Str = Array.isArray(mod2Val) ? mod2Val[0] : mod2Val;
-        var isDistinct2 = mod2Str !== null && mod2Str !== undefined && mod2Str.toString().toUpperCase() === 'DISTINCT';
-        var curryName = isDistinct2 ? effectiveName + 'Distinct' : effectiveName;
+        const mod2 = second[3];
+        const mod2Val = mod2 !== null ? mod2[0] : null;
+        const mod2Str = Array.isArray(mod2Val) ? mod2Val[0] : mod2Val;
+        const isDistinct2 = mod2Str !== null && mod2Str !== undefined && mod2Str.toString().toUpperCase() === 'DISTINCT';
+        const curryName = isDistinct2 ? effectiveName + 'Distinct' : effectiveName;
         call = { kind: 'functionCall', name: curryName, params: args1, args: second[4] || [] };
       } else {
         call = { kind: 'functionCall', name: effectiveName, args: args1 };
@@ -2094,9 +1986,9 @@ FunctionCall
       if (funcSettings !== null) call.funcSettings = funcSettings[3];
       if (filter !== null) {
         // count(*) FILTER (WHERE cond) → countIf(cond): drop the asterisk arg
-        var filterArgs = (call.args.length === 1 && call.args[0].kind === 'asterisk')
+        const filterArgs = (call.args.length === 1 && call.args[0].kind === 'asterisk')
           ? [] : call.args;
-        call = { kind: 'functionCall', name: call.name + 'If', args: filterArgs.concat([filter]) };
+        call = { kind: 'functionCall', name: call.name + 'If', args: [...filterArgs, filter] };
       }
       return call;
     }
@@ -2138,23 +2030,19 @@ FunctionCallArgGuarded
 // Trailing comma is allowed (e.g. if(a, b, c,) — ClickHouse extension).
 FunctionCallArgList
   = head:FunctionCallArgGuarded tail:(_ "," _ FunctionCallArgGuarded)* ( _ "," )? {
-      var items = [head];
-      for (var i = 0; i < tail.length; i++) {
-        var ws1 = tail[i][0]; // before comma
-        var ws2 = tail[i][2]; // after comma
-        var trailing = ws2.trailing;
-        var leading = flattenWs(ws1).concat(ws2.leading);
+      const items = [head];
+      for (const t of tail) {
+        const ws1 = t[0]; // before comma
+        const ws2 = t[2]; // after comma
+        const trailing = ws2.trailing;
+        const leading = [...flattenWs(ws1), ...ws2.leading];
         if (trailing.length > 0) {
-          var prev = items[items.length - 1];
-          items[items.length - 1] = Object.assign({}, prev, {
-            trailingComments: (prev.trailingComments || []).concat(trailing)
-          });
+          const prev = items[items.length - 1];
+          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
         }
-        var next = tail[i][3];
+        let next = t[3];
         if (leading.length > 0) {
-          next = Object.assign({}, next, {
-            leadingComments: leading.concat(next.leadingComments || [])
-          });
+          next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
         }
         items.push(next);
       }
@@ -2195,7 +2083,7 @@ ColumnRef
   // QueryParam identifiers (e.g. {DB:Identifier}.table),
   // JSON object subcolumn ^ prefix (e.g. json.^a), and array subscript suffix (e.g. arr.k1[]).
   = first:ColumnRefFirst rest:( _ "." _ part:ColumnRefCont { return part; } )+ {
-      return { kind: 'columnRef', parts: [first].concat(rest) };
+      return { kind: 'columnRef', parts: [first, ...rest] };
     }
   // Unqualified: plain identifier (keyword-guarded) or digit-prefixed identifier
   / name:Identifier { return { kind: 'columnRef', parts: [name] }; }
@@ -2223,16 +2111,16 @@ ColumnRefCont
 QualifiedAsterisk
   = first:ColumnRefFirst rest:( _ "." _ ![*] part:Identifier { return part; } )* _ "." _ "*"
     transformers:( _ ColumnTransformer )* {
-      var result = { kind: 'qualifiedAsterisk', parts: [first].concat(rest) };
-      if (transformers.length > 0) result.transformers = transformers.map(function(t) { return t[1]; });
+      const result = { kind: 'qualifiedAsterisk', parts: [first, ...rest] };
+      if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
       return result;
     }
 
 // Asterisk optionally followed by column transformers (EXCEPT, APPLY, REPLACE).
 Asterisk
   = "*" transformers:( _ ColumnTransformer )* {
-      var result = { kind: 'asterisk' };
-      if (transformers.length > 0) result.transformers = transformers.map(function(t) { return t[1]; });
+      const result = { kind: 'asterisk' };
+      if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
       return result;
     }
 
@@ -2269,7 +2157,7 @@ ColumnTransformerExcept
 // List of column names (identifiers or backtick-quoted) for EXCEPT transformer
 ColumnTransformerExceptList
   = head:Identifier tail:( _ "," _ Identifier )* {
-      return [head].concat(tail.map(function(t) { return t[3]; }));
+      return [head, ...tail.map((t) => t[3])];
     }
 
 // APPLY column transformer: applies a function to each matched column.
@@ -2307,13 +2195,13 @@ ColumnTransformerReplace
 
 ReplaceItemList
   = head:ReplaceItem tail:( _ "," _ ReplaceItem )* {
-      return [head].concat(tail.map(function(t) { return t[3]; }));
+      return [head, ...tail.map((t) => t[3])];
     }
 
 // Single REPLACE item: expr AS colName
 ReplaceItem
   = expr:TernaryExpr _ KW_AS _ alias:Identifier {
-      return { expr: expr, alias: alias };
+      return { expr, alias };
     }
 
 // COLUMNS expression: COLUMNS(args) optionally preceded by a table qualifier and optionally followed by transformers.
@@ -2324,14 +2212,14 @@ ColumnsExpr
   // [db.]table.COLUMNS(args) — table-qualified columns expression, e.g. t.COLUMNS('^c'), db.tbl.COLUMNS('^c')
   // Uses ColumnRefFirst for the first part to support digit-prefixed identifiers and QueryParamIdentifiers.
   = first:ColumnRefFirst rest:( _ "." _ !( "COLUMNS"i _ "(" ) part:ColumnRefCont { return part; } )* _ "." _ "COLUMNS"i _ "(" _ args:FunctionCallArgList _ ")" transformers:( _ ColumnTransformer )* {
-      var qualPath = [first].concat(rest);
-      var result = { kind: 'columnsExpr', args: args, qualifier: qualPath.join('.') };
-      if (transformers.length > 0) result.transformers = transformers.map(function(t) { return t[1]; });
+      const qualPath = [first, ...rest];
+      const result = { kind: 'columnsExpr', args, qualifier: qualPath.join('.') };
+      if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
       return result;
     }
   / "COLUMNS"i _ "(" _ args:FunctionCallArgList _ ")" _ head:ColumnTransformer rest:( _ ColumnTransformer )* {
-      var transformers = [head].concat(rest.map(function(t) { return t[1]; }));
-      return { kind: 'columnsExpr', args: args, transformers: transformers };
+      const transformers = [head, ...rest.map((t) => t[1])];
+      return { kind: 'columnsExpr', args, transformers };
     }
 
 // ── Literals & identifiers ────────────────────────────────────────────────────
@@ -2343,8 +2231,8 @@ ColumnsExpr
 // The ![a-zA-Z_] guard prevents consuming the digit prefix of digit-prefixed identifiers like 02337_db.
 IntegerLiteral
   = digits:$([0-9]+("_"[0-9]+)*) ![a-zA-Z_] {
-      var normalized = digits.replace(/_/g, '').replace(/^0+/, '') || '0';
-      var UINT64_MAX = BigInt('18446744073709551615');
+      const normalized = digits.replace(/_/g, '').replace(/^0+/, '') || '0';
+      const UINT64_MAX = BigInt('18446744073709551615');
       if (normalized.length > 20 || (normalized.length >= 20 && BigInt(normalized) > UINT64_MAX)) {
         // Keep original string to preserve precision for CAST contexts
         return { kind: 'literal', type: 'Float64', value: normalized };
@@ -2361,10 +2249,9 @@ StringLiteral
     }
   / "'" chars:StringChar* "'" {
       // Collect consecutive hex byte objects and decode as UTF-8
-      var parts = [];
-      var hexBuf = [];
-      for (var i = 0; i < chars.length; i++) {
-        var c = chars[i];
+      const parts = [];
+      let hexBuf = [];
+      for (const c of chars) {
         if (c !== null && typeof c === 'object' && c.hexByte !== undefined) {
           hexBuf.push(c.hexByte);
         } else {
@@ -2521,19 +2408,19 @@ KW_WINDOW    = "WINDOW"i    ![a-zA-Z0-9_]
 // Use flattenWs(ws) to get all comments as a flat array.
 _ "whitespace"
   = trailing:_HWS newlineContent:_NLC* {
-      var leading = [];
-      for (var i = 0; i < newlineContent.length; i++) {
-        for (var j = 0; j < newlineContent[i].length; j++) {
-          if (newlineContent[i][j] !== null) leading.push(newlineContent[i][j]);
+      const leading = [];
+      for (const nc of newlineContent) {
+        for (const item of nc) {
+          if (item !== null) leading.push(item);
         }
       }
-      return { trailing: trailing, leading: leading };
+      return { trailing, leading };
     }
 
 // Horizontal whitespace + comments (no newlines consumed)
 _HWS
   = items:([ \t\u00A0\u2003\u3000\uFEFF]+ { return null; } / SingleLineComment / MultiLineComment)* {
-      return items.filter(function(item) { return item !== null; });
+      return items.filter((item) => item !== null);
     }
 
 // Newline(s) followed by optional horizontal whitespace + comments
