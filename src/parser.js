@@ -19,6 +19,46 @@
     return ws.trailing.concat(ws.leading);
   }
 
+  // Prepend comments to a node's leadingComments (no-op if empty)
+  function addLeading(node, comments) {
+    if (comments.length > 0) {
+      return { ...node, leadingComments: [...comments, ...(node.leadingComments || [])] };
+    }
+    return node;
+  }
+
+  // Append comments to a node's trailingComments (no-op if empty)
+  function addTrailing(node, comments) {
+    if (comments.length > 0) {
+      return { ...node, trailingComments: [...(node.trailingComments || []), ...comments] };
+    }
+    return node;
+  }
+
+  // Shorthand: flatten a whitespace result and prepend as leading comments
+  function addWsLeading(node, ws) {
+    return addLeading(node, flattenWs(ws));
+  }
+
+  // Attach leading and trailing comments from surrounding whitespace (e.g., parenthesized queries)
+  function addSurroundingWs(node, beforeWs, afterWs) {
+    return addTrailing(addLeading(node, flattenWs(beforeWs)), flattenWs(afterWs));
+  }
+
+  // Build a comma-separated list with comment distribution:
+  //   ws before comma → all comments go to leading on next item
+  //   ws after comma → .trailing goes to trailing on prev item, .leading goes to leading on next
+  function buildCommaList(head, tail, itemIndex = 3) {
+    const items = [head];
+    for (const t of tail) {
+      const ws1 = t[0]; // before comma
+      const ws2 = t[2]; // after comma
+      items[items.length - 1] = addTrailing(items[items.length - 1], ws2.trailing);
+      items.push(addLeading(t[itemIndex], [...flattenWs(ws1), ...ws2.leading]));
+    }
+    return items;
+  }
+
   // Interval unit name lookup (lowercase key → capitalized unit name)
   const INTERVAL_UNITS = {
     nanosecond: 'Nanosecond', nanoseconds: 'Nanosecond', ns: 'Nanosecond',
@@ -729,40 +769,27 @@ function peg$parse(input, options) {
   const peg$e262 = peg$literalExpectation("*/", false);
 
   function peg$f0(pre, head, headWs, rest, finalWs) {
-    const preComments = flattenWs(pre);
-    if (preComments.length > 0) head.leadingComments = [...preComments, ...(head.leadingComments || [])];
+    head = addLeading(head, flattenWs(pre));
     // headWs: .trailing = same-line after head → trailing on head
     // headWs: .leading = after-newline before ";" → deferred to next stmt (or trailing on last if single stmt)
-    if (headWs.trailing.length > 0) head.trailingComments = [...(head.trailingComments || []), ...headWs.trailing];
+    head = addTrailing(head, headWs.trailing);
     let pendingLeading = headWs.leading;
     const stmts = [head];
     for (const r of rest) {
       const ws2val = r[1]; // after ";"
-      const stmt = r[2];
+      let stmt = r[2];
       const ws3val = r[3]; // after stmt
       // Same-line after ";" → trailing on prev stmt
-      if (ws2val.trailing.length > 0) {
-        const prev = stmts[stmts.length - 1];
-        prev.trailingComments = [...(prev.trailingComments || []), ...ws2val.trailing];
-      }
+      stmts[stmts.length - 1] = addTrailing(stmts[stmts.length - 1], ws2val.trailing);
       // Pending from prev iteration + after-newline after ";" → leading on this stmt
-      const leading = [...pendingLeading, ...ws2val.leading];
-      if (leading.length > 0) {
-        stmt.leadingComments = [...leading, ...(stmt.leadingComments || [])];
-      }
+      stmt = addLeading(stmt, [...pendingLeading, ...ws2val.leading]);
       // Same-line after stmt → trailing on this stmt
-      if (ws3val.trailing.length > 0) {
-        stmt.trailingComments = [...(stmt.trailingComments || []), ...ws3val.trailing];
-      }
+      stmt = addTrailing(stmt, ws3val.trailing);
       // After-newline after stmt → deferred to next iteration
       pendingLeading = ws3val.leading;
       stmts.push(stmt);
     }
-    const last = stmts[stmts.length - 1];
-    const endComments = [...pendingLeading, ...flattenWs(finalWs)];
-    if (endComments.length > 0) {
-      last.trailingComments = [...(last.trailingComments || []), ...endComments];
-    }
+    stmts[stmts.length - 1] = addTrailing(stmts[stmts.length - 1], [...pendingLeading, ...flattenWs(finalWs)]);
     return stmts;
   }
   function peg$f1() {    return [];  }
@@ -820,11 +847,7 @@ function peg$parse(input, options) {
     let result = head;
     for (const t of tail) {
       const op = t[1];
-      let right = t[3];
-      const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-      if (comments.length > 0) {
-        right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-      }
+      const right = addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]);
       if (op === 'UNION') {
         // UNION ALL: flatten into existing union (if it's also ALL)
         if (result.kind === 'union' && !result.unionMode) {
@@ -845,12 +868,7 @@ function peg$parse(input, options) {
     if (tail.length === 0) return head;
     let result = head;
     for (const t of tail) {
-      let right = t[3];
-      const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-      if (comments.length > 0) {
-        right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-      }
-      result = { kind: 'intersect', op: 'INTERSECT', left: result, right };
+      result = { kind: 'intersect', op: 'INTERSECT', left: result, right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]) };
     }
     return result;
   }
@@ -861,14 +879,7 @@ function peg$parse(input, options) {
   function peg$f27() {    return 'DISTINCT';  }
   function peg$f28() {    return 'EXCEPT';  }
   function peg$f29(beforeQuery, query, afterQuery) {
-    const bq = flattenWs(beforeQuery);
-    if (bq.length > 0) {
-      query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
-    }
-    const aq = flattenWs(afterQuery);
-    if (aq.length > 0) {
-      query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
-    }
+    query = addSurroundingWs(query, beforeQuery, afterQuery);
     // Mark bare parenthesized selects so they can be wrapped in SelectWithUnionQuery
     // when they appear inside INTERSECT/EXCEPT or UNION DISTINCT
     if (query.kind === 'select') return { ...query, parenthesized: true };
@@ -902,18 +913,8 @@ function peg$parse(input, options) {
       if (fromLeading.length > 0) result.fromLeadingComments = fromLeading;
     }
     // Keep prewhere and where as separate fields for correct explain output
-    if (prewhere !== null) {
-      let pw = prewhere[1];
-      const pwc = flattenWs(prewhere[0]);
-      if (pwc.length > 0) pw = { ...pw, leadingComments: [...pwc, ...(pw.leadingComments || [])] };
-      result.prewhere = pw;
-    }
-    if (where !== null) {
-      let w = where[1];
-      const wc = flattenWs(where[0]);
-      if (wc.length > 0) w = { ...w, leadingComments: [...wc, ...(w.leadingComments || [])] };
-      result.where = w;
-    }
+    if (prewhere !== null) result.prewhere = addWsLeading(prewhere[1], prewhere[0]);
+    if (where !== null) result.where = addWsLeading(where[1], where[0]);
     // WITH TOTALS/CUBE/ROLLUP modifiers (can appear without GROUP BY)
     const wm = withModifier1 !== null ? withModifier1[1] : (withModifier2 !== null ? withModifier2[1] : null);
     if (wm !== null) {
@@ -937,9 +938,8 @@ function peg$parse(input, options) {
         // Attach pre-GROUP BY whitespace comments to first item
         let gbItems = gb.items;
         if (gbc.length > 0 && gbItems.length > 0) {
-          const gbFirst = gbItems[0];
           gbItems = gbItems.slice();
-          gbItems[0] = { ...gbFirst, leadingComments: [...gbc, ...(gbFirst.leadingComments || [])] };
+          gbItems[0] = addLeading(gbItems[0], gbc);
         }
         result.groupBy = { kind: 'expressions', items: gbItems };
         if (gb.withTotals) result.withTotals = true;
@@ -947,12 +947,7 @@ function peg$parse(input, options) {
         if (gb.withRollup) result.withRollup = true;
       }
     }
-    if (having !== null) {
-      let hv = having[1];
-      const hvc = flattenWs(having[0]);
-      if (hvc.length > 0) hv = { ...hv, leadingComments: [...hvc, ...(hv.leadingComments || [])] };
-      result.having = hv;
-    }
+    if (having !== null) result.having = addWsLeading(having[1], having[0]);
     if (orderBy !== null) {
       result.orderBy = orderBy[1];
     }
@@ -982,20 +977,14 @@ function peg$parse(input, options) {
     const windows = window1 !== null ? window1[1] : (window2 !== null ? window2[1] : null);
     if (windows !== null) result.windows = windows;
     const qualify = qualify1 !== null ? qualify1 : qualify2;
-    if (qualify !== null) {
-      let qe = qualify[1];
-      const qec = flattenWs(qualify[0]);
-      if (qec.length > 0) qe = { ...qe, leadingComments: [...qec, ...(qe.leadingComments || [])] };
-      result.qualify = qe;
-    }
+    if (qualify !== null) result.qualify = addWsLeading(qualify[1], qualify[0]);
     if (settings !== null) result.settings = settings[1];
     // SELECT TOP n — sets the limit (SQL Server compat syntax)
     if (top !== null && result.limit === undefined) result.limit = { count: top[3] };
     // Comments between WITH block/SELECT keyword and first item → leadingComments on first select item
     const selectCommentsFlat = [...withTrailingComments, ...flattenWs(selectComments)];
     if (selectCommentsFlat.length > 0 && result.select.length > 0) {
-      const firstItem = result.select[0];
-      result.select[0] = { ...firstItem, leadingComments: [...selectCommentsFlat, ...(firstItem.leadingComments || [])] };
+      result.select[0] = addLeading(result.select[0], selectCommentsFlat);
     }
     // Trailing same-line comment after the last select item:
     // If clauses follow, attach to the last select item (it will appear inline before the next clause).
@@ -1005,8 +994,7 @@ function peg$parse(input, options) {
         || result.having || result.orderBy || result.limitBy || result.limit || result.offset
         || result.windows || result.qualify || result.settings;
       if (hasFollowingClause) {
-        const lastItem = result.select[result.select.length - 1];
-        result.select[result.select.length - 1] = { ...lastItem, trailingComments: [...(lastItem.trailingComments || []), ..._selectTrailing] };
+        result.select[result.select.length - 1] = addTrailing(result.select[result.select.length - 1], _selectTrailing);
       } else {
         result.trailingComments = _selectTrailing;
       }
@@ -1021,66 +1009,20 @@ function peg$parse(input, options) {
   function peg$f34(wc, items) {    return { items: items, keywordComments: wc };  }
   function peg$f35(wc, items) {    return { items: items, keywordComments: wc };  }
   function peg$f36(head, tail, lastWs) {
-    const items = [head];
-    for (const t of tail) {
-      // ws1 (before comma): all comments → leading on next item (preserves old behavior)
-      // ws2 (after comma): .trailing → trailing on prev item, .leading → leading on next
-      const ws1 = t[0];
-      const ws2 = t[2];
-      const trailing = ws2.trailing;
-      const leading = [...flattenWs(ws1), ...ws2.leading];
-      if (trailing.length > 0) {
-        const prev = items[items.length - 1];
-        items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-      }
-      let next = t[3];
-      if (leading.length > 0) {
-        next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
-      }
-      items.push(next);
-    }
+    const items = buildCommaList(head, tail);
     if (lastWs.length > 0) {
-      const lastItem = items[items.length - 1];
-      items[items.length - 1] = { ...lastItem, trailingComments: [...(lastItem.trailingComments || []), ...lastWs] };
+      items[items.length - 1] = addTrailing(items[items.length - 1], lastWs);
     }
     return items;
   }
   function peg$f37(name, beforeQuery, query, afterQuery) {
-    const bq = flattenWs(beforeQuery);
-    if (bq.length > 0) {
-      query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
-    }
-    const aq = flattenWs(afterQuery);
-    if (aq.length > 0) {
-      query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
-    }
-    return { kind: 'subquery', name, query };
+    return { kind: 'subquery', name, query: addSurroundingWs(query, beforeQuery, afterQuery) };
   }
   function peg$f38(expr, afterExpr, name) {
-    const ae = flattenWs(afterExpr);
-    if (ae.length > 0) {
-      expr = { ...expr, trailingComments: [...(expr.trailingComments || []), ...ae] };
-    }
-    return { kind: 'expr', name, expr };
+    return { kind: 'expr', name, expr: addTrailing(expr, flattenWs(afterExpr)) };
   }
   function peg$f39(head, tail) {
-    const items = [head];
-    for (const t of tail) {
-      const ws1 = t[0]; // before comma
-      const ws2 = t[2]; // after comma
-      const trailing = ws2.trailing;
-      const leading = [...flattenWs(ws1), ...ws2.leading];
-      if (trailing.length > 0) {
-        const prev = items[items.length - 1];
-        items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-      }
-      let next = t[4];
-      if (leading.length > 0) {
-        next = { ...next, leadingComments: leading };
-      }
-      items.push(next);
-    }
-    return items;
+    return buildCommaList(head, tail, 4);
   }
   function peg$f40(expr, alias) {
     if (alias !== null) {
@@ -1092,26 +1034,12 @@ function peg$parse(input, options) {
   }
   function peg$f41(alias) {    return alias;  }
   function peg$f42(alias) {    return alias;  }
-  function peg$f43(comments, expr) {
-    const c = flattenWs(comments);
-    if (c.length > 0 && expr && typeof expr === 'object') {
-      expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-    }
-    return expr;
-  }
+  function peg$f43(comments, expr) {    return addWsLeading(expr, comments);  }
   function peg$f44(head, tail) {
     return tail.reduce((acc, t) => ({ left: acc, ...t[1] }), head);
   }
   function peg$f45(beforeQuery, query, afterQuery, alias, final, sample) {
-    const bq = flattenWs(beforeQuery);
-    if (bq.length > 0) {
-      query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
-    }
-    const aq = flattenWs(afterQuery);
-    if (aq.length > 0) {
-      query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
-    }
-    const result = { kind: 'subqueryFrom', query };
+    const result = { kind: 'subqueryFrom', query: addSurroundingWs(query, beforeQuery, afterQuery) };
     if (final !== null) result.final = true;
     if (sample !== null) result.sample = sample[1];
     if (alias !== null) {
@@ -1168,23 +1096,7 @@ function peg$parse(input, options) {
     return result;
   }
   function peg$f61(head, tail) {
-    const items = [head];
-    for (const t of tail) {
-      const ws1 = t[0];
-      const ws2 = t[2];
-      const trailing = ws2.trailing;
-      const leading = [...flattenWs(ws1), ...ws2.leading];
-      if (trailing.length > 0) {
-        const prev = items[items.length - 1];
-        items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-      }
-      let next = t[3];
-      if (leading.length > 0) {
-        next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
-      }
-      items.push(next);
-    }
-    return items;
+    return buildCommaList(head, tail);
   }
   function peg$f62(join_type, exprs) {
     return { kind: 'arrayJoin', joinType: join_type, expressions: exprs };
@@ -1207,13 +1119,7 @@ function peg$parse(input, options) {
   function peg$f72(dir) {    return dir !== null ? dir : "INNER";  }
   function peg$f73() {    return "LEFT ARRAY";  }
   function peg$f74() {    return "ARRAY";  }
-  function peg$f75(comments, expr) {
-    const c = flattenWs(comments);
-    if (c.length > 0) {
-      expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-    }
-    return { kind: 'on', expr };
-  }
+  function peg$f75(comments, expr) {    return { kind: 'on', expr: addWsLeading(expr, comments) };  }
   function peg$f76(cols) {    return { kind: 'using', columns: cols !== null ? cols : [] };  }
   function peg$f77() {    return { kind: 'using', columns: ['*'] };  }
   function peg$f78(cols) {    return { kind: 'using', columns: cols };  }
@@ -1225,20 +1131,8 @@ function peg$parse(input, options) {
   function peg$f82(head, tail) {
     return [head, ...tail.map((t) => t[3])];
   }
-  function peg$f83(comments, expr) {
-    const c = flattenWs(comments);
-    if (c.length > 0) {
-      expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-    }
-    return expr;
-  }
-  function peg$f84(comments, expr) {
-    const c = flattenWs(comments);
-    if (c.length > 0) {
-      expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-    }
-    return expr;
-  }
+  function peg$f83(comments, expr) {    return addWsLeading(expr, comments);  }
+  function peg$f84(comments, expr) {    return addWsLeading(expr, comments);  }
   function peg$f85(modifiers) {
     const withTotals = modifiers.some((m) => m === 'TOTALS');
     const withCube = modifiers.some((m) => m === 'CUBE');
@@ -1257,8 +1151,7 @@ function peg$parse(input, options) {
     const items = exprList;
     const kc = flattenWs(keywordComments);
     if (kc.length > 0 && items.length > 0) {
-      const first = items[0];
-      items[0] = { ...first, leadingComments: [...kc, ...(first.leadingComments || [])] };
+      items[0] = addLeading(items[0], kc);
     }
     return { items, withTotals, withCube, withRollup };
   }
@@ -1274,20 +1167,8 @@ function peg$parse(input, options) {
   function peg$f95() {    return 'TOTALS';  }
   function peg$f96() {    return 'ROLLUP';  }
   function peg$f97() {    return 'CUBE';  }
-  function peg$f98(comments, expr) {
-    const c = flattenWs(comments);
-    if (c.length > 0) {
-      expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-    }
-    return expr;
-  }
-  function peg$f99(comments, expr) {
-    const c = flattenWs(comments);
-    if (c.length > 0) {
-      expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-    }
-    return expr;
-  }
+  function peg$f98(comments, expr) {    return addWsLeading(expr, comments);  }
+  function peg$f99(comments, expr) {    return addWsLeading(expr, comments);  }
   function peg$f100(items) {    return items;  }
   function peg$f101(count) {    return { count: count, by: [] };  }
   function peg$f102(offset, count) {
@@ -1365,100 +1246,42 @@ function peg$parse(input, options) {
   function peg$f127() {    return [];  }
   function peg$f128(col, expr) {    return { col: col, expr: expr };  }
   function peg$f129(col) {    return { col: col };  }
-  function peg$f130(head, tail) {
-    const items = [head];
-    for (const t of tail) {
-      const ws1 = t[0]; // before comma
-      const ws2 = t[2]; // after comma
-      const trailing = ws2.trailing;
-      const leading = [...flattenWs(ws1), ...ws2.leading];
-      if (trailing.length > 0) {
-        const prev = items[items.length - 1];
-        items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-      }
-      let next = t[3];
-      if (leading.length > 0) {
-        next = { ...next, leadingComments: leading };
-      }
-      items.push(next);
-    }
-    return items;
-  }
+  function peg$f130(head, tail) {    return buildCommaList(head, tail);  }
   function peg$f131(expr, asWs, alias) {
     // Unwrap auto-alias (e.g. @@varname) if an explicit AS alias is provided
-    let inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-    const ac = flattenWs(asWs);
-    if (ac.length > 0) {
-      inner = { ...inner, trailingComments: [...(inner.trailingComments || []), ...ac] };
-    }
-    return { kind: 'alias', expr: inner, alias };
+    const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+    return { kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias };
   }
   function peg$f132(expr, asWs, alias) {
-    let inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-    const ac = flattenWs(asWs);
-    if (ac.length > 0) {
-      inner = { ...inner, trailingComments: [...(inner.trailingComments || []), ...ac] };
-    }
-    return { kind: 'alias', expr: inner, alias };
+    const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+    return { kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias };
   }
   function peg$f133(expr, aliasWs, alias) {
-    const ac2 = flattenWs(aliasWs);
-    if (ac2.length > 0) {
-      expr = { ...expr, trailingComments: [...(expr.trailingComments || []), ...ac2] };
-    }
-    return { kind: 'alias', expr, alias };
+    return { kind: 'alias', expr: addTrailing(expr, flattenWs(aliasWs)), alias };
   }
   function peg$f134(cond, ws1, ws2, then, ws3, ws4, else_) {
-    const thenComments = [...flattenWs(ws1), ...flattenWs(ws2)];
-    if (thenComments.length > 0) {
-      then = { ...then, leadingComments: [...thenComments, ...(then.leadingComments || [])] };
-    }
-    const elseComments = [...flattenWs(ws3), ...flattenWs(ws4)];
-    if (elseComments.length > 0) {
-      else_ = { ...else_, leadingComments: [...elseComments, ...(else_.leadingComments || [])] };
-    }
-    return { kind: 'functionCall', name: 'if', args: [cond, then, else_] };
+    return { kind: 'functionCall', name: 'if', args: [
+      cond,
+      addLeading(then, [...flattenWs(ws1), ...flattenWs(ws2)]),
+      addLeading(else_, [...flattenWs(ws3), ...flattenWs(ws4)])
+    ] };
   }
   function peg$f135(head, tail) {
-    const operands = [head];
-    for (const t of tail) {
-      let next = t[3];
-      const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-      if (comments.length > 0) {
-        next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
-      }
-      operands.push(next);
-    }
+    const operands = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
     return { kind: 'naryExpr', op: 'OR', operands };
   }
   function peg$f136(head, tail) {
-    const operands = [head];
-    for (const t of tail) {
-      let next = t[3];
-      const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-      if (comments.length > 0) {
-        next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
-      }
-      operands.push(next);
-    }
+    const operands = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
     return { kind: 'naryExpr', op: 'AND', operands };
   }
   function peg$f137(comments, expr) {
-    const c = flattenWs(comments);
-    if (c.length > 0) {
-      expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-    }
-    return { kind: 'unaryExpr', op: 'NOT', expr };
+    return { kind: 'unaryExpr', op: 'NOT', expr: addWsLeading(expr, comments) };
   }
   function peg$f138(base, rest) {
-    return rest.reduce((acc, t) => {
-      let right = t[3];
-      const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-      if (comments.length > 0) {
-        right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-      }
-      return { kind: 'binaryExpr', op: t[1], left: acc, right };
-    }, base);
+    return rest.reduce((acc, t) => ({
+      kind: 'binaryExpr', op: t[1], left: acc,
+      right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
+    }), base);
   }
   function peg$f139(left, suffix) {
     if (suffix === null) return left;
@@ -1524,26 +1347,14 @@ function peg$parse(input, options) {
     // Attach comments to first/last value if they are expression nodes
     if (Array.isArray(values)) {
       const bv = flattenWs(beforeValues);
-      if (bv.length > 0 && values.length > 0) {
-        const first = values[0];
-        values = values.slice();
-        values[0] = { ...first, leadingComments: [...bv, ...(first.leadingComments || [])] };
-      }
       const av = flattenWs(afterValues);
-      if (av.length > 0 && values.length > 0) {
-        const last = values[values.length - 1];
+      if ((bv.length > 0 || av.length > 0) && values.length > 0) {
         values = values.slice();
-        values[values.length - 1] = { ...last, trailingComments: [...(last.trailingComments || []), ...av] };
+        values[0] = addLeading(values[0], bv);
+        values[values.length - 1] = addTrailing(values[values.length - 1], av);
       }
     } else if (values && values.kind === 'subqueryExpr') {
-      const bv2 = flattenWs(beforeValues);
-      if (bv2.length > 0) {
-        values = { ...values, leadingComments: [...bv2, ...(values.leadingComments || [])] };
-      }
-      const av2 = flattenWs(afterValues);
-      if (av2.length > 0) {
-        values = { ...values, trailingComments: [...(values.trailingComments || []), ...av2] };
-      }
+      values = addSurroundingWs(values, beforeValues, afterValues);
     }
     return { values };
   }
@@ -1551,40 +1362,24 @@ function peg$parse(input, options) {
   function peg$f154(expr) {    return { kind: 'unaryExpr', op: 'NOT', expr: expr };  }
   function peg$f155(query) {    return { kind: 'subqueryExpr', query: query };  }
   function peg$f156(head, tail) {
-    return tail.reduce((acc, t) => {
-      let right = t[3];
-      const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-      if (comments.length > 0) {
-        right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-      }
-      return { kind: 'binaryExpr', op: t[1], left: acc, right };
-    }, head);
+    return tail.reduce((acc, t) => ({
+      kind: 'binaryExpr', op: t[1], left: acc,
+      right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
+    }), head);
   }
   function peg$f157(expr) {    return { kind: 'unaryExpr', op: 'NOT', expr: expr };  }
   function peg$f158() {    return "-";  }
   function peg$f159() {    return "-";  }
   function peg$f160(head, tail) {
     if (tail.length === 0) return head;
-    const parts = [head];
-    for (const t of tail) {
-      let next = t[3];
-      const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-      if (comments.length > 0) {
-        next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
-      }
-      parts.push(next);
-    }
+    const parts = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
     return { kind: 'functionCall', name: 'concat', args: parts };
   }
   function peg$f161(head, tail) {
-    return tail.reduce((acc, t) => {
-      let right = t[3];
-      const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-      if (comments.length > 0) {
-        right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-      }
-      return { kind: 'binaryExpr', op: t[1], left: acc, right };
-    }, head);
+    return tail.reduce((acc, t) => ({
+      kind: 'binaryExpr', op: t[1], left: acc,
+      right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
+    }), head);
   }
   function peg$f162() {    return 'DIV';  }
   function peg$f163() {    return 'MOD';  }
@@ -1765,30 +1560,16 @@ function peg$parse(input, options) {
   }
   function peg$f209() {    return { kind: 'functionCall', name: 'tuple', args: [] };  }
   function peg$f210(beforeQuery, query, afterQuery) {
-    const bq = flattenWs(beforeQuery);
-    if (bq.length > 0) {
-      query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
-    }
-    const aq = flattenWs(afterQuery);
-    if (aq.length > 0) {
-      query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
-    }
-    return { kind: 'subqueryExpr', query };
+    return { kind: 'subqueryExpr', query: addSurroundingWs(query, beforeQuery, afterQuery) };
   }
   function peg$f211(head, tail, body) {
     return { kind: 'lambdaExpr', params: [head, ...tail.map((t) => t[3])], body };
   }
   function peg$f212(beforeFirst, first, rest, trailing, afterLast) {
-    const bf = flattenWs(beforeFirst);
-    if (bf.length > 0) {
-      first = { ...first, leadingComments: [...bf, ...(first.leadingComments || [])] };
-    }
+    first = addLeading(first, flattenWs(beforeFirst));
     if (rest.length === 0 && trailing === null) {
       // (expr) — parenthesized expression
-      const al = flattenWs(afterLast);
-      if (al.length > 0) {
-        first = { ...first, trailingComments: [...(first.trailingComments || []), ...al] };
-      }
+      first = addTrailing(first, flattenWs(afterLast));
       return { ...first, parenthesized: true };
     } else if (rest.length === 0) {
       // (expr,) — single-element tuple
@@ -1810,16 +1591,11 @@ function peg$parse(input, options) {
   }
   function peg$f216(beforeItems, items, afterItems) {
     const bi = flattenWs(beforeItems);
-    if (bi.length > 0 && items.length > 0) {
-      const first = items[0];
-      items = items.slice();
-      items[0] = { ...first, leadingComments: [...bi, ...(first.leadingComments || [])] };
-    }
     const ai = flattenWs(afterItems);
-    if (ai.length > 0 && items.length > 0) {
-      const last = items[items.length - 1];
+    if ((bi.length > 0 || ai.length > 0) && items.length > 0) {
       items = items.slice();
-      items[items.length - 1] = { ...last, trailingComments: [...(last.trailingComments || []), ...ai] };
+      items[0] = addLeading(items[0], bi);
+      items[items.length - 1] = addTrailing(items[items.length - 1], ai);
     }
     return { kind: 'array', elements: items, source: text() };
   }
@@ -2031,9 +1807,8 @@ function peg$parse(input, options) {
     let args1 = first || [];
     const oc = flattenWs(openComments);
     if (oc.length > 0 && args1.length > 0) {
-      const firstArg = args1[0];
       args1 = args1.slice();
-      args1[0] = { ...firstArg, leadingComments: [...oc, ...(firstArg.leadingComments || [])] };
+      args1[0] = addLeading(args1[0], oc);
     }
     let call;
     if (second !== null) {
@@ -2067,23 +1842,7 @@ function peg$parse(input, options) {
   function peg$f270(chars) {    return chars.join("");  }
   function peg$f271(arg) {    return arg;  }
   function peg$f272(head, tail) {
-    const items = [head];
-    for (const t of tail) {
-      const ws1 = t[0]; // before comma
-      const ws2 = t[2]; // after comma
-      const trailing = ws2.trailing;
-      const leading = [...flattenWs(ws1), ...ws2.leading];
-      if (trailing.length > 0) {
-        const prev = items[items.length - 1];
-        items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-      }
-      let next = t[3];
-      if (leading.length > 0) {
-        next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
-      }
-      items.push(next);
-    }
-    return items;
+    return buildCommaList(head, tail);
   }
   function peg$f273(params, body) {
     return { kind: 'lambdaExpr', params: params, body: body };
