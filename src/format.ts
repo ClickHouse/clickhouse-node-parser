@@ -1,4 +1,5 @@
 import {
+  ASTNode,
   CTE,
   ColumnTransformer,
   ExplainStatement,
@@ -185,6 +186,44 @@ export function format(statements: Statement[]): string {
       return result;
     })
     .join('\n\n');
+}
+
+// Format any AST node by dispatching to the appropriate kind-specific formatter.
+export function formatNode(node: ASTNode, indent: string = ''): string {
+  switch (node.kind) {
+    // Statement types
+    case 'select':
+      return formatSelectStatement(node, indent);
+    case 'union':
+      return formatUnionStatement(node, indent);
+    case 'intersect':
+      return formatIntersectStatement(node, indent);
+    case 'explain':
+      return formatExplainStatement(node, indent);
+    case 'set':
+      return formatSetStatement(node, indent);
+    case 'use':
+      return formatUseStatement(node, indent);
+    case 'system':
+      return formatSystemStatement(node, indent);
+    // From-clause types
+    case 'tableRef':
+      return formatTableRef(node);
+    case 'tableFunction':
+      return formatTableFunction(node, indent);
+    case 'subqueryFrom':
+      return formatSubqueryFrom(node, indent);
+    case 'join':
+      return formatFromExpr(node, indent).join('\n');
+    case 'arrayJoin':
+      return formatFromExpr(node, indent).join('\n');
+    // Non-expression node types without dedicated formatters
+    case 'orderByItem':
+      return formatOrderByItem(node, indent);
+    // Expression types — use formatExpr (with comments)
+    default:
+      return formatExpr(node, indent);
+  }
 }
 
 // Format a comma-separated list of expressions, reading leadingComments/trailingComments
@@ -479,240 +518,328 @@ function formatExpr(expr: Expression, indent: string): string {
   return result;
 }
 
+// ── Per-kind expression formatters ──────────────────────────────────────────
+// Each function accepts the specific expression type and indent, handles the
+// parenthesized flag, and returns a string. Leading/trailing comments are NOT
+// rendered here — that is formatExpr's responsibility.
+
+function formatLiteral(expr: Extract<Expression, { kind: 'literal' }>): string {
+  let result: string;
+  if (expr.type === 'String') {
+    result = `'${escapeString(expr.value)}'`;
+  } else if (expr.type === 'Bool') {
+    result = expr.value === '1' ? 'true' : 'false';
+  } else if (expr.source) {
+    // Use original source text for literals that can't round-trip (hex floats, -0, overflow ints)
+    result = expr.source;
+  } else {
+    result = expr.value;
+  }
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatColumnRef(expr: Extract<Expression, { kind: 'columnRef' }>): string {
+  let result = expr.parts.map(quoteIdent).join('.');
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatAsterisk(expr: Extract<Expression, { kind: 'asterisk' }>, indent: string): string {
+  let result =
+    '*' +
+    (expr.transformers
+      ? expr.transformers.map((t) => ' ' + formatTransformer(t, indent)).join('')
+      : '');
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatQualifiedAsterisk(
+  expr: Extract<Expression, { kind: 'qualifiedAsterisk' }>,
+  indent: string,
+): string {
+  return (
+    `${expr.parts.map(quoteIdent).join('.')}.*` +
+    (expr.transformers
+      ? expr.transformers.map((t) => ' ' + formatTransformer(t, indent)).join('')
+      : '')
+  );
+}
+
+function formatTupleExpansion(
+  expr: Extract<Expression, { kind: 'tupleExpansion' }>,
+  indent: string,
+): string {
+  return (
+    `${formatExpr(expr.expr, indent)}.*` +
+    (expr.transformers
+      ? expr.transformers.map((t) => ' ' + formatTransformer(t, indent)).join('')
+      : '')
+  );
+}
+
+function formatColumnsExpr(
+  expr: Extract<Expression, { kind: 'columnsExpr' }>,
+  indent: string,
+): string {
+  const argsStr = expr.args.map((a) => formatExpr(a, indent)).join(', ');
+  const base = `${expr.qualifier ? quoteIdent(expr.qualifier) + '.' : ''}COLUMNS(${argsStr})`;
+  return (
+    base +
+    (expr.transformers
+      ? expr.transformers.map((t) => ' ' + formatTransformer(t, indent)).join('')
+      : '')
+  );
+}
+
+function formatQueryParam(expr: Extract<Expression, { kind: 'queryParam' }>): string {
+  return `{${expr.name}:${expr.type}}`;
+}
+
+function formatAlias(expr: Extract<Expression, { kind: 'alias' }>, indent: string): string {
+  // MySQL global variables (@@varname) are formatted as @@varname directly
+  if (expr.alias.startsWith('@@')) return expr.alias;
+  const aliasStr = quoteIdent(expr.alias);
+  // Wrap lambda expressions in parens so AS binds to the lambda, not its body
+  const innerStr =
+    expr.expr.kind === 'lambdaExpr'
+      ? `(${formatExpr(expr.expr, indent)})`
+      : formatExpr(expr.expr, indent);
+  let result = `${innerStr} AS ${aliasStr}`;
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatArray(expr: Extract<Expression, { kind: 'array' }>, indent: string): string {
+  let result =
+    expr.source !== undefined
+      ? expr.source
+      : `[${expr.elements.map((e) => formatExpr(e, indent)).join(', ')}]`;
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatTuple(expr: Extract<Expression, { kind: 'tuple' }>, indent: string): string {
+  let result =
+    expr.source !== undefined
+      ? expr.source
+      : `(${expr.elements.map((e) => formatExpr(e, indent)).join(', ')})`;
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatCastExpr(expr: Extract<Expression, { kind: 'castExpr' }>, indent: string): string {
+  let result: string;
+  if (expr.operator) {
+    // :: binds very tightly - wrap binary/nary/unary/in expressions
+    const inner = expr.expr;
+    let innerStr: string;
+    if (
+      inner.kind === 'binaryExpr' ||
+      inner.kind === 'naryExpr' ||
+      inner.kind === 'unaryExpr' ||
+      inner.kind === 'inExpr' ||
+      inner.kind === 'alias'
+    ) {
+      innerStr = `(${formatExpr(inner, indent)})`;
+    } else {
+      innerStr = formatExpr(inner, indent);
+    }
+    result = `${innerStr}::${expr.type}`;
+  } else {
+    // If the inner expression is a nested alias (alias wrapping alias), wrap the inner alias
+    // in parens to avoid ambiguous AS clauses: CAST((X AS lhs) rhs AS UInt32)
+    let castInner = formatExpr(expr.expr, indent);
+    if (expr.expr.kind === 'alias' && expr.expr.expr.kind === 'alias') {
+      // Wrap the inner-most alias chain in parens
+      const innerAlias = expr.expr;
+      castInner = `(${formatExpr(innerAlias.expr, indent)}) AS ${quoteIdent(innerAlias.alias)}`;
+    }
+    result = `CAST(${castInner} AS ${expr.type})`;
+  }
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatLambdaExpr(
+  expr: Extract<Expression, { kind: 'lambdaExpr' }>,
+  indent: string,
+): string {
+  let result: string;
+  if (expr.params.length === 1) {
+    result = `${expr.params[0]} -> ${formatExpr(expr.body, indent)}`;
+  } else {
+    result = `(${expr.params.join(', ')}) -> ${formatExpr(expr.body, indent)}`;
+  }
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatUnaryExpr(expr: Extract<Expression, { kind: 'unaryExpr' }>, indent: string): string {
+  // NOT formatting depends on inner expression type:
+  // - Simple (literal, columnRef, functionCall, castExpr, etc.): NOT inner (space form, low precedence)
+  // - Complex (AND/OR, tuple, alias, subquery): NOT(inner) (PrimaryBase form, high precedence)
+  // The NOT(inner) form uses PrimaryBase's KW_NOT "(" ExpressionWithImplicitAlias ")" rule
+  const inner = formatExpr(expr.expr, indent);
+  const innerPrec = exprPrecedence(expr.expr);
+  let result: string;
+  if (
+    innerPrec <= 2 ||
+    expr.expr.kind === 'tuple' ||
+    expr.expr.kind === 'alias' ||
+    expr.expr.kind === 'subqueryExpr'
+  ) {
+    result = `NOT(${inner})`;
+  } else {
+    result = `NOT ${inner}`;
+  }
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatBinaryExpr(
+  expr: Extract<Expression, { kind: 'binaryExpr' }>,
+  indent: string,
+): string {
+  let leftStr = wrapChildCore(expr.left, expr.op, false, indent);
+  const rightStr = wrapChildCore(expr.right, expr.op, true, indent);
+  // Render leading comments on the left operand
+  if (expr.left.leadingComments && expr.left.leadingComments.length > 0) {
+    const lc = expr.left.leadingComments.map((c) => `${indent}${c}`).join('\n');
+    leftStr = lc + '\n' + indent + leftStr;
+  }
+  let result: string;
+  if (expr.right.leadingComments && expr.right.leadingComments.length > 0) {
+    const bParts: string[] = [leftStr];
+    for (const c of expr.right.leadingComments) {
+      bParts.push(`${indent}${c}`);
+    }
+    bParts.push(`${indent}${expr.op} ${rightStr}`);
+    result = bParts.join('\n');
+  } else {
+    result = `${leftStr} ${expr.op} ${rightStr}`;
+  }
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatNaryExpr(expr: Extract<Expression, { kind: 'naryExpr' }>, indent: string): string {
+  const parts: string[] = [];
+  // Render leading comments on the first operand
+  const first = expr.operands[0];
+  if (first.leadingComments && first.leadingComments.length > 0) {
+    for (const c of first.leadingComments) {
+      parts.push(`${indent}${c}`);
+    }
+  }
+  parts.push(wrapNaryOperandCore(first, expr.op, indent));
+  for (let i = 1; i < expr.operands.length; i++) {
+    const operand = expr.operands[i];
+    if (operand.leadingComments && operand.leadingComments.length > 0) {
+      for (const c of operand.leadingComments) {
+        parts.push(`${indent}${c}`);
+      }
+    }
+    parts.push(`${indent}${expr.op} ${wrapNaryOperandCore(operand, expr.op, indent)}`);
+  }
+  let result = parts.join('\n');
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatSubqueryExpr(
+  expr: Extract<Expression, { kind: 'subqueryExpr' }>,
+  indent: string,
+): string {
+  const innerIndent = indent + '    ';
+  return `(\n${formatStatement(expr.query, innerIndent)}\n${indent})`;
+}
+
+function formatInExpr(expr: Extract<Expression, { kind: 'inExpr' }>, indent: string): string {
+  const op = expr.global
+    ? expr.negated
+      ? 'GLOBAL NOT IN'
+      : 'GLOBAL IN'
+    : expr.negated
+      ? 'NOT IN'
+      : 'IN';
+  // Wrap the IN's expr if it's an alias, lambda, or nested IN to preserve parse structure
+  const inExprStr =
+    expr.expr.kind === 'alias' || expr.expr.kind === 'lambdaExpr' || expr.expr.kind === 'inExpr'
+      ? `(${formatExpr(expr.expr, indent)})`
+      : formatExpr(expr.expr, indent);
+  let result: string;
+  if (Array.isArray(expr.values)) {
+    result = `${inExprStr} ${op} (${expr.values.map((v) => formatExpr(v, indent)).join(', ')})`;
+  } else {
+    const innerIndent = indent + '    ';
+    result = `${inExprStr} ${op} (\n${formatStatement(expr.values.query, innerIndent)}\n${indent})`;
+  }
+  if (isParenthesized(expr)) result = `(${result})`;
+  return result;
+}
+
+function formatJsonSubcolumn(
+  expr: Extract<Expression, { kind: 'jsonSubcolumn' }>,
+  indent: string,
+): string {
+  // Backtick-quote the type if it contains characters that require quoting (parens, spaces, etc.)
+  const needsQuoting = /[^a-zA-Z0-9_]/.test(expr.type);
+  const typeStr = needsQuoting ? `\`${expr.type}\`` : expr.type;
+  let result = `${formatExpr(expr.expr, indent)}.:${typeStr}`;
+  if (expr.path && expr.path.length > 0) {
+    result +=
+      '.' + expr.path.map((p: string) => (/[^a-zA-Z0-9_]/.test(p) ? `\`${p}\`` : p)).join('.');
+  }
+  return result;
+}
+
 // Format an expression without rendering its leading/trailing comments.
 // Used by list formatters and operator cases that handle comments with their own layout.
 function formatExprCore(expr: Expression, indent: string): string {
-  // Handle parenthesized flag on any expression type
-  const parenthesized = isParenthesized(expr);
-
-  let result: string;
   switch (expr.kind) {
-    case 'literal': {
-      if (expr.type === 'String') {
-        result = `'${escapeString(expr.value)}'`;
-      } else if (expr.type === 'Bool') {
-        result = expr.value === '1' ? 'true' : 'false';
-      } else if (expr.source) {
-        // Use original source text for literals that can't round-trip (hex floats, -0, overflow ints)
-        result = expr.source;
-      } else {
-        result = expr.value;
-      }
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
+    case 'literal':
+      return formatLiteral(expr);
     case 'columnRef':
-      result = expr.parts.map(quoteIdent).join('.');
-      if (parenthesized) result = `(${result})`;
-      return result;
-    case 'asterisk': {
-      result =
-        '*' +
-        (expr.transformers
-          ? expr.transformers.map((t) => ' ' + formatTransformer(t, indent)).join('')
-          : '');
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
+      return formatColumnRef(expr);
+    case 'asterisk':
+      return formatAsterisk(expr, indent);
     case 'qualifiedAsterisk':
-      return (
-        `${expr.parts.map(quoteIdent).join('.')}.*` +
-        (expr.transformers
-          ? expr.transformers.map((t) => ' ' + formatTransformer(t, indent)).join('')
-          : '')
-      );
+      return formatQualifiedAsterisk(expr, indent);
     case 'tupleExpansion':
-      return (
-        `${formatExpr(expr.expr, indent)}.*` +
-        (expr.transformers
-          ? expr.transformers.map((t) => ' ' + formatTransformer(t, indent)).join('')
-          : '')
-      );
-    case 'columnsExpr': {
-      const argsStr = expr.args.map((a) => formatExpr(a, indent)).join(', ');
-      const base = `${expr.qualifier ? quoteIdent(expr.qualifier) + '.' : ''}COLUMNS(${argsStr})`;
-      return (
-        base +
-        (expr.transformers
-          ? expr.transformers.map((t) => ' ' + formatTransformer(t, indent)).join('')
-          : '')
-      );
-    }
+      return formatTupleExpansion(expr, indent);
+    case 'columnsExpr':
+      return formatColumnsExpr(expr, indent);
     case 'queryParam':
-      return `{${expr.name}:${expr.type}}`;
-    case 'alias': {
-      // MySQL global variables (@@varname) are formatted as @@varname directly
-      if (expr.alias.startsWith('@@')) return expr.alias;
-      const aliasStr = quoteIdent(expr.alias);
-      // Wrap lambda expressions in parens so AS binds to the lambda, not its body
-      const innerStr =
-        expr.expr.kind === 'lambdaExpr'
-          ? `(${formatExpr(expr.expr, indent)})`
-          : formatExpr(expr.expr, indent);
-      result = `${innerStr} AS ${aliasStr}`;
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
-    case 'array': {
-      result =
-        expr.source !== undefined
-          ? expr.source
-          : `[${expr.elements.map((e) => formatExpr(e, indent)).join(', ')}]`;
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
-    case 'tuple': {
-      result =
-        expr.source !== undefined
-          ? expr.source
-          : `(${expr.elements.map((e) => formatExpr(e, indent)).join(', ')})`;
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
+      return formatQueryParam(expr);
+    case 'alias':
+      return formatAlias(expr, indent);
+    case 'array':
+      return formatArray(expr, indent);
+    case 'tuple':
+      return formatTuple(expr, indent);
     case 'functionCall': {
-      result = formatFunctionCall(expr, indent);
-      if (parenthesized) result = `(${result})`;
+      let result = formatFunctionCall(expr, indent);
+      if (isParenthesized(expr)) result = `(${result})`;
       return result;
     }
     case 'castExpr':
-      if (expr.operator) {
-        // :: binds very tightly - wrap binary/nary/unary/in expressions
-        const inner = expr.expr;
-        let innerStr: string;
-        if (
-          inner.kind === 'binaryExpr' ||
-          inner.kind === 'naryExpr' ||
-          inner.kind === 'unaryExpr' ||
-          inner.kind === 'inExpr' ||
-          inner.kind === 'alias'
-        ) {
-          innerStr = `(${formatExpr(inner, indent)})`;
-        } else {
-          innerStr = formatExpr(inner, indent);
-        }
-        result = `${innerStr}::${expr.type}`;
-      } else {
-        // If the inner expression is a nested alias (alias wrapping alias), wrap the inner alias
-        // in parens to avoid ambiguous AS clauses: CAST((X AS lhs) rhs AS UInt32)
-        let castInner = formatExpr(expr.expr, indent);
-        if (expr.expr.kind === 'alias' && expr.expr.expr.kind === 'alias') {
-          // Wrap the inner-most alias chain in parens
-          const innerAlias = expr.expr;
-          castInner = `(${formatExpr(innerAlias.expr, indent)}) AS ${quoteIdent(innerAlias.alias)}`;
-        }
-        result = `CAST(${castInner} AS ${expr.type})`;
-      }
-      if (parenthesized) result = `(${result})`;
-      return result;
+      return formatCastExpr(expr, indent);
     case 'lambdaExpr':
-      if (expr.params.length === 1) {
-        result = `${expr.params[0]} -> ${formatExpr(expr.body, indent)}`;
-      } else {
-        result = `(${expr.params.join(', ')}) -> ${formatExpr(expr.body, indent)}`;
-      }
-      if (parenthesized) result = `(${result})`;
-      return result;
-    case 'unaryExpr': {
-      // NOT formatting depends on inner expression type:
-      // - Simple (literal, columnRef, functionCall, castExpr, etc.): NOT inner (space form, low precedence)
-      // - Complex (AND/OR, tuple, alias, subquery): NOT(inner) (PrimaryBase form, high precedence)
-      // The NOT(inner) form uses PrimaryBase's KW_NOT "(" ExpressionWithImplicitAlias ")" rule
-      const inner = formatExpr(expr.expr, indent);
-      const innerPrec = exprPrecedence(expr.expr);
-      if (
-        innerPrec <= 2 ||
-        expr.expr.kind === 'tuple' ||
-        expr.expr.kind === 'alias' ||
-        expr.expr.kind === 'subqueryExpr'
-      ) {
-        result = `NOT(${inner})`;
-      } else {
-        result = `NOT ${inner}`;
-      }
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
-    case 'binaryExpr': {
-      let leftStr = wrapChildCore(expr.left, expr.op, false, indent);
-      const rightStr = wrapChildCore(expr.right, expr.op, true, indent);
-      // Render leading comments on the left operand
-      if (expr.left.leadingComments && expr.left.leadingComments.length > 0) {
-        const lc = expr.left.leadingComments.map((c) => `${indent}${c}`).join('\n');
-        leftStr = lc + '\n' + indent + leftStr;
-      }
-      if (expr.right.leadingComments && expr.right.leadingComments.length > 0) {
-        const bParts: string[] = [leftStr];
-        for (const c of expr.right.leadingComments) {
-          bParts.push(`${indent}${c}`);
-        }
-        bParts.push(`${indent}${expr.op} ${rightStr}`);
-        result = bParts.join('\n');
-      } else {
-        result = `${leftStr} ${expr.op} ${rightStr}`;
-      }
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
-    case 'naryExpr': {
-      const parts: string[] = [];
-      // Render leading comments on the first operand
-      const first = expr.operands[0];
-      if (first.leadingComments && first.leadingComments.length > 0) {
-        for (const c of first.leadingComments) {
-          parts.push(`${indent}${c}`);
-        }
-      }
-      parts.push(wrapNaryOperandCore(first, expr.op, indent));
-      for (let i = 1; i < expr.operands.length; i++) {
-        const operand = expr.operands[i];
-        if (operand.leadingComments && operand.leadingComments.length > 0) {
-          for (const c of operand.leadingComments) {
-            parts.push(`${indent}${c}`);
-          }
-        }
-        parts.push(`${indent}${expr.op} ${wrapNaryOperandCore(operand, expr.op, indent)}`);
-      }
-      result = parts.join('\n');
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
-    case 'subqueryExpr': {
-      const innerIndent = indent + '    ';
-      return `(\n${formatStatement(expr.query, innerIndent)}\n${indent})`;
-    }
-    case 'inExpr': {
-      const op = expr.global
-        ? expr.negated
-          ? 'GLOBAL NOT IN'
-          : 'GLOBAL IN'
-        : expr.negated
-          ? 'NOT IN'
-          : 'IN';
-      // Wrap the IN's expr if it's an alias, lambda, or nested IN to preserve parse structure
-      const inExprStr =
-        expr.expr.kind === 'alias' || expr.expr.kind === 'lambdaExpr' || expr.expr.kind === 'inExpr'
-          ? `(${formatExpr(expr.expr, indent)})`
-          : formatExpr(expr.expr, indent);
-      if (Array.isArray(expr.values)) {
-        result = `${inExprStr} ${op} (${expr.values.map((v) => formatExpr(v, indent)).join(', ')})`;
-      } else {
-        const innerIndent = indent + '    ';
-        result = `${inExprStr} ${op} (\n${formatStatement(expr.values.query, innerIndent)}\n${indent})`;
-      }
-      if (parenthesized) result = `(${result})`;
-      return result;
-    }
-    case 'jsonSubcolumn': {
-      // Backtick-quote the type if it contains characters that require quoting (parens, spaces, etc.)
-      const needsQuoting = /[^a-zA-Z0-9_]/.test(expr.type);
-      const typeStr = needsQuoting ? `\`${expr.type}\`` : expr.type;
-      result = `${formatExpr(expr.expr, indent)}.:${typeStr}`;
-      if (expr.path && expr.path.length > 0) {
-        result +=
-          '.' + expr.path.map((p: string) => (/[^a-zA-Z0-9_]/.test(p) ? `\`${p}\`` : p)).join('.');
-      }
-      return result;
-    }
+      return formatLambdaExpr(expr, indent);
+    case 'unaryExpr':
+      return formatUnaryExpr(expr, indent);
+    case 'binaryExpr':
+      return formatBinaryExpr(expr, indent);
+    case 'naryExpr':
+      return formatNaryExpr(expr, indent);
+    case 'subqueryExpr':
+      return formatSubqueryExpr(expr, indent);
+    case 'inExpr':
+      return formatInExpr(expr, indent);
+    case 'jsonSubcolumn':
+      return formatJsonSubcolumn(expr, indent);
   }
 }
 

@@ -32,6 +32,7 @@ export type {
   CommentFields,
   ASTNodeKind,
   ASTNodeKindMap,
+  ASTNode,
 } from './ast';
 
 // ── Public API ────────────────────────────────────────────────────────────────
@@ -40,6 +41,6 @@ export function parse(sql: string): Statement[] {
   return peggyParse(sql) as Statement[];
 }
 
-export { format } from './format';
+export { format, formatNode } from './format';
 export { formatExplain } from './explain';
 export { findNodes } from './find-nodes';
