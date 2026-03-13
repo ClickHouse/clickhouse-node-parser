@@ -14,6 +14,46 @@
     return ws.trailing.concat(ws.leading);
   }
 
+  // Prepend comments to a node's leadingComments (no-op if empty)
+  function addLeading(node, comments) {
+    if (comments.length > 0) {
+      return { ...node, leadingComments: [...comments, ...(node.leadingComments || [])] };
+    }
+    return node;
+  }
+
+  // Append comments to a node's trailingComments (no-op if empty)
+  function addTrailing(node, comments) {
+    if (comments.length > 0) {
+      return { ...node, trailingComments: [...(node.trailingComments || []), ...comments] };
+    }
+    return node;
+  }
+
+  // Shorthand: flatten a whitespace result and prepend as leading comments
+  function addWsLeading(node, ws) {
+    return addLeading(node, flattenWs(ws));
+  }
+
+  // Attach leading and trailing comments from surrounding whitespace (e.g., parenthesized queries)
+  function addSurroundingWs(node, beforeWs, afterWs) {
+    return addTrailing(addLeading(node, flattenWs(beforeWs)), flattenWs(afterWs));
+  }
+
+  // Build a comma-separated list with comment distribution:
+  //   ws before comma → all comments go to leading on next item
+  //   ws after comma → .trailing goes to trailing on prev item, .leading goes to leading on next
+  function buildCommaList(head, tail, itemIndex = 3) {
+    const items = [head];
+    for (const t of tail) {
+      const ws1 = t[0]; // before comma
+      const ws2 = t[2]; // after comma
+      items[items.length - 1] = addTrailing(items[items.length - 1], ws2.trailing);
+      items.push(addLeading(t[itemIndex], [...flattenWs(ws1), ...ws2.leading]));
+    }
+    return items;
+  }
+
   // Interval unit name lookup (lowercase key → capitalized unit name)
   const INTERVAL_UNITS = {
     nanosecond: 'Nanosecond', nanoseconds: 'Nanosecond', ns: 'Nanosecond',
@@ -42,40 +82,27 @@ Statements
   = pre:_ head:TopLevelStatement headWs:_
     rest:(";"+ ws2:_ TopLevelStatement ws3:_)*
     ";"* finalWs:_ {
-      const preComments = flattenWs(pre);
-      if (preComments.length > 0) head.leadingComments = [...preComments, ...(head.leadingComments || [])];
+      head = addLeading(head, flattenWs(pre));
       // headWs: .trailing = same-line after head → trailing on head
       // headWs: .leading = after-newline before ";" → deferred to next stmt (or trailing on last if single stmt)
-      if (headWs.trailing.length > 0) head.trailingComments = [...(head.trailingComments || []), ...headWs.trailing];
+      head = addTrailing(head, headWs.trailing);
       let pendingLeading = headWs.leading;
       const stmts = [head];
       for (const r of rest) {
         const ws2val = r[1]; // after ";"
-        const stmt = r[2];
+        let stmt = r[2];
         const ws3val = r[3]; // after stmt
         // Same-line after ";" → trailing on prev stmt
-        if (ws2val.trailing.length > 0) {
-          const prev = stmts[stmts.length - 1];
-          prev.trailingComments = [...(prev.trailingComments || []), ...ws2val.trailing];
-        }
+        stmts[stmts.length - 1] = addTrailing(stmts[stmts.length - 1], ws2val.trailing);
         // Pending from prev iteration + after-newline after ";" → leading on this stmt
-        const leading = [...pendingLeading, ...ws2val.leading];
-        if (leading.length > 0) {
-          stmt.leadingComments = [...leading, ...(stmt.leadingComments || [])];
-        }
+        stmt = addLeading(stmt, [...pendingLeading, ...ws2val.leading]);
         // Same-line after stmt → trailing on this stmt
-        if (ws3val.trailing.length > 0) {
-          stmt.trailingComments = [...(stmt.trailingComments || []), ...ws3val.trailing];
-        }
+        stmt = addTrailing(stmt, ws3val.trailing);
         // After-newline after stmt → deferred to next iteration
         pendingLeading = ws3val.leading;
         stmts.push(stmt);
       }
-      const last = stmts[stmts.length - 1];
-      const endComments = [...pendingLeading, ...flattenWs(finalWs)];
-      if (endComments.length > 0) {
-        last.trailingComments = [...(last.trailingComments || []), ...endComments];
-      }
+      stmts[stmts.length - 1] = addTrailing(stmts[stmts.length - 1], [...pendingLeading, ...flattenWs(finalWs)]);
       return stmts;
     }
   / _ { return []; }
@@ -182,11 +209,7 @@ UnionQuery
       let result = head;
       for (const t of tail) {
         const op = t[1];
-        let right = t[3];
-        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-        if (comments.length > 0) {
-          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-        }
+        const right = addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]);
         if (op === 'UNION') {
           // UNION ALL: flatten into existing union (if it's also ALL)
           if (result.kind === 'union' && !result.unionMode) {
@@ -210,12 +233,7 @@ IntersectQuery
       if (tail.length === 0) return head;
       let result = head;
       for (const t of tail) {
-        let right = t[3];
-        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-        if (comments.length > 0) {
-          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-        }
-        result = { kind: 'intersect', op: 'INTERSECT', left: result, right };
+        result = { kind: 'intersect', op: 'INTERSECT', left: result, right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]) };
       }
       return result;
     }
@@ -238,14 +256,7 @@ UnionAllOrDistinct
 // UnionQueryAtom: a single SELECT or EXPLAIN statement, optionally wrapped in parentheses
 UnionQueryAtom
   = "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
-      const bq = flattenWs(beforeQuery);
-      if (bq.length > 0) {
-        query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
-      }
-      const aq = flattenWs(afterQuery);
-      if (aq.length > 0) {
-        query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
-      }
+      query = addSurroundingWs(query, beforeQuery, afterQuery);
       // Mark bare parenthesized selects so they can be wrapped in SelectWithUnionQuery
       // when they appear inside INTERSECT/EXCEPT or UNION DISTINCT
       if (query.kind === 'select') return { ...query, parenthesized: true };
@@ -309,18 +320,8 @@ SelectStatement
         if (fromLeading.length > 0) result.fromLeadingComments = fromLeading;
       }
       // Keep prewhere and where as separate fields for correct explain output
-      if (prewhere !== null) {
-        let pw = prewhere[1];
-        const pwc = flattenWs(prewhere[0]);
-        if (pwc.length > 0) pw = { ...pw, leadingComments: [...pwc, ...(pw.leadingComments || [])] };
-        result.prewhere = pw;
-      }
-      if (where !== null) {
-        let w = where[1];
-        const wc = flattenWs(where[0]);
-        if (wc.length > 0) w = { ...w, leadingComments: [...wc, ...(w.leadingComments || [])] };
-        result.where = w;
-      }
+      if (prewhere !== null) result.prewhere = addWsLeading(prewhere[1], prewhere[0]);
+      if (where !== null) result.where = addWsLeading(where[1], where[0]);
       // WITH TOTALS/CUBE/ROLLUP modifiers (can appear without GROUP BY)
       const wm = withModifier1 !== null ? withModifier1[1] : (withModifier2 !== null ? withModifier2[1] : null);
       if (wm !== null) {
@@ -344,9 +345,8 @@ SelectStatement
           // Attach pre-GROUP BY whitespace comments to first item
           let gbItems = gb.items;
           if (gbc.length > 0 && gbItems.length > 0) {
-            const gbFirst = gbItems[0];
             gbItems = gbItems.slice();
-            gbItems[0] = { ...gbFirst, leadingComments: [...gbc, ...(gbFirst.leadingComments || [])] };
+            gbItems[0] = addLeading(gbItems[0], gbc);
           }
           result.groupBy = { kind: 'expressions', items: gbItems };
           if (gb.withTotals) result.withTotals = true;
@@ -354,12 +354,7 @@ SelectStatement
           if (gb.withRollup) result.withRollup = true;
         }
       }
-      if (having !== null) {
-        let hv = having[1];
-        const hvc = flattenWs(having[0]);
-        if (hvc.length > 0) hv = { ...hv, leadingComments: [...hvc, ...(hv.leadingComments || [])] };
-        result.having = hv;
-      }
+      if (having !== null) result.having = addWsLeading(having[1], having[0]);
       if (orderBy !== null) {
         result.orderBy = orderBy[1];
       }
@@ -389,20 +384,14 @@ SelectStatement
       const windows = window1 !== null ? window1[1] : (window2 !== null ? window2[1] : null);
       if (windows !== null) result.windows = windows;
       const qualify = qualify1 !== null ? qualify1 : qualify2;
-      if (qualify !== null) {
-        let qe = qualify[1];
-        const qec = flattenWs(qualify[0]);
-        if (qec.length > 0) qe = { ...qe, leadingComments: [...qec, ...(qe.leadingComments || [])] };
-        result.qualify = qe;
-      }
+      if (qualify !== null) result.qualify = addWsLeading(qualify[1], qualify[0]);
       if (settings !== null) result.settings = settings[1];
       // SELECT TOP n — sets the limit (SQL Server compat syntax)
       if (top !== null && result.limit === undefined) result.limit = { count: top[3] };
       // Comments between WITH block/SELECT keyword and first item → leadingComments on first select item
       const selectCommentsFlat = [...withTrailingComments, ...flattenWs(selectComments)];
       if (selectCommentsFlat.length > 0 && result.select.length > 0) {
-        const firstItem = result.select[0];
-        result.select[0] = { ...firstItem, leadingComments: [...selectCommentsFlat, ...(firstItem.leadingComments || [])] };
+        result.select[0] = addLeading(result.select[0], selectCommentsFlat);
       }
       // Trailing same-line comment after the last select item:
       // If clauses follow, attach to the last select item (it will appear inline before the next clause).
@@ -412,8 +401,7 @@ SelectStatement
           || result.having || result.orderBy || result.limitBy || result.limit || result.offset
           || result.windows || result.qualify || result.settings;
         if (hasFollowingClause) {
-          const lastItem = result.select[result.select.length - 1];
-          result.select[result.select.length - 1] = { ...lastItem, trailingComments: [...(lastItem.trailingComments || []), ..._selectTrailing] };
+          result.select[result.select.length - 1] = addTrailing(result.select[result.select.length - 1], _selectTrailing);
         } else {
           result.trailingComments = _selectTrailing;
         }
@@ -438,27 +426,9 @@ CTEClause
 
 CTEItemList
   = head:CTEItem tail:(_ "," _ CTEItem)* lastWs:_HWS {
-      const items = [head];
-      for (const t of tail) {
-        // ws1 (before comma): all comments → leading on next item (preserves old behavior)
-        // ws2 (after comma): .trailing → trailing on prev item, .leading → leading on next
-        const ws1 = t[0];
-        const ws2 = t[2];
-        const trailing = ws2.trailing;
-        const leading = [...flattenWs(ws1), ...ws2.leading];
-        if (trailing.length > 0) {
-          const prev = items[items.length - 1];
-          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-        }
-        let next = t[3];
-        if (leading.length > 0) {
-          next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
-        }
-        items.push(next);
-      }
+      const items = buildCommaList(head, tail);
       if (lastWs.length > 0) {
-        const lastItem = items[items.length - 1];
-        items[items.length - 1] = { ...lastItem, trailingComments: [...(lastItem.trailingComments || []), ...lastWs] };
+        items[items.length - 1] = addTrailing(items[items.length - 1], lastWs);
       }
       return items;
     }
@@ -466,23 +436,11 @@ CTEItemList
 CTEItem
 // Subquery CTE: name AS (SELECT ...)
   = name:Identifier _ KW_AS _ "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
-      const bq = flattenWs(beforeQuery);
-      if (bq.length > 0) {
-        query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
-      }
-      const aq = flattenWs(afterQuery);
-      if (aq.length > 0) {
-        query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
-      }
-      return { kind: 'subquery', name, query };
+      return { kind: 'subquery', name, query: addSurroundingWs(query, beforeQuery, afterQuery) };
     }
   // Expression CTE: expr AS name (ClickHouse extension)
   / expr:TernaryExpr afterExpr:_ KW_AS _ name:Identifier {
-      const ae = flattenWs(afterExpr);
-      if (ae.length > 0) {
-        expr = { ...expr, trailingComments: [...(expr.trailingComments || []), ...ae] };
-      }
-      return { kind: 'expr', name, expr };
+      return { kind: 'expr', name, expr: addTrailing(expr, flattenWs(afterExpr)) };
     }
 
 // SelectItemList: supports optional trailing comma (ClickHouse extension).
@@ -490,23 +448,7 @@ CTEItem
 // from being consumed as select items via the last-resort AliasName rule.
 SelectItemList
   = head:SelectItem tail:(_ "," _ !SelectClauseKeyword SelectItem)* (_ "," _)? {
-      const items = [head];
-      for (const t of tail) {
-        const ws1 = t[0]; // before comma
-        const ws2 = t[2]; // after comma
-        const trailing = ws2.trailing;
-        const leading = [...flattenWs(ws1), ...ws2.leading];
-        if (trailing.length > 0) {
-          const prev = items[items.length - 1];
-          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-        }
-        let next = t[4];
-        if (leading.length > 0) {
-          next = { ...next, leadingComments: leading };
-        }
-        items.push(next);
-      }
-      return items;
+      return buildCommaList(head, tail, 4);
     }
 
 // SelectClauseKeyword: keywords that start SELECT sub-clauses (used as negative lookahead
@@ -532,13 +474,7 @@ SelectItemAlias
   / _ !KW_FORMAT alias:Identifier { return alias; }
 
 FromClause
-  = KW_FROM comments:_ expr:JoinExpr {
-      const c = flattenWs(comments);
-      if (c.length > 0 && expr && typeof expr === 'object') {
-        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-      }
-      return expr;
-    }
+  = KW_FROM comments:_ expr:JoinExpr { return addWsLeading(expr, comments); }
 
 JoinExpr
   = head:FromAtom tail:( _ JoinPart )* {
@@ -550,15 +486,7 @@ JoinExpr
 // e.g. (SELECT 1) AS t, numbers(10), system.one FINAL, my_table SAMPLE 0.1
 FromAtom
   = "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" alias:FromAtomAlias? final:( _ KW_FINAL )? sample:( _ SampleClause )? {
-      const bq = flattenWs(beforeQuery);
-      if (bq.length > 0) {
-        query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
-      }
-      const aq = flattenWs(afterQuery);
-      if (aq.length > 0) {
-        query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
-      }
-      const result = { kind: 'subqueryFrom', query };
+      const result = { kind: 'subqueryFrom', query: addSurroundingWs(query, beforeQuery, afterQuery) };
       if (final !== null) result.final = true;
       if (sample !== null) result.sample = sample[1];
       if (alias !== null) {
@@ -639,23 +567,7 @@ TableFunctionRef
 // TableFunctionArgList: like FunctionCallArgList but stops before a trailing ", SETTINGS ..."
 TableFunctionArgList
   = head:FunctionCallArgGuarded tail:(_ "," _ FunctionCallArgGuarded)* {
-      const items = [head];
-      for (const t of tail) {
-        const ws1 = t[0];
-        const ws2 = t[2];
-        const trailing = ws2.trailing;
-        const leading = [...flattenWs(ws1), ...ws2.leading];
-        if (trailing.length > 0) {
-          const prev = items[items.length - 1];
-          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-        }
-        let next = t[3];
-        if (leading.length > 0) {
-          next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
-        }
-        items.push(next);
-      }
-      return items;
+      return buildCommaList(head, tail);
     }
 
 JoinPart
@@ -704,13 +616,7 @@ ArrayJoinKeyword
 // USING () with empty list is valid in ClickHouse (treated as a full cross join with renaming)
 // USING also supports aliased columns: USING (a AS b) — the alias is discarded for AST purposes
 JoinConstraint
-  = KW_ON comments:_ expr:Expression {
-      const c = flattenWs(comments);
-      if (c.length > 0) {
-        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-      }
-      return { kind: 'on', expr };
-    }
+  = KW_ON comments:_ expr:Expression { return { kind: 'on', expr: addWsLeading(expr, comments) }; }
   / KW_USING _ "(" _ cols:UsingColumnList? _ ")" { return { kind: 'using', columns: cols !== null ? cols : [] }; }
   // USING * — wildcard join key (ClickHouse extension)
   / KW_USING _ "*" { return { kind: 'using', columns: ['*'] }; }
@@ -733,22 +639,10 @@ IdentifierList
 
 // PrewhereClause: PREWHERE expr (treated same as WHERE for AST purposes)
 PrewhereClause
-  = KW_PREWHERE comments:_ expr:Expression {
-      const c = flattenWs(comments);
-      if (c.length > 0) {
-        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-      }
-      return expr;
-    }
+  = KW_PREWHERE comments:_ expr:Expression { return addWsLeading(expr, comments); }
 
 WhereClause
-  = KW_WHERE comments:_ expr:Expression {
-      const c = flattenWs(comments);
-      if (c.length > 0) {
-        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-      }
-      return expr;
-    }
+  = KW_WHERE comments:_ expr:Expression { return addWsLeading(expr, comments); }
 
 GroupByClause
   = KW_GROUP _ KW_BY _ KW_ALL modifiers:GroupByModifier* {
@@ -769,8 +663,7 @@ GroupByClause
       const items = exprList;
       const kc = flattenWs(keywordComments);
       if (kc.length > 0 && items.length > 0) {
-        const first = items[0];
-        items[0] = { ...first, leadingComments: [...kc, ...(first.leadingComments || [])] };
+        items[0] = addLeading(items[0], kc);
       }
       return { items, withTotals, withCube, withRollup };
     }
@@ -800,23 +693,11 @@ WithModifierClause
   / KW_WITH _ "CUBE"i   ![a-zA-Z0-9_] { return 'CUBE'; }
 
 HavingClause
-  = KW_HAVING comments:_ expr:Expression {
-      const c = flattenWs(comments);
-      if (c.length > 0) {
-        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-      }
-      return expr;
-    }
+  = KW_HAVING comments:_ expr:Expression { return addWsLeading(expr, comments); }
 
 // QualifyClause: QUALIFY expr — filters rows after window functions, analogous to HAVING for aggregations
 QualifyClause
-  = "QUALIFY"i ![a-zA-Z0-9_] comments:_ expr:Expression {
-      const c = flattenWs(comments);
-      if (c.length > 0) {
-        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-      }
-      return expr;
-    }
+  = "QUALIFY"i ![a-zA-Z0-9_] comments:_ expr:Expression { return addWsLeading(expr, comments); }
 
 OrderByClause
   = KW_ORDER _ KW_BY _ items:OrderByItemList { return items; }
@@ -961,36 +842,14 @@ InterpolateItem
 // ── Expressions (precedence: ternary < OR < AND < comparison < add < mul < unary < primary) ────
 
 ExpressionList
-  = head:Expression tail:(_ "," _ Expression)* {
-      const items = [head];
-      for (const t of tail) {
-        const ws1 = t[0]; // before comma
-        const ws2 = t[2]; // after comma
-        const trailing = ws2.trailing;
-        const leading = [...flattenWs(ws1), ...ws2.leading];
-        if (trailing.length > 0) {
-          const prev = items[items.length - 1];
-          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-        }
-        let next = t[3];
-        if (leading.length > 0) {
-          next = { ...next, leadingComments: leading };
-        }
-        items.push(next);
-      }
-      return items;
-    }
+  = head:Expression tail:(_ "," _ Expression)* { return buildCommaList(head, tail); }
 
 // Expression: alias form or ternary expression
 Expression
   = expr:TernaryExpr asWs:_ KW_AS _ alias:AliasName {
       // Unwrap auto-alias (e.g. @@varname) if an explicit AS alias is provided
-      let inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-      const ac = flattenWs(asWs);
-      if (ac.length > 0) {
-        inner = { ...inner, trailingComments: [...(inner.trailingComments || []), ...ac] };
-      }
-      return { kind: 'alias', expr: inner, alias };
+      const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+      return { kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias };
     }
   / TernaryExpr
 
@@ -999,35 +858,23 @@ Expression
 // The implicit alias must be followed by a delimiter (, ) FROM FOR) to avoid ambiguity.
 ExpressionWithImplicitAlias
   = expr:TernaryExpr asWs:_ KW_AS _ alias:AliasName {
-      let inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-      const ac = flattenWs(asWs);
-      if (ac.length > 0) {
-        inner = { ...inner, trailingComments: [...(inner.trailingComments || []), ...ac] };
-      }
-      return { kind: 'alias', expr: inner, alias };
+      const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
+      return { kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias };
     }
   // Bare alias without AS: must be followed by , ) FROM FOR (as delimiter of the argument context)
   / expr:TernaryExpr aliasWs:_ alias:Identifier &( _ ( "," / ")" / "FROM"i ![a-zA-Z0-9_] / "FOR"i ![a-zA-Z0-9_] ) ) {
-      const ac2 = flattenWs(aliasWs);
-      if (ac2.length > 0) {
-        expr = { ...expr, trailingComments: [...(expr.trailingComments || []), ...ac2] };
-      }
-      return { kind: 'alias', expr, alias };
+      return { kind: 'alias', expr: addTrailing(expr, flattenWs(aliasWs)), alias };
     }
   / TernaryExpr
 
 // TernaryExpr: ternary ? : operator, maps to Function if(cond, then, else)
 TernaryExpr
   = cond:OrExpr ws1:_ "?" ws2:_ then:TernaryExpr ws3:_ ":" ws4:_ else_:TernaryExpr {
-      const thenComments = [...flattenWs(ws1), ...flattenWs(ws2)];
-      if (thenComments.length > 0) {
-        then = { ...then, leadingComments: [...thenComments, ...(then.leadingComments || [])] };
-      }
-      const elseComments = [...flattenWs(ws3), ...flattenWs(ws4)];
-      if (elseComments.length > 0) {
-        else_ = { ...else_, leadingComments: [...elseComments, ...(else_.leadingComments || [])] };
-      }
-      return { kind: 'functionCall', name: 'if', args: [cond, then, else_] };
+      return { kind: 'functionCall', name: 'if', args: [
+        cond,
+        addLeading(then, [...flattenWs(ws1), ...flattenWs(ws2)]),
+        addLeading(else_, [...flattenWs(ws3), ...flattenWs(ws4)])
+      ] };
     }
   / OrExpr
 
@@ -1036,15 +883,7 @@ TernaryExpr
 // remain as separate nodes.
 OrExpr
   = head:AndExpr tail:(_ KW_OR _ AndExpr)+ {
-      const operands = [head];
-      for (const t of tail) {
-        let next = t[3];
-        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-        if (comments.length > 0) {
-          next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
-        }
-        operands.push(next);
-      }
+      const operands = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
       return { kind: 'naryExpr', op: 'OR', operands };
     }
   / AndExpr
@@ -1053,15 +892,7 @@ OrExpr
 // into a flat list, matching ClickHouse's EXPLAIN AST behavior.
 AndExpr
   = head:NotExpr tail:(_ KW_AND _ NotExpr)+ {
-      const operands = [head];
-      for (const t of tail) {
-        let next = t[3];
-        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-        if (comments.length > 0) {
-          next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
-        }
-        operands.push(next);
-      }
+      const operands = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
       return { kind: 'naryExpr', op: 'AND', operands };
     }
   / NotExpr
@@ -1070,11 +901,7 @@ NotExpr
   // NOT followed by "(" is handled as a high-precedence function-call-like NOT in PrimaryBase;
   // exclude that case here so NOT (0) + NOT (0) parses as plus(not(0), not(0)) like ClickHouse does.
   = KW_NOT !( _ "(" ) comments:_ expr:NotExpr {
-      const c = flattenWs(comments);
-      if (c.length > 0) {
-        expr = { ...expr, leadingComments: [...c, ...(expr.leadingComments || [])] };
-      }
-      return { kind: 'unaryExpr', op: 'NOT', expr };
+      return { kind: 'unaryExpr', op: 'NOT', expr: addWsLeading(expr, comments) };
     }
   / CompareExpr
 
@@ -1085,14 +912,10 @@ NotExpr
 // start a new comparison chain. E.g. k = (100) = 1 → equals(equals(k,100), 1).
 CompareExpr
   = base:CompareBase rest:(_ op:CompareOp _ CompareRightExpr)* {
-      return rest.reduce((acc, t) => {
-        let right = t[3];
-        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-        if (comments.length > 0) {
-          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-        }
-        return { kind: 'binaryExpr', op: t[1], left: acc, right };
-      }, base);
+      return rest.reduce((acc, t) => ({
+        kind: 'binaryExpr', op: t[1], left: acc,
+        right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
+      }), base);
     }
 
 // CompareBase: parse AddExpr once, then branch on comparison/IN/LIKE/BETWEEN suffix.
@@ -1177,26 +1000,14 @@ InTarget
       // Attach comments to first/last value if they are expression nodes
       if (Array.isArray(values)) {
         const bv = flattenWs(beforeValues);
-        if (bv.length > 0 && values.length > 0) {
-          const first = values[0];
-          values = values.slice();
-          values[0] = { ...first, leadingComments: [...bv, ...(first.leadingComments || [])] };
-        }
         const av = flattenWs(afterValues);
-        if (av.length > 0 && values.length > 0) {
-          const last = values[values.length - 1];
+        if ((bv.length > 0 || av.length > 0) && values.length > 0) {
           values = values.slice();
-          values[values.length - 1] = { ...last, trailingComments: [...(last.trailingComments || []), ...av] };
+          values[0] = addLeading(values[0], bv);
+          values[values.length - 1] = addTrailing(values[values.length - 1], av);
         }
       } else if (values && values.kind === 'subqueryExpr') {
-        const bv2 = flattenWs(beforeValues);
-        if (bv2.length > 0) {
-          values = { ...values, leadingComments: [...bv2, ...(values.leadingComments || [])] };
-        }
-        const av2 = flattenWs(afterValues);
-        if (av2.length > 0) {
-          values = { ...values, trailingComments: [...(values.trailingComments || []), ...av2] };
-        }
+        values = addSurroundingWs(values, beforeValues, afterValues);
       }
       return { values };
     }
@@ -1222,14 +1033,10 @@ InValues
 // (e.g. NOT 0 + NOT 0 = NOT(0 + NOT(0)), consistent with ClickHouse precedence rules)
 AddExpr
   = head:ConcatExpr tail:(_ op:AddOp _ right:NotPrefixExpr)* {
-      return tail.reduce((acc, t) => {
-        let right = t[3];
-        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-        if (comments.length > 0) {
-          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-        }
-        return { kind: 'binaryExpr', op: t[1], left: acc, right };
-      }, head);
+      return tail.reduce((acc, t) => ({
+        kind: 'binaryExpr', op: t[1], left: acc,
+        right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
+      }), head);
     }
 
 // NotPrefixExpr: allows NOT as a prefix, but only wrapping arithmetic-level expressions (no comparison).
@@ -1247,28 +1054,16 @@ AddOp
 ConcatExpr
   = head:MulExpr tail:(_ "||" _ MulExpr)* {
       if (tail.length === 0) return head;
-      const parts = [head];
-      for (const t of tail) {
-        let next = t[3];
-        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-        if (comments.length > 0) {
-          next = { ...next, leadingComments: [...comments, ...(next.leadingComments || [])] };
-        }
-        parts.push(next);
-      }
+      const parts = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
       return { kind: 'functionCall', name: 'concat', args: parts };
     }
 
 MulExpr
   = head:UnaryExpr tail:(_ op:MulOp _ right:UnaryExpr)* {
-      return tail.reduce((acc, t) => {
-        let right = t[3];
-        const comments = [...flattenWs(t[0]), ...flattenWs(t[2])];
-        if (comments.length > 0) {
-          right = { ...right, leadingComments: [...comments, ...(right.leadingComments || [])] };
-        }
-        return { kind: 'binaryExpr', op: t[1], left: acc, right };
-      }, head);
+      return tail.reduce((acc, t) => ({
+        kind: 'binaryExpr', op: t[1], left: acc,
+        right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
+      }), head);
     }
 
 // MulOp: multiplication-level binary operators including keyword variants DIV and MOD
@@ -1603,15 +1398,7 @@ ParenGroup
   = "(" _ ")" { return { kind: 'functionCall', name: 'tuple', args: [] }; }
   // Subquery: (SELECT ...) / (WITH ... SELECT ...) / (EXPLAIN ...)
   / "(" beforeQuery:_ &(KW_SELECT / KW_WITH / "EXPLAIN"i ![a-zA-Z0-9_]) query:UnionQuery afterQuery:_ ")" {
-      const bq = flattenWs(beforeQuery);
-      if (bq.length > 0) {
-        query = { ...query, leadingComments: [...bq, ...(query.leadingComments || [])] };
-      }
-      const aq = flattenWs(afterQuery);
-      if (aq.length > 0) {
-        query = { ...query, trailingComments: [...(query.trailingComments || []), ...aq] };
-      }
-      return { kind: 'subqueryExpr', query };
+      return { kind: 'subqueryExpr', query: addSurroundingWs(query, beforeQuery, afterQuery) };
     }
   // Lambda with parens: (x, y, ...) -> expr
   / "(" _ head:Identifier tail:(_ "," _ Identifier)* _ ")" _ "->" _ body:Expression {
@@ -1619,16 +1406,10 @@ ParenGroup
     }
   // Tuple or parenthesized expression: parse first expression, then branch on comma vs close paren
   / "(" beforeFirst:_ first:Expression rest:(_ "," _ Expression)* trailing:(_ ",")? afterLast:_ ")" {
-      const bf = flattenWs(beforeFirst);
-      if (bf.length > 0) {
-        first = { ...first, leadingComments: [...bf, ...(first.leadingComments || [])] };
-      }
+      first = addLeading(first, flattenWs(beforeFirst));
       if (rest.length === 0 && trailing === null) {
         // (expr) — parenthesized expression
-        const al = flattenWs(afterLast);
-        if (al.length > 0) {
-          first = { ...first, trailingComments: [...(first.trailingComments || []), ...al] };
-        }
+        first = addTrailing(first, flattenWs(afterLast));
         return { ...first, parenthesized: true };
       } else if (rest.length === 0) {
         // (expr,) — single-element tuple
@@ -1657,16 +1438,11 @@ ArrayLiteral
     }
   / "[" beforeItems:_ items:ExpressionList afterItems:_ "]" {
       const bi = flattenWs(beforeItems);
-      if (bi.length > 0 && items.length > 0) {
-        const first = items[0];
-        items = items.slice();
-        items[0] = { ...first, leadingComments: [...bi, ...(first.leadingComments || [])] };
-      }
       const ai = flattenWs(afterItems);
-      if (ai.length > 0 && items.length > 0) {
-        const last = items[items.length - 1];
+      if ((bi.length > 0 || ai.length > 0) && items.length > 0) {
         items = items.slice();
-        items[items.length - 1] = { ...last, trailingComments: [...(last.trailingComments || []), ...ai] };
+        items[0] = addLeading(items[0], bi);
+        items[items.length - 1] = addTrailing(items[items.length - 1], ai);
       }
       return { kind: 'array', elements: items, source: text() };
     }
@@ -1967,9 +1743,8 @@ FunctionCall
       let args1 = first || [];
       const oc = flattenWs(openComments);
       if (oc.length > 0 && args1.length > 0) {
-        const firstArg = args1[0];
         args1 = args1.slice();
-        args1[0] = { ...firstArg, leadingComments: [...oc, ...(firstArg.leadingComments || [])] };
+        args1[0] = addLeading(args1[0], oc);
       }
       let call;
       if (second !== null) {
@@ -2030,23 +1805,7 @@ FunctionCallArgGuarded
 // Trailing comma is allowed (e.g. if(a, b, c,) — ClickHouse extension).
 FunctionCallArgList
   = head:FunctionCallArgGuarded tail:(_ "," _ FunctionCallArgGuarded)* ( _ "," )? {
-      const items = [head];
-      for (const t of tail) {
-        const ws1 = t[0]; // before comma
-        const ws2 = t[2]; // after comma
-        const trailing = ws2.trailing;
-        const leading = [...flattenWs(ws1), ...ws2.leading];
-        if (trailing.length > 0) {
-          const prev = items[items.length - 1];
-          items[items.length - 1] = { ...prev, trailingComments: [...(prev.trailingComments || []), ...trailing] };
-        }
-        let next = t[3];
-        if (leading.length > 0) {
-          next = { ...next, leadingComments: [...leading, ...(next.leadingComments || [])] };
-        }
-        items.push(next);
-      }
-      return items;
+      return buildCommaList(head, tail);
     }
 
 FunctionCallArg
