@@ -19,7 +19,7 @@ export const SourceLocationSchema = z.object({
 
 // ── Leaf schemas (no recursion) ───────────────────────────────────────────────
 
-const ExprCommentFields = {
+const ExprMetadataFields = {
   leadingComments: z.array(z.string()).optional(),
   trailingComments: z.array(z.string()).optional(),
   location: SourceLocationSchema.optional(),
@@ -42,7 +42,7 @@ export const LiteralSchema = z.object({
   value: z.string(),
   source: z.string().optional(),
   parenthesized: z.boolean().optional(),
-  ...ExprCommentFields,
+  ...ExprMetadataFields,
 });
 
 /**
@@ -52,7 +52,7 @@ export const ColumnRefSchema = z.object({
   kind: z.literal('columnRef'),
   parts: z.array(z.string()),
   parenthesized: z.boolean().optional(),
-  ...ExprCommentFields,
+  ...ExprMetadataFields,
 });
 
 /**
@@ -170,7 +170,7 @@ export const AsteriskSchema: z.ZodType<Asterisk> = z.lazy(() =>
     kind: z.literal('asterisk'),
     transformers: z.array(ColumnTransformerSchema).optional(),
     parenthesized: z.boolean().optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -180,7 +180,7 @@ export const QualifiedAsteriskSchema: z.ZodType<QualifiedAsterisk> = z.lazy(() =
     kind: z.literal('qualifiedAsterisk'),
     parts: z.array(z.string()),
     transformers: z.array(ColumnTransformerSchema).optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -189,7 +189,7 @@ export const QueryParamSchema = z.object({
   kind: z.literal('queryParam'),
   name: z.string(),
   type: z.string(),
-  ...ExprCommentFields,
+  ...ExprMetadataFields,
 });
 
 /** Zod schema for {@link TupleExpansion}. */
@@ -198,7 +198,7 @@ export const TupleExpansionSchema: z.ZodType<TupleExpansion> = z.lazy(() =>
     kind: z.literal('tupleExpansion'),
     expr: ExpressionSchema,
     transformers: z.array(ColumnTransformerSchema).optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -218,7 +218,13 @@ export const TupleExpansionSchema: z.ZodType<TupleExpansion> = z.lazy(() =>
  * @example `true` → `{ kind: 'literal', type: 'Bool', value: 'true' }`
  * @example `-3.14` → `{ kind: 'literal', type: 'Float64', value: '-3.14' }`
  */
-export type Literal = z.infer<typeof LiteralSchema>;
+export type Literal = {
+  kind: 'literal';
+  type: 'UInt64' | 'Int64' | 'Float64' | 'String' | 'NULL' | 'Bool';
+  value: string;
+  source?: string;
+  parenthesized?: boolean;
+} & NodeMetadata;
 
 /**
  * A column reference, optionally qualified with database/table names.
@@ -230,7 +236,11 @@ export type Literal = z.infer<typeof LiteralSchema>;
  * @example `t.col` → `{ kind: 'columnRef', parts: ['t', 'col'] }`
  * @example `db.t.col` → `{ kind: 'columnRef', parts: ['db', 't', 'col'] }`
  */
-export type ColumnRef = z.infer<typeof ColumnRefSchema>;
+export type ColumnRef = {
+  kind: 'columnRef';
+  parts: string[];
+  parenthesized?: boolean;
+} & NodeMetadata;
 
 /**
  * A table reference in a FROM clause.
@@ -239,7 +249,14 @@ export type ColumnRef = z.infer<typeof ColumnRefSchema>;
  * @example `t FINAL` → `{ kind: 'tableRef', table: 't', final: true }`
  * @example `t AS alias` → `{ kind: 'tableRef', table: 't', alias: 'alias' }`
  */
-export type TableRef = z.infer<typeof TableRefSchema>;
+export type TableRef = {
+  kind: 'tableRef';
+  database?: string;
+  table: string;
+  alias?: string;
+  final?: boolean;
+  sample?: SampleClause;
+} & NodeMetadata;
 
 /**
  * Bare `*` wildcard, with optional column transformers (EXCEPT, APPLY, REPLACE).
@@ -284,7 +301,11 @@ export type QualifiedAsterisk = {
  *
  * @example `{x:UInt64}` → `{ kind: 'queryParam', name: 'x', type: 'UInt64' }`
  */
-export type QueryParam = z.infer<typeof QueryParamSchema>;
+export type QueryParam = {
+  kind: 'queryParam';
+  name: string;
+  type: string;
+} & NodeMetadata;
 
 /**
  * Tuple expansion: `expr.*` — expands all fields of a tuple expression.
@@ -740,7 +761,7 @@ export const ColumnsExprSchema: z.ZodType<ColumnsExpr> = z.lazy(() =>
     qualifier: z.string().optional(),
     args: z.array(ExpressionSchema),
     transformers: z.array(ColumnTransformerSchema).optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -751,7 +772,7 @@ export const JsonSubcolumnSchema: z.ZodType<JsonSubcolumn> = z.lazy(() =>
     expr: ExpressionSchema,
     type: z.string(),
     path: z.array(z.string()).optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -790,7 +811,7 @@ export const FunctionCallSchema: z.ZodType<FunctionCall> = z.lazy(() =>
     funcSettings: z.array(SettingItemSchema).optional(),
     window: WindowSpecSchema.optional(),
     parenthesized: z.boolean().optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -802,7 +823,7 @@ export const CastExprSchema: z.ZodType<CastExpr> = z.lazy(() =>
     type: z.string(),
     operator: z.boolean().optional(),
     parenthesized: z.boolean().optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -813,7 +834,7 @@ export const LambdaExprSchema: z.ZodType<LambdaExpr> = z.lazy(() =>
     params: z.array(z.string()),
     body: ExpressionSchema,
     parenthesized: z.boolean().optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -845,7 +866,7 @@ export const BinaryExprSchema: z.ZodType<BinaryExpr> = z.object({
   left: ExpressionSchema,
   right: ExpressionSchema,
   parenthesized: z.boolean().optional(),
-  ...ExprCommentFields,
+  ...ExprMetadataFields,
 });
 
 /** Zod schema for {@link NaryExpr}. */
@@ -855,7 +876,7 @@ export const NaryExprSchema: z.ZodType<NaryExpr> = z.lazy(() =>
     op: z.union([z.literal('AND'), z.literal('OR')]),
     operands: z.array(ExpressionSchema),
     parenthesized: z.boolean().optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -866,7 +887,7 @@ export const UnaryExprSchema: z.ZodType<UnaryExpr> = z.lazy(() =>
     op: z.literal('NOT'),
     expr: ExpressionSchema,
     parenthesized: z.boolean().optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -876,7 +897,7 @@ export const AliasSchema: z.ZodType<Alias> = z.object({
   expr: ExpressionSchema,
   alias: z.string(),
   parenthesized: z.boolean().optional(),
-  ...ExprCommentFields,
+  ...ExprMetadataFields,
 });
 
 /** Zod schema for {@link ArrayLiteral}. */
@@ -885,7 +906,7 @@ export const ArrayLiteralSchema: z.ZodType<ArrayLiteral> = z.object({
   elements: z.array(ExpressionSchema),
   source: z.string().optional(),
   parenthesized: z.boolean().optional(),
-  ...ExprCommentFields,
+  ...ExprMetadataFields,
 });
 
 /** Zod schema for {@link TupleLiteral}. */
@@ -894,7 +915,7 @@ export const TupleLiteralSchema: z.ZodType<TupleLiteral> = z.object({
   elements: z.array(ExpressionSchema),
   source: z.string().optional(),
   parenthesized: z.boolean().optional(),
-  ...ExprCommentFields,
+  ...ExprMetadataFields,
 });
 
 /** Zod schema for {@link SubqueryExpr}. */
@@ -902,7 +923,7 @@ export const SubqueryExprSchema: z.ZodType<SubqueryExpr> = z.lazy(() =>
   z.object({
     kind: z.literal('subqueryExpr'),
     query: QueryStatementSchema,
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -915,7 +936,7 @@ export const InExprSchema: z.ZodType<InExpr> = z.lazy(() =>
     expr: ExpressionSchema,
     values: z.union([z.array(ExpressionSchema), SubqueryExprSchema]),
     parenthesized: z.boolean().optional(),
-    ...ExprCommentFields,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -1128,17 +1149,16 @@ export const DistinctClauseSchema: z.ZodType<DistinctClause> = z.union([
  * @example `SELECT 1 SETTINGS max_block_size=1 FORMAT TSV SETTINGS max_block_size=3`
  */
 /**
- * Comment fields that can appear on any top-level statement.
- * Leading comments appear before the statement; trailing comments appear after.
+ * Metadata fields common to all AST nodes: comments, source location, and parent reference.
  */
-export type CommentFields = {
-  /** Comments appearing before this statement. Each string is the full comment text including delimiters. */
+export type NodeMetadata = {
+  /** Comments appearing before this node. Each string is the full comment text including delimiters. */
   leadingComments?: string[];
-  /** Comments appearing on the same line as the end of this statement (inline trailing). */
+  /** Comments appearing on the same line as the end of this node (inline trailing). */
   trailingComments?: string[];
   /** Source location in the original SQL input. */
   location?: SourceLocation;
-  /** Reference to the parent AST node. */
+  /** Reference to the parent AST node. Set by {@link setParents}. */
   parent?: ASTNode;
 };
 
@@ -1311,7 +1331,7 @@ export type SelectStatement = {
   /** Query execution settings: `SETTINGS key = value, ...` inside the query body. */
   settings?: SettingItem[];
 } & TrailingClauses &
-  CommentFields;
+  NodeMetadata;
 
 /**
  * A UNION ALL or UNION DISTINCT statement combining multiple queries.
@@ -1328,7 +1348,7 @@ export type UnionStatement = {
   /** Query execution settings. */
   settings?: SettingItem[];
 } & TrailingClauses &
-  CommentFields;
+  NodeMetadata;
 
 /**
  * An INTERSECT or EXCEPT statement between two queries.
@@ -1345,7 +1365,7 @@ export type IntersectStatement = {
   /** The right query. */
   right: QueryStatement;
 } & TrailingClauses &
-  CommentFields;
+  NodeMetadata;
 
 /**
  * A Common Table Expression (CTE) in a WITH clause.
@@ -1387,7 +1407,7 @@ export type ExplainStatement = {
   /** The query being explained. */
   query?: Statement;
 } & TrailingClauses &
-  CommentFields;
+  NodeMetadata;
 
 /**
  * A SET statement: `SET key = value [, key = value ...]`.
@@ -1400,7 +1420,7 @@ export type SetStatement = {
   kind: 'set';
   /** The settings to set. */
   settings: SettingItem[];
-} & CommentFields;
+} & NodeMetadata;
 
 /**
  * A USE statement: `USE database` — selects the current database.
@@ -1411,7 +1431,7 @@ export type UseStatement = {
   kind: 'use';
   /** The database name to switch to. */
   database: string;
-} & CommentFields;
+} & NodeMetadata;
 
 /**
  * A SYSTEM statement: `SYSTEM FLUSH LOGS`, `SYSTEM RELOAD CONFIG`, etc.
@@ -1425,7 +1445,7 @@ export type SystemStatement = {
   kind: 'system';
   /** The raw text of the SYSTEM command after the SYSTEM keyword. */
   body: string;
-} & CommentFields;
+} & NodeMetadata;
 
 /**
  * Union of all top-level statement types.
@@ -1493,7 +1513,7 @@ export type ASTNode = ASTNodeKindMap[ASTNodeKind];
 
 // ── Zod schemas for statement types ──────────────────────────────────────────
 
-const CommentFieldsSchema = {
+const NodeMetadataSchema = {
   leadingComments: z.array(z.string()).optional(),
   trailingComments: z.array(z.string()).optional(),
   location: SourceLocationSchema.optional(),
@@ -1532,7 +1552,7 @@ export const SelectStatementSchema: z.ZodType<SelectStatement> = z.lazy(() =>
     parenthesized: z.boolean().optional(),
     settings: z.array(SettingItemSchema).optional(),
     ...TrailingClausesFields,
-    ...CommentFieldsSchema,
+    ...NodeMetadataSchema,
   }),
 );
 
@@ -1544,7 +1564,7 @@ export const UnionStatementSchema: z.ZodType<UnionStatement> = z.lazy(() =>
     unionMode: z.literal('DISTINCT').optional(),
     settings: z.array(SettingItemSchema).optional(),
     ...TrailingClausesFields,
-    ...CommentFieldsSchema,
+    ...NodeMetadataSchema,
   }),
 );
 
@@ -1556,7 +1576,7 @@ export const IntersectStatementSchema: z.ZodType<IntersectStatement> = z.lazy(()
     left: QueryStatementSchema,
     right: QueryStatementSchema,
     ...TrailingClausesFields,
-    ...CommentFieldsSchema,
+    ...NodeMetadataSchema,
   }),
 );
 
@@ -1567,13 +1587,13 @@ export const CTESchema: z.ZodType<CTE> = z.lazy(() =>
       kind: z.literal('subquery'),
       name: z.string(),
       query: QueryStatementSchema,
-      ...ExprCommentFields,
+      ...ExprMetadataFields,
     }),
     z.object({
       kind: z.literal('expr'),
       name: z.string(),
       expr: ExpressionSchema,
-      ...ExprCommentFields,
+      ...ExprMetadataFields,
     }),
   ]),
 );
@@ -1682,7 +1702,7 @@ export const ExplainStatementSchema: z.ZodType<ExplainStatement> = z.lazy(() =>
     settings: z.array(SettingItemSchema).optional(),
     query: StatementSchema.optional(),
     ...TrailingClausesFields,
-    ...CommentFieldsSchema,
+    ...NodeMetadataSchema,
   }),
 );
 
@@ -1690,21 +1710,21 @@ export const ExplainStatementSchema: z.ZodType<ExplainStatement> = z.lazy(() =>
 export const SetStatementSchema: z.ZodType<SetStatement> = z.object({
   kind: z.literal('set'),
   settings: z.array(SettingItemSchema),
-  ...CommentFieldsSchema,
+  ...NodeMetadataSchema,
 });
 
 /** Zod schema for {@link UseStatement}. */
 export const UseStatementSchema: z.ZodType<UseStatement> = z.object({
   kind: z.literal('use'),
   database: z.string(),
-  ...CommentFieldsSchema,
+  ...NodeMetadataSchema,
 });
 
 /** Zod schema for {@link SystemStatement}. */
 export const SystemStatementSchema: z.ZodType<SystemStatement> = z.object({
   kind: z.literal('system'),
   body: z.string(),
-  ...CommentFieldsSchema,
+  ...NodeMetadataSchema,
 });
 
 /** Zod schema for {@link QueryStatement}. */
