@@ -1,14 +1,15 @@
 import { format, parse } from '../src/index';
+import { stripMeta } from './helpers';
 
 /**
  * Helper: parse SQL, snapshot the AST, then format and re-parse to verify round-trip.
  */
 function parseAndSnap(sql: string) {
   const statements = parse(sql);
-  expect(statements).toMatchSnapshot();
+  expect(stripMeta(statements)).toMatchSnapshot();
   const formatted = format(statements);
   const reparsed = parse(formatted);
-  expect(reparsed).toEqual(statements);
+  expect(stripMeta(reparsed)).toEqual(stripMeta(statements));
   return { statements, formatted };
 }
 
@@ -282,21 +283,21 @@ describe('Query Parameter Parsing and Formatting', () => {
   describe('parameter formatting', () => {
     it('normalizes whitespace around colon', () => {
       const stmts = parse('SELECT {x:UInt64};');
-      expect(stmts).toMatchSnapshot();
+      expect(stripMeta(stmts)).toMatchSnapshot();
       const formatted = format(stmts);
       expect(formatted).toContain('{x:UInt64}');
     });
 
     it('preserves complex type string in formatting', () => {
       const stmts = parse('SELECT {m:Map(UUID, Array(Float32))};');
-      expect(stmts).toMatchSnapshot();
+      expect(stripMeta(stmts)).toMatchSnapshot();
       const formatted = format(stmts);
       expect(formatted).toContain('{m:Map(UUID, Array(Float32))}');
     });
 
     it('preserves positional parameter names', () => {
       const stmts = parse('SELECT {$0:UInt64};');
-      expect(stmts).toMatchSnapshot();
+      expect(stripMeta(stmts)).toMatchSnapshot();
       const formatted = format(stmts);
       expect(formatted).toContain('{$0:UInt64}');
     });

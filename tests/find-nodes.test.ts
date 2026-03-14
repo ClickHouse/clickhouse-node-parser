@@ -35,7 +35,7 @@ describe('findNodes', () => {
     it('finds query params', () => {
       const stmts = parse('SELECT {x: UInt64} FROM t WHERE id = {id: String};');
       const params = findNodes(stmts, 'queryParam');
-      expect(params).toEqual([
+      expect(params).toMatchObject([
         { kind: 'queryParam', name: 'x', type: 'UInt64' },
         { kind: 'queryParam', name: 'id', type: 'String' },
       ]);
@@ -126,7 +126,7 @@ describe('findNodes', () => {
       const stmts = parse('SELECT t.* FROM t;');
       const qualAsterisks = findNodes(stmts, 'qualifiedAsterisk');
       expect(qualAsterisks).toHaveLength(1);
-      expect(qualAsterisks[0].parts).toEqual(['t']);
+      expect(qualAsterisks[0]).toMatchObject({ parts: ['t'] });
     });
 
     it('finds subquery expressions', () => {

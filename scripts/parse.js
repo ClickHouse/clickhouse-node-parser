@@ -10,7 +10,7 @@ if (!sql) {
 }
 
 try {
-  console.log(JSON.stringify(parse(sql), null, 2));
+  console.log(JSON.stringify(parse(sql), (key, value) => (key === 'parent' ? undefined : value), 2));
 } catch (e) {
   process.stderr.write(e.message + '\n');
   process.exit(1);

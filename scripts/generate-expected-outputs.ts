@@ -211,7 +211,7 @@ async function processFile(file: string): Promise<void> {
 
   try {
     ast = parse(content);
-    astOutput = JSON.stringify(ast, null, 2);
+    astOutput = JSON.stringify(ast, (key, value) => (key === 'location' || key === 'parent' ? undefined : value), 2);
     try {
       formattedOutput = format(ast);
     } catch (e) {
