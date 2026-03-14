@@ -813,11 +813,11 @@ function peg$parse(input, options) {
     return result;
   }
   function peg$f3(path) {    return path;  }
-  function peg$f4(items) {    return { kind: 'set', settings: items };  }
-  function peg$f5(db) {    return { kind: 'use', database: db };  }
-  function peg$f6(body) {    return { kind: 'system', body: body.trim() };  }
+  function peg$f4(items) {    return loc({ kind: 'set', settings: items });  }
+  function peg$f5(db) {    return loc({ kind: 'use', database: db });  }
+  function peg$f6(body) {    return loc({ kind: 'system', body: body.trim() });  }
   function peg$f7(type, settings, query, format, postSettings) {
-    const result = { kind: 'explain' };
+    const result = loc({ kind: 'explain' });
     if (type !== null) result.explainType = type;
     if (settings !== null && settings.length > 0) result.settings = settings;
     if (query !== null) result.query = query;
@@ -851,15 +851,15 @@ function peg$parse(input, options) {
       if (op === 'UNION') {
         // UNION ALL: flatten into existing union (if it's also ALL)
         if (result.kind === 'union' && !result.unionMode) {
-          result = { kind: 'union', queries: [...result.queries, right] };
+          result = loc({ kind: 'union', queries: [...result.queries, right] });
         } else {
-          result = { kind: 'union', queries: [result, right] };
+          result = loc({ kind: 'union', queries: [result, right] });
         }
       } else if (op === 'UNION DISTINCT') {
         // UNION DISTINCT: always create a new union node with mode
-        result = { kind: 'union', queries: [result, right], unionMode: 'DISTINCT' };
+        result = loc({ kind: 'union', queries: [result, right], unionMode: 'DISTINCT' });
       } else {
-        result = { kind: 'intersect', op, left: result, right };
+        result = loc({ kind: 'intersect', op, left: result, right });
       }
     }
     return result;
@@ -868,7 +868,7 @@ function peg$parse(input, options) {
     if (tail.length === 0) return head;
     let result = head;
     for (const t of tail) {
-      result = { kind: 'intersect', op: 'INTERSECT', left: result, right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]) };
+      result = loc({ kind: 'intersect', op: 'INTERSECT', left: result, right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]) });
     }
     return result;
   }
@@ -886,8 +886,7 @@ function peg$parse(input, options) {
     return query;
   }
   function peg$f30(withClause, selectComments, distinct, top, select, selectTrailing, withModifier1, from, prewhere, where, withModifier2, groupBy, having, window1, qualify1, orderBy, limitBy, limit, offset, fetch, window2, qualify2, settings) {
-    const result = {};
-    result.kind = 'select';
+    const result = loc({ kind: 'select' });
     let withTrailingComments = [];
     if (withClause !== null) {
       const wcd = withClause[0];
@@ -1028,7 +1027,7 @@ function peg$parse(input, options) {
     if (alias !== null) {
       // Unwrap auto-alias from @@varname when an explicit alias is provided
       const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-      return { kind: 'alias', expr: inner, alias };
+      return loc({ kind: 'alias', expr: inner, alias });
     }
     return expr;
   }
@@ -1039,7 +1038,7 @@ function peg$parse(input, options) {
     return tail.reduce((acc, t) => ({ left: acc, ...t[1] }), head);
   }
   function peg$f45(beforeQuery, query, afterQuery, alias, final, sample) {
-    const result = { kind: 'subqueryFrom', query: addSurroundingWs(query, beforeQuery, afterQuery) };
+    const result = loc({ kind: 'subqueryFrom', query: addSurroundingWs(query, beforeQuery, afterQuery) });
     if (final !== null) result.final = true;
     if (sample !== null) result.sample = sample[1];
     if (alias !== null) {
@@ -1091,7 +1090,7 @@ function peg$parse(input, options) {
   }
   function peg$f59(alias) {    return alias;  }
   function peg$f60(name, args, settings) {
-    const result = { kind: 'tableFunction', name, args: args !== null ? args : [] };
+    const result = loc({ kind: 'tableFunction', name, args: args !== null ? args : [] });
     if (settings !== null) result.settings = settings[4];
     return result;
   }
@@ -1099,16 +1098,16 @@ function peg$parse(input, options) {
     return buildCommaList(head, tail);
   }
   function peg$f62(join_type, exprs) {
-    return { kind: 'arrayJoin', joinType: join_type, expressions: exprs };
+    return loc({ kind: 'arrayJoin', joinType: join_type, expressions: exprs });
   }
   function peg$f63(join_type, right, constraint) {
-    return { kind: 'join', joinType: join_type, right, constraint };
+    return loc({ kind: 'join', joinType: join_type, right, constraint });
   }
   function peg$f64(join_type, right) {
-    return { kind: 'join', joinType: join_type, right };
+    return loc({ kind: 'join', joinType: join_type, right });
   }
   function peg$f65(right) {
-    return { kind: 'join', joinType: 'CROSS', right };
+    return loc({ kind: 'join', joinType: 'CROSS', right });
   }
   function peg$f66() {    return "PASTE";  }
   function peg$f67() {    return "CROSS";  }
@@ -1212,14 +1211,14 @@ function peg$parse(input, options) {
     return { name, value };
   }
   function peg$f122(name) {
-    return { name, value: { kind: 'literal', type: 'UInt64', value: '1' } };
+    return { name, value: loc({ kind: 'literal', type: 'UInt64', value: '1' }) };
   }
   function peg$f123(head, tail) {
     return [head, ...tail.map((t) => t[3])];
   }
   function peg$f124(expr, alias, dir, nulls, collate, fill) {
-    const resolvedExpr = alias !== null ? { kind: 'alias', expr, alias: alias[3] } : expr;
-    const result = { kind: 'orderByItem', expr: resolvedExpr, direction: dir !== null ? dir[1].toUpperCase() : 'ASC' };
+    const resolvedExpr = alias !== null ? loc({ kind: 'alias', expr, alias: alias[3] }) : expr;
+    const result = loc({ kind: 'orderByItem', expr: resolvedExpr, direction: dir !== null ? dir[1].toUpperCase() : 'ASC' });
     if (collate !== null) result.collate = collate[4].value;
     if (fill !== null) {
       const fillArgs = fill[6];
@@ -1250,38 +1249,38 @@ function peg$parse(input, options) {
   function peg$f131(expr, asWs, alias) {
     // Unwrap auto-alias (e.g. @@varname) if an explicit AS alias is provided
     const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-    return { kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias };
+    return loc({ kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias });
   }
   function peg$f132(expr, asWs, alias) {
     const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-    return { kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias };
+    return loc({ kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias });
   }
   function peg$f133(expr, aliasWs, alias) {
-    return { kind: 'alias', expr: addTrailing(expr, flattenWs(aliasWs)), alias };
+    return loc({ kind: 'alias', expr: addTrailing(expr, flattenWs(aliasWs)), alias });
   }
   function peg$f134(cond, ws1, ws2, then, ws3, ws4, else_) {
-    return { kind: 'functionCall', name: 'if', args: [
+    return loc({ kind: 'functionCall', name: 'if', args: [
       cond,
       addLeading(then, [...flattenWs(ws1), ...flattenWs(ws2)]),
       addLeading(else_, [...flattenWs(ws3), ...flattenWs(ws4)])
-    ] };
+    ] });
   }
   function peg$f135(head, tail) {
     const operands = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
-    return { kind: 'naryExpr', op: 'OR', operands };
+    return loc({ kind: 'naryExpr', op: 'OR', operands });
   }
   function peg$f136(head, tail) {
     const operands = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
-    return { kind: 'naryExpr', op: 'AND', operands };
+    return loc({ kind: 'naryExpr', op: 'AND', operands });
   }
   function peg$f137(comments, expr) {
-    return { kind: 'unaryExpr', op: 'NOT', expr: addWsLeading(expr, comments) };
+    return loc({ kind: 'unaryExpr', op: 'NOT', expr: addWsLeading(expr, comments) });
   }
   function peg$f138(base, rest) {
-    return rest.reduce((acc, t) => ({
+    return rest.reduce((acc, t) => (loc({
       kind: 'binaryExpr', op: t[1], left: acc,
       right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
-    }), base);
+    })), base);
   }
   function peg$f139(left, suffix) {
     if (suffix === null) return left;
@@ -1289,58 +1288,58 @@ function peg$parse(input, options) {
   }
   function peg$f140(global, negated, target) {
     return (left) => {
-      const result = { kind: 'inExpr', negated: negated !== null, expr: left, ...target };
+      const result = loc({ kind: 'inExpr', negated: negated !== null, expr: left, ...target });
       if (global !== null) result.global = true;
       return result;
     };
   }
   function peg$f141(negated, right) {
     const name = negated !== null ? 'notILike' : 'ilike';
-    return (left) => ({ kind: 'functionCall', name, args: [left, right] });
+    return (left) => (loc({ kind: 'functionCall', name, args: [left, right] }));
   }
   function peg$f142(negated, right) {
     const name = negated !== null ? 'notLike' : 'like';
-    return (left) => ({ kind: 'functionCall', name, args: [left, right] });
+    return (left) => (loc({ kind: 'functionCall', name, args: [left, right] }));
   }
   function peg$f143(right) {
-    return (left) => ({ kind: 'functionCall', name: 'match', args: [left, right] });
+    return (left) => (loc({ kind: 'functionCall', name: 'match', args: [left, right] }));
   }
   function peg$f144(low, high) {
-    return (left) => ({
+    return (left) => (loc({
       kind: 'functionCall', name: 'or', args: [
-        { kind: 'functionCall', name: 'less', args: [left, low] },
-        { kind: 'functionCall', name: 'greater', args: [left, high] }
+        loc({ kind: 'functionCall', name: 'less', args: [left, low] }),
+        loc({ kind: 'functionCall', name: 'greater', args: [left, high] })
       ]
-    });
+    }));
   }
   function peg$f145(low, high) {
-    return (left) => ({
+    return (left) => (loc({
       kind: 'functionCall', name: 'and', args: [
-        { kind: 'functionCall', name: 'greaterOrEquals', args: [left, low] },
-        { kind: 'functionCall', name: 'lessOrEquals', args: [left, high] }
+        loc({ kind: 'functionCall', name: 'greaterOrEquals', args: [left, low] }),
+        loc({ kind: 'functionCall', name: 'lessOrEquals', args: [left, high] })
       ]
-    });
+    }));
   }
   function peg$f146(right) {
-    return (left) => ({ kind: 'binaryExpr', op: '<=>', left, right });
+    return (left) => (loc({ kind: 'binaryExpr', op: '<=>', left, right }));
   }
   function peg$f147(right) {
-    return (left) => ({ kind: 'binaryExpr', op: 'IS DISTINCT FROM', left, right });
+    return (left) => (loc({ kind: 'binaryExpr', op: 'IS DISTINCT FROM', left, right }));
   }
   function peg$f148(arith) {
     return (left) => {
-      const base = { kind: 'functionCall', name: 'isNotNull', args: [left] };
-      return arith.reduce((acc, t) => ({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] }), base);
+      const base = loc({ kind: 'functionCall', name: 'isNotNull', args: [left] });
+      return arith.reduce((acc, t) => (loc({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] })), base);
     };
   }
   function peg$f149(arith) {
     return (left) => {
-      const base = { kind: 'functionCall', name: 'isNull', args: [left] };
-      return arith.reduce((acc, t) => ({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] }), base);
+      const base = loc({ kind: 'functionCall', name: 'isNull', args: [left] });
+      return arith.reduce((acc, t) => (loc({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] })), base);
     };
   }
   function peg$f150(op, right) {
-    return (left) => ({ kind: 'binaryExpr', op, left, right });
+    return (left) => (loc({ kind: 'binaryExpr', op, left, right }));
   }
   function peg$f151(arr) {    return { values: [arr] };  }
   function peg$f152(beforeValues, values, afterValues) {
@@ -1359,27 +1358,27 @@ function peg$parse(input, options) {
     return { values };
   }
   function peg$f153(single) {    return { values: [single] };  }
-  function peg$f154(expr) {    return { kind: 'unaryExpr', op: 'NOT', expr: expr };  }
-  function peg$f155(query) {    return { kind: 'subqueryExpr', query: query };  }
+  function peg$f154(expr) {    return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr });  }
+  function peg$f155(query) {    return loc({ kind: 'subqueryExpr', query: query });  }
   function peg$f156(head, tail) {
-    return tail.reduce((acc, t) => ({
+    return tail.reduce((acc, t) => (loc({
       kind: 'binaryExpr', op: t[1], left: acc,
       right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
-    }), head);
+    })), head);
   }
-  function peg$f157(expr) {    return { kind: 'unaryExpr', op: 'NOT', expr: expr };  }
+  function peg$f157(expr) {    return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr });  }
   function peg$f158() {    return "-";  }
   function peg$f159() {    return "-";  }
   function peg$f160(head, tail) {
     if (tail.length === 0) return head;
     const parts = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
-    return { kind: 'functionCall', name: 'concat', args: parts };
+    return loc({ kind: 'functionCall', name: 'concat', args: parts });
   }
   function peg$f161(head, tail) {
-    return tail.reduce((acc, t) => ({
+    return tail.reduce((acc, t) => (loc({
       kind: 'binaryExpr', op: t[1], left: acc,
       right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
-    }), head);
+    })), head);
   }
   function peg$f162() {    return 'DIV';  }
   function peg$f163() {    return 'MOD';  }
@@ -1397,17 +1396,17 @@ function peg$parse(input, options) {
       // Check if fits in Int64 range [-2^63, 0]
       const INT64_MIN = BigInt('-9223372036854775808');
       if (bigNeg >= INT64_MIN) {
-        const intResult = { kind: 'literal', type: 'Int64', value: String(bigNeg) };
+        const intResult = loc({ kind: 'literal', type: 'Int64', value: String(bigNeg) });
         // Preserve source for -0 → "0" since it can't round-trip without original text
         if (bigNeg === BigInt(0)) intResult.source = text();
         return intResult;
       }
       // Overflows Int64: use Float64 (loses precision like ClickHouse does)
-      return { kind: 'literal', type: 'Float64', value: String(Number(bigNeg)), source: text() };
+      return loc({ kind: 'literal', type: 'Float64', value: String(Number(bigNeg)), source: text() });
     }
     if (expr.kind === 'literal' && expr.type === 'Float64' && expr.value.charAt(0) !== '-') {
       // Negate a positive float literal; update source if present to include the minus sign
-      const negResult = { kind: 'literal', type: 'Float64', value: '-' + expr.value };
+      const negResult = loc({ kind: 'literal', type: 'Float64', value: '-' + expr.value });
       if (expr.source) negResult.source = text();
       return negResult;
     }
@@ -1439,12 +1438,12 @@ function peg$parse(input, options) {
       }
     }
     // For all other cases (non-literal, already-negative literal, etc.), wrap in negate()
-    return { kind: 'functionCall', name: 'negate', args: [expr] };
+    return loc({ kind: 'functionCall', name: 'negate', args: [expr] });
   }
   function peg$f166(base, suffixes, over) {
     const result = suffixes.reduce((acc, s) => {
       if (s.kind === 'subscript') {
-        return { kind: 'functionCall', name: 'arrayElement', args: [acc, s.index] };
+        return loc({ kind: 'functionCall', name: 'arrayElement', args: [acc, s.index] });
       } else if (s.kind === 'tuple_element') {
         let idxArg;
         const absIndex = s.index.charAt(0) === '-' ? s.index.substring(1) : s.index;
@@ -1452,33 +1451,33 @@ function peg$parse(input, options) {
         let idxLiteral;
         if (absIndex.length > 18) {
           const fval = Number(absIndex);
-          idxLiteral = { kind: 'literal', type: 'Float64', value: fval.toExponential().replace('+', '') };
+          idxLiteral = loc({ kind: 'literal', type: 'Float64', value: fval.toExponential().replace('+', '') });
         } else {
-          idxLiteral = { kind: 'literal', type: 'UInt64', value: absIndex };
+          idxLiteral = loc({ kind: 'literal', type: 'UInt64', value: absIndex });
         }
         if (s.index.charAt(0) === '-') {
           // Negative index: wrap as negate(literal)
-          idxArg = { kind: 'functionCall', name: 'negate', args: [idxLiteral] };
+          idxArg = loc({ kind: 'functionCall', name: 'negate', args: [idxLiteral] });
         } else {
           idxArg = idxLiteral;
         }
-        return { kind: 'functionCall', name: 'tupleElement', args: [acc, idxArg] };
+        return loc({ kind: 'functionCall', name: 'tupleElement', args: [acc, idxArg] });
       } else if (s.kind === 'field_access') {
         // Named field access: expr.name — tuple element by name
-        return { kind: 'functionCall', name: 'tupleElement', args: [acc, { kind: 'literal', type: 'String', value: s.name }] };
+        return loc({ kind: 'functionCall', name: 'tupleElement', args: [acc, loc({ kind: 'literal', type: 'String', value: s.name })] });
       } else if (s.kind === 'json_subcolumn') {
         // .:Type or .:`QuotedType` — JSON subcolumn type annotation
-        const node = { kind: 'jsonSubcolumn', expr: acc, type: s.type };
+        const node = loc({ kind: 'jsonSubcolumn', expr: acc, type: s.type });
         if (s.path && s.path.length > 0) node.path = s.path;
         return node;
       } else if (s.kind === 'asterisk_access') {
         // expr.* — tuple/expression wildcard expansion
-        const node = { kind: 'tupleExpansion', expr: acc };
+        const node = loc({ kind: 'tupleExpansion', expr: acc });
         if (s.transformers && s.transformers.length > 0) node.transformers = s.transformers;
         return node;
       } else {
         // :: cast operator; mark with operator:true to distinguish from CAST(x AS T)
-        return { kind: 'castExpr', expr: acc, type: s.type, operator: true };
+        return loc({ kind: 'castExpr', expr: acc, type: s.type, operator: true });
       }
     }, base);
     // Attach window spec to function calls with an inline OVER (spec) clause
@@ -1537,33 +1536,33 @@ function peg$parse(input, options) {
   function peg$f196(nested) {    return nested;  }
   function peg$f197(str) {    return str;  }
   function peg$f198(chars) {    return chars;  }
-  function peg$f199(tuple) {    return { kind: 'functionCall', name: 'not', args: [tuple] };  }
-  function peg$f200(expr) {    return { kind: 'unaryExpr', op: 'NOT', expr: expr };  }
+  function peg$f199(tuple) {    return loc({ kind: 'functionCall', name: 'not', args: [tuple] });  }
+  function peg$f200(expr) {    return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr });  }
   function peg$f201(first, part) {    return part;  }
   function peg$f202(first, rest) {
-    return { kind: 'columnRef', parts: [first, ...rest] };
+    return loc({ kind: 'columnRef', parts: [first, ...rest] });
   }
-  function peg$f203(name) {    return { kind: 'columnRef', parts: [name] };  }
-  function peg$f204(name) {    return { kind: 'columnRef', parts: [name] };  }
-  function peg$f205() {    return { kind: 'functionCall', name: 'map', args: [] };  }
+  function peg$f203(name) {    return loc({ kind: 'columnRef', parts: [name] });  }
+  function peg$f204(name) {    return loc({ kind: 'columnRef', parts: [name] });  }
+  function peg$f205() {    return loc({ kind: 'functionCall', name: 'map', args: [] });  }
   function peg$f206(first, rest) {
     const args = [first[0], first[1]];
     for (const r of rest) {
       args.push(r[3][0]);
       args.push(r[3][1]);
     }
-    return { kind: 'functionCall', name: 'map', args };
+    return loc({ kind: 'functionCall', name: 'map', args });
   }
   function peg$f207(key, value) {    return [key, value];  }
   function peg$f208(name) {
-    return { kind: 'alias', alias: '@@' + name, expr: { kind: 'functionCall', name: 'globalVariable', args: [{ kind: 'literal', type: 'String', value: name }] } };
+    return loc({ kind: 'alias', alias: '@@' + name, expr: loc({ kind: 'functionCall', name: 'globalVariable', args: [loc({ kind: 'literal', type: 'String', value: name })] }) });
   }
-  function peg$f209() {    return { kind: 'functionCall', name: 'tuple', args: [] };  }
+  function peg$f209() {    return loc({ kind: 'functionCall', name: 'tuple', args: [] });  }
   function peg$f210(beforeQuery, query, afterQuery) {
-    return { kind: 'subqueryExpr', query: addSurroundingWs(query, beforeQuery, afterQuery) };
+    return loc({ kind: 'subqueryExpr', query: addSurroundingWs(query, beforeQuery, afterQuery) });
   }
   function peg$f211(head, tail, body) {
-    return { kind: 'lambdaExpr', params: [head, ...tail.map((t) => t[3])], body };
+    return loc({ kind: 'lambdaExpr', params: [head, ...tail.map((t) => t[3])], body });
   }
   function peg$f212(beforeFirst, first, rest, trailing, afterLast) {
     first = addLeading(first, flattenWs(beforeFirst));
@@ -1573,21 +1572,21 @@ function peg$parse(input, options) {
       return { ...first, parenthesized: true };
     } else if (rest.length === 0) {
       // (expr,) — single-element tuple
-      return { kind: 'functionCall', name: 'tuple', args: [first] };
+      return loc({ kind: 'functionCall', name: 'tuple', args: [first] });
     } else {
       // (expr, expr, ...) — multi-element tuple
       const elems = [first, ...rest.map((r) => r[3])];
-      return { kind: 'tuple', elements: elems, source: text() };
+      return loc({ kind: 'tuple', elements: elems, source: text() });
     }
   }
   function peg$f213(elem) {
-    return { kind: 'functionCall', name: 'tuple', args: [elem] };
+    return loc({ kind: 'functionCall', name: 'tuple', args: [elem] });
   }
   function peg$f214(first, rest) {
-    return { kind: 'tuple', elements: [first, ...rest], source: text() };
+    return loc({ kind: 'tuple', elements: [first, ...rest], source: text() });
   }
   function peg$f215() {
-    return { kind: 'array', elements: [], source: text() };
+    return loc({ kind: 'array', elements: [], source: text() });
   }
   function peg$f216(beforeItems, items, afterItems) {
     const bi = flattenWs(beforeItems);
@@ -1597,10 +1596,10 @@ function peg$parse(input, options) {
       items[0] = addLeading(items[0], bi);
       items[items.length - 1] = addTrailing(items[items.length - 1], ai);
     }
-    return { kind: 'array', elements: items, source: text() };
+    return loc({ kind: 'array', elements: items, source: text() });
   }
   function peg$f217(name, type) {
-    return { kind: 'queryParam', name: name, type: type.trim() };
+    return loc({ kind: 'queryParam', name: name, type: type.trim() });
   }
   function peg$f218(tag) {
     const endMarker = `$${tag}$`;
@@ -1609,27 +1608,27 @@ function peg$parse(input, options) {
     const content = input.substring(peg$currPos, pos);
     peg$currPos = pos + endMarker.length;
     // Double backslashes so escapeStringValue in explain.ts outputs them correctly (consistent with StringChar handling of \\)
-    return { kind: 'literal', type: 'String', value: content.replace(/\\/g, '\\\\') };
+    return loc({ kind: 'literal', type: 'String', value: content.replace(/\\/g, '\\\\') });
   }
-  function peg$f219() {    return { kind: 'literal', type: 'Bool', value: '1' };  }
-  function peg$f220() {    return { kind: 'literal', type: 'Bool', value: '0' };  }
+  function peg$f219() {    return loc({ kind: 'literal', type: 'Bool', value: '1' });  }
+  function peg$f220() {    return loc({ kind: 'literal', type: 'Bool', value: '0' });  }
   function peg$f221() {
-    return { kind: 'literal', type: 'NULL', value: 'NULL' };
+    return loc({ kind: 'literal', type: 'NULL', value: 'NULL' });
   }
   function peg$f222(digits) {
-    if (digits.length === 0) return { kind: 'literal', type: 'String', value: '' };
+    if (digits.length === 0) return loc({ kind: 'literal', type: 'String', value: '' });
     // Pad to multiple of 8 bits, MSB-first, then interpret as UTF-8 bytes
     const padded = digits.padStart(Math.ceil(digits.length / 8) * 8, '0');
     const bytes = [];
     for (let i = 0; i < padded.length; i += 8) {
       bytes.push(parseInt(padded.slice(i, i + 8), 2));
     }
-    return { kind: 'literal', type: 'String', value: Buffer.from(bytes).toString('utf-8') };
+    return loc({ kind: 'literal', type: 'String', value: Buffer.from(bytes).toString('utf-8') });
   }
   function peg$f223(digits) {
-    if (digits.length === 0) return { kind: 'literal', type: 'String', value: '' };
+    if (digits.length === 0) return loc({ kind: 'literal', type: 'String', value: '' });
     const padded = digits.length % 2 === 1 ? '0' + digits : digits;
-    return { kind: 'literal', type: 'String', value: Buffer.from(padded, 'hex').toString('utf-8') };
+    return loc({ kind: 'literal', type: 'String', value: Buffer.from(padded, 'hex').toString('utf-8') });
   }
   function peg$f224(int, frac, exp) {
     const cleanInt = int.replace(/_/g, '');
@@ -1637,42 +1636,42 @@ function peg$parse(input, options) {
     const intVal = parseInt(cleanInt, 16);
     const fracVal = cleanFrac.length > 0 ? parseInt(cleanFrac, 16) / Math.pow(16, cleanFrac.length) : 0;
     const value = exp !== null ? (intVal + fracVal) * Math.pow(2, exp) : (intVal + fracVal);
-    return { kind: 'literal', type: 'Float64', value: value.toString(), source: text() };
+    return loc({ kind: 'literal', type: 'Float64', value: value.toString(), source: text() });
   }
   function peg$f225(digits, exp) {
     // Remove underscore digit separators
     const clean = digits.replace(/_/g, '');
     // Parse hex with optional exponent (e.g. 0x123p4) as float
     if (exp !== null) {
-      return { kind: 'literal', type: 'Float64', value: parseFloat(parseInt(clean, 16) * Math.pow(2, exp)).toString(), source: text() };
+      return loc({ kind: 'literal', type: 'Float64', value: parseFloat(parseInt(clean, 16) * Math.pow(2, exp)).toString(), source: text() });
     }
     // If significant hex digits exceed 16 (> 64 bits), overflows UInt64 → treat as Float64
     const significant = clean.replace(/^0+/, '') || '0';
     if (significant.length > 16) {
-      return { kind: 'literal', type: 'Float64', value: String(Number(BigInt('0x' + clean))), source: text() };
+      return loc({ kind: 'literal', type: 'Float64', value: String(Number(BigInt('0x' + clean))), source: text() });
     }
-    return { kind: 'literal', type: 'UInt64', value: '0x' + clean };
+    return loc({ kind: 'literal', type: 'UInt64', value: '0x' + clean });
   }
   function peg$f226(sign, digits) {    return (sign === '-' ? -1 : 1) * parseInt(digits.replace(/_/g, ''), 10);  }
   function peg$f227(digits) {
     // Remove underscore digit separators
     const clean = digits.replace(/_/g, '');
-    return { kind: 'literal', type: 'UInt64', value: '0b' + clean };
+    return loc({ kind: 'literal', type: 'UInt64', value: '0b' + clean });
   }
-  function peg$f228() {    return { kind: 'literal', type: 'Float64', value: 'inf' };  }
-  function peg$f229() {    return { kind: 'literal', type: 'Float64', value: 'nan' };  }
+  function peg$f228() {    return loc({ kind: 'literal', type: 'Float64', value: 'inf' });  }
+  function peg$f229() {    return loc({ kind: 'literal', type: 'Float64', value: 'nan' });  }
   function peg$f230(digits, frac, exp) {
-    return { kind: 'literal', type: 'Float64', value: digits.replace(/_/g, '') + '.' + (frac || '').replace(/_/g, '') + (exp || '') };
+    return loc({ kind: 'literal', type: 'Float64', value: digits.replace(/_/g, '') + '.' + (frac || '').replace(/_/g, '') + (exp || '') });
   }
   function peg$f231(digits, exp) {
-    return { kind: 'literal', type: 'Float64', value: '.' + digits.replace(/_/g, '') + (exp || '') };
+    return loc({ kind: 'literal', type: 'Float64', value: '.' + digits.replace(/_/g, '') + (exp || '') });
   }
   function peg$f232(digits, exp) {
-    return { kind: 'literal', type: 'Float64', value: digits.replace(/_/g, '') + exp };
+    return loc({ kind: 'literal', type: 'Float64', value: digits.replace(/_/g, '') + exp });
   }
   function peg$f233(e, sign, digits) {    return e + sign + digits.replace(/_/g, '');  }
   function peg$f234(param, body) {
-    return { kind: 'lambdaExpr', params: [param], body: body };
+    return loc({ kind: 'lambdaExpr', params: [param], body: body });
   }
   function peg$f235(branches, elseClause) {
     const args = [];
@@ -1680,8 +1679,8 @@ function peg$parse(input, options) {
       args.push(branch[0]);
       args.push(branch[1]);
     }
-    args.push(elseClause !== null ? elseClause[4] : { kind: 'literal', type: 'NULL', value: 'NULL' });
-    return { kind: 'functionCall', name: 'multiIf', args };
+    args.push(elseClause !== null ? elseClause[4] : loc({ kind: 'literal', type: 'NULL', value: 'NULL' }));
+    return loc({ kind: 'functionCall', name: 'multiIf', args });
   }
   function peg$f236(subject, branches, elseClause) {
     const args = [subject];
@@ -1689,14 +1688,14 @@ function peg$parse(input, options) {
       args.push(branch[0]);
       args.push(branch[1]);
     }
-    args.push(elseClause !== null ? elseClause[4] : { kind: 'literal', type: 'NULL', value: 'NULL' });
-    return { kind: 'functionCall', name: 'caseWithExpression', args };
+    args.push(elseClause !== null ? elseClause[4] : loc({ kind: 'literal', type: 'NULL', value: 'NULL' }));
+    return loc({ kind: 'functionCall', name: 'caseWithExpression', args });
   }
   function peg$f237(cond, val) {
     return [cond, val];
   }
   function peg$f238(expr, unit) {
-    return { kind: 'functionCall', name: 'toInterval' + unit, args: [expr] };
+    return loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [expr] });
   }
   function peg$f239(str) {
     const parts = str.value.trim().split(/\s+/);
@@ -1709,7 +1708,7 @@ function peg$parse(input, options) {
     };
     const unit = unitMap[unitStr] || 'Second';
     const numVal = parseInt(val, 10);
-    return { kind: 'functionCall', name: 'toInterval' + unit, args: [{ kind: 'literal', type: 'UInt64', value: String(numVal) }] };
+    return loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [loc({ kind: 'literal', type: 'UInt64', value: String(numVal) })] });
   }
   function peg$f240(word) {    return INTERVAL_UNITS[word.toLowerCase()] !== undefined;  }
   function peg$f241(word) {
@@ -1718,18 +1717,18 @@ function peg$parse(input, options) {
   function peg$f242() {    return 'plus';  }
   function peg$f243() {    return 'minus';  }
   function peg$f244(unit, amount, date) {
-    return [date, { kind: 'functionCall', name: 'toInterval' + unit, args: [amount] }];
+    return [date, loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [amount] })];
   }
   function peg$f245(date, interval) {    return [date, interval];  }
   function peg$f246(interval, date) {    return [interval, date];  }
   function peg$f247(fn, args) {
-    return { kind: 'functionCall', name: fn, args: args };
+    return loc({ kind: 'functionCall', name: fn, args: args });
   }
   function peg$f248(fn, args) {
-    return { kind: 'functionCall', name: fn, args: args };
+    return loc({ kind: 'functionCall', name: fn, args: args });
   }
   function peg$f249(unit, amount, date) {
-    return { kind: 'functionCall', name: 'minus', args: [date, { kind: 'functionCall', name: 'toInterval' + unit, args: [amount] }] };
+    return loc({ kind: 'functionCall', name: 'minus', args: [date, loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [amount] })] });
   }
   function peg$f250(unit, rest) {
     const unitAliases = {
@@ -1748,16 +1747,16 @@ function peg$parse(input, options) {
     };
     const lower = unit.toLowerCase();
     const canonical = unitAliases[lower] || lower;
-    const unitLiteral = { kind: 'literal', type: 'String', value: canonical };
-    return { kind: 'functionCall', name: 'dateDiff', args: [unitLiteral, ...rest] };
+    const unitLiteral = loc({ kind: 'literal', type: 'String', value: canonical });
+    return loc({ kind: 'functionCall', name: 'dateDiff', args: [unitLiteral, ...rest] });
   }
   function peg$f251(args) {
-    return { kind: 'functionCall', name: 'dateDiff', args: args };
+    return loc({ kind: 'functionCall', name: 'dateDiff', args: args });
   }
   function peg$f252(str, pos, len) {
     const args = [str, pos];
     if (len !== null) args.push(len[4]);
-    return { kind: 'functionCall', name: 'substring', args };
+    return loc({ kind: 'functionCall', name: 'substring', args });
   }
   function peg$f253(unit, expr) {
     const funcMap = {
@@ -1771,7 +1770,7 @@ function peg$parse(input, options) {
       MI: 'toMinute', SS: 'toSecond'
     };
     const funcName = funcMap[unit.toUpperCase()] || ('to' + unit.charAt(0).toUpperCase() + unit.slice(1).toLowerCase());
-    return { kind: 'functionCall', name: funcName, args: [expr] };
+    return loc({ kind: 'functionCall', name: funcName, args: [expr] });
   }
   function peg$f254(direction, chars, str) {
     // ClickHouse simplifies TRIM with empty string to just the expression
@@ -1779,24 +1778,24 @@ function peg$parse(input, options) {
       return str;
     }
     const fname = direction === 'LEADING' ? 'trimLeft' : (direction === 'TRAILING' ? 'trimRight' : 'trimBoth');
-    return { kind: 'functionCall', name: fname, args: [str, chars] };
+    return loc({ kind: 'functionCall', name: fname, args: [str, chars] });
   }
   function peg$f255(needle, haystack) {
-    return { kind: 'functionCall', name: 'position', args: [haystack, needle] };
+    return loc({ kind: 'functionCall', name: 'position', args: [haystack, needle] });
   }
   function peg$f256(str) {
-    return { kind: 'functionCall', name: 'toDate', args: [str] };
+    return loc({ kind: 'functionCall', name: 'toDate', args: [str] });
   }
   function peg$f257(str) {
-    return { kind: 'functionCall', name: 'toDateTime', args: [str] };
+    return loc({ kind: 'functionCall', name: 'toDateTime', args: [str] });
   }
   function peg$f258(str) {
-    return { kind: 'functionCall', name: 'toTime', args: [str] };
+    return loc({ kind: 'functionCall', name: 'toTime', args: [str] });
   }
   function peg$f259(expr, name) {    return name;  }
   function peg$f260(expr, alias, type) {
-    const innerExpr = alias !== null ? { kind: 'alias', expr, alias } : expr;
-    return { kind: 'castExpr', expr: innerExpr, type: type };
+    const innerExpr = alias !== null ? loc({ kind: 'alias', expr, alias }) : expr;
+    return loc({ kind: 'castExpr', expr: innerExpr, type: type });
   }
   function peg$f261(name, openComments, modifier, first, funcSettings, second, filter) {
     const modVal = modifier !== null ? modifier[0] : null;
@@ -1818,16 +1817,16 @@ function peg$parse(input, options) {
       const mod2Str = Array.isArray(mod2Val) ? mod2Val[0] : mod2Val;
       const isDistinct2 = mod2Str !== null && mod2Str !== undefined && mod2Str.toString().toUpperCase() === 'DISTINCT';
       const curryName = isDistinct2 ? effectiveName + 'Distinct' : effectiveName;
-      call = { kind: 'functionCall', name: curryName, params: args1, args: second[4] || [] };
+      call = loc({ kind: 'functionCall', name: curryName, params: args1, args: second[4] || [] });
     } else {
-      call = { kind: 'functionCall', name: effectiveName, args: args1 };
+      call = loc({ kind: 'functionCall', name: effectiveName, args: args1 });
     }
     if (funcSettings !== null) call.funcSettings = funcSettings[3];
     if (filter !== null) {
       // count(*) FILTER (WHERE cond) → countIf(cond): drop the asterisk arg
       const filterArgs = (call.args.length === 1 && call.args[0].kind === 'asterisk')
         ? [] : call.args;
-      call = { kind: 'functionCall', name: call.name + 'If', args: [...filterArgs, filter] };
+      call = loc({ kind: 'functionCall', name: call.name + 'If', args: [...filterArgs, filter] });
     }
     return call;
   }
@@ -1845,12 +1844,12 @@ function peg$parse(input, options) {
     return buildCommaList(head, tail);
   }
   function peg$f273(params, body) {
-    return { kind: 'lambdaExpr', params: params, body: body };
+    return loc({ kind: 'lambdaExpr', params: params, body: body });
   }
   function peg$f274(query) {
-    return { kind: 'subqueryExpr', query: query };
+    return loc({ kind: 'subqueryExpr', query: query });
   }
-  function peg$f275(name) {    return { kind: 'columnRef', parts: [name] };  }
+  function peg$f275(name) {    return loc({ kind: 'columnRef', parts: [name] });  }
   function peg$f276(head, tail) {
     return [head, ...tail];
   }
@@ -1862,20 +1861,20 @@ function peg$parse(input, options) {
   }
   function peg$f279(first, part) {    return part;  }
   function peg$f280(first, rest) {
-    return { kind: 'columnRef', parts: [first, ...rest] };
+    return loc({ kind: 'columnRef', parts: [first, ...rest] });
   }
-  function peg$f281(name) {    return { kind: 'columnRef', parts: [name] };  }
-  function peg$f282(name) {    return { kind: 'columnRef', parts: [name] };  }
+  function peg$f281(name) {    return loc({ kind: 'columnRef', parts: [name] });  }
+  function peg$f282(name) {    return loc({ kind: 'columnRef', parts: [name] });  }
   function peg$f283(name, brackets) {    return "^" + name + (brackets !== null ? "[]" : "");  }
   function peg$f284(name, brackets) {    return name + (brackets !== null ? "[]" : "");  }
   function peg$f285(first, part) {    return part;  }
   function peg$f286(first, rest, transformers) {
-    const result = { kind: 'qualifiedAsterisk', parts: [first, ...rest] };
+    const result = loc({ kind: 'qualifiedAsterisk', parts: [first, ...rest] });
     if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
     return result;
   }
   function peg$f287(transformers) {
-    const result = { kind: 'asterisk' };
+    const result = loc({ kind: 'asterisk' });
     if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
     return result;
   }
@@ -1910,7 +1909,7 @@ function peg$parse(input, options) {
     return { kind: 'apply', func: func };
   }
   function peg$f298(name) {
-    return { kind: 'apply', func: { kind: 'columnRef', parts: [name] } };
+    return { kind: 'apply', func: loc({ kind: 'columnRef', parts: [name] }) };
   }
   function peg$f299(items) {
     return { kind: 'replace', items: items, strict: true };
@@ -1933,25 +1932,25 @@ function peg$parse(input, options) {
   function peg$f305(first, part) {    return part;  }
   function peg$f306(first, rest, args, transformers) {
     const qualPath = [first, ...rest];
-    const result = { kind: 'columnsExpr', args, qualifier: qualPath.join('.') };
+    const result = loc({ kind: 'columnsExpr', args, qualifier: qualPath.join('.') });
     if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
     return result;
   }
   function peg$f307(args, head, rest) {
     const transformers = [head, ...rest.map((t) => t[1])];
-    return { kind: 'columnsExpr', args, transformers };
+    return loc({ kind: 'columnsExpr', args, transformers });
   }
   function peg$f308(digits) {
     const normalized = digits.replace(/_/g, '').replace(/^0+/, '') || '0';
     const UINT64_MAX = BigInt('18446744073709551615');
     if (normalized.length > 20 || (normalized.length >= 20 && BigInt(normalized) > UINT64_MAX)) {
       // Keep original string to preserve precision for CAST contexts
-      return { kind: 'literal', type: 'Float64', value: normalized };
+      return loc({ kind: 'literal', type: 'Float64', value: normalized });
     }
-    return { kind: 'literal', type: 'UInt64', value: normalized };
+    return loc({ kind: 'literal', type: 'UInt64', value: normalized });
   }
   function peg$f309(chars) {
-    return { kind: 'literal', type: 'String', value: chars.join('') };
+    return loc({ kind: 'literal', type: 'String', value: chars.join('') });
   }
   function peg$f310(chars) {
     // Collect consecutive hex byte objects and decode as UTF-8
@@ -1971,7 +1970,7 @@ function peg$parse(input, options) {
     if (hexBuf.length > 0) {
       parts.push(new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(hexBuf)));
     }
-    return { kind: 'literal', type: 'String', value: parts.join('') };
+    return loc({ kind: 'literal', type: 'String', value: parts.join('') });
   }
   function peg$f311() {    return "'";  }
   function peg$f312() {    return '\x07';  }
@@ -1999,10 +1998,10 @@ function peg$parse(input, options) {
     return '{' + name + ':Identifier}';
   }
   function peg$f332(db, table) {
-    return { kind: 'tableRef', database: db, table: table };
+    return loc({ kind: 'tableRef', database: db, table: table });
   }
   function peg$f333(table) {
-    return { kind: 'tableRef', table: table };
+    return loc({ kind: 'tableRef', table: table });
   }
   function peg$f334(word) {    return !KEYWORDS.has(word.toUpperCase());  }
   function peg$f335(word) {    return word;  }
@@ -27556,6 +27555,12 @@ function peg$parse(input, options) {
     peg$resultsCache[key] = { nextPos: peg$currPos, result: s0 };
 
     return s0;
+  }
+
+
+  // Attach source location to a node (must be in per-parse initializer to access location())
+  function loc(node) {
+    return { ...node, location: location() };
   }
 
   peg$result = peg$startRuleFunction();

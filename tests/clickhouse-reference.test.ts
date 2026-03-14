@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { format, formatExplain, parse } from '../src/index';
+import { stripMeta } from './helpers';
 
 const CLICKHOUSE_DIR = path.join(__dirname, 'clickhouse-reference');
 const QUERY_PARAMS = '<Query Parameters>';
@@ -50,7 +51,7 @@ describe('clickhouse tests', () => {
       const statements = parse(sql);
 
       const expectedAst = JSON.parse(fs.readFileSync(astPath, 'utf-8'));
-      expect(statements).toEqual(expectedAst);
+      expect(stripMeta(statements)).toEqual(expectedAst);
     });
 
     it(`${fileName} - format`, () => {
@@ -70,7 +71,7 @@ describe('clickhouse tests', () => {
 
       const sqlFormatted = format(statements);
       const reparsed = parse(sqlFormatted);
-      expect(reparsed).toEqual(statements);
+      expect(stripMeta(reparsed)).toEqual(stripMeta(statements));
     });
   }
 });

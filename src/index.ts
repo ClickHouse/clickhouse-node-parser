@@ -33,12 +33,55 @@ export type {
   ASTNodeKind,
   ASTNodeKindMap,
   ASTNode,
+  SourceLocation,
 } from './ast';
+
+// ── Parent assignment ────────────────────────────────────────────────────────
+
+function setParents(statements: Statement[]): void {
+  const seen = new Set<unknown>();
+
+  function walk(node: unknown, parent: unknown): void {
+    if (node === null || node === undefined || typeof node !== 'object') {
+      return;
+    }
+    if (seen.has(node)) return;
+    seen.add(node);
+
+    if (Array.isArray(node)) {
+      for (const item of node) {
+        walk(item, parent);
+      }
+      return;
+    }
+
+    const obj = node as Record<string, unknown>;
+    if ('kind' in obj) {
+      obj.parent = parent;
+      for (const [key, value] of Object.entries(obj)) {
+        if (key === 'parent') continue;
+        if (typeof value === 'object' && value !== null) {
+          walk(value, obj);
+        }
+      }
+    } else {
+      for (const value of Object.values(obj)) {
+        if (typeof value === 'object' && value !== null) {
+          walk(value, parent);
+        }
+      }
+    }
+  }
+
+  walk(statements, undefined);
+}
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export function parse(sql: string): Statement[] {
-  return peggyParse(sql) as Statement[];
+  const statements = peggyParse(sql) as Statement[];
+  setParents(statements);
+  return statements;
 }
 
 export { format, formatNode } from './format';

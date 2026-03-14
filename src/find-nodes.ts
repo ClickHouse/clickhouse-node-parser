@@ -47,7 +47,8 @@ export function findNodes<K extends ASTNodeKind>(
       results.push(obj as ASTNodeKindMap[K]);
     }
 
-    for (const value of Object.values(obj)) {
+    for (const [key, value] of Object.entries(obj)) {
+      if (key === 'parent') continue;
       if (typeof value === 'object' && value !== null) {
         walk(value);
       }

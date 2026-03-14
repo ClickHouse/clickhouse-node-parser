@@ -76,6 +76,13 @@
   };
 }}
 
+{
+  // Attach source location to a node (must be in per-parse initializer to access location())
+  function loc(node) {
+    return { ...node, location: location() };
+  }
+}
+
 // Statements is the top-level rule, supporting UNION ALL and FORMAT clauses
 // Allows empty input (e.g., SQL files containing only comments)
 Statements
@@ -140,15 +147,15 @@ IntoOutfileClause
 
 // SetStatement: SET key = value [, key = value ...] — changes session-level settings
 SetStatement
-  = "SET"i ![a-zA-Z0-9_] _ items:SettingsList { return { kind: 'set', settings: items }; }
+  = "SET"i ![a-zA-Z0-9_] _ items:SettingsList { return loc({ kind: 'set', settings: items }); }
 
 // UseStatement: USE database — selects the current database
 UseStatement
-  = "USE"i ![a-zA-Z0-9_] _ db:AliasName { return { kind: 'use', database: db }; }
+  = "USE"i ![a-zA-Z0-9_] _ db:AliasName { return loc({ kind: 'use', database: db }); }
 
 // SystemStatement: SYSTEM FLUSH LOGS, SYSTEM RELOAD CONFIG, etc. — admin commands (body discarded)
 SystemStatement
-  = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return { kind: 'system', body: body.trim() }; }
+  = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return loc({ kind: 'system', body: body.trim() }); }
 
 // ExplainStatement: EXPLAIN [AST|SYNTAX|QUERY TREE|PLAN|PIPELINE|ESTIMATE|TABLE OVERRIDE] [settings] [query] [FORMAT ...]
 // Settings are key=value pairs without the SETTINGS keyword (e.g. EXPLAIN actions=1 SELECT ...).
@@ -159,7 +166,7 @@ ExplainStatement
     query:UnionQuery?
     format:( _ FormatClause )?
     postSettings:( _ SettingsClause )? {
-      const result = { kind: 'explain' };
+      const result = loc({ kind: 'explain' });
       if (type !== null) result.explainType = type;
       if (settings !== null && settings.length > 0) result.settings = settings;
       if (query !== null) result.query = query;
@@ -213,15 +220,15 @@ UnionQuery
         if (op === 'UNION') {
           // UNION ALL: flatten into existing union (if it's also ALL)
           if (result.kind === 'union' && !result.unionMode) {
-            result = { kind: 'union', queries: [...result.queries, right] };
+            result = loc({ kind: 'union', queries: [...result.queries, right] });
           } else {
-            result = { kind: 'union', queries: [result, right] };
+            result = loc({ kind: 'union', queries: [result, right] });
           }
         } else if (op === 'UNION DISTINCT') {
           // UNION DISTINCT: always create a new union node with mode
-          result = { kind: 'union', queries: [result, right], unionMode: 'DISTINCT' };
+          result = loc({ kind: 'union', queries: [result, right], unionMode: 'DISTINCT' });
         } else {
-          result = { kind: 'intersect', op, left: result, right };
+          result = loc({ kind: 'intersect', op, left: result, right });
         }
       }
       return result;
@@ -233,7 +240,7 @@ IntersectQuery
       if (tail.length === 0) return head;
       let result = head;
       for (const t of tail) {
-        result = { kind: 'intersect', op: 'INTERSECT', left: result, right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]) };
+        result = loc({ kind: 'intersect', op: 'INTERSECT', left: result, right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]) });
       }
       return result;
     }
@@ -293,8 +300,7 @@ SelectStatement
     window2:( _ WindowClause )?
     qualify2:( _ QualifyClause )?
     settings:( _ SettingsClause )? {
-      const result = {};
-      result.kind = 'select';
+      const result = loc({ kind: 'select' });
       let withTrailingComments = [];
       if (withClause !== null) {
         const wcd = withClause[0];
@@ -464,7 +470,7 @@ SelectItem
       if (alias !== null) {
         // Unwrap auto-alias from @@varname when an explicit alias is provided
         const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-        return { kind: 'alias', expr: inner, alias };
+        return loc({ kind: 'alias', expr: inner, alias });
       }
       return expr;
     }
@@ -486,7 +492,7 @@ JoinExpr
 // e.g. (SELECT 1) AS t, numbers(10), system.one FINAL, my_table SAMPLE 0.1
 FromAtom
   = "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" alias:FromAtomAlias? final:( _ KW_FINAL )? sample:( _ SampleClause )? {
-      const result = { kind: 'subqueryFrom', query: addSurroundingWs(query, beforeQuery, afterQuery) };
+      const result = loc({ kind: 'subqueryFrom', query: addSurroundingWs(query, beforeQuery, afterQuery) });
       if (final !== null) result.final = true;
       if (sample !== null) result.sample = sample[1];
       if (alias !== null) {
@@ -559,7 +565,7 @@ FromAtomAlias
 
 TableFunctionRef
   = name:FunctionName _ "(" _ args:TableFunctionArgList? settings:( ( _ "," )? _ KW_SETTINGS _ SettingsList )? _ ")" {
-      const result = { kind: 'tableFunction', name, args: args !== null ? args : [] };
+      const result = loc({ kind: 'tableFunction', name, args: args !== null ? args : [] });
       if (settings !== null) result.settings = settings[4];
       return result;
     }
@@ -572,17 +578,17 @@ TableFunctionArgList
 
 JoinPart
   = join_type:ArrayJoinKeyword _ exprs:ExpressionList {
-      return { kind: 'arrayJoin', joinType: join_type, expressions: exprs };
+      return loc({ kind: 'arrayJoin', joinType: join_type, expressions: exprs });
     }
   / join_type:JoinKeyword _ right:FromAtom _ constraint:JoinConstraint {
-      return { kind: 'join', joinType: join_type, right, constraint };
+      return loc({ kind: 'join', joinType: join_type, right, constraint });
     }
   / join_type:JoinKeyword _ right:FromAtom {
-      return { kind: 'join', joinType: join_type, right };
+      return loc({ kind: 'join', joinType: join_type, right });
     }
   // Comma-separated tables: implicit CROSS JOIN without constraint
   / "," _ right:FromAtom {
-      return { kind: 'join', joinType: 'CROSS', right };
+      return loc({ kind: 'join', joinType: 'CROSS', right });
     }
 
 // JoinKeyword: [GLOBAL] [strictness] [direction] [OUTER] JOIN — returns direction string.
@@ -778,7 +784,7 @@ SettingItem
     }
   // Bare setting name without value (e.g. SETTINGS force_index_by_date) — treated as = 1
   / name:SettingName {
-      return { name, value: { kind: 'literal', type: 'UInt64', value: '1' } };
+      return { name, value: loc({ kind: 'literal', type: 'UInt64', value: '1' }) };
     }
 
 // ── ORDER BY items ────────────────────────────────────────────────────────────
@@ -798,8 +804,8 @@ OrderByItem
     collate:( _ "COLLATE"i ![a-zA-Z0-9_] _ StringLiteral )?
     fill:( _ "WITH"i ![a-zA-Z0-9_] _ "FILL"i ![a-zA-Z0-9_] fillArgs:WithFillArgs? )?
     {
-      const resolvedExpr = alias !== null ? { kind: 'alias', expr, alias: alias[3] } : expr;
-      const result = { kind: 'orderByItem', expr: resolvedExpr, direction: dir !== null ? dir[1].toUpperCase() : 'ASC' };
+      const resolvedExpr = alias !== null ? loc({ kind: 'alias', expr, alias: alias[3] }) : expr;
+      const result = loc({ kind: 'orderByItem', expr: resolvedExpr, direction: dir !== null ? dir[1].toUpperCase() : 'ASC' });
       if (collate !== null) result.collate = collate[4].value;
       if (fill !== null) {
         const fillArgs = fill[6];
@@ -849,7 +855,7 @@ Expression
   = expr:TernaryExpr asWs:_ KW_AS _ alias:AliasName {
       // Unwrap auto-alias (e.g. @@varname) if an explicit AS alias is provided
       const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-      return { kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias };
+      return loc({ kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias });
     }
   / TernaryExpr
 
@@ -859,22 +865,22 @@ Expression
 ExpressionWithImplicitAlias
   = expr:TernaryExpr asWs:_ KW_AS _ alias:AliasName {
       const inner = (expr.kind === 'alias' && typeof expr.alias === 'string' && expr.alias.charAt(0) === '@') ? expr.expr : expr;
-      return { kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias };
+      return loc({ kind: 'alias', expr: addTrailing(inner, flattenWs(asWs)), alias });
     }
   // Bare alias without AS: must be followed by , ) FROM FOR (as delimiter of the argument context)
   / expr:TernaryExpr aliasWs:_ alias:Identifier &( _ ( "," / ")" / "FROM"i ![a-zA-Z0-9_] / "FOR"i ![a-zA-Z0-9_] ) ) {
-      return { kind: 'alias', expr: addTrailing(expr, flattenWs(aliasWs)), alias };
+      return loc({ kind: 'alias', expr: addTrailing(expr, flattenWs(aliasWs)), alias });
     }
   / TernaryExpr
 
 // TernaryExpr: ternary ? : operator, maps to Function if(cond, then, else)
 TernaryExpr
   = cond:OrExpr ws1:_ "?" ws2:_ then:TernaryExpr ws3:_ ":" ws4:_ else_:TernaryExpr {
-      return { kind: 'functionCall', name: 'if', args: [
+      return loc({ kind: 'functionCall', name: 'if', args: [
         cond,
         addLeading(then, [...flattenWs(ws1), ...flattenWs(ws2)]),
         addLeading(else_, [...flattenWs(ws3), ...flattenWs(ws4)])
-      ] };
+      ] });
     }
   / OrExpr
 
@@ -884,7 +890,7 @@ TernaryExpr
 OrExpr
   = head:AndExpr tail:(_ KW_OR _ AndExpr)+ {
       const operands = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
-      return { kind: 'naryExpr', op: 'OR', operands };
+      return loc({ kind: 'naryExpr', op: 'OR', operands });
     }
   / AndExpr
 
@@ -893,7 +899,7 @@ OrExpr
 AndExpr
   = head:NotExpr tail:(_ KW_AND _ NotExpr)+ {
       const operands = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
-      return { kind: 'naryExpr', op: 'AND', operands };
+      return loc({ kind: 'naryExpr', op: 'AND', operands });
     }
   / NotExpr
 
@@ -901,7 +907,7 @@ NotExpr
   // NOT followed by "(" is handled as a high-precedence function-call-like NOT in PrimaryBase;
   // exclude that case here so NOT (0) + NOT (0) parses as plus(not(0), not(0)) like ClickHouse does.
   = KW_NOT !( _ "(" ) comments:_ expr:NotExpr {
-      return { kind: 'unaryExpr', op: 'NOT', expr: addWsLeading(expr, comments) };
+      return loc({ kind: 'unaryExpr', op: 'NOT', expr: addWsLeading(expr, comments) });
     }
   / CompareExpr
 
@@ -912,10 +918,10 @@ NotExpr
 // start a new comparison chain. E.g. k = (100) = 1 → equals(equals(k,100), 1).
 CompareExpr
   = base:CompareBase rest:(_ op:CompareOp _ CompareRightExpr)* {
-      return rest.reduce((acc, t) => ({
+      return rest.reduce((acc, t) => (loc({
         kind: 'binaryExpr', op: t[1], left: acc,
         right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
-      }), base);
+      })), base);
     }
 
 // CompareBase: parse AddExpr once, then branch on comparison/IN/LIKE/BETWEEN suffix.
@@ -932,7 +938,7 @@ CompareBaseSuffix
   // IN variants: [GLOBAL] [NOT] IN (array / parens / bare)
   = _ global:(KW_GLOBAL _)? negated:(KW_NOT _)? KW_IN _ target:InTarget {
       return (left) => {
-        const result = { kind: 'inExpr', negated: negated !== null, expr: left, ...target };
+        const result = loc({ kind: 'inExpr', negated: negated !== null, expr: left, ...target });
         if (global !== null) result.global = true;
         return result;
       };
@@ -940,57 +946,57 @@ CompareBaseSuffix
   // LIKE / ILIKE
   / _ negated:(KW_NOT _)? KW_ILIKE _ right:AddExpr {
       const name = negated !== null ? 'notILike' : 'ilike';
-      return (left) => ({ kind: 'functionCall', name, args: [left, right] });
+      return (left) => (loc({ kind: 'functionCall', name, args: [left, right] }));
     }
   / _ negated:(KW_NOT _)? KW_LIKE _ right:AddExpr {
       const name = negated !== null ? 'notLike' : 'like';
-      return (left) => ({ kind: 'functionCall', name, args: [left, right] });
+      return (left) => (loc({ kind: 'functionCall', name, args: [left, right] }));
     }
   // REGEXP
   / _ "REGEXP"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return (left) => ({ kind: 'functionCall', name: 'match', args: [left, right] });
+      return (left) => (loc({ kind: 'functionCall', name: 'match', args: [left, right] }));
     }
   // BETWEEN
   / _ KW_NOT _ KW_BETWEEN _ low:AddExpr _ KW_AND _ high:AddExpr {
-      return (left) => ({
+      return (left) => (loc({
         kind: 'functionCall', name: 'or', args: [
-          { kind: 'functionCall', name: 'less', args: [left, low] },
-          { kind: 'functionCall', name: 'greater', args: [left, high] }
+          loc({ kind: 'functionCall', name: 'less', args: [left, low] }),
+          loc({ kind: 'functionCall', name: 'greater', args: [left, high] })
         ]
-      });
+      }));
     }
   / _ KW_BETWEEN _ low:AddExpr _ KW_AND _ high:AddExpr {
-      return (left) => ({
+      return (left) => (loc({
         kind: 'functionCall', name: 'and', args: [
-          { kind: 'functionCall', name: 'greaterOrEquals', args: [left, low] },
-          { kind: 'functionCall', name: 'lessOrEquals', args: [left, high] }
+          loc({ kind: 'functionCall', name: 'greaterOrEquals', args: [left, low] }),
+          loc({ kind: 'functionCall', name: 'lessOrEquals', args: [left, high] })
         ]
-      });
+      }));
     }
   // IS [NOT] DISTINCT FROM / IS [NOT] NULL
   / _ "IS"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "DISTINCT"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return (left) => ({ kind: 'binaryExpr', op: '<=>', left, right });
+      return (left) => (loc({ kind: 'binaryExpr', op: '<=>', left, right }));
     }
   / _ "IS"i ![a-zA-Z0-9_] _ "DISTINCT"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return (left) => ({ kind: 'binaryExpr', op: 'IS DISTINCT FROM', left, right });
+      return (left) => (loc({ kind: 'binaryExpr', op: 'IS DISTINCT FROM', left, right }));
     }
   // IS [NOT] NULL with optional arithmetic continuation: "x IS NOT NULL + 1" parses as plus(isNotNull(x), 1).
   // The arith tail allows arithmetic ops to bind tighter than comparison, matching ClickHouse precedence.
   / _ "IS"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] arith:( _ op:AddOp _ right:NotPrefixExpr )* {
       return (left) => {
-        const base = { kind: 'functionCall', name: 'isNotNull', args: [left] };
-        return arith.reduce((acc, t) => ({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] }), base);
+        const base = loc({ kind: 'functionCall', name: 'isNotNull', args: [left] });
+        return arith.reduce((acc, t) => (loc({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] })), base);
       };
     }
   / _ "IS"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] arith:( _ op:AddOp _ right:NotPrefixExpr )* {
       return (left) => {
-        const base = { kind: 'functionCall', name: 'isNull', args: [left] };
-        return arith.reduce((acc, t) => ({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] }), base);
+        const base = loc({ kind: 'functionCall', name: 'isNull', args: [left] });
+        return arith.reduce((acc, t) => (loc({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] })), base);
       };
     }
   // Plain comparison operator
   / _ op:CompareOp _ right:CompareRightExpr {
-      return (left) => ({ kind: 'binaryExpr', op, left, right });
+      return (left) => (loc({ kind: 'binaryExpr', op, left, right }));
     }
 
 // InTarget: the target expression for IN — array literal, parenthesized list, or bare expression
@@ -1020,11 +1026,11 @@ CompareOp = "<=>" / ">=" / "<=" / "<>" / "!=" / "==" / ">" / "<" / "="
 // This ensures comparisons are left-associative: k = (100) = 1 → equals(equals(k,100), 1).
 // Allows: 1 != NOT 1, k = x + y, k > -5. Does not allow: k = (a = b) unless in parens.
 CompareRightExpr
-  = KW_NOT _ expr:CompareRightExpr { return { kind: 'unaryExpr', op: 'NOT', expr: expr }; }
+  = KW_NOT _ expr:CompareRightExpr { return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr }); }
   / AddExpr
 
 InValues
-  = query:UnionQuery { return { kind: 'subqueryExpr', query: query }; }
+  = query:UnionQuery { return loc({ kind: 'subqueryExpr', query: query }); }
   / ExpressionList
 
 // ── Arithmetic expressions ────────────────────────────────────────────────────
@@ -1033,16 +1039,16 @@ InValues
 // (e.g. NOT 0 + NOT 0 = NOT(0 + NOT(0)), consistent with ClickHouse precedence rules)
 AddExpr
   = head:ConcatExpr tail:(_ op:AddOp _ right:NotPrefixExpr)* {
-      return tail.reduce((acc, t) => ({
+      return tail.reduce((acc, t) => (loc({
         kind: 'binaryExpr', op: t[1], left: acc,
         right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
-      }), head);
+      })), head);
     }
 
 // NotPrefixExpr: allows NOT as a prefix, but only wrapping arithmetic-level expressions (no comparison).
 // Used as right-hand side of + and - so that NOT has lower precedence than arithmetic operators.
 NotPrefixExpr
-  = KW_NOT _ expr:NotPrefixExpr { return { kind: 'unaryExpr', op: 'NOT', expr: expr }; }
+  = KW_NOT _ expr:NotPrefixExpr { return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr }); }
   / ConcatExpr
 
 AddOp
@@ -1055,15 +1061,15 @@ ConcatExpr
   = head:MulExpr tail:(_ "||" _ MulExpr)* {
       if (tail.length === 0) return head;
       const parts = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
-      return { kind: 'functionCall', name: 'concat', args: parts };
+      return loc({ kind: 'functionCall', name: 'concat', args: parts });
     }
 
 MulExpr
   = head:UnaryExpr tail:(_ op:MulOp _ right:UnaryExpr)* {
-      return tail.reduce((acc, t) => ({
+      return tail.reduce((acc, t) => (loc({
         kind: 'binaryExpr', op: t[1], left: acc,
         right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
-      }), head);
+      })), head);
     }
 
 // MulOp: multiplication-level binary operators including keyword variants DIV and MOD
@@ -1093,17 +1099,17 @@ UnaryExpr
         // Check if fits in Int64 range [-2^63, 0]
         const INT64_MIN = BigInt('-9223372036854775808');
         if (bigNeg >= INT64_MIN) {
-          const intResult = { kind: 'literal', type: 'Int64', value: String(bigNeg) };
+          const intResult = loc({ kind: 'literal', type: 'Int64', value: String(bigNeg) });
           // Preserve source for -0 → "0" since it can't round-trip without original text
           if (bigNeg === BigInt(0)) intResult.source = text();
           return intResult;
         }
         // Overflows Int64: use Float64 (loses precision like ClickHouse does)
-        return { kind: 'literal', type: 'Float64', value: String(Number(bigNeg)), source: text() };
+        return loc({ kind: 'literal', type: 'Float64', value: String(Number(bigNeg)), source: text() });
       }
       if (expr.kind === 'literal' && expr.type === 'Float64' && expr.value.charAt(0) !== '-') {
         // Negate a positive float literal; update source if present to include the minus sign
-        const negResult = { kind: 'literal', type: 'Float64', value: '-' + expr.value };
+        const negResult = loc({ kind: 'literal', type: 'Float64', value: '-' + expr.value });
         if (expr.source) negResult.source = text();
         return negResult;
       }
@@ -1135,7 +1141,7 @@ UnaryExpr
         }
       }
       // For all other cases (non-literal, already-negative literal, etc.), wrap in negate()
-      return { kind: 'functionCall', name: 'negate', args: [expr] };
+      return loc({ kind: 'functionCall', name: 'negate', args: [expr] });
     }
   / PrimaryExpr
 
@@ -1150,7 +1156,7 @@ PrimaryExpr
   = base:PrimaryBase suffixes:PrimaryExprSuffix* NullsHandlingClause? over:OverClause? {
       const result = suffixes.reduce((acc, s) => {
         if (s.kind === 'subscript') {
-          return { kind: 'functionCall', name: 'arrayElement', args: [acc, s.index] };
+          return loc({ kind: 'functionCall', name: 'arrayElement', args: [acc, s.index] });
         } else if (s.kind === 'tuple_element') {
           let idxArg;
           const absIndex = s.index.charAt(0) === '-' ? s.index.substring(1) : s.index;
@@ -1158,33 +1164,33 @@ PrimaryExpr
           let idxLiteral;
           if (absIndex.length > 18) {
             const fval = Number(absIndex);
-            idxLiteral = { kind: 'literal', type: 'Float64', value: fval.toExponential().replace('+', '') };
+            idxLiteral = loc({ kind: 'literal', type: 'Float64', value: fval.toExponential().replace('+', '') });
           } else {
-            idxLiteral = { kind: 'literal', type: 'UInt64', value: absIndex };
+            idxLiteral = loc({ kind: 'literal', type: 'UInt64', value: absIndex });
           }
           if (s.index.charAt(0) === '-') {
             // Negative index: wrap as negate(literal)
-            idxArg = { kind: 'functionCall', name: 'negate', args: [idxLiteral] };
+            idxArg = loc({ kind: 'functionCall', name: 'negate', args: [idxLiteral] });
           } else {
             idxArg = idxLiteral;
           }
-          return { kind: 'functionCall', name: 'tupleElement', args: [acc, idxArg] };
+          return loc({ kind: 'functionCall', name: 'tupleElement', args: [acc, idxArg] });
         } else if (s.kind === 'field_access') {
           // Named field access: expr.name — tuple element by name
-          return { kind: 'functionCall', name: 'tupleElement', args: [acc, { kind: 'literal', type: 'String', value: s.name }] };
+          return loc({ kind: 'functionCall', name: 'tupleElement', args: [acc, loc({ kind: 'literal', type: 'String', value: s.name })] });
         } else if (s.kind === 'json_subcolumn') {
           // .:Type or .:`QuotedType` — JSON subcolumn type annotation
-          const node = { kind: 'jsonSubcolumn', expr: acc, type: s.type };
+          const node = loc({ kind: 'jsonSubcolumn', expr: acc, type: s.type });
           if (s.path && s.path.length > 0) node.path = s.path;
           return node;
         } else if (s.kind === 'asterisk_access') {
           // expr.* — tuple/expression wildcard expansion
-          const node = { kind: 'tupleExpansion', expr: acc };
+          const node = loc({ kind: 'tupleExpansion', expr: acc });
           if (s.transformers && s.transformers.length > 0) node.transformers = s.transformers;
           return node;
         } else {
           // :: cast operator; mark with operator:true to distinguish from CAST(x AS T)
-          return { kind: 'castExpr', expr: acc, type: s.type, operator: true };
+          return loc({ kind: 'castExpr', expr: acc, type: s.type, operator: true });
         }
       }, base);
       // Attach window spec to function calls with an inline OVER (spec) clause
@@ -1332,15 +1338,15 @@ PrimaryBase
   // NOT(expr) and NOT (expr) — parenthesized NOT as a high-precedence unary operator.
   // This is distinct from NotExpr (low precedence): NOT (0) + NOT (0) → plus(not(0), not(0)).
   // NOT (a, b, c) — NOT applied to a multi-element tuple: not(tuple(a, b, c))
-  / KW_NOT _ tuple:TupleLiteral { return { kind: 'functionCall', name: 'not', args: [tuple] }; }
-  / KW_NOT _ "(" _ expr:ExpressionWithImplicitAlias _ ")" { return { kind: 'unaryExpr', op: 'NOT', expr: expr }; }
+  / KW_NOT _ tuple:TupleLiteral { return loc({ kind: 'functionCall', name: 'not', args: [tuple] }); }
+  / KW_NOT _ "(" _ expr:ExpressionWithImplicitAlias _ ")" { return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr }); }
   / ParenGroup
   / ArrayLiteral
   / LambdaExprNoParens
   // {QP:Identifier}.field.col — QueryParam used as a table/db qualifier in a dotted column ref.
   // Must come before QueryParam to prevent {QP:Identifier} being consumed as a bare query param.
   / first:QueryParamIdentifier rest:( _ "." _ part:ColumnRefCont { return part; } )+ {
-      return { kind: 'columnRef', parts: [first, ...rest] };
+      return loc({ kind: 'columnRef', parts: [first, ...rest] });
     }
   / QueryParam
   / MapLiteral
@@ -1361,24 +1367,24 @@ PrimaryBase
   / QualifiedAsterisk
   // Bare keyword identifier used as column reference only when immediately followed by subscript '['.
   // This allows ClickHouse system-table columns like Settings['key'] where Settings is a reserved word.
-  / name:AliasName &(_ "[") { return { kind: 'columnRef', parts: [name] }; }
+  / name:AliasName &(_ "[") { return loc({ kind: 'columnRef', parts: [name] }); }
   / ColumnRef
   // Last resort: allow reserved keywords as bare column references (e.g., GROUP BY in, SELECT count).
   // Only reached when all other PrimaryBase alternatives fail.
-  / name:AliasName { return { kind: 'columnRef', parts: [name] }; }
+  / name:AliasName { return loc({ kind: 'columnRef', parts: [name] }); }
   / Asterisk
 
 // MapLiteral: {'key': value, ...} syntax — parsed as map() function call
 // A map literal starts with '{' followed by an expression then ':' (not just an identifier or identifier:type which is QueryParam/Heredoc)
 MapLiteral
-  = "{" _ "}" { return { kind: 'functionCall', name: 'map', args: [] }; }
+  = "{" _ "}" { return loc({ kind: 'functionCall', name: 'map', args: [] }); }
   / "{" _ first:MapEntry rest:( _ "," _ MapEntry )* _ "}" {
       const args = [first[0], first[1]];
       for (const r of rest) {
         args.push(r[3][0]);
         args.push(r[3][1]);
       }
-      return { kind: 'functionCall', name: 'map', args };
+      return loc({ kind: 'functionCall', name: 'map', args });
     }
 
 MapEntry
@@ -1388,21 +1394,21 @@ MapEntry
 // Maps to globalVariable('varname') with alias @@varname (session./global. prefix is stripped).
 MySQLGlobalVariable
   = "@@" ("session." / "global." / "local.")? name:$[a-zA-Z0-9_]+ {
-      return { kind: 'alias', alias: '@@' + name, expr: { kind: 'functionCall', name: 'globalVariable', args: [{ kind: 'literal', type: 'String', value: name }] } };
+      return loc({ kind: 'alias', alias: '@@' + name, expr: loc({ kind: 'functionCall', name: 'globalVariable', args: [loc({ kind: 'literal', type: 'String', value: name })] }) });
     }
 
 // ParenGroup: left-factored rule for all "("-prefixed expressions in PrimaryBase.
 // After consuming "(", branches on what follows to avoid re-entering "(" for each alternative.
 ParenGroup
   // Empty tuple: ()
-  = "(" _ ")" { return { kind: 'functionCall', name: 'tuple', args: [] }; }
+  = "(" _ ")" { return loc({ kind: 'functionCall', name: 'tuple', args: [] }); }
   // Subquery: (SELECT ...) / (WITH ... SELECT ...) / (EXPLAIN ...)
   / "(" beforeQuery:_ &(KW_SELECT / KW_WITH / "EXPLAIN"i ![a-zA-Z0-9_]) query:UnionQuery afterQuery:_ ")" {
-      return { kind: 'subqueryExpr', query: addSurroundingWs(query, beforeQuery, afterQuery) };
+      return loc({ kind: 'subqueryExpr', query: addSurroundingWs(query, beforeQuery, afterQuery) });
     }
   // Lambda with parens: (x, y, ...) -> expr
   / "(" _ head:Identifier tail:(_ "," _ Identifier)* _ ")" _ "->" _ body:Expression {
-      return { kind: 'lambdaExpr', params: [head, ...tail.map((t) => t[3])], body };
+      return loc({ kind: 'lambdaExpr', params: [head, ...tail.map((t) => t[3])], body });
     }
   // Tuple or parenthesized expression: parse first expression, then branch on comma vs close paren
   / "(" beforeFirst:_ first:Expression rest:(_ "," _ Expression)* trailing:(_ ",")? afterLast:_ ")" {
@@ -1413,11 +1419,11 @@ ParenGroup
         return { ...first, parenthesized: true };
       } else if (rest.length === 0) {
         // (expr,) — single-element tuple
-        return { kind: 'functionCall', name: 'tuple', args: [first] };
+        return loc({ kind: 'functionCall', name: 'tuple', args: [first] });
       } else {
         // (expr, expr, ...) — multi-element tuple
         const elems = [first, ...rest.map((r) => r[3])];
-        return { kind: 'tuple', elements: elems, source: text() };
+        return loc({ kind: 'tuple', elements: elems, source: text() });
       }
     }
 
@@ -1425,16 +1431,16 @@ ParenGroup
 TupleLiteral
   // Single-element tuple with trailing comma: (expr,)
   = "(" _ elem:Expression _ "," _ ")" {
-      return { kind: 'functionCall', name: 'tuple', args: [elem] };
+      return loc({ kind: 'functionCall', name: 'tuple', args: [elem] });
     }
   // Multi-element tuple (optionally with trailing comma)
   / "(" _ first:Expression _ "," _ rest:ExpressionList _ ","? _ ")" {
-      return { kind: 'tuple', elements: [first, ...rest], source: text() };
+      return loc({ kind: 'tuple', elements: [first, ...rest], source: text() });
     }
 
 ArrayLiteral
   = "[" _ "]" {
-      return { kind: 'array', elements: [], source: text() };
+      return loc({ kind: 'array', elements: [], source: text() });
     }
   / "[" beforeItems:_ items:ExpressionList afterItems:_ "]" {
       const bi = flattenWs(beforeItems);
@@ -1444,12 +1450,12 @@ ArrayLiteral
         items[0] = addLeading(items[0], bi);
         items[items.length - 1] = addTrailing(items[items.length - 1], ai);
       }
-      return { kind: 'array', elements: items, source: text() };
+      return loc({ kind: 'array', elements: items, source: text() });
     }
 
 QueryParam
   = "{" _ name:$( "$" [0-9]+ / [a-zA-Z_][a-zA-Z0-9_]* ) _ ":" _ type:$([^}]+) "}" {
-      return { kind: 'queryParam', name: name, type: type.trim() };
+      return loc({ kind: 'queryParam', name: name, type: type.trim() });
     }
 
 // HeredocLiteral: PostgreSQL-style dollar-quoted string: $tag$content$tag$ or $$content$$
@@ -1463,38 +1469,38 @@ HeredocLiteral
       const content = input.substring(peg$currPos, pos);
       peg$currPos = pos + endMarker.length;
       // Double backslashes so escapeStringValue in explain.ts outputs them correctly (consistent with StringChar handling of \\)
-      return { kind: 'literal', type: 'String', value: content.replace(/\\/g, '\\\\') };
+      return loc({ kind: 'literal', type: 'String', value: content.replace(/\\/g, '\\\\') });
     }
 
 // BoolLiteral: true and false keywords produce Bool literals
 BoolLiteral
-  = "true"i  ![a-zA-Z0-9_] { return { kind: 'literal', type: 'Bool', value: '1' }; }
-  / "false"i ![a-zA-Z0-9_] { return { kind: 'literal', type: 'Bool', value: '0' }; }
+  = "true"i  ![a-zA-Z0-9_] { return loc({ kind: 'literal', type: 'Bool', value: '1' }); }
+  / "false"i ![a-zA-Z0-9_] { return loc({ kind: 'literal', type: 'Bool', value: '0' }); }
 
 NullLiteral
   = "NULL"i ![a-zA-Z0-9_] {
-      return { kind: 'literal', type: 'NULL', value: 'NULL' };
+      return loc({ kind: 'literal', type: 'NULL', value: 'NULL' });
     }
 
 // BinaryStringLiteral: b'01010...' syntax - binary digits converted to a UTF-8 string value
 BinaryStringLiteral
   = [bB] "'" digits:$[01]* "'" {
-      if (digits.length === 0) return { kind: 'literal', type: 'String', value: '' };
+      if (digits.length === 0) return loc({ kind: 'literal', type: 'String', value: '' });
       // Pad to multiple of 8 bits, MSB-first, then interpret as UTF-8 bytes
       const padded = digits.padStart(Math.ceil(digits.length / 8) * 8, '0');
       const bytes = [];
       for (let i = 0; i < padded.length; i += 8) {
         bytes.push(parseInt(padded.slice(i, i + 8), 2));
       }
-      return { kind: 'literal', type: 'String', value: Buffer.from(bytes).toString('utf-8') };
+      return loc({ kind: 'literal', type: 'String', value: Buffer.from(bytes).toString('utf-8') });
     }
 
 // HexStringLiteral: x'hexdigits...' syntax - hex digit pairs converted to a UTF-8 string value
 HexStringLiteral
   = [xX] "'" digits:$[0-9a-fA-F]* "'" {
-      if (digits.length === 0) return { kind: 'literal', type: 'String', value: '' };
+      if (digits.length === 0) return loc({ kind: 'literal', type: 'String', value: '' });
       const padded = digits.length % 2 === 1 ? '0' + digits : digits;
-      return { kind: 'literal', type: 'String', value: Buffer.from(padded, 'hex').toString('utf-8') };
+      return loc({ kind: 'literal', type: 'String', value: Buffer.from(padded, 'hex').toString('utf-8') });
     }
 
 HexLiteral
@@ -1507,21 +1513,21 @@ HexLiteral
       const intVal = parseInt(cleanInt, 16);
       const fracVal = cleanFrac.length > 0 ? parseInt(cleanFrac, 16) / Math.pow(16, cleanFrac.length) : 0;
       const value = exp !== null ? (intVal + fracVal) * Math.pow(2, exp) : (intVal + fracVal);
-      return { kind: 'literal', type: 'Float64', value: value.toString(), source: text() };
+      return loc({ kind: 'literal', type: 'Float64', value: value.toString(), source: text() });
     }
   / "0x"i digits:$([0-9a-fA-F]+("_"[0-9a-fA-F]+)*) exp:HexExponentPart? ![a-zA-Z0-9_] {
       // Remove underscore digit separators
       const clean = digits.replace(/_/g, '');
       // Parse hex with optional exponent (e.g. 0x123p4) as float
       if (exp !== null) {
-        return { kind: 'literal', type: 'Float64', value: parseFloat(parseInt(clean, 16) * Math.pow(2, exp)).toString(), source: text() };
+        return loc({ kind: 'literal', type: 'Float64', value: parseFloat(parseInt(clean, 16) * Math.pow(2, exp)).toString(), source: text() });
       }
       // If significant hex digits exceed 16 (> 64 bits), overflows UInt64 → treat as Float64
       const significant = clean.replace(/^0+/, '') || '0';
       if (significant.length > 16) {
-        return { kind: 'literal', type: 'Float64', value: String(Number(BigInt('0x' + clean))), source: text() };
+        return loc({ kind: 'literal', type: 'Float64', value: String(Number(BigInt('0x' + clean))), source: text() });
       }
-      return { kind: 'literal', type: 'UInt64', value: '0x' + clean };
+      return loc({ kind: 'literal', type: 'UInt64', value: '0x' + clean });
     }
 
 HexExponentPart
@@ -1531,7 +1537,7 @@ BinaryNumLiteral
   = "0b"i digits:$([01]+("_"[01]+)*) ![a-zA-Z0-9_] {
       // Remove underscore digit separators
       const clean = digits.replace(/_/g, '');
-      return { kind: 'literal', type: 'UInt64', value: '0b' + clean };
+      return loc({ kind: 'literal', type: 'UInt64', value: '0b' + clean });
     }
 
 // FloatLiteral: decimal float with optional underscore digit separators.
@@ -1539,16 +1545,16 @@ BinaryNumLiteral
 // Note: "_ " in Peggy sequences is the whitespace rule; use "_" (quoted) for literal underscore.
 // The ![a-zA-Z_] guard prevents partial consumption (e.g. 1e5_ must not match as 1e5).
 FloatLiteral
-  = "inf"i ![a-zA-Z0-9_] { return { kind: 'literal', type: 'Float64', value: 'inf' }; }
-  / "nan"i ![a-zA-Z0-9_] { return { kind: 'literal', type: 'Float64', value: 'nan' }; }
+  = "inf"i ![a-zA-Z0-9_] { return loc({ kind: 'literal', type: 'Float64', value: 'inf' }); }
+  / "nan"i ![a-zA-Z0-9_] { return loc({ kind: 'literal', type: 'Float64', value: 'nan' }); }
   / digits:$([0-9]+("_"[0-9]+)*) "." frac:$([0-9]+("_"[0-9]+)*)? exp:ExponentPart? ![a-zA-Z_] {
-      return { kind: 'literal', type: 'Float64', value: digits.replace(/_/g, '') + '.' + (frac || '').replace(/_/g, '') + (exp || '') };
+      return loc({ kind: 'literal', type: 'Float64', value: digits.replace(/_/g, '') + '.' + (frac || '').replace(/_/g, '') + (exp || '') });
     }
   / "." digits:$([0-9]+("_"[0-9]+)*) exp:ExponentPart? ![a-zA-Z_] {
-      return { kind: 'literal', type: 'Float64', value: '.' + digits.replace(/_/g, '') + (exp || '') };
+      return loc({ kind: 'literal', type: 'Float64', value: '.' + digits.replace(/_/g, '') + (exp || '') });
     }
   / digits:$([0-9]+("_"[0-9]+)*) exp:ExponentPart ![a-zA-Z_] {
-      return { kind: 'literal', type: 'Float64', value: digits.replace(/_/g, '') + exp };
+      return loc({ kind: 'literal', type: 'Float64', value: digits.replace(/_/g, '') + exp });
     }
 
 // ExponentPart: e/E with optional sign and decimal digits (underscores allowed between digits).
@@ -1559,7 +1565,7 @@ ExponentPart
 
 LambdaExprNoParens
   = param:Identifier _ "->" _ body:Expression {
-      return { kind: 'lambdaExpr', params: [param], body: body };
+      return loc({ kind: 'lambdaExpr', params: [param], body: body });
     }
 
 // IntervalExpr: INTERVAL expr unit - maps to toIntervalUnit(expr)
@@ -1574,8 +1580,8 @@ CaseExpr
         args.push(branch[0]);
         args.push(branch[1]);
       }
-      args.push(elseClause !== null ? elseClause[4] : { kind: 'literal', type: 'NULL', value: 'NULL' });
-      return { kind: 'functionCall', name: 'multiIf', args };
+      args.push(elseClause !== null ? elseClause[4] : loc({ kind: 'literal', type: 'NULL', value: 'NULL' }));
+      return loc({ kind: 'functionCall', name: 'multiIf', args });
     }
   / "CASE"i ![a-zA-Z0-9_] _ subject:Expression _ branches:CaseWhenBranch+ elseClause:( _ "ELSE"i ![a-zA-Z0-9_] _ Expression )? _ "END"i ![a-zA-Z0-9_] {
       const args = [subject];
@@ -1583,8 +1589,8 @@ CaseExpr
         args.push(branch[0]);
         args.push(branch[1]);
       }
-      args.push(elseClause !== null ? elseClause[4] : { kind: 'literal', type: 'NULL', value: 'NULL' });
-      return { kind: 'functionCall', name: 'caseWithExpression', args };
+      args.push(elseClause !== null ? elseClause[4] : loc({ kind: 'literal', type: 'NULL', value: 'NULL' }));
+      return loc({ kind: 'functionCall', name: 'caseWithExpression', args });
     }
 
 // CaseWhenBranch: a single WHEN ... THEN ... pair in a CASE expression
@@ -1595,7 +1601,7 @@ CaseWhenBranch
 
 IntervalExpr
   = "INTERVAL"i ![a-zA-Z0-9_] _ expr:Expression _ unit:IntervalUnit {
-      return { kind: 'functionCall', name: 'toInterval' + unit, args: [expr] };
+      return loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [expr] });
     }
   // INTERVAL 'N unit' MySQL-compatible syntax: single string containing value and unit
   / "INTERVAL"i ![a-zA-Z0-9_] _ str:StringLiteral {
@@ -1609,7 +1615,7 @@ IntervalExpr
       };
       const unit = unitMap[unitStr] || 'Second';
       const numVal = parseInt(val, 10);
-      return { kind: 'functionCall', name: 'toInterval' + unit, args: [{ kind: 'literal', type: 'UInt64', value: String(numVal) }] };
+      return loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [loc({ kind: 'literal', type: 'UInt64', value: String(numVal) })] });
     }
 
 // IntervalUnit: time unit keywords for INTERVAL expressions
@@ -1631,7 +1637,7 @@ DateSubName = ("DATE_SUB"i / "DATESUB"i / "TIMESTAMP_SUB"i / "TIMESTAMPSUB"i) { 
 // DATE_ADD/DATE_SUB argument forms: (unit, amount, date) or (date, INTERVAL ...) or (INTERVAL ..., date)
 DateAddSubArgs
   = unit:IntervalUnit _ "," _ amount:ExpressionWithImplicitAlias _ "," _ date:ExpressionWithImplicitAlias {
-      return [date, { kind: 'functionCall', name: 'toInterval' + unit, args: [amount] }];
+      return [date, loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [amount] })];
     }
   / date:ExpressionWithImplicitAlias _ "," _ interval:IntervalExpr { return [date, interval]; }
   / interval:IntervalExpr _ "," _ date:ExpressionWithImplicitAlias { return [interval, date]; }
@@ -1641,15 +1647,15 @@ DateAddSubArgs
 FunctionCall
   // DATE_ADD/DATEADD/TIMESTAMP_ADD/TIMESTAMPADD — all forms → plus(date, interval)
   = fn:DateAddName _ "(" _ args:DateAddSubArgs _ ")" {
-      return { kind: 'functionCall', name: fn, args: args };
+      return loc({ kind: 'functionCall', name: fn, args: args });
     }
   // DATE_SUB/DATESUB/TIMESTAMP_SUB/TIMESTAMPSUB — all forms → minus(date, interval)
   / fn:DateSubName _ "(" _ args:DateAddSubArgs _ ")" {
-      return { kind: 'functionCall', name: fn, args: args };
+      return loc({ kind: 'functionCall', name: fn, args: args });
     }
   // TIMESTAMP_SUB/TIMESTAMPSUB(SQL_TSI_UNIT, amount, date) with TSI prefix unit → minus(date, toIntervalUnit(amount))
   / DateSubName _ "(" _ unit:TimestampTsiUnit _ "," _ amount:Expression _ "," _ date:Expression _ ")" {
-      return { kind: 'functionCall', name: 'minus', args: [date, { kind: 'functionCall', name: 'toInterval' + unit, args: [amount] }] };
+      return loc({ kind: 'functionCall', name: 'minus', args: [date, loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [amount] })] });
     }
   // dateDiff/DATEDIFF/DATE_DIFF with unquoted unit identifier as first arg → convert to canonical lowercase string literal
   / ("dateDiff"i / "DATEDIFF"i / "DATE_DIFF"i) _ "(" _ unit:$([a-zA-Z_][a-zA-Z0-9_]*) _ "," _ rest:FunctionCallArgList _ ")" {
@@ -1669,18 +1675,18 @@ FunctionCall
       };
       const lower = unit.toLowerCase();
       const canonical = unitAliases[lower] || lower;
-      const unitLiteral = { kind: 'literal', type: 'String', value: canonical };
-      return { kind: 'functionCall', name: 'dateDiff', args: [unitLiteral, ...rest] };
+      const unitLiteral = loc({ kind: 'literal', type: 'String', value: canonical });
+      return loc({ kind: 'functionCall', name: 'dateDiff', args: [unitLiteral, ...rest] });
     }
   // dateDiff/DATEDIFF/DATE_DIFF with quoted string unit (normalize function name to dateDiff)
   / ("dateDiff"i / "DATEDIFF"i / "DATE_DIFF"i) _ "(" _ args:FunctionCallArgList _ ")" {
-      return { kind: 'functionCall', name: 'dateDiff', args: args };
+      return loc({ kind: 'functionCall', name: 'dateDiff', args: args });
     }
   // SUBSTRING(str FROM pos [FOR len]) — SQL standard substring syntax
   / ( "SUBSTRING"i / "SUBSTR"i / "MID"i ) _ "(" _ str:ExpressionWithImplicitAlias _ "FROM"i ![a-zA-Z0-9_] _ pos:ExpressionWithImplicitAlias len:( _ "FOR"i ![a-zA-Z0-9_] _ ExpressionWithImplicitAlias )? _ ")" {
       const args = [str, pos];
       if (len !== null) args.push(len[4]);
-      return { kind: 'functionCall', name: 'substring', args };
+      return loc({ kind: 'functionCall', name: 'substring', args });
     }
   // EXTRACT(unit FROM expr) — SQL standard date/time extraction
   // Supports implicit alias on expr (ClickHouse extension)
@@ -1696,7 +1702,7 @@ FunctionCall
         MI: 'toMinute', SS: 'toSecond'
       };
       const funcName = funcMap[unit.toUpperCase()] || ('to' + unit.charAt(0).toUpperCase() + unit.slice(1).toLowerCase());
-      return { kind: 'functionCall', name: funcName, args: [expr] };
+      return loc({ kind: 'functionCall', name: funcName, args: [expr] });
     }
   / "TRIM"i _ "(" _ direction:TrimDirection _ chars:ExpressionWithImplicitAlias _ "FROM"i ![a-zA-Z0-9_] _ str:ExpressionWithImplicitAlias _ ")" {
       // ClickHouse simplifies TRIM with empty string to just the expression
@@ -1704,29 +1710,29 @@ FunctionCall
         return str;
       }
       const fname = direction === 'LEADING' ? 'trimLeft' : (direction === 'TRAILING' ? 'trimRight' : 'trimBoth');
-      return { kind: 'functionCall', name: fname, args: [str, chars] };
+      return loc({ kind: 'functionCall', name: fname, args: [str, chars] });
     }
   // POSITION(needle IN haystack) — SQL standard POSITION syntax; maps to position(haystack, needle)
   // Uses AddExpr for needle to prevent consuming IN as part of the expression
   / "POSITION"i _ "(" _ needle:AddExpr _ "IN"i ![a-zA-Z0-9_] _ haystack:ExpressionWithImplicitAlias _ ")" {
-      return { kind: 'functionCall', name: 'position', args: [haystack, needle] };
+      return loc({ kind: 'functionCall', name: 'position', args: [haystack, needle] });
     }
   // SQL-standard typed date/time literals: DATE 'string' → toDate('string'), etc.
   / "DATE"i ![a-zA-Z0-9_] _ str:StringLiteral {
-      return { kind: 'functionCall', name: 'toDate', args: [str] };
+      return loc({ kind: 'functionCall', name: 'toDate', args: [str] });
     }
   / "TIMESTAMP"i ![a-zA-Z0-9_] _ str:StringLiteral {
-      return { kind: 'functionCall', name: 'toDateTime', args: [str] };
+      return loc({ kind: 'functionCall', name: 'toDateTime', args: [str] });
     }
   / "TIME"i ![a-zA-Z0-9_] _ str:StringLiteral {
-      return { kind: 'functionCall', name: 'toTime', args: [str] };
+      return loc({ kind: 'functionCall', name: 'toTime', args: [str] });
     }
   // CAST(expr AS Type) — SQL standard type cast. Also supports aliased form: CAST(expr AS alias AS Type)
   // The alias lookahead (&(KW_AS)) ensures we don't consume the final type name as an alias.
   // e.g. CAST(1 AS Int32), CAST(x AS y AS String)
   / "CAST"i _ "(" _ expr:TernaryExpr alias:( _ ( KW_AS _ )? name:AliasName &( _ KW_AS ) { return name; } )? _ KW_AS _ type:ClickHouseType _ ")" {
-      const innerExpr = alias !== null ? { kind: 'alias', expr, alias } : expr;
-      return { kind: 'castExpr', expr: innerExpr, type: type };
+      const innerExpr = alias !== null ? loc({ kind: 'alias', expr, alias }) : expr;
+      return loc({ kind: 'castExpr', expr: innerExpr, type: type });
     }
   // Generic function call: name([DISTINCT|ALL] args [SETTINGS ...])[(params)]? [FILTER(WHERE ...)]?
   // DISTINCT modifier appends "Distinct" to function name: countDistinct, sumDistinct, etc.
@@ -1754,16 +1760,16 @@ FunctionCall
         const mod2Str = Array.isArray(mod2Val) ? mod2Val[0] : mod2Val;
         const isDistinct2 = mod2Str !== null && mod2Str !== undefined && mod2Str.toString().toUpperCase() === 'DISTINCT';
         const curryName = isDistinct2 ? effectiveName + 'Distinct' : effectiveName;
-        call = { kind: 'functionCall', name: curryName, params: args1, args: second[4] || [] };
+        call = loc({ kind: 'functionCall', name: curryName, params: args1, args: second[4] || [] });
       } else {
-        call = { kind: 'functionCall', name: effectiveName, args: args1 };
+        call = loc({ kind: 'functionCall', name: effectiveName, args: args1 });
       }
       if (funcSettings !== null) call.funcSettings = funcSettings[3];
       if (filter !== null) {
         // count(*) FILTER (WHERE cond) → countIf(cond): drop the asterisk arg
         const filterArgs = (call.args.length === 1 && call.args[0].kind === 'asterisk')
           ? [] : call.args;
-        call = { kind: 'functionCall', name: call.name + 'If', args: [...filterArgs, filter] };
+        call = loc({ kind: 'functionCall', name: call.name + 'If', args: [...filterArgs, filter] });
       }
       return call;
     }
@@ -1810,15 +1816,15 @@ FunctionCallArgList
 
 FunctionCallArg
   = params:MultiLambdaParams _ "->" _ body:Expression {
-      return { kind: 'lambdaExpr', params: params, body: body };
+      return loc({ kind: 'lambdaExpr', params: params, body: body });
     }
   / &(KW_SELECT / KW_WITH) query:UnionQuery {
-      return { kind: 'subqueryExpr', query: query };
+      return loc({ kind: 'subqueryExpr', query: query });
     }
   // Support implicit aliases in function args: f(expr alias, ...) — ClickHouse extension
   / ExpressionWithImplicitAlias
   // Allow keywords as column name identifiers in function args (e.g. sum(DISTINCT), repeat(ALL, 5))
-  / name:AliasName &(_ (")" / ",")) { return { kind: 'columnRef', parts: [name] }; }
+  / name:AliasName &(_ (")" / ",")) { return loc({ kind: 'columnRef', parts: [name] }); }
 
 // Matches two or more comma-separated identifiers before "->".
 // The final identifier uses a lookahead to confirm "->" follows.
@@ -1842,11 +1848,11 @@ ColumnRef
   // QueryParam identifiers (e.g. {DB:Identifier}.table),
   // JSON object subcolumn ^ prefix (e.g. json.^a), and array subscript suffix (e.g. arr.k1[]).
   = first:ColumnRefFirst rest:( _ "." _ part:ColumnRefCont { return part; } )+ {
-      return { kind: 'columnRef', parts: [first, ...rest] };
+      return loc({ kind: 'columnRef', parts: [first, ...rest] });
     }
   // Unqualified: plain identifier (keyword-guarded) or digit-prefixed identifier
-  / name:Identifier { return { kind: 'columnRef', parts: [name] }; }
-  / name:$([0-9][a-zA-Z0-9_$]+) { return { kind: 'columnRef', parts: [name] }; }
+  / name:Identifier { return loc({ kind: 'columnRef', parts: [name] }); }
+  / name:$([0-9][a-zA-Z0-9_$]+) { return loc({ kind: 'columnRef', parts: [name] }); }
 
 // First part of a column ref: regular identifier, QueryParam-as-identifier, digit-prefixed identifier,
 // or any AliasName (allows reserved keywords as table-alias qualifiers like "join.n")
@@ -1870,7 +1876,7 @@ ColumnRefCont
 QualifiedAsterisk
   = first:ColumnRefFirst rest:( _ "." _ ![*] part:Identifier { return part; } )* _ "." _ "*"
     transformers:( _ ColumnTransformer )* {
-      const result = { kind: 'qualifiedAsterisk', parts: [first, ...rest] };
+      const result = loc({ kind: 'qualifiedAsterisk', parts: [first, ...rest] });
       if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
       return result;
     }
@@ -1878,7 +1884,7 @@ QualifiedAsterisk
 // Asterisk optionally followed by column transformers (EXCEPT, APPLY, REPLACE).
 Asterisk
   = "*" transformers:( _ ColumnTransformer )* {
-      const result = { kind: 'asterisk' };
+      const result = loc({ kind: 'asterisk' });
       if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
       return result;
     }
@@ -1933,7 +1939,7 @@ ColumnTransformerApply
       return { kind: 'apply', func: func };
     }
   / "APPLY"i ![a-zA-Z0-9_] _ name:Identifier {
-      return { kind: 'apply', func: { kind: 'columnRef', parts: [name] } };
+      return { kind: 'apply', func: loc({ kind: 'columnRef', parts: [name] }) };
     }
 
 // REPLACE column transformer: replaces column values with expressions.
@@ -1972,13 +1978,13 @@ ColumnsExpr
   // Uses ColumnRefFirst for the first part to support digit-prefixed identifiers and QueryParamIdentifiers.
   = first:ColumnRefFirst rest:( _ "." _ !( "COLUMNS"i _ "(" ) part:ColumnRefCont { return part; } )* _ "." _ "COLUMNS"i _ "(" _ args:FunctionCallArgList _ ")" transformers:( _ ColumnTransformer )* {
       const qualPath = [first, ...rest];
-      const result = { kind: 'columnsExpr', args, qualifier: qualPath.join('.') };
+      const result = loc({ kind: 'columnsExpr', args, qualifier: qualPath.join('.') });
       if (transformers.length > 0) result.transformers = transformers.map((t) => t[1]);
       return result;
     }
   / "COLUMNS"i _ "(" _ args:FunctionCallArgList _ ")" _ head:ColumnTransformer rest:( _ ColumnTransformer )* {
       const transformers = [head, ...rest.map((t) => t[1])];
-      return { kind: 'columnsExpr', args, transformers };
+      return loc({ kind: 'columnsExpr', args, transformers });
     }
 
 // ── Literals & identifiers ────────────────────────────────────────────────────
@@ -1994,9 +2000,9 @@ IntegerLiteral
       const UINT64_MAX = BigInt('18446744073709551615');
       if (normalized.length > 20 || (normalized.length >= 20 && BigInt(normalized) > UINT64_MAX)) {
         // Keep original string to preserve precision for CAST contexts
-        return { kind: 'literal', type: 'Float64', value: normalized };
+        return loc({ kind: 'literal', type: 'Float64', value: normalized });
       }
-      return { kind: 'literal', type: 'UInt64', value: normalized };
+      return loc({ kind: 'literal', type: 'UInt64', value: normalized });
     }
 
 // StringLiteral: decodes hex escape sequences as UTF-8 bytes (collecting consecutive \xNN
@@ -2004,7 +2010,7 @@ IntegerLiteral
 StringLiteral
   // Unicode left/right single quotes (no escape processing - backslashes stored doubled)
   = "\u2018" chars:UnicodeQuoteChar* "\u2019" {
-      return { kind: 'literal', type: 'String', value: chars.join('') };
+      return loc({ kind: 'literal', type: 'String', value: chars.join('') });
     }
   / "'" chars:StringChar* "'" {
       // Collect consecutive hex byte objects and decode as UTF-8
@@ -2024,7 +2030,7 @@ StringLiteral
       if (hexBuf.length > 0) {
         parts.push(new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(hexBuf)));
       }
-      return { kind: 'literal', type: 'String', value: parts.join('') };
+      return loc({ kind: 'literal', type: 'String', value: parts.join('') });
     }
 
 // StringChar: processes escape sequences inside single-quoted strings.
@@ -2072,10 +2078,10 @@ QueryParamIdentifier
 
 TableRef
   = db:( QueryParamIdentifier / AliasName ) _ "." _ table:( QueryParamIdentifier / AliasName ) {
-      return { kind: 'tableRef', database: db, table: table };
+      return loc({ kind: 'tableRef', database: db, table: table });
     }
   / table:( QueryParamIdentifier / AliasName ) {
-      return { kind: 'tableRef', table: table };
+      return loc({ kind: 'tableRef', table: table });
     }
 
 // Identifier: bare word (not a keyword) or quoted identifier

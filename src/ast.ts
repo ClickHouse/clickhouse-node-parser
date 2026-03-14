@@ -1,10 +1,29 @@
 import { z } from 'zod';
 
+// ── Source location ──────────────────────────────────────────────────────────
+
+/**
+ * Source location range from the original SQL input.
+ * Compatible with peggy's `LocationRange`.
+ */
+export type SourceLocation = {
+  start: { offset: number; line: number; column: number };
+  end: { offset: number; line: number; column: number };
+};
+
+/** Zod schema for {@link SourceLocation}. */
+export const SourceLocationSchema = z.object({
+  start: z.object({ offset: z.number(), line: z.number(), column: z.number() }),
+  end: z.object({ offset: z.number(), line: z.number(), column: z.number() }),
+});
+
 // ── Leaf schemas (no recursion) ───────────────────────────────────────────────
 
 const ExprCommentFields = {
   leadingComments: z.array(z.string()).optional(),
   trailingComments: z.array(z.string()).optional(),
+  location: SourceLocationSchema.optional(),
+  parent: z.any().optional(),
 };
 
 /**
@@ -86,6 +105,8 @@ export const TableRefSchema = z.object({
   sample: SampleClauseSchema.optional(),
   leadingComments: z.array(z.string()).optional(),
   trailingComments: z.array(z.string()).optional(),
+  location: SourceLocationSchema.optional(),
+  parent: z.any().optional(),
 });
 
 /**
@@ -232,6 +253,8 @@ export type Asterisk = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -250,6 +273,8 @@ export type QualifiedAsterisk = {
   transformers?: ColumnTransformer[];
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -277,6 +302,8 @@ export type TupleExpansion = {
   transformers?: ColumnTransformer[];
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -376,6 +403,8 @@ export type FunctionCall = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -396,6 +425,8 @@ export type CastExpr = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -414,6 +445,8 @@ export type LambdaExpr = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -427,6 +460,8 @@ export type SubqueryExpr = {
   query: QueryStatement;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -450,6 +485,8 @@ export type InExpr = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -467,6 +504,8 @@ export type UnaryExpr = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -511,6 +550,8 @@ export type BinaryExpr = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -532,6 +573,8 @@ export type NaryExpr = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -549,6 +592,8 @@ export type Alias = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -565,6 +610,8 @@ export type ArrayLiteral = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -584,6 +631,8 @@ export type TupleLiteral = {
   parenthesized?: boolean;
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -605,6 +654,8 @@ export type ColumnsExpr = {
   transformers?: ColumnTransformer[];
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -625,6 +676,8 @@ export type JsonSubcolumn = {
   path?: string[];
   leadingComments?: string[];
   trailingComments?: string[];
+  location?: SourceLocation;
+  parent?: ASTNode;
 };
 
 /**
@@ -904,6 +957,10 @@ export type OrderByItem = {
   fillStaleness?: Expression;
   /** INTERPOLATE clause items (attached to the last WITH FILL item in the ORDER BY). */
   interpolate?: InterpolateItem[];
+  /** Source location in the original SQL input. */
+  location?: SourceLocation;
+  /** Reference to the parent AST node. */
+  parent?: ASTNode;
 };
 
 /** Zod schema for {@link InterpolateItem}. */
@@ -925,6 +982,8 @@ export const OrderByItemSchema = z.object({
   fillStep: ExpressionSchema.optional(),
   fillStaleness: ExpressionSchema.optional(),
   interpolate: z.array(InterpolateItemSchema).optional(),
+  location: SourceLocationSchema.optional(),
+  parent: z.any().optional(),
 });
 
 /** Zod schema for {@link SettingItem}. */
@@ -1077,6 +1136,10 @@ export type CommentFields = {
   leadingComments?: string[];
   /** Comments appearing on the same line as the end of this statement (inline trailing). */
   trailingComments?: string[];
+  /** Source location in the original SQL input. */
+  location?: SourceLocation;
+  /** Reference to the parent AST node. */
+  parent?: ASTNode;
 };
 
 export type TrailingClauses = {
@@ -1114,6 +1177,10 @@ export type SubqueryFrom = {
   leadingComments?: string[];
   /** Comments appearing after this node on the same line. */
   trailingComments?: string[];
+  /** Source location in the original SQL input. */
+  location?: SourceLocation;
+  /** Reference to the parent AST node. */
+  parent?: ASTNode;
 };
 
 /**
@@ -1140,6 +1207,10 @@ export type TableFunctionRef = {
   leadingComments?: string[];
   /** Comments appearing after this node on the same line. */
   trailingComments?: string[];
+  /** Source location in the original SQL input. */
+  location?: SourceLocation;
+  /** Reference to the parent AST node. */
+  parent?: ASTNode;
 };
 
 /**
@@ -1159,6 +1230,10 @@ export type JoinExpr = {
   right: TableRef | SubqueryFrom | TableFunctionRef;
   /** The join condition (ON or USING). Absent for CROSS and PASTE joins. */
   constraint?: JoinConstraint;
+  /** Source location in the original SQL input. */
+  location?: SourceLocation;
+  /** Reference to the parent AST node. */
+  parent?: ASTNode;
 };
 
 /**
@@ -1175,6 +1250,10 @@ export type ArrayJoinExpr = {
   left: FromExpr;
   /** The array expressions to unfold. */
   expressions: Expression[];
+  /** Source location in the original SQL input. */
+  location?: SourceLocation;
+  /** Reference to the parent AST node. */
+  parent?: ASTNode;
 };
 
 /**
@@ -1417,6 +1496,8 @@ export type ASTNode = ASTNodeKindMap[ASTNodeKind];
 const CommentFieldsSchema = {
   leadingComments: z.array(z.string()).optional(),
   trailingComments: z.array(z.string()).optional(),
+  location: SourceLocationSchema.optional(),
+  parent: z.any().optional(),
 };
 
 const TrailingClausesFields = {
@@ -1508,6 +1589,8 @@ export const SubqueryFromSchema: z.ZodType<SubqueryFrom> = z.lazy(() =>
     sample: SampleClauseSchema.optional(),
     leadingComments: z.array(z.string()).optional(),
     trailingComments: z.array(z.string()).optional(),
+    location: SourceLocationSchema.optional(),
+    parent: z.any().optional(),
   }),
 );
 
@@ -1523,6 +1606,8 @@ export const TableFunctionRefSchema: z.ZodType<TableFunctionRef> = z.lazy(() =>
     settings: z.array(SettingItemSchema).optional(),
     leadingComments: z.array(z.string()).optional(),
     trailingComments: z.array(z.string()).optional(),
+    location: SourceLocationSchema.optional(),
+    parent: z.any().optional(),
   }),
 );
 
@@ -1572,6 +1657,8 @@ export const JoinExprSchema: z.ZodType<JoinExpr> = z.lazy(() =>
     left: FromExprSchema,
     right: z.union([TableRefSchema, SubqueryFromSchema, TableFunctionRefSchema]),
     constraint: JoinConstraintSchema.optional(),
+    location: SourceLocationSchema.optional(),
+    parent: z.any().optional(),
   }),
 );
 
@@ -1582,6 +1669,8 @@ export const ArrayJoinExprSchema: z.ZodType<ArrayJoinExpr> = z.lazy(() =>
     joinType: ArrayJoinTypeSchema,
     left: FromExprSchema,
     expressions: z.array(ExpressionSchema),
+    location: SourceLocationSchema.optional(),
+    parent: z.any().optional(),
   }),
 );
 
