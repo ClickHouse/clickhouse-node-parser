@@ -29,7 +29,7 @@ export type {
   QueryParam,
   SelectStatement,
   Statement,
-  CommentFields,
+  NodeMetadata,
   ASTNodeKind,
   ASTNodeKindMap,
   ASTNode,
@@ -78,9 +78,21 @@ function setParents(statements: Statement[]): void {
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
-export function parse(sql: string): Statement[] {
+export type ParseOptions = {
+  /**
+   * When true, sets the `parent` reference on each AST node. The returned AST
+   * nodes will have circular references, breaking JSON serialization.
+   *
+   * Default: false
+   **/
+  setParents?: boolean;
+};
+
+export function parse(sql: string, options?: ParseOptions): Statement[] {
   const statements = peggyParse(sql) as Statement[];
-  setParents(statements);
+  if (options?.setParents) {
+    setParents(statements);
+  }
   return statements;
 }
 
