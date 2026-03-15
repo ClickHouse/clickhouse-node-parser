@@ -156,7 +156,7 @@ select 'dictGet', 'complex_cache_ints' as dict_name, tuple(toUInt64(1)) as k,
     dictGet(dict_name, 'u16', k),
     dictGet(dict_name, 'u32', k),
     dictGet(dict_name, 'u64', k),
-    dictGet(dict_name, ('i8', 'i16', 'i32'), k);;
+    dictGet(dict_name, ('i8', 'i16', 'i32'), k);
 select 'dictGetOrDefault', 'complex_cache_ints' as dict_name, tuple(toUInt64(1)) as k,
     dictGetOrDefault(dict_name, 'i8', k, toInt8(42)),
     dictGetOrDefault(dict_name, 'i16', k, toInt16(42)),

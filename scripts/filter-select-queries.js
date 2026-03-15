@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
-const dir = new URL('../clickhouse-tests', import.meta.url).pathname;
+const dir = new URL('../tests/clickhouse-reference', import.meta.url).pathname;
 
 // Step 1: Remove all non-.sql and non-.txt files
 const allFiles = readdirSync(dir);
@@ -68,21 +68,45 @@ function splitStatements(content) {
       }
     }
 
-    if (ch === "'" && !inDoubleQuote) {
+    if (ch === '\\' && (inSingleQuote || inDoubleQuote)) {
+      // Backslash escape: consume the next character as-is.
+      current += ch;
+      if (i + 1 < content.length) current += content[++i];
+      continue;
+    } else if (ch === "'" && !inDoubleQuote) {
+      // SQL-style '' escaped quote: stay inside the string.
+      if (inSingleQuote && next === "'") {
+        current += ch + next;
+        i++;
+        continue;
+      }
       inSingleQuote = !inSingleQuote;
     } else if (ch === '"' && !inSingleQuote) {
       inDoubleQuote = !inDoubleQuote;
     }
 
     if (ch === ';' && !inSingleQuote && !inDoubleQuote) {
-      // Consume the rest of the line so inline trailing comments stay with
-      // this statement rather than being prepended to the next one.
+      // Consume trailing whitespace and an optional inline comment so they
+      // stay with this statement rather than being prepended to the next one.
+      // Stop if we hit a non-whitespace, non-comment character (i.e. another
+      // statement on the same line).
       let tail = ';';
-      i++;
-      while (i < content.length && content[i] !== '\n') {
-        tail += content[i];
-        i++;
+      let j = i + 1;
+      while (j < content.length && content[j] !== '\n') {
+        if (content[j] === '-' && content[j + 1] === '-') {
+          while (j < content.length && content[j] !== '\n') {
+            tail += content[j];
+            j++;
+          }
+          break;
+        } else if (content[j] === ' ' || content[j] === '\t') {
+          tail += content[j];
+          j++;
+        } else {
+          break;
+        }
       }
+      i = j - 1;
       statements.push(current + tail);
       current = '';
     } else {
@@ -90,13 +114,13 @@ function splitStatements(content) {
     }
   }
 
-  // Any trailing content without a semicolon
   if (current.trim()) {
     statements.push(current);
   }
 
   return statements;
 }
+
 
 /**
  * Returns the SQL keyword at the start of a statement, ignoring leading
@@ -142,12 +166,28 @@ function hasClientError(statement) {
   return /;\s*--[^\n]*clientError/.test(statement);
 }
 
-/** Returns true if the statement uses the implicit_transaction setting. */
-function hasImplicitTransaction(statement) {
-  return /implicit_transaction/.test(statement);
+/** Returns true if the statement uses a disallowed setting. */
+function hasDisallowedSetting(statement) {
+  return /implicit_transaction/.test(statement) ||
+    /output_format_tsv_crlf_end_of_line/.test(statement);
 }
 
-// Step 2: Filter .sql files
+const blocklist = [
+  '03775_too_large_temporary_files_buffer_size.sql',
+  '02686_bson3.sql',
+  '02366_kql_operator_in_sql.sql',
+];
+
+// Step 2: Remove blocklisted files
+for (const stem of blocklist) {
+  for (const file of readdirSync(dir)) {
+    if (file.startsWith(stem)) {
+      unlinkSync(join(dir, file));
+    }
+  }
+}
+
+// Step 3: Filter .sql files
 const sqlFiles = readdirSync(dir).filter((f) => f.endsWith('.sql') && !f.includes('.expected.'));
 let totalRemoved = 0;
 let totalDuplicates = 0;
@@ -163,7 +203,7 @@ for (const file of sqlFiles) {
       isSelectStatement(s) &&
       !isStringOnlySelect(s) &&
       !hasClientError(s) &&
-      !hasImplicitTransaction(s),
+      !hasDisallowedSetting(s),
   );
   const removed = statements.length - selectStatements.length;
 

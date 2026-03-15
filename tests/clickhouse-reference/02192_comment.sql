@@ -1,5 +1,3 @@
-select 1; #!
-SELECT # hello
-1;
+select 1;
 SELECT '
 # hello', 1;

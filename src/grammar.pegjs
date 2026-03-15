@@ -118,6 +118,7 @@ Statements
 // SETTINGS can appear before FORMAT (inside SELECT) or after FORMAT
 TopLevelStatement
   = ExplainStatement
+  / CreateTableStatement
   / SetStatement
   / UseStatement
   / SystemStatement
@@ -156,6 +157,249 @@ UseStatement
 // SystemStatement: SYSTEM FLUSH LOGS, SYSTEM RELOAD CONFIG, etc. — admin commands (body discarded)
 SystemStatement
   = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return loc({ kind: 'system', body: body.trim() }); }
+
+// ── CREATE TABLE ─────────────────────────────────────────────────────────────
+
+// CreateTableStatement: handles all CREATE TABLE and REPLACE TABLE forms
+CreateTableStatement
+  = header:CreateTableHeader _ body:CreateTableBody {
+      return loc({ ...header, ...body });
+    }
+
+// Header: CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS] [db.]table [ON CLUSTER ...]
+// Also: REPLACE TABLE [db.]table [ON CLUSTER ...]
+CreateTableHeader
+  = "REPLACE"i ![a-zA-Z0-9_] _ "TABLE"i ![a-zA-Z0-9_] _ table:TableRef cluster:( _ OnClusterClause )? {
+      const result = { kind: 'createTable', replace: true, table };
+      if (cluster !== null) result.onCluster = cluster[1];
+      return result;
+    }
+  / "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    temp:( _ "TEMPORARY"i ![a-zA-Z0-9_] )?
+    _ "TABLE"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    cluster:( _ OnClusterClause )? {
+      const result = { kind: 'createTable', table };
+      if (orReplace !== null) result.orReplace = true;
+      if (temp !== null) result.temporary = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      return result;
+    }
+
+OnClusterClause
+  = "ON"i ![a-zA-Z0-9_] _ "CLUSTER"i ![a-zA-Z0-9_] _ name:( StringLiteral { return text(); } / AliasName ) { return name; }
+
+// Body: the various syntax forms after the header
+CreateTableBody
+  // Form: CLONE AS [db.]table [ENGINE = ...]
+  = "CLONE"i ![a-zA-Z0-9_] _ "AS"i ![a-zA-Z0-9_] _ asTable:TableRef engine:( _ EngineClause )? {
+      const result = { clone: true, asTable };
+      if (engine !== null) result.engine = engine[1];
+      return result;
+    }
+  // Form: (columns) ENGINE = ... [clauses] [AS SELECT ...]
+  / schema:CreateTableSchema _ engine:EngineClause clauses:CreateTableClauses asQuery:( _ KW_AS _ UnionQuery )? {
+      const result = { ...schema, engine };
+      Object.assign(result, clauses);
+      if (asQuery !== null) result.asQuery = asQuery[3];
+      return result;
+    }
+  // Form: (columns) — no ENGINE (for TEMPORARY tables etc.)
+  / schema:CreateTableSchema clauses:CreateTableClauses {
+      const result = { ...schema };
+      Object.assign(result, clauses);
+      return result;
+    }
+  // Form: ENGINE = ... [clauses] AS SELECT ... (no explicit column schema)
+  / engine:EngineClause clauses:CreateTableClauses _ KW_AS _ asQuery:UnionQuery {
+      const result = { engine, asQuery };
+      Object.assign(result, clauses);
+      return result;
+    }
+  // Form: AS [db.]table [ENGINE = ...] — schema from another table (or table function)
+  / "AS"i ![a-zA-Z0-9_] _ asTable:TableRef engine:( _ EngineClause )? {
+      const result = { asTable };
+      if (engine !== null) result.engine = engine[1];
+      return result;
+    }
+
+// Schema: parenthesized column definitions
+CreateTableSchema
+  = "(" _ elements:TableElementList _ ")" {
+      // Separate primary key from other elements
+      const tableElements = [];
+      let primaryKeyInSchema = null;
+      for (const el of elements) {
+        if (el._primaryKey) {
+          primaryKeyInSchema = el._primaryKey;
+        } else {
+          tableElements.push(el);
+        }
+      }
+      const result = {};
+      if (tableElements.length > 0) result.tableElements = tableElements;
+      if (primaryKeyInSchema !== null) result.primaryKeyInSchema = primaryKeyInSchema;
+      return result;
+    }
+
+TableElementList
+  = head:TableElement tail:(_ "," _ TableElement)* trailing_comma:(_ ",")? {
+      return [head, ...tail.map(t => t[3])];
+    }
+
+TableElement
+  = ConstraintElement
+  / IndexElement
+  / ProjectionElement
+  / PrimaryKeyElement
+  / ColumnElement
+
+ColumnElement
+  = name:AliasName
+    type:( _ !("DEFAULT"i ![a-zA-Z0-9_] / "MATERIALIZED"i ![a-zA-Z0-9_] / "EPHEMERAL"i ![a-zA-Z0-9_] / "ALIAS"i ![a-zA-Z0-9_] / "COMMENT"i ![a-zA-Z0-9_] / "CODEC"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / "," / ")") ClickHouseType )?
+    nullable:( _ NullableModifier )?
+    def:( _ ColumnDefault )?
+    comment:( _ ColumnComment )?
+    codec:( _ ColumnCodec )?
+    ttl:( _ ColumnTTL )? {
+      const result = loc({ kind: 'columnDef', name });
+      if (type !== null) result.type = type[2];
+      if (nullable !== null) result.nullable = nullable[1];
+      if (def !== null) { result.defaultKind = def[1].kind; if (def[1].expr) result.defaultExpr = def[1].expr; }
+      if (comment !== null) result.comment = comment[1];
+      if (codec !== null) result.codec = codec[1];
+      if (ttl !== null) result.ttl = ttl[1];
+      return result;
+    }
+
+NullableModifier
+  = "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] { return 'NOT NULL'; }
+  / "NULL"i ![a-zA-Z0-9_] { return 'NULL'; }
+
+ColumnDefault
+  = "DEFAULT"i ![a-zA-Z0-9_] _ expr:TernaryExpr { return { kind: 'DEFAULT', expr }; }
+  / "MATERIALIZED"i ![a-zA-Z0-9_] _ expr:TernaryExpr { return { kind: 'MATERIALIZED', expr }; }
+  / "ALIAS"i ![a-zA-Z0-9_] _ expr:TernaryExpr { return { kind: 'ALIAS', expr }; }
+  / "EPHEMERAL"i ![a-zA-Z0-9_] expr:( _ TernaryExpr )? {
+      const result = { kind: 'EPHEMERAL' };
+      if (expr !== null) result.expr = expr[1];
+      return result;
+    }
+
+ColumnComment
+  = "COMMENT"i ![a-zA-Z0-9_] _ str:StringLiteral { return str.value; }
+
+ColumnCodec
+  = "CODEC"i ![a-zA-Z0-9_] _ codecArgs:CodecArgs { return 'CODEC' + codecArgs; }
+
+CodecArgs
+  = "(" parts:CodecArgPart* ")" { return '(' + parts.join('') + ')'; }
+
+CodecArgPart
+  = nested:CodecArgs { return nested; }
+  / chars:$[^()]+ { return chars; }
+
+ColumnTTL
+  = "TTL"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+
+ConstraintElement
+  = "CONSTRAINT"i ![a-zA-Z0-9_] _ name:AliasName _ ct:("CHECK"i / "ASSUME"i) ![a-zA-Z0-9_] _ expr:Expression {
+      return loc({ kind: 'constraintDef', name, constraintType: ct.toUpperCase(), expr });
+    }
+
+IndexElement
+  = "INDEX"i ![a-zA-Z0-9_] _ name:AliasName _ expr:Expression _ "TYPE"i ![a-zA-Z0-9_] _ indexType:$([a-zA-Z_][a-zA-Z0-9_]* ( "(" [^)]* ")" )?)
+    gran:( _ "GRANULARITY"i ![a-zA-Z0-9_] _ n:$[0-9]+ { return parseInt(n, 10); } )? {
+      const result = loc({ kind: 'indexDef', name, expr, indexType });
+      if (gran !== null) result.granularity = gran;
+      return result;
+    }
+
+ProjectionElement
+  = "PROJECTION"i ![a-zA-Z0-9_] _ name:AliasName _ "(" _ query:SelectStatement _ ")" {
+      return loc({ kind: 'projectionDef', name, query });
+    }
+
+PrimaryKeyElement
+  = "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ exprs:PrimaryKeyExprs {
+      return { _primaryKey: exprs };
+    }
+
+PrimaryKeyExprs
+  = "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
+      return [head, ...tail.map(t => t[3])];
+    }
+  / expr:Expression { return [expr]; }
+
+// Engine clause: ENGINE = name[(args)]
+EngineClause
+  = "ENGINE"i ![a-zA-Z0-9_] _ "=" _ name:AliasName args:( _ "(" _ EngineArgList? _ ")" )? {
+      const result = { name };
+      if (args !== null) result.args = args[3] !== null ? args[3] : [];
+      return result;
+    }
+
+EngineArgList
+  = head:Expression tail:(_ "," _ Expression)* {
+      return [head, ...tail.map(t => t[3])];
+    }
+
+// Clauses that follow the ENGINE clause in a CREATE TABLE statement
+// Order is flexible — clauses can appear in any order
+CreateTableClauses
+  = clauses:( _ CreateTableClause )* {
+      const result = {};
+      for (const c of clauses) {
+        const clause = c[1];
+        if (clause.orderBy) result.orderBy = clause.orderBy;
+        else if (clause.partitionBy) result.partitionBy = clause.partitionBy;
+        else if (clause.primaryKey) result.primaryKey = clause.primaryKey;
+        else if (clause.sampleBy) result.sampleBy = clause.sampleBy;
+        else if (clause.ttl) result.ttl = clause.ttl;
+        else if (clause.settings) result.settings = clause.settings;
+        else if (clause.comment !== undefined) result.comment = clause.comment;
+      }
+      return result;
+    }
+
+CreateTableClause
+  = c:CreateOrderByClause { return { orderBy: c }; }
+  / c:CreatePartitionByClause { return { partitionBy: c }; }
+  / c:CreatePrimaryKeyClause { return { primaryKey: c }; }
+  / c:CreateSampleByClause { return { sampleBy: c }; }
+  / c:CreateTTLClause { return { ttl: c }; }
+  / c:SettingsClause { return { settings: c }; }
+  / c:CreateCommentClause { return { comment: c }; }
+
+CreateOrderByClause
+  = "ORDER"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
+      return [head, ...tail.map(t => t[3])];
+    }
+  / "ORDER"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ head:Expression tail:(_ "," _ Expression)* {
+      return [head, ...tail.map(t => t[3])];
+    }
+
+CreatePartitionByClause
+  = "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+
+CreatePrimaryKeyClause
+  = "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
+      return [head, ...tail.map(t => t[3])];
+    }
+  / "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ expr:Expression {
+      return [expr];
+    }
+
+CreateSampleByClause
+  = "SAMPLE"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+
+CreateTTLClause
+  = "TTL"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+
+CreateCommentClause
+  = "COMMENT"i ![a-zA-Z0-9_] _ str:StringLiteral { return str.value; }
 
 // ExplainStatement: EXPLAIN [AST|SYNTAX|QUERY TREE|PLAN|PIPELINE|ESTIMATE|TABLE OVERRIDE] [settings] [query] [FORMAT ...]
 // Settings are key=value pairs without the SETTINGS keyword (e.g. EXPLAIN actions=1 SELECT ...).

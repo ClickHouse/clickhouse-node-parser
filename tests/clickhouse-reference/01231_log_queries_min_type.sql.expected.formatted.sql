@@ -4,12 +4,6 @@ WHERE current_database = currentDatabase()
     AND like(query, 'select ''01231_log_queries_min_type/QUERY_START%')
     AND event_date >= yesterday();
 
-SET log_queries_min_type = 'EXCEPTION_BEFORE_START';
-
-SELECT '01231_log_queries_min_type/EXCEPTION_BEFORE_START';
-
-SYSTEM flush logs query_log;
-
 SELECT count()
 FROM `system`.query_log
 WHERE current_database = currentDatabase()
@@ -29,17 +23,11 @@ WHERE current_database = currentDatabase()
     AND event_date >= yesterday()
     AND type = 'ExceptionWhileProcessing';
 
-SET max_rows_to_read = '100K';
-
 SELECT
     '01231_log_queries_min_type w/ Settings/EXCEPTION_WHILE_PROCESSING',
     max(number)
 FROM `system`.numbers
 LIMIT 1e6; -- { serverError TOO_MANY_ROWS }
-
-SYSTEM flush logs query_log;
-
-SET max_rows_to_read = 0;
 
 SELECT count()
 FROM `system`.query_log

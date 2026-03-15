@@ -1447,6 +1447,148 @@ export type SystemStatement = {
   body: string;
 } & NodeMetadata;
 
+// ── CREATE TABLE types ───────────────────────────────────────────────────────
+
+/**
+ * A column definition in a CREATE TABLE statement.
+ *
+ * @example `name String DEFAULT 'foo' COMMENT 'the name' CODEC(ZSTD) TTL created + INTERVAL 1 DAY`
+ */
+export type ColumnDef = {
+  kind: 'columnDef';
+  /** Column name. */
+  name: string;
+  /** Column data type as raw text (e.g. `'UInt64'`, `'Nullable(String)'`). */
+  type?: string;
+  /** Nullability modifier: `'NULL'` or `'NOT NULL'`. */
+  nullable?: 'NULL' | 'NOT NULL';
+  /** Default value kind: `'DEFAULT'`, `'MATERIALIZED'`, `'EPHEMERAL'`, or `'ALIAS'`. */
+  defaultKind?: 'DEFAULT' | 'MATERIALIZED' | 'EPHEMERAL' | 'ALIAS';
+  /** Default value expression. */
+  defaultExpr?: Expression;
+  /** Column comment string. */
+  comment?: string;
+  /** Compression codec pipeline as raw text (e.g. `'CODEC(ZSTD, Delta)'`). */
+  codec?: string;
+  /** TTL expression for the column. */
+  ttl?: Expression;
+} & NodeMetadata;
+
+/**
+ * A constraint definition in a CREATE TABLE column list.
+ *
+ * @example `CONSTRAINT c1 CHECK x > 0`
+ * @example `CONSTRAINT c2 ASSUME length(name) = name_len`
+ */
+export type ConstraintDef = {
+  kind: 'constraintDef';
+  /** Constraint name. */
+  name: string;
+  /** Constraint type: `'CHECK'` or `'ASSUME'`. */
+  constraintType: 'CHECK' | 'ASSUME';
+  /** The boolean expression for the constraint. */
+  expr: Expression;
+} & NodeMetadata;
+
+/**
+ * An index definition in a CREATE TABLE column list.
+ *
+ * @example `INDEX idx_name expr TYPE minmax GRANULARITY 4`
+ */
+export type IndexDef = {
+  kind: 'indexDef';
+  /** Index name. */
+  name: string;
+  /** The indexed expression. */
+  expr: Expression;
+  /** Index type as raw text (e.g. `'minmax'`, `'set(100)'`). */
+  indexType: string;
+  /** Granularity value. */
+  granularity?: number;
+} & NodeMetadata;
+
+/**
+ * A projection definition in a CREATE TABLE column list.
+ *
+ * @example `PROJECTION proj_name (SELECT col1, col2 ORDER BY col1)`
+ */
+export type ProjectionDef = {
+  kind: 'projectionDef';
+  /** Projection name. */
+  name: string;
+  /** The projection SELECT query. */
+  query: SelectStatement;
+} & NodeMetadata;
+
+/** Any element that can appear in a CREATE TABLE column list. */
+export type TableElement = ColumnDef | ConstraintDef | IndexDef | ProjectionDef;
+
+/**
+ * An engine clause: `ENGINE = name[(args)]`.
+ *
+ * @example `ENGINE = MergeTree` → `{ name: 'MergeTree' }`
+ * @example `ENGINE = MergeTree()` → `{ name: 'MergeTree', args: [] }`
+ * @example `ENGINE = ReplicatedMergeTree('/table', '{replica}')` → `{ name: 'ReplicatedMergeTree', args: [...] }`
+ */
+export type EngineClause = {
+  /** Engine name (e.g. `'MergeTree'`, `'Memory'`, `'ReplicatedMergeTree'`). */
+  name: string;
+  /** Engine arguments. `undefined` means no parentheses; `[]` means empty parens `()`. */
+  args?: Expression[];
+};
+
+/**
+ * A CREATE TABLE statement.
+ *
+ * Supports all syntax forms: explicit schema, AS other table, CLONE AS, AS table function,
+ * AS SELECT, and REPLACE TABLE.
+ *
+ * @example `CREATE TABLE t (id UInt64) ENGINE = MergeTree ORDER BY id`
+ * @example `CREATE TABLE t AS other_table ENGINE = Memory`
+ * @example `CREATE TABLE t ENGINE = MergeTree ORDER BY id AS SELECT * FROM src`
+ */
+export type CreateTableStatement = {
+  kind: 'createTable';
+  /** Whether this is `OR REPLACE` / `REPLACE TABLE`. */
+  orReplace?: boolean;
+  /** Whether this is a `REPLACE TABLE` statement (as opposed to `CREATE OR REPLACE`). */
+  replace?: boolean;
+  /** Whether this is a `TEMPORARY TABLE`. */
+  temporary?: boolean;
+  /** Whether `IF NOT EXISTS` was specified. */
+  ifNotExists?: boolean;
+  /** The table being created. */
+  table: TableRef;
+  /** ON CLUSTER clause value. */
+  onCluster?: string;
+  /** Column definitions, constraints, indexes, and projections in the column list. */
+  tableElements?: TableElement[];
+  /** Primary key defined inside the column list: `PRIMARY KEY(expr, ...)`. */
+  primaryKeyInSchema?: Expression[];
+  /** The table engine. */
+  engine?: EngineClause;
+  /** ORDER BY clause expression(s). */
+  orderBy?: Expression[];
+  /** PARTITION BY expression. */
+  partitionBy?: Expression;
+  /** PRIMARY KEY clause (outside column list). */
+  primaryKey?: Expression[];
+  /** SAMPLE BY expression. */
+  sampleBy?: Expression;
+  /** Table-level TTL expression. */
+  ttl?: Expression;
+  /** Engine-level SETTINGS. */
+  settings?: SettingItem[];
+  /** Table comment string. */
+  comment?: string;
+  /** AS table reference (for `CREATE TABLE t AS other_table`). */
+  asTable?: TableRef;
+  /** Whether this is a CLONE AS (vs. plain AS). */
+  clone?: boolean;
+  /** AS SELECT query (for `CREATE TABLE t ... AS SELECT ...`). */
+  asQuery?: QueryStatement;
+} & NodeMetadata;
+
 /**
  * Union of all top-level statement types.
  *
@@ -1457,7 +1599,8 @@ export type Statement =
   | ExplainStatement
   | SetStatement
   | UseStatement
-  | SystemStatement;
+  | SystemStatement
+  | CreateTableStatement;
 
 // ── AST node kind map ────────────────────────────────────────────────────────
 
@@ -1499,6 +1642,11 @@ export interface ASTNodeKindMap {
   set: SetStatement;
   use: UseStatement;
   system: SystemStatement;
+  createTable: CreateTableStatement;
+  columnDef: ColumnDef;
+  constraintDef: ConstraintDef;
+  indexDef: IndexDef;
+  projectionDef: ProjectionDef;
 }
 
 /**
@@ -1727,6 +1875,100 @@ export const SystemStatementSchema: z.ZodType<SystemStatement> = z.object({
   ...NodeMetadataSchema,
 });
 
+/** Zod schema for {@link ColumnDef}. */
+export const ColumnDefSchema: z.ZodType<ColumnDef> = z.lazy(() =>
+  z.object({
+    kind: z.literal('columnDef'),
+    name: z.string(),
+    type: z.string().optional(),
+    nullable: z.union([z.literal('NULL'), z.literal('NOT NULL')]).optional(),
+    defaultKind: z
+      .union([
+        z.literal('DEFAULT'),
+        z.literal('MATERIALIZED'),
+        z.literal('EPHEMERAL'),
+        z.literal('ALIAS'),
+      ])
+      .optional(),
+    defaultExpr: ExpressionSchema.optional(),
+    comment: z.string().optional(),
+    codec: z.string().optional(),
+    ttl: ExpressionSchema.optional(),
+    ...NodeMetadataSchema,
+  }),
+);
+
+/** Zod schema for {@link ConstraintDef}. */
+export const ConstraintDefSchema: z.ZodType<ConstraintDef> = z.lazy(() =>
+  z.object({
+    kind: z.literal('constraintDef'),
+    name: z.string(),
+    constraintType: z.union([z.literal('CHECK'), z.literal('ASSUME')]),
+    expr: ExpressionSchema,
+    ...NodeMetadataSchema,
+  }),
+);
+
+/** Zod schema for {@link IndexDef}. */
+export const IndexDefSchema: z.ZodType<IndexDef> = z.lazy(() =>
+  z.object({
+    kind: z.literal('indexDef'),
+    name: z.string(),
+    expr: ExpressionSchema,
+    indexType: z.string(),
+    granularity: z.number().optional(),
+    ...NodeMetadataSchema,
+  }),
+);
+
+/** Zod schema for {@link ProjectionDef}. */
+export const ProjectionDefSchema: z.ZodType<ProjectionDef> = z.lazy(() =>
+  z.object({
+    kind: z.literal('projectionDef'),
+    name: z.string(),
+    query: SelectStatementSchema,
+    ...NodeMetadataSchema,
+  }),
+);
+
+/** Zod schema for {@link TableElement}. */
+export const TableElementSchema: z.ZodType<TableElement> = z.lazy(() =>
+  z.union([ColumnDefSchema, ConstraintDefSchema, IndexDefSchema, ProjectionDefSchema]),
+);
+
+/** Zod schema for {@link EngineClause}. */
+export const EngineClauseSchema = z.object({
+  name: z.string(),
+  args: z.array(ExpressionSchema).optional(),
+});
+
+/** Zod schema for {@link CreateTableStatement}. */
+export const CreateTableStatementSchema: z.ZodType<CreateTableStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createTable'),
+    orReplace: z.boolean().optional(),
+    replace: z.boolean().optional(),
+    temporary: z.boolean().optional(),
+    ifNotExists: z.boolean().optional(),
+    table: TableRefSchema,
+    onCluster: z.string().optional(),
+    tableElements: z.array(TableElementSchema).optional(),
+    primaryKeyInSchema: z.array(ExpressionSchema).optional(),
+    engine: EngineClauseSchema.optional(),
+    orderBy: z.array(ExpressionSchema).optional(),
+    partitionBy: ExpressionSchema.optional(),
+    primaryKey: z.array(ExpressionSchema).optional(),
+    sampleBy: ExpressionSchema.optional(),
+    ttl: ExpressionSchema.optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    comment: z.string().optional(),
+    asTable: TableRefSchema.optional(),
+    clone: z.boolean().optional(),
+    asQuery: QueryStatementSchema.optional(),
+    ...NodeMetadataSchema,
+  }),
+);
+
 /** Zod schema for {@link QueryStatement}. */
 export const QueryStatementSchema: z.ZodType<QueryStatement> = z.lazy(() =>
   z.union([
@@ -1747,6 +1989,7 @@ export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
     SetStatementSchema,
     UseStatementSchema,
     SystemStatementSchema,
+    CreateTableStatementSchema,
   ]),
 );
 

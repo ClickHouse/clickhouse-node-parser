@@ -18,6 +18,7 @@ import { join } from 'path';
 import { parse, format, Statement } from '../src/index.js';
 
 const PARSE_ERROR = '<Parse Error>';
+const EXPLAIN_ERROR = '<Explain Error>';
 const QUERY_PARAMS = '<Query Parameters>';
 
 const dir = new URL('../tests/clickhouse-reference', import.meta.url).pathname;
@@ -89,14 +90,27 @@ function splitStatements(content: string): string[] {
     }
 
     if (ch === ';' && !inSingleQuote && !inDoubleQuote) {
-      // Consume the rest of the line so trailing inline comments stay with
-      // this statement rather than being prepended to the next one.
+      // Consume trailing whitespace and an optional inline comment so they
+      // stay with this statement rather than being prepended to the next one.
+      // Stop if we hit a non-whitespace, non-comment character (i.e. another
+      // statement on the same line).
       let tail = ';';
-      i++;
-      while (i < content.length && content[i] !== '\n') {
-        tail += content[i];
-        i++;
+      let j = i + 1;
+      while (j < content.length && content[j] !== '\n') {
+        if (content[j] === '-' && content[j + 1] === '-') {
+          while (j < content.length && content[j] !== '\n') {
+            tail += content[j];
+            j++;
+          }
+          break;
+        } else if (content[j] === ' ' || content[j] === '\t') {
+          tail += content[j];
+          j++;
+        } else {
+          break;
+        }
       }
+      i = j - 1;
       statements.push(current + tail);
       current = '';
     } else {
@@ -173,12 +187,12 @@ function runExplain(sql: string): Promise<string> {
       const text = await response.text();
       if (!response.ok) {
         console.log(`  Explain failed with status ${response.status}:`, text, query);
-        return PARSE_ERROR;
+        return EXPLAIN_ERROR;
       }
       return text;
     } catch (e) {
       console.log(`  Explain error:`, e);
-      return PARSE_ERROR;
+      return EXPLAIN_ERROR;
     }
   });
 }
@@ -231,7 +245,7 @@ async function processFile(file: string): Promise<void> {
   // Skip if the explain file already exists.
 
   const explainPath = `${filePath}.expected.explain.txt`;
-  if (!existsSync(explainPath)) {
+  // if (!existsSync(explainPath)) {
     // Run all statements for this file concurrently (throttled by the pool).
     const explainParts = await Promise.all(statements.map(runExplain));
 
@@ -248,7 +262,7 @@ async function processFile(file: string): Promise<void> {
 
     const explainOutput = trimmedParts.join('\n\n') + (trimmedParts.length > 0 ? '\n' : '');
     writeFileSync(explainPath, explainOutput, 'utf8');
-  }
+  // }
 
   processed++;
   if (processed % 50 === 0) {

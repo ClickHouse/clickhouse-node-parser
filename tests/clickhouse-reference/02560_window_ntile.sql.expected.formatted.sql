@@ -188,7 +188,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    ); -- { serverError BAD_ARGUMENTS }
+    );
 
 SELECT
     a,
@@ -199,7 +199,7 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    ); -- { serverError BAD_ARGUMENTS }
+    );
 
 SELECT
     a,
@@ -210,4 +210,4 @@ FROM (
             intDiv(number, 10) AS a,
             number % 10 AS b
         FROM numbers(20)
-    ); -- { serverError BAD_ARGUMENTS }
+    );

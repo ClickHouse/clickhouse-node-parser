@@ -1054,6 +1054,7 @@ function stmtNode(stmt: Statement): ExplainNode {
   if (stmt.kind === 'set') return n('Set');
   if (stmt.kind === 'system') return n('SYSTEM query');
   if (stmt.kind === 'use') return n('Query');
+  if (stmt.kind === 'createTable') return n('CreateQuery');
 
   const format = stmt.format;
 

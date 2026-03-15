@@ -180,3 +180,28 @@ export function isUseStatement(node: ASTNode): node is ASTNodeKindMap['use'] {
 export function isSystemStatement(node: ASTNode): node is ASTNodeKindMap['system'] {
   return node.kind === 'system';
 }
+
+/** Type guard for {@link import('./ast').CreateTableStatement | CreateTableStatement} nodes. */
+export function isCreateTableStatement(node: ASTNode): node is ASTNodeKindMap['createTable'] {
+  return node.kind === 'createTable';
+}
+
+/** Type guard for {@link import('./ast').ColumnDef | ColumnDef} nodes. */
+export function isColumnDef(node: ASTNode): node is ASTNodeKindMap['columnDef'] {
+  return node.kind === 'columnDef';
+}
+
+/** Type guard for {@link import('./ast').ConstraintDef | ConstraintDef} nodes. */
+export function isConstraintDef(node: ASTNode): node is ASTNodeKindMap['constraintDef'] {
+  return node.kind === 'constraintDef';
+}
+
+/** Type guard for {@link import('./ast').IndexDef | IndexDef} nodes. */
+export function isIndexDef(node: ASTNode): node is ASTNodeKindMap['indexDef'] {
+  return node.kind === 'indexDef';
+}
+
+/** Type guard for {@link import('./ast').ProjectionDef | ProjectionDef} nodes. */
+export function isProjectionDef(node: ASTNode): node is ASTNodeKindMap['projectionDef'] {
+  return node.kind === 'projectionDef';
+}

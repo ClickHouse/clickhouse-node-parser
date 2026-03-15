@@ -52,6 +52,13 @@ export interface NodePositionMap {
   set: Statement;
   use: Statement;
   system: Statement;
+  createTable: Statement;
+
+  // CREATE TABLE element nodes
+  columnDef: import('./ast').TableElement;
+  constraintDef: import('./ast').TableElement;
+  indexDef: import('./ast').TableElement;
+  projectionDef: import('./ast').TableElement;
 }
 
 /**

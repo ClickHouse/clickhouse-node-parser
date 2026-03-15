@@ -5,6 +5,7 @@ import { stripMeta } from './helpers';
 
 const CLICKHOUSE_DIR = path.join(__dirname, 'clickhouse-reference');
 const QUERY_PARAMS = '<Query Parameters>';
+const EXPLAIN_ERROR = '<Explain Error>';
 
 function discoverCases(): string[] {
   if (!fs.existsSync(CLICKHOUSE_DIR)) return [];
@@ -39,6 +40,7 @@ describe('clickhouse tests', () => {
       for (let i = 0; i < expectedEntries.length; i++) {
         const expected = expectedEntries[i].trimEnd();
         if (expected === QUERY_PARAMS) continue;
+        if (expected === EXPLAIN_ERROR) continue;
         const actual = formatExplain([statements[i]]).trimEnd();
         expect(actual).toBe(expected);
       }

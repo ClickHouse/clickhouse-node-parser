@@ -2,6 +2,7 @@ import {
   ASTNode,
   CTE,
   ColumnTransformer,
+  CreateTableStatement,
   ExplainStatement,
   Expression,
   FunctionCall,
@@ -206,6 +207,13 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
       return formatUseStatement(node, indent);
     case 'system':
       return formatSystemStatement(node, indent);
+    case 'createTable':
+      return formatCreateTableStatement(node, indent);
+    case 'columnDef':
+    case 'constraintDef':
+    case 'indexDef':
+    case 'projectionDef':
+      return formatTableElement(node, indent);
     // From-clause types
     case 'tableRef':
       return formatTableRef(node);
@@ -309,6 +317,9 @@ function formatStatement(stmt: Statement, indent: string): string {
   if (stmt.kind === 'system') {
     return formatSystemStatement(stmt, indent);
   }
+  if (stmt.kind === 'createTable') {
+    return formatCreateTableStatement(stmt, indent);
+  }
   return formatSelectStatement(stmt, indent);
 }
 
@@ -323,6 +334,145 @@ function formatUseStatement(stmt: UseStatement, indent: string): string {
 
 function formatSystemStatement(stmt: SystemStatement, indent: string): string {
   return `${indent}SYSTEM ${stmt.body}`;
+}
+
+function formatCreateTableStatement(stmt: CreateTableStatement, indent: string): string {
+  const parts: string[] = [];
+
+  // Header: CREATE/REPLACE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]
+  if (stmt.replace) {
+    parts.push(`${indent}REPLACE TABLE`);
+  } else {
+    let header = `${indent}CREATE`;
+    if (stmt.orReplace) header += ' OR REPLACE';
+    if (stmt.temporary) header += ' TEMPORARY';
+    header += ' TABLE';
+    if (stmt.ifNotExists) header += ' IF NOT EXISTS';
+    parts.push(header);
+  }
+
+  // Table name
+  parts.push(formatTableRef(stmt.table));
+
+  // ON CLUSTER
+  if (stmt.onCluster) {
+    parts.push(`ON CLUSTER ${quoteIdent(stmt.onCluster)}`);
+  }
+
+  let result = parts.join(' ');
+
+  // CLONE AS form
+  if (stmt.clone && stmt.asTable) {
+    result += `\n${indent}CLONE AS ${formatTableRef(stmt.asTable)}`;
+    if (stmt.engine) result += `\n${indent}ENGINE = ${formatEngine(stmt.engine, indent)}`;
+    return result;
+  }
+
+  // AS table form (no schema)
+  if (stmt.asTable && !stmt.tableElements) {
+    result += ` AS ${formatTableRef(stmt.asTable)}`;
+    if (stmt.engine) result += `\n${indent}ENGINE = ${formatEngine(stmt.engine, indent)}`;
+    return result;
+  }
+
+  // Column schema
+  if (stmt.tableElements || stmt.primaryKeyInSchema) {
+    const innerIndent = indent + '    ';
+    const elements: string[] = [];
+    if (stmt.tableElements) {
+      for (const el of stmt.tableElements) {
+        elements.push(formatTableElement(el, innerIndent));
+      }
+    }
+    if (stmt.primaryKeyInSchema) {
+      elements.push(
+        `${innerIndent}PRIMARY KEY(${stmt.primaryKeyInSchema.map((e) => formatExpr(e, innerIndent)).join(', ')})`,
+      );
+    }
+    result += `\n(\n${elements.join(',\n')}\n${indent})`;
+  }
+
+  // ENGINE
+  if (stmt.engine) {
+    result += `\n${indent}ENGINE = ${formatEngine(stmt.engine, indent)}`;
+  }
+
+  // Table clauses
+  if (stmt.orderBy) {
+    result += `\n${indent}ORDER BY ${formatOrderByExprs(stmt.orderBy, indent)}`;
+  }
+  if (stmt.partitionBy) {
+    result += `\n${indent}PARTITION BY ${formatExpr(stmt.partitionBy, indent)}`;
+  }
+  if (stmt.primaryKey) {
+    result += `\n${indent}PRIMARY KEY ${formatOrderByExprs(stmt.primaryKey, indent)}`;
+  }
+  if (stmt.sampleBy) {
+    result += `\n${indent}SAMPLE BY ${formatExpr(stmt.sampleBy, indent)}`;
+  }
+  if (stmt.ttl) {
+    result += `\n${indent}TTL ${formatExpr(stmt.ttl, indent)}`;
+  }
+  if (stmt.settings) {
+    const settingsStr = stmt.settings
+      .map((s) => `${s.name} = ${formatExpr(s.value, indent)}`)
+      .join(', ');
+    result += `\n${indent}SETTINGS ${settingsStr}`;
+  }
+  if (stmt.comment) {
+    result += `\n${indent}COMMENT ${formatStringLiteral(stmt.comment)}`;
+  }
+
+  // AS SELECT
+  if (stmt.asQuery) {
+    result += ` AS\n${formatStatement(stmt.asQuery, indent)}`;
+  }
+
+  return result;
+}
+
+function formatEngine(engine: CreateTableStatement['engine'] & {}, indent: string): string {
+  let result = engine.name;
+  if (engine.args !== undefined) {
+    result += `(${engine.args.map((a) => formatExpr(a, indent)).join(', ')})`;
+  }
+  return result;
+}
+
+function formatTableElement(el: import('./ast').TableElement, indent: string): string {
+  switch (el.kind) {
+    case 'columnDef': {
+      const parts = [`${indent}${quoteIdent(el.name)}`];
+      if (el.type) parts.push(el.type);
+      if (el.nullable) parts.push(el.nullable);
+      if (el.defaultKind) {
+        parts.push(el.defaultKind);
+        if (el.defaultExpr) parts.push(formatExpr(el.defaultExpr, indent));
+      }
+      if (el.comment) parts.push(`COMMENT ${formatStringLiteral(el.comment)}`);
+      if (el.codec) parts.push(el.codec);
+      if (el.ttl) parts.push(`TTL ${formatExpr(el.ttl, indent)}`);
+      return parts.join(' ');
+    }
+    case 'constraintDef':
+      return `${indent}CONSTRAINT ${quoteIdent(el.name)} ${el.constraintType} ${formatExpr(el.expr, indent)}`;
+    case 'indexDef': {
+      let result = `${indent}INDEX ${quoteIdent(el.name)} ${formatExpr(el.expr, indent)} TYPE ${el.indexType}`;
+      if (el.granularity !== undefined) result += ` GRANULARITY ${el.granularity}`;
+      return result;
+    }
+    case 'projectionDef':
+      return `${indent}PROJECTION ${quoteIdent(el.name)} (${formatStatement(el.query, indent)})`;
+  }
+}
+
+function formatOrderByExprs(exprs: Expression[], indent: string): string {
+  if (exprs.length === 1) return formatExpr(exprs[0], indent);
+  return `(${exprs.map((e) => formatExpr(e, indent)).join(', ')})`;
+}
+
+function formatStringLiteral(str: string): string {
+  return `'${str.replace(/'/g, "\\'")}'`;
 }
 
 function formatExplainStatement(stmt: ExplainStatement, indent: string): string {
