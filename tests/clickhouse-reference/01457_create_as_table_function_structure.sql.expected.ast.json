@@ -1,1 +1,413 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":63,"line":4,"column":8},"end":{"offset":64,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01457"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01457",
+      "table": "tf_remote"
+    },
+    "asTableFunction": {
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "tmp"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01457",
+      "table": "tf_remote_explicit_structure"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "asTableFunction": {
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "tmp"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01457",
+      "table": "tf_numbers"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "asTableFunction": {
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01457",
+      "table": "tf_merge"
+    },
+    "asTableFunction": {
+      "name": "merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "tmp"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "error"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- To suppress \"Structure does not match (...), implicit conversion will be done.\" message"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tmp"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "asterisk"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "c"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tmp"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "asterisk"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "c"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test_01457",
+      "table": "tf_remote"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "asterisk"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "c"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test_01457",
+      "table": "tf_remote_explicit_structure"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "asterisk"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "c"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test_01457",
+      "table": "tf_numbers"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "asterisk"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "c"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test_01457",
+      "table": "tf_merge"
+    }
+  }
+]

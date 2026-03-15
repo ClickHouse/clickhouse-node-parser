@@ -1,1 +1,216 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":289,"line":15,"column":8},"end":{"offset":290,"line":15,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_functions_to_subcolumns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rawtable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Attributes",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "attributes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "AttributeKeys",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "AttributeValues",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_to_attributes_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "attributes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "AttributeKeys",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "AttributeValues",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "mapKeys",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "Attributes"
+                ]
+              }
+            ]
+          },
+          "alias": "AttributeKeys"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "mapValues",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "Attributes"
+                ]
+              }
+            ]
+          },
+          "alias": "AttributeValues"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "rawtable"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "raw_to_attributes_mv"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "AttributeKeys"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

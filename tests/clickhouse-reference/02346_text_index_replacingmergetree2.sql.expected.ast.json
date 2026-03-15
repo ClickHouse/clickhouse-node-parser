@@ -51,17 +51,23 @@
       {
         "kind": "columnDef",
         "name": "id",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "version",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "text",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "indexDef",
@@ -70,10 +76,29 @@
           "kind": "columnRef",
           "parts": [
             "text"
-          ],
-          "parenthesized": true
+          ]
         },
-        "indexType": "text(tokenizer = array)"
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "array"
+                ]
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -89,10 +114,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "id"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
       }
     ]
   },

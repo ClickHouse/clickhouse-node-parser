@@ -1,1 +1,934 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"d","location":{"start":{"offset":29,"line":3,"column":8},"end":{"offset":30,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "shard_0",
+    "ifNotExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "shard_1",
+    "ifNotExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_0",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dtm",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "dtm"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_1",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dtm",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "dtm"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dist"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dtm",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards_different_databases"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_shard_num"
+        ]
+      },
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_dist"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "_shard_num"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_dist",
+      "alias": "a"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_dist"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "dtm"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          "settings": [
+            {
+              "name": "distributed_product_mode",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "allow"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_dist",
+      "alias": "a"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_dist"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "dtm"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          "settings": [
+            {
+              "name": "distributed_product_mode",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "local"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_dist",
+      "alias": "a"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_dist"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dtm"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "settings": [
+                {
+                  "name": "distributed_product_mode",
+                  "value": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "local"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_dist"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dtm"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "settings": [
+                {
+                  "name": "distributed_product_mode",
+                  "value": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "local"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_dist",
+      "alias": "a"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_dist"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dtm"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "settings": [
+                {
+                  "name": "distributed_product_mode",
+                  "value": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "local"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_dist"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dtm"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "settings": [
+                {
+                  "name": "distributed_product_mode",
+                  "value": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "allow"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_dist",
+      "alias": "a"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_dist"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dtm"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "settings": [
+                {
+                  "name": "distributed_product_mode",
+                  "value": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "allow"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_dist"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dtm"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "settings": [
+                {
+                  "name": "distributed_product_mode",
+                  "value": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "local"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_dist",
+      "alias": "a"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_dist"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dtm"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "settings": [
+                {
+                  "name": "distributed_product_mode",
+                  "value": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "allow"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_dist"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dtm"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "settings": [
+                {
+                  "name": "distributed_product_mode",
+                  "value": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "allow"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

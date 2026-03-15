@@ -1,1 +1,598 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":177,"line":5,"column":8},"end":{"offset":178,"line":5,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Looks like you cannot use the query parameter as a column name.",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/23194"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db1_03101"
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db2_03101"
+  },
+  {
+    "kind": "use",
+    "database": "db1_03101"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db1_03101",
+      "table": "tbl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "db1_03101",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "tbl",
+              "type": {
+                "name": "Nested",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "col",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "db1_03101",
+          "tbl",
+          "col"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "db1_03101",
+      "table": "tbl"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "db1_03101"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "db1_03101"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "asterisk"
+        },
+        "right": {
+          "kind": "asterisk"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "VALUES",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "a UInt16"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "---"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "asterisk"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "asterisk"
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- not ok as every component of ORDER BY may contain ASC/DESC and COLLATE; though can be supported in some sense",
+      "-- but it works"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "asterisk"
+    },
+    "trailingComments": [
+      "-- { serverError UNEXPECTED_EXPRESSION }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "a"
+            }
+          ]
+        },
+        "alias": "t"
+      },
+      "kind": "join",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              "alias": "b"
+            }
+          ]
+        },
+        "alias": "u"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "a"
+            }
+          ]
+        },
+        "alias": "t"
+      },
+      "kind": "join",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              "alias": "b"
+            }
+          ]
+        },
+        "alias": "u"
+      }
+    },
+    "leadingComments": [
+      "-- equivalent to:"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "a"
+            }
+          ]
+        },
+        "alias": "t"
+      },
+      "kind": "join",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "a"
+            }
+          ]
+        },
+        "alias": "u"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "u",
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "a"
+            }
+          ]
+        },
+        "alias": "t"
+      },
+      "kind": "join",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "a"
+            }
+          ]
+        },
+        "alias": "u"
+      }
+    },
+    "leadingComments": [
+      "-- equivalent to:"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nest",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "---- TODO: think about it",
+      "--CREATE TABLE db1_03101.t",
+      "--(",
+      "--    a UInt16",
+      "--)",
+      "--ENGINE = Memory;",
+      "--",
+      "--CREATE TABLE db2_03101.t",
+      "--(",
+      "--    a UInt16",
+      "--)",
+      "--ENGINE = Memory;",
+      "--",
+      "--SELECT * FROM (SELECT 1 AS a) AS db2_03101.t, (SELECT 1 AS a) AS db1_03101.t;",
+      "---- equivalent to:",
+      "--SELECT db2_03101.t.a, db1_03101.t.a FROM (SELECT 1 AS a) AS db2_03101.t, (SELECT 1 AS a) AS db1_03101.t;"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "nest"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "leadingComments": [
+      "-- equivalent to:"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "nest",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "nest",
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "leadingComments": [
+      "-- equivalent to:"
+    ]
+  }
+]

@@ -38,8 +38,8 @@ CREATE TABLE data
     value AggregateFunction(sum, UInt64)
 )
 ENGINE = AggregatingMergeTree()
-ORDER BY (value, key)
-PRIMARY KEY value; -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
+PRIMARY KEY value
+ORDER BY (value, key); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
 
 CREATE TABLE data
 (
@@ -47,8 +47,8 @@ CREATE TABLE data
     value SimpleAggregateFunction(sum, UInt64)
 )
 ENGINE = AggregatingMergeTree()
-ORDER BY (value, key)
-PRIMARY KEY value; -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
+PRIMARY KEY value
+ORDER BY (value, key); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
 
 SET allow_suspicious_primary_key = 1;
 
@@ -58,7 +58,7 @@ CREATE TABLE data
     key Int
 )
 ENGINE = AggregatingMergeTree()
-ORDER BY key;
+ORDER BY (key);
 
 -- ALTER ReplicatedAggregatingMergeTree
 CREATE TABLE data_rep
@@ -66,4 +66,4 @@ CREATE TABLE data_rep
     key Int
 )
 ENGINE = ReplicatedAggregatingMergeTree('/tables/{database}', 'r1')
-ORDER BY key;
+ORDER BY (key);

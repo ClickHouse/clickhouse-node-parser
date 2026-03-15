@@ -1,1 +1,144 @@
-<Parse Error>
+SET joined_subquery_requires_alias = 0;
+
+SET max_threads = 1;
+
+-- It affects number of read rows and max_rows_to_read.
+SET max_bytes_before_external_sort = 0;
+
+SET max_bytes_ratio_before_external_sort = 0;
+
+SET max_bytes_before_external_group_by = 0;
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
+-- that is the final table, which is filled incrementally from 2 different sources
+CREATE TABLE target_table
+ENGINE = SummingMergeTree()
+ORDER BY id
+SETTINGS index_granularity = 128, index_granularity_bytes = '10Mi' AS
+SELECT
+    number AS id,
+    maxState(toDateTime(0, 'UTC')) AS latest_login_time,
+    maxState(toDateTime(0, 'UTC')) AS latest_checkout_time,
+    minState(toUInt64(-1)) AS fastest_session,
+    maxState(toUInt64(0)) AS biggest_inactivity_period
+FROM numbers(50000)
+GROUP BY id
+SETTINGS max_insert_threads = 1;
+
+-- source table #1
+CREATE TABLE logins
+(
+    id UInt64,
+    ts DateTime('UTC')
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+-- and mv with something like feedback from target table
+CREATE MATERIALIZED VIEW mv_logins2target
+TO target_table
+AS
+SELECT
+    id,
+    maxState(ts) AS latest_login_time,
+    maxState(toDateTime(0, 'UTC')) AS latest_checkout_time,
+    minState(toUInt64(-1)) AS fastest_session,
+    if(max(current_latest_checkout_time) > 0, maxState(toUInt64(ts - current_latest_checkout_time)), maxState(toUInt64(0))) AS biggest_inactivity_period
+FROM
+    logins
+LEFT JOIN (
+        SELECT
+            id,
+            maxMerge(latest_checkout_time) AS current_latest_checkout_time
+        -- normal MV sees only the incoming block, but we need something like feedback here
+        -- so we do join with target table, the most important thing here is that
+        -- we extract from target table only row affected by that MV, referencing src table
+        -- it second time
+        FROM target_table
+        WHERE id IN (
+                SELECT id
+                FROM logins
+            )
+        GROUP BY id
+    )
+    USING (id)
+GROUP BY id;
+
+-- the same for second pipeline
+CREATE TABLE checkouts
+(
+    id UInt64,
+    ts DateTime('UTC')
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE MATERIALIZED VIEW mv_checkouts2target
+TO target_table
+AS
+SELECT
+    id,
+    maxState(toDateTime(0, 'UTC')) AS latest_login_time,
+    maxState(ts) AS latest_checkout_time,
+    if(max(current_latest_login_time) > 0, minState(toUInt64(ts - current_latest_login_time)), minState(toUInt64(-1))) AS fastest_session,
+    maxState(toUInt64(0)) AS biggest_inactivity_period
+FROM
+    checkouts
+LEFT JOIN (
+        SELECT
+            id,
+            maxMerge(latest_login_time) AS current_latest_login_time
+        FROM target_table
+        WHERE id IN (
+                SELECT id
+                FROM checkouts
+            )
+        GROUP BY id
+    )
+    USING (id)
+GROUP BY id;
+
+-- ensure that we don't read whole target table during join
+-- by this time we should have 3 parts for target_table because of prev inserts
+-- and we plan to make two more inserts. With index_granularity=128 and max id=1000
+-- we expect to read not more than:
+--      1000 rows read from numbers(1000) in the INSERT itself
+--      1000 rows in the `IN (SELECT id FROM table)` in the mat views
+--      (1000/128) marks per part * (3 + 2) parts * 128 granularity = 5120 rows
+--      Total: 7120
+SET max_rows_to_read = 7120;
+
+-- by this time we should have 5 parts for target_table because of prev inserts
+-- and we plan to make two more inserts. With index_granularity=128 and max id=1
+-- we expect to read not more than:
+--      1 mark per part * (5 + 2) parts * 128 granularity + 1 (numbers(1)) = 897 rows
+SET max_rows_to_read = 897;
+
+SET max_rows_to_read = 0;
+
+SELECT '-- unmerged state';
+
+SELECT
+    id,
+    finalizeAggregation(latest_login_time) AS current_latest_login_time,
+    finalizeAggregation(latest_checkout_time) AS current_latest_checkout_time,
+    finalizeAggregation(fastest_session) AS current_fastest_session,
+    finalizeAggregation(biggest_inactivity_period) AS current_biggest_inactivity_period
+FROM target_table
+WHERE id IN (1, 2)
+ORDER BY
+    id ASC,
+    current_latest_login_time ASC,
+    current_latest_checkout_time ASC;
+
+SELECT
+    id,
+    maxMerge(latest_login_time) AS current_latest_login_time,
+    maxMerge(latest_checkout_time) AS current_latest_checkout_time,
+    minMerge(fastest_session) AS current_fastest_session,
+    maxMerge(biggest_inactivity_period) AS current_biggest_inactivity_period
+FROM target_table
+WHERE id IN (1, 2)
+GROUP BY id
+ORDER BY id ASC;

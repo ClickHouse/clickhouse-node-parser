@@ -1,1 +1,209 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":43,"line":1,"column":44},"end":{"offset":44,"line":1,"column":45}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "visits"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "WatchID",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "visits_layer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "visits"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_layer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "WatchID",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "hits"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_product_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "local"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "hits_layer",
+      "alias": "hl"
+    },
+    "prewhere": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "WatchID"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "visits_layer",
+            "alias": "vl"
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "0"
+    }
+  }
+]

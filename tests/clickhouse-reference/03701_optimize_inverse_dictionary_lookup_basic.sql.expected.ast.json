@@ -1,1 +1,3453 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":354,"line":15,"column":8},"end":{"offset":355,"line":15,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database, no-parallel-replicas",
+      "-- no-parallel, no-parallel-replicas: Dictionary is not created in parallel replicas."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_inverse_dictionary_lookup",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_or_like_chain",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ref_colors"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "colors"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_colors"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "color_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "payload",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "red"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "literal",
+        "type": "String",
+        "value": "red"
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetUInt64",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "n"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "dictGetUInt64",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "n"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetInt32",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "n"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "dictGetString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "colors"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "name"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "color_id"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r%"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "ilike",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "dictGetString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "colors"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "name"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "color_id"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r%"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "equals",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "dictGetString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "colors"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "name"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "color_id"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "red"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "red"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "notLike",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "dictGetString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "colors"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "name"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "color_id"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r%"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "notILike",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "dictGetString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "colors"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "name"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "color_id"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r%"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "match",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "dictGetString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "colors"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "name"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "color_id"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^r"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "dictGetString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "colors"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "name"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "color_id"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "String",
+          "value": "red"
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "dictGetString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "colors"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "name"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "color_id"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "red"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "functionCall",
+                "name": "dictGetUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "colors"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "n"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "color_id"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "dictGetString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "colors"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "name"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "color_id"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "green"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "NULL",
+        "value": "NULL"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "red"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "row_number",
+          "args": [],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "color_id"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        },
+        "alias": "rn"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rn"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "qualify": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "red"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "nonexistent_color"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "c"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        }
+      ]
+    },
+    "having": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "red"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "payload"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "payload"
+          ]
+        },
+        "alias": "payload2"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "color_id"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "color_id"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "dictGetString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "colors"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "name"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t1",
+                      "color_id"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "red"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload2"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "payload"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "payload"
+          ]
+        },
+        "alias": "payload2"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "color_id"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "color_id"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "dictGetString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "colors"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "name"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t1",
+                      "color_id"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "red"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload2"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "dictGetString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "colors"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "name"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "color_id"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "red"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "match"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "no_match"
+            }
+          ]
+        },
+        "alias": "tag"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tag"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "countIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "dictGetString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "colors"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "name"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "color_id"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "red"
+              }
+            }
+          ]
+        },
+        "alias": "cnt"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sumIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "color_id"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "dictGetString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "colors"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "name"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "color_id"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "red"
+              }
+            }
+          ]
+        },
+        "alias": "sum_id_match"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "dictGetString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "colors"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "name"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "color_id"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "red"
+          },
+          "parenthesized": true
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "dictGetString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "colors"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "name"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "color_id"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "red"
+          },
+          "parenthesized": true
+        },
+        "alias": "is_red"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "c"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "dictGetString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "colors"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "name"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "color_id"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "red"
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "is_red"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "dictGetString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "colors"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "name"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "color_id"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "red"
+          },
+          "parenthesized": true
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "row_number",
+          "args": [],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "dictGetString",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "colors"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "name"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "color_id"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "red"
+                },
+                "parenthesized": true
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "color_id"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        },
+        "alias": "rn"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rn"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "color_id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "colors"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "color_id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "c0",
+        "type": {
+          "name": "UInt128"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ],
+          "parenthesized": true
+        }
+      ],
+      "source": {
+        "name": "null",
+        "pairs": []
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    },
+    "leadingComments": [
+      "-- Validation of attribute name"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "dictGetUInt16",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dict"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "c0"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "c0"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dict",
+      "alias": "t1"
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t__fuzz_0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "color_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "payload",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "colors"
+    },
+    "dictAttrs": [
+      {
+        "name": "color_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "payload",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "color_id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "t__fuzz_0"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "equals",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "9"
+              }
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "red"
+              },
+              "type": "Nullable(String)"
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "dictGetString",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "colors"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "payload"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "color_id"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t__fuzz_0"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab__fuzz_24"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt16"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "payload",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int8"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ref_table_all"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i8",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i16",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i64",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "u8",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "u16",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "u32",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f32",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ip4",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ip6",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dictionary_all"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "i8",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "i16",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "i32",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "i64",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "u8",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "u16",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "u32",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "u64",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "f32",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "f64",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "d",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "dt",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "uid",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "ip4",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "ip6",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_table_all"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "13"
+      },
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "functionCall",
+        "name": "or",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "literal",
+              "type": "Int64",
+              "value": "-32"
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "dictGetInt32",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toFixedString",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "dictionary_all"
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toLowCardinality",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "14"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toFixedString",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "i32"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "isNotDistinctFrom",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "9223372036854775806"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toLowCardinality",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "19"
+              }
+            ]
+          },
+          {
+            "kind": "unaryExpr",
+            "op": "NOT",
+            "expr": {
+              "kind": "functionCall",
+              "name": "equals",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "payload"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "9223372036854775806"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "isNotNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dictGetFloat64 - plan"
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "isNotNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab__fuzz_24"
+    },
+    "prewhere": {
+      "kind": "functionCall",
+      "name": "equals",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "9223372036854775806"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "isNotDistinctFrom",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "isNotDistinctFrom",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9223372036854775806"
+            },
+            {
+              "kind": "functionCall",
+              "name": "equals",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "isNotNull",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "9223372036854775806"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "qualify": {
+      "kind": "functionCall",
+      "name": "and",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        },
+        {
+          "kind": "functionCall",
+          "name": "equals",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "functionCall",
+              "name": "isZeroOrNull",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

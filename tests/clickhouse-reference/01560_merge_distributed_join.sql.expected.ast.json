@@ -1,1 +1,179 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":68,"line":1,"column":69},"end":{"offset":69,"line":1,"column":70}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cat_hist"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "categoryId",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "categoryName",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "prod_hist"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "categoryId",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "productId",
+        "type": {
+          "name": "UUID"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "productId"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "products_l"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "prod_hist"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "prod_hist"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "prod_hist"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^products_"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "products",
+        "alias": "p"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "cat_hist",
+        "alias": "c"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "categoryId"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "products",
+        "alias": "p"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "cat_hist",
+        "alias": "c"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "categoryId"
+        ]
+      }
+    }
+  }
+]

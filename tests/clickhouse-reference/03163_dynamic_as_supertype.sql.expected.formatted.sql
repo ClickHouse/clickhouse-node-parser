@@ -10,13 +10,13 @@ FROM numbers(4);
 
 CREATE TABLE dynamic_test_1
 (
-    d Dynamic(max_types=3)
+    d Dynamic(max_types = 3)
 )
 ENGINE = Memory;
 
 CREATE TABLE dynamic_test_2
 (
-    d Dynamic(max_types=5)
+    d Dynamic(max_types = 5)
 )
 ENGINE = Memory;
 

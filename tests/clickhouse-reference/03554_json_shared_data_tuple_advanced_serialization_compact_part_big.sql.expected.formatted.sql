@@ -1,6 +1,6 @@
 CREATE TABLE test_compact_advanced_tuple
 (
-    json Tuple(data JSON(max_dynamic_paths=8))
+    json Tuple(data JSON(max_dynamic_paths = 8))
 )
 ENGINE = MergeTree
 ORDER BY tuple()

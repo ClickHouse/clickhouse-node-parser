@@ -5,7 +5,7 @@ CREATE TABLE `02861_interpolate`
     f Int16
 )
 ENGINE = MergeTree()
-ORDER BY date;
+ORDER BY (date);
 
 SELECT
     date AS d,

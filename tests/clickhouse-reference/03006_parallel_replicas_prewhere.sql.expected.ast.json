@@ -1,1 +1,217 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"R","location":{"start":{"offset":243,"line":10,"column":8},"end":{"offset":244,"line":10,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "url_na_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "SiteId",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "DateVisit",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "SiteId"
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "SiteId"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "DateVisit"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      },
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "url_na_log_policy0"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "url_na_log"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "<",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "DateVisit"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2022-08-11"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "DateVisit"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2022-08-19"
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "to": {
+      "kind": "names",
+      "names": [
+        "default"
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1048576"
+        }
+      },
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_one_shard_three_replicas_localhost"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "name": "parallel_replicas_min_number_of_rows_per_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_only_with_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- necessary for CI run with disabled analyzer"
+    ]
+  }
+]

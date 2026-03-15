@@ -16,7 +16,7 @@ ORDER BY n;
 CREATE TABLE zstd_1_24
 (
     n Int,
-    b String CODEC(ZSTD(1,24))
+    b String CODEC(ZSTD(1, 24))
 )
 ENGINE = MergeTree
 ORDER BY n;
@@ -32,7 +32,7 @@ ORDER BY n;
 CREATE TABLE zstd_9_24
 (
     n Int,
-    b String CODEC(ZSTD(9,24))
+    b String CODEC(ZSTD(9, 24))
 )
 ENGINE = MergeTree
 ORDER BY n;

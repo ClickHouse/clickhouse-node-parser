@@ -1,6 +1,6 @@
 CREATE TABLE test_enum_string_functions
 (
-    e Enum('a'=1, 'b'=2)
+    e Enum('a' = 1, 'b' = 2)
 )
 ENGINE = TinyLog;
 

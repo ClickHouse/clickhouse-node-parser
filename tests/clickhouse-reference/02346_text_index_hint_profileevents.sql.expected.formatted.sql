@@ -1,1 +1,34 @@
-<Parse Error>
+-- Tags: no-parallel-replicas
+-- Random settings limits: index_granularity=(128, None)
+SET enable_analyzer = 1;
+
+SET enable_full_text_index = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET query_plan_text_index_add_hint = 1;
+
+CREATE TABLE tab
+(
+    s String,
+    INDEX idx_s s TYPE text(tokenizer = ngrams(3))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SELECT count()
+FROM tab
+WHERE like(s, '%foo%');
+
+SELECT count()
+FROM tab
+WHERE like(s, '%7777%');
+
+SELECT
+    ProfileEvents['TextIndexUseHint'] > 0,
+    ProfileEvents['TextIndexDiscardHint'] > 0
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND type = 'QueryFinish'
+    AND like(query, 'SELECT count() FROM tab%')
+ORDER BY event_time_microseconds ASC;

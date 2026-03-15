@@ -1,1 +1,125 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":117,"line":4,"column":57},"end":{"offset":118,"line":4,"column":58}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_foreground_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: distributed"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "visits"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "visits_dist"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "visits"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "visits"
+        },
+        {
+          "kind": "functionCall",
+          "name": "rand",
+          "args": []
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "visits_dist"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "Name2"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

@@ -1,1 +1,149 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "database_for_dict"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "database_for_dict",
+      "table": "table_for_dict"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "database_for_dict",
+      "table": "dict1"
+    },
+    "dictAttrs": [
+      {
+        "name": "k",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "v",
+        "type": {
+          "name": "UInt8"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_for_dict"
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "database_for_dict"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 10
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  }
+]

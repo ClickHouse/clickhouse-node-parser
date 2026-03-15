@@ -1,1 +1,186 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":62,"line":2,"column":8},"end":{"offset":63,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "number_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ],
+        "alias": "tb"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_mv"
+    },
+    "engine": {
+      "name": "Log"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "null_table"
+        },
+        "kind": "join",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "number_view",
+          "alias": "tb"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "number"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_table_buffer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "null_table"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "200"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sleep",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "null_mv"
+    },
+    "leadingComments": [
+      "-- Insert about should've landed into `null_mv`"
+    ]
+  }
+]

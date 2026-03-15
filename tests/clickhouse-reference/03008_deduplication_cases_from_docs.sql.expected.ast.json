@@ -1,1 +1,368 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":298,"line":17,"column":8},"end":{"offset":299,"line":17,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "non_replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "non_replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_first"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mv_dst"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "alias": "key"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          "alias": "value"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "dst"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_second"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mv_dst"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "alias": "key"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          "alias": "value"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "dst"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "deduplicate_blocks_in_dependent_materialized_views",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "from dst"
+      },
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_part"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "from mv_dst"
+      },
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_part"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mv_dst"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "non_replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "alias": "key"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          "alias": "value"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "dst"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  }
+]

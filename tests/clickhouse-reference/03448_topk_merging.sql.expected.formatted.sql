@@ -4,7 +4,7 @@ CREATE TABLE topk_test
     top_items AggregateFunction(topKWeighted(100, 3, 'counts'), String, UInt64)
 )
 ENGINE = AggregatingMergeTree()
-ORDER BY foo;
+ORDER BY (foo);
 
 SELECT *
 FROM (

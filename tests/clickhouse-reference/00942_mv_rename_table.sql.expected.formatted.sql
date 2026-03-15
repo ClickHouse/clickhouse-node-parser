@@ -1,1 +1,19 @@
-<Parse Error>
+CREATE TABLE src_00942
+(
+    x UInt8
+)
+ENGINE = Null;
+
+CREATE MATERIALIZED VIEW view_table_00942
+ENGINE = Memory
+AS
+SELECT *
+FROM src_00942;
+
+SELECT *
+FROM view_table_00942
+ORDER BY x ASC;
+
+SELECT *
+FROM new_view_table_00942
+ORDER BY x ASC;

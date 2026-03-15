@@ -1,1 +1,219 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":103,"line":2,"column":63},"end":{"offset":104,"line":2,"column":64}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "src"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "lc",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "lc",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "a"
+          },
+          "alias": "s"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toLowCardinality",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "b"
+              }
+            ]
+          },
+          "alias": "lc"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "src"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "lc"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mv"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "functionCall",
+        "name": "ignore",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lc"
+            ]
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "lc"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mv"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "functionCall",
+        "name": "ignore",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lc"
+            ]
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

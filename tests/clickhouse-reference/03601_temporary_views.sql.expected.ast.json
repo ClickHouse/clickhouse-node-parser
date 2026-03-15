@@ -1,1 +1,192 @@
-{"expected":[{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":87,"line":2,"column":18},"end":{"offset":88,"line":2,"column":19}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_src"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "tview_basic"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "upper",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "val"
+                ]
+              }
+            ]
+          },
+          "alias": "u"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t_src"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "<=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tview_basic"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "tview_basic"
+    },
+    "temporary": true,
+    "ifNotExists": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "database": "default",
+      "table": "tview_db"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError BAD_DATABASE_FOR_TEMPORARY_TABLE }"
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "tview_cluster"
+    },
+    "temporary": true,
+    "onCluster": "'test'",
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tsrc_cluster"
+    },
+    "temporary": true,
+    "onCluster": "'test'",
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  }
+]

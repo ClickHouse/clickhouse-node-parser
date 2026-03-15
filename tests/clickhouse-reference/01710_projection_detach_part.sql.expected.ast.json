@@ -1,1 +1,138 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":107,"line":2,"column":74},"end":{"offset":108,"line":2,"column":75}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_use_projections",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "j"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "i"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "projection_parts"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "t"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "active"
+          ]
+        }
+      ]
+    }
+  }
+]

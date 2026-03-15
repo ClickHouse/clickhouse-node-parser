@@ -1,1 +1,297 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":301,"line":18,"column":8},"end":{"offset":302,"line":18,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ref_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "final_id",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "display",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_target"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ref_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "final_id",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "display",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mv_test_target"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ref_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "final_id",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "display",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "subquery",
+          "name": "tester",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ref_id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "final_id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "display"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "mv_test"
+            }
+          }
+        },
+        {
+          "kind": "subquery",
+          "name": "id_set",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "display"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "max",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "max_id"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "mv_test"
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "display"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "tester"
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "max_id"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "id_set"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mv_test_target"
+    }
+  }
+]

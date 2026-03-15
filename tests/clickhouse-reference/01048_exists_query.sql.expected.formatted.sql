@@ -1,1 +1,33 @@
-<Parse Error>
+CREATE DATABASE db_01048;
+
+CREATE TABLE db_01048.t_01048
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+CREATE TEMPORARY TABLE t_01048
+(
+    x UInt8
+);
+
+CREATE DICTIONARY db_01048.t_01048
+(
+    k UInt64,
+    v String
+)
+PRIMARY KEY k
+SOURCE(http(URL 'http://example.test/' FORMAT 'TSV'))
+LIFETIME(1000)
+LAYOUT(FLAT());
+
+CREATE TABLE db_01048.t_01048_2
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+CREATE VIEW db_01048.v_01048
+AS
+SELECT *
+FROM db_01048.t_01048_2;

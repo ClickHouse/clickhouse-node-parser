@@ -8,5 +8,5 @@ CREATE TABLE weird_projections
     GROUP BY account_id)
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/tables/test', '1')
-ORDER BY account_id
+ORDER BY (account_id)
 SETTINGS index_granularity = 8192, lightweight_mutation_projection_mode = 'rebuild';

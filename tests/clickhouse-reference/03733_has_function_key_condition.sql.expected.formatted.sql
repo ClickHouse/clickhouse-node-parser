@@ -177,7 +177,7 @@ CREATE TABLE t1
     c1 UInt64
 )
 ENGINE = MergeTree()
-ORDER BY c1;
+ORDER BY (c1);
 
 SELECT count()
 FROM t1

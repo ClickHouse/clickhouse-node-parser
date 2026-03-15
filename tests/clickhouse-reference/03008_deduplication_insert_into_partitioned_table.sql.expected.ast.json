@@ -1,1 +1,193 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":305,"line":7,"column":8},"end":{"offset":306,"line":7,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "deduplicate_blocks_in_dependent_materialized_views",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "partitioned_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/03008_deduplication_insert_into_partitioned_table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "%",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/03008_deduplication_insert_into_partitioned_table_mv"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "partitioned_table"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "partitioned_table"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mv_table"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

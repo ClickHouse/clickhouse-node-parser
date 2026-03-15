@@ -1,1 +1,87 @@
-{"expected":[{"type":"literal","text":"NOT","ignoreCase":true},{"type":"literal","text":"NULL","ignoreCase":true},{"type":"literal","text":"DEFAULT","ignoreCase":true},{"type":"literal","text":"MATERIALIZED","ignoreCase":true},{"type":"literal","text":"ALIAS","ignoreCase":true},{"type":"literal","text":"EPHEMERAL","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"CODEC","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":")","ignoreCase":false}],"found":"(","location":{"start":{"offset":80,"line":1,"column":81},"end":{"offset":81,"line":1,"column":82}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sums"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sumOfSums",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sumsMap",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "key",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "sum",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree"
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "sums"
+    }
+  }
+]

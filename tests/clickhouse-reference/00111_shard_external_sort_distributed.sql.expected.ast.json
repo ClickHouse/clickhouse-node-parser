@@ -1,1 +1,230 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":295,"line":10,"column":8},"end":{"offset":296,"line":10,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_memory_usage",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "150000000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: distributed, long, no-msan, no-tsan, no-asan, no-ubsan",
+      "-- ^ slow"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_sort",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_ratio_before_external_sort",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_time_leaf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers10m"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5000000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "numbers10m"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1234567890123456789"
+          }
+        },
+        "direction": "ASC"
+      }
+    ],
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "20"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "4999980"
+      },
+      "commaSyntax": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{2,3}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "numbers10m"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1234567890123456789"
+          }
+        },
+        "direction": "ASC"
+      }
+    ],
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "20"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "4999980"
+      },
+      "commaSyntax": true
+    }
+  }
+]

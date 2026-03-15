@@ -1,1 +1,301 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":33,"line":3,"column":8},"end":{"offset":34,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03215_test_v"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "subquery",
+          "name": "test_table",
+          "query": {
+            "kind": "union",
+            "queries": [
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "alias": "number"
+                  }
+                ]
+              },
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "test_table"
+                },
+                "where": {
+                  "kind": "binaryExpr",
+                  "op": "<",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "100"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "03215_test_v"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03215_multi_v"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "subquery",
+          "name": "task",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "alias": "task_id"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "-",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "parent_id"
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind": "subquery",
+          "name": "rtq",
+          "query": {
+            "kind": "union",
+            "queries": [
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "task_id"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "parent_id"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "task",
+                  "alias": "t"
+                },
+                "where": {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t",
+                      "parent_id"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              },
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t",
+                      "task_id"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t",
+                      "parent_id"
+                    ]
+                  }
+                ],
+                "from": {
+                  "left": {
+                    "kind": "tableRef",
+                    "table": "task",
+                    "alias": "t"
+                  },
+                  "kind": "join",
+                  "joinType": "CROSS",
+                  "right": {
+                    "kind": "tableRef",
+                    "table": "rtq",
+                    "alias": "r"
+                  }
+                },
+                "where": {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t",
+                      "parent_id"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "r",
+                      "task_id"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "rtq"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "03215_multi_v"
+    }
+  }
+]

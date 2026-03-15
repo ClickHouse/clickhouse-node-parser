@@ -4,7 +4,7 @@ SET output_format_native_write_json_as_string = 0;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=8, max_dynamic_types=4)
+    json JSON(max_dynamic_paths = 8, max_dynamic_types = 4)
 )
 ENGINE = Memory;
 
@@ -41,7 +41,7 @@ FORMAT JSONColumns;
 
 CREATE TABLE test2
 (
-    json JSON(max_dynamic_paths=16, max_dynamic_types=8)
+    json JSON(max_dynamic_paths = 16, max_dynamic_types = 8)
 )
 ENGINE = Memory;
 
@@ -59,7 +59,7 @@ FROM test2;
 
 CREATE TABLE test3
 (
-    json JSON(max_dynamic_paths=4, max_dynamic_types=2)
+    json JSON(max_dynamic_paths = 4, max_dynamic_types = 2)
 )
 ENGINE = Memory;
 
@@ -77,7 +77,7 @@ FROM test3;
 
 CREATE TABLE test4
 (
-    json JSON(max_dynamic_paths=8, max_dynamic_types=4)
+    json JSON(max_dynamic_paths = 8, max_dynamic_types = 4)
 )
 ENGINE = Memory;
 

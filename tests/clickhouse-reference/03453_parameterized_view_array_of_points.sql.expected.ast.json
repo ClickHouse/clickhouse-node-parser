@@ -1,1 +1,184 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":89,"line":7,"column":8},"end":{"offset":90,"line":7,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "point_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "coord",
+        "type": {
+          "name": "Point"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "point_test_parameterized"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "point_test"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "coord"
+          ]
+        },
+        "right": {
+          "kind": "queryParam",
+          "name": "point",
+          "type": "Point"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "point_test_parameterized",
+      "args": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "point"
+            ]
+          },
+          "right": {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ],
+            "source": "(0, 0)"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "point_test_parameterized2"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "point_test"
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "coord"
+          ]
+        },
+        "values": [
+          {
+            "kind": "queryParam",
+            "name": "point",
+            "type": "Array(Point)"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "point_test_parameterized2",
+      "args": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "point"
+            ]
+          },
+          "right": {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "tuple",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                ],
+                "source": "(0, 0)"
+              }
+            ],
+            "source": "[(0, 0)]"
+          }
+        }
+      ]
+    }
+  }
+]

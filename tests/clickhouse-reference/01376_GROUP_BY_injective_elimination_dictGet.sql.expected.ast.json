@@ -1,1 +1,251 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":229,"line":5,"column":8},"end":{"offset":230,"line":5,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "dictGet",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "default.countryId"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "country"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "country"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "country"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/11469"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "dictdb_01376"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "dictdb_01376",
+      "table": "table_for_dict"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "dictdb_01376",
+      "table": "dict_exists"
+    },
+    "ifNotExists": true,
+    "dictAttrs": [
+      {
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "77.77"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_for_dict"
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictdb_01376"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 1
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "dictGet",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictdb_01376.dict_exists"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "value"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "val"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "val"
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -52,12 +52,42 @@
       {
         "kind": "columnDef",
         "name": "id",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "json",
-        "type": "JSON(max_dynamic_paths=8, a.b Array(JSON))"
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_dynamic_paths",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "a.b",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "JSON"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -65,10 +95,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "id"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
       }
     ],
     "settings": [
@@ -88,7 +120,8 @@
           "value": "10000000000"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

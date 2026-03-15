@@ -108,7 +108,7 @@ SELECT minMap(([1,1,1])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 CREATE TABLE sum_map_decimal
 (
-    statusMap Map(UInt16,Decimal32(5))
+    statusMap Map(UInt16, Decimal32(5))
 )
 ENGINE = Log;
 

@@ -1,1 +1,23 @@
-<Parse Error>
+CREATE TABLE test_01532_1
+(
+    a Tuple(key String, value String)
+)
+ENGINE = Memory();
+
+CREATE TABLE test_01532_2
+(
+    a Tuple(Tuple(key String, value String))
+)
+ENGINE = Memory();
+
+CREATE TABLE test_01532_3
+(
+    a Array(Tuple(key String, value String))
+)
+ENGINE = Memory();
+
+CREATE TABLE test_01532_4
+(
+    a Tuple(UInt8, Tuple(key String, value String))
+)
+ENGINE = Memory();

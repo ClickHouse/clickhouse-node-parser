@@ -27,7 +27,7 @@ CREATE TABLE t_light_r1
     a int,
     b int,
     c int,
-    INDEX i_c (b) TYPE minmax GRANULARITY 4
+    INDEX i_c b TYPE minmax GRANULARITY 4
 )
 ENGINE = ReplicatedMergeTree('/test/02352/{database}/t_light', '1')
 ORDER BY a
@@ -38,7 +38,7 @@ CREATE TABLE t_light_r2
     a int,
     b int,
     c int,
-    INDEX i_c (b) TYPE minmax GRANULARITY 4
+    INDEX i_c b TYPE minmax GRANULARITY 4
 )
 ENGINE = ReplicatedMergeTree('/test/02352/{database}/t_light', '2')
 ORDER BY a
@@ -62,7 +62,7 @@ CREATE TABLE t_light_sync_r1
     a int,
     b int,
     c int,
-    INDEX i_c (b) TYPE minmax GRANULARITY 4
+    INDEX i_c b TYPE minmax GRANULARITY 4
 )
 ENGINE = ReplicatedMergeTree('/test/02352/{database}/t_sync', '1')
 ORDER BY a
@@ -74,7 +74,7 @@ CREATE TABLE t_light_sync_r2
     a int,
     b int,
     c int,
-    INDEX i_c (b) TYPE minmax GRANULARITY 4
+    INDEX i_c b TYPE minmax GRANULARITY 4
 )
 ENGINE = ReplicatedMergeTree('/test/02352/{database}/t_sync', '2')
 ORDER BY a

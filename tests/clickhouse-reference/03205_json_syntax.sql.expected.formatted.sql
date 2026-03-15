@@ -9,13 +9,13 @@ ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=10)
+    json JSON(max_dynamic_paths = 10)
 )
 ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_types=10)
+    json JSON(max_dynamic_types = 10)
 )
 ENGINE = Memory;
 
@@ -39,25 +39,25 @@ ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(a.b.c UInt32)
+    json JSON(`a.b.c` UInt32)
 )
 ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(aaaa.b.cccc UInt32)
+    json JSON(`aaaa.b.cccc` UInt32)
 )
 ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(`some path`.`path some` UInt32)
+    json JSON(`some path.path some` UInt32)
 )
 ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(a.b.c Tuple(d UInt32, e UInt32))
+    json JSON(`a.b.c` Tuple(d UInt32, e UInt32))
 )
 ENGINE = Memory;
 
@@ -105,6 +105,6 @@ ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=10, max_dynamic_types=10, a.b.c UInt32, b.c.d String, SKIP g.d.a, SKIP o.g.a, SKIP REGEXP '.*u.*', SKIP REGEXP 'abc')
+    json JSON(max_dynamic_paths = 10, max_dynamic_types = 10, `a.b.c` UInt32, `b.c.d` String, SKIP g.d.a, SKIP o.g.a, SKIP REGEXP '.*u.*', SKIP REGEXP 'abc')
 )
 ENGINE = Memory;

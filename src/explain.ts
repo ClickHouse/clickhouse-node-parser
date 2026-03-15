@@ -1,10 +1,20 @@
 import {
   BinaryExpr,
   CTE,
+  ColumnDef,
   ColumnTransformer,
+  CreateTableStatement,
+  CreateViewStatement,
+  CreateMaterializedViewStatement,
+  CreateDatabaseStatement,
+  CreateFunctionStatement,
+  CreateIndexStatement,
+  CreateDictionaryStatement,
+  CreateWorkloadStatement,
   ExplainStatement,
   Expression,
   FromExpr,
+  ParallelWithStatement,
   JoinConstraint,
   OrderByItem,
   SampleClause,
@@ -17,6 +27,7 @@ import {
   TableRef,
   WindowSpec,
 } from './ast';
+import { isCreateTableStatement } from './guards';
 
 const OP_TO_FUNCTION: Record<string, string> = {
   AND: 'and',
@@ -444,7 +455,7 @@ function exprNode(expr: Expression): ExplainNode {
     }
 
     case 'queryParam':
-      return n(`QueryParameter {${expr.name}: ${expr.type}}`);
+      return n(`QueryParameter ${expr.name}:${expr.type}`);
     case 'alias': {
       // Outer alias overrides any inner aliases — only show the outermost alias
       let innerExpr = expr.expr;
@@ -1048,13 +1059,946 @@ function viewExplainNode(stmt: ExplainStatement, aliasStr: string): ExplainNode 
   ]);
 }
 
+// ── CREATE TABLE explain helpers ──────────────────────────────────────────────
+
+// Convert a structured DataType to an EXPLAIN node tree
+function dataTypeToExplainNode(dt: import('./ast').DataType): ExplainNode {
+  const baseName = dt.name;
+
+  // Enum types with parsed values
+  if (
+    /^Enum(?:8|16)?$/i.test(baseName) &&
+    dt.args &&
+    dt.args.length === 1 &&
+    dt.args[0].kind === 'enumValues'
+  ) {
+    const enumVals = dt.args[0].values;
+    // If ALL values have explicit assignments, use EnumDataType (no children)
+    const allExplicit = enumVals.every(
+      (v) => v.value !== undefined && v.value !== null && v.name !== null,
+    );
+    if (allExplicit) {
+      return n(`EnumDataType ${baseName}`);
+    }
+    // Otherwise show DataType with ExpressionList children
+    const children = enumVals.map((v) => {
+      if (v.name === null) return n('Literal NULL');
+      if (v.value !== undefined && v.value !== null) {
+        const numVal = v.value;
+        const numLabel = numVal.startsWith('-') ? `Int64_${numVal}` : `UInt64_${numVal}`;
+        return n('Function equals', [
+          n('ExpressionList', [
+            n(`Literal '${escapeStringValue(v.name)}'`),
+            n(`Literal ${numLabel}`),
+          ]),
+        ]);
+      }
+      return n(`Literal '${escapeStringValue(v.name)}'`);
+    });
+    return n(`DataType ${baseName}`, [n('ExpressionList', children)]);
+  }
+  // Enum without args: EnumDataType
+  if (/^Enum(?:8|16)?$/i.test(baseName)) {
+    return n(`EnumDataType ${baseName}`);
+  }
+
+  // MySQL integer types strip their display width: TINYINT(8) → DataType TINYINT
+  const intTypePattern =
+    /^(TINYINT|SMALLINT|INT|INTEGER|BIGINT|MEDIUMINT)(\s+(SIGNED|UNSIGNED))?$/i;
+  if (intTypePattern.test(baseName) && dt.args) {
+    return n(`DataType ${baseName}`);
+  }
+
+  // No args
+  if (!dt.args) {
+    return n(`DataType ${baseName}`);
+  }
+  // Empty args: show ExpressionList child (DateTime(), Variant(), Tuple(), etc.)
+  if (dt.args.length === 0) {
+    return n(`DataType ${baseName}`, [n('ExpressionList')]);
+  }
+
+  // Tuple type uses TupleDataType; named fields are stripped (only types shown)
+  if (/^Tuple$/i.test(baseName)) {
+    if (dt.args.length === 0) {
+      return n(`DataType ${baseName}`, [n('ExpressionList')]);
+    }
+    const children = dt.args.map((arg) => {
+      if (arg.kind === 'namedField') return dataTypeToExplainNode(arg.type);
+      if (arg.kind === 'type') return dataTypeToExplainNode(arg.type);
+      return dataTypeArgToExplainNode(arg, baseName, 0);
+    });
+    return n(`TupleDataType ${baseName}`, [n('ExpressionList', children)]);
+  }
+
+  // Nested type: children are NameTypePair
+  if (/^Nested$/i.test(baseName)) {
+    const children = dt.args.map((arg) => {
+      if (arg.kind === 'namedField') {
+        return n(`NameTypePair ${arg.name}`, [dataTypeToExplainNode(arg.type)]);
+      }
+      if (arg.kind === 'type') return dataTypeToExplainNode(arg.type);
+      return dataTypeArgToExplainNode(arg, baseName, 0);
+    });
+    return n(`DataType ${baseName}`, [n('ExpressionList', children)]);
+  }
+
+  // JSON type: args are wrapped in ASTObjectTypeArgument / ObjectTypedPath
+  if (/^JSON$/i.test(baseName)) {
+    const children = dt.args.map((arg) => jsonTypeArgToExplainNode(arg));
+    return n(`DataType ${baseName}`, [n('ExpressionList', children)]);
+  }
+
+  // Generic parameterized type (Array, Nullable, Map, AggregateFunction, etc.)
+  const children = dt.args.map((arg, idx) => dataTypeArgToExplainNode(arg, baseName, idx));
+  return n(`DataType ${baseName}`, [n('ExpressionList', children)]);
+}
+
+// Convert a single DataTypeArg to an EXPLAIN node
+function dataTypeArgToExplainNode(
+  arg: import('./ast').DataTypeArg,
+  parentName: string,
+  index: number,
+): ExplainNode {
+  switch (arg.kind) {
+    case 'type':
+      // AggregateFunction: first arg is a function name (Identifier)
+      if (/^(?:Aggregate|SimpleAggregate)Function$/i.test(parentName) && index === 0) {
+        // Render the function name as Identifier, including params if present
+        const t = arg.type;
+        if (t.args && t.args.length > 0) {
+          // e.g. quantile(0.5) → Function quantile(...)
+          const argNodes = t.args.map((a, i) => dataTypeArgToExplainNode(a, t.name, i));
+          return n(`Function ${t.name}`, [n('ExpressionList', argNodes)]);
+        }
+        return n(`Identifier ${t.name}`);
+      }
+      return dataTypeToExplainNode(arg.type);
+    case 'namedField':
+      return n(`ColumnDeclaration ${arg.name}`, [dataTypeToExplainNode(arg.type)]);
+    case 'literal': {
+      const v = arg.value;
+      if (/^\d+$/.test(v)) return n(`Literal UInt64_${v}`);
+      if (/^-?\d+$/.test(v)) return n(`Literal Int64_${v}`);
+      if (/^-?\d*\.\d+$/.test(v) || /^\d+\.\d*$/.test(v))
+        return n(`Literal Float64_${normalizeFloat(v)}`);
+      if (v.startsWith("'")) return n(`Literal ${v}`);
+      // Setting-like: "max_types = 3" → not currently output as literal in CH
+      return n(`Literal ${v}`);
+    }
+    case 'enumValues':
+      return n(`EnumDataType ${parentName}`);
+    case 'setting':
+      return n('Function equals', [
+        n('ExpressionList', [n(`Identifier ${arg.name}`), exprNode(arg.value)]),
+      ]);
+  }
+}
+
+// Convert a JSON type argument to an ASTObjectTypeArgument explain node
+function jsonTypeArgToExplainNode(arg: import('./ast').DataTypeArg): ExplainNode {
+  switch (arg.kind) {
+    case 'namedField':
+      // JSON(a String) → ASTObjectTypeArgument / ObjectTypedPath a / DataType String
+      return n('ASTObjectTypeArgument', [
+        n(`ObjectTypedPath ${arg.name}`, [dataTypeToExplainNode(arg.type)]),
+      ]);
+    case 'setting':
+      // JSON(max_dynamic_paths=2) → ASTObjectTypeArgument / Function equals(...)
+      return n('ASTObjectTypeArgument', [
+        n('Function equals', [
+          n('ExpressionList', [n(`Identifier ${arg.name}`), exprNode(arg.value)]),
+        ]),
+      ]);
+    case 'literal': {
+      // SKIP REGEXP 'pattern' → ASTObjectTypeArgument / Literal 'pattern'
+      const skipRegexpMatch = arg.value.match(/^SKIP REGEXP\s+(.+)$/);
+      if (skipRegexpMatch) {
+        return n('ASTObjectTypeArgument', [n(`Literal ${skipRegexpMatch[1]}`)]);
+      }
+      // SKIP path → ASTObjectTypeArgument / Identifier path (strip backticks from each segment)
+      const skipMatch = arg.value.match(/^SKIP\s+(.+)$/);
+      if (skipMatch) {
+        const path = skipMatch[1].replace(/`([^`]*)`/g, '$1');
+        return n('ASTObjectTypeArgument', [n(`Identifier ${path}`)]);
+      }
+      return n('ASTObjectTypeArgument', [n(`Literal ${arg.value}`)]);
+    }
+    case 'type':
+      return n('ASTObjectTypeArgument', [dataTypeToExplainNode(arg.type)]);
+    case 'enumValues':
+      return n('ASTObjectTypeArgument');
+  }
+}
+
+// Convert structured CodecItem[] to EXPLAIN nodes
+function codecToExplainNodes(items: import('./ast').CodecItem[]): ExplainNode {
+  const children = items.map((item) => {
+    if (item.args !== undefined && item.args.length > 0) {
+      return n(`Function ${item.name}`, [n('ExpressionList', item.args.map(exprNode))]);
+    }
+    if (item.args !== undefined) {
+      return n(`Function ${item.name}`, [n('ExpressionList')]);
+    }
+    return n(`Function ${item.name}`);
+  });
+  return n('Function CODEC', [n('ExpressionList', children)]);
+}
+
+// Convert structured IndexType to EXPLAIN node
+function indexTypeToExplainNode(it: import('./ast').IndexType): ExplainNode {
+  if (it.args !== undefined && it.args.length > 0) {
+    return n(`Function ${it.name}`, [n('ExpressionList', it.args.map(exprNode))]);
+  }
+  if (it.args !== undefined) {
+    return n(`Function ${it.name}`, [n('ExpressionList')]);
+  }
+  return n(`Function ${it.name}`, [n('ExpressionList')]);
+}
+
+// Build ColumnDeclaration explain node
+function columnDeclNode(col: ColumnDef): ExplainNode {
+  const children: ExplainNode[] = [];
+
+  // DataType (if specified)
+  if (col.type) {
+    children.push(dataTypeToExplainNode(col.type));
+  }
+
+  // Collation
+  if (col.collate) {
+    children.push(n('Collation'));
+  }
+
+  // EPHEMERAL without default value: show defaultValueOfTypeName placeholder
+  if (col.defaultKind === 'EPHEMERAL' && !col.defaultExpr) {
+    children.push(n('Function defaultValueOfTypeName'));
+  }
+
+  // Default/Materialized/Alias/Ephemeral expression
+  if (col.defaultExpr) {
+    children.push(exprNode(col.defaultExpr));
+  }
+
+  // CODEC
+  if (col.codec) {
+    children.push(codecToExplainNodes(col.codec));
+  }
+
+  // Column SETTINGS (before STATISTICS and TTL)
+  if (col.columnSettings) {
+    children.push(n('Set'));
+  }
+
+  // STATISTICS — rendered as Function STATISTICS (not CODEC)
+  if (col.statistics) {
+    const statChildren = col.statistics.map((item) => {
+      if (item.args !== undefined && item.args.length > 0) {
+        return n(`Function ${item.name}`, [n('ExpressionList', item.args.map(exprNode))]);
+      }
+      return n(`Function ${item.name}`);
+    });
+    children.push(n('Function STATISTICS', [n('ExpressionList', statChildren)]));
+  }
+
+  // Column TTL
+  if (col.ttl) {
+    children.push(exprNode(col.ttl));
+  }
+
+  // Column comment
+  if (col.comment) {
+    children.push(n(`Literal '${col.comment.replace(/'/g, "\\'")}'`));
+  }
+
+  return n(`ColumnDeclaration ${col.name}`, children);
+}
+
+// Build Storage definition node
+function storageDefNode(
+  stmt: CreateTableStatement | CreateMaterializedViewStatement,
+): ExplainNode | null {
+  const children: ExplainNode[] = [];
+
+  // Engine
+  if (stmt.engine) {
+    if (stmt.engine.args !== undefined) {
+      if (stmt.engine.args.length === 0) {
+        children.push(n(`Function ${stmt.engine.name}`, [n('ExpressionList')]));
+      } else {
+        children.push(
+          n(`Function ${stmt.engine.name}`, [n('ExpressionList', stmt.engine.args.map(exprNode))]),
+        );
+      }
+    } else {
+      children.push(n(`Function ${stmt.engine.name}`));
+    }
+  }
+
+  // SETTINGS before ORDER BY (when SETTINGS was specified before ORDER BY in the DDL)
+  const settingsAfterOrderBy = !!(stmt as Record<string, unknown>).settingsAfterOrderBy;
+  if (stmt.settings && !settingsAfterOrderBy) {
+    children.push(n('Set'));
+  }
+
+  // PARTITION BY
+  if (stmt.partitionBy) {
+    children.push(exprNode(stmt.partitionBy));
+  }
+
+  // PRIMARY KEY
+  const pk =
+    stmt.primaryKey || (isCreateTableStatement(stmt) ? stmt.primaryKeyInSchema : undefined);
+  const storagePkFromColumns =
+    isCreateTableStatement(stmt) &&
+    stmt.tableElements?.some((el) => el.kind === 'columnDef' && el.primaryKey);
+  // PK goes after ORDER BY when from column-level modifiers or from schema PRIMARY KEY
+  const hasSchemaPk = isCreateTableStatement(stmt) && !!stmt.primaryKeyInSchema;
+  const pkAfterOrderBy = storagePkFromColumns || hasSchemaPk;
+  // Render PK before ORDER BY (when not from column modifiers)
+  if (pk && !pkAfterOrderBy) {
+    if (pk.length === 1) {
+      children.push(exprNode(pk[0]));
+    } else {
+      children.push(n('Function tuple', [n('ExpressionList', pk.map(exprNode))]));
+    }
+  }
+
+  // ORDER BY
+  if (stmt.orderBy) {
+    const hasDesc = stmt.orderBy.some((o) => o.dir === 'DESC');
+    const isParenthesized = !!(stmt.orderBy as unknown as { _parenthesized?: boolean })
+      ._parenthesized;
+    if (hasDesc && isParenthesized) {
+      // Parenthesized ORDER BY with any DESC → Function tuple (no children)
+      children.push(n('Function tuple'));
+    } else if (stmt.orderBy.length === 1) {
+      const item = stmt.orderBy[0];
+      if (item.dir === 'DESC') {
+        children.push(n('StorageOrderByElement', [exprNode(item.expr)]));
+      } else {
+        children.push(exprNode(item.expr));
+      }
+    } else if (hasDesc) {
+      // Non-parenthesized multi-item with DESC → Function tuple (no children)
+      children.push(n('Function tuple'));
+    } else {
+      children.push(
+        n('Function tuple', [
+          n(
+            'ExpressionList',
+            stmt.orderBy.map((o) => exprNode(o.expr)),
+          ),
+        ]),
+      );
+    }
+  }
+
+  // PK after ORDER BY (from column modifiers or explicit PRIMARY KEY after ORDER BY)
+  if (pk && pkAfterOrderBy) {
+    if (storagePkFromColumns) {
+      children.push(n('Function tuple', [n('ExpressionList', pk.map(exprNode))]));
+    } else if (pk.length === 1) {
+      children.push(exprNode(pk[0]));
+    } else {
+      children.push(n('Function tuple', [n('ExpressionList', pk.map(exprNode))]));
+    }
+  }
+
+  // SAMPLE BY
+  if (stmt.sampleBy) {
+    children.push(exprNode(stmt.sampleBy));
+  }
+
+  // TTL
+  if (stmt.ttl) {
+    const ttlElements = stmt.ttl.map((item) => {
+      const ttlChildren = [exprNode(item.expr)];
+      if (item.where) ttlChildren.push(exprNode(item.where));
+      return n('TTLElement', ttlChildren);
+    });
+    children.push(n('ExpressionList', ttlElements));
+  }
+
+  // SETTINGS after ORDER BY (when SETTINGS was specified after ORDER BY in the DDL)
+  if (stmt.settings && settingsAfterOrderBy) {
+    children.push(n('Set'));
+  }
+
+  if (children.length === 0) return null;
+  return n('Storage definition', children);
+}
+
+// Build CreateIndexQuery explain node
+// Format: CreateIndexQuery  tablename (children 3)
+//   Identifier indexName
+//   Index (children 1-2)
+//     expr
+//     [Function typeName ...]
+//   Identifier tableName
+function createIndexQueryNode(stmt: CreateIndexStatement): ExplainNode {
+  // Note: double space between CreateIndexQuery and table name (ClickHouse quirk)
+  const label = `CreateIndexQuery  ${stmt.table.table}`;
+
+  const children: ExplainNode[] = [];
+
+  // Index name
+  children.push(n(`Identifier ${stmt.indexName}`));
+
+  // Index node
+  const indexChildren: ExplainNode[] = [];
+  if (stmt.indexExpr) {
+    // For multi-column indexes, ClickHouse EXPLAIN shows Function tuple with empty ExpressionList
+    if (stmt.indexExpr.kind === 'functionCall' && stmt.indexExpr.name === 'tuple') {
+      indexChildren.push(n('Function tuple', [n('ExpressionList')]));
+    } else {
+      indexChildren.push(exprNode(stmt.indexExpr));
+    }
+  }
+  if (stmt.indexType) {
+    indexChildren.push(indexTypeToExplainNode(stmt.indexType));
+  }
+  children.push(n('Index', indexChildren));
+
+  // Table name
+  children.push(n(`Identifier ${stmt.table.table}`));
+
+  return n(label, children);
+}
+
+// Build CreateQuery explain node for DICTIONARY
+function createDictionaryQueryNode(stmt: CreateDictionaryStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+
+  // Label
+  let label = 'CreateQuery';
+  if (stmt.table.database) {
+    label += ` ${stmt.table.database} ${stmt.table.table}`;
+    children.push(n(`Identifier ${stmt.table.database}`));
+    children.push(n(`Identifier ${stmt.table.table}`));
+  } else {
+    label += ` ${stmt.table.table}`;
+    children.push(n(`Identifier ${stmt.table.table}`));
+  }
+
+  // Dictionary attributes
+  if (stmt.dictAttrs && stmt.dictAttrs.length > 0) {
+    const attrNodes = stmt.dictAttrs.map((attr) => {
+      const attrChildren: ExplainNode[] = [dataTypeToExplainNode(attr.type)];
+      if (attr.defaultValue) attrChildren.push(exprNode(attr.defaultValue));
+      if (attr.expression) attrChildren.push(exprNode(attr.expression));
+      return n(`DictionaryAttributeDeclaration ${attr.name}`, attrChildren);
+    });
+    children.push(n('ExpressionList', attrNodes));
+  }
+
+  // Dictionary definition
+  if (stmt.dictDef) {
+    const defChildren: ExplainNode[] = [];
+    const dd = stmt.dictDef;
+
+    // PRIMARY KEY — flatten tuple to flat list
+    if (dd.primaryKey) {
+      const pkExprs: Expression[] = [];
+      for (const pk of dd.primaryKey) {
+        if (pk.kind === 'tuple') {
+          pkExprs.push(...pk.elements);
+        } else {
+          pkExprs.push(pk);
+        }
+      }
+      defChildren.push(n('ExpressionList', pkExprs.map(exprNode)));
+    }
+
+    // SOURCE
+    if (dd.source) {
+      const pairNodes = dd.source.pairs.map((p) => {
+        if (Array.isArray(p.value)) {
+          // Structure pairs: render type as Identifier (simple) or Function (parameterized)
+          const structPairs = p.value.map(
+            (sp: { name: string; type: import('./ast').DataType }) => {
+              const dt = sp.type;
+              if (dt.args && dt.args.length > 0) {
+                const argNodes = dt.args.map((a, i) => dataTypeArgToExplainNode(a, dt.name, i));
+                return n('pair', [n(`Function ${dt.name}`, [n('ExpressionList', argNodes)])]);
+              }
+              return n('pair', [n(`Identifier ${dt.name}`)]);
+            },
+          );
+          return n('pair', [n('ExpressionList', structPairs)]);
+        }
+        return n('pair', [exprNode(p.value)]);
+      });
+      // Double space before source name (ClickHouse quirk)
+      defChildren.push(
+        n(`FunctionWithKeyValueArguments  ${dd.source.name}`, [n('ExpressionList', pairNodes)]),
+      );
+    }
+
+    // LIFETIME
+    if (dd.lifetime) {
+      defChildren.push(n('Dictionary lifetime'));
+    }
+
+    // LAYOUT
+    if (dd.layout) {
+      const layoutPairs = dd.layout.pairs.map((p) => n('pair', [exprNode(p.value)]));
+      defChildren.push(n('Dictionary layout', [n('ExpressionList', layoutPairs)]));
+    }
+
+    // RANGE — no children in EXPLAIN
+    if (dd.range) {
+      defChildren.push(n('Dictionary range'));
+    }
+
+    // SETTINGS
+    if (dd.settings) {
+      defChildren.push(n('Dictionary settings'));
+    }
+
+    children.push(n('Dictionary definition', defChildren));
+  }
+
+  // Dictionary comment
+  if (stmt.dictDef?.comment) {
+    children.push(n(`Literal '${stmt.dictDef.comment.replace(/'/g, "\\'")}'`));
+  }
+
+  return n(label, children);
+}
+
+function createWorkloadQueryNode(stmt: CreateWorkloadStatement): ExplainNode {
+  const children: ExplainNode[] = [n(`Identifier ${stmt.name}`)];
+  if (stmt.parentWorkload) {
+    children.push(n(`Identifier ${stmt.parentWorkload}`));
+  }
+  return n(`CreateWorkloadQuery ${stmt.name}`, children);
+}
+
+function createFunctionQueryNode(stmt: CreateFunctionStatement): ExplainNode {
+  const children: ExplainNode[] = [n(`Identifier ${stmt.name}`)];
+  children.push(exprNode(stmt.functionExpr));
+  return n(`CreateFunctionQuery ${stmt.name}`, children);
+}
+
+function createDatabaseQueryNode(stmt: CreateDatabaseStatement): ExplainNode {
+  const children: ExplainNode[] = [n(`Identifier ${stmt.name}`)];
+  // Build storage definition if we have engine, ORDER BY, or settings
+  const storageChildren: ExplainNode[] = [];
+  if (stmt.engine) {
+    if (stmt.engine.args !== undefined) {
+      if (stmt.engine.args.length === 0) {
+        storageChildren.push(n(`Function ${stmt.engine.name}`, [n('ExpressionList')]));
+      } else {
+        storageChildren.push(
+          n(`Function ${stmt.engine.name}`, [n('ExpressionList', stmt.engine.args.map(exprNode))]),
+        );
+      }
+    } else {
+      storageChildren.push(n(`Function ${stmt.engine.name}`));
+    }
+  }
+  if (stmt.orderBy) {
+    if (stmt.orderBy.length === 1 && !stmt.orderBy[0].dir) {
+      storageChildren.push(exprNode(stmt.orderBy[0].expr));
+    }
+  }
+  if (stmt.settings) {
+    storageChildren.push(n('Set'));
+  }
+  if (storageChildren.length > 0) {
+    children.push(n('Storage definition', storageChildren));
+  }
+  // Note: trailing space after dbname (ClickHouse quirk)
+  return n(`CreateQuery ${stmt.name} `, children);
+}
+
+function createViewQueryNode(stmt: CreateViewStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+  let label = 'CreateQuery';
+  if (stmt.table.database) {
+    label += ` ${stmt.table.database} ${stmt.table.table}`;
+    children.push(n(`Identifier ${stmt.table.database}`));
+    children.push(n(`Identifier ${stmt.table.table}`));
+  } else {
+    label += ` ${stmt.table.table}`;
+    children.push(n(`Identifier ${stmt.table.table}`));
+  }
+  if (stmt.tableElements && stmt.tableElements.length > 0) {
+    const columns = stmt.tableElements.filter((el) => el.kind === 'columnDef');
+    // If all columns are bare names (no type), render as ExpressionList of Identifiers (view column aliases)
+    const allBareNames = columns.every((c) => !c.type);
+    if (allBareNames && columns.length > 0) {
+      children.push(
+        n(
+          'ExpressionList',
+          columns.map((c) => n(`Identifier ${c.name}`)),
+        ),
+      );
+    } else if (columns.length > 0) {
+      children.push(n('Columns definition', [n('ExpressionList', columns.map(columnDeclNode))]));
+    }
+  }
+  if (stmt.asQuery) children.push(stmtNode(stmt.asQuery));
+  return n(label, children);
+}
+
+function createMaterializedViewQueryNode(stmt: CreateMaterializedViewStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+  let label = 'CreateQuery';
+  if (stmt.table.database) {
+    label += ` ${stmt.table.database} ${stmt.table.table}`;
+    children.push(n(`Identifier ${stmt.table.database}`));
+    children.push(n(`Identifier ${stmt.table.table}`));
+  } else {
+    label += ` ${stmt.table.table}`;
+    children.push(n(`Identifier ${stmt.table.table}`));
+  }
+  if (stmt.tableElements && stmt.tableElements.length > 0) {
+    const colsDefChildren: ExplainNode[] = [];
+    const columns = stmt.tableElements.filter((el) => el.kind === 'columnDef').map(columnDeclNode);
+    if (columns.length > 0) colsDefChildren.push(n('ExpressionList', columns));
+    const indexes = stmt.tableElements
+      .filter((el) => el.kind === 'indexDef')
+      .map((el) => {
+        const idxChildren: ExplainNode[] = [exprNode(el.expr)];
+        idxChildren.push(indexTypeToExplainNode(el.indexType));
+        return n('Index', idxChildren);
+      });
+    if (indexes.length > 0) colsDefChildren.push(n('ExpressionList', indexes));
+    // Projections in MV
+    const projections: ExplainNode[] = [];
+    for (const el of stmt.tableElements) {
+      if (el.kind === 'projectionDef') {
+        const projChildren: ExplainNode[] = [];
+        if (el.query) {
+          const pqChildren: ExplainNode[] = [];
+          if (el.query.select) pqChildren.push(n('ExpressionList', el.query.select.map(exprNode)));
+          if (el.query.groupBy && el.query.groupBy.kind === 'expressions') {
+            pqChildren.push(n('ExpressionList', el.query.groupBy.items.map(exprNode)));
+          }
+          if (el.query.orderBy && el.query.orderBy.length > 0) {
+            if (el.query.orderBy.length === 1) pqChildren.push(exprNode(el.query.orderBy[0].expr));
+            else
+              pqChildren.push(
+                n('Function tuple', [
+                  n(
+                    'ExpressionList',
+                    el.query.orderBy.map((o) => exprNode(o.expr)),
+                  ),
+                ]),
+              );
+          }
+          projChildren.push(n('ProjectionSelectQuery', pqChildren));
+        }
+        projections.push(n('Projection', projChildren));
+      }
+    }
+    if (projections.length > 0) colsDefChildren.push(n('ExpressionList', projections));
+    // Schema-level PRIMARY KEY in MV
+    const mvPkInSchema = (stmt as Record<string, unknown>).primaryKeyInSchema as
+      | Expression[]
+      | undefined;
+    if (mvPkInSchema) {
+      if (mvPkInSchema.length === 1) {
+        colsDefChildren.push(exprNode(mvPkInSchema[0]));
+      } else if (mvPkInSchema.length > 1) {
+        colsDefChildren.push(
+          n('Function tuple', [n('ExpressionList', mvPkInSchema.map(exprNode))]),
+        );
+      }
+    }
+    // Column-level PRIMARY KEY in MV
+    const mvColPks = stmt.tableElements
+      ?.filter((el): el is ColumnDef => el.kind === 'columnDef' && !!el.primaryKey)
+      .map((el) => n(`Identifier ${el.name}`));
+    if (mvColPks && mvColPks.length > 0 && !mvPkInSchema) {
+      colsDefChildren.push(n('Function tuple', [n('ExpressionList', mvColPks)]));
+    }
+    if (colsDefChildren.length > 0) {
+      children.push(n('Columns definition', colsDefChildren));
+    }
+  }
+  // Refresh strategy
+  if ((stmt as Record<string, unknown>).refresh) {
+    children.push(n('Refresh strategy definition', [n('TimeInterval')]));
+  }
+  if (stmt.asQuery) children.push(stmtNode(stmt.asQuery));
+  // ViewTargets
+  if (stmt.toTable) {
+    children.push(n('ViewTargets'));
+  } else if (
+    stmt.engine ||
+    stmt.orderBy ||
+    stmt.primaryKey ||
+    (stmt as Record<string, unknown>).primaryKeyInSchema ||
+    stmt.tableElements?.some((el) => el.kind === 'columnDef' && el.primaryKey)
+  ) {
+    // When MV has PK but no ORDER BY, replicate PK as ORDER BY in ViewTargets storage
+    const colPkExprs = stmt.tableElements
+      ?.filter((el): el is ColumnDef => el.kind === 'columnDef' && !!el.primaryKey)
+      .map((el) => ({ kind: 'columnRef' as const, parts: [el.name] }));
+    const mvPk = (stmt.primaryKey ||
+      (stmt as Record<string, unknown>).primaryKeyInSchema ||
+      (colPkExprs && colPkExprs.length > 0 ? colPkExprs : undefined)) as Expression[] | undefined;
+    let innerStorage: ExplainNode | null;
+    const isColPk = colPkExprs && colPkExprs.length > 0;
+    if (mvPk && !stmt.orderBy) {
+      // PK used as implicit ORDER BY — suppress normal PK rendering in storage
+      const stmtNoPk = { ...stmt, primaryKey: undefined } as typeof stmt;
+      innerStorage = storageDefNode(stmtNoPk);
+      if (innerStorage) {
+        if (isColPk) {
+          // Column-modifier PK: always tuple-wrapped
+          innerStorage.children.push(
+            n('Function tuple', [n('ExpressionList', mvPk.map(exprNode))]),
+          );
+        } else {
+          // Schema PK: bare expression for single, tuple for multiple
+          if (mvPk.length === 1) {
+            innerStorage.children.push(exprNode(mvPk[0]));
+          } else {
+            innerStorage.children.push(
+              n('Function tuple', [n('ExpressionList', mvPk.map(exprNode))]),
+            );
+          }
+        }
+      }
+    } else {
+      innerStorage = storageDefNode(stmt);
+    }
+    if (innerStorage) {
+      children.push(n('ViewTargets', [innerStorage]));
+    } else {
+      children.push(n('ViewTargets'));
+    }
+  }
+  // FORMAT clause
+  if ((stmt as Record<string, unknown>).format) {
+    children.push(n(`Identifier ${(stmt as Record<string, unknown>).format}`));
+  }
+  return n(label, children);
+}
+
+// Build the full CreateQuery explain node for CREATE TABLE
+function createTableQueryNode(stmt: CreateTableStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+
+  let label = 'CreateQuery';
+  if (stmt.table.database) {
+    label += ` ${stmt.table.database} ${stmt.table.table}`;
+    children.push(n(`Identifier ${stmt.table.database}`));
+    children.push(n(`Identifier ${stmt.table.table}`));
+  } else {
+    label += ` ${stmt.table.table}`;
+    children.push(n(`Identifier ${stmt.table.table}`));
+  }
+
+  // Columns definition
+  if (stmt.tableElements && stmt.tableElements.length > 0) {
+    const colsDefChildren: ExplainNode[] = [];
+
+    // Separate columns, constraints, indexes, and projections
+    const columns: ExplainNode[] = [];
+    const constraints: ExplainNode[] = [];
+    const indexes: ExplainNode[] = [];
+    const projections: ExplainNode[] = [];
+
+    for (const el of stmt.tableElements) {
+      switch (el.kind) {
+        case 'columnDef':
+          columns.push(columnDeclNode(el));
+          break;
+        case 'constraintDef':
+          constraints.push(n('Constraint', [exprNode(el.expr)]));
+          break;
+        case 'indexDef': {
+          const idxChildren: ExplainNode[] = [exprNode(el.expr)];
+          idxChildren.push(indexTypeToExplainNode(el.indexType));
+          indexes.push(n('Index', idxChildren));
+          break;
+        }
+        case 'projectionDef': {
+          // PROJECTION ... INDEX col TYPE name format
+          if (el.projectionIndex) {
+            const pi = el.projectionIndex;
+            const piChildren: ExplainNode[] = [
+              n(`Identifier ${pi.column}`),
+              n(`Function ${pi.typeName}`, [n('ExpressionList')]),
+            ];
+            projections.push(n('Projection', piChildren));
+            break;
+          }
+          const projChildren: ExplainNode[] = [];
+          const projQuery = el.query!;
+          const pqChildren: ExplainNode[] = [];
+          // WITH CTEs as aliased expressions (separate ExpressionList)
+          if (projQuery.with && projQuery.with.length > 0) {
+            const cteItems = projQuery.with
+              .filter((cte): cte is typeof cte & { kind: 'expr' } => cte.kind === 'expr')
+              .map((cte) => exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name }));
+            if (cteItems.length > 0) {
+              pqChildren.push(n('ExpressionList', cteItems));
+            }
+          }
+          // SELECT list
+          if (projQuery.select) {
+            pqChildren.push(n('ExpressionList', projQuery.select.map(exprNode)));
+          }
+          // GROUP BY in projection (comes before ORDER BY)
+          if (projQuery.groupBy && projQuery.groupBy.kind === 'expressions') {
+            pqChildren.push(n('ExpressionList', projQuery.groupBy.items.map(exprNode)));
+          }
+          // ORDER BY in projection
+          if (projQuery.orderBy && projQuery.orderBy.length > 0) {
+            if (projQuery.orderBy.length === 1) {
+              pqChildren.push(exprNode(projQuery.orderBy[0].expr));
+            } else {
+              pqChildren.push(
+                n('Function tuple', [
+                  n(
+                    'ExpressionList',
+                    projQuery.orderBy.map((o) => exprNode(o.expr)),
+                  ),
+                ]),
+              );
+            }
+          }
+          projChildren.push(n('ProjectionSelectQuery', pqChildren));
+          // Projection SETTINGS
+          if ((el as Record<string, unknown>).projectionSettings) {
+            projChildren.push(n('Set'));
+          }
+          projections.push(n('Projection', projChildren));
+          break;
+        }
+      }
+    }
+
+    // Columns are always first ExpressionList
+    if (columns.length > 0) {
+      colsDefChildren.push(n('ExpressionList', columns));
+    }
+
+    // Constraints, indexes, and projections go into separate ExpressionLists
+    if (constraints.length > 0) {
+      colsDefChildren.push(n('ExpressionList', constraints));
+    }
+    if (indexes.length > 0) {
+      colsDefChildren.push(n('ExpressionList', indexes));
+    }
+    if (projections.length > 0) {
+      colsDefChildren.push(n('ExpressionList', projections));
+    }
+
+    // Primary key in schema is a direct child of Columns definition
+    // This includes both explicit PRIMARY KEY(...) elements and column-level PRIMARY KEY modifiers
+    const pkFromColumns = stmt.tableElements?.some(
+      (el) => el.kind === 'columnDef' && el.primaryKey,
+    );
+    const pkInColsDef =
+      stmt.primaryKeyInSchema || (stmt.primaryKey && pkFromColumns ? stmt.primaryKey : undefined);
+    if (pkInColsDef) {
+      if (pkInColsDef.length === 1 && !pkFromColumns) {
+        colsDefChildren.push(exprNode(pkInColsDef[0]));
+      } else {
+        colsDefChildren.push(n('Function tuple', [n('ExpressionList', pkInColsDef.map(exprNode))]));
+      }
+    }
+
+    children.push(n('Columns definition', colsDefChildren));
+  }
+
+  // Storage definition
+  const storageDef = storageDefNode(stmt);
+  if (storageDef) {
+    children.push(storageDef);
+  }
+
+  // AS SELECT query
+  if (stmt.asQuery) {
+    children.push(stmtNode(stmt.asQuery));
+  }
+
+  // AS table_function()
+  if (stmt.asTableFunction) {
+    const tf = stmt.asTableFunction;
+    if (tf.args.length === 0) {
+      children.push(n(`Function ${tf.name}`, [n('ExpressionList')]));
+    } else {
+      children.push(n(`Function ${tf.name}`, [n('ExpressionList', tf.args.map(exprNode))]));
+    }
+  }
+
+  // Table COMMENT
+  if (stmt.comment) {
+    children.push(n(`Literal '${stmt.comment.replace(/'/g, "\\'")}'`));
+  }
+
+  // Query-level SETTINGS (second SETTINGS clause)
+  if ((stmt as Record<string, unknown>).querySettings) {
+    children.push(n('Set'));
+  }
+
+  // FORMAT clause
+  if ((stmt as Record<string, unknown>).format) {
+    children.push(n(`Identifier ${(stmt as Record<string, unknown>).format}`));
+  }
+
+  return n(label, children);
+}
+
+function parallelWithQueryNode(stmt: ParallelWithStatement): ExplainNode {
+  const firstTable = stmt.queries[0]?.kind === 'createTable' ? stmt.queries[0].table.table : '';
+  const label = `ParallelWithQuery ${stmt.queries.length} CreateQuery_${firstTable}`;
+  const children = stmt.queries.map((q) => stmtNode(q));
+  return n(label, children);
+}
+
 // Build the top-level SelectWithUnionQuery node for a statement (SelectStatement or UnionStatement)
 function stmtNode(stmt: Statement): ExplainNode {
+  if (stmt.kind === 'parallelWith') return parallelWithQueryNode(stmt);
   if (stmt.kind === 'explain') return explainStmtNode(stmt);
-  if (stmt.kind === 'set') return n('Set');
+  if (stmt.kind === 'transactionControl') return n('ASTTransactionControl');
+  if (stmt.kind === 'setRole') return n('SetRoleQuery');
+  if (stmt.kind === 'set') {
+    return n('Set');
+  }
   if (stmt.kind === 'system') return n('SYSTEM query');
-  if (stmt.kind === 'use') return n('Query');
-  if (stmt.kind === 'createTable') return n('CreateQuery');
+  if (stmt.kind === 'use')
+    return n(`UseQuery ${stmt.database}`, [n(`Identifier ${stmt.database}`)]);
+  if (stmt.kind === 'createTable') return createTableQueryNode(stmt);
+  if (stmt.kind === 'createView') return createViewQueryNode(stmt);
+  if (stmt.kind === 'createMaterializedView') return createMaterializedViewQueryNode(stmt);
+  if (stmt.kind === 'createDatabase') return createDatabaseQueryNode(stmt);
+  if (stmt.kind === 'createFunction') return createFunctionQueryNode(stmt);
+  if (stmt.kind === 'createIndex') return createIndexQueryNode(stmt);
+  if (stmt.kind === 'createDictionary') return createDictionaryQueryNode(stmt);
+  if (stmt.kind === 'createWorkload') return createWorkloadQueryNode(stmt);
+  if (stmt.kind === 'createUser') {
+    if (!stmt.auth || stmt.auth.length === 0) return n('CreateUserQuery');
+    const authChildren = stmt.auth.map((a) => {
+      if (a.sshKeys !== undefined) {
+        const keys = Array.from({ length: a.sshKeys }, () => n('PublicSSHKey'));
+        return n('AuthenticationData', keys);
+      }
+      if (a.secret !== undefined) {
+        return n('AuthenticationData', [n(`Literal '${a.secret}'`)]);
+      }
+      return n('AuthenticationData');
+    });
+    return n('CreateUserQuery', authChildren);
+  }
+  if (stmt.kind === 'createRole') return n('CreateRoleQuery');
+  if (stmt.kind === 'createRowPolicy') return n('CREATE ROW POLICY or ALTER ROW POLICY query');
+  if (stmt.kind === 'createQuota') return n('CreateQuotaQuery');
+  if (stmt.kind === 'createSettingsProfile') return n('CreateSettingsProfileQuery');
+  if (stmt.kind === 'createNamedCollection') return n('CreateNamedCollectionQuery');
+  if (stmt.kind === 'createResource') {
+    return n(`CreateResourceQuery ${stmt.name}`, [n(`Identifier ${stmt.name}`)]);
+  }
+  if (stmt.kind === 'createWindowView') return n('CreateQuery');
+  if (stmt.kind === 'createLiveView') return n('CreateQuery');
 
   const format = stmt.format;
 

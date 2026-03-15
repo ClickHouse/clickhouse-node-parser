@@ -19,9 +19,9 @@ CREATE TABLE test_block_mismatch_sk1
     b DateTime
 )
 ENGINE = ReplacingMergeTree
+PRIMARY KEY toDate(b)
 ORDER BY (toDate(b), a)
-PARTITION BY toYYYYMM(b)
-PRIMARY KEY toDate(b);
+PARTITION BY toYYYYMM(b);
 
 SELECT count(*)
 FROM test_block_mismatch_sk1 FINAL;
@@ -32,9 +32,9 @@ CREATE TABLE test_block_mismatch_sk2
     b DateTime
 )
 ENGINE = ReplacingMergeTree
+PRIMARY KEY a
 ORDER BY (a, toDate(b))
-PARTITION BY toYYYYMM(b)
-PRIMARY KEY a;
+PARTITION BY toYYYYMM(b);
 
 SELECT count(*)
 FROM test_block_mismatch_sk2 FINAL;

@@ -240,7 +240,7 @@ FROM table_gcd_codec_only_zeros;
 
 CREATE TABLE table_gcd_codec_one_hundred_zeros
 (
-    a Nullable(Int64) CODEC(GCD,LZ4)
+    a Nullable(Int64) CODEC(GCD, LZ4)
 )
 ENGINE = MergeTree
 ORDER BY tuple();
@@ -250,7 +250,7 @@ FROM table_gcd_codec_one_hundred_zeros;
 
 CREATE TABLE table_gcd_codec_one_hundred_ones
 (
-    a Nullable(Int64) CODEC(GCD,LZ4)
+    a Nullable(Int64) CODEC(GCD, LZ4)
 )
 ENGINE = MergeTree
 ORDER BY tuple();

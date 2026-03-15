@@ -4,8 +4,8 @@ CREATE TABLE t_lwd_indexes
 (
     key UInt64,
     value String,
-    INDEX idx_key (key) TYPE minmax GRANULARITY 1,
-    INDEX idx_value (value) TYPE bloom_filter(0.001) GRANULARITY 1
+    INDEX idx_key key TYPE minmax GRANULARITY 1,
+    INDEX idx_value value TYPE bloom_filter(0.001) GRANULARITY 1
 )
 ENGINE = MergeTree
 ORDER BY tuple()

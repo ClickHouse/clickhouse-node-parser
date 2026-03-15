@@ -359,11 +359,11 @@ CREATE TABLE test
 (
     id UInt32,
     time UInt32,
-    INDEX id (id) TYPE set(0) GRANULARITY 3,
-    INDEX time (time) TYPE minmax GRANULARITY 3
+    INDEX id id TYPE set(0) GRANULARITY 3,
+    INDEX time time TYPE minmax GRANULARITY 3
 )
 ENGINE = MergeTree()
-ORDER BY time;
+ORDER BY (time);
 
 SELECT
     count(*) AS value,

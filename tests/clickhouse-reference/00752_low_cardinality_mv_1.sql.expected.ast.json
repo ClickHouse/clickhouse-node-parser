@@ -1,1 +1,189 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":95,"line":2,"column":8},"end":{"offset":96,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "lc_00752"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "lc_mv_00752"
+    },
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "populate": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "substring",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "alias": "letter"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "min",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "length",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "str"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "min_len"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "max",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "length",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "str"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "max_len"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "lc_00752"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "functionCall",
+            "name": "substring",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "lc_mv_00752"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "letter"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

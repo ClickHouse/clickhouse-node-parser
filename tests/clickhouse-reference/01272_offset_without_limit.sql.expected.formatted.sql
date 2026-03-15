@@ -3,8 +3,8 @@ CREATE TABLE offset_without_limit
     value UInt32
 )
 ENGINE = MergeTree()
-ORDER BY value
-PRIMARY KEY value;
+PRIMARY KEY value
+ORDER BY value;
 
 SELECT value
 FROM offset_without_limit

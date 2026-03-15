@@ -2,6 +2,8 @@
 
 A TypeScript parser for ClickHouse SQL. Parses ClickHouse SQL into a typed AST, with support for formatting back to SQL.
 
+**Note:** This is alpha-level Claudeware. The API and AST formats are subject to change.
+
 ## Installation
 
 ```bash
@@ -135,11 +137,12 @@ try {
 - **SET** — session variable assignment
 - **USE** — database selection
 - **SYSTEM** — system commands (parsed as raw text)
+- **CREATE** - Partial DDL support (for all CREATE statements)
 
 ### Limitations
 
 - **ClickHouse-only** — this is not a general SQL parser. Syntax from other dialects that ClickHouse doesn't support will not parse.
-- **Query statements only** — DDL (CREATE, ALTER, DROP), DML (INSERT, UPDATE, DELETE), and other non-query statements are not supported at this time (except SET, USE, and SYSTEM).
+- **Unsupported Statement Types** — DDL (ALTER, DROP), DML (INSERT, UPDATE, DELETE), and other non-query statements are not supported at this time (except SET, USE, and SYSTEM).
 - **KQL** — Kusto Query Language syntax is not supported.
 
 ## Development

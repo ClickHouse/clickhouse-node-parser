@@ -1,1 +1,482 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":220,"line":2,"column":8},"end":{"offset":221,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v0",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v2",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v3",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v4",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "65535"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "65535"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "6553"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "655355"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "65535"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1e6"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_sharded"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "v0",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dict_data"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": [
+          {
+            "name": "SHARDS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "32"
+            }
+          }
+        ]
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "attribute",
+              "names"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "element_count"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "load_factor"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dictionaries"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_sharded"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_sharded_multi"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "v0",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "name": "v1",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "name": "v2",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "name": "v3",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "name": "v4",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dict_data"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": [
+          {
+            "name": "SHARDS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "32"
+            }
+          }
+        ]
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "attribute",
+              "names"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "element_count"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "load_factor"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dictionaries"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_sharded_multi"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,1 +1,331 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":87,"line":3,"column":8},"end":{"offset":88,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/23104"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE:Identifier}"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "base"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "d"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id2"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "derived1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value1",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "d1"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id1"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "derived2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value2",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "d2"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id2"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d2"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "base",
+            "id"
+          ]
+        },
+        "alias": "base.id"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "derived2",
+            "id2"
+          ]
+        },
+        "alias": "derived2.id2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "derived2",
+            "value2"
+          ]
+        },
+        "alias": "derived2.value2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "derived1",
+            "value1"
+          ]
+        },
+        "alias": "derived1.value1"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "database": "{CLICKHOUSE_DATABASE:Identifier}",
+          "table": "base",
+          "alias": "base"
+        },
+        "kind": "join",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "database": "{CLICKHOUSE_DATABASE:Identifier}",
+          "table": "derived2",
+          "alias": "derived2"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "base",
+                "id2"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "derived2",
+                "id2"
+              ]
+            }
+          }
+        }
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "derived1",
+        "alias": "derived1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "base",
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "derived1",
+              "id1"
+            ]
+          }
+        }
+      }
+    }
+  }
+]

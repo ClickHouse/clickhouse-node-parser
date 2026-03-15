@@ -1,1 +1,131 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"R","location":{"start":{"offset":137,"line":2,"column":8},"end":{"offset":138,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_generic_events_all"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "APIKey",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "SessionType",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "APIKey"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "rp"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "test_generic_events_all"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "APIKey"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "35"
+      }
+    },
+    "to": {
+      "kind": "names",
+      "names": [
+        "CURRENT_USER"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "OperatingSystem"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_generic_events_all"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "APIKey"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "42"
+      }
+    },
+    "settings": [
+      {
+        "name": "additional_table_filters",
+        "value": {
+          "kind": "functionCall",
+          "name": "map",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_generic_events_all"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "APIKey > 40"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

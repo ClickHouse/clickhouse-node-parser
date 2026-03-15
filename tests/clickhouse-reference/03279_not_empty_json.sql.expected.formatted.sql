@@ -19,12 +19,12 @@ ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=1)
+    json JSON(max_dynamic_paths = 1)
 )
 ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=0)
+    json JSON(max_dynamic_paths = 0)
 )
 ENGINE = Memory;

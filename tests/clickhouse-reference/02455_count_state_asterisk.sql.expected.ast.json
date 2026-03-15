@@ -1,1 +1,74 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"L","location":{"start":{"offset":37,"line":1,"column":38},"end":{"offset":38,"line":1,"column":39}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "a"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "b"
+    },
+    "engine": {
+      "name": "Log"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "countState",
+          "args": [
+            {
+              "kind": "asterisk"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "a"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "countMerge",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "b"
+    }
+  }
+]

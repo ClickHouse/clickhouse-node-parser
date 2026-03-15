@@ -1,1 +1,140 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":84,"line":2,"column":45},"end":{"offset":85,"line":2,"column":46}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_trivial_insert_select",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "_part_offset"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_bytes_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "98312"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- One granule, (_part_offset (8 bytes) + <one minimal physical column> (4 bytes)) * 8192 + <other two physical columns>(8 bytes) * 1 = 98312"
+    ]
+  }
+]

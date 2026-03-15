@@ -4,7 +4,7 @@ CREATE TABLE foo
     x UInt64
 )
 ENGINE = MergeTree
-ORDER BY ts
+ORDER BY (ts)
 PARTITION BY toYYYYMMDD(ts);
 
 SET mutations_sync = 1;

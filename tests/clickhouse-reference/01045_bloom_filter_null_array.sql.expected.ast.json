@@ -9,7 +9,33 @@
       {
         "kind": "columnDef",
         "name": "v",
-        "type": "Array(LowCardinality(Nullable(String)))"
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "indexDef",
@@ -20,7 +46,16 @@
             "v"
           ]
         },
-        "indexType": "bloom_filter(0.1)",
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.1"
+            }
+          ]
+        },
         "granularity": 1
       }
     ],
@@ -30,10 +65,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "v"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
       }
     ],
     "settings": [
@@ -45,7 +82,8 @@
           "value": "1"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

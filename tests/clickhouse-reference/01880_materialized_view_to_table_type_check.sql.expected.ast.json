@@ -1,1 +1,278 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":184,"line":3,"column":8},"end":{"offset":185,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_input"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "pv",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "pv",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sumState",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "alias": "pv"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test_input"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_CONVERT_TYPE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "----------test--------:"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "pv",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sumState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "pv"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test_input"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      }
+    }
+  }
+]

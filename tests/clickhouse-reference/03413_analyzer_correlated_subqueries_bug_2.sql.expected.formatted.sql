@@ -7,14 +7,14 @@ CREATE TABLE orders
     o_orderkey Int32,
     o_custkey Int32,
     o_orderstatus String,
-    o_totalprice Decimal(15,2),
+    o_totalprice Decimal(15, 2),
     o_orderdate Date,
     o_orderpriority String,
     o_clerk String,
     o_shippriority Int32,
     o_comment String
 )
-ORDER BY o_orderkey;
+ORDER BY (o_orderkey);
 
 CREATE TABLE lineitem
 (
@@ -22,10 +22,10 @@ CREATE TABLE lineitem
     l_partkey Int32,
     l_suppkey Int32,
     l_linenumber Int32,
-    l_quantity Decimal(15,2),
-    l_extendedprice Decimal(15,2),
-    l_discount Decimal(15,2),
-    l_tax Decimal(15,2),
+    l_quantity Decimal(15, 2),
+    l_extendedprice Decimal(15, 2),
+    l_discount Decimal(15, 2),
+    l_tax Decimal(15, 2),
     l_returnflag String,
     l_linestatus String,
     l_shipdate Date,

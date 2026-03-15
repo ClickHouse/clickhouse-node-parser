@@ -1,1 +1,115 @@
-{"expected":[{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true}],"found":"t","location":{"start":{"offset":147,"line":2,"column":87},"end":{"offset":148,"line":2,"column":88}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "val"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "td"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "t"
+        }
+      ]
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "engine"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "td"
+          }
+        }
+      ]
+    }
+  }
+]

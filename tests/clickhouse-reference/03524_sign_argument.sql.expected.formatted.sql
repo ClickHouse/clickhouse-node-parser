@@ -1,1 +1,50 @@
-<Parse Error>
+CREATE DATABASE IF NOT EXISTS {CLICKHOUSE_DATABASE:Identifier};
+
+USE {CLICKHOUSE_DATABASE:Identifier};
+
+CREATE TABLE IF NOT EXISTS {CLICKHOUSE_DATABASE:Identifier}.t0
+(
+    c0 String
+)
+ENGINE = Memory();
+
+CREATE TABLE IF NOT EXISTS {CLICKHOUSE_DATABASE:Identifier}.t1
+(
+    c0 String,
+    c1 Int32,
+    c2 Int32 CODEC(ZSTD)
+)
+ENGINE = Memory();
+
+CREATE TABLE IF NOT EXISTS {CLICKHOUSE_DATABASE:Identifier}.t2
+(
+    c0 Int32,
+    c1 Int32,
+    c2 String
+)
+ENGINE = MergeTree()
+ORDER BY ((c1) / (c0))
+PARTITION BY (negate((c1)))
+SETTINGS allow_suspicious_indices = 1;
+
+CREATE TABLE IF NOT EXISTS {CLICKHOUSE_DATABASE:Identifier}.t3
+(
+    c0 Int32,
+    c1 Int32,
+    c2 Int32
+)
+ENGINE = Log();
+
+SELECT
+    right_0.c0,
+    ((pow(pow(right_1.c1, t1.c2), (sign(t1.c2)))) * (negate(((t1.c2) / (t1.c2))))),
+    t1.c1
+FROM
+    t1
+RIGHT JOIN t0 AS right_0
+    ON (('.D') = ('m''X'))
+RIGHT JOIN t3 AS right_1
+    ON ((t1.c1) = (right_1.c1))
+ORDER BY `ALL` ASC;
+
+USE default;

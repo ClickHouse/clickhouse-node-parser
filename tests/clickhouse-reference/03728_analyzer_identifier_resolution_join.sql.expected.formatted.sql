@@ -9,8 +9,8 @@ CREATE TABLE address
     list_import_sid LowCardinality(String)
 )
 ENGINE = MergeTree
-ORDER BY (list_import_sid, country, esp, domain, email_address)
 PRIMARY KEY (list_import_sid, country, esp, domain, email_address)
+ORDER BY (list_import_sid, country, esp, domain, email_address)
 SETTINGS index_granularity = 8192;
 
 CREATE TABLE fact_click

@@ -90,12 +90,16 @@
       {
         "kind": "columnDef",
         "name": "id",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "str",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "indexDef",
@@ -106,7 +110,27 @@
             "str"
           ]
         },
-        "indexType": "text(tokenizer = splitByNonAlpha)",
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "splitByNonAlpha"
+                ]
+              }
+            }
+          ]
+        },
         "granularity": 8
       }
     ],
@@ -115,10 +139,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "id"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
       }
     ],
     "partitionBy": {
@@ -136,7 +162,8 @@
           "value": "s3_cache"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

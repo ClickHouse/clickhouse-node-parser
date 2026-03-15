@@ -1,1 +1,103 @@
-<Parse Error>
+SET log_queries = 1;
+
+SET log_profile_events = true;
+
+SELECT
+    'SLEEP #1 TEST',
+    sleep(0.001)
+FORMAT Null;
+
+SELECT
+    'SLEEP #1 CHECK',
+    ProfileEvents['SleepFunctionCalls'] AS calls,
+    ProfileEvents['SleepFunctionMicroseconds'] AS microseconds
+FROM `system`.query_log
+WHERE like(query, '%SELECT ''SLEEP #1 TEST''%')
+    AND type > 1
+    AND current_database = currentDatabase()
+    AND event_date >= yesterday()
+FORMAT JSONEachRow;
+
+SELECT
+    'SLEEP #2 TEST',
+    sleep(0.001)
+FROM numbers(2)
+FORMAT Null;
+
+SELECT
+    'SLEEP #2 CHECK',
+    ProfileEvents['SleepFunctionCalls'] AS calls,
+    ProfileEvents['SleepFunctionMicroseconds'] AS microseconds
+FROM `system`.query_log
+WHERE like(query, '%SELECT ''SLEEP #2 TEST''%')
+    AND type > 1
+    AND current_database = currentDatabase()
+    AND event_date >= yesterday()
+FORMAT JSONEachRow;
+
+SELECT
+    'SLEEP #3 TEST',
+    sleepEachRow(0.001)
+FORMAT Null;
+
+SELECT
+    'SLEEP #3 CHECK',
+    ProfileEvents['SleepFunctionCalls'] AS calls,
+    ProfileEvents['SleepFunctionMicroseconds'] AS microseconds
+FROM `system`.query_log
+WHERE like(query, '%SELECT ''SLEEP #3 TEST''%')
+    AND type > 1
+    AND current_database = currentDatabase()
+    AND event_date >= yesterday()
+FORMAT JSONEachRow;
+
+SELECT
+    'SLEEP #4 TEST',
+    sleepEachRow(0.001)
+FROM numbers(2)
+FORMAT Null;
+
+SELECT
+    'SLEEP #4 CHECK',
+    ProfileEvents['SleepFunctionCalls'] AS calls,
+    ProfileEvents['SleepFunctionMicroseconds'] AS microseconds
+FROM `system`.query_log
+WHERE like(query, '%SELECT ''SLEEP #4 TEST''%')
+    AND type > 1
+    AND current_database = currentDatabase()
+    AND event_date >= yesterday()
+FORMAT JSONEachRow;
+
+CREATE VIEW sleep_view
+AS
+SELECT sleepEachRow(0.001)
+FROM `system`.numbers;
+
+SELECT
+    'SLEEP #5 CHECK',
+    ProfileEvents['SleepFunctionCalls'] AS calls,
+    ProfileEvents['SleepFunctionMicroseconds'] AS microseconds
+FROM `system`.query_log
+WHERE like(query, '%CREATE VIEW sleep_view AS%')
+    AND type > 1
+    AND current_database = currentDatabase()
+    AND event_date >= yesterday()
+FORMAT JSONEachRow;
+
+SELECT
+    'SLEEP #6 TEST',
+    sleepEachRow(0.001)
+FROM sleep_view
+LIMIT 10
+FORMAT Null;
+
+SELECT
+    'SLEEP #6 CHECK',
+    ProfileEvents['SleepFunctionCalls'] AS calls,
+    ProfileEvents['SleepFunctionMicroseconds'] AS microseconds
+FROM `system`.query_log
+WHERE like(query, '%SELECT ''SLEEP #6 TEST''%')
+    AND type > 1
+    AND current_database = currentDatabase()
+    AND event_date >= yesterday()
+FORMAT JSONEachRow;

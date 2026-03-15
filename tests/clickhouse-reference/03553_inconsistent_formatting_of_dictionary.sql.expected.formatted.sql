@@ -1,1 +1,5 @@
-<Parse Error>
+CREATE DICTIONARY d0
+(
+    c1 Nested(c2 Int)
+)
+RANGE(MIN c1 MAX `c1.c2`); -- { serverError INCORRECT_DICTIONARY_DEFINITION }

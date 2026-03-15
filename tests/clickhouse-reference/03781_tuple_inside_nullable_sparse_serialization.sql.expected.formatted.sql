@@ -56,7 +56,7 @@ ORDER BY tup.u ASC;
 CREATE TABLE test_structure
 (
     t Nullable(Tuple(x UInt32, y UInt64)),
-    PRIMARY KEY(tuple())
+    PRIMARY KEY()
 )
 ENGINE = MergeTree
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0, nullable_serialization_version = 'allow_sparse', min_bytes_for_wide_part = 0;
@@ -67,7 +67,7 @@ FROM test_structure;
 CREATE TABLE test_structure_2
 (
     t Nullable(Tuple(x UInt32, y UInt64)),
-    PRIMARY KEY(tuple())
+    PRIMARY KEY()
 )
 ENGINE = MergeTree
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0, nullable_serialization_version = 'allow_sparse', min_bytes_for_wide_part = 0;

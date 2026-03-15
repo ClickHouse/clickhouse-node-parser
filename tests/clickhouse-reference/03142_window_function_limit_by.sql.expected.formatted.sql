@@ -1,1 +1,40 @@
-<Parse Error>
+SET enable_analyzer = 1;
+
+-- https://github.com/ClickHouse/ClickHouse/issues/55965
+CREATE TABLE error_win_func
+(
+    k String,
+    `in` UInt64,
+    out UInt64
+)
+ENGINE = MergeTree
+ORDER BY k AS
+SELECT *
+FROM VALUES(('a', 2, 4), ('a', 4, 2), ('a', 6, 3), ('a', 8, 4));
+
+SELECT
+    k,
+    `in` / out AS ratio,
+    count(*) AS count_rows_w
+FROM error_win_func
+ORDER BY `ALL` ASC
+LIMIT 1 BY k
+WINDOW w AS (ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING);
+
+-- https://github.com/ClickHouse/ClickHouse/issues/47217
+CREATE TABLE t
+(
+    n String,
+    st String
+)
+ENGINE = Memory AS
+SELECT *
+FROM values(('a', 'x'), ('b', 'y'), ('c', 'z'));
+
+SELECT
+    n AS m,
+    count() OVER (PARTITION BY m) AS cnt
+FROM t
+WHERE st IN ('x', 'y')
+ORDER BY `ALL` ASC
+LIMIT 1 BY m;

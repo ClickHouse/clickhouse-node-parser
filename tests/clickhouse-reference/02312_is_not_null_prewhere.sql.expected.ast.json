@@ -1,1 +1,232 @@
-{"expected":[{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"'","location":{"start":{"offset":110,"line":6,"column":8},"end":{"offset":111,"line":6,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bug_36995"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "product",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2022-01-01 00:00:00"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bug_36995"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "isNotNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "product"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bug_36995"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "isNotNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "product"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "bug_36995"
+    },
+    "prewhere": {
+      "kind": "functionCall",
+      "name": "isNotNull",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      ],
+      "parenthesized": true
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "product"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "parenthesized": true
+    }
+  }
+]

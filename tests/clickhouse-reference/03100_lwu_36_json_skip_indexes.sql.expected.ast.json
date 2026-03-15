@@ -9,12 +9,32 @@
       {
         "kind": "columnDef",
         "name": "id",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "document",
-        "type": "JSON(name String, age UInt16)"
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "name",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "age",
+              "type": {
+                "name": "UInt16"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "indexDef",
@@ -26,7 +46,16 @@
             "name"
           ]
         },
-        "indexType": "bloom_filter(0.01)",
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.01"
+            }
+          ]
+        },
         "granularity": 1
       },
       {
@@ -44,7 +73,16 @@
           "type": "String",
           "operator": true
         },
-        "indexType": "bloom_filter(0.01)",
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.01"
+            }
+          ]
+        },
         "granularity": 1
       }
     ],
@@ -54,10 +92,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "id"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
       }
     ],
     "settings": [
@@ -85,7 +125,8 @@
           "value": "1"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "set",

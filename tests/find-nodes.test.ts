@@ -237,7 +237,7 @@ describe('findNodes', () => {
       const stmts = parse('SET max_threads = 4;');
       const sets = findNodes(stmts, 'set');
       expect(sets).toHaveLength(1);
-      expect(sets[0].settings[0].name).toBe('max_threads');
+      expect(sets[0].settings![0].name).toBe('max_threads');
     });
 
     it('finds use statements', () => {

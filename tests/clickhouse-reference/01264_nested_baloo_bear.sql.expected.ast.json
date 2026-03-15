@@ -9,12 +9,40 @@
       {
         "kind": "columnDef",
         "name": "fingerprint",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "fields",
-        "type": "Nested(\n    name LowCardinality(String), \n    value String)"
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "name",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "value",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -22,10 +50,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "fingerprint"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "fingerprint"
+          ]
+        }
       }
     ]
   },

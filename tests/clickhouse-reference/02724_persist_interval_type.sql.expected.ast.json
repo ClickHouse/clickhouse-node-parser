@@ -1,1 +1,266 @@
-{"expected":[{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":"n","location":{"start":{"offset":275,"line":2,"column":80},"end":{"offset":276,"line":2,"column":81}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "saved_intervals_tmp"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "EventID"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalSecond",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          "alias": "v1"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              }
+            ]
+          },
+          "alias": "v2"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalNanosecond",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ]
+          },
+          "alias": "v3"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "saved_intervals_mgt"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "EventID"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalSecond",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          "alias": "v1"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              }
+            ]
+          },
+          "alias": "v2"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalNanosecond",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ]
+          },
+          "alias": "v3"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventID"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "IntervalMinute"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  }
+]

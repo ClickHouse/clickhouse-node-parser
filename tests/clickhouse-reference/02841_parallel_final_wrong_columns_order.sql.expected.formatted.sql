@@ -7,8 +7,8 @@ CREATE TABLE tab2
     z Int32
 )
 ENGINE = ReplacingMergeTree(z)
-ORDER BY (accountCode, id, version, l)
-PRIMARY KEY (accountCode, id);
+PRIMARY KEY (accountCode, id)
+ORDER BY (accountCode, id, version, l);
 
 SET max_threads = 2;
 

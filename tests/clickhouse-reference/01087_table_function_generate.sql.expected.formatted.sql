@@ -209,7 +209,7 @@ CREATE TABLE test_table_2
     b UInt32,
     c Nullable(String),
     d Decimal32(4),
-    e Nullable(Enum16('h' = 1, 'w' = 5 , 'o' = -200)),
+    e Nullable(Enum16('h' = 1, 'w' = 5, 'o' = -200)),
     f Float64,
     g Tuple(Date, DateTime('UTC'), DateTime64(3, 'UTC'), UUID),
     h FixedString(2)

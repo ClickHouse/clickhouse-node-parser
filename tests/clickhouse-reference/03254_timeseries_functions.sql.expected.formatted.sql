@@ -1,6 +1,6 @@
 CREATE TABLE ts_raw_data
 (
-    timestamp DateTime64(3,'UTC'),
+    timestamp DateTime64(3, 'UTC'),
     value Float64
 )
 ENGINE = MergeTree()

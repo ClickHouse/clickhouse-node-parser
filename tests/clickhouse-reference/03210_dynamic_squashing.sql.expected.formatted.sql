@@ -19,7 +19,7 @@ ORDER BY type ASC;
 
 CREATE TABLE test
 (
-    d Dynamic(max_types=1)
+    d Dynamic(max_types = 1)
 )
 ENGINE = MergeTree
 ORDER BY tuple();

@@ -1,1 +1,315 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":307,"line":10,"column":8},"end":{"offset":308,"line":10,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Regression test for https://github.com/ClickHouse/ClickHouse/issues/87403",
+      "-- Dictionary + CASE + distributed table: predicate pushdown should not filter out rows incorrectly."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_dict_dist_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "d_dict_dist"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "name": "d",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "QUERY",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "\n    SELECT * FROM (\n        SELECT toInt64(1) AS id, 'alpha' AS d\n        UNION ALL\n        SELECT toInt64(2) AS id, 'beta' AS d\n    )\n"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_dict_dist"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t_dict_dist_local"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t_dict_dist_local"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "dictGet",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ".d_dict_dist"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "d"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ]
+        },
+        "alias": "d"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "same"
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "gamma"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SHOULD NOT HAPPEN"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "same"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SHOULD ALWAYS HAPPEN"
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ]
+        },
+        "alias": "filter_value"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "t_dict_dist"
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "filter_value"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "SHOULD ALWAYS HAPPEN"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

@@ -1,1 +1,382 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE:Identifier}"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "A"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "B"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "functionCall",
+          "name": "toUInt32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metadata_modification_time"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "engine_full"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "create_table_query"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "database"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "currentDatabase",
+        "args": []
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVRaw"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_temporary_table"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "is_temporary"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_temporary_table"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "test_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "test_materialized"
+    },
+    "engine": {
+      "name": "Log"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "test_log"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dependencies_database"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dependencies_table"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_log"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE:Identifier}",
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "-- Check that create_table_query works for system tables and unusual Databases"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "A"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "ignore",
+            "args": [
+              {
+                "kind": "asterisk"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metadata_modification_time"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "engine_full"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "create_table_query"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "database"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "{CLICKHOUSE_DATABASE:String}"
+      }
+    }
+  }
+]

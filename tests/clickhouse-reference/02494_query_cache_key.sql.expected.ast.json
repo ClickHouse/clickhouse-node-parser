@@ -1,1 +1,419 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "db1"
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db2"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db1",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db2",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "use",
+    "database": "db1"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "use",
+    "database": "db2"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "format": "Null",
+    "leadingComments": [
+      "-- test with query-level settings"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "query"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_cache"
+    },
+    "leadingComments": [
+      "-- 4x the same query but with different settings each. There should yield four entries in the query cache."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- test with mixed session-level/query-level settings"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "limit",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "default"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "default"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "default"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "default"
+          ]
+        }
+      }
+    ]
+  }
+]

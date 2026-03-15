@@ -3,7 +3,7 @@ CREATE TABLE t0
     c0 Int
 )
 ENGINE = MergeTree()
-ORDER BY c0;
+ORDER BY (c0);
 
 -- ../src/Interpreters/AggregationCommon.h:90:35: runtime error: downcast of address 0x743320010d90 which does not point to an object of type 'const ColumnFixedSizeHelper'
 -- 0x743320010d90: note: object is of type 'DB::ColumnConst'

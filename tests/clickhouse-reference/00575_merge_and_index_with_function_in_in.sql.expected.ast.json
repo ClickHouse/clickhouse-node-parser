@@ -1,1 +1,90 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":82,"line":2,"column":37},"end":{"offset":83,"line":2,"column":38}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_00575"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_00575"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "functionCall",
+        "name": "toDayOfWeek",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    }
+  }
+]

@@ -1,1 +1,389 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":80,"line":7,"column":8},"end":{"offset":81,"line":7,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02843_source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "02843_dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "02843_source"
+            }
+          }
+        ]
+      },
+      "lifetime": null,
+      "layout": {
+        "name": "DIRECT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "dictGet",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "02843_dict"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "value"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "materialize",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02843_join"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ANY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "joinGet",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "02843_join"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "value"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "materialize",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "joinGetOrNull",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "02843_join"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "value"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "materialize",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "connectionId",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "getSetting",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "max_threads"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "file",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "materialize",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "a"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError FILE_DOESNT_EXIST }"
+    ]
+  }
+]

@@ -1,1 +1,147 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"m","location":{"start":{"offset":456,"line":11,"column":8},"end":{"offset":457,"line":11,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "deduplicate_blocks_in_dependent_materialized_views",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    },
+    "leadingComments": [
+      "-- { echo }",
+      "-- Log does not support sparse columns - RemovingSparseTransform added"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_mt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- MergeTree support sparse columns - no RemovingSparseTransform"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "t_log"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t_mt"
+      }
+    },
+    "leadingComments": [
+      "-- MergeTree pushes to Log, which does not support sparse columns - RemovingSparseTransform added"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "t_mt"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t_log"
+      }
+    },
+    "leadingComments": [
+      "-- Log does not support sparse columns - RemovingSparseTransform added"
+    ]
+  }
+]

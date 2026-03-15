@@ -1,1 +1,2566 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":4219,"line":66,"column":8},"end":{"offset":4220,"line":66,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-random-merge-tree-settings",
+      "-- add_minmax_index_for_numeric_columns=0: Different plan"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "serialize_query_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_aggregation_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{1,2}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "42"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tab0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "arraySum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arrayMap",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "y"
+                ],
+                "body": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "y"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              },
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ],
+                "source": "[x]"
+              }
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "42"
+      }
+    },
+    "leadingComments": [
+      "--- lambdas are not supported"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tab0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "arraySum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arrayMap",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "y"
+                ],
+                "body": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "y"
+                      ]
+                    }
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                }
+              },
+              {
+                "kind": "array",
+                "elements": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ],
+                "source": "[x]"
+              }
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "42"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{1,2}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "42"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "y"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{1,2}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "42"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{1,2}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "values": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "leadingComments": [
+      "--- IN is supported"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.2"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tab0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              }
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    },
+    "leadingComments": [
+      "--- GLOBAL IN is replaced to temporary table"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.2"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "values": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            "global": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.1"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tab0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              }
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.1"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "values": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            "global": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{2,3}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tab0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              }
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{2,3}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "values": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            "global": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tab0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              }
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{1,2}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "values": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            "global": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2,3}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tab0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              }
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{1,2,3}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "values": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            "global": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2,3}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tab0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              }
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{1,2,3}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab0"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            "values": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            "global": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "tenant",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "recordTimestamp",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "responseBody",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "responseBody"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "something else"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "ngrams",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "colAlias"
+          ]
+        },
+        "indexType": {
+          "name": "ngrambf_v1",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2097152"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "granularity": 10
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "recordTimestamp"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableFunction",
+                "name": "remote",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "127.0.0.{1,2}"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tab1"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "where": {
+            "kind": "inExpr",
+            "negated": false,
+            "expr": {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "tenant"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "recordTimestamp"
+                  ]
+                }
+              ],
+              "source": "(tenant,recordTimestamp)"
+            },
+            "values": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tenant"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "recordTimestamp"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunction",
+                  "name": "remote",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "127.0.0.{1,2}"
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "currentDatabase",
+                      "args": []
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tab1"
+                      ]
+                    }
+                  ]
+                },
+                "where": {
+                  "kind": "functionCall",
+                  "name": "like",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "colAlias"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "%abcd%"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    },
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          "alias": "n"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "8192"
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            }
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.{1,2}"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tab2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "distributed",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_view"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        }
+      }
+    }
+  }
+]

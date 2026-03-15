@@ -196,7 +196,7 @@ CREATE TABLE pk_order
     b Int
 )
 ENGINE = MergeTree
-ORDER BY a / b;
+ORDER BY (a / b);
 
 SELECT *
 FROM pk_order

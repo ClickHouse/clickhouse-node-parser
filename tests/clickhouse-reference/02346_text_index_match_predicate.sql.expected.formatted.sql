@@ -6,7 +6,7 @@ CREATE TABLE tab
 (
     id UInt32,
     str String,
-    INDEX inv_idx (str) TYPE text(tokenizer = 'splitByNonAlpha')
+    INDEX inv_idx str TYPE text(tokenizer = 'splitByNonAlpha')
 )
 ENGINE = MergeTree
 ORDER BY id

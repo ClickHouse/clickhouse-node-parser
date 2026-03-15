@@ -27,8 +27,8 @@ CREATE TABLE forms
     text_field String
 )
 ENGINE = MergeTree
-ORDER BY form_id
-PRIMARY KEY form_id;
+PRIMARY KEY form_id
+ORDER BY form_id;
 
 -- { echoOn }
 SELECT *

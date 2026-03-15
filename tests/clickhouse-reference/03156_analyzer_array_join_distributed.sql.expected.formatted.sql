@@ -4,7 +4,7 @@ CREATE TABLE arrays_test
     arr Array(UInt8)
 )
 ENGINE = MergeTree()
-ORDER BY s;
+ORDER BY (s);
 
 SELECT
     s,

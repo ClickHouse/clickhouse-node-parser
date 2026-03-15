@@ -18,7 +18,7 @@ CREATE TABLE test
     key Int32
 )
 ENGINE = MergeTree
-ORDER BY key
+ORDER BY (key)
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT COUNT()

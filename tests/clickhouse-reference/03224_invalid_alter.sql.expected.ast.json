@@ -1,1 +1,475 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":731,"line":22,"column":8},"end":{"offset":732,"line":22,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_alias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              "alias": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database",
+      "-- no-replicated-database: It messes up the output and this test explicitly checks the replicated database"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_with_alias"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valid_column_1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valid_column_2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_alias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              "alias": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/03224_invalid_alter/{database}/{table}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_with_alias"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valid_column_1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valid_column_2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test2"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE:Identifier}",
+    "onCluster": "test_shard_localhost",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "onCluster": "test_shard_localhost",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_alias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              "alias": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/03224_invalid_alter/{database}_atomic/{table}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_with_alias"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valid_column_1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valid_column_2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test3"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE:Identifier}",
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/03224_invalid_alter/{database}_replicated"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "shard1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica1"
+        }
+      ]
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test4"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_alias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              "alias": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_with_alias"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valid_column_1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valid_column_2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test4"
+    }
+  }
+]

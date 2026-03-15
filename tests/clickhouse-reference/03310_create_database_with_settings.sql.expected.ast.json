@@ -1,1 +1,96 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE_1:Identifier}",
+    "settings": [
+      {
+        "name": "distributed_ddl_task_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "42"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "Settings"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "distributed_ddl_task_timeout"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryStart"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "CREATE DATABASE % SETTINGS %"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

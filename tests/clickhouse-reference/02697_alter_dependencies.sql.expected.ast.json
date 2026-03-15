@@ -1,1 +1,269 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":203,"line":3,"column":8},"end":{"offset":204,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "insert_time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "insert_time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_target"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "insert_time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "insert_time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_to_target"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mv_target"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "mv_source"
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": true,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "sleepEachRow",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "0.1"
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ProfileEvents"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "FunctionExecute"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ProfileEvents"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "TableFunctionExecute"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%ALTER TABLE mv_source%"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "now",
+              "args": []
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- This is a fancy way to check that the MV hasn't been called (no functions executed by ALTER)"
+    ]
+  }
+]

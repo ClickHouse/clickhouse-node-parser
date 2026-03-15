@@ -1,1 +1,101 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":64,"line":1,"column":65},"end":{"offset":65,"line":1,"column":66}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i8",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i16",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i64",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "apply",
+            "func": {
+              "kind": "columnRef",
+              "parts": [
+                "bitmapMin"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "apply",
+            "func": {
+              "kind": "columnRef",
+              "parts": [
+                "bitmapMax"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk",
+            "transformers": [
+              {
+                "kind": "apply",
+                "func": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "groupBitmapState"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "t"
+        }
+      }
+    }
+  }
+]

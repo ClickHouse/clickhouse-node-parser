@@ -1,1 +1,2143 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":1697,"line":37,"column":8},"end":{"offset":1698,"line":37,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "address",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "20"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "deployer",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "20"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_number",
+        "type": {
+          "name": "UInt256"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_hash",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "32"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_timestamp",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "insertion_time",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "address"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_tmp"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "block_timestamp",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "max"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "DateTime",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "'UTC'"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_hash",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "FixedString",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "32"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_number",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt256"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "deployer",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "FixedString",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "20"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "address",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "20"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "symbol",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "decimals",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt8"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_proxy",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Bool"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "blacklist_flags",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "whitelist_flags",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "detected_standards",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "amended_type",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "comment",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "_sources",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupUniqArray"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "_updated_at",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "max"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "_active",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Bool"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "address"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "block_timestamp",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "max"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "DateTime",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "'UTC'"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_hash",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "FixedString",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "32"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_number",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt256"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "deployer",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "FixedString",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "20"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "address",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "20"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "symbol",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "decimals",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt8"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_proxy",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Bool"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "blacklist_flags",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "whitelist_flags",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "detected_standards",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "amended_type",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "comment",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "_sources",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupUniqArray"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "_updated_at",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "max"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "_active",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Bool"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "expr",
+          "name": "default_timestamp",
+          "expr": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "1970-01-01 00:00:00"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "block_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(DateTime('UTC'))"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "block_timestamp"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "block_hash"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(FixedString(32))"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "insertion_time"
+                ]
+              }
+            ]
+          },
+          "alias": "block_hash"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "block_number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(UInt256)"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "insertion_time"
+                ]
+              }
+            ]
+          },
+          "alias": "block_number"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "deployer"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(FixedString(20))"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "insertion_time"
+                ]
+              }
+            ]
+          },
+          "alias": "deployer"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "address"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(String)"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "name"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(String)"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "symbol"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(UInt8)"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "decimals"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Bool",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(Boolean)"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "insertion_time"
+                ]
+              }
+            ]
+          },
+          "alias": "is_proxy"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "[]"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Array(Nullable(String))"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "blacklist_flags"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "[]"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Array(Nullable(String))"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "whitelist_flags"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "[]"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Array(Nullable(String))"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "detected_standards"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(String)"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "amended_type"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(String)"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "comment"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "groupUniqArrayState",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "tokens_proxy_deployments"
+              }
+            ]
+          },
+          "alias": "_sources"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "insertion_time"
+                ]
+              }
+            ]
+          },
+          "alias": "_updated_at"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMaxState",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Bool",
+                "value": "1"
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "default_timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "DateTime('UTC')"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "_active"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "insertion_time"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2024-03-14 11:38:09"
+            }
+          ]
+        }
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "address"
+            ]
+          }
+        ]
+      },
+      "parenthesized": true
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  }
+]

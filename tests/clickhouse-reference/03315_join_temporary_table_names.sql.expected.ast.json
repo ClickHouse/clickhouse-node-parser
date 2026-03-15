@@ -1,1 +1,402 @@
-{"expected":[{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"1","location":{"start":{"offset":213,"line":8,"column":11},"end":{"offset":214,"line":8,"column":12}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "T1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "T2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "C",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "T1"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "A"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "A"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "alias": "B"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "T2"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "C",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "A"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "A"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "alias": "B"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          },
+          "alias": "C"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "T1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "table": "T2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "T1",
+              "A"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "T2",
+              "A"
+            ]
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "PrettyCompactMonoBlock"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "T1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "table": "T2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "A"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "PrettyCompactMonoBlock"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "T1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "T2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "T1",
+              "A"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "T2",
+              "A"
+            ]
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "PrettyCompactMonoBlock"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "T1"
+      },
+      "kind": "join",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "table": "T2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "T1",
+              "A"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "T2",
+              "A"
+            ]
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "PrettyCompactMonoBlock"
+  }
+]

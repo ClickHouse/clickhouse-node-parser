@@ -1,1 +1,71 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":87,"line":3,"column":8},"end":{"offset":88,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/70826"
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "v0"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "c0"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "alias": "w"
+        },
+        "kind": "join",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "alias": "z"
+        }
+      }
+    }
+  }
+]

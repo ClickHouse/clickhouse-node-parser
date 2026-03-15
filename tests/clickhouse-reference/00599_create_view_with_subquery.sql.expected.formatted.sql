@@ -1,1 +1,13 @@
-<Parse Error>
+CREATE TABLE test_00599
+(
+    id UInt64
+)
+ENGINE = Log;
+
+CREATE VIEW test_view_00599
+AS
+SELECT *
+FROM test_00599
+WHERE id = (
+        SELECT 1
+    );

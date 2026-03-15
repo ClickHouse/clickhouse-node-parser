@@ -25,12 +25,16 @@
       {
         "kind": "columnDef",
         "name": "a",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "b",
-        "type": "UInt64",
+        "type": {
+          "name": "UInt64"
+        },
         "defaultKind": "DEFAULT",
         "defaultExpr": {
           "kind": "binaryExpr",
@@ -52,17 +56,47 @@
       {
         "kind": "columnDef",
         "name": "s",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "columnDef",
         "name": "n",
-        "type": "Nested(x UInt32, y String)"
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "x",
+              "type": {
+                "name": "UInt32"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "y",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "lc",
-        "type": "LowCardinality(String)"
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -70,10 +104,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "a"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
       }
     ],
     "partitionBy": {
@@ -116,7 +152,8 @@
           "value": "10"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

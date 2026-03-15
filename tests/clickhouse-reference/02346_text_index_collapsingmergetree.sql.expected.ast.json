@@ -22,22 +22,38 @@
       {
         "kind": "columnDef",
         "name": "id",
-        "type": "UInt32"
+        "type": {
+          "name": "UInt32"
+        }
       },
       {
         "kind": "columnDef",
         "name": "key",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "columnDef",
         "name": "value",
-        "type": "Nullable(String)"
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "sign",
-        "type": "Int8"
+        "type": {
+          "name": "Int8"
+        }
       },
       {
         "kind": "indexDef",
@@ -46,10 +62,28 @@
           "kind": "columnRef",
           "parts": [
             "key"
-          ],
-          "parenthesized": true
+          ]
         },
-        "indexType": "text(tokenizer = 'splitByNonAlpha')"
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -65,10 +99,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "id"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
       }
     ]
   },

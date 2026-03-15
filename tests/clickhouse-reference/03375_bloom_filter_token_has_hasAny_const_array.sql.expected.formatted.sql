@@ -4,8 +4,8 @@ CREATE TABLE bloom_filter_has_const_array
 (
     bf String,
     abf Array(String),
-    INDEX idx_bf bf TYPE tokenbf_v1(512,3,0) GRANULARITY 1,
-    INDEX idx_abf abf TYPE tokenbf_v1(512,3,0) GRANULARITY 1
+    INDEX idx_bf bf TYPE tokenbf_v1(512, 3, 0) GRANULARITY 1,
+    INDEX idx_abf abf TYPE tokenbf_v1(512, 3, 0) GRANULARITY 1
 )
 ENGINE = MergeTree
 ORDER BY tuple()

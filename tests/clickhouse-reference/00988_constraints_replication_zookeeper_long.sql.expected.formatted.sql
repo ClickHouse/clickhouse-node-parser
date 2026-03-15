@@ -5,7 +5,7 @@ CREATE TABLE replicated_constraints1
     CONSTRAINT a_constraint CHECK a < 10
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00988/alter_constraints', 'r1')
-ORDER BY a;
+ORDER BY (a);
 
 CREATE TABLE replicated_constraints2
 (
@@ -14,4 +14,4 @@ CREATE TABLE replicated_constraints2
     CONSTRAINT a_constraint CHECK a < 10
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00988/alter_constraints', 'r2')
-ORDER BY a;
+ORDER BY (a);

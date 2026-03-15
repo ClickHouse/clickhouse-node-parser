@@ -4,7 +4,7 @@ CREATE TABLE t0
     c1 UInt64
 )
 ENGINE = MergeTree()
-ORDER BY c0;
+ORDER BY (c0);
 
 CREATE TABLE t1
 (
@@ -12,7 +12,7 @@ CREATE TABLE t1
     c1 UInt64
 )
 ENGINE = MergeTree()
-ORDER BY c0;
+ORDER BY (c0);
 
 SET query_plan_join_swap_table = 0;
 

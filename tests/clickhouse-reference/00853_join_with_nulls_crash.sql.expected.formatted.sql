@@ -5,7 +5,7 @@ CREATE TABLE table_a
     other Nullable(String)
 )
 ENGINE = MergeTree
-ORDER BY event_id;
+ORDER BY (event_id);
 
 CREATE TABLE table_b
 (
@@ -14,7 +14,7 @@ CREATE TABLE table_b
     other String
 )
 ENGINE = MergeTree
-ORDER BY event_id;
+ORDER BY (event_id);
 
 SELECT
     s1.other,

@@ -1,1 +1,116 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":166,"line":8,"column":8},"end":{"offset":167,"line":8,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_01"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_02"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view_01"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "column"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "column"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "test_table_01",
+          "alias": "t1"
+        },
+        "kind": "join",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "test_table_02",
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "column"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "t2",
+                "column"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+]

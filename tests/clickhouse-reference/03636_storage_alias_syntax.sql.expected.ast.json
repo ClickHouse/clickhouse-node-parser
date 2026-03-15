@@ -1,1 +1,306 @@
-{"expected":[{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":";","location":{"start":{"offset":226,"line":5,"column":59},"end":{"offset":227,"line":5,"column":60}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_alias_table_engine",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Create source table"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_syntax_1"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "source_table"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias_syntax_1"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_syntax_2"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "source_table"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias_syntax_2"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias_syntax_1"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias_syntax_2"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_syntax_3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "source_table"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "base_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_1"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "base_table"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_2"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "alias_1"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  }
+]

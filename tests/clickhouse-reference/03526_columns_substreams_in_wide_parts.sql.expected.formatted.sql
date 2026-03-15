@@ -2,9 +2,7 @@ CREATE TABLE test
 (
     int UInt32,
     str String,
-    t Tuple(
-        a UInt32,
-        b Array(UInt32)),
+    t Tuple(a UInt32, b Array(UInt32)),
     json JSON(a UInt32, b Array(String)),
     nested Nested(a UInt32, b UInt32)
 )

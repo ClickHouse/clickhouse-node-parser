@@ -7,14 +7,14 @@ CREATE TABLE test_table_1
     id UInt32
 )
 ENGINE = MergeTree
-ORDER BY id;
+ORDER BY (id);
 
 CREATE TABLE test_table_2
 (
     id UInt32
 )
 ENGINE = MergeTree
-ORDER BY id;
+ORDER BY (id);
 
 SELECT
     t1.id,

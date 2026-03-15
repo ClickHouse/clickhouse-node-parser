@@ -1,1 +1,134 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":221,"line":9,"column":8},"end":{"offset":222,"line":9,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mister_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c0",
+            "null"
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mister_table_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mister_view"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "mister_table_2",
+              "c0",
+              "null"
+            ]
+          },
+          "alias": "c0"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "mister_table_2"
+      },
+      "parenthesized": true
+    }
+  }
+]

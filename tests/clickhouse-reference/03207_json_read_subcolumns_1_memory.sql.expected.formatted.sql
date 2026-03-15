@@ -10,7 +10,7 @@ SET session_timezone = 'UTC';
 CREATE TABLE test
 (
     id UInt64,
-    json JSON(max_dynamic_paths=2, a.b.c UInt32)
+    json JSON(max_dynamic_paths = 2, `a.b.c` UInt32)
 )
 ENGINE = Memory;
 

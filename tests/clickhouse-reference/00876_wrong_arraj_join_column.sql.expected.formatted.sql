@@ -3,7 +3,7 @@ CREATE TABLE visits
     str String
 )
 ENGINE = MergeTree
-ORDER BY str;
+ORDER BY (str);
 
 SELECT 1
 FROM

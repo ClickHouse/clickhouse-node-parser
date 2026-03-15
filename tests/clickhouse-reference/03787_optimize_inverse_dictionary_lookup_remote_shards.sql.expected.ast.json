@@ -1,1 +1,345 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":235,"line":7,"column":8},"end":{"offset":236,"line":7,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database, no-parallel-replicas",
+      "-- no-parallel, no-parallel-replicas: Dictionary is not created in parallel replicas."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "rewrite_in_to_join",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "inverse_dict_lookup_remote_shards"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "name": "f",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "QUERY",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "SELECT 1 id, 2 f"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_inverse_dictionary_lookup",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "dictGet",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "inverse_dict_lookup_remote_shards"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "f"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "dummy"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "12"
+          }
+        },
+        "alias": "limit_and_equals"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "localhost,localhost"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system",
+            "one"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_inverse_dictionary_lookup",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "inverse_dict_lookup_remote_shards_composite_key"
+    },
+    "dictAttrs": [
+      {
+        "name": "k1",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "name": "k2",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "name": "f",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "QUERY",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "SELECT toInt64(1) k1, toUInt32(1) k2, toInt64(2) f"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "dictGet",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "inverse_dict_lookup_remote_shards_composite_key"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "f"
+              },
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toInt64",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "dummy"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt32",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "dummy"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "12"
+          }
+        },
+        "alias": "limit_and_equals"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "localhost,localhost"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system",
+            "one"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  }
+]

@@ -1,1 +1,483 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":37,"line":1,"column":38},"end":{"offset":38,"line":1,"column":39}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "xy"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "%",
+      "left": {
+        "kind": "functionCall",
+        "name": "intHash64",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Now we have two partitions: 0 and 1, each of which contains 2 values.",
+      "-- minmax index for the first partition is 0 <= x <= 8",
+      "-- minmax index for the second partition is 2 <= x <= 9"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "xy"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "functionCall",
+          "name": "intHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      "right": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "functionCall",
+          "name": "intHash64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "xy"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "8"
+      }
+    },
+    "leadingComments": [
+      "-- Equality is another special operator that can be treated as an always monotonic indicator for deterministic functions.",
+      "-- minmax index is not enough."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "xyz"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "z",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "if",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "toUInt8",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "z"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "xyz"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "toYYYYMM",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ],
+      "source": "(toYYYYMM(d),k)"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "2020-01-01"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "myTable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "myDay",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "myOrder",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "someData",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "floor",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "toYYYYMMDD",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "myDay"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "Int64",
+          "value": "-1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "myOrder"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "myTable",
+      "alias": "mt"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "myDay"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "2021-01-02"
+      }
+    }
+  }
+]

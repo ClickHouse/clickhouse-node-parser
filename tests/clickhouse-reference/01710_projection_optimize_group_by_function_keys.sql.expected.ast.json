@@ -1,1 +1,182 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":506,"line":21,"column":12},"end":{"offset":507,"line":21,"column":13}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "proj"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "bool_value",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "zero_integer_value",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "integer_value",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "float_value",
+        "type": {
+          "name": "Float32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "datetime_value",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "string_value",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "test_projection",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toStartOfDay",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toDateTime",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "datetime_value"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "Day"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "datetime_value"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "float_value"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "countDistinct",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "if",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "zero_integer_value"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "string_value"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "Day"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "datetime_value"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "float_value"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "datetime_value"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "bool_value"
+          ]
+        }
+      }
+    ]
+  }
+]

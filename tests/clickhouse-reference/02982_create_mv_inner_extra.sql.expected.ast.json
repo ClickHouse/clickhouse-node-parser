@@ -1,1 +1,354 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":78,"line":7,"column":8},"end":{"offset":79,"line":7,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_indexes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter"
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_no_indexes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter"
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_projections"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "uniqCombined",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "key"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_primary_key"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_primary_key_from_column"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "String"
+        },
+        "primaryKey": true
+      }
+    ],
+    "_columnPrimaryKeys": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpOne",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "create_table_query"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "CREATE TABLE [^ ]*"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "CREATE TABLE x"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "table"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ".inner%"
+            }
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "LineAsString"
+  }
+]

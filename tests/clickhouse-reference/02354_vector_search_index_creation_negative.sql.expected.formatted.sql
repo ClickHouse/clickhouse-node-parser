@@ -146,7 +146,7 @@ CREATE TABLE tab
 (
     id Int32,
     vec Array(Float32),
-    INDEX idx (vec, id) TYPE vector_similarity('hnsw', 'L2Distance', 1)
+    INDEX idx tuple(vec, id) TYPE vector_similarity('hnsw', 'L2Distance', 1)
 )
 ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError INCORRECT_NUMBER_OF_COLUMNS }

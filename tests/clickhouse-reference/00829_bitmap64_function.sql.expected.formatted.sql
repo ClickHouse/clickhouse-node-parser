@@ -10,7 +10,7 @@ CREATE TABLE bitmap_state_test
 (
     pickup_date Date,
     city_id UInt32,
-    uv AggregateFunction( groupBitmap, UInt64 )
+    uv AggregateFunction(groupBitmap, UInt64)
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY (pickup_date, city_id)

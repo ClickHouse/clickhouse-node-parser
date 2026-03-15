@@ -4,7 +4,7 @@ CREATE TABLE bloom_filter
 (
     id UInt64,
     s String,
-    INDEX tok_bf (s, lower(s)) TYPE tokenbf_v1(512, 3, 0) GRANULARITY 1
+    INDEX tok_bf tuple(s, lower(s)) TYPE tokenbf_v1(512, 3, 0) GRANULARITY 1
 )
 ENGINE = MergeTree
 ORDER BY id

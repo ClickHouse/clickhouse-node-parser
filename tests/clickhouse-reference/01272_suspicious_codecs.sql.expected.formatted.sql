@@ -86,7 +86,7 @@ ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 
 CREATE TABLE codecs
 (
-    a Decimal(15,5) CODEC(Gorilla)
+    a Decimal(15, 5) CODEC(Gorilla)
 )
 ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
@@ -179,7 +179,7 @@ ORDER BY tuple();
 
 CREATE TABLE codecs11
 (
-    a Decimal(15,5) CODEC(Gorilla)
+    a Decimal(15, 5) CODEC(Gorilla)
 )
 ENGINE = MergeTree
 ORDER BY tuple();

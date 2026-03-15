@@ -1,1 +1,197 @@
-{"expected":[{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":"'","location":{"start":{"offset":75,"line":4,"column":8},"end":{"offset":76,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03772_table_match"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "http://example1.com/"
+          },
+          "alias": "url"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "url"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "03772_table_match"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "functionCall",
+        "name": "match",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "url"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "^https?://clickhouse[.]com/"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- { echo }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "03772_table_match"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "functionCall",
+        "name": "match",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "url"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "^abcd"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "03772_table_match"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "match",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "url"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^abcd"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "03772_table_match"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "match",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "url"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "^https?://clickhouse[.]com/"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "Bool",
+        "value": "0"
+      }
+    }
+  }
+]

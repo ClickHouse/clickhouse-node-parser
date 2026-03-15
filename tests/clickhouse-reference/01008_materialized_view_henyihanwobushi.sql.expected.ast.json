@@ -1,1 +1,293 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":263,"line":4,"column":8},"end":{"offset":264,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ddate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ddate"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bar"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ddate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "foo_id",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ddate"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_foo_bar"
+    },
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ddate"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bar_id"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ddate"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bar_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bar_n"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "foo_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "foo_n"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ddate"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "alias": "bar_id"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n"
+                  ]
+                },
+                "alias": "bar_n"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "foo_id"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "bar"
+            }
+          },
+          "alias": "js1"
+        },
+        "kind": "join",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "alias": "foo_id"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n"
+                  ]
+                },
+                "alias": "foo_n"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "foo"
+            }
+          },
+          "alias": "js2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "foo_id"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "view_foo_bar"
+    }
+  }
+]

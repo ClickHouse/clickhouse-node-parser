@@ -18,10 +18,7 @@ CREATE TABLE tab_bitpacking
 (
     ts DateTime,
     str String,
-    INDEX inv_idx str TYPE text(
-        tokenizer = 'splitByNonAlpha',
-        posting_list_codec = 'bitpacking'
-    )
+    INDEX inv_idx str TYPE text(tokenizer = 'splitByNonAlpha', posting_list_codec = 'bitpacking')
 )
 ENGINE = MergeTree
 ORDER BY ts;
@@ -30,9 +27,7 @@ CREATE TABLE tab_uncompressed
 (
     ts DateTime,
     str String,
-    INDEX inv_idx str TYPE text(
-        tokenizer = 'splitByNonAlpha'
-    )
+    INDEX inv_idx str TYPE text(tokenizer = 'splitByNonAlpha')
 )
 ENGINE = MergeTree
 ORDER BY ts;

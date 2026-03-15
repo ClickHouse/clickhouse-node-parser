@@ -1,1 +1,134 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":250,"line":5,"column":41},"end":{"offset":251,"line":5,"column":42}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "-- SELECT"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "dummy"
+              ]
+            },
+            "alias": "k"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2}"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "system",
+                "one"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  }
+]

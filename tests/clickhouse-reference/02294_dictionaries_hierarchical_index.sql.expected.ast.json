@@ -1,1 +1,476 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":118,"line":6,"column":8},"end":{"offset":119,"line":6,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_hierarchy_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "parent_id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "hierarchy_flat_dictionary_index"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "parent_id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_hierarchy_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    },
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "hierarchy_flat_dictionary_index"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "parent_id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_hierarchy_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "hierarchy_flat_dictionary_index"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "hierarchical_index_bytes_allocated"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dictionaries"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "hierarchy_flat_dictionary_index"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "hierarchy_hashed_dictionary_index"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "parent_id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_hierarchy_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "hierarchy_hashed_dictionary_index"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "hierarchical_index_bytes_allocated"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dictionaries"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "hierarchy_hashed_dictionary_index"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "hierarchy_hashed_array_dictionary_index"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "parent_id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_hierarchy_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED_ARRAY",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "hierarchy_hashed_array_dictionary_index"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "hierarchical_index_bytes_allocated"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dictionaries"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "hierarchy_hashed_array_dictionary_index"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        }
+      ]
+    }
+  }
+]

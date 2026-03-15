@@ -1,1 +1,219 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":185,"line":9,"column":8},"end":{"offset":186,"line":9,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "complex_key_simple_attributes_source_short_circuit_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id_key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_first",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_second",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "cache_dictionary_complex_key_simple_attributes_short_circuit"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "id_key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "value_first",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "value_first_default"
+        }
+      },
+      {
+        "name": "value_second",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "value_second_default"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id_key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "complex_key_simple_attributes_source_short_circuit_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 1000
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_CACHE",
+        "pairs": [
+          {
+            "name": "SIZE_IN_CELLS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        ]
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "dictGetOrDefault",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "cache_dictionary_complex_key_simple_attributes_short_circuit"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "value_first"
+            },
+            {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "concat",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "toString",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "source": "(number, concat(toString(number)))"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "materialize",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "default"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "value_first"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "20"
+      }
+    },
+    "format": "Null"
+  }
+]

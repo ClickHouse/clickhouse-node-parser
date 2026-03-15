@@ -1,1 +1,563 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":73,"line":4,"column":8},"end":{"offset":74,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel, no-fasttest"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "database_for_dict_01018"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "database_for_dict_01018",
+      "table": "table_for_dict"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "second_column",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "third_column",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_01018"
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01018",
+      "table": "dict1"
+    },
+    "dictAttrs": [
+      {
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "second_column",
+        "type": {
+          "name": "UInt8"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "third_column",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "qqq"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_for_dict"
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "database_for_dict_01018"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 10
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "database"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dictionaries"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "db_01018"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dict1"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "memory_db",
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "memory_db",
+      "table": "dict2"
+    },
+    "dictAttrs": [
+      {
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "second_column",
+        "type": {
+          "name": "UInt8"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "expression": {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "functionCall",
+            "name": "rand",
+            "args": []
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "222"
+          }
+        }
+      },
+      {
+        "name": "third_column",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "qqq"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_for_dict"
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "database_for_dict_01018"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 10
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "database"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dictionaries"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "memory_db"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dict2"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01018",
+      "table": "dict4"
+    },
+    "dictAttrs": [
+      {
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "second_column",
+        "type": {
+          "name": "UInt8"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "third_column",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "qqq"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_for_dict"
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "database_for_dict_01018"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 10
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  }
+]

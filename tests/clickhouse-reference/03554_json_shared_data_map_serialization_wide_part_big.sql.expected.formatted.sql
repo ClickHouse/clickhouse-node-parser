@@ -1,6 +1,6 @@
 CREATE TABLE test_wide_map
 (
-    json JSON(max_dynamic_paths=8)
+    json JSON(max_dynamic_paths = 8)
 )
 ENGINE = MergeTree
 ORDER BY tuple()
@@ -58,7 +58,7 @@ FORMAT Null;
 
 CREATE TABLE test_wide_map_tuple
 (
-    json Tuple(data JSON(max_dynamic_paths=8))
+    json Tuple(data JSON(max_dynamic_paths = 8))
 )
 ENGINE = MergeTree
 ORDER BY tuple()

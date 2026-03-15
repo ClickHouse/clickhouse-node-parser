@@ -9,12 +9,40 @@
       {
         "kind": "columnDef",
         "name": "ary",
-        "type": "Array(LowCardinality(Nullable(String)))"
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "d",
-        "type": "Date"
+        "type": {
+          "name": "Date"
+        }
       },
       {
         "kind": "indexDef",
@@ -25,7 +53,16 @@
             "ary"
           ]
         },
-        "indexType": "bloom_filter(0.01)",
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.01"
+            }
+          ]
+        },
         "granularity": 1024
       }
     ],
@@ -41,10 +78,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "d"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        }
       }
     ]
   },

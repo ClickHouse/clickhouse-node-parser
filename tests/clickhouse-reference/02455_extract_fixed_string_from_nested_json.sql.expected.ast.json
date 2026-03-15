@@ -1,1 +1,61 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":64,"line":1,"column":65},"end":{"offset":65,"line":1,"column":66}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_fixed_string_nested_json"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "data"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "data"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple(a FixedString(24))"
+            }
+          ]
+        },
+        "alias": "json"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_fixed_string_nested_json"
+    }
+  }
+]

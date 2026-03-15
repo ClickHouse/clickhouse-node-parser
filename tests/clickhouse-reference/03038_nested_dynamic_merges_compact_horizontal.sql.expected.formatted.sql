@@ -11,7 +11,7 @@ SET enable_named_columns_in_function_tuple = 0;
 CREATE TABLE test
 (
     id UInt64,
-    d Dynamic(max_types=2)
+    d Dynamic(max_types = 2)
 )
 ENGINE = MergeTree
 ORDER BY id

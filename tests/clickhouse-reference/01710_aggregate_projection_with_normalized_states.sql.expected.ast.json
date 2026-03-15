@@ -64,22 +64,66 @@
       {
         "kind": "columnDef",
         "name": "x",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "columnDef",
         "name": "a",
-        "type": "LowCardinality(String)"
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "q",
-        "type": "AggregateFunction(quantilesTiming(0.5, 0.95, 0.99), Int64)"
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "quantilesTiming",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "0.5"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "0.95"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "0.99"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int64"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "s",
-        "type": "Int64"
+        "type": {
+          "name": "Int64"
+        }
       },
       {
         "kind": "projectionDef",
@@ -154,16 +198,20 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "x"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
       },
       {
-        "kind": "columnRef",
-        "parts": [
-          "a"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
       }
     ],
     "settings": [
@@ -176,6 +224,7 @@
         }
       }
     ],
+    "settingsAfterOrderBy": true,
     "trailingComments": [
       "-- should set it to rebuild once projection is supported with SummingMergeTree"
     ]

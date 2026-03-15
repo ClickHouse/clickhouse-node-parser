@@ -3,7 +3,7 @@ CREATE TABLE test1
 (
     c UInt32,
     a ALIAS c + 1,
-    INDEX i (a) TYPE minmax
+    INDEX i a TYPE minmax
 )
 ENGINE = MergeTree
 ORDER BY c
@@ -14,7 +14,7 @@ CREATE TABLE test2
     c UInt32,
     a1 ALIAS c + 1,
     a2 ALIAS a1 + 1,
-    INDEX i (a2) TYPE minmax
+    INDEX i a2 TYPE minmax
 )
 ENGINE = MergeTree
 ORDER BY c

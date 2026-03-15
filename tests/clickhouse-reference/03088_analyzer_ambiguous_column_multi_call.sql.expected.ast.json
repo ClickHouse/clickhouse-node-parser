@@ -1,1 +1,71 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"d","location":{"start":{"offset":87,"line":3,"column":8},"end":{"offset":88,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/61014"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE:Identifier}"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "a"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log",
+      "args": []
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "{CLICKHOUSE_DATABASE:Identifier}",
+          "a",
+          "i"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "a"
+      },
+      "kind": "join",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "a",
+        "alias": "x"
+      }
+    }
+  }
+]

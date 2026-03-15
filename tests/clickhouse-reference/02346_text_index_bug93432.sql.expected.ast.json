@@ -1,1 +1,122 @@
-{"expected":[{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"[","location":{"start":{"offset":163,"line":8,"column":11},"end":{"offset":164,"line":8,"column":12}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_full_text_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "array"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "array",
+          "elements": [],
+          "source": "[]"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "hasAllTokens",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "col"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "abc"
+        }
+      ]
+    }
+  }
+]

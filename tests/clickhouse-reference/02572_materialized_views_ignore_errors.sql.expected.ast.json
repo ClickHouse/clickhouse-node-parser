@@ -1,1 +1,291 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"m","location":{"start":{"offset":228,"line":5,"column":8},"end":{"offset":229,"line":5,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02572"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "proxy_02572"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_shard_localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "receiver_02572"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "push_to_proxy_mv_02572"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "proxy_02572"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data_02572"
+      }
+    },
+    "leadingComments": [
+      "-- proxy data with MV"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "data_02572"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lower",
+        "args": [
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "status"
+              ]
+            },
+            "type": "String",
+            "operator": true
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "errorCodeToName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "exception_code"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_views_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "view_name"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "concatWithSeparator",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "."
+              },
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "push_to_proxy_mv_02572"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "view_target"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "concatWithSeparator",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "."
+              },
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "proxy_02572"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_date"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_time"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- lower(status) to pass through clickhouse-test \"exception\" check"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "receiver_02572"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "data_02572"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "receiver_02572"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

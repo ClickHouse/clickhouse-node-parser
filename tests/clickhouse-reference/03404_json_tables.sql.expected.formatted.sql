@@ -3,7 +3,7 @@ CREATE TABLE t0
     c0 JSON
 )
 ENGINE = MergeTree()
-ORDER BY c0; -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
+ORDER BY (c0); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
 
 SELECT '---';
 

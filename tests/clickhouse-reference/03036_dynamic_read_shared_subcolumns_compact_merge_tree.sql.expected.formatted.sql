@@ -8,7 +8,7 @@ SET allow_experimental_dynamic_type = 1;
 CREATE TABLE test
 (
     id UInt64,
-    d Dynamic(max_types=2)
+    d Dynamic(max_types = 2)
 )
 ENGINE = MergeTree
 ORDER BY id

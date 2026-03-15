@@ -3,7 +3,7 @@ CREATE TABLE t0
     c0 Int
 )
 ENGINE = MergeTree()
-ORDER BY c0 * NULL
+ORDER BY (c0 * NULL)
 SETTINGS allow_nullable_key = 1;
 
 SELECT *

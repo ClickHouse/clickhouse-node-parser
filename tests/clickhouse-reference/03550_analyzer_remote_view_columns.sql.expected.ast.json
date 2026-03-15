@@ -1,1 +1,317 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":260,"line":17,"column":8},"end":{"offset":261,"line":17,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i1",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i2",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i3",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i4",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i5",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i6",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i7",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i8",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i9",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i10",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "serialize_query_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "i1"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_view"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "THIS IS A COMMENT TO MARK THE INITIAL QUERY"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "columns"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "initial_query_id"
+            ]
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "query_id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "database": "system",
+                "table": "query_log"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "current_database"
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "currentDatabase",
+                      "args": []
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "log_comment"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "THIS IS A COMMENT TO MARK THE INITIAL QUERY"
+                    }
+                  }
+                ]
+              },
+              "limit": {
+                "count": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        },
+        {
+          "kind": "unaryExpr",
+          "op": "NOT",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "is_initial_query"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

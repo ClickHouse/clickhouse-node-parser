@@ -59,7 +59,7 @@ ORDER BY id ASC;
 
 CREATE TABLE t_tuple_null
 (
-    t Tuple(null UInt32)
+    t Tuple(`null` UInt32)
 )
 ENGINE = MergeTree
 ORDER BY tuple();

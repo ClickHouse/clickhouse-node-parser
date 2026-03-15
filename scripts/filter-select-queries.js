@@ -32,12 +32,25 @@ function splitStatements(content) {
   let current = '';
   let inSingleQuote = false;
   let inDoubleQuote = false;
+  let inBacktick = false;
+  let dollarTag = null; // non-null string when inside a dollar-quoted string (e.g. '$$' or '$doc$')
   let inLineComment = false;
   let inBlockComment = false;
 
   for (let i = 0; i < content.length; i++) {
     const ch = content[i];
     const next = content[i + 1];
+
+    // Dollar-quoted strings: $tag$...$tag$ (tag may be empty, e.g. $$...$$)
+    if (dollarTag !== null) {
+      current += ch;
+      if (ch === '$' && content.substring(i, i + dollarTag.length) === dollarTag) {
+        current += content.substring(i + 1, i + dollarTag.length);
+        i += dollarTag.length - 1;
+        dollarTag = null;
+      }
+      continue;
+    }
 
     if (inLineComment) {
       current += ch;
@@ -55,7 +68,17 @@ function splitStatements(content) {
       continue;
     }
 
-    if (!inSingleQuote && !inDoubleQuote) {
+    if (!inSingleQuote && !inDoubleQuote && !inBacktick) {
+      if (ch === '$') {
+        // Match $tag$ where tag is [a-zA-Z0-9_]* (may be empty for $$)
+        const tagMatch = content.substring(i).match(/^\$([a-zA-Z0-9_]*)\$/);
+        if (tagMatch) {
+          dollarTag = tagMatch[0];
+          current += dollarTag;
+          i += dollarTag.length - 1;
+          continue;
+        }
+      }
       if (ch === '-' && next === '-') {
         inLineComment = true;
         current += ch;
@@ -73,7 +96,15 @@ function splitStatements(content) {
       current += ch;
       if (i + 1 < content.length) current += content[++i];
       continue;
-    } else if (ch === "'" && !inDoubleQuote) {
+    } else if (ch === '`' && !inSingleQuote && !inDoubleQuote) {
+      // Backtick-quoted identifiers: `` is an escaped backtick inside backticks.
+      if (inBacktick && next === '`') {
+        current += ch + next;
+        i++;
+        continue;
+      }
+      inBacktick = !inBacktick;
+    } else if (ch === "'" && !inDoubleQuote && !inBacktick) {
       // SQL-style '' escaped quote: stay inside the string.
       if (inSingleQuote && next === "'") {
         current += ch + next;
@@ -81,11 +112,16 @@ function splitStatements(content) {
         continue;
       }
       inSingleQuote = !inSingleQuote;
-    } else if (ch === '"' && !inSingleQuote) {
+    } else if (ch === '"' && !inSingleQuote && !inBacktick) {
+      if (inDoubleQuote && next === '"') {
+        current += ch + next;
+        i++;
+        continue;
+      }
       inDoubleQuote = !inDoubleQuote;
     }
 
-    if (ch === ';' && !inSingleQuote && !inDoubleQuote) {
+    if (ch === ';' && !inSingleQuote && !inDoubleQuote && !inBacktick) {
       // Consume trailing whitespace and an optional inline comment so they
       // stay with this statement rather than being prepended to the next one.
       // Stop if we hit a non-whitespace, non-comment character (i.e. another
@@ -163,7 +199,7 @@ function isStringOnlySelect(statement) {
 
 /** Returns true if the statement's trailing inline comment contains "clientError". */
 function hasClientError(statement) {
-  return /;\s*--[^\n]*clientError/.test(statement);
+  return /;\s*--[^\n]*(clientError)/.test(statement);
 }
 
 /** Returns true if the statement uses a disallowed setting. */
@@ -172,10 +208,24 @@ function hasDisallowedSetting(statement) {
     /output_format_tsv_crlf_end_of_line/.test(statement);
 }
 
+/** Returns true if the statement uses a disallowed setting. */
+function hasKql(statement) {
+  return /kql\(/.test(statement);
+}
+
 const blocklist = [
+  // Ridiculous inputs
   '03775_too_large_temporary_files_buffer_size.sql',
   '02686_bson3.sql',
+  '01666_blns_long.sql',
+  // Expected Parse error
+  '02474_fix_function_parser_bug.sql',
+  // Experimental window views, may be supported in the future
+  '01049_window_view_window_functions.sql',
+  // KQL parsing
   '02366_kql_operator_in_sql.sql',
+  // Difficult to split
+  // '03011_definitive_guide_to_cast.sql',
 ];
 
 // Step 2: Remove blocklisted files
@@ -203,7 +253,7 @@ for (const file of sqlFiles) {
       isSupportedStatement(s) &&
       !isStringOnlySelect(s) &&
       !hasClientError(s) &&
-      !hasDisallowedSetting(s),
+      !hasDisallowedSetting(s) && !hasKql(s),
   );
   const removed = statements.length - selectStatements.length;
 

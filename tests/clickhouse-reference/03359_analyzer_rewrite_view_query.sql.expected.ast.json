@@ -1,1 +1,112 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":240,"line":11,"column":8},"end":{"offset":241,"line":11,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mydestination"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "object",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "object"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database",
+      "-- no-replicated-database: avoids strange edge case error that only happens with replicated DB and old analyzer"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "myview"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mydestination"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "expr",
+          "name": "objects",
+          "expr": {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "foo"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "bar"
+              }
+            ],
+            "source": "('foo', 'bar')"
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "foo"
+          },
+          "alias": "object"
+        }
+      ],
+      "where": {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "object"
+          ]
+        },
+        "values": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "objects"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "myview"
+    }
+  }
+]

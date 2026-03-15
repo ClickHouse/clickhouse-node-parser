@@ -1,1 +1,2897 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":143,"line":8,"column":8},"end":{"offset":144,"line":8,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v2",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v3",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "flat_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "v1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "v2",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      },
+      {
+        "name": "v3",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "flat_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v2"
+              }
+            ],
+            "source": "('v1', 'v2')"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "flat_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v2"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "flat_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v3"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "hashed_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "v1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "v2",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      },
+      {
+        "name": "v3",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v2"
+              }
+            ],
+            "source": "('v1', 'v2')"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v2"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v3"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v2"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "hashed_array_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "v1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "v2",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      },
+      {
+        "name": "v3",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "HASHED_ARRAY",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_array_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v2"
+              }
+            ],
+            "source": "('v1', 'v2')"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_array_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v2"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_array_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v3"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_array_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v2"
+              }
+            ],
+            "source": "('v1', 'v2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt128",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toNullable",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "NULL",
+                        "value": "NULL"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(materialize(toNullable(NULL)), intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "leadingComments": [
+      "-- Fuzzer"
+    ],
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "materialize",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "15"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_array_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v2"
+              }
+            ],
+            "source": "('v1', 'v2')"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "materialize",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "NULL",
+                        "value": "NULL"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(intDiv(materialize(NULL), id), intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hashed_array_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v2"
+              }
+            ],
+            "source": "('v1', 'v2')"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toNullable",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(toNullable(NULL), intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "start",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "end",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Date"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_hashed_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "start",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "name": "end",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Date"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "val",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "range_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "RANGE_HASHED",
+        "pairs": []
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "start"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "end"
+            ]
+          }
+        }
+      ],
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_hashed_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "val"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2023-01-02"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary_source_table"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "cache_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "v1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "v2",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      },
+      {
+        "name": "v3",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "CACHE",
+        "pairs": [
+          {
+            "name": "SIZE_IN_CELLS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        ]
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "cache_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v2"
+              }
+            ],
+            "source": "('v1', 'v2')"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "cache_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v2"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "cache_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v3"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "direct_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "v1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "v2",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      },
+      {
+        "name": "v3",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": null,
+      "layout": {
+        "name": "DIRECT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "direct_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "v2"
+              }
+            ],
+            "source": "('v1', 'v2')"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "direct_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v2"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "direct_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "v3"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ip_dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "asn",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cca2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "ip_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "asn",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "name": "cca2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "prefix"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ip_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 3600
+      },
+      "layout": {
+        "name": "IP_TRIE",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "ip_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "cca2"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toIPv4",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "202.79.32.10"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ip_dictionary_source_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "ip_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "asn"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "cca2"
+              }
+            ],
+            "source": "('asn', 'cca2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "IPv6StringToNum",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2a02:6b8:1::1"
+              }
+            ]
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(intDiv(1, id), intDiv(1, id))"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ip_dictionary_source_table"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "polygon_dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Tuple",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "Float64"
+                                }
+                              },
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "Float64"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "polygon_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Tuple",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "Float64"
+                                }
+                              },
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "Float64"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "name",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "polygon_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "POLYGON",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "points"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          ]
+        },
+        "alias": "key"
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "polygon_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "points"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "regexp_dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "parent_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "regexp",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "keys",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "values",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "regexp_dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "regexp",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "version",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "comment",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "nothing"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "regexp"
+          ],
+          "parenthesized": true
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "regexp_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "REGEXP_TREE",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "regexp_dict"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "/tclwebkit"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "regexp_dict"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "/tclwebkit"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Fuzzer"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_DIVISION }"
+    ]
+  }
+]

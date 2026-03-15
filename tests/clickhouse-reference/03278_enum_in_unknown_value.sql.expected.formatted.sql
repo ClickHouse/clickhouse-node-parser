@@ -1,6 +1,6 @@
 CREATE TABLE t_enum_in_unknown_value
 (
-    e Enum('a'=1, 'b'=2)
+    e Enum('a' = 1, 'b' = 2)
 )
 ENGINE = Memory;
 

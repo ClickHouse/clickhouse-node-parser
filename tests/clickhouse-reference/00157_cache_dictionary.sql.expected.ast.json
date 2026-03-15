@@ -1,1 +1,679 @@
-{"expected":[{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"P","location":{"start":{"offset":58,"line":3,"column":1},"end":{"offset":59,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_1m"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "intHash32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserID"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "sampleBy": {
+      "kind": "functionCall",
+      "name": "intHash32",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "storage_policy",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "default"
+        }
+      },
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10485760"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_dict",
+    "ifNotExists": true
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_dict",
+      "table": "cache_hits"
+    },
+    "dictAttrs": [
+      {
+        "name": "WatchID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "SearchPhrase",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "WatchID"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "hits_1m"
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 10
+      },
+      "layout": {
+        "name": "CACHE",
+        "pairs": [
+          {
+            "name": "SIZE_IN_CELLS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "QUERY_WAIT_TIMEOUT_MILLISECONDS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "60000"
+            }
+          }
+        ]
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayDistinct",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "groupArray",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "dictGetUInt64",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "db_dict.cache_hits"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "UserID"
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "WatchID"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "arr"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "test",
+          "table": "hits_1m"
+        },
+        "prewhere": {
+          "kind": "binaryExpr",
+          "op": "==",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            }
+          ]
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "functionCall",
+              "name": "length",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                }
+              ]
+            },
+            "direction": "DESC"
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "arr"
+        ]
+      },
+      "right": {
+        "kind": "array",
+        "elements": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ],
+        "source": "[0]"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayDistinct",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "groupArray",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "dictGetUInt64",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "db_dict.cache_hits"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "UserID"
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "WatchID"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "arr"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "test",
+          "table": "hits_1m"
+        },
+        "prewhere": {
+          "kind": "binaryExpr",
+          "op": "==",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "7"
+            }
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            }
+          ]
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "functionCall",
+              "name": "length",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                }
+              ]
+            },
+            "direction": "DESC"
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "arr"
+        ]
+      },
+      "right": {
+        "kind": "array",
+        "elements": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ],
+        "source": "[0]"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayDistinct",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "groupArray",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "dictGetUInt64",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "db_dict.cache_hits"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "UserID"
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toUInt64",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "WatchID"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "arr"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "test",
+          "table": "hits_1m"
+        },
+        "prewhere": {
+          "kind": "binaryExpr",
+          "op": "==",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "13"
+            }
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            }
+          ]
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "functionCall",
+              "name": "length",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                }
+              ]
+            },
+            "direction": "DESC"
+          }
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "arr"
+        ]
+      },
+      "right": {
+        "kind": "array",
+        "elements": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ],
+        "source": "[0]"
+      }
+    }
+  }
+]

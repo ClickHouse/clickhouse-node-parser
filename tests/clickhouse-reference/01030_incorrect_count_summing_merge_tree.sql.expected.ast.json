@@ -1,1 +1,469 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"S","location":{"start":{"offset":164,"line":3,"column":66},"end":{"offset":165,"line":3,"column":67}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "-- SummingMergeTree with Nullable column without duplicates."
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "isNotNull",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "isNotNull",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "isNotNull",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "val"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "isNotNull",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "val"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "2017-01-01 00:00:00"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "2017-01-01 00:00:00"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tst",
+      "final": true
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      }
+    ]
+  }
+]

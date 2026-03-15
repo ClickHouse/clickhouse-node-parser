@@ -6,7 +6,7 @@ CREATE TABLE test
     INDEX ix_country document.country::String TYPE bloom_filter(0.01) GRANULARITY 1
 )
 ENGINE = MergeTree()
-ORDER BY id
+ORDER BY (id)
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1, index_granularity = 1;
 
 SET enable_lightweight_update = 1;

@@ -1,1 +1,270 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":62,"line":1,"column":63},"end":{"offset":63,"line":1,"column":64}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "z"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "d"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "1.0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "partition"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatReadableSize",
+          "args": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "data_compressed_bytes"
+                    ]
+                  }
+                ]
+              },
+              "alias": "size"
+            }
+          ]
+        },
+        "alias": "compressed"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatReadableSize",
+          "args": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "data_uncompressed_bytes"
+                    ]
+                  }
+                ]
+              },
+              "alias": "usize"
+            }
+          ]
+        },
+        "alias": "uncompressed"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "round",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "usize"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "size"
+                ]
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        },
+        "alias": "compr_rate"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "rows"
+              ]
+            }
+          ]
+        },
+        "alias": "rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "part_count"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "projection_parts"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "z"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "active"
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "partition"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "size"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ]
+  }
+]

@@ -1,1 +1,373 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":665,"line":9,"column":8},"end":{"offset":666,"line":9,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: zookeeper, no-replicated-database, no-parallel, no-ordinary-database"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "database_replicated_allow_replicated_engine_arguments",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/test_01148/{shard}/{database}/{table}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{default_path_test}{uuid}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{default_name_test}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{default_path_test}test_01148"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{default_name_test}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "none"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01148_atomic",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01148_atomic",
+      "table": "rmt2"
+    },
+    "onCluster": "test_shard_localhost",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01148_atomic",
+      "table": "rmt3"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "test_01148_atomic",
+      "table": "rmt2"
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01148_atomic",
+      "table": "rmt4"
+    },
+    "onCluster": "test_shard_localhost",
+    "asTable": {
+      "kind": "tableRef",
+      "database": "test_01148_atomic",
+      "table": "rmt2"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01148_ordinary",
+    "engine": {
+      "name": "Ordinary"
+    },
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "imdb_01148",
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/databases/imdb_01148"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "imdb_01148",
+      "table": "movie_directors"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "director_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "movie_id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "director_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "movie_id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "imdb_01148",
+      "table": "anything"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "imdb_01148",
+      "table": "movie_directors"
+    }
+  }
+]

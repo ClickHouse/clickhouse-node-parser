@@ -1,1 +1,970 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"m","location":{"start":{"offset":632,"line":24,"column":8},"end":{"offset":633,"line":24,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "async_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "wait_for_async_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "async_insert_deduplicate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "deduplicate_blocks_in_dependent_materialized_views",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "async_insert_use_adaptive_busy_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "async_insert_busy_timeout_min_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      },
+      {
+        "name": "async_insert_busy_timeout_max_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "src_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "non_replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "src_table"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "src_table"
+    },
+    "leadingComments": [
+      "-- Expecting 2"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst_1_0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "non_replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_1_0"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst_1_0"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "src_table"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst_1_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "non_replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_1_1"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst_1_1"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "src_table"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst_1_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "non_replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_1_2"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst_1_2"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "src_table"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst_2_01"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "non_replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_2_00"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst_2_01"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "dst_1_0"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_2_01"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst_2_01"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "dst_1_1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "src_table"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "dst_1_0"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst_1_0"
+    },
+    "leadingComments": [
+      "-- Expecting 2"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst_1_0"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "dst_1_1"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst_1_1"
+    },
+    "leadingComments": [
+      "-- Expecting 4"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst_1_1"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "dst_1_2"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst_1_2"
+    },
+    "leadingComments": [
+      "-- Expecting 6"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst_1_2"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "dst_2_01"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst_2_01"
+    },
+    "leadingComments": [
+      "-- Expecting 6"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst_2_01"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "query"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "query_kind"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "exception_code"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "read_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "written_rows"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "QueriesWithSubqueries"
+            }
+          ]
+        },
+        "alias": "QueriesWithSubqueries"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectQueriesWithSubqueries"
+            }
+          ]
+        },
+        "alias": "SelectQueriesWithSubqueries"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "AsyncInsertRows"
+            }
+          ]
+        },
+        "alias": "AsyncInsertRows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelfDuplicatedAsyncInserts"
+            }
+          ]
+        },
+        "alias": "SelfDuplicatedAsyncInserts"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "DuplicatedAsyncInserts"
+            }
+          ]
+        },
+        "alias": "DuplicatedAsyncInserts"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "has",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "databases"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "has",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tables"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ".src_table"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryStart"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "query_kind"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "AsyncInsertFlush"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "format": "Vertical"
+  }
+]

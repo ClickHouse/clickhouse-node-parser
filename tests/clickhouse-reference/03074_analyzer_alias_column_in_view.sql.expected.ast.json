@@ -1,1 +1,100 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"v","location":{"start":{"offset":87,"line":3,"column":8},"end":{"offset":88,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/28687"
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dummy",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "dummy"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "one"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  }
+]

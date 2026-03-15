@@ -1,1 +1,101 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"R","location":{"start":{"offset":121,"line":4,"column":8},"end":{"offset":122,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "filter"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "t"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "parenthesized": true
+    },
+    "to": {
+      "kind": "all"
+    }
+  }
+]

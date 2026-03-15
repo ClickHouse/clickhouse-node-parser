@@ -1,1 +1,276 @@
-{"expected":[{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"'","location":{"start":{"offset":161,"line":8,"column":11},"end":{"offset":162,"line":8,"column":12}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "test_table_col2_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col2"
+          ]
+        },
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col1"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "v1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "v2"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "col1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "col1"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "col2"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "secondary_indices_enable_bulk_filtering",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Boolean"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "col_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col"
+          ]
+        },
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "col"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "isNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "col"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "secondary_indices_enable_bulk_filtering",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  }
+]

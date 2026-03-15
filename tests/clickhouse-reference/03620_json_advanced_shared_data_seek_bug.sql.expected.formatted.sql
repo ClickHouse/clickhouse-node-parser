@@ -3,7 +3,7 @@ SET use_variant_as_common_type = 1;
 CREATE TABLE test
 (
     id UInt64,
-    json JSON(max_dynamic_paths=2, a.b.c UInt32)
+    json JSON(max_dynamic_paths = 2, `a.b.c` UInt32)
 )
 ENGINE = MergeTree
 ORDER BY id

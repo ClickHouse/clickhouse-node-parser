@@ -1,1 +1,183 @@
-{"expected":[{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":";","location":{"start":{"offset":147,"line":2,"column":84},"end":{"offset":148,"line":2,"column":85}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "t0"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "Int64",
+      "value": "-10"
+    },
+    "settings": [
+      {
+        "name": "optimize_const_name_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "10"
+    },
+    "settings": [
+      {
+        "name": "optimize_const_name_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "Int64",
+        "value": "-10"
+      }
+    },
+    "settings": [
+      {
+        "name": "optimize_const_name_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "settings": [
+      {
+        "name": "optimize_const_name_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

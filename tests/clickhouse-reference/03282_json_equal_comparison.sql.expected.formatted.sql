@@ -4,8 +4,8 @@ SET output_format_native_write_json_as_string = 0;
 
 CREATE TABLE test
 (
-    json1 JSON(max_dynamic_paths=2, a UInt32),
-    json2 JSON(max_dynamic_paths=2, a UInt32)
+    json1 JSON(max_dynamic_paths = 2, a UInt32),
+    json2 JSON(max_dynamic_paths = 2, a UInt32)
 )
 ENGINE = Memory;
 

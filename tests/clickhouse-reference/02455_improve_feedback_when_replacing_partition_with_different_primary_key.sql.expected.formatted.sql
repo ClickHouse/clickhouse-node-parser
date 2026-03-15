@@ -5,9 +5,9 @@ CREATE TABLE test_a
     total UInt64
 )
 ENGINE = SummingMergeTree()
+PRIMARY KEY id
 ORDER BY (id, company)
-PARTITION BY company
-PRIMARY KEY id;
+PARTITION BY company;
 
 CREATE TABLE test_b
 (

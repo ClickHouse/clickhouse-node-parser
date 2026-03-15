@@ -3,7 +3,7 @@ CREATE TABLE table_1
 (
     x UInt32,
     y String,
-    INDEX a (length(y)) TYPE minmax GRANULARITY 1
+    INDEX a length(y) TYPE minmax GRANULARITY 1
 )
 ENGINE = MergeTree
 ORDER BY x

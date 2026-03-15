@@ -1,1 +1,112 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"d","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "db_01870"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01870",
+      "table": "a_data_01870"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    },
+    "leadingComments": [
+      "-- Right now the order for shutdown is defined and it is:",
+      "-- (prefixes are important, to define the order)",
+      "-- - a_data_01870",
+      "-- - z_buffer_01870",
+      "-- so on DETACH DATABASE the following error will be printed:",
+      "--",
+      "--     Destination table default.a_data_01870 doesn't exist. Block of data is discarded."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01870",
+      "table": "z_buffer_01870"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "db_01870"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a_data_01870"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "1e6"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "db_01870",
+      "table": "a_data_01870"
+    }
+  }
+]

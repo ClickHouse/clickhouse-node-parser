@@ -1,1 +1,451 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":215,"line":10,"column":8},"end":{"offset":216,"line":10,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02185_range_dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "start",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "end",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "02185_range_dictionary_source_table"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "02185_range_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "start",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "end",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "DefaultValue"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "02185_range_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "RANGE_HASHED",
+        "pairs": [
+          {
+            "name": "convert_null_range_bound_to_open",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "start"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "end"
+            ]
+          }
+        }
+      ],
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "02185_range_dictionary"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "02185_range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "02185_range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5001"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "02185_range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10001"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "02185_range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "02185_range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5001"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "02185_range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10001"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "02185_range_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "start",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "end",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "DefaultValue"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "02185_range_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "RANGE_HASHED",
+        "pairs": [
+          {
+            "name": "convert_null_range_bound_to_open",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "start"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "end"
+            ]
+          }
+        }
+      ],
+      "settings": null,
+      "comment": null
+    }
+  }
+]

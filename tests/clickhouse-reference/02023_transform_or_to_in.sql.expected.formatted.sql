@@ -4,7 +4,7 @@ CREATE TABLE t_transform_or
     A String
 )
 ENGINE = MergeTree
-ORDER BY A;
+ORDER BY (A);
 
 SELECT uniqMergeIf(B, (A = '1')
     OR (A = '2')

@@ -2,7 +2,7 @@ SET allow_experimental_dynamic_type = 1;
 
 CREATE TABLE test_max_types
 (
-    d Dynamic(max_types=5)
+    d Dynamic(max_types = 5)
 )
 ENGINE = Memory;
 
@@ -14,7 +14,7 @@ FROM test_max_types;
 CREATE TABLE test_nested_dynamic
 (
     d1 Dynamic,
-    d2 Dynamic(max_types=2)
+    d2 Dynamic(max_types = 2)
 )
 ENGINE = Memory;
 

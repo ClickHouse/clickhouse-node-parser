@@ -1,7 +1,7 @@
 CREATE TABLE test
 (
-    d1 Dynamic(max_types=2),
-    d2 Dynamic(max_types=2)
+    d1 Dynamic(max_types = 2),
+    d2 Dynamic(max_types = 2)
 )
 ENGINE = Memory;
 

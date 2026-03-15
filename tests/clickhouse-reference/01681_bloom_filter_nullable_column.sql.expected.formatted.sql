@@ -2,7 +2,7 @@ CREATE TABLE bloom_filter_nullable_index
 (
     order_key UInt64,
     str Nullable(String),
-    INDEX idx (str) TYPE bloom_filter GRANULARITY 1
+    INDEX idx str TYPE bloom_filter GRANULARITY 1
 )
 ENGINE = MergeTree()
 ORDER BY order_key

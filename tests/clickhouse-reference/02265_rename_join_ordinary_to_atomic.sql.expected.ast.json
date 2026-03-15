@@ -1,1 +1,98 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":102,"line":5,"column":8},"end":{"offset":103,"line":5,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "02265_atomic_db",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "02265_ordinary_db",
+    "engine": {
+      "name": "Ordinary"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "02265_ordinary_db",
+      "table": "join_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "02265_atomic_db",
+      "table": "join_table"
+    }
+  }
+]

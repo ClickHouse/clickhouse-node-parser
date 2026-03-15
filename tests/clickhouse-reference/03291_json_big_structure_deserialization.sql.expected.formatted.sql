@@ -2,7 +2,7 @@ SET enable_json_type = 1;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=0)
+    json JSON(max_dynamic_paths = 0)
 )
 ENGINE = MergeTree
 ORDER BY tuple()

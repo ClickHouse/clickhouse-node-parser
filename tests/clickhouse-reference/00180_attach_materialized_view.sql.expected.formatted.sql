@@ -1,1 +1,11 @@
-<Parse Error>
+CREATE TABLE t_00180
+(
+    x UInt8
+)
+ENGINE = Null;
+
+CREATE MATERIALIZED VIEW mv_00180
+ENGINE = Null
+AS
+SELECT *
+FROM t_00180;

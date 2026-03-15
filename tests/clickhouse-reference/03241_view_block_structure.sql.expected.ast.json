@@ -1,1 +1,201 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":76,"line":2,"column":8},"end":{"offset":77,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "to_dttm",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "vfoo"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "foo",
+                "to_dttm"
+              ]
+            },
+            "type": "DateTime64(6)"
+          },
+          "alias": "feature"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-03-26 11:35:03.620846"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              }
+            ]
+          },
+          "alias": "to_dttm"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "foo"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "vfoo"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "vfoo",
+          "to_dttm"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime64",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-03-26 11:35:03.620846"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "6"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "to_dttm_blaaaaaaaaaaaaaa",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "vfoo"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "foo",
+                "to_dttm_blaaaaaaaaaaaaaa"
+              ]
+            },
+            "type": "DateTime64(6)"
+          },
+          "alias": "feature"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-03-26 11:35:03.620846"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              }
+            ]
+          },
+          "alias": "to_dttm"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "foo"
+      }
+    }
+  }
+]

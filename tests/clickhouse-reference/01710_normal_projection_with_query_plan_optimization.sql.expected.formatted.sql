@@ -13,7 +13,7 @@ CREATE TABLE t
         id3 ASC)
 )
 ENGINE = MergeTree
-ORDER BY id
+ORDER BY (id)
 SETTINGS index_granularity = 4;
 
 SET max_rows_to_read = 4;

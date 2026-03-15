@@ -1,1 +1,226 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":223,"line":13,"column":8},"end":{"offset":224,"line":13,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1_01361"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "time"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2_01361"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "time"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv1_01361"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "t2_01361"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t1_01361"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "b1_01361"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t1_01361"
+    },
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t1_01361"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "b1_01361"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1_01361"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t2_01361"
+    }
+  }
+]

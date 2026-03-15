@@ -27,12 +27,40 @@
       {
         "kind": "columnDef",
         "name": "k",
-        "type": "LowCardinality(Nullable(UInt16))"
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt16"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "v",
-        "type": "Nullable(UInt256)"
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt256"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "indexDef",
@@ -43,7 +71,16 @@
             "v"
           ]
         },
-        "indexType": "set(100)",
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        },
         "granularity": 2
       }
     ],
@@ -52,10 +89,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "k"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
       }
     ],
     "settings": [
@@ -67,7 +106,8 @@
           "value": "1"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

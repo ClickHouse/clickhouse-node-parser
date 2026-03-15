@@ -7,7 +7,7 @@ CREATE TABLE tab
     INDEX i0 c0.c1 TYPE text(tokenizer = splitByString)
 )
 ENGINE = SummingMergeTree()
-ORDER BY id;
+ORDER BY (id);
 
 SELECT id
 FROM tab
@@ -22,7 +22,7 @@ CREATE TABLE tab
     INDEX i1 coalesce(c1.s2, '')::String TYPE text(tokenizer = splitByString)
 )
 ENGINE = SummingMergeTree()
-ORDER BY id;
+ORDER BY (id);
 
 SELECT id
 FROM tab

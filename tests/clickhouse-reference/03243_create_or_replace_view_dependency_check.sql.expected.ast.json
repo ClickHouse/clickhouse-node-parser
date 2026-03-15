@@ -1,1 +1,188 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"v","location":{"start":{"offset":61,"line":2,"column":8},"end":{"offset":62,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "v"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "v",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "v"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1000
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "v"
+    },
+    "orReplace": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          },
+          "alias": "y"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  }
+]

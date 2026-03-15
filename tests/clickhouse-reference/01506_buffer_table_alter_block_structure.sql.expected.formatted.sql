@@ -3,7 +3,7 @@ CREATE TABLE buf_dest
     timestamp DateTime
 )
 ENGINE = MergeTree
-ORDER BY timestamp
+ORDER BY (timestamp)
 PARTITION BY toYYYYMMDD(timestamp);
 
 CREATE TABLE buf

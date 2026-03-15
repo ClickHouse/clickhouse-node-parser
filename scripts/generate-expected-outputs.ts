@@ -36,12 +36,25 @@ function splitStatements(content: string): string[] {
   let current = '';
   let inSingleQuote = false;
   let inDoubleQuote = false;
+  let inBacktick = false;
+  let dollarTag: string | null = null; // non-null when inside $tag$...$tag$
   let inLineComment = false;
   let inBlockComment = false;
 
   for (let i = 0; i < content.length; i++) {
     const ch = content[i];
     const next = content[i + 1];
+
+    // Dollar-quoted strings: $tag$...$tag$ (tag may be empty, e.g. $$...$$)
+    if (dollarTag !== null) {
+      current += ch;
+      if (ch === '$' && content.substring(i, i + dollarTag.length) === dollarTag) {
+        current += content.substring(i + 1, i + dollarTag.length);
+        i += dollarTag.length - 1;
+        dollarTag = null;
+      }
+      continue;
+    }
 
     if (inLineComment) {
       current += ch;
@@ -59,7 +72,17 @@ function splitStatements(content: string): string[] {
       continue;
     }
 
-    if (!inSingleQuote && !inDoubleQuote) {
+    if (!inSingleQuote && !inDoubleQuote && !inBacktick) {
+      if (ch === '$') {
+        // Match $tag$ where tag is [a-zA-Z0-9_]* (may be empty for $$)
+        const tagMatch = content.substring(i).match(/^\$([a-zA-Z0-9_]*)\$/);
+        if (tagMatch) {
+          dollarTag = tagMatch[0];
+          current += dollarTag;
+          i += dollarTag.length - 1;
+          continue;
+        }
+      }
       if (ch === '-' && next === '-') {
         inLineComment = true;
         current += ch;
@@ -77,7 +100,15 @@ function splitStatements(content: string): string[] {
       current += ch;
       if (i + 1 < content.length) current += content[++i];
       continue;
-    } else if (ch === "'" && !inDoubleQuote) {
+    } else if (ch === '`' && !inSingleQuote && !inDoubleQuote) {
+      // Backtick-quoted identifiers: `` is an escaped backtick inside backticks.
+      if (inBacktick && next === '`') {
+        current += ch + next;
+        i++;
+        continue;
+      }
+      inBacktick = !inBacktick;
+    } else if (ch === "'" && !inDoubleQuote && !inBacktick) {
       // SQL-style '' escaped quote: stay inside the string.
       if (inSingleQuote && next === "'") {
         current += ch + next;
@@ -85,11 +116,16 @@ function splitStatements(content: string): string[] {
         continue;
       }
       inSingleQuote = !inSingleQuote;
-    } else if (ch === '"' && !inSingleQuote) {
+    } else if (ch === '"' && !inSingleQuote && !inBacktick) {
+      if (inDoubleQuote && next === '"') {
+        current += ch + next;
+        i++;
+        continue;
+      }
       inDoubleQuote = !inDoubleQuote;
     }
 
-    if (ch === ';' && !inSingleQuote && !inDoubleQuote) {
+    if (ch === ';' && !inSingleQuote && !inDoubleQuote && !inBacktick) {
       // Consume trailing whitespace and an optional inline comment so they
       // stay with this statement rather than being prepended to the next one.
       // Stop if we hit a non-whitespace, non-comment character (i.e. another
@@ -245,7 +281,7 @@ async function processFile(file: string): Promise<void> {
   // Skip if the explain file already exists.
 
   const explainPath = `${filePath}.expected.explain.txt`;
-  // if (!existsSync(explainPath)) {
+  if (!existsSync(explainPath)) {
     // Run all statements for this file concurrently (throttled by the pool).
     const explainParts = await Promise.all(statements.map(runExplain));
 
@@ -262,7 +298,7 @@ async function processFile(file: string): Promise<void> {
 
     const explainOutput = trimmedParts.join('\n\n') + (trimmedParts.length > 0 ? '\n' : '');
     writeFileSync(explainPath, explainOutput, 'utf8');
-  // }
+  }
 
   processed++;
   if (processed % 50 === 0) {

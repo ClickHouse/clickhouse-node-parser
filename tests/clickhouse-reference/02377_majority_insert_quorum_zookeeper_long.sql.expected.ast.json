@@ -1,1 +1,450 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"R","location":{"start":{"offset":462,"line":10,"column":47},"end":{"offset":463,"line":10,"column":48}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_quorum_parallel",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, zookeeper, no-replicated-database, no-shared-merge-tree, no-async-insert",
+      "-- no-replicated-database:",
+      "--   The number of replicas is doubled, so `SYSTEM STOP FETCHES` stop not enough replicas.",
+      "-- no-shared-merge-tree: no quorum inserts",
+      "--- Tag no-async-insert: async inserts are not supported with non-parallel quorum inserts"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "select_sequential_consistency",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "quorum1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_02377/quorum"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "y"
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "quorum2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_02377/quorum"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "y"
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_quorum",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "auto"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- insert_quorum = n/2 + 1 , so insert will be written to both replica"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "quorum1"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "quorum2"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "quorum1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_02377/quorum1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "y"
+      ]
+    },
+    "leadingComments": [
+      "-- Create 3 replicas and stop sync 2 replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "quorum2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_02377/quorum1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "y"
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "quorum3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_02377/quorum1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "3"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "y"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "quorum3"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError REPLICA_IS_NOT_IN_QUORUM}"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_quorum_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_quorum_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "600000"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- set default value back"
+    ]
+  }
+]

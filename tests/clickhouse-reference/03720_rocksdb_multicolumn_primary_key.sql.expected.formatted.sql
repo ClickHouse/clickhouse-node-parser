@@ -200,7 +200,7 @@ WHERE (k1, k2) = (1, '2024-01-01 00:00:00');
 
 CREATE TABLE `03720_enum`
 (
-    k1 Enum8('a'=1, 'b'=2),
+    k1 Enum8('a' = 1, 'b' = 2),
     k2 UInt32,
     val String
 )

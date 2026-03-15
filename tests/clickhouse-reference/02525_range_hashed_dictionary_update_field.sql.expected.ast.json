@@ -1,1 +1,238 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":145,"line":8,"column":8},"end":{"offset":146,"line":8,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "start",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "end",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "insert_time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "uid"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "start"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "start",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "name": "end",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "name": "insert_time",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "name": "uid",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "uid"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_table"
+            }
+          },
+          {
+            "name": "UPDATE_FIELD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "insert_time"
+            }
+          },
+          {
+            "name": "UPDATE_LAG",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 2
+      },
+      "layout": {
+        "name": "RANGE_HASHED",
+        "pairs": []
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "start"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "end"
+            ]
+          }
+        }
+      ],
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_dictionary"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "insert_time"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sleep",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "--"
+      }
+    ]
+  }
+]

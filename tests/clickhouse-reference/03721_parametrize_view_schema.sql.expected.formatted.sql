@@ -1,1 +1,33 @@
-<Parse Error>
+SET enable_analyzer = 1;
+
+CREATE VIEW `03271_parametrized_v`
+AS
+SELECT number AS n
+FROM numbers({upper_bound:UInt64});
+
+CREATE VIEW `03271_parametrized_v_expl` (n UInt64)
+AS
+SELECT number AS n
+FROM numbers({upper_bound:UInt64});
+
+SELECT *
+FROM `system`.`columns`
+WHERE table = '03271_parametrized_v'
+    AND database = currentDatabase();
+
+SELECT *
+FROM `system`.`columns`
+WHERE table = '03271_parametrized_v_expl'
+    AND database = currentDatabase();
+
+-- Mismatched schema: should return error on query tree building
+CREATE VIEW `03271_parametrized_v_expl_mismatch` (n UInt64, s String)
+AS
+SELECT number AS n
+FROM numbers({upper_bound:UInt64});
+
+SELECT *
+FROM 03271_parametrized_v_expl_mismatch(upper_bound = 3); -- { serverError TYPE_MISMATCH }
+
+SELECT *
+FROM 03271_parametrized_v_expl(upper_bound = 3);

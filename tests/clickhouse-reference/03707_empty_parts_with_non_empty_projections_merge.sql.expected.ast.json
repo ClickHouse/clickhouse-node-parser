@@ -1,1 +1,103 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":76,"line":1,"column":77},"end":{"offset":77,"line":1,"column":78}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "proj",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "min",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "ttl": [
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalSecond",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "remove_empty_parts",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "merge_with_ttl_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "deduplicate_merge_projection_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "ignore"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  }
+]

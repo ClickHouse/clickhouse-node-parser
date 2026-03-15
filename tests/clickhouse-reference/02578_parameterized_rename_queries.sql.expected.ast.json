@@ -1,1 +1,261 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":76,"line":3,"column":8},"end":{"offset":77,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_old_db_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_db"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_new_db_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_db1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{old_db_name:Identifier}"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "databases"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "queryParam",
+        "name": "new_db_name",
+        "type": "String"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_old_tbl_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_t"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_new_tbl_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_t1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{new_db_name:Identifier}",
+      "table": "{old_tbl_name:Identifier}"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "queryParam",
+        "name": "new_tbl_name",
+        "type": "String"
+      }
+    },
+    "leadingComments": [
+      "-- NOTE: no 'database = currentDatabase()' on purpose"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_old_dict_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_d"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_new_dict_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_d1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "{new_db_name:Identifier}",
+      "table": "{old_dict_name:Identifier}"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "val",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "null",
+        "pairs": []
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dictionaries"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "queryParam",
+        "name": "new_dict_name",
+        "type": "String"
+      }
+    }
+  }
+]

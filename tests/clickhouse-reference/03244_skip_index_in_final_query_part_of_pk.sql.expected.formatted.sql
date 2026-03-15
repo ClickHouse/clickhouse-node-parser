@@ -41,7 +41,7 @@ CREATE TABLE t0
     INDEX i1 c0 TYPE set(0)
 )
 ENGINE = SummingMergeTree()
-ORDER BY c0
+ORDER BY (c0)
 PARTITION BY (c0);
 
 SELECT rank() OVER ()

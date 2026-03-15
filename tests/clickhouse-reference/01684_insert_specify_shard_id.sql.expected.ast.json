@@ -1,1 +1,164 @@
-{"expected":[{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"O","location":{"start":{"offset":52,"line":1,"column":53},"end":{"offset":53,"line":1,"column":54}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "y"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x_dist"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "y_dist"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "y"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards_localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "x_dist"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "y_dist"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

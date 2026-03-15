@@ -1,1 +1,225 @@
-{"expected":[{"type":"literal","text":"NOT","ignoreCase":true},{"type":"literal","text":"NULL","ignoreCase":true},{"type":"literal","text":"DEFAULT","ignoreCase":true},{"type":"literal","text":"MATERIALIZED","ignoreCase":true},{"type":"literal","text":"ALIAS","ignoreCase":true},{"type":"literal","text":"EPHEMERAL","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"CODEC","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":")","ignoreCase":false}],"found":"S","location":{"start":{"offset":212,"line":9,"column":14},"end":{"offset":213,"line":9,"column":15}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- no-fasttest: 'countmin' sketches need a 3rd party library"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_alter_auto_statistics"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/t_alter_auto_statistics"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "statistics"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "estimates",
+          "cardinality"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "estimates",
+          "min"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "estimates",
+          "max"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "parts_columns"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "t_alter_auto_statistics"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "active"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "column"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

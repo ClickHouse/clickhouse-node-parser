@@ -1,1 +1,19 @@
-<Parse Error>
+CREATE OR REPLACE TEMPORARY TABLE tmp
+(
+    n UInt32
+) AS
+SELECT *
+FROM numbers(10);
+
+SELECT *
+FROM tmp;
+
+CREATE OR REPLACE TEMPORARY TABLE tmp
+(
+    n UInt32,
+    s String
+) AS
+SELECT
+    number,
+    'a'
+FROM numbers(10);

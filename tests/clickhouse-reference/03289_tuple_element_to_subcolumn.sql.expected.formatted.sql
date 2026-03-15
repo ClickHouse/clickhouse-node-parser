@@ -2,12 +2,8 @@ SET enable_variant_type = 1;
 
 CREATE TABLE t_tuple_elem
 (
-    t1 Tuple(
-        a Array(UInt64),
-        b Array(LowCardinality(String))),
-    v Variant(
-        Array(UInt64),
-        Array(LowCardinality(String)))
+    t1 Tuple(a Array(UInt64), b Array(LowCardinality(String))),
+    v Variant(Array(UInt64), Array(LowCardinality(String)))
 )
 ENGINE = MergeTree
 ORDER BY tuple();

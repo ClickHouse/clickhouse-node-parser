@@ -29,7 +29,7 @@ CREATE TABLE t_light
     a int,
     b int,
     c int,
-    INDEX i_c (b) TYPE minmax GRANULARITY 4
+    INDEX i_c b TYPE minmax GRANULARITY 4
 )
 ENGINE = MergeTree
 ORDER BY a

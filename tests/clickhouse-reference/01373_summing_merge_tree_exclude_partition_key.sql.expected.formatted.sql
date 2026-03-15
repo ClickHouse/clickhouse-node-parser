@@ -7,7 +7,7 @@ CREATE TABLE tt_01373
     val Int64
 )
 ENGINE = SummingMergeTree
-ORDER BY d
+ORDER BY (d)
 PARTITION BY (a)
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
@@ -40,7 +40,7 @@ CREATE TABLE tt_01373_expr
     val Int64
 )
 ENGINE = SummingMergeTree
-ORDER BY d + 0
+ORDER BY (d + 0)
 PARTITION BY (a % 2);
 
 SELECT

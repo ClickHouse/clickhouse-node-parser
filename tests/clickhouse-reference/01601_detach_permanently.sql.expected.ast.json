@@ -1,1 +1,189 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":72,"line":4,"column":8},"end":{"offset":73,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel, log-engine"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test1601_detach_permanently_atomic",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_rename_attempt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "-----------------------"
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test1601_detach_permanently_ordinary",
+    "engine": {
+      "name": "Ordinary"
+    },
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_reuse"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_rename_attempt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  }
+]

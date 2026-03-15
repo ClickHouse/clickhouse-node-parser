@@ -7,7 +7,7 @@ SET output_format_native_write_json_as_string = 0;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=4)
+    json JSON(max_dynamic_paths = 4)
 )
 ENGINE = Memory;
 
@@ -58,7 +58,7 @@ SET max_threads = 1;
 CREATE TABLE test
 (
     id UInt64,
-    json JSON(max_dynamic_paths=4)
+    json JSON(max_dynamic_paths = 4)
 )
 ENGINE = MergeTree
 ORDER BY id

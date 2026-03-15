@@ -6,7 +6,7 @@ SET allow_dynamic_type_in_join_keys = 1;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_types=1)
+    json JSON(max_dynamic_types = 1)
 )
 ENGINE = Memory;
 

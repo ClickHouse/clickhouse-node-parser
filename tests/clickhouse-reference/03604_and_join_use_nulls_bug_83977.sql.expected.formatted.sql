@@ -4,7 +4,7 @@ CREATE TABLE AA
     value Int64
 )
 ENGINE = MergeTree
-ORDER BY key;
+ORDER BY (key);
 
 CREATE TABLE B
 (
@@ -12,14 +12,14 @@ CREATE TABLE B
     flag Bool
 )
 ENGINE = MergeTree
-ORDER BY key;
+ORDER BY (key);
 
 CREATE TABLE C
 (
     key String
 )
 ENGINE = MergeTree
-ORDER BY key;
+ORDER BY (key);
 
 SELECT flag
     AND value <= 10

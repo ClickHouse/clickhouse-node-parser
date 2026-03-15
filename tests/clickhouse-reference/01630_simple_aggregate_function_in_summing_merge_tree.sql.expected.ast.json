@@ -1,1 +1,323 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"S","location":{"start":{"offset":181,"line":1,"column":182},"end":{"offset":182,"line":1,"column":183}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_smt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sMap",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sumMap"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "UInt8"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "aMap",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sumMap"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "UInt8"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "tuple",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sumMap",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "sMap"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumMapMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "aMap"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_smt"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple_agf_summing_mt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "grp_aggreg",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupUniqArrayArray"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "grp_simple",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupUniqArrayArray"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "groupUniqArrayArrayMerge",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "grp_aggreg"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "gra"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "groupUniqArrayArray",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "grp_simple"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "grs"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "simple_agf_summing_mt"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      ]
+    }
+  }
+]

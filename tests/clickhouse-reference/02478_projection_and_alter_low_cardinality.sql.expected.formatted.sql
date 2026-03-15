@@ -10,8 +10,8 @@ CREATE TABLE testing
     ORDER BY d ASC)
 )
 ENGINE = MergeTree()
-ORDER BY (a, b)
 PRIMARY KEY a
+ORDER BY (a, b)
 SETTINGS index_granularity = 8192, index_granularity_bytes = 0, min_bytes_for_wide_part = 0;
 
 SELECT *

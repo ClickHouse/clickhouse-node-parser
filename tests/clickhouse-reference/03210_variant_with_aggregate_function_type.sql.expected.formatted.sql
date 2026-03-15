@@ -14,7 +14,7 @@ CREATE TABLE test_agg_variant
     Value Variant(AggregateFunction(uniqExact, Int64), AggregateFunction(avg, Int64))
 )
 ENGINE = MergeTree
-ORDER BY Name;
+ORDER BY (Name);
 
 SELECT
     Name,

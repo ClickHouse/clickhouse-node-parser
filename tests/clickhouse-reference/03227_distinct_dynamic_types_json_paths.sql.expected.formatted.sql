@@ -11,7 +11,7 @@ SET max_block_size = 10000;
 
 CREATE TABLE test_json_dynamic_aggregate_functions
 (
-    json JSON(a1 String, max_dynamic_paths=2, max_dynamic_types=2)
+    json JSON(a1 String, max_dynamic_paths = 2, max_dynamic_types = 2)
 )
 ENGINE = Memory;
 

@@ -6,7 +6,7 @@ SET min_bytes_to_use_direct_io = 1;
 CREATE TABLE test
 (
     id UInt64,
-    json JSON(max_dynamic_paths=4)
+    json JSON(max_dynamic_paths = 4)
 )
 ENGINE = MergeTree
 ORDER BY id

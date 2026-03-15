@@ -1,1 +1,83 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"L","location":{"start":{"offset":35,"line":1,"column":36},"end":{"offset":36,"line":1,"column":37}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_dist"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "t_local"
+        },
+        {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_foreground_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

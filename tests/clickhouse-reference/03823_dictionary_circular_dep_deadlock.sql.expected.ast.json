@@ -1,1 +1,117 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":326,"line":6,"column":8},"end":{"offset":327,"line":6,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "d1"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Test for https://github.com/ClickHouse/ClickHouse/issues/78360",
+      "-- A HASHED dictionary that references itself through a Merge table should not deadlock.",
+      "-- Previously this would hang forever; now it should produce an error about circular dependency."
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "d1"
+    },
+    "dictAttrs": [
+      {
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ],
+          "parenthesized": true
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "DB",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "t0"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 1
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "d1"
+    },
+    "trailingComments": [
+      "-- { serverError DEADLOCK_AVOIDED }"
+    ]
+  }
+]

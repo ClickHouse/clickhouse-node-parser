@@ -1,1 +1,282 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "db_01526"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01526",
+      "table": "table_for_dict1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "second_column",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "third_column",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "second_column"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01526",
+      "table": "dict1"
+    },
+    "dictAttrs": [
+      {
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "second_column",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "third_column",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "qqq"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "second_column"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_for_dict1"
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "db_01526"
+            }
+          }
+        ]
+      },
+      "lifetime": null,
+      "layout": {
+        "name": "COMPLEX_KEY_DIRECT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "db_01526.dict1"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "third_column"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ],
+            "source": "(number, number + 1)"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "db_01526.dict1"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ]
+              }
+            ],
+            "source": "(toUInt64(1), toUInt64(3))"
+          }
+        ]
+      }
+    ]
+  }
+]

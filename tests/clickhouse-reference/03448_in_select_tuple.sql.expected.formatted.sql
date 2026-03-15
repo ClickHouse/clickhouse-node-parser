@@ -4,7 +4,7 @@ CREATE TABLE table1
     id2 UInt8
 )
 ENGINE = MergeTree
-ORDER BY id1 AS
+ORDER BY (id1) AS
 SELECT
     1,
     1;

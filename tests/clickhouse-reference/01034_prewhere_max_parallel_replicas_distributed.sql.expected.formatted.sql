@@ -5,7 +5,7 @@ CREATE TABLE test_max_parallel_replicas_lr
     timestamp UInt64
 )
 ENGINE = MergeTree
-ORDER BY intHash32(timestamp)
+ORDER BY (intHash32(timestamp))
 SAMPLE BY intHash32(timestamp);
 
 SET enable_parallel_replicas = 1;

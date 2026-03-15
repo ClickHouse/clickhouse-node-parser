@@ -1,6 +1,6 @@
 CREATE TABLE t0
 (
-    c0 Map(Int,Int),
+    c0 Map(Int, Int),
     c1 Nullable(BFloat16)
 )
 ENGINE = MergeTree()

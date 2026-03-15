@@ -29,37 +29,29 @@ SELECT CAST($$['Hello', 'wo\'rld\\']$$ AS Array(String));
 -- While for simple data types, it does not interpret escape sequences:
 
 SELECT arrayJoin(CAST($$['Hello', 'wo\'rld\\']$$ AS Array(String))) AS x, CAST($$wo\'rld\\$$ AS FixedString(9)) AS y;
-
 -- As conversion from String is similar to direct parsing rather than conversion from other types,
 -- it can be stricter for numbers by not tolerating overflows in some cases:
 
 SELECT CAST(-123 AS UInt8), CAST(1234 AS UInt8);
-
 SELECT CAST('-123' AS UInt8); -- { serverError CANNOT_PARSE_NUMBER }
-
 -- In some cases it still allows overflows, but it is implementation defined:
 
 SELECT CAST('1234' AS UInt8);
-
 -- Parsing from a string does not tolerate extra whitespace characters:
 
 SELECT CAST(' 123' AS UInt8); -- { serverError CANNOT_PARSE_TEXT }
 SELECT CAST('123 ' AS UInt8); -- { serverError CANNOT_PARSE_TEXT }
-
 -- But for composite data types, it involves a more featured parser, that takes care of whitespace inside the data structures:
 
 SELECT CAST('[ 123 ,456, ]' AS Array(UInt16));
-
 -- Conversion from a floating point value to an integer will involve truncation towards zero:
 
 SELECT CAST(1.9, 'Int64'), CAST(-1.9, 'Int64');
-
 -- Conversion from NULL into a non-Nullable type will throw an exception, as well as conversions from denormal floating point numbers (NaN, inf, -inf) to an integer, or conversion between arrays of different dimensions.
 
 -- However, you might find it amusing that an empty array of Nothing data type can be converted to arrays of any dimensions:
 
 SELECT [] AS x, CAST(x AS Array(Array(Array(Tuple(UInt64, String))))) AS y, toTypeName(x), toTypeName(y);
-
 -- Conversion between numbers and DateTime/Date data types interprets the number as the number of seconds/days from the Unix epoch,
 -- where Unix epoch starts from 1970-01-01T00:00:00Z (the midnight of Gregorian year 1970 in UTC),
 -- and the number of seconds don't count the coordination seconds, as in Unix.

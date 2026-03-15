@@ -534,8 +534,8 @@ SELECT
 
 CREATE TABLE test
 (
-    json1 JSON(max_dynamic_paths=2, a UInt32),
-    json2 JSON(max_dynamic_paths=2, a UInt32)
+    json1 JSON(max_dynamic_paths = 2, a UInt32),
+    json2 JSON(max_dynamic_paths = 2, a UInt32)
 )
 ENGINE = Memory;
 

@@ -1,1 +1,321 @@
-{"expected":[{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true}],"found":"t","location":{"start":{"offset":97,"line":3,"column":34},"end":{"offset":98,"line":3,"column":35}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "asTableFunction": {
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "v"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    },
+    "leadingComments": [
+      "-- view"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "v"
+    },
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE_1:Identifier}"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+      "table": "dict_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.1"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dict_data"
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "_1"
+                }
+              ]
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "SPARSE_HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  }
+]

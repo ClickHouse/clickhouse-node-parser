@@ -3,14 +3,14 @@ CREATE TABLE local_table_1
     id String
 )
 ENGINE = MergeTree
-ORDER BY id;
+ORDER BY (id);
 
 CREATE TABLE local_table_2
 (
     id String
 )
 ENGINE = MergeTree
-ORDER BY id;
+ORDER BY (id);
 
 CREATE TABLE local_table_merged
 (

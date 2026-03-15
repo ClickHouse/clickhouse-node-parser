@@ -1,1 +1,115 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":62,"line":3,"column":32},"end":{"offset":63,"line":3,"column":33}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a_table",
+            "a"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b_table",
+            "b_arr"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "range",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10000"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "alias": "a"
+              }
+            ]
+          },
+          "alias": "a_table"
+        },
+        "kind": "join",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10000"
+                    }
+                  ]
+                },
+                "alias": "b_arr"
+              }
+            ]
+          },
+          "alias": "b_table"
+        }
+      },
+      "settings": [
+        {
+          "name": "max_memory_usage",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-ordinary-database"
+    ],
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
+    ]
+  }
+]

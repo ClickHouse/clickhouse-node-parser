@@ -1,1 +1,174 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":98,"line":4,"column":10},"end":{"offset":99,"line":4,"column":11}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "testTable"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "A"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "testView"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "A"
+            ]
+          },
+          "alias": "ALow",
+          "trailingComments": [
+            "-- like account"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "B"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "testTable"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ALow"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "String"
+            }
+          ]
+        },
+        "alias": "AStr"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "testView"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "AStr"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "AStr"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "testTable"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "A"
+          ]
+        }
+      }
+    ]
+  }
+]

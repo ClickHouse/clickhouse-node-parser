@@ -1,1 +1,228 @@
-<Parse Error>
+-- Tags: no-parallel-replicas, no-azure-blob-storage
+-- Tests that text indexes can be build on and used with Array columns.
+SET enable_analyzer = 1;
+
+SET enable_full_text_index = 1;
+
+CREATE TABLE tab
+(
+    id UInt32,
+    arr Array(String),
+    arr_fixed Array(FixedString(3)),
+    INDEX array_idx arr TYPE text(tokenizer = 'splitByNonAlpha'),
+    INDEX array_fixed_idx arr_fixed TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE = MergeTree()
+ORDER BY (id)
+SETTINGS index_granularity = 1;
+
+SELECT '-- with String';
+
+SELECT count()
+FROM tab
+WHERE has(arr, 'foo');
+
+SELECT count()
+FROM tab
+WHERE has(arr, 'bar');
+
+SELECT count()
+FROM tab
+WHERE has(arr, 'baz');
+
+SELECT count()
+FROM tab
+WHERE has(arr, 'def');
+
+SELECT count()
+FROM tab
+WHERE has(arr_fixed, toFixedString('foo', 3));
+
+SELECT count()
+FROM tab
+WHERE has(arr_fixed, toFixedString('bar', 3));
+
+SELECT count()
+FROM tab
+WHERE has(arr_fixed, toFixedString('baz', 3));
+
+SELECT count()
+FROM tab
+WHERE has(arr_fixed, toFixedString('def', 3));
+
+CREATE VIEW explain_index_has
+AS
+(SELECT trimLeft(`explain`) AS `explain`
+FROM (
+        EXPLAIN indexes = 1
+        SELECT count()
+        FROM tab
+        WHERE (multiIf({use_idx_fixed:boolean} = 1, has(arr_fixed, {filter:FixedString(3)}), has(arr, {filter:String})))
+    )
+WHERE like(`explain`, '%Description:%')
+    OR like(`explain`, '%Granules:%')
+LIMIT 1, 2);
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 0, filter = 'abc');
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 0, filter = 'baz');
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 0, filter = 'foo');
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 0, filter = 'bar');
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 0, filter = 'def');
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 1, filter = toFixedString('abc', 3));
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 1, filter = toFixedString('baz', 3));
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 1, filter = toFixedString('foo', 3));
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 1, filter = toFixedString('bar', 3));
+
+SELECT *
+FROM explain_index_has(use_idx_fixed = 1, filter = toFixedString('def', 3));
+
+SELECT count()
+FROM tab
+WHERE hasAnyTokens(arr, 'foo');
+
+SELECT count()
+FROM tab
+WHERE hasAnyTokens(arr, 'bar');
+
+SELECT count()
+FROM tab
+WHERE hasAnyTokens(arr, 'foo bar');
+
+SELECT count()
+FROM tab
+WHERE hasAnyTokens(arr_fixed, 'foo');
+
+SELECT count()
+FROM tab
+WHERE hasAnyTokens(arr_fixed, 'bar');
+
+SELECT count()
+FROM tab
+WHERE hasAnyTokens(arr_fixed, 'foo bar');
+
+CREATE VIEW explain_index_has_any_tokens
+AS
+(SELECT trimLeft(`explain`) AS `explain`
+FROM (
+        EXPLAIN indexes = 1
+        SELECT count()
+        FROM tab
+        WHERE (multiIf({use_idx_fixed:boolean} = 1, hasAnyTokens(arr_fixed, {filter:String}), hasAnyTokens(arr, {filter:String})))
+    )
+WHERE like(`explain`, '%Description:%')
+    OR like(`explain`, '%Granules:%')
+LIMIT 1, 2);
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 0, filter = 'abc');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 0, filter = 'baz');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 0, filter = 'foo');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 0, filter = 'foo bar');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 0, filter = 'def');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 1, filter = 'abc');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 1, filter = 'baz');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 1, filter = 'foo');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 1, filter = 'foo bar');
+
+SELECT *
+FROM explain_index_has_any_tokens(use_idx_fixed = 1, filter = 'def');
+
+SELECT count()
+FROM tab
+WHERE hasAllTokens(arr, 'foo');
+
+SELECT count()
+FROM tab
+WHERE hasAllTokens(arr, 'bar');
+
+SELECT count()
+FROM tab
+WHERE hasAllTokens(arr, 'foo bar');
+
+SELECT count()
+FROM tab
+WHERE hasAllTokens(arr_fixed, 'foo');
+
+SELECT count()
+FROM tab
+WHERE hasAllTokens(arr_fixed, 'bar');
+
+SELECT count()
+FROM tab
+WHERE hasAllTokens(arr_fixed, 'foo bar');
+
+CREATE VIEW explain_index_has_all_tokens
+AS
+(SELECT trimLeft(`explain`) AS `explain`
+FROM (
+        EXPLAIN indexes = 1
+        SELECT count()
+        FROM tab
+        WHERE (multiIf({use_idx_fixed:boolean} = 1, hasAllTokens(arr_fixed, {filter:String}), hasAllTokens(arr, {filter:String})))
+    )
+WHERE like(`explain`, '%Description:%')
+    OR like(`explain`, '%Granules:%')
+LIMIT 1, 2);
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 0, filter = 'abc');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 0, filter = 'baz');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 0, filter = 'foo');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 0, filter = 'foo bar');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 0, filter = 'def');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'abc');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'baz');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'foo');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'foo bar');
+
+SELECT *
+FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'def');

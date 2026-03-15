@@ -1,1 +1,377 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":659,"line":17,"column":8},"end":{"offset":660,"line":17,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_named_columns_in_function_tuple",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "apply",
+            "func": {
+              "kind": "columnRef",
+              "parts": [
+                "finalizeAggregation"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "expr",
+            "name": "nt",
+            "expr": {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "tuple",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ],
+                "source": "(1, 2)"
+              },
+              "type": "Tuple(a int, b int)",
+              "operator": true
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "uniqState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "nt"
+                    ]
+                  }
+                ]
+              },
+              "type": "AggregateFunction(uniq, Tuple(int, int))",
+              "operator": true
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "uniqState",
+                "args": [
+                  {
+                    "kind": "array",
+                    "elements": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "nt"
+                        ]
+                      }
+                    ],
+                    "source": "[nt]"
+                  }
+                ]
+              },
+              "type": "AggregateFunction(uniq, Array(Tuple(int, int)))",
+              "operator": true
+            },
+            "alias": "y"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "uniqState",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "map",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "nt"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "nt"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": "AggregateFunction(uniq, Map(Tuple(int, int), Tuple(int, int)))",
+              "operator": true
+            },
+            "alias": "z"
+          }
+        ]
+      }
+    },
+    "format": "JSONEachRow"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "city",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "city_name_uniq",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "uniq"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "users2"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "uniqState",
+            "args": [
+              {
+                "kind": "tuple",
+                "elements": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "city"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "name"
+                    ]
+                  }
+                ],
+                "source": "(city, name)"
+              }
+            ]
+          },
+          "alias": "city_name_uniq"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "users"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "uniqMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "city_name_uniq"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "users2"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

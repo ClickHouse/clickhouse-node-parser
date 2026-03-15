@@ -1,1 +1,1104 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":1411,"line":58,"column":8},"end":{"offset":1412,"line":58,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "uk_price_paid"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Table",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Engine",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "price",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "postcode1",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "postcode2",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "type",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "terraced",
+                  "value": "1"
+                },
+                {
+                  "name": "semi-detached",
+                  "value": "2"
+                },
+                {
+                  "name": "detached",
+                  "value": "3"
+                },
+                {
+                  "name": "flat",
+                  "value": "4"
+                },
+                {
+                  "name": "other",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_new",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "duration",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "freehold",
+                  "value": "1"
+                },
+                {
+                  "name": "leasehold",
+                  "value": "2"
+                },
+                {
+                  "name": "unknown",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "addr1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "addr2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "street",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "locality",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "town",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "district",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "county",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "county_index",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "county"
+          ]
+        },
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        },
+        "granularity": 1
+      },
+      {
+        "kind": "projectionDef",
+        "name": "town_date_projection",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "town"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "price"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "town"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "date"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "handy_aggs_projection",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "avg",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                }
+              ]
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "town"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "postcode1"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "postcode2"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Create tables, views, dictionaries"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "prices_by_year_dest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Table",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Engine",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "price",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "addr1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "addr2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "street",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "town",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "district",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "county",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "town"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "date"
+        ]
+      }
+    ],
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYear",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "prices_by_year_view"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "prices_by_year_dest"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "price"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "addr1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "addr2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "street"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "town"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "district"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "county"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "uk_price_paid"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "uk_prices_aggs_dest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "month",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "min_price",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "min"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "max_price",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "max"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "volume",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "count"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "avg_price",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "avg"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree"
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "month"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "uk_prices_aggs_view"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "uk_prices_aggs_dest"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "expr",
+          "name": "month",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toStartOfMonth",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "date"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "month"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "minSimpleState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "price"
+                ]
+              }
+            ]
+          },
+          "alias": "min_price"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxSimpleState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "price"
+                ]
+              }
+            ]
+          },
+          "alias": "max_price"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "countState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "price"
+                ]
+              }
+            ]
+          },
+          "alias": "volume"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "avgState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "price"
+                ]
+              }
+            ]
+          },
+          "alias": "avg_price"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "uk_price_paid"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "month"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "uk_mortgage_rates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "DateTime64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "variable",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "fixed",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "bank",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "uk_mortgage_rates_dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "date",
+        "type": {
+          "name": "DateTime64"
+        }
+      },
+      {
+        "name": "variable",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "name": "fixed",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "name": "bank",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "uk_mortgage_rates"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 2628000000
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: default",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with default settings"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: always & Backticks",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='always', show_create_query_identifier_quoting_style='Backticks'"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: user_display & Backticks",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='user_display', show_create_query_identifier_quoting_style='Backticks'"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: when_necessary & Backticks",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='when_necessary', show_create_query_identifier_quoting_style='Backticks'"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: always & DoubleQuotes",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='always', show_create_query_identifier_quoting_style='DoubleQuotes'"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: user_display & DoubleQuotes",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='user_display', show_create_query_identifier_quoting_style='DoubleQuotes'"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: when_necessary & DoubleQuotes",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='when_necessary', show_create_query_identifier_quoting_style='DoubleQuotes'"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: always & BackticksMySQL",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='always', show_create_query_identifier_quoting_style='BackticksMySQL'"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: user_display & BackticksMySQL",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='user_display', show_create_query_identifier_quoting_style='BackticksMySQL'"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "Settings: when_necessary & BackticksMySQL",
+        "parenthesized": true
+      }
+    ],
+    "leadingComments": [
+      "-- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='when_necessary', show_create_query_identifier_quoting_style='BackticksMySQL'"
+    ]
+  }
+]

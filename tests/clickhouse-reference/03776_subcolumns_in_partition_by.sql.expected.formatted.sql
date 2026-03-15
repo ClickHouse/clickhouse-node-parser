@@ -21,7 +21,7 @@ CREATE TABLE test
     c2 Int
 )
 ENGINE = MergeTree()
-ORDER BY c1
+ORDER BY (c1)
 PARTITION BY (c0.`null`);
 
 SELECT *

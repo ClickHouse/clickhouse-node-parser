@@ -1,1 +1,186 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "audit_size_column"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "formatReadableSize",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "size"
+                ]
+              }
+            ]
+          },
+          "alias": "formatted"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "column_bytes_on_disk"
+                ]
+              }
+            ]
+          },
+          "alias": "size"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "column"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "table"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "database"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "parts_columns"
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "active"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "naryExpr",
+            "op": "OR",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "database"
+                  ]
+                },
+                "right": {
+                  "kind": "queryParam",
+                  "name": "db",
+                  "type": "String"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "database"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                }
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "table"
+                ]
+              },
+              {
+                "kind": "queryParam",
+                "name": "table",
+                "type": "String"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "column"
+                ]
+              },
+              {
+                "kind": "queryParam",
+                "name": "column",
+                "type": "String"
+              }
+            ],
+            "parenthesized": true
+          }
+        ]
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "column"
+            ]
+          }
+        ]
+      }
+    }
+  }
+]

@@ -1,1 +1,744 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":140,"line":2,"column":8},"end":{"offset":141,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "test_table_01080"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dim_key",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dim_id",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "dim_key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "test_dict_01080"
+    },
+    "dictAttrs": [
+      {
+        "name": "dim_key",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "name": "dim_id",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dim_key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "host",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "port",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "user",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "password",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "db",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          },
+          {
+            "name": "table",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_table_01080"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 0
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toInt64",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ],
+        "from": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toInt64",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "rand64",
+                        "args": []
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toInt64",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "blockSize",
+                        "args": []
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toInt64",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "materialize",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "0"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetString",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "String"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".test_dict_01080"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dim_id"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toInt64",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "materialize",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ]
+      }
+    }
+  }
+]

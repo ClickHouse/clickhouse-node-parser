@@ -6,7 +6,7 @@ CREATE TABLE tab
     key String,
     value Nullable(String),
     sign Int8,
-    INDEX idx_key (key) TYPE text(tokenizer = 'splitByNonAlpha')
+    INDEX idx_key key TYPE text(tokenizer = 'splitByNonAlpha')
 )
 ENGINE = CollapsingMergeTree(sign)
 ORDER BY id;

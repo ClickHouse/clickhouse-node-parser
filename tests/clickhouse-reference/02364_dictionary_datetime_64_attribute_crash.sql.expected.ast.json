@@ -1,1 +1,193 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":126,"line":2,"column":8},"end":{"offset":127,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dat"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "blockNum",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "eventTimestamp",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "9"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "eventTimestamp"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "datDictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "blockNum",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      {
+        "name": "eventTimestamp",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "9"
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "blockNum"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dat"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1000
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "eventTimestamp"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "datDictionary"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dat"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "eventTimestamp"
+        ]
+      },
+      "right": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "eventTimestamp"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "datDictionary"
+          }
+        }
+      }
+    }
+  }
+]

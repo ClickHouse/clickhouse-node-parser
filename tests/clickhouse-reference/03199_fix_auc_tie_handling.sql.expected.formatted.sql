@@ -5,8 +5,8 @@ CREATE TABLE labels_unordered
     label Int64
 )
 ENGINE = MergeTree
-ORDER BY idx
-PRIMARY KEY idx;
+PRIMARY KEY idx
+ORDER BY idx;
 
 SELECT floor(arrayAUC(array_concat_agg([score]), array_concat_agg([label])), 5)
 FROM labels_unordered;
@@ -18,8 +18,8 @@ CREATE TABLE labels_ordered
     label Int64
 )
 ENGINE = MergeTree
-ORDER BY idx
-PRIMARY KEY idx;
+PRIMARY KEY idx
+ORDER BY idx;
 
 SELECT floor(arrayAUC(array_concat_agg([score]), array_concat_agg([label])), 5)
 FROM labels_ordered;

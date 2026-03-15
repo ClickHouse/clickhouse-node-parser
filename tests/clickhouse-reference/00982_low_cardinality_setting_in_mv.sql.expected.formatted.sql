@@ -1,1 +1,19 @@
-<Parse Error>
+CREATE TABLE test1
+(
+    a LowCardinality(String)
+)
+ENGINE = MergeTree()
+ORDER BY a;
+
+CREATE TABLE test2
+(
+    a UInt64
+)
+ENGINE = MergeTree()
+ORDER BY a;
+
+CREATE MATERIALIZED VIEW test_mv
+TO test2
+AS
+SELECT toUInt64(a = 'test') AS a
+FROM test1;

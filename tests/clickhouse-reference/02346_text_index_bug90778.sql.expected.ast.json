@@ -25,7 +25,17 @@
       {
         "kind": "columnDef",
         "name": "col",
-        "type": "LowCardinality(String)"
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "indexDef",
@@ -36,7 +46,26 @@
             "col"
           ]
         },
-        "indexType": "text(tokenizer='array')"
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "array"
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -44,9 +73,11 @@
     },
     "orderBy": [
       {
-        "kind": "functionCall",
-        "name": "tuple",
-        "args": []
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
       }
     ]
   },

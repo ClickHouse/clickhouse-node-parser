@@ -1,1 +1,193 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"m","location":{"start":{"offset":414,"line":9,"column":8},"end":{"offset":415,"line":9,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel, no-replicated-database",
+      "-- Tag no-parallel: due to attaching to system.query_log",
+      "-- Tag no-replicated-database: Replicated database will has extra queries",
+      "-- Attach MV to system.query_log and check that writing query_log will not fail"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "log_proxy_02572"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_shard_localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "receiver_02572"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "push_to_logs_proxy_mv_02572"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "log_proxy_02572"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "query_log"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "query"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\\n"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\\\\n"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lower",
+        "args": [
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "type"
+              ]
+            },
+            "type": "String",
+            "operator": true
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "errorCodeToName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "exception_code"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "current_database"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "currentDatabase",
+        "args": []
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_time_microseconds"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "CSV",
+    "leadingComments": [
+      "-- lower() to pass through clickhouse-test \"exception\" check"
+    ]
+  }
+]

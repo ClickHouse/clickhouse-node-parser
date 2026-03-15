@@ -4,8 +4,8 @@ CREATE TABLE prd_bid_events_simple_no_partition
     timestamp DateTime64(9)
 )
 ENGINE = MergeTree()
-ORDER BY (timestamp, type)
-PRIMARY KEY (timestamp, type);
+PRIMARY KEY (timestamp, type)
+ORDER BY (timestamp, type);
 
 SELECT
     type,

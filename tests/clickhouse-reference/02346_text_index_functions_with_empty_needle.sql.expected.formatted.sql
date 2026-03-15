@@ -8,10 +8,10 @@ CREATE TABLE tab
 (
     id Int,
     text String,
-    INDEX idx_text (text) TYPE text(tokenizer = 'splitByNonAlpha')
+    INDEX idx_text text TYPE text(tokenizer = 'splitByNonAlpha')
 )
 ENGINE = MergeTree()
-ORDER BY id;
+ORDER BY (id);
 
 SELECT '-- Plain text index search functions';
 

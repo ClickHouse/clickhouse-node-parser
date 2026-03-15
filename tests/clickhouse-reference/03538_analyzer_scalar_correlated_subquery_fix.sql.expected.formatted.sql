@@ -14,7 +14,7 @@ CREATE TABLE lineitem
 (
     l_partkey Int32,
     l_suppkey Int32,
-    l_quantity Decimal(15,2)
+    l_quantity Decimal(15, 2)
 )
 ORDER BY tuple();
 

@@ -9,7 +9,7 @@ CREATE TABLE TESTTABLE4
     l String
 )
 ENGINE = MergeTree()
-ORDER BY _id
+ORDER BY (_id)
 PARTITION BY (pt);
 
 SELECT _id

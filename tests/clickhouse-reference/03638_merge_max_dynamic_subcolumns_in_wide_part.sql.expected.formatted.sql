@@ -1,6 +1,6 @@
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=4)
+    json JSON(max_dynamic_paths = 4)
 )
 ENGINE = MergeTree
 ORDER BY tuple()
@@ -20,7 +20,7 @@ LIMIT 1;
 CREATE TABLE test
 (
     x UInt32,
-    json JSON(max_dynamic_paths=4)
+    json JSON(max_dynamic_paths = 4)
 )
 ENGINE = MergeTree
 ORDER BY tuple()

@@ -1,1 +1,1279 @@
-<Parse Error>
+-- Tags: long
+SET allow_suspicious_low_cardinality_types = 1;
+
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+
+-- Prevent remote replicas from skipping index analysis in Parallel Replicas. Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
+SET parallel_replicas_index_analysis_only_on_coordinator = 0;
+
+CREATE TABLE single_column_bloom_filter
+(
+    u64 UInt64,
+    i32 Int32,
+    i64 UInt64,
+    INDEX idx i32 TYPE bloom_filter GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY u64
+SETTINGS index_granularity = 6, index_granularity_bytes = '10Mi';
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE i32 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32, i32) = (1, 2)
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32, i64) = (1, 1)
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i64, (i64, i32)) = (1, (1, 1))
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE i32 IN (1, 2)
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32, i32) IN ((1, 2), (2, 3))
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32, i64) IN ((1, 1), (2, 2))
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i64, (i64, i32)) IN ((1, (1, 1)), (2, (2, 2)))
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE i32 IN (
+        SELECT arrayJoin([toInt32(1), toInt32(2)])
+    )
+SETTINGS max_rows_to_read = 7;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32, i32) IN (
+        SELECT arrayJoin([(toInt32(1), toInt32(2)), (toInt32(2), toInt32(3))])
+    )
+SETTINGS max_rows_to_read = 7;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32, i64) IN (
+        SELECT arrayJoin([(toInt32(1), toUInt64(1)), (toInt32(2), toUInt64(2))])
+    )
+SETTINGS max_rows_to_read = 7;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i64, (i64, i32)) IN (
+        SELECT arrayJoin([(toUInt64(1), (toUInt64(1), toInt32(1))), (toUInt64(2), (toUInt64(2), toInt32(2)))])
+    )
+SETTINGS max_rows_to_read = 7;
+
+-- Check that indexHint() works (but it doesn't work with COUNT()).
+SELECT SUM(ignore(*) + 1)
+FROM single_column_bloom_filter
+WHERE indexHint(i32 IN (3, 15, 50));
+
+-- The index doesn't understand expressions like these, but it shouldn't break the query.
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32 = 200) = ((i32 = 200));
+
+SELECT SUM(ignore(*) + 1)
+FROM single_column_bloom_filter
+WHERE indexHint((i32 = 200) != ((i32 = 200)));
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE indexOf([10, 20, 30], i32) != 0;
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE has([100, 200, 300], 200);
+
+CREATE TABLE bloom_filter_types_test
+(
+    order_key UInt64,
+    i8 Int8,
+    i16 Int16,
+    i32 Int32,
+    i64 Int64,
+    u8 UInt8,
+    u16 UInt16,
+    u32 UInt32,
+    u64 UInt64,
+    f32 Float32,
+    f64 Float64,
+    date Date,
+    date_time DateTime('Asia/Istanbul'),
+    str String,
+    fixed_string FixedString(5),
+    dt64 DateTime64(3, 'Asia/Istanbul'),
+    INDEX idx tuple(i8, i16, i32, i64, u8, u16, u32, u64, f32, f64, date, date_time, str, fixed_string, dt64) TYPE bloom_filter GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS index_granularity = 6, index_granularity_bytes = '10Mi';
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE i8 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE i16 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE i32 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE i64 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE u8 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE u16 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE u32 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE u64 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE f32 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE f64 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE date = '1970-01-02'
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE date_time = toDateTime('1970-01-01 02:00:01', 'Asia/Istanbul')
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE str = '1'
+SETTINGS max_rows_to_read = 12;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE fixed_string = toFixedString('1', 5)
+SETTINGS max_rows_to_read = 12;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE dt64 = toDateTime64('1970-01-01 02:00:01', 3, 'Asia/Istanbul')
+SETTINGS max_rows_to_read = 12;
+
+SELECT COUNT()
+FROM bloom_filter_types_test
+WHERE str IN (
+        SELECT str
+        FROM bloom_filter_types_test
+    );
+
+CREATE TABLE bloom_filter_array_types_test
+(
+    order_key Array(UInt64),
+    i8 Array(Int8),
+    i16 Array(Int16),
+    i32 Array(Int32),
+    i64 Array(Int64),
+    u8 Array(UInt8),
+    u16 Array(UInt16),
+    u32 Array(UInt32),
+    u64 Array(UInt64),
+    f32 Array(Float32),
+    f64 Array(Float64),
+    date Array(Date),
+    date_time Array(DateTime('Asia/Istanbul')),
+    str Array(String),
+    fixed_string Array(FixedString(5)),
+    dt64 Array(DateTime64(3, 'Asia/Istanbul')),
+    INDEX idx tuple(i8, i16, i32, i64, u8, u16, u32, u64, f32, f64, date, date_time, str, fixed_string, dt64) TYPE bloom_filter GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS index_granularity = 6, index_granularity_bytes = '10Mi';
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i8, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i16, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i32, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i64, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u8, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u16, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u32, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u64, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(f32, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(f64, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(date, toDate('1970-01-02'));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(date_time, toDateTime('1970-01-01 02:00:01', 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(str, '1');
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(fixed_string, toFixedString('1', 5));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(dt64, toDateTime64('1970-01-01 02:00:01', 3, 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i8, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i16, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i32, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i64, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u8, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u16, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u32, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u64, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(f32, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(f64, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(date, toDate('1970-01-06'));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(date_time, toDateTime('1970-01-01 02:00:05', 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(str, '5');
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(fixed_string, toFixedString('5', 5));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(dt64, toDateTime64('1970-01-01 02:00:05', 3, 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i8, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i16, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i32, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(i64, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u8, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u16, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u32, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(u64, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(f32, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(f64, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(date, toDate('1970-01-11'));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(date_time, toDateTime('1970-01-01 02:00:10', 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(str, '10');
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(fixed_string, toFixedString('10', 5));
+
+SELECT COUNT()
+FROM bloom_filter_array_types_test
+WHERE has(dt64, toDateTime64('1970-01-01 02:00:10', 3, 'Asia/Istanbul'));
+
+CREATE TABLE bloom_filter_null_types_test
+(
+    order_key UInt64,
+    i8 Nullable(Int8),
+    i16 Nullable(Int16),
+    i32 Nullable(Int32),
+    i64 Nullable(Int64),
+    u8 Nullable(UInt8),
+    u16 Nullable(UInt16),
+    u32 Nullable(UInt32),
+    u64 Nullable(UInt64),
+    f32 Nullable(Float32),
+    f64 Nullable(Float64),
+    date Nullable(Date),
+    date_time Nullable(DateTime('Asia/Istanbul')),
+    str Nullable(String),
+    fixed_string Nullable(FixedString(5)),
+    dt64 Nullable(DateTime64(3, 'Asia/Istanbul')),
+    INDEX idx tuple(i8, i16, i32, i64, u8, u16, u32, u64, f32, f64, date, date_time, str, fixed_string, dt64) TYPE bloom_filter GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS index_granularity = 6, index_granularity_bytes = '10Mi';
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE i8 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE i16 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE i32 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE i64 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE u8 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE u16 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE u32 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE u64 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE f32 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE f64 = 1
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE date = '1970-01-02'
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE date_time = toDateTime('1970-01-01 02:00:01', 'Asia/Istanbul')
+SETTINGS max_rows_to_read = 6;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE str = '1'
+SETTINGS max_rows_to_read = 12;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE fixed_string = toFixedString('1', 5)
+SETTINGS max_rows_to_read = 12;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE dt64 = toDateTime64('1970-01-01 02:00:01', 3, 'Asia/Istanbul')
+SETTINGS max_rows_to_read = 12;
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(i8);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(i16);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(i32);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(i64);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(u8);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(u16);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(u32);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(u64);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(f32);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(f64);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(date);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(date_time);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(str);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(fixed_string);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE isNull(dt64);
+
+SELECT COUNT()
+FROM bloom_filter_null_types_test
+WHERE str IN (
+        SELECT str
+        FROM bloom_filter_null_types_test
+    );
+
+CREATE TABLE bloom_filter_lc_null_types_test
+(
+    order_key UInt64,
+    str LowCardinality(Nullable(String)),
+    fixed_string LowCardinality(Nullable(FixedString(5))),
+    INDEX idx tuple(str, fixed_string) TYPE bloom_filter GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS index_granularity = 6, index_granularity_bytes = '10Mi';
+
+SELECT COUNT()
+FROM bloom_filter_lc_null_types_test
+WHERE str = '1'
+SETTINGS max_rows_to_read = 12;
+
+SELECT COUNT()
+FROM bloom_filter_lc_null_types_test
+WHERE fixed_string = toFixedString('1', 5)
+SETTINGS max_rows_to_read = 12;
+
+SELECT COUNT()
+FROM bloom_filter_lc_null_types_test
+WHERE isNull(str);
+
+SELECT COUNT()
+FROM bloom_filter_lc_null_types_test
+WHERE isNull(fixed_string);
+
+SELECT COUNT()
+FROM bloom_filter_lc_null_types_test
+WHERE str IN (
+        SELECT str
+        FROM bloom_filter_lc_null_types_test
+    );
+
+CREATE TABLE bloom_filter_array_lc_null_types_test
+(
+    order_key Array(LowCardinality(Nullable(UInt64))),
+    i8 Array(LowCardinality(Nullable(Int8))),
+    i16 Array(LowCardinality(Nullable(Int16))),
+    i32 Array(LowCardinality(Nullable(Int32))),
+    i64 Array(LowCardinality(Nullable(Int64))),
+    u8 Array(LowCardinality(Nullable(UInt8))),
+    u16 Array(LowCardinality(Nullable(UInt16))),
+    u32 Array(LowCardinality(Nullable(UInt32))),
+    u64 Array(LowCardinality(Nullable(UInt64))),
+    f32 Array(LowCardinality(Nullable(Float32))),
+    f64 Array(LowCardinality(Nullable(Float64))),
+    date Array(LowCardinality(Nullable(Date))),
+    date_time Array(LowCardinality(Nullable(DateTime('Asia/Istanbul')))),
+    str Array(LowCardinality(Nullable(String))),
+    fixed_string Array(LowCardinality(Nullable(FixedString(5)))),
+    INDEX idx tuple(i8, i16, i32, i64, u8, u16, u32, u64, f32, f64, date, date_time, str, fixed_string) TYPE bloom_filter GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS index_granularity = 6, index_granularity_bytes = '10Mi', allow_nullable_key = 1;
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i8, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i16, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i32, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i64, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u8, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u16, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u32, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u64, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f32, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f64, 1);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date, toDate('1970-01-02'));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date_time, toDateTime('1970-01-01 02:00:01', 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(str, '1');
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(fixed_string, toFixedString('1', 5));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i8, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i16, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i32, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i64, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u8, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u16, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u32, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u64, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f32, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f64, 5);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date, toDate('1970-01-06'));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date_time, toDateTime('1970-01-01 02:00:05', 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(str, '5');
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(fixed_string, toFixedString('5', 5));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i8, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i16, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i32, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i64, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u8, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u16, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u32, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u64, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f32, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f64, 10);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date, toDate('1970-01-11'));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date_time, toDateTime('1970-01-01 02:00:10', 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(str, '10');
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(fixed_string, toFixedString('10', 5));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i8, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i16, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i32, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i64, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u8, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u16, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u32, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u64, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f32, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f64, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date_time, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(str, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(fixed_string, NULL);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i8, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i16, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i32, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(i64, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u8, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u16, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u32, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(u64, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f32, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(f64, 100);
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date, toDate('1970-04-11'));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(date_time, toDateTime('1970-01-01 02:01:40', 'Asia/Istanbul'));
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(str, '100');
+
+SELECT COUNT()
+FROM bloom_filter_array_lc_null_types_test
+WHERE has(fixed_string, toFixedString('100', 5));
+
+CREATE TABLE bloom_filter_array_offsets_lc_str
+(
+    order_key int,
+    str Array(LowCardinality(String)),
+    INDEX idx str TYPE bloom_filter(1.) GRANULARITY 1024
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS index_granularity = 1024, index_granularity_bytes = '10Mi';
+
+SELECT count()
+FROM bloom_filter_array_offsets_lc_str
+WHERE has(str, 'value');
+
+CREATE TABLE bloom_filter_array_offsets_str
+(
+    order_key int,
+    str Array(String),
+    INDEX idx str TYPE bloom_filter(1.) GRANULARITY 1024
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS index_granularity = 1024, index_granularity_bytes = '10Mi';
+
+SELECT count()
+FROM bloom_filter_array_offsets_str
+WHERE has(str, 'value');
+
+CREATE TABLE bloom_filter_array_offsets_i
+(
+    order_key int,
+    i Array(int),
+    INDEX idx i TYPE bloom_filter(1.) GRANULARITY 1024
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS index_granularity = 1024, index_granularity_bytes = '10Mi';
+
+SELECT count()
+FROM bloom_filter_array_offsets_i
+WHERE has(i, 99999);
+
+CREATE TABLE test_bf_indexOf
+(
+    id int,
+    ary Array(LowCardinality(Nullable(String))),
+    INDEX idx_ary ary TYPE bloom_filter(0.01) GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS index_granularity = 1;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') = 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') = 1
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value2') = 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value2') = 2
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value3') = 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value3') = 1
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') != 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') != 1
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value2') != 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value2') != 2
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value3') != 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value3') != 1
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') = 2
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value3') = 2
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') = 1
+    OR indexOf(ary, 'value3') = 1
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE NOT indexOf(ary, 'value1')
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE NOT indexOf(ary, 'value1') == 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE NOT indexOf(ary, 'value1') == 1
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE NOT indexOf(ary, 'value1') == 2
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') IN (0)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') IN (1)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') IN (2)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') NOT IN (0)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') NOT IN (1)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') NOT IN (2)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') > 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE 0 < indexOf(ary, 'value1')
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') >= 0
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE 0 <= indexOf(ary, 'value1')
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') > 1
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE 1 < indexOf(ary, 'value1')
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') >= 1
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE 1 <= indexOf(ary, 'value1')
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') >= 2
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE 2 <= indexOf(ary, 'value1')
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') = toDecimal32(0, 2)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE toDecimal128(0, 2) = indexOf(ary, 'value1')
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') = '0'
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE '0' = indexOf(ary, 'value1')
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') > toDecimal32(0, 2)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') < toDecimal128(1, 2)
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') > '0'
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT id
+FROM test_bf_indexOf
+WHERE indexOf(ary, 'value1') < '1'
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT
+    id,
+    ary[indexOf(ary, 'value1')]
+FROM test_bf_indexOf
+WHERE ary[indexOf(ary, 'value1')] = 'value1'
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT
+    id,
+    ary[indexOf(ary, 'value2')]
+FROM test_bf_indexOf
+WHERE ary[indexOf(ary, 'value2')] = 'value2'
+ORDER BY id ASC
+FORMAT TSV;
+
+SELECT
+    id,
+    ary[indexOf(ary, 'value3')]
+FROM test_bf_indexOf
+WHERE ary[indexOf(ary, 'value3')] = 'value3'
+ORDER BY id ASC
+FORMAT TSV;
+
+CREATE TABLE test_bf_cast
+(
+    c Int32,
+    INDEX x1 c TYPE bloom_filter
+)
+ENGINE = MergeTree
+ORDER BY c AS
+SELECT 1;
+
+SELECT count()
+FROM test_bf_cast
+WHERE CAST(c = 1
+    OR c = 9999 AS Bool)
+SETTINGS use_skip_indexes = 0;
+
+SELECT count()
+FROM test_bf_cast
+WHERE CAST(c = 1
+    OR c = 9999 AS Bool)
+SETTINGS use_skip_indexes = 1;

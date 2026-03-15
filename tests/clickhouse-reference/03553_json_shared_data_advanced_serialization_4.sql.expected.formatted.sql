@@ -3,13 +3,13 @@ SET output_format_json_quote_64bit_integers = 0;
 
 CREATE TABLE source
 (
-    json JSON(max_dynamic_paths=8)
+    json JSON(max_dynamic_paths = 8)
 )
 ENGINE = Memory;
 
 CREATE TABLE test_wide_advanced_tuple
 (
-    json Tuple(data JSON(max_dynamic_paths=8))
+    json Tuple(data JSON(max_dynamic_paths = 8))
 )
 ENGINE = MergeTree
 ORDER BY tuple()

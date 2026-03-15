@@ -1,1 +1,269 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":140,"line":2,"column":8},"end":{"offset":141,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "6"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "type",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_v"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "type"
+            ]
+          },
+          "alias": "type"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "val"
+                ]
+              }
+            ]
+          },
+          "alias": "sval"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toStartOfDay",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "dt"
+                ]
+              }
+            ]
+          },
+          "alias": "sday"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "anyLast",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "sval"
+                ]
+              }
+            ]
+          },
+          "alias": "lval"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "tab",
+        "alias": "t1"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "sday"
+            ]
+          }
+        ]
+      },
+      "windows": [
+        {
+          "name": "w",
+          "body": "PARTITION BY type"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_v"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "type"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "--------"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sday"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_v"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "type"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sday"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

@@ -364,7 +364,7 @@ FROM test;
 CREATE TABLE test
 (
     x UInt64,
-    d Dynamic(max_types=5)
+    d Dynamic(max_types = 5)
 )
 ENGINE = Memory;
 

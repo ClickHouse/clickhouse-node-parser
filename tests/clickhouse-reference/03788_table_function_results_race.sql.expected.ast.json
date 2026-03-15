@@ -1,1 +1,206 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":330,"line":6,"column":8},"end":{"offset":331,"line":6,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dest"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "source",
+            "x"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "n",
+              "number"
+            ]
+          },
+          "alias": "y"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "source"
+        },
+        "kind": "join",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ],
+          "alias": "n"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Materialized view that uses a table function in a JOIN.",
+      "-- When data is inserted into source, multiple threads may process chunks",
+      "-- and resolve the numbers() table function concurrently."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      },
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Use small block size and parallel view processing to trigger the race."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_view_processing",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      },
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dest"
+    }
+  }
+]

@@ -1,1 +1,15 @@
-<Parse Error>
+CREATE DATABASE `02111_modify_table_comment`;
+
+USE 02111_modify_table_comment;
+
+CREATE TABLE t
+(
+    n Int8
+)
+ENGINE = MergeTree
+ORDER BY n
+COMMENT 'this is a MergeTree table';
+
+CREATE TABLE t_merge AS t
+ENGINE = Merge('02111_modify_table_comment', 't')
+COMMENT 'this is a Merge table';

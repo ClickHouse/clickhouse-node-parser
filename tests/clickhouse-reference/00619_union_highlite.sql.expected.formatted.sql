@@ -1,1 +1,9 @@
-<Parse Error>
+CREATE VIEW `union`
+AS
+SELECT 1 AS test
+UNION ALL
+SELECT 2;
+
+SELECT *
+FROM `union`
+ORDER BY test ASC;

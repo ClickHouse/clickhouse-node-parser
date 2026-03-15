@@ -4,7 +4,7 @@ CREATE TABLE t_00712_1
     b Int32
 )
 ENGINE = MergeTree
-ORDER BY a
+ORDER BY (a)
 PARTITION BY (a,b);
 
 SELECT b

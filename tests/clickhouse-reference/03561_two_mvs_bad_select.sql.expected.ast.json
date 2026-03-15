@@ -1,1 +1,138 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":152,"line":4,"column":8},"end":{"offset":153,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_materialized_view_with_bad_select",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03561_t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03561_t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03561_v0"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "03561_t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "c0"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "03561_t0"
+      },
+      "parenthesized": true
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03561_v1"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "03561_t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "grouping",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "c0"
+                ]
+              }
+            ]
+          },
+          "alias": "c0"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "03561_t0"
+      },
+      "parenthesized": true
+    }
+  }
+]

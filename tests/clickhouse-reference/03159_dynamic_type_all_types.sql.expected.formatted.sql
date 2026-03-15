@@ -9,7 +9,7 @@ SET allow_suspicious_types_in_order_by = 1;
 
 CREATE TABLE t
 (
-    d Dynamic(max_types=254)
+    d Dynamic(max_types = 254)
 )
 ENGINE = Memory;
 
@@ -24,7 +24,7 @@ ORDER BY
 
 CREATE TABLE t2
 (
-    d Dynamic(max_types=254)
+    d Dynamic(max_types = 254)
 )
 ENGINE = Memory;
 

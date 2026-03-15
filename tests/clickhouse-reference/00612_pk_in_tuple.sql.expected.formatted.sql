@@ -125,7 +125,7 @@ CREATE TABLE tab_00612
     c1 Int64
 )
 ENGINE = MergeTree
-ORDER BY key1
+ORDER BY (key1)
 PARTITION BY id1;
 
 SELECT count(*)

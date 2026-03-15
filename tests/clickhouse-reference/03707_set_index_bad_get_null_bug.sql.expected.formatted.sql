@@ -7,4 +7,4 @@ CREATE TABLE test
     INDEX v v TYPE set(0) GRANULARITY 1
 )
 ENGINE = MergeTree
-ORDER BY ts;
+ORDER BY (ts);

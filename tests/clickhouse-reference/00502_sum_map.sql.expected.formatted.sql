@@ -128,10 +128,7 @@ FROM (
 
 CREATE TABLE sum_map_decimal
 (
-    statusMap Nested(
-        goal_id UInt16,
-        revenue Decimal32(5)
-    )
+    statusMap Nested(goal_id UInt16, revenue Decimal32(5))
 )
 ENGINE = MergeTree
 ORDER BY tuple();

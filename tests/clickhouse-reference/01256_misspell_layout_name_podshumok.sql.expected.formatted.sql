@@ -1,1 +1,9 @@
-<Parse Error>
+CREATE DICTIONARY testip
+(
+    network String,
+    test_field String
+)
+PRIMARY KEY network
+SOURCE(file(PATH '/tmp/test.csv' FORMAT CSVWithNames))
+LIFETIME(MIN 0 MAX 300)
+LAYOUT(IPTRIE()); -- { serverError UNKNOWN_ELEMENT_IN_CONFIG }

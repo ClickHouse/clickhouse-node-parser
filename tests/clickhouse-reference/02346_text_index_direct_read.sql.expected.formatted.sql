@@ -18,7 +18,7 @@ CREATE TABLE tab
 (
     k UInt64,
     text String,
-    INDEX idx (text) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1
+    INDEX idx text TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1
 )
 ENGINE = MergeTree()
 ORDER BY k

@@ -1,1 +1,213 @@
-{"expected":[{"type":"literal","text":".","ignoreCase":false},{"type":"literal","text":"ON","ignoreCase":true},{"type":"literal","text":"CLONE","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"ENGINE","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":"U","location":{"start":{"offset":732,"line":13,"column":16},"end":{"offset":733,"line":13,"column":17}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel, no-ordinary-database, no-replicated-database",
+      "-- Tag no-parallel: static UUID",
+      "-- Tag no-ordinary-database: requires UUID",
+      "-- Tag no-replicated-database: executes with ON CLUSTER anyway",
+      "-- Ignore \"ATTACH TABLE query with full table definition is not recommended\"",
+      "-- Ignore BAD_ARGUMENTS"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uuid"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "x"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "replica_path"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "replicas"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "x"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/tables/{database}/{uuid}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- {uuid} macro forbidden for CREATE TABLE without explicit UUID"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/tables/{database}/{uuid}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  }
+]

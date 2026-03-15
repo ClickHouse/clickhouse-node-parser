@@ -9,7 +9,7 @@ CREATE TABLE data_02228
     s UInt64
 )
 ENGINE = CollapsingMergeTree(sign)
-ORDER BY key1
+ORDER BY (key1)
 PARTITION BY key1 % 100
 SETTINGS auto_statistics_types = '';
 
@@ -20,6 +20,6 @@ CREATE TABLE data_rep_02228
     s UInt64
 )
 ENGINE = ReplicatedCollapsingMergeTree('/clickhouse/{database}', 'r1', sign)
-ORDER BY key1
+ORDER BY (key1)
 PARTITION BY key1 % 100
 SETTINGS auto_statistics_types = '';

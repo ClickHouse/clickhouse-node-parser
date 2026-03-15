@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS decimal
 (
-    a DECIMAL(9,0),
-    b DECIMAL(18,0),
-    c DECIMAL(38,0),
+    a DECIMAL(9, 0),
+    b DECIMAL(18, 0),
+    c DECIMAL(38, 0),
     d DECIMAL(9, 9),
     e DEC(18, 18),
     f dec(38, 38),

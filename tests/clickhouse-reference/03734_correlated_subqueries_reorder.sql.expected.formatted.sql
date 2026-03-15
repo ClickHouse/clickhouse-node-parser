@@ -20,17 +20,17 @@ CREATE TABLE lineitem
 (
     l_orderkey Int32,
     l_partkey Int32,
-    l_quantity Decimal(15,2),
-    l_extendedprice Decimal(15,2)
+    l_quantity Decimal(15, 2),
+    l_extendedprice Decimal(15, 2)
 )
-ORDER BY l_orderkey
+ORDER BY (l_orderkey)
 SETTINGS auto_statistics_types = 'uniq';
 
 CREATE TABLE part
 (
     p_partkey Int32
 )
-ORDER BY p_partkey
+ORDER BY (p_partkey)
 SETTINGS auto_statistics_types = 'uniq';
 
 SELECT `explain`

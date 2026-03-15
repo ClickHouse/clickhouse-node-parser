@@ -1,1 +1,511 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":96,"line":6,"column":8},"end":{"offset":97,"line":6,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "DefaultValue"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "--{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "DefaultValue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "DefaultValue"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "--{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "start",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "end",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_hashed_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "start",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "end",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "RANGE_HASHED",
+        "pairs": []
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "start"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "end"
+            ]
+          }
+        }
+      ],
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_hashed_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_hashed_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "DefaultValue"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "--{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_hashed_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "DefaultValue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_hashed_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "DefaultValue"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "--{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
+  }
+]

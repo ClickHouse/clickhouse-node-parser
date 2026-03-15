@@ -9,7 +9,9 @@
       {
         "kind": "columnDef",
         "name": "number",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       }
     ],
     "engine": {
@@ -17,54 +19,56 @@
     },
     "orderBy": [
       {
-        "kind": "functionCall",
-        "name": "if",
-        "args": [
-          {
-            "kind": "binaryExpr",
-            "op": ">",
-            "left": {
-              "kind": "functionCall",
-              "name": "now",
-              "args": []
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "now",
+                "args": []
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2020-06-01 13:31:40"
+                  }
+                ]
+              }
             },
-            "right": {
+            {
               "kind": "functionCall",
-              "name": "toDateTime",
+              "name": "toInt64",
               "args": [
                 {
-                  "kind": "literal",
-                  "type": "String",
-                  "value": "2020-06-01 13:31:40"
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "negate",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
                 }
               ]
             }
-          },
-          {
-            "kind": "functionCall",
-            "name": "toInt64",
-            "args": [
-              {
-                "kind": "columnRef",
-                "parts": [
-                  "number"
-                ]
-              }
-            ]
-          },
-          {
-            "kind": "functionCall",
-            "name": "negate",
-            "args": [
-              {
-                "kind": "columnRef",
-                "parts": [
-                  "number"
-                ]
-              }
-            ]
-          }
-        ]
+          ]
+        }
       }
     ],
     "trailingComments": [
@@ -81,7 +85,9 @@
       {
         "kind": "columnDef",
         "name": "number",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       }
     ],
     "engine": {
@@ -89,24 +95,26 @@
     },
     "orderBy": [
       {
-        "kind": "binaryExpr",
-        "op": ">",
-        "left": {
-          "kind": "functionCall",
-          "name": "now",
-          "args": []
-        },
-        "right": {
-          "kind": "functionCall",
-          "name": "toDateTime",
-          "args": [
-            {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            }
-          ]
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "functionCall",
+            "name": "now",
+            "args": []
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
         }
       }
     ],
@@ -124,7 +132,9 @@
       {
         "kind": "columnDef",
         "name": "number",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       }
     ],
     "engine": {
@@ -132,9 +142,11 @@
     },
     "orderBy": [
       {
-        "kind": "functionCall",
-        "name": "now",
-        "args": []
+        "expr": {
+          "kind": "functionCall",
+          "name": "now",
+          "args": []
+        }
       }
     ],
     "trailingComments": [
@@ -151,7 +163,9 @@
       {
         "kind": "columnDef",
         "name": "number",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       }
     ],
     "engine": {
@@ -159,18 +173,25 @@
     },
     "orderBy": [
       {
-        "kind": "binaryExpr",
-        "op": "+",
-        "left": {
+        "expr": {
           "kind": "binaryExpr",
           "op": "+",
           "left": {
             "kind": "binaryExpr",
             "op": "+",
             "left": {
-              "kind": "functionCall",
-              "name": "now",
-              "args": []
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "now",
+                "args": []
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
             },
             "right": {
               "kind": "literal",
@@ -179,16 +200,11 @@
             }
           },
           "right": {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "1"
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
           }
-        },
-        "right": {
-          "kind": "columnRef",
-          "parts": [
-            "number"
-          ]
         }
       }
     ],

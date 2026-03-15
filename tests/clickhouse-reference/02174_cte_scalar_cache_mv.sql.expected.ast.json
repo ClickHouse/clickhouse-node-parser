@@ -1,1 +1,1195 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":143,"line":4,"column":8},"end":{"offset":144,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "-- TEST CACHE"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "m",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv1"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "expr",
+          "name": "t1",
+          "expr": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "max",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "i"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t1"
+              }
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t1"
+            ]
+          },
+          "alias": "k",
+          "trailingComments": [
+            "-- Using local cache x 4"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t1"
+            ]
+          },
+          "alias": "l"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t1"
+            ]
+          },
+          "alias": "m"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t1"
+            ]
+          },
+          "alias": "n"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t1"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "l"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "m"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "l"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "m"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "l"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "m"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "02177_MV"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesGlobalCacheHit"
+            }
+          ]
+        },
+        "alias": "scalar_cache_global_hit"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesLocalCacheHit"
+            }
+          ]
+        },
+        "alias": "scalar_cache_local_hit"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesCacheMiss"
+            }
+          ]
+        },
+        "alias": "scalar_cache_miss"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "-- FIRST INSERT\\nINSERT INTO t1\\n%"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "now",
+              "args": []
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- The main query should have a cache miss and 3 global hits",
+      "-- The MV is executed 20 times (100 / 5) and each run does 1 miss and 4 hits to the LOCAL cache",
+      "-- In addition to this, to prepare the MV, there is an extra preparation to get the list of columns via",
+      "-- InterpreterSelectQuery, which adds 5 miss (since we don't use cache for preparation)",
+      "-- So in total we have:",
+      "-- Main query:  1  miss, 3 global",
+      "-- Preparation: 5  miss",
+      "-- Blocks (20): 20 miss, 0 global, 80 local hits",
+      "-- TOTAL:       26 miss, 3 global, 80 local"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "z",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv2"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "i"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "j"
+                    ]
+                  }
+                ]
+              }
+            },
+            "right": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "subqueryFrom",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "functionCall",
+                          "name": "min",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "i"
+                              ]
+                            }
+                          ]
+                        },
+                        "right": {
+                          "kind": "functionCall",
+                          "name": "min",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "j"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "from": {
+                      "kind": "subqueryFrom",
+                      "query": {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ],
+                        "from": {
+                          "left": {
+                            "kind": "tableRef",
+                            "database": "system",
+                            "table": "one",
+                            "alias": "_a"
+                          },
+                          "kind": "join",
+                          "joinType": "CROSS",
+                          "right": {
+                            "kind": "tableRef",
+                            "table": "t1",
+                            "alias": "_b"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "alias": "z",
+          "leadingComments": [
+            "-- This includes an unnecessarily complex query to verify that the local cache is used (since it uses t1)"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "z"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "02177_MV_2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesGlobalCacheHit"
+            }
+          ]
+        },
+        "alias": "scalar_cache_global_hit"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesLocalCacheHit"
+            }
+          ]
+        },
+        "alias": "scalar_cache_local_hit"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesCacheMiss"
+            }
+          ]
+        },
+        "alias": "scalar_cache_miss"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "-- SECOND INSERT\\nINSERT INTO t1%"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "now",
+              "args": []
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t4"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "z",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv3"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "t4"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "min",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "i"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "min",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "j"
+                    ]
+                  }
+                ]
+              }
+            },
+            "right": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "subqueryFrom",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "functionCall",
+                          "name": "min",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "k"
+                              ]
+                            }
+                          ]
+                        },
+                        "right": {
+                          "kind": "functionCall",
+                          "name": "min",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "l"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "from": {
+                      "kind": "subqueryFrom",
+                      "query": {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "asterisk"
+                          }
+                        ],
+                        "from": {
+                          "left": {
+                            "kind": "tableRef",
+                            "database": "system",
+                            "table": "one",
+                            "alias": "_a"
+                          },
+                          "kind": "join",
+                          "joinType": "CROSS",
+                          "right": {
+                            "kind": "tableRef",
+                            "table": "t2",
+                            "alias": "_b"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "alias": "z",
+          "leadingComments": [
+            "-- This includes an unnecessarily complex query but now it uses t2 so it can be cached"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t4"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "z"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "02177_MV_3"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesGlobalCacheHit"
+            }
+          ]
+        },
+        "alias": "scalar_cache_global_hit"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesLocalCacheHit"
+            }
+          ]
+        },
+        "alias": "scalar_cache_local_hit"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ScalarSubqueriesCacheMiss"
+            }
+          ]
+        },
+        "alias": "scalar_cache_miss"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "-- THIRD INSERT\\nINSERT INTO t1%"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "now",
+              "args": []
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+]

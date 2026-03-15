@@ -14,9 +14,9 @@ CREATE TABLE data_01917_2
 (
     name String,
     frequency UInt64,
-    INDEX memory (frequency * length(name)) TYPE set(1000) GRANULARITY 5,
-    INDEX sample_index1 (length(name), name) TYPE minmax GRANULARITY 4,
-    INDEX sample_index2 (lower(name), name) TYPE ngrambf_v1(3, 256, 2, 0) GRANULARITY 4
+    INDEX memory frequency * length(name) TYPE set(1000) GRANULARITY 5,
+    INDEX sample_index1 tuple(length(name), name) TYPE minmax GRANULARITY 4,
+    INDEX sample_index2 tuple(lower(name), name) TYPE ngrambf_v1(3, 256, 2, 0) GRANULARITY 4
 )
 ENGINE = MergeTree()
 ORDER BY name

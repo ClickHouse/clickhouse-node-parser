@@ -1,1 +1,119 @@
-{"expected":[{"type":"literal","text":".","ignoreCase":false},{"type":"literal","text":"ENGINE","ignoreCase":true},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"*","location":{"start":{"offset":151,"line":3,"column":50},"end":{"offset":152,"line":3,"column":51}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_merge_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_merge_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "temporary_table"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": true,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "merge",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "test_merge_1|test_merge_2"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "temporary_table"
+    }
+  }
+]

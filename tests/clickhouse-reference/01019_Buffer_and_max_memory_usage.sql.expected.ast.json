@@ -1,1 +1,247 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":1009,"line":27,"column":8},"end":{"offset":1010,"line":27,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null",
+      "args": []
+    },
+    "leadingComments": [
+      "-- Each UInt64  is 8    bytes",
+      "-- So 10e6 rows is 80e6 bytes",
+      "--",
+      "-- Use LIMIT max_rows+1 to force flush from the query context, and to avoid",
+      "-- flushing from the background thread, since in this case it can steal memory",
+      "-- the max_memory_usage may be exceeded during squashing other blocks."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer_"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "null_"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "10e6"
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "10e6"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "10e6"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "80e6"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_memory_usage",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "10e6"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "100e3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "9e6"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Check that max_memory_usage is ignored only on flush and not on squash"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "aggregation_"
+    },
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "key"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "null_"
+      }
+    },
+    "leadingComments": [
+      "-- create complex aggregation to fail with Memory limit exceede error while writing to Buffer()",
+      "-- String over UInt64 is enough to trigger the problem."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Check that max_memory_usage is ignored during write from StorageBuffer"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "100e3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "buffer_"
+    },
+    "leadingComments": [
+      "-- Check that 10e6 rows had been flushed from the query, not from the background worker."
+    ]
+  }
+]

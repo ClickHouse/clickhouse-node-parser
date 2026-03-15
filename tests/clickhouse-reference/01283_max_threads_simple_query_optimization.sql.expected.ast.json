@@ -1,1 +1,288 @@
-{"expected":[{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":"n","location":{"start":{"offset":267,"line":8,"column":11},"end":{"offset":268,"line":8,"column":12}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "remote_filesystem_read_method",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "read"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "local_filesystem_read_method",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "pread"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "load_marks_asynchronously",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01283"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "key"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "key"
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "data_01283"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "throwIf",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "no query was logged"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "throwIf",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "functionCall",
+              "name": "length",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "thread_ids"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "too many threads used"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%data_01283 LIMIT 1%"
+            }
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "thread_ids"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- 1 for PullingAsyncPipelineExecutor::pull"
+    ]
+  }
+]

@@ -1,1 +1,254 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":336,"line":16,"column":8},"end":{"offset":337,"line":16,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/65981"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "input"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json_message",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json_message"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "deduplicate"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "event"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "deduplicate_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "deduplicate"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "subquery",
+          "name": "event",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "JSONExtract",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "json_message"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "id"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "Nullable(UInt64)"
+                    }
+                  ]
+                },
+                "alias": "id"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "input"
+            },
+            "where": {
+              "kind": "functionCall",
+              "name": "isNotNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "parenthesized": true
+            }
+          }
+        }
+      ],
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "event"
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": true,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "deduplicate"
+            },
+            "where": {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "values": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "event"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "deduplicate_mv"
+    },
+    "format": "Null"
+  }
+]

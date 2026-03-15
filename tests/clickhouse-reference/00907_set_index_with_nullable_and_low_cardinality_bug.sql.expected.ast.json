@@ -9,17 +9,55 @@
       {
         "kind": "columnDef",
         "name": "timestamp",
-        "type": "DateTime"
+        "type": {
+          "name": "DateTime"
+        }
       },
       {
         "kind": "columnDef",
         "name": "action",
-        "type": "LowCardinality(Nullable(String))"
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "user",
-        "type": "LowCardinality(Nullable(String))"
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "indexDef",
@@ -28,10 +66,18 @@
           "kind": "columnRef",
           "parts": [
             "user"
-          ],
-          "parenthesized": true
+          ]
         },
-        "indexType": "set(0)",
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
         "granularity": 8192
       }
     ],
@@ -52,28 +98,34 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "timestamp"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
       },
       {
-        "kind": "columnRef",
-        "parts": [
-          "action"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "action"
+          ]
+        }
       },
       {
-        "kind": "functionCall",
-        "name": "cityHash64",
-        "args": [
-          {
-            "kind": "columnRef",
-            "parts": [
-              "user"
-            ]
-          }
-        ]
+        "expr": {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "user"
+              ]
+            }
+          ]
+        }
       }
     ],
     "settings": [
@@ -85,7 +137,8 @@
           "value": "1"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

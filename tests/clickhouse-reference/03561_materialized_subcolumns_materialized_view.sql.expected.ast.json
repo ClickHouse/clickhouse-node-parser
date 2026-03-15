@@ -1,1 +1,140 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":232,"line":11,"column":8},"end":{"offset":233,"line":11,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "destination"
+    },
+    "orReplace": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "some_data",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "JSON"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a_val",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "some_data",
+                "a"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source"
+    },
+    "orReplace": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "some_data",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "JSON"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_to_destination_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "destination"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "some_data"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "source"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "some_data"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a_val"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "destination"
+    }
+  }
+]

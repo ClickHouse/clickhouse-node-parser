@@ -9,9 +9,7 @@ ORDER BY a;
 CREATE TABLE IF NOT EXISTS repro_dist
 (
     a LowCardinality(String),
-    foos Nested(
-      "x" LowCardinality(String),
-   )
+    foos Nested(x LowCardinality(String))
 )
 ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), 'repro');
 

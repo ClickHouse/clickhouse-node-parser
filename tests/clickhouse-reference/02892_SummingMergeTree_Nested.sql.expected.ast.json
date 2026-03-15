@@ -1,1 +1,114 @@
-{"expected":[{"type":"literal","text":"NOT","ignoreCase":true},{"type":"literal","text":"NULL","ignoreCase":true},{"type":"literal","text":"DEFAULT","ignoreCase":true},{"type":"literal","text":"MATERIALIZED","ignoreCase":true},{"type":"literal","text":"ALIAS","ignoreCase":true},{"type":"literal","text":"EPHEMERAL","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"CODEC","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":")","ignoreCase":false}],"found":"(","location":{"start":{"offset":84,"line":4,"column":26},"end":{"offset":85,"line":4,"column":27}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nested_smt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "counters_Map",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "id",
+              "type": {
+                "name": "UInt8"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "count",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nested_smt"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "val"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- { echo }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nested_smt",
+      "final": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "nested_smt"
+    }
+  }
+]

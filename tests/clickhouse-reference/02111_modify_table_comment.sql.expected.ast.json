@@ -1,1 +1,67 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "02111_modify_table_comment"
+  },
+  {
+    "kind": "use",
+    "database": "02111_modify_table_comment"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ],
+    "comment": "this is a MergeTree table"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_merge"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "02111_modify_table_comment"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "t"
+        }
+      ]
+    },
+    "comment": "this is a Merge table"
+  }
+]

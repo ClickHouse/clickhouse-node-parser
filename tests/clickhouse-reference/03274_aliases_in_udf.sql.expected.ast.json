@@ -1,1 +1,209 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"F","location":{"start":{"offset":93,"line":5,"column":8},"end":{"offset":94,"line":5,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "skip_redundant_aliases_in_udf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createFunction",
+    "name": "03274_test_function",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "input_column_name"
+      ],
+      "body": {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "1"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "input_column_name"
+                  ]
+                },
+                "alias": "input_column_name"
+              }
+            ],
+            "source": "(\n        '1' AS a,\n        input_column_name AS input_column_name\n    )"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ],
+        "parenthesized": true
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "metadata_a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "metadata_b",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "skip_redundant_aliases_in_udf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat_a"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat_b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "test_03274",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "x"
+      ],
+      "body": {
+        "kind": "tuple",
+        "elements": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "alias": "y"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ],
+        "source": "(x + 1 as y, y + 2)",
+        "parenthesized": true
+      }
+    }
+  }
+]

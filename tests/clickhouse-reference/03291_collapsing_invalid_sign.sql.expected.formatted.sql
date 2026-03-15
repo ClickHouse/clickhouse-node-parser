@@ -50,7 +50,7 @@ CREATE TABLE t0
     c1 Int
 )
 ENGINE = CollapsingMergeTree(c0)
-ORDER BY c1;
+ORDER BY (c1);
 
 SELECT 1
 FROM t0 FINAL;

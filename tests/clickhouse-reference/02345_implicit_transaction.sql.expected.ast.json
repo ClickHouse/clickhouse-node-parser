@@ -1,1 +1,756 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":127,"line":3,"column":8},"end":{"offset":128,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "landing"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "target"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "landing_to_target"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "target"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "throwIf",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "==",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3333"
+                  }
+                }
+              ]
+            }
+          },
+          "alias": "n"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "landing"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "no_transaction_landing"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "landing"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "no_transaction_target"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "target"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "after_transaction_landing"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "landing"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "after_transaction_target"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "target"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "after_implicit_txn_in_query_settings_landing"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "landing"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "after_implicit_txn_in_query_settings_target"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "target"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "after_implicit_txn_in_session_landing"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "landing"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "after_implicit_txn_in_session_target"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "target"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "throwIf",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "==",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "in_transaction"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "target"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "out_transaction"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "target"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "implicit_True"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "all"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "transaction_id"
+            ]
+          },
+          "right": {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "00000000-0000-0000-0000-000000000000"
+              }
+            ],
+            "source": "(0,0,'00000000-0000-0000-0000-000000000000')"
+          }
+        },
+        "alias": "is_empty"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "-- Verify that the transaction_id column is populated correctly%"
+            }
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "transaction_id"
+          ]
+        }
+      ]
+    },
+    "format": "JSONEachRow"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "implicit_False"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "all"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "transaction_id"
+            ]
+          },
+          "right": {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "00000000-0000-0000-0000-000000000000"
+              }
+            ],
+            "source": "(0,0,'00000000-0000-0000-0000-000000000000')"
+          }
+        },
+        "alias": "is_empty"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "-- Verify that the transaction_id column is NOT populated without transaction%"
+            }
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "transaction_id"
+          ]
+        }
+      ]
+    },
+    "format": "JSONEachRow"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "throw_on_unsupported_query_inside_transaction",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "one"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_interserver_secret"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "throw_on_unsupported_query_inside_transaction",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_interserver_secret"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- there's not session in the interserver mode"
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION }"
+    ]
+  }
+]

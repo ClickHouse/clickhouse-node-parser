@@ -1,1 +1,16 @@
-<Parse Error>
+CREATE TABLE file
+(
+    s String,
+    n UInt32
+)
+ENGINE = File(CSVWithNames);
+
+SELECT *
+FROM file;
+
+CREATE TEMPORARY TABLE file2 AS
+SELECT *
+FROM file;
+
+SELECT *
+FROM file2;

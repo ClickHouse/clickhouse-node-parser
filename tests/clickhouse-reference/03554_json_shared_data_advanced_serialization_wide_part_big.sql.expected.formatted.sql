@@ -1,6 +1,6 @@
 CREATE TABLE test_wide_advanced
 (
-    json JSON(max_dynamic_paths=8)
+    json JSON(max_dynamic_paths = 8)
 )
 ENGINE = MergeTree
 ORDER BY tuple()

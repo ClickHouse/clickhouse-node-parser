@@ -4,7 +4,7 @@ CREATE TABLE bad_date_time
     count UInt16
 )
 ENGINE = MergeTree()
-ORDER BY time;
+ORDER BY (time);
 
 -- primary key analysis was wrong in previous versions and did not take the timezone argument into account, so empty result was given.
 SELECT

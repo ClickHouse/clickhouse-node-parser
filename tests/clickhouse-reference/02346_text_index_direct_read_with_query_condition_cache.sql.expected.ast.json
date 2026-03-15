@@ -48,12 +48,16 @@
       {
         "kind": "columnDef",
         "name": "id",
-        "type": "UInt32"
+        "type": {
+          "name": "UInt32"
+        }
       },
       {
         "kind": "columnDef",
         "name": "message",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "indexDef",
@@ -62,10 +66,29 @@
           "kind": "columnRef",
           "parts": [
             "message"
-          ],
-          "parenthesized": true
+          ]
         },
-        "indexType": "text(tokenizer = splitByNonAlpha)"
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "splitByNonAlpha"
+                ]
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -73,10 +96,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "id"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
       }
     ]
   },

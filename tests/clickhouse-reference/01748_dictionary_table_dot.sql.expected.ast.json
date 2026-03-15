@@ -1,1 +1,202 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "test_01748"
+  },
+  {
+    "kind": "use",
+    "database": "test_01748"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test.txt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key2",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "key1",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "name": "key2",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key2"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "columnRef",
+              "parts": [
+                "test.txt"
+              ]
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 3600
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_dict"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toUInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              }
+            ],
+            "source": "(toUInt32(1), toUInt32(2))"
+          }
+        ]
+      }
+    ]
+  }
+]

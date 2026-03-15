@@ -18,16 +18,16 @@ ENGINE = Memory; -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 CREATE TABLE IF NOT EXISTS decimal
 (
-    a DECIMAL(9,0),
-    b DECIMAL(18,0),
-    c DECIMAL(38,0),
+    a DECIMAL(9, 0),
+    b DECIMAL(18, 0),
+    c DECIMAL(38, 0),
     d DECIMAL(9, 9),
     e DECIMAL(18, 18),
     f DECIMAL(38, 38),
     g Decimal(9, 5),
     h decimal(18, 9),
     i deciMAL(38, 18),
-    j DECIMAL(1,0)
+    j DECIMAL(1, 0)
 )
 ENGINE = Memory;
 

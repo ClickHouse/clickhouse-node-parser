@@ -1,1 +1,247 @@
-{"expected":[{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":"n","location":{"start":{"offset":366,"line":4,"column":107},"end":{"offset":367,"line":4,"column":108}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers1"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers2"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^numbers\\\\d+$"
+        }
+      ],
+      "sample": {
+        "ratio": {
+          "num": "0.1"
+        }
+      }
+    },
+    "trailingComments": [
+      "-- { serverError SAMPLING_NOT_SUPPORTED }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers1"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "intHash32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "sampleBy": {
+      "kind": "functionCall",
+      "name": "intHash32",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers2"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "intHash32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "sampleBy": {
+      "kind": "functionCall",
+      "name": "intHash32",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^numbers\\\\d+$"
+        }
+      ],
+      "sample": {
+        "ratio": {
+          "num": "0.01"
+        }
+      }
+    }
+  }
+]

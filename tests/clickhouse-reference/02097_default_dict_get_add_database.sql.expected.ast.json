@@ -1,1 +1,256 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "db_02097"
+  },
+  {
+    "kind": "use",
+    "database": "db_02097"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data_column_1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data_column_2",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "key_column",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "data_column_1",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "data_column_2",
+        "type": {
+          "name": "UInt8"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key_column"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_table"
+            }
+          }
+        ]
+      },
+      "lifetime": null,
+      "layout": {
+        "name": "DIRECT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_default"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "data_1",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "dictGetUInt64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "db_02097.test_dictionary"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "data_column_1"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data_2",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "dictGet",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "db_02097",
+                "test_dictionary"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "data_column_2"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "create_table_query"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_table_default"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "db_02097"
+          }
+        }
+      ]
+    }
+  }
+]

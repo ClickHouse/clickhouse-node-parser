@@ -4,7 +4,7 @@ SET enable_time_time64_type = 1;
 -- Time type in JSON
 CREATE TABLE json_time_test
 (
-    json JSON(`time_value` Time, `id` String)
+    json JSON(time_value Time, id String)
 )
 ENGINE = Memory;
 
@@ -17,7 +17,7 @@ ORDER BY json.id ASC;
 -- Time64 type in JSON
 CREATE TABLE json_time64_test
 (
-    json JSON(`time_value` Time64(3), `id` String)
+    json JSON(time_value Time64(3), id String)
 )
 ENGINE = Memory;
 
@@ -30,7 +30,7 @@ ORDER BY json.id ASC;
 -- #82267
 CREATE TABLE json_splits
 (
-    json JSON(`metric.moving_time` Time, `id` String)
+    json JSON(`metric.moving_time` Time, id String)
 )
 ORDER BY json.id;
 

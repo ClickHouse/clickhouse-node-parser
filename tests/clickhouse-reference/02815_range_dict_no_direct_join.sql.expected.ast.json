@@ -1,1 +1,416 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":164,"line":9,"column":8},"end":{"offset":165,"line":9,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "discounts"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "advertiser_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "discount_start_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "discount_end_date",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Date"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "amount",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "discounts_dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "advertiser_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "discount_start_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "name": "discount_end_date",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Date"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "amount",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "advertiser_id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "columnRef",
+              "parts": [
+                "discounts"
+              ]
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 600,
+        "max": 900
+      },
+      "layout": {
+        "name": "RANGE_HASHED",
+        "pairs": [
+          {
+            "name": "RANGE_LOOKUP_STRATEGY",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "max"
+            }
+          }
+        ]
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "discount_start_date"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "discount_end_date"
+            ]
+          }
+        }
+      ],
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ids"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "amount"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "ids"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "discounts_dict"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "advertiser_id"
+            ]
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "amount"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "direct,hash"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "amount"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "ids"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "discounts_dict"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "advertiser_id"
+            ]
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "amount"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "default"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "amount"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "ids"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "discounts_dict"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "advertiser_id"
+            ]
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "amount"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "direct"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  }
+]

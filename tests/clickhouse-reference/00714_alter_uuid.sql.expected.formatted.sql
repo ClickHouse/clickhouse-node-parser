@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS uuid
     id1 FixedString(36)
 )
 ENGINE = MergeTree
-ORDER BY created_at
+ORDER BY (created_at)
 PARTITION BY toDate(created_at);
 
 SELECT

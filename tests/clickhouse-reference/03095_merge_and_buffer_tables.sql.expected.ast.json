@@ -1,1 +1,212 @@
-{"expected":[{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"o","location":{"start":{"offset":117,"line":2,"column":46},"end":{"offset":118,"line":2,"column":47}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "f1",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f2",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "f1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt2"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "mt1"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "f1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "b"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "mt1"
+    },
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "mt2"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "m"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "mt1"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^(mt1|b)$"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "f1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "f2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "m"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "f1"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "f2"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- do select"
+    ]
+  }
+]

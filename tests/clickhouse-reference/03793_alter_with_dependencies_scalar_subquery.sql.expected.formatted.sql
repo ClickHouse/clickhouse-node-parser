@@ -6,7 +6,7 @@ CREATE TABLE foo_without_dependencies
     x UInt64
 )
 ENGINE = MergeTree
-ORDER BY ts
+ORDER BY (ts)
 PARTITION BY toYYYYMMDD(ts);
 
 SELECT
@@ -22,7 +22,7 @@ CREATE TABLE foo_with_index
     INDEX minmax_x x TYPE minmax GRANULARITY 1
 )
 ENGINE = MergeTree
-ORDER BY ts
+ORDER BY (ts)
 PARTITION BY toYYYYMMDD(ts);
 
 SELECT
@@ -42,7 +42,7 @@ CREATE TABLE foo_with_projection
     ORDER BY x ASC)
 )
 ENGINE = MergeTree
-ORDER BY ts
+ORDER BY (ts)
 PARTITION BY toYYYYMMDD(ts);
 
 SELECT

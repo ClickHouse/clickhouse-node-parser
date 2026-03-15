@@ -1,1 +1,325 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":226,"line":15,"column":8},"end":{"offset":227,"line":15,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k0",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v0",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k0"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k0",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v00",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupArrayLast",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "1"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k0"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv0"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k0",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v0",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupArrayLast",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "1"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k0"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "groupArrayLastState",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "v0"
+                ]
+              }
+            ]
+          },
+          "alias": "v00"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t0"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k0"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "v00"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k0"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "JSONEachRow"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_memory"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupArrayLast",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "1"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "v"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_memory"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "JSONEachRow"
+  }
+]

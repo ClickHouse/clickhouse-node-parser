@@ -1,1 +1,334 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"R","location":{"start":{"offset":64,"line":4,"column":8},"end":{"offset":65,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_zk_connection_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "zookeeper2:/clickhouse/{database}/02731_zk_connection/{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "host"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "port"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "index"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "is_expired"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "keeper_api_version"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "and",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "greaterOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "connected_time"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "yesterday",
+                "args": []
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "lessOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "connected_time"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "now",
+                  "args": []
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "parenthesized": true
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "functionCall",
+          "name": "abs",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "session_uptime_elapsed_seconds"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "zookeeperSessionUptime",
+                "args": []
+              }
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "parenthesized": true
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "enabled_feature_flags"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "zookeeper_connection"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "default"
+      }
+    },
+    "leadingComments": [
+      "-- NOTE: Durind the query execution, now() can be evaluated a bit earlier than connected_time"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "host"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "port"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "index"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "is_expired"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "keeper_api_version"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "and",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "greaterOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "connected_time"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "yesterday",
+                "args": []
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "lessOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "connected_time"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "now",
+                  "args": []
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "parenthesized": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "zookeeper_connection"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "default"
+      }
+    },
+    "leadingComments": [
+      "-- keeper_api_version will by 0 for auxiliary_zookeeper2, because we fail to get /api_version due to chroot",
+      "-- I'm not sure if it's a bug or a useful trick to fallback to basic api",
+      "-- Also, auxiliary zookeeper is created lazily"
+    ]
+  }
+]

@@ -52,8 +52,8 @@ WHERE s2 = '2';
 
 CREATE TABLE Test
 ENGINE = MergeTree()
-ORDER BY (String1, String2)
 PRIMARY KEY (String1, String2)
+ORDER BY (String1, String2)
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns = 0 AS
 SELECT
     concat('String1_', toString(number)) AS String1,

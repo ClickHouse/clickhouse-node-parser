@@ -1,1 +1,144 @@
-{"expected":[{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"t","location":{"start":{"offset":129,"line":1,"column":130},"end":{"offset":130,"line":1,"column":131}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "proj"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "maxdate",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "date"
+                  ]
+                }
+              ]
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "date"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2012-10-24"
+              }
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1e2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "date"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "proj"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "date"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "2012-10-24"
+      }
+    }
+  }
+]

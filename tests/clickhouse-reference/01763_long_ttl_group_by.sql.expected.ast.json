@@ -1,1 +1,381 @@
-{"expected":[{"type":"literal","text":"::","ignoreCase":false},{"type":"literal","text":"[","ignoreCase":false},{"type":"literal","text":".","ignoreCase":false},{"type":"literal","text":".","ignoreCase":false},{"type":"literal","text":".","ignoreCase":false},{"type":"literal","text":".","ignoreCase":false},{"type":"literal","text":"RESPECT","ignoreCase":true},{"type":"literal","text":"IGNORE","ignoreCase":true},{"type":"literal","text":"OVER","ignoreCase":true},{"type":"literal","text":"OVER","ignoreCase":true},{"type":"literal","text":"OVER","ignoreCase":true},{"type":"class","parts":["*","/","%"],"inverted":false,"ignoreCase":false,"unicode":false},{"type":"literal","text":"DIV","ignoreCase":true},{"type":"literal","text":"MOD","ignoreCase":true},{"type":"literal","text":"||","ignoreCase":false},{"type":"literal","text":"+","ignoreCase":false},{"type":"literal","text":"-","ignoreCase":false},{"type":"literal","text":"−","ignoreCase":false},{"type":"literal","text":"GLOBAL","ignoreCase":true},{"type":"literal","text":"NOT","ignoreCase":true},{"type":"literal","text":"IN","ignoreCase":true},{"type":"literal","text":"ILIKE","ignoreCase":true},{"type":"literal","text":"LIKE","ignoreCase":true},{"type":"literal","text":"REGEXP","ignoreCase":true},{"type":"literal","text":"BETWEEN","ignoreCase":true},{"type":"literal","text":"IS","ignoreCase":true},{"type":"literal","text":"IS","ignoreCase":true},{"type":"literal","text":"IS","ignoreCase":true},{"type":"literal","text":"IS","ignoreCase":true},{"type":"literal","text":"<=>","ignoreCase":false},{"type":"literal","text":">=","ignoreCase":false},{"type":"literal","text":"<=","ignoreCase":false},{"type":"literal","text":"<>","ignoreCase":false},{"type":"literal","text":"!=","ignoreCase":false},{"type":"literal","text":"==","ignoreCase":false},{"type":"class","parts":[["<",">"]],"inverted":false,"ignoreCase":false,"unicode":false},{"type":"literal","text":"AND","ignoreCase":true},{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"?","ignoreCase":false},{"type":"literal","text":"AS","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"G","location":{"start":{"offset":278,"line":5,"column":28},"end":{"offset":279,"line":5,"column":29}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_ttl_group_by01763"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "min_value",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "max_value",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "toStartOfInterval",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      }
+    ],
+    "ttl": [
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "ts"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMinute",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "min_value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "max_value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "uniqExact",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ttl_group_by01763"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "min_value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "max_value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "uniqExact",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ttl_group_by01763"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "3"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "min_value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "max_value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "uniqExact",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ttl_group_by01763"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "ts"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "today",
+              "args": []
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalDay",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+]

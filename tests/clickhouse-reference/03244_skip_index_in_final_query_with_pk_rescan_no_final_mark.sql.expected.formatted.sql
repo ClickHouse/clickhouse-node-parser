@@ -19,8 +19,8 @@ CREATE TABLE tab1
     INDEX tab1_ric_idx ric TYPE bloom_filter GRANULARITY 4
 )
 ENGINE = ReplacingMergeTree(update_timestamp)
-ORDER BY (valueDate, bb_ticker, ric)
 PRIMARY KEY (valueDate, bb_ticker, ric)
+ORDER BY (valueDate, bb_ticker, ric)
 SETTINGS index_granularity = 111, index_granularity_bytes = 0, compress_primary_key = 0;
 
 SET send_logs_level = 'warning';

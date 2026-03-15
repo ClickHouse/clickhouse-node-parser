@@ -1,1 +1,111 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"J","location":{"start":{"offset":55,"line":1,"column":56},"end":{"offset":56,"line":1,"column":57}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "id_val"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ANY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "join_use_nulls",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "joinGet",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id_val"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "val"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toInt32",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  }
+]

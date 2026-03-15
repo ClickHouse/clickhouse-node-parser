@@ -1,1 +1,12 @@
-<Parse Error>
+CREATE DATABASE {CLICKHOUSE_DATABASE_1:Identifier};
+
+USE {CLICKHOUSE_DATABASE_1:Identifier};
+
+CREATE TABLE t
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+SELECT *
+FROM merge('', '');

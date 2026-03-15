@@ -9,8 +9,8 @@ CREATE TABLE bug_delta_gorilla
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi' AS
-SELECT 0
-FROM numbers(20000000);
+(SELECT 0
+FROM numbers(20000000));
 
 SELECT count(*)
 FROM bug_delta_gorilla

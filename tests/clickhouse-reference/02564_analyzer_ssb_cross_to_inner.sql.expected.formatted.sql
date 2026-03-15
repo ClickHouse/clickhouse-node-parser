@@ -12,7 +12,7 @@ CREATE TABLE customer
     C_MKTSEGMENT LowCardinality(String)
 )
 ENGINE = MergeTree
-ORDER BY C_CUSTKEY;
+ORDER BY (C_CUSTKEY);
 
 CREATE TABLE lineorder
 (

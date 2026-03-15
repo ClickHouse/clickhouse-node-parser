@@ -1,1 +1,765 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"A","location":{"start":{"offset":1515,"line":24,"column":10},"end":{"offset":1516,"line":24,"column":11}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_throw_if_noop",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Double"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "simple"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "simple",
+      "final": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "val"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "simple"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nullable_str",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "anyLast"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nullable_str_respect_nulls",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "anyLastRespectNulls"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "low_str",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "anyLast"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "anyLast"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "IPv4"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "status",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupBitOr"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tup",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sumMap"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int32"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tup_min",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "minMap"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int32"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tup_max",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "maxMap"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int32"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupArrayArray"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int32"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "uniq_arr",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupUniqArrayArray"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int32"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "map_uniq_arr",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupUniqArrayArrayMap"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Map",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int32"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "nullable_str"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "nullable_str_respect_nulls"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "low_str"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ip"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "status"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tup"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tup_min"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tup_max"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "uniq_arr"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "map_uniq_arr"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "simple"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "with_overflow"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sumWithOverflow"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "with_overflow"
+      },
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "with_overflow"
+    }
+  }
+]

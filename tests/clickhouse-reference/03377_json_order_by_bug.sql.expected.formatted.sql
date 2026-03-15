@@ -2,7 +2,7 @@ SET enable_variant_type = 1, allow_suspicious_variant_types = 1, enable_json_typ
 
 CREATE TABLE t0
 (
-    c0 Variant(Float32,UInt8,JSON)
+    c0 Variant(Float32, UInt8, JSON)
 )
 ENGINE = Memory;
 

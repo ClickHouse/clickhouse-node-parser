@@ -1,1 +1,114 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":82,"line":1,"column":83},"end":{"offset":83,"line":1,"column":84}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Printer",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "IntervalStart",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "hiveHash",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Printer"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toYear",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "IntervalStart"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(hiveHash(Printer), toYear(IntervalStart))"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "Printer"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "IntervalStart"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Printer"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "Printer"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "printer1"
+      }
+    }
+  }
+]

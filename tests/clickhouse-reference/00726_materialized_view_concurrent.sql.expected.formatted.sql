@@ -1,1 +1,31 @@
-<Parse Error>
+CREATE TABLE src_00726
+(
+    x UInt8
+)
+ENGINE = Null;
+
+CREATE MATERIALIZED VIEW mv1_00726
+ENGINE = Memory
+AS
+SELECT x
+FROM src_00726
+WHERE x % 2 = 0;
+
+CREATE MATERIALIZED VIEW mv2_00726
+ENGINE = Memory
+AS
+SELECT x
+FROM src_00726
+WHERE x % 2 = 1;
+
+SET parallel_view_processing = 1;
+
+SET parallel_view_processing = 0;
+
+SELECT *
+FROM mv1_00726
+ORDER BY x ASC;
+
+SELECT *
+FROM mv2_00726
+ORDER BY x ASC;

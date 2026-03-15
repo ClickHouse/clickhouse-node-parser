@@ -11,14 +11,14 @@ CREATE TABLE part
     p_type String,
     p_size Int32,
     p_container FixedString(10),
-    p_retailprice Decimal(18,2),
+    p_retailprice Decimal(18, 2),
     p_comment String,
     CONSTRAINT pk CHECK p_partkey >= 0,
     CONSTRAINT positive CHECK (p_size >= 0
     AND p_retailprice >= 0)
 )
 ENGINE = MergeTree
-ORDER BY p_partkey;
+ORDER BY (p_partkey);
 
 CREATE TABLE supplier
 (
@@ -27,19 +27,19 @@ CREATE TABLE supplier
     s_address String,
     s_nationkey Int32,
     s_phone FixedString(15),
-    s_acctbal Decimal(18,2),
+    s_acctbal Decimal(18, 2),
     s_comment String,
     CONSTRAINT pk CHECK s_suppkey >= 0
 )
 ENGINE = MergeTree
-ORDER BY s_suppkey;
+ORDER BY (s_suppkey);
 
 CREATE TABLE partsupp
 (
     ps_partkey Int32,
     ps_suppkey Int32,
     ps_availqty Int32,
-    ps_supplycost Decimal(18,2),
+    ps_supplycost Decimal(18, 2),
     ps_comment String,
     CONSTRAINT pk CHECK ps_partkey >= 0,
     CONSTRAINT c1 CHECK (ps_availqty >= 0
@@ -55,20 +55,20 @@ CREATE TABLE customer
     c_address String,
     c_nationkey Int32,
     c_phone FixedString(15),
-    c_acctbal Decimal(18,2),
+    c_acctbal Decimal(18, 2),
     c_mktsegment FixedString(10),
     c_comment String,
     CONSTRAINT pk CHECK c_custkey >= 0
 )
 ENGINE = MergeTree
-ORDER BY c_custkey;
+ORDER BY (c_custkey);
 
 CREATE TABLE orders
 (
     o_orderkey Int32,
     o_custkey Int32,
     o_orderstatus FixedString(1),
-    o_totalprice Decimal(18,2),
+    o_totalprice Decimal(18, 2),
     o_orderdate Date,
     o_orderpriority FixedString(15),
     o_clerk FixedString(15),
@@ -85,10 +85,10 @@ CREATE TABLE lineitem
     l_partkey Int32,
     l_suppkey Int32,
     l_linenumber Int32,
-    l_quantity Decimal(18,2),
-    l_extendedprice Decimal(18,2),
-    l_discount Decimal(18,2),
-    l_tax Decimal(18,2),
+    l_quantity Decimal(18, 2),
+    l_extendedprice Decimal(18, 2),
+    l_discount Decimal(18, 2),
+    l_tax Decimal(18, 2),
     l_returnflag FixedString(1),
     l_linestatus FixedString(1),
     l_shipdate Date,
@@ -114,7 +114,7 @@ CREATE TABLE nation
     CONSTRAINT pk CHECK n_nationkey >= 0
 )
 ENGINE = MergeTree
-ORDER BY n_nationkey;
+ORDER BY (n_nationkey);
 
 CREATE TABLE region
 (
@@ -124,7 +124,7 @@ CREATE TABLE region
     CONSTRAINT pk CHECK r_regionkey >= 0
 )
 ENGINE = MergeTree
-ORDER BY r_regionkey;
+ORDER BY (r_regionkey);
 
 SELECT 1;
 

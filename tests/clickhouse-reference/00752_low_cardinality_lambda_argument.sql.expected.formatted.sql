@@ -14,7 +14,7 @@ CREATE TABLE test_array
     resources_host Array(LowCardinality(String))
 )
 ENGINE = MergeTree()
-ORDER BY resources_host;
+ORDER BY (resources_host);
 
 SELECT arrayMap(i -> [resources_host[i]], arrayEnumerate(resources_host))
 FROM test_array;

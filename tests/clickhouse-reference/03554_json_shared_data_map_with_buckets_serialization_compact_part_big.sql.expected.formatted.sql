@@ -1,6 +1,6 @@
 CREATE TABLE test_compact_map_with_buckets
 (
-    json JSON(max_dynamic_paths=8)
+    json JSON(max_dynamic_paths = 8)
 )
 ENGINE = MergeTree
 ORDER BY tuple()

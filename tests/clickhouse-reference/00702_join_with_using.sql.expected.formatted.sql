@@ -1,1 +1,126 @@
-<Parse Error>
+CREATE TABLE using1
+(
+    a UInt8,
+    b UInt8
+)
+ENGINE = Memory;
+
+CREATE TABLE using2
+(
+    a UInt8,
+    b UInt8
+)
+ENGINE = Memory;
+
+SELECT *
+FROM
+    using1
+LEFT JOIN (
+        SELECT *
+        FROM using2
+    ) AS js2
+    USING (a, b)
+ORDER BY a ASC;
+
+CREATE TABLE persons
+(
+    id String,
+    name String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE TABLE children
+(
+    id String,
+    childName String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+SELECT *
+FROM
+    persons
+INNER JOIN children
+    USING (id)
+ORDER BY
+    id ASC,
+    name ASC,
+    childName ASC;
+
+SELECT *
+FROM
+    persons
+INNER JOIN (
+        SELECT *
+        FROM children
+    ) AS j
+    USING (id)
+ORDER BY
+    id ASC,
+    name ASC,
+    childName ASC;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM persons
+    ) AS s
+INNER JOIN (
+        SELECT *
+        FROM children
+    ) AS j
+    USING (id)
+ORDER BY
+    id ASC,
+    name ASC,
+    childName ASC;
+
+--
+SET joined_subquery_requires_alias = 0;
+
+SELECT *
+FROM
+    persons
+INNER JOIN (
+        SELECT *
+        FROM children
+    )
+    USING (id)
+ORDER BY
+    id ASC,
+    name ASC,
+    childName ASC;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM persons
+    )
+INNER JOIN (
+        SELECT *
+        FROM children
+    )
+    USING (id)
+ORDER BY
+    id ASC,
+    name ASC,
+    childName ASC;
+
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM persons
+    ) AS s
+INNER JOIN (
+        SELECT *
+        FROM children
+    )
+    USING (id)
+ORDER BY
+    id ASC,
+    name ASC,
+    childName ASC;

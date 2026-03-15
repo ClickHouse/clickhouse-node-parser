@@ -1,1 +1,42 @@
-<Parse Error>
+SET allow_experimental_statistics = 1;
+
+SET allow_statistics_optimize = 1;
+
+SET mutations_sync = 1;
+
+CREATE TABLE tab
+(
+    a Float64 STATISTICS(tdigest)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+SELECT count(*)
+FROM tab
+WHERE a < '10';
+
+CREATE TABLE tab
+(
+    a Int32 STATISTICS(tdigest)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+SELECT count(*)
+FROM tab
+WHERE a < '10.5'; -- { serverError TYPE_MISMATCH }
+
+SELECT count(*)
+FROM tab
+WHERE a < 10.5;
+
+CREATE TABLE tab
+(
+    a Int16 STATISTICS(tdigest)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+SELECT count(*)
+FROM tab
+WHERE a < '9999999999999999999999999';

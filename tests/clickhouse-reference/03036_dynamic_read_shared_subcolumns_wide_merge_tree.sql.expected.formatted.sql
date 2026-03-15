@@ -10,7 +10,7 @@ SET min_bytes_to_use_direct_io = 0; -- min_bytes_to_use_direct_io > 0 is broken
 CREATE TABLE test
 (
     id UInt64,
-    d Dynamic(max_types=2)
+    d Dynamic(max_types = 2)
 )
 ENGINE = MergeTree
 ORDER BY id

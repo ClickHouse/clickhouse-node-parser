@@ -9,12 +9,50 @@
       {
         "kind": "columnDef",
         "name": "foo",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "top_items",
-        "type": "AggregateFunction(topKWeighted(100, 3, 'counts'), String, UInt64)"
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "topKWeighted",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "100"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "'counts'"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -23,10 +61,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "foo"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "foo"
+          ]
+        }
       }
     ]
   },

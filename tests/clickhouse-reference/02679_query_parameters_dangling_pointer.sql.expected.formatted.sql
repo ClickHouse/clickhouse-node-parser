@@ -6,4 +6,4 @@ CREATE TABLE test.xxx
     a Int64
 )
 ENGINE = MergeTree
-ORDER BY {o:String}; -- { serverError ILLEGAL_COLUMN }
+ORDER BY ({o:String}); -- { serverError ILLEGAL_COLUMN }

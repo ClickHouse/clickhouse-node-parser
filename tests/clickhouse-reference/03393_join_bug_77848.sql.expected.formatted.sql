@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS BadJoin
     name LowCardinality(String)
 )
 ENGINE = MergeTree()
-ORDER BY name;
+ORDER BY (name);
 
 SET enable_analyzer = 1;
 

@@ -11,7 +11,7 @@ CREATE TABLE userid_test
     name String
 )
 ENGINE = MergeTree()
-ORDER BY userid
+ORDER BY (userid)
 PARTITION BY (intDiv(userid, 500))
 SETTINGS index_granularity = 8192;
 

@@ -1,1 +1,171 @@
-{"expected":[{"type":"literal","text":"NOT","ignoreCase":true},{"type":"literal","text":"NULL","ignoreCase":true},{"type":"literal","text":"DEFAULT","ignoreCase":true},{"type":"literal","text":"MATERIALIZED","ignoreCase":true},{"type":"literal","text":"ALIAS","ignoreCase":true},{"type":"literal","text":"EPHEMERAL","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"CODEC","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":")","ignoreCase":false}],"found":"(","location":{"start":{"offset":321,"line":12,"column":5},"end":{"offset":322,"line":12,"column":6}},"name":"SyntaxError"}
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "type": "Enum8('hello' = 1, 'world' = 2)"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "CAST",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Enum8('hello' = 1, 'world' = 2)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "type": "Enum8(\n    'hello' = 1,\n    'world' = 2)"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "CAST",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Enum8('hello' = 1,\\n\\t'world' = 2)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTimeZone",
+        "args": [
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "type": "TIMESTAMP"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "UTC"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cast"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello",
+                  "value": "1"
+                },
+                {
+                  "name": "world",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          "type": "Enum8(\n            'hello' = 1,\n            'world' = 2\n        )"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "e"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "cast"
+    }
+  }
+]

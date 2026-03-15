@@ -1,1 +1,174 @@
-{"expected":[{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"P","location":{"start":{"offset":54,"line":3,"column":1},"end":{"offset":55,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_dst"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "intHash32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserID"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "sampleBy": {
+      "kind": "functionCall",
+      "name": "intHash32",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "storage_policy",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "default"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_buffer"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "hits_dst"
+    },
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "current_database",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "hits_dst"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "600"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "600"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "hits_buffer"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "hits_dst"
+    }
+  }
+]

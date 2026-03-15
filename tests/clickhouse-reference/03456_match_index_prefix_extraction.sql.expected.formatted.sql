@@ -6,7 +6,7 @@ CREATE TABLE foo
     path String
 )
 ENGINE = MergeTree
-ORDER BY path
+ORDER BY (path)
 SETTINGS index_granularity = 1;
 
 -- check if also escaped sequence are properly extracted

@@ -5,9 +5,7 @@ SET enable_json_type = 1;
 CREATE TABLE json_test
 (
     id String,
-    json JSON(
-        foo Variant(String, Array(String))
-    )
+    json JSON(foo Variant(String, Array(String)))
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/json_test', '1')
 ORDER BY id

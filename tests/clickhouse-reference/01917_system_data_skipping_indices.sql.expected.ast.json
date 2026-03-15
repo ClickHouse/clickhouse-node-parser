@@ -9,17 +9,31 @@
       {
         "kind": "columnDef",
         "name": "key",
-        "type": "Int"
+        "type": {
+          "name": "Int"
+        }
       },
       {
         "kind": "columnDef",
         "name": "d1",
-        "type": "Int"
+        "type": {
+          "name": "Int"
+        }
       },
       {
         "kind": "columnDef",
         "name": "d1_null",
-        "type": "Nullable(Int)"
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "indexDef",
@@ -30,7 +44,9 @@
             "d1"
           ]
         },
-        "indexType": "minmax",
+        "indexType": {
+          "name": "minmax"
+        },
         "granularity": 1
       },
       {
@@ -48,7 +64,9 @@
             }
           ]
         },
-        "indexType": "minmax",
+        "indexType": {
+          "name": "minmax"
+        },
         "granularity": 1
       }
     ],
@@ -58,10 +76,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "key"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
       }
     ],
     "settings": [
@@ -73,7 +93,8 @@
           "value": "0"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "createTable",
@@ -85,12 +106,16 @@
       {
         "kind": "columnDef",
         "name": "name",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "columnDef",
         "name": "frequency",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "indexDef",
@@ -115,18 +140,27 @@
                 ]
               }
             ]
-          },
-          "parenthesized": true
+          }
         },
-        "indexType": "set(1000)",
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          ]
+        },
         "granularity": 5
       },
       {
         "kind": "indexDef",
         "name": "sample_index1",
         "expr": {
-          "kind": "tuple",
-          "elements": [
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
             {
               "kind": "functionCall",
               "name": "length",
@@ -145,18 +179,20 @@
                 "name"
               ]
             }
-          ],
-          "source": "(length(name), name)"
+          ]
         },
-        "indexType": "minmax",
+        "indexType": {
+          "name": "minmax"
+        },
         "granularity": 4
       },
       {
         "kind": "indexDef",
         "name": "sample_index2",
         "expr": {
-          "kind": "tuple",
-          "elements": [
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
             {
               "kind": "functionCall",
               "name": "lower",
@@ -175,10 +211,33 @@
                 "name"
               ]
             }
-          ],
-          "source": "(lower(name), name)"
+          ]
         },
-        "indexType": "ngrambf_v1(3, 256, 2, 0)",
+        "indexType": {
+          "name": "ngrambf_v1",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "256"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
         "granularity": 4
       }
     ],
@@ -188,10 +247,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "name"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        }
       }
     ],
     "settings": [
@@ -203,7 +264,8 @@
           "value": "0"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

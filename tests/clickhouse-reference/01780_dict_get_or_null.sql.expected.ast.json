@@ -1,1 +1,906 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":146,"line":7,"column":8},"end":{"offset":147,"line":7,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple_key_dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_nullable",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple_key_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "value_nullable",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "simple_key_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": null,
+      "layout": {
+        "name": "DIRECT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "simple_key_dictionary"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "simple_key_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "simple_key_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value_nullable"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "simple_key_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "value"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "value_nullable"
+              }
+            ],
+            "source": "('value', 'value_nullable')"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "complex_key_dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id_key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_nullable",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "complex_key_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "id_key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "value_nullable",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id_key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "complex_key_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": null,
+      "layout": {
+        "name": "COMPLEX_KEY_DIRECT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "tuple",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "key"
+          }
+        ],
+        "source": "(number, 'key')"
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "complex_key_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "key"
+              }
+            ],
+            "source": "(number, 'key')"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "complex_key_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "key"
+              }
+            ],
+            "source": "(number, 'key')"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "complex_key_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value_nullable"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "key"
+              }
+            ],
+            "source": "(number, 'key')"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "complex_key_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "value"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "value_nullable"
+              }
+            ],
+            "source": "('value', 'value_nullable')"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "key"
+              }
+            ],
+            "source": "(number, 'key')"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_key_dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "start_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "end_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_nullable",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_key_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "start_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "name": "end_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "value_nullable",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "range_key_dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 1000
+      },
+      "layout": {
+        "name": "RANGE_HASHED",
+        "pairs": []
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "start_date"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "end_date"
+            ]
+          }
+        }
+      ],
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "tuple",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-20"
+              }
+            ]
+          }
+        ],
+        "source": "(number, toDate('2019-05-20'))"
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_key_dictionary"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-20"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_key_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-20"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_key_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "value_nullable"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-20"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrNull",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_key_dictionary"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "value"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "value_nullable"
+              }
+            ],
+            "source": "('value', 'value_nullable')"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-20"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    }
+  }
+]

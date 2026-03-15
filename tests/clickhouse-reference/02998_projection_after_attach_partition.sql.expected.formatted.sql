@@ -5,8 +5,8 @@ CREATE TABLE visits_order
     some_int UInt64
 )
 ENGINE = MergeTree()
-PARTITION BY user_id
 PRIMARY KEY user_id
+PARTITION BY user_id
 SETTINGS index_granularity = 1;
 
 CREATE TABLE visits_order_dst
@@ -16,8 +16,8 @@ CREATE TABLE visits_order_dst
     some_int UInt64
 )
 ENGINE = MergeTree()
-PARTITION BY user_id
 PRIMARY KEY user_id
+PARTITION BY user_id
 SETTINGS index_granularity = 1;
 
 SET enable_analyzer = 0;

@@ -1,1 +1,110 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "03147_db",
+    "ifNotExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "03147_db",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "use",
+    "database": "03147_db"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_parallel_reading_from_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "parallel_replicas"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- We use the old setting here just to make sure we preserve it as an alias."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "loop",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "03147_db",
+            "t"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "15"
+      }
+    },
+    "format": "Null"
+  }
+]

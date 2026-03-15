@@ -1,1 +1,173 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"m","location":{"start":{"offset":180,"line":4,"column":8},"end":{"offset":181,"line":4,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_json_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "src"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "c",
+                    "type": {
+                      "name": "UInt32"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "x.y",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "z",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "alias": "a"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "json",
+              "x",
+              "y"
+            ]
+          },
+          "alias": "x"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "json",
+                "z"
+              ]
+            },
+            "type": "UInt32",
+            "operator": true
+          },
+          "alias": "z"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "src"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "dst"
+    }
+  }
+]

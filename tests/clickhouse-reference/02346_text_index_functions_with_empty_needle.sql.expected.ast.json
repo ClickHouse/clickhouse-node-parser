@@ -28,12 +28,16 @@
       {
         "kind": "columnDef",
         "name": "id",
-        "type": "Int"
+        "type": {
+          "name": "Int"
+        }
       },
       {
         "kind": "columnDef",
         "name": "text",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "indexDef",
@@ -42,10 +46,28 @@
           "kind": "columnRef",
           "parts": [
             "text"
-          ],
-          "parenthesized": true
+          ]
         },
-        "indexType": "text(tokenizer = 'splitByNonAlpha')"
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -54,10 +76,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "id"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
       }
     ]
   },

@@ -5,7 +5,7 @@ CREATE TABLE foo
     dimension_1 String
 )
 ENGINE = MergeTree()
-ORDER BY server_date
+ORDER BY (server_date)
 PARTITION BY toYYYYMM(server_date);
 
 CREATE TABLE bar
@@ -14,7 +14,7 @@ CREATE TABLE bar
     dimension_1 String
 )
 ENGINE = MergeTree()
-ORDER BY server_date
+ORDER BY (server_date)
 PARTITION BY toYYYYMM(server_date);
 
 SET optimize_move_to_prewhere = 1;

@@ -10,7 +10,7 @@ CREATE TABLE tab
     id UInt64,
     version UInt64,
     text String,
-    INDEX idx_text (text) TYPE text(tokenizer = array)
+    INDEX idx_text text TYPE text(tokenizer = `array`)
 )
 ENGINE = ReplacingMergeTree(version)
 ORDER BY id;

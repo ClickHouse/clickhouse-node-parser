@@ -6,10 +6,10 @@ CREATE TABLE set_array
 (
     primary_key String,
     index_array Array(UInt64),
-    INDEX additional_index_array (index_array) TYPE set(10000) GRANULARITY 1
+    INDEX additional_index_array index_array TYPE set(10000) GRANULARITY 1
 )
 ENGINE = MergeTree()
-ORDER BY primary_key;
+ORDER BY (primary_key);
 
 SET max_rows_to_read = 8192;
 

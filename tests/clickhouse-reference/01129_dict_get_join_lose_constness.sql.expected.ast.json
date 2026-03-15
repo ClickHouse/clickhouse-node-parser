@@ -1,1 +1,257 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "dict1"
+    },
+    "ifNotExists": true,
+    "dictAttrs": [
+      {
+        "name": "bytes_allocated",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "element_count",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "name": "loading_start_time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bytes_allocated"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "PASSWORD",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionaries"
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "system"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "join_key"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTimeZone",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "dictGetDateTime",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "system.dict1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "loading_start_time"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dict_key"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        },
+        "alias": "datetime"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "dictGetInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "system.dict1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "element_count"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt64",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "dict_key"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "join_key"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "dict_key"
+            }
+          ]
+        },
+        "alias": "js1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              "alias": "join_key"
+            }
+          ]
+        },
+        "alias": "js2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "join_key"
+        ]
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "now",
+        "args": []
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "datetime"
+        ]
+      }
+    }
+  }
+]

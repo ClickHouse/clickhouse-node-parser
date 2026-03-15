@@ -10,10 +10,10 @@ CREATE TABLE lineitem
     l_partkey Int32,
     l_suppkey Int32,
     l_linenumber Int32,
-    l_quantity Decimal(15,2),
-    l_extendedprice Decimal(15,2),
-    l_discount Decimal(15,2),
-    l_tax Decimal(15,2),
+    l_quantity Decimal(15, 2),
+    l_extendedprice Decimal(15, 2),
+    l_discount Decimal(15, 2),
+    l_tax Decimal(15, 2),
     l_returnflag String,
     l_linestatus String,
     l_shipdate Date,
@@ -34,10 +34,10 @@ CREATE TABLE part
     p_type String,
     p_size Int32,
     p_container String,
-    p_retailprice Decimal(15,2),
+    p_retailprice Decimal(15, 2),
     p_comment String
 )
-ORDER BY p_partkey;
+ORDER BY (p_partkey);
 
 SELECT sum(l_extendedprice) / 7.0 AS avg_yearly
 FROM (

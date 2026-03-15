@@ -1,1 +1,13 @@
-<Parse Error>
+CREATE TABLE kek
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+CREATE MATERIALIZED VIEW kekv
+ENGINE = MergeTree
+ORDER BY tuple()
+AS
+SELECT *
+FROM kek;

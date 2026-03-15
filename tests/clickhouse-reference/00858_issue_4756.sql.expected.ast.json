@@ -1,1 +1,478 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"D","location":{"start":{"offset":252,"line":5,"column":38},"end":{"offset":253,"line":5,"column":39}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_product_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "local"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "shard1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "shard2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "distr1"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "shard1"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "shard1"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "distr2"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "shard2"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "shard2"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "distr1",
+          "id"
+        ],
+        "parenthesized": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "distr1"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "distr1",
+          "id"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "distr1",
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "distr1"
+            },
+            "kind": "join",
+            "joinType": "INNER",
+            "right": {
+              "kind": "tableRef",
+              "table": "distr2"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "distr1",
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "distr2",
+                    "id"
+                  ]
+                }
+              }
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "distr1",
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d0",
+          "id"
+        ],
+        "parenthesized": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "distr1",
+      "alias": "d0"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "d0",
+          "id"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d1",
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "distr1",
+              "alias": "d1"
+            },
+            "kind": "join",
+            "joinType": "INNER",
+            "right": {
+              "kind": "tableRef",
+              "table": "distr2",
+              "alias": "d2"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d1",
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d2",
+                    "id"
+                  ]
+                }
+              }
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "d1",
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "distr1",
+          "id"
+        ],
+        "parenthesized": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "distr1"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "distr1",
+          "id"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "distr1",
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "distr1",
+              "alias": "d1"
+            },
+            "kind": "join",
+            "joinType": "INNER",
+            "right": {
+              "kind": "tableRef",
+              "table": "distr2",
+              "alias": "d2"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "distr1",
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "distr2",
+                    "id"
+                  ]
+                }
+              }
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "distr1",
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        }
+      }
+    }
+  }
+]

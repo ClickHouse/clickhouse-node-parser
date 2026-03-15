@@ -1,1 +1,3451 @@
-{"expected":[{"type":"literal","text":"NOT","ignoreCase":true},{"type":"literal","text":"NULL","ignoreCase":true},{"type":"literal","text":"DEFAULT","ignoreCase":true},{"type":"literal","text":"MATERIALIZED","ignoreCase":true},{"type":"literal","text":"ALIAS","ignoreCase":true},{"type":"literal","text":"EPHEMERAL","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"CODEC","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":")","ignoreCase":false}],"found":"S","location":{"start":{"offset":335,"line":9,"column":31},"end":{"offset":336,"line":9,"column":32}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest, long",
+      "-- no-fasttest: 'countmin' sketches need a 3rd party library",
+      "-- Tests that DDL statements which create / drop / materialize statistics"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Float64"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Error case: Can't create statistics when allow_experimental_statistics = 0"
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Float64"
+        },
+        "statistics": [
+          {
+            "name": "no_statistics_type"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Error case: Unknown statistics types are rejected"
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Float64"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          },
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Error case: The same statistics type can't exist more than once on a column"
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UInt8"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Statistics can only be created on columns of specific data types (depending on the statistics kind), (*)",
+      "--   tdigest requires data_type.isValueRepresentedByInteger",
+      "--     These types work:"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UInt256"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Float32"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Date"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Date32"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "DateTime"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "DateTime64"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello"
+                },
+                {
+                  "name": "world"
+                }
+              ]
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt8"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "String"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "--     These types don't work:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "1"
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UUID"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "IPv4"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "IPv6"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UInt8"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "--   uniq requires data_type.isValueRepresentedByInteger or (Fixed)String",
+      "--     These types work:"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UInt256"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Float32"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Date"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Date32"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "DateTime"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "DateTime64"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello"
+                },
+                {
+                  "name": "world"
+                }
+              ]
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "IPv4"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt8"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "String"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "1"
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "--     These types don't work:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UUID"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "IPv6"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UInt8"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "--   countmin requires data_type.isValueRepresentedByInteger or data_type = (Fixed)String",
+      "--     These types work:"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UInt256"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Float32"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Date"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Date32"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "DateTime"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "DateTime64"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello"
+                },
+                {
+                  "name": "world"
+                }
+              ]
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "IPv4"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt8"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "String"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "1"
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "--     These types don't work:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UUID"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "IPv6"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UInt8"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "--   minmax requires data_type.isValueRepresentedByInteger",
+      "--     These types work:"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UInt256"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Float32"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Date"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Date32"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "DateTime"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "DateTime64"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello"
+                },
+                {
+                  "name": "world"
+                }
+              ]
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "IPv4"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt8"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "String"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "--     These types don't work:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "1"
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "UUID"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "IPv6"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64_tdigest",
+        "type": {
+          "name": "Float64"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "f32",
+        "type": {
+          "name": "Float32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- CREATE TABLE was easy, ALTER is more fun"
+    ]
+  }
+]

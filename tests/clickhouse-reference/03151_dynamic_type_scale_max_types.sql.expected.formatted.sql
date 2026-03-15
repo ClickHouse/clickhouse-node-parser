@@ -7,7 +7,7 @@ SET optimize_read_in_order = 1;
 CREATE TABLE to_table
 (
     n1 UInt8,
-    n2 Dynamic(max_types=2)
+    n2 Dynamic(max_types = 2)
 )
 ENGINE = MergeTree
 ORDER BY n1;

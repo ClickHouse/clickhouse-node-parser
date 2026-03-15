@@ -1,1 +1,470 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"R","location":{"start":{"offset":44,"line":1,"column":45},"end":{"offset":45,"line":1,"column":46}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/{database}/t1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/{database}/t2"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_use_nulls",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_one_shard_three_replicas_localhost"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t1"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t2"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "x"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "s"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "s"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t1"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t2"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t1"
+      },
+      "kind": "join",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "x"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "s"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "s"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t1"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t2"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "x"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "s"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "s"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t1"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t2"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t1"
+      },
+      "kind": "join",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "x"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "s"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "s"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

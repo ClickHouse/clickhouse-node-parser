@@ -1,1 +1,392 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":641,"line":14,"column":8},"end":{"offset":642,"line":14,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- add_minmax_index_for_numeric_columns=0: Different plan (extra filtering)"
+    ],
+    "trailingComments": [
+      "-- this setting may skip index analysis when false"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_on_data_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "materialize_skip_indexes_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- disable asynchronous mutations"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_a",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "id,x_b",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "materialize_skip_indexes_on_merge",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "explain_indexes"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "trimLeft",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              }
+            ]
+          },
+          "alias": "explain"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "viewExplain",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "EXPLAIN"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "indexes = 1"
+              },
+              {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "functionCall",
+                      "name": "count",
+                      "args": []
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "tab"
+                  },
+                  "where": {
+                    "kind": "naryExpr",
+                    "op": "AND",
+                    "operands": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": ">=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "a"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "90"
+                        },
+                        "parenthesized": true
+                      },
+                      {
+                        "kind": "binaryExpr",
+                        "op": "<",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "a"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "110"
+                        },
+                        "parenthesized": true
+                      },
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "b"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        "parenthesized": true
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "OR",
+        "operands": [
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Name%"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Description%"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Parts%"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Granules%"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Range%"
+              }
+            ],
+            "parenthesized": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "explain_indexes"
+    }
+  }
+]

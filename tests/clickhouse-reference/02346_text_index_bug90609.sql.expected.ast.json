@@ -25,7 +25,9 @@
       {
         "kind": "columnDef",
         "name": "text",
-        "type": "String"
+        "type": {
+          "name": "String"
+        }
       },
       {
         "kind": "indexDef",
@@ -36,7 +38,27 @@
             "text"
           ]
         },
-        "indexType": "text(tokenizer = splitByNonAlpha)"
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "splitByNonAlpha"
+                ]
+              }
+            }
+          ]
+        }
       }
     ],
     "engine": {
@@ -44,9 +66,11 @@
     },
     "orderBy": [
       {
-        "kind": "functionCall",
-        "name": "tuple",
-        "args": []
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
       }
     ]
   },

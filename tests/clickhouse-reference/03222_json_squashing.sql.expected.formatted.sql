@@ -24,14 +24,14 @@ ORDER BY path ASC;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=2)
+    json JSON(max_dynamic_paths = 2)
 )
 ENGINE = MergeTree
 ORDER BY tuple();
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=8)
+    json JSON(max_dynamic_paths = 8)
 )
 ENGINE = MergeTree
 ORDER BY tuple();

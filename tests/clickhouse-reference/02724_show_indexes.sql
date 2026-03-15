@@ -31,4 +31,15 @@ CREATE TABLE `tab.with.dots`
 ENGINE = MergeTree
 PRIMARY KEY (c, a)
 SETTINGS add_minmax_index_for_numeric_columns=0;
+CREATE DATABASE `'`;
 CREATE TABLE `'`.`'` (c String) ENGINE = MergeTree ORDER BY c SETTINGS add_minmax_index_for_numeric_columns=0;
+CREATE DATABASE database_123456789abcde; -- pseudo-random database name
+CREATE TABLE database_123456789abcde.tbl
+(
+    a UInt64,
+    b UInt64,
+    INDEX mmi_idx b TYPE minmax
+)
+ENGINE = MergeTree
+PRIMARY KEY a
+SETTINGS add_minmax_index_for_numeric_columns=0;

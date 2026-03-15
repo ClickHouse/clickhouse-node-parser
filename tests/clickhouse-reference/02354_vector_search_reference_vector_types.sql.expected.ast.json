@@ -1,1 +1,1886 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"F","location":{"start":{"offset":909,"line":11,"column":8},"end":{"offset":910,"line":11,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-ordinary-database, no-parallel",
+      "-- no-parallel: SQL functions are not per-database, they are global",
+      "-- Tests that vector search queries work with reference vectors of different data types."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- this setting is randomized, set it explicitly to force local plan for parallel replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_f64"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": {
+          "name": "vector_similarity",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hnsw"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "L2Distance"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_f32"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": {
+          "name": "vector_similarity",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hnsw"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "L2Distance"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_bf16"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "BFloat16"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": {
+          "name": "vector_similarity",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hnsw"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "L2Distance"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createFunction",
+    "name": "constF64",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "array",
+        "elements": [
+          {
+            "kind": "functionCall",
+            "name": "toFloat64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.0"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toFloat64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "2.0"
+              }
+            ]
+          }
+        ],
+        "source": "[toFloat64(0.0), toFloat64(2.0)]"
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "constF32",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "array",
+        "elements": [
+          {
+            "kind": "functionCall",
+            "name": "toFloat32",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.0"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toFloat32",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "2.0"
+              }
+            ]
+          }
+        ],
+        "source": "[toFloat32(0.0), toFloat32(2.0)]"
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "constBF16",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "array",
+        "elements": [
+          {
+            "kind": "functionCall",
+            "name": "toBFloat16",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.0"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toBFloat16",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "2.0"
+              }
+            ]
+          }
+        ],
+        "source": "[toBFloat16(0.0), toBFloat16(2.0)]"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_f64"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constF64",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_f64"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constF32",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_f64"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constBF16",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_f32"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constF64",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_f32"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constF32",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_f32"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constBF16",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_bf16"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constF64",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_bf16"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constF32",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab_bf16"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "constBF16",
+              "args": []
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_f64"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constF64",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_f64"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constF32",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_f64"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constBF16",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_f32"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constF64",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_f32"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constF32",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_f32"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constBF16",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_bf16"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constF64",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_bf16"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constF32",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_bf16"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "constBF16",
+                    "args": []
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "nonConstF32",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "arg1"
+      ],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "array",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "toFloat32",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "/",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "arg1"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        },
+                        "parenthesized": true
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toFloat32",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "/",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "arg1"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        },
+                        "parenthesized": true
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "source": "[toFloat32((arg1 % 10)/10), toFloat32((arg1 % 10)/10)]"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            }
+          ]
+        },
+        "alias": "explain"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab_f32"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "L2Distance",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "nonConstF32",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "rand",
+                        "args": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%vector_similarity%"
+        }
+      ]
+    }
+  }
+]

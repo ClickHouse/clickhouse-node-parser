@@ -1,1 +1,303 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":29,"line":3,"column":8},"end":{"offset":30,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "database_dictionary_test_key_expression",
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "database_dictionary_test_key_expression",
+      "table": "test_for_dictionary"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "database_dictionary_test_key_expression",
+      "table": "test_query_log_dictionary_simple"
+    },
+    "dictAttrs": [
+      {
+        "name": "value_id",
+        "type": {
+          "name": "UInt64"
+        },
+        "expression": {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value_id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_for_dictionary"
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "database_dictionary_test_key_expression"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 10
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "database_dictionary_test_key_expression",
+      "table": "test_query_log_dictionary_simple"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "database_dictionary_test_key_expression",
+      "table": "test_query_log_dictionary_complex"
+    },
+    "dictAttrs": [
+      {
+        "name": "value_id",
+        "type": {
+          "name": "UInt64"
+        },
+        "expression": {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "value_length",
+        "type": {
+          "name": "UInt64"
+        },
+        "expression": {
+          "kind": "functionCall",
+          "name": "length",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value_length"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_for_dictionary"
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "database_dictionary_test_key_expression"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 10
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "database_dictionary_test_key_expression",
+      "table": "test_query_log_dictionary_complex"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

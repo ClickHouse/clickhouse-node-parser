@@ -1,1 +1,103 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"v","location":{"start":{"offset":100,"line":2,"column":8},"end":{"offset":101,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "subquery",
+          "name": "cte",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "cte"
+      }
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view1"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "subquery",
+          "name": "t",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "alias": "n"
+              }
+            ],
+            "from": {
+              "kind": "tableFunction",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    }
+  }
+]

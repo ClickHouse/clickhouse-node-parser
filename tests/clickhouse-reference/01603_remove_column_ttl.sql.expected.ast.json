@@ -1,1 +1,113 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":136,"line":7,"column":8},"end":{"offset":137,"line":7,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_column_ttl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventTime",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Age",
+        "type": {
+          "name": "UInt8"
+        },
+        "ttl": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "EventTime"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMonth",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "trailingComments": [
+      "-- column TTL doesn't work for compact parts"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "UserID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Age"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table_with_column_ttl"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

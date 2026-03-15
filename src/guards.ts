@@ -171,6 +171,18 @@ export function isSetStatement(node: ASTNode): node is ASTNodeKindMap['set'] {
   return node.kind === 'set';
 }
 
+/** Type guard for {@link import('./ast').TransactionControlStatement | TransactionControlStatement} nodes. */
+export function isTransactionControlStatement(
+  node: ASTNode,
+): node is ASTNodeKindMap['transactionControl'] {
+  return node.kind === 'transactionControl';
+}
+
+/** Type guard for {@link import('./ast').SetRoleStatement | SetRoleStatement} nodes. */
+export function isSetRoleStatement(node: ASTNode): node is ASTNodeKindMap['setRole'] {
+  return node.kind === 'setRole';
+}
+
 /** Type guard for {@link import('./ast').UseStatement | UseStatement} nodes. */
 export function isUseStatement(node: ASTNode): node is ASTNodeKindMap['use'] {
   return node.kind === 'use';
@@ -184,6 +196,98 @@ export function isSystemStatement(node: ASTNode): node is ASTNodeKindMap['system
 /** Type guard for {@link import('./ast').CreateTableStatement | CreateTableStatement} nodes. */
 export function isCreateTableStatement(node: ASTNode): node is ASTNodeKindMap['createTable'] {
   return node.kind === 'createTable';
+}
+
+/** Type guard for {@link import('./ast').CreateViewStatement | CreateViewStatement} nodes. */
+export function isCreateViewStatement(node: ASTNode): node is ASTNodeKindMap['createView'] {
+  return node.kind === 'createView';
+}
+
+/** Type guard for {@link import('./ast').CreateMaterializedViewStatement | CreateMaterializedViewStatement} nodes. */
+export function isCreateMaterializedViewStatement(
+  node: ASTNode,
+): node is ASTNodeKindMap['createMaterializedView'] {
+  return node.kind === 'createMaterializedView';
+}
+
+/** Type guard for {@link import('./ast').CreateDatabaseStatement | CreateDatabaseStatement} nodes. */
+export function isCreateDatabaseStatement(node: ASTNode): node is ASTNodeKindMap['createDatabase'] {
+  return node.kind === 'createDatabase';
+}
+
+/** Type guard for {@link import('./ast').CreateFunctionStatement | CreateFunctionStatement} nodes. */
+export function isCreateFunctionStatement(node: ASTNode): node is ASTNodeKindMap['createFunction'] {
+  return node.kind === 'createFunction';
+}
+
+/** Type guard for {@link import('./ast').CreateIndexStatement | CreateIndexStatement} nodes. */
+export function isCreateIndexStatement(node: ASTNode): node is ASTNodeKindMap['createIndex'] {
+  return node.kind === 'createIndex';
+}
+
+/** Type guard for {@link import('./ast').CreateDictionaryStatement | CreateDictionaryStatement} nodes. */
+export function isCreateDictionaryStatement(
+  node: ASTNode,
+): node is ASTNodeKindMap['createDictionary'] {
+  return node.kind === 'createDictionary';
+}
+
+/** Type guard for {@link import('./ast').CreateWorkloadStatement | CreateWorkloadStatement} nodes. */
+export function isCreateWorkloadStatement(node: ASTNode): node is ASTNodeKindMap['createWorkload'] {
+  return node.kind === 'createWorkload';
+}
+
+/** Type guard for {@link import('./ast').CreateUserStatement | CreateUserStatement} nodes. */
+export function isCreateUserStatement(node: ASTNode): node is ASTNodeKindMap['createUser'] {
+  return node.kind === 'createUser';
+}
+
+/** Type guard for {@link import('./ast').CreateRoleStatement | CreateRoleStatement} nodes. */
+export function isCreateRoleStatement(node: ASTNode): node is ASTNodeKindMap['createRole'] {
+  return node.kind === 'createRole';
+}
+
+/** Type guard for {@link import('./ast').CreateRowPolicyStatement | CreateRowPolicyStatement} nodes. */
+export function isCreateRowPolicyStatement(
+  node: ASTNode,
+): node is ASTNodeKindMap['createRowPolicy'] {
+  return node.kind === 'createRowPolicy';
+}
+
+/** Type guard for {@link import('./ast').CreateQuotaStatement | CreateQuotaStatement} nodes. */
+export function isCreateQuotaStatement(node: ASTNode): node is ASTNodeKindMap['createQuota'] {
+  return node.kind === 'createQuota';
+}
+
+/** Type guard for {@link import('./ast').CreateSettingsProfileStatement | CreateSettingsProfileStatement} nodes. */
+export function isCreateSettingsProfileStatement(
+  node: ASTNode,
+): node is ASTNodeKindMap['createSettingsProfile'] {
+  return node.kind === 'createSettingsProfile';
+}
+
+/** Type guard for {@link import('./ast').CreateNamedCollectionStatement | CreateNamedCollectionStatement} nodes. */
+export function isCreateNamedCollectionStatement(
+  node: ASTNode,
+): node is ASTNodeKindMap['createNamedCollection'] {
+  return node.kind === 'createNamedCollection';
+}
+
+/** Type guard for {@link import('./ast').CreateResourceStatement | CreateResourceStatement} nodes. */
+export function isCreateResourceStatement(node: ASTNode): node is ASTNodeKindMap['createResource'] {
+  return node.kind === 'createResource';
+}
+
+/** Type guard for {@link import('./ast').CreateWindowViewStatement | CreateWindowViewStatement} nodes. */
+export function isCreateWindowViewStatement(
+  node: ASTNode,
+): node is ASTNodeKindMap['createWindowView'] {
+  return node.kind === 'createWindowView';
+}
+
+/** Type guard for {@link import('./ast').CreateLiveViewStatement | CreateLiveViewStatement} nodes. */
+export function isCreateLiveViewStatement(node: ASTNode): node is ASTNodeKindMap['createLiveView'] {
+  return node.kind === 'createLiveView';
 }
 
 /** Type guard for {@link import('./ast').ColumnDef | ColumnDef} nodes. */

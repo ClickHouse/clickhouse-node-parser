@@ -8,10 +8,10 @@ CREATE TABLE tab
 (
     id UInt32,
     message String,
-    INDEX idx (message) TYPE text(tokenizer = splitByNonAlpha)
+    INDEX idx message TYPE text(tokenizer = splitByNonAlpha)
 )
 ENGINE = MergeTree
-ORDER BY id;
+ORDER BY (id);
 
 SELECT groupArray(id)
 FROM tab

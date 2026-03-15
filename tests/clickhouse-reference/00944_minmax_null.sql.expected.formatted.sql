@@ -5,7 +5,7 @@ CREATE TABLE min_max_with_nullable_string
     INDEX nullable_str_min_max nullable_str TYPE minmax GRANULARITY 1
 )
 ENGINE = MergeTree
-ORDER BY t;
+ORDER BY (t);
 
 SELECT count()
 FROM min_max_with_nullable_string

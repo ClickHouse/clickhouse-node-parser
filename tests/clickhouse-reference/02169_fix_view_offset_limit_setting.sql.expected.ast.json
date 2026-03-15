@@ -1,1 +1,207 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":94,"line":2,"column":8},"end":{"offset":95,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "counter"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "createdAt",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "vcounter"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            ]
+          },
+          "alias": "tens"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "max",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "createdAt"
+                ]
+              }
+            ]
+          },
+          "alias": "maxid"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "counter"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tens"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tens"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "vcounter"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tens"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    },
+    "settings": [
+      {
+        "name": "limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        }
+      },
+      {
+        "name": "offset",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tens"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "vcounter"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tens"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    },
+    "settings": [
+      {
+        "name": "limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        }
+      },
+      {
+        "name": "offset",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  }
+]

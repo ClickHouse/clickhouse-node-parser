@@ -1,1 +1,282 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":29,"line":3,"column":8},"end":{"offset":30,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createDatabase",
+    "name": "db_01455_rank_correlation",
+    "ifNotExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "use",
+    "database": "db_01455_rank_correlation"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "rankCorr",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "rankCorr",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "literal",
+              "type": "Int64",
+              "value": "-1"
+            },
+            "right": {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "type": "Int64"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "roundBankers",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "rankCorr",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "exp",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "sin",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "moons"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "roundBankers",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "rankCorr",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "moons"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "circles"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "roundBankers",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "rankCorr",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "circles"
+    }
+  }
+]

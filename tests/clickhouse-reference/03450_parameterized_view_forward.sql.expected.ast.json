@@ -1,1 +1,222 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "inner_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "queryParam",
+              "name": "inner_a",
+              "type": "Int32"
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "inner_b",
+              "type": "Int32"
+            }
+          },
+          "alias": "n"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "outer_view_hardcoded_ok"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "alias": "c"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "inner_view",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "inner_a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "inner_b"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "outer_view_hardcoded_ok"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "outer_view_parameterized_ko"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "alias": "c"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "inner_view",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "inner_a"
+              ]
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "a",
+              "type": "Int32"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "inner_b"
+              ]
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "b",
+              "type": "Int32"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "outer_view_parameterized_ko",
+      "args": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      ]
+    }
+  }
+]

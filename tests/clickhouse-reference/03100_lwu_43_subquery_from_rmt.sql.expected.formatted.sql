@@ -5,7 +5,7 @@ CREATE TABLE lightweight_test
     key String
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/lightweight_test', '1')
-ORDER BY key
+ORDER BY (key)
 PARTITION BY toYYYYMMDD(ts)
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 
@@ -14,7 +14,7 @@ CREATE TABLE keys
     key String
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/keys', '1')
-ORDER BY key;
+ORDER BY (key);
 
 SELECT
     key,

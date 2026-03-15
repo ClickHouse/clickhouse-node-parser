@@ -5,7 +5,7 @@ CREATE TABLE tab
     id UInt32,
     key String,
     value Nullable(String),
-    INDEX idx_key (key) TYPE text(tokenizer = 'splitByNonAlpha')
+    INDEX idx_key key TYPE text(tokenizer = 'splitByNonAlpha')
 )
 ENGINE = CoalescingMergeTree()
 ORDER BY id;

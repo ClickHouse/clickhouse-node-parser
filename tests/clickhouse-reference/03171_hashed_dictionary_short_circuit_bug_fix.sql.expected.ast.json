@@ -1,1 +1,374 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":169,"line":3,"column":8},"end":{"offset":170,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "hash_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "user_result",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "y"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "hash_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "user_result",
+        "type": {
+          "name": "DECIMAL",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "6"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "d1"
+    },
+    "dictAttrs": [
+      {
+        "name": "hash_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "user_result",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "hash_id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "x"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "hash_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d1"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "user_result"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "hash_id"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toFloat64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "user_result"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d1"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "user_result"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "hash_id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "y"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "d2"
+    },
+    "dictAttrs": [
+      {
+        "name": "hash_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "user_result",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "hash_id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "x"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED_ARRAY",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "hash_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d2"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "user_result"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "hash_id"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toFloat64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "user_result"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d2"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "user_result"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "hash_id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "y"
+    }
+  }
+]

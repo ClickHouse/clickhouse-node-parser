@@ -1,1 +1,401 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":65,"line":1,"column":66},"end":{"offset":66,"line":1,"column":67}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tbl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "i"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "length",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "j"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(toDate(dt), i % 2, length(j))"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_use_implicit_projections",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "_partition_value"
+        ]
+      },
+      "right": {
+        "kind": "tuple",
+        "elements": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2021-04-01"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ],
+        "source": "('2021-04-01', 1, 2)"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "_partition_value"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "2021-04-01"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "_partition_value"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "_partition_value"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "4"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tbl2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_partition_value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl2"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_partition_value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tbl2"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  }
+]

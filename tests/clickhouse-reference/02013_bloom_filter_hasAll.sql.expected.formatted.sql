@@ -3,7 +3,7 @@ CREATE TABLE bftest
     k Int64,
     y Array(Int64) DEFAULT x,
     x Array(Int64),
-    INDEX ix1 (x) TYPE bloom_filter GRANULARITY 3
+    INDEX ix1 x TYPE bloom_filter GRANULARITY 3
 )
 ENGINE = MergeTree
 ORDER BY k;

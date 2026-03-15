@@ -3,7 +3,7 @@ CREATE TABLE t
     c0 Nullable(Int)
 )
 ENGINE = MergeTree()
-ORDER BY c0
+ORDER BY (c0)
 PARTITION BY (c0)
 SETTINGS allow_nullable_key = 1;
 
@@ -18,7 +18,7 @@ CREATE TABLE taggr
     c0 Nullable(Int)
 )
 ENGINE = AggregatingMergeTree()
-ORDER BY c0
+ORDER BY (c0)
 PARTITION BY (c0)
 SETTINGS allow_nullable_key = 1;
 

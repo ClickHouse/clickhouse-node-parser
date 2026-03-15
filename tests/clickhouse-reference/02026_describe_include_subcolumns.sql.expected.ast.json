@@ -22,24 +22,68 @@
       {
         "kind": "columnDef",
         "name": "d",
-        "type": "Date"
+        "type": {
+          "name": "Date"
+        }
       },
       {
         "kind": "columnDef",
         "name": "n",
-        "type": "Nullable(String)",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
         "comment": "It is a nullable column"
       },
       {
         "kind": "columnDef",
         "name": "arr1",
-        "type": "Array(UInt32)",
-        "codec": "CODEC(ZSTD)"
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
       },
       {
         "kind": "columnDef",
         "name": "arr2",
-        "type": "Array(Array(String))",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
         "ttl": {
           "kind": "binaryExpr",
           "op": "+",
@@ -65,8 +109,54 @@
       {
         "kind": "columnDef",
         "name": "t",
-        "type": "Tuple(s String, a Array(Tuple(a UInt32, b UInt32)))",
-        "codec": "CODEC(ZSTD)"
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "s",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Tuple",
+                      "args": [
+                        {
+                          "kind": "namedField",
+                          "name": "a",
+                          "type": {
+                            "name": "UInt32"
+                          }
+                        },
+                        {
+                          "kind": "namedField",
+                          "name": "b",
+                          "type": {
+                            "name": "UInt32"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
       }
     ],
     "engine": {
@@ -74,10 +164,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "d"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        }
       }
     ]
   }

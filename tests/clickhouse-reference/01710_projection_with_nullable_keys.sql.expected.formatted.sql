@@ -1,1 +1,8 @@
-<Parse Error>
+CREATE TABLE sales
+(
+    DATE_SOLD DateTime64(3, 'UTC'),
+    PRODUCT_ID Nullable(String)
+)
+ENGINE = MergeTree()
+ORDER BY DATE_SOLD
+PARTITION BY toYYYYMM(DATE_SOLD);

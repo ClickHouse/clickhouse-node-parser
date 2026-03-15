@@ -1,1 +1,1270 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":495,"line":24,"column":8},"end":{"offset":496,"line":24,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database, no-parallel-replicas",
+      "-- no-parallel, no-parallel-replicas: Dictionary is not created in parallel replicas."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_inverse_dictionary_lookup",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_or_like_chain",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ref_prices_ckh"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "price",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tag",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ref_items_flat"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "score",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_prices_ckh"
+    },
+    "dictAttrs": [
+      {
+        "name": "k1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "k2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "price",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "tag",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_prices_ckh"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_prices_ch_array"
+    },
+    "dictAttrs": [
+      {
+        "name": "k1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "k2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "price",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "tag",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_prices_ckh"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_HASHED_ARRAY",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_prices_ck_sparse_hashed"
+    },
+    "dictAttrs": [
+      {
+        "name": "k1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "k2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "price",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "tag",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_prices_ckh"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_SPARSE_HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_items_flat"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "score",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_items_flat"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_items_hashed"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "score",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_items_flat"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_items_hashed_array"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "score",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_items_flat"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "HASHED_ARRAY",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_items_sparse_hashed"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "score",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "ref_items_flat"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "SPARSE_HASHED",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "f"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "payload",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "f"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_prices_ckh"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "tag"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k1"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k2"
+                ]
+              }
+            ],
+            "source": "(k1, k2)"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "pro"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "f"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_prices_ch_array"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "tag"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k1"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k2"
+                ]
+              }
+            ],
+            "source": "(k1, k2)"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "pro"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "f"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_prices_ck_sparse_hashed"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "tag"
+          },
+          {
+            "kind": "tuple",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k1"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k2"
+                ]
+              }
+            ],
+            "source": "(k1, k2)"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "pro"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "f"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_items_flat"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "alpha"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "f"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_items_hashed"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "alpha"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "f"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_items_hashed_array"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "alpha"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "payload"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "f"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "dict_items_sparse_hashed"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "name"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "alpha"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "payload"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

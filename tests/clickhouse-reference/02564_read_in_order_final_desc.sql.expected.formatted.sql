@@ -8,8 +8,8 @@ CREATE TABLE mytable
     value Float64
 )
 ENGINE = ReplacingMergeTree(insert_timestamp)
-ORDER BY (key, timestamp)
-PRIMARY KEY (key, timestamp);
+PRIMARY KEY (key, timestamp)
+ORDER BY (key, timestamp);
 
 SELECT
     timestamp,

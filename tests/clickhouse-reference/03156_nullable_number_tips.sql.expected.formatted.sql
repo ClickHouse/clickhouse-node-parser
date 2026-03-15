@@ -18,7 +18,7 @@ FORMAT PrettyCompact;
 CREATE TEMPORARY TABLE test
 (
     x Nullable(UInt64),
-    PRIMARY KEY(tuple())
+    PRIMARY KEY()
 )
 ENGINE = MergeTree
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0, serialization_info_version = 'with_types', nullable_serialization_version = 'allow_sparse';
@@ -47,7 +47,7 @@ FORMAT PrettySpace;
 CREATE TEMPORARY TABLE test
 (
     x UInt64,
-    PRIMARY KEY(tuple())
+    PRIMARY KEY()
 )
 ENGINE = MergeTree
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0, serialization_info_version = 'with_types', nullable_serialization_version = 'allow_sparse';

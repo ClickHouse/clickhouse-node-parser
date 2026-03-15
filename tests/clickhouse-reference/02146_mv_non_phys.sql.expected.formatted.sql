@@ -1,1 +1,6 @@
-<Parse Error>
+CREATE MATERIALIZED VIEW mv_02146
+ENGINE = MergeTree()
+ORDER BY number
+AS
+SELECT *
+FROM numbers(10); -- { serverError QUERY_IS_NOT_SUPPORTED_IN_MATERIALIZED_VIEW }

@@ -49,12 +49,12 @@ FROM test;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_types=0)
+    json JSON(max_dynamic_types = 0)
 )
 ENGINE = Memory;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=0)
+    json JSON(max_dynamic_paths = 0)
 )
 ENGINE = Memory;

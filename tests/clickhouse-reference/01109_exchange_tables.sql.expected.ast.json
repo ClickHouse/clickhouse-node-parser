@@ -1,1 +1,541 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":59,"line":3,"column":8},"end":{"offset":60,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01109",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "use",
+    "database": "test_01109"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "rowNumberInAllBlocks",
+          "args": []
+        },
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "toLowCardinality",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "exchange"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "tables"
+                        }
+                      ],
+                      "source": "['exchange', 'tables']"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "engine": {
+      "name": "Log",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "tables",
+          "alias": "t"
+        },
+        "kind": "join",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "databases",
+          "alias": "d"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t",
+                "database"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "d",
+                "name"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "leadingComments": [
+      "-- NOTE: database = currentDatabase() is not mandatory"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "rowNumberInAllBlocks",
+            "args": []
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "count",
+                  "args": []
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t0"
+              }
+            }
+          }
+        },
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "hello"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "world"
+                    }
+                  ],
+                  "source": "['hello', 'world']"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t2"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01109_other_atomic"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01109_ordinary",
+    "engine": {
+      "name": "Ordinary"
+    },
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01109_other_atomic",
+      "table": "t3"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "rowNumberInAllBlocks",
+            "args": []
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "max",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "tupleElement",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "tupleElement",
+                            "args": [
+                              {
+                                "kind": "tuple",
+                                "elements": [
+                                  {
+                                    "kind": "asterisk"
+                                  },
+                                  {
+                                    "kind": "asterisk"
+                                  }
+                                ],
+                                "source": "(*,*)"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              ],
+              "from": {
+                "kind": "subqueryFrom",
+                "query": {
+                  "kind": "union",
+                  "queries": [
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "functionCall",
+                          "name": "tuple",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "t1"
+                      }
+                    },
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "functionCall",
+                          "name": "tuple",
+                          "args": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ]
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "t2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "array",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "another"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "db"
+                    }
+                  ],
+                  "source": "['another', 'db']"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01109_ordinary",
+      "table": "t4"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test_01109_other_atomic",
+      "table": "t3"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test_01109_ordinary",
+      "table": "t4"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01109_rename_exists",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "use",
+    "database": "test_01109_rename_exists"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "engine": {
+      "name": "Log",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    }
+  }
+]

@@ -1,1 +1,136 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"v","location":{"start":{"offset":85,"line":2,"column":8},"end":{"offset":86,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_pv"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp_field",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "pv"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "table_pv"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp_field"
+          ]
+        },
+        "right": {
+          "kind": "queryParam",
+          "name": "timestamp_param",
+          "type": "DateTime"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "pv",
+      "args": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp_param"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-04-01 00:00:01"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "pv",
+      "args": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp_param"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-040"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_PARSE_DATETIME }"
+    ]
+  }
+]

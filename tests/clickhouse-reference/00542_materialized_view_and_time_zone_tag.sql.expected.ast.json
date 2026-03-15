@@ -1,1 +1,273 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"M","location":{"start":{"offset":123,"line":3,"column":8},"end":{"offset":124,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ],
+          "source": "(d, t)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "m1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ],
+          "source": "(d, t)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toStartOfMinute",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x",
+                  "t"
+                ]
+              }
+            ]
+          },
+          "alias": "t"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "count",
+            "args": []
+          },
+          "alias": "c"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "x"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "m3"
+    },
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ],
+          "source": "(d, t)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toStartOfHour",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "m1",
+                  "t"
+                ]
+              }
+            ]
+          },
+          "alias": "t"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "m1"
+      }
+    }
+  }
+]

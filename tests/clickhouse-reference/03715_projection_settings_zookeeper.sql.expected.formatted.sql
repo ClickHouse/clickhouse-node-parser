@@ -1,1 +1,43 @@
-<Parse Error>
+CREATE TABLE x1
+(
+    i int
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/x', 'r1')
+ORDER BY i
+SETTINGS index_granularity = 999999999, index_granularity_bytes = 99999999999, use_const_adaptive_granularity = 0, min_bytes_for_wide_part = 0;
+
+CREATE TABLE x2
+(
+    i int
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/x', 'r2')
+ORDER BY i
+SETTINGS index_granularity = 999999999, index_granularity_bytes = 99999999999, use_const_adaptive_granularity = 0, min_bytes_for_wide_part = 0;
+
+SELECT marks
+FROM `system`.projection_parts
+WHERE active
+    AND database = currentDatabase()
+    AND table = 'x1'
+    AND name = 'p1';
+
+SELECT marks
+FROM `system`.projection_parts
+WHERE active
+    AND database = currentDatabase()
+    AND table = 'x1'
+    AND name = 'p2';
+
+SELECT marks
+FROM `system`.projection_parts
+WHERE active
+    AND database = currentDatabase()
+    AND table = 'x2'
+    AND name = 'p1';
+
+SELECT marks
+FROM `system`.projection_parts
+WHERE active
+    AND database = currentDatabase()
+    AND table = 'x2'
+    AND name = 'p2';

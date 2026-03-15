@@ -1,7 +1,7 @@
 CREATE TABLE tab
 ENGINE = Memory() AS
-SELECT ([1, number], [toInt32(2),2]) AS map
-FROM numbers(1, 10);
+(SELECT ([1, number], [toInt32(2),2]) AS map
+FROM numbers(1, 10));
 
 -- mapAdd
 SELECT mapAdd([1], [1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

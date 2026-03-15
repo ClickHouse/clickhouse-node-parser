@@ -1,1 +1,123 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":7,"line":1,"column":8},"end":{"offset":8,"line":1,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers500k"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "500000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_query_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1073741824"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{2,3}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "numbers500k"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "bitmapContains",
+      "args": [
+        {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "numbers500k"
+            }
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "toUInt32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

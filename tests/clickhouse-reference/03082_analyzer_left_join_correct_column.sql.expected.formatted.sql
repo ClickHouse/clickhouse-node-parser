@@ -7,7 +7,7 @@ CREATE TABLE test1
     `x.y` Decimal(18, 4)
 )
 ENGINE = MergeTree()
-ORDER BY pk;
+ORDER BY (pk);
 
 CREATE TABLE test2
 (
@@ -15,7 +15,7 @@ CREATE TABLE test2
     `x.y` Decimal(18, 4)
 )
 ENGINE = MergeTree()
-ORDER BY pk;
+ORDER BY (pk);
 
 SELECT
     t1.pk,

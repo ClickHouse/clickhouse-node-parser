@@ -1,1 +1,155 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":55,"line":1,"column":56},"end":{"offset":56,"line":1,"column":57}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "test1"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test1"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test2",
+        "alias": "test2"
+      },
+      "kind": "arrayJoin",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayFilter",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "t"
+                ],
+                "body": {
+                  "kind": "inExpr",
+                  "negated": false,
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t"
+                    ]
+                  },
+                  "values": {
+                    "kind": "subqueryExpr",
+                    "query": {
+                      "kind": "select",
+                      "distinct": {
+                        "kind": "distinct"
+                      },
+                      "select": [
+                        {
+                          "kind": "alias",
+                          "expr": {
+                            "kind": "functionCall",
+                            "name": "now",
+                            "args": []
+                          },
+                          "alias": "ym:a"
+                        }
+                      ],
+                      "where": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    }
+                  },
+                  "global": true,
+                  "parenthesized": true
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "test2",
+                  "b"
+                ]
+              }
+            ]
+          },
+          "alias": "test2_b"
+        }
+      ]
+    },
+    "where": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "1"
+    }
+  }
+]

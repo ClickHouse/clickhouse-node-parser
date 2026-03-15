@@ -1,1 +1,1212 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":61,"line":1,"column":62},"end":{"offset":62,"line":1,"column":63}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nation"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n_nationkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n_name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n_nationkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "customer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c_custkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_nationkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_nationkey_copy",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c_custkey"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_join_runtime_filters",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_join_swap_table",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "explain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "customer"
+            },
+            "kind": "join",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "tableRef",
+              "table": "nation"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_nationkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_nationkey"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_name"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "FRANCE"
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_custkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%ReadFromMergeTree%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Type%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Strictness%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "explain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "customer"
+            },
+            "kind": "join",
+            "joinType": "RIGHT",
+            "right": {
+              "kind": "tableRef",
+              "table": "nation"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_nationkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_nationkey"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_name"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "FRANCE"
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_custkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%ReadFromMergeTree%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Type%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Strictness%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "explain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "customer"
+            },
+            "kind": "join",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "tableRef",
+              "table": "nation"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_nationkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_nationkey"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_name"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "FRANCE"
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_custkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%ReadFromMergeTree%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Type%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Strictness%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "explain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "customer"
+            },
+            "kind": "join",
+            "joinType": "RIGHT",
+            "right": {
+              "kind": "tableRef",
+              "table": "nation"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_nationkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_nationkey"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_name"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "FRANCE"
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_custkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%ReadFromMergeTree%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Type%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Strictness%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "explain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "customer"
+            },
+            "kind": "join",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "tableRef",
+              "table": "nation"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_nationkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_nationkey"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_name"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "FRANCE"
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_custkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%ReadFromMergeTree%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Type%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Strictness%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "explain"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "customer"
+            },
+            "kind": "join",
+            "joinType": "RIGHT",
+            "right": {
+              "kind": "tableRef",
+              "table": "nation"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_nationkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_nationkey"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n_name"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "FRANCE"
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c_custkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%ReadFromMergeTree%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Type%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Strictness%"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

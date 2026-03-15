@@ -1,1 +1,226 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"v","location":{"start":{"offset":120,"line":3,"column":8},"end":{"offset":121,"line":3,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'Asia/Istanbul'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "expr",
+          "name": "ttt",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          }
+        },
+        {
+          "kind": "expr",
+          "name": "start_date",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "s"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "subquery",
+          "name": "_table",
+          "query": {
+            "kind": "union",
+            "queries": [
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "alias": "number"
+                  }
+                ]
+              },
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "_table"
+                },
+                "where": {
+                  "kind": "binaryExpr",
+                  "op": "<",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ttt"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "t1"
+        },
+        "kind": "join",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "_table"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t1",
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "_table",
+                    "number"
+                  ]
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_date"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2024-09-23"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "parenthesized": true
+    }
+  }
+]

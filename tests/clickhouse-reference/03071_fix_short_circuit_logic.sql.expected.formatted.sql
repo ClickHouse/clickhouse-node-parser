@@ -1,1 +1,62 @@
-<Parse Error>
+CREATE FUNCTION unhexPrefixed AS value -> unhex(substring(value, 3));
+
+CREATE FUNCTION hex2bytes AS address -> CAST(unhexPrefixed(address), 'FixedString(20)');
+
+CREATE FUNCTION bytes2hex AS address -> concat('0x', lower(hex(address)));
+
+CREATE TABLE test
+(
+    transfer_id String,
+    address FixedString(20),
+    value UInt256,
+    block_timestamp DateTime('UTC'),
+    token_address FixedString(20)
+)
+ENGINE = MergeTree
+PRIMARY KEY (address, block_timestamp)
+ORDER BY (address, block_timestamp)
+PARTITION BY toYYYYMM(block_timestamp);
+
+CREATE TABLE token_data
+(
+    token_address_hex String,
+    chain String,
+    is_blacklisted Bool
+)
+ENGINE = TinyLog;
+
+CREATE DICTIONARY token_data_map
+(
+    token_address_hex String,
+    chain String,
+    is_blacklisted Bool
+)
+PRIMARY KEY token_address_hex, chain
+SOURCE(clickhouse(table token_data))
+LIFETIME(MIN 200 MAX 300)
+LAYOUT(COMPLEX_KEY_HASHED_ARRAY());
+
+SELECT block_timestamp
+FROM (
+        SELECT
+            block_timestamp,
+            bytes2hex(token_address) AS token_address_hex
+        FROM (
+                SELECT
+                    transfer_id,
+                    address,
+                    value,
+                    block_timestamp,
+                    token_address,
+                    'zksync' AS chain
+                FROM test
+            )
+        WHERE (address = hex2bytes('0xd387a6e4e84a6c86bd90c158c6028a58cc8ac459'))
+            AND (notLike(transfer_id, 'gas%'))
+            AND (value > 0)
+            AND (dictGetOrDefault(token_data_map, 'is_blacklisted', (token_address_hex, 'zksync'), true))
+    )
+SETTINGS
+    max_threads = 1,
+    short_circuit_function_evaluation = 'enable',
+    enable_analyzer = 0;

@@ -50,15 +50,35 @@ export interface NodePositionMap {
   intersect: Statement;
   explain: Statement;
   set: Statement;
+  transactionControl: Statement;
+  setRole: Statement;
   use: Statement;
   system: Statement;
   createTable: Statement;
+  createView: Statement;
+  createMaterializedView: Statement;
+  createDatabase: Statement;
+  createFunction: Statement;
+  createIndex: Statement;
+  createDictionary: Statement;
+  createWorkload: Statement;
+  createUser: Statement;
+  createRole: Statement;
+  createRowPolicy: Statement;
+  createQuota: Statement;
+  createSettingsProfile: Statement;
+  createNamedCollection: Statement;
+  createResource: Statement;
+  createWindowView: Statement;
+  createLiveView: Statement;
+  parallelWith: Statement;
 
   // CREATE TABLE element nodes
   columnDef: import('./ast').TableElement;
   constraintDef: import('./ast').TableElement;
   indexDef: import('./ast').TableElement;
   projectionDef: import('./ast').TableElement;
+  foreignKeyDef: import('./ast').TableElement;
 }
 
 /**

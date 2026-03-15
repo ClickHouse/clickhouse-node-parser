@@ -1,1 +1,154 @@
-{"expected":[{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"F","location":{"start":{"offset":161,"line":4,"column":19},"end":{"offset":162,"line":4,"column":20}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_correlated_subqueries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "age",
+        "type": {
+          "name": "Int16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "oldest_before",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "age_max"
+      ],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "uid"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "users"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "<",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "users",
+                "age"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "age_max"
+              ]
+            }
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "users",
+                  "age"
+                ]
+              },
+              "direction": "DESC"
+            }
+          ],
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "functionCall",
+        "name": "oldest_before",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "users",
+              "age"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "trailingComments": [
+      "-- { serverError UNSUPPORTED_METHOD }"
+    ]
+  }
+]

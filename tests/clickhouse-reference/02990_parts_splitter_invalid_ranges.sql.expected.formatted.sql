@@ -5,8 +5,8 @@ CREATE TABLE test_table
     key UInt64
 )
 ENGINE = ReplacingMergeTree
-ORDER BY (eventType, timestamp, key)
 PRIMARY KEY (eventType, timestamp)
+ORDER BY (eventType, timestamp, key)
 SETTINGS index_granularity = 1;
 
 SELECT

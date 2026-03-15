@@ -1,1 +1,71 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"R","location":{"start":{"offset":97,"line":6,"column":8},"end":{"offset":98,"line":6,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "test_row_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    },
+    "to": {
+      "kind": "all"
+    }
+  }
+]

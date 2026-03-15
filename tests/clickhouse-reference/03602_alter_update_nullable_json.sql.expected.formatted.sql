@@ -5,7 +5,7 @@ SET max_block_size = 1000;
 CREATE TABLE test
 (
     id UInt32,
-    json Nullable(JSON(max_dynamic_paths=1))
+    json Nullable(JSON(max_dynamic_paths = 1))
 )
 ENGINE = MergeTree
 ORDER BY tuple()
@@ -20,7 +20,7 @@ FROM test;
 CREATE TABLE test
 (
     id UInt32,
-    json Nullable(JSON(max_dynamic_paths=1))
+    json Nullable(JSON(max_dynamic_paths = 1))
 )
 ENGINE = MergeTree
 ORDER BY tuple()

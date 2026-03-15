@@ -1,1 +1,337 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"R","location":{"start":{"offset":830,"line":39,"column":8},"end":{"offset":831,"line":39,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_merge_tree_02525"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "primaryKeyAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table_merge_tree_02525"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dummy"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Check that temporary table with MergeTree is not sent to remote servers",
+      "-- The query with remote() should not fail"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_log_02525"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table_log_02525"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_stripe_log_02525"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "StripeLog"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table_stripe_log_02525"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_tiny_log_02525"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table_tiny_log_02525"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_replicated_merge_tree_02525"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_02525/table_replicated_merge_tree_02525"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "primaryKeyAfterOrderBy": true,
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_keeper_map_02525"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "KeeperMap",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "/"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "/test02525"
+            }
+          ]
+        }
+      ]
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  }
+]

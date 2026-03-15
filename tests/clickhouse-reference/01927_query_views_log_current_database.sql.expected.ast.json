@@ -1,1 +1,1597 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":332,"line":7,"column":54},"end":{"offset":333,"line":7,"column":55}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_query_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_a"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- SETUP TABLES"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_b"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "count",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_c"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_d"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "count",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_e"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "count",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_f"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "count",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "matview_a_to_b"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "table_b"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toFloat64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            ]
+          },
+          "alias": "a"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "sleepEachRow",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.000001"
+                }
+              ]
+            }
+          },
+          "alias": "count"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "table_a"
+      }
+    },
+    "leadingComments": [
+      "-- SETUP MATERIALIZED VIEWS"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "matview_b_to_c"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "table_c"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "SUM",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "sleepEachRow",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.000002"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "alias": "a"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "table_b"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "matview_join_d_e"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "table_f"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "table_d",
+              "a"
+            ]
+          },
+          "alias": "a"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "table_e",
+                "count"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "sleepEachRow",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.000003"
+                }
+              ]
+            }
+          },
+          "alias": "count"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "table_d"
+        },
+        "kind": "join",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "table_e"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "table_d",
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "table_e",
+                "a"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_view_processing",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- ENABLE LOGS"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_query_views",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries_min_type",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "QUERY_FINISH"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Query log rows"
+        },
+        "alias": "stage"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "read_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "written_rows"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "databases"
+              ]
+            }
+          ]
+        },
+        "alias": "databases"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tables"
+              ]
+            }
+          ]
+        },
+        "alias": "tables"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "views"
+              ]
+            }
+          ]
+        },
+        "alias": "views"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SleepFunctionCalls"
+            }
+          ]
+        },
+        "alias": "sleep_calls"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SleepFunctionMicroseconds"
+            }
+          ]
+        },
+        "alias": "sleep_us"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectedRows"
+            }
+          ]
+        },
+        "alias": "profile_select_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectedBytes"
+            }
+          ]
+        },
+        "alias": "profile_select_bytes"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "InsertedRows"
+            }
+          ]
+        },
+        "alias": "profile_insert_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "InsertedBytes"
+            }
+          ]
+        },
+        "alias": "profile_insert_bytes"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "-- INSERT 1%INSERT INTO table_a%"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        }
+      ]
+    },
+    "format": "Vertical",
+    "leadingComments": [
+      "-- CHECK LOGS OF INSERT 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Depending views"
+        },
+        "alias": "stage"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "view_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "view_type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "status"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "view_target"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "view_query"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "read_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "written_rows"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SleepFunctionCalls"
+            }
+          ]
+        },
+        "alias": "sleep_calls"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SleepFunctionMicroseconds"
+            }
+          ]
+        },
+        "alias": "sleep_us"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectedRows"
+            }
+          ]
+        },
+        "alias": "profile_select_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectedBytes"
+            }
+          ]
+        },
+        "alias": "profile_select_bytes"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "InsertedRows"
+            }
+          ]
+        },
+        "alias": "profile_insert_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "InsertedBytes"
+            }
+          ]
+        },
+        "alias": "profile_insert_bytes"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_views_log"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "initial_query_id"
+        ]
+      },
+      "right": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "initial_query_id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "query_log"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "query"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "-- INSERT 1%INSERT INTO table_a%"
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "current_database"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "event_date"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "yesterday",
+                  "args": []
+                }
+              }
+            ]
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "view_name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "Vertical"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Query log rows 2"
+        },
+        "alias": "stage"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "read_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "written_rows"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "databases"
+              ]
+            }
+          ]
+        },
+        "alias": "databases"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tables"
+              ]
+            }
+          ]
+        },
+        "alias": "tables"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "views"
+              ]
+            }
+          ]
+        },
+        "alias": "views"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SleepFunctionCalls"
+            }
+          ]
+        },
+        "alias": "sleep_calls"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SleepFunctionMicroseconds"
+            }
+          ]
+        },
+        "alias": "sleep_us"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectedRows"
+            }
+          ]
+        },
+        "alias": "profile_select_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectedBytes"
+            }
+          ]
+        },
+        "alias": "profile_select_bytes"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "InsertedRows"
+            }
+          ]
+        },
+        "alias": "profile_insert_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "InsertedBytes"
+            }
+          ]
+        },
+        "alias": "profile_insert_bytes"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "-- INSERT 2%INSERT INTO table_d%"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        }
+      ]
+    },
+    "format": "Vertical",
+    "leadingComments": [
+      "-- CHECK LOGS OF INSERT 2"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Depending views 2"
+        },
+        "alias": "stage"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "view_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "view_type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "status"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "view_target"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "view_query"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "read_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "written_rows"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SleepFunctionCalls"
+            }
+          ]
+        },
+        "alias": "sleep_calls"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SleepFunctionMicroseconds"
+            }
+          ]
+        },
+        "alias": "sleep_us"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectedRows"
+            }
+          ]
+        },
+        "alias": "profile_select_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SelectedBytes"
+            }
+          ]
+        },
+        "alias": "profile_select_bytes"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "InsertedRows"
+            }
+          ]
+        },
+        "alias": "profile_insert_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ProfileEvents"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "InsertedBytes"
+            }
+          ]
+        },
+        "alias": "profile_insert_bytes"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_views_log"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "initial_query_id"
+        ]
+      },
+      "right": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "initial_query_id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "query_log"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "query"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "-- INSERT 2%INSERT INTO table_d%"
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "current_database"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "event_date"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "yesterday",
+                  "args": []
+                }
+              }
+            ]
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "view_name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "Vertical"
+  }
+]

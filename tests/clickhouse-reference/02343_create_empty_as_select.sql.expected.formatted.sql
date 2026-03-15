@@ -1,1 +1,16 @@
-<Parse Error>
+CREATE TABLE t
+ENGINE = Memory
+EMPTY AS
+SELECT 1;
+
+SELECT count()
+FROM t;
+
+CREATE MATERIALIZED VIEW mv
+ENGINE = Memory
+EMPTY
+AS
+SELECT 1;
+
+SELECT count()
+FROM mv;

@@ -1,1 +1,16 @@
-<Parse Error>
+CREATE TABLE t
+(
+    key UInt64,
+    value String
+)
+ENGINE = MergeTree()
+ORDER BY key
+SETTINGS index_granularity = 10, index_granularity_bytes = '1024K';
+
+SELECT
+    index_granularity_bytes_in_memory,
+    index_granularity_bytes_in_memory_allocated
+FROM `system`.parts
+WHERE table = 't'
+    AND database = currentDatabase()
+ORDER BY name ASC;

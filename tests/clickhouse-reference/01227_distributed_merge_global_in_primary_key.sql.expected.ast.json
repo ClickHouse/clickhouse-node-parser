@@ -1,1 +1,889 @@
-{"expected":[{"type":"literal","text":",","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true},{"type":"literal","text":";","ignoreCase":false},{"type":"literal","text":";","ignoreCase":false},{"type":"end"}],"found":"'","location":{"start":{"offset":82,"line":3,"column":25},"end":{"offset":83,"line":3,"column":26}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "x"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_distributed"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_local"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_merge"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_local"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_merge_distributed"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_merge"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_distributed_merge"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_distributed"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "------------------- Distributed ------------------"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_distributed"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_distributed"
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_distributed"
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_distributed"
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_local"
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_distributed"
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_local"
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "merge",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "test_local"
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_local"
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "remote",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "127.0.0.{1,2}"
+              },
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "test_merge"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_merge"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_distributed"
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_merge_distributed"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_merge_distributed"
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_merge"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "remote",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "127.0.0.{1,2}"
+              },
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "test_merge"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_distributed_merge"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "remote",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "127.0.0.{1,2}"
+              },
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "test_merge"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_distributed_merge"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "remote",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "127.0.0.{1,2}"
+              },
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "test_distributed_merge"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_distributed_merge"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_distributed_merge"
+          }
+        }
+      },
+      "global": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunction",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_distributed_merge"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunction",
+            "name": "remote",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "127.0.0.{1,2}"
+              },
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "test_merge"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "global": true
+    }
+  }
+]

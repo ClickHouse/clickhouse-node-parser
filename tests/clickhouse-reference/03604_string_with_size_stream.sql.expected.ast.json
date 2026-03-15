@@ -1,1 +1,1661 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":36,"line":1,"column":37},"end":{"offset":37,"line":1,"column":38}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      },
+      {
+        "name": "string_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "single_stream"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "leadingComments": [
+      "-- Old string type also supports .size subcolumn"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "substreams"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "subcolumns",
+          "names"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "subcolumns",
+          "types"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "parts_columns"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "active"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "column"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- system.parts_columns table only lists physical subcolumns/substreams"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_types"
+        }
+      },
+      {
+        "name": "string_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_size_stream"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      },
+      {
+        "name": "string_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_size_stream"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- When `serialization_info_version` is set to `single_stream`, any per-type string serialization version (`string_serialization_version`) will be ignored and reset to `DEFAULT`."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_optimize_lazy_materialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Lazy materialization test"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_max_limit_for_lazy_materialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_old"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_new"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_types"
+        }
+      },
+      {
+        "name": "string_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_size_stream"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_old"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_old"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_new"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_new"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_old_compact"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      },
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_old_wide"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      },
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_new_compact"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_types"
+        }
+      },
+      {
+        "name": "string_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_size_stream"
+        }
+      },
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_new_wide"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_types"
+        }
+      },
+      {
+        "name": "string_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_size_stream"
+        }
+      },
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_old_compact"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "3"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_old_compact"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "3"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_old_wide"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "3"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_old_wide"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "3"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_new_compact"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "3"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_new_compact"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "3"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_new_wide"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "3"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "a",
+          "size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b",
+          "size"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_new_wide"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "3"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test empty string comparison and .size subcolumn optimization"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_empty_string_comparisons",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_functions_to_subcolumns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_column_names"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "!=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_column_names"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_functions_to_subcolumns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

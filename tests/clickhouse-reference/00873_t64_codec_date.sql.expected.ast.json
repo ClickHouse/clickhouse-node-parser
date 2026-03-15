@@ -1,1 +1,148 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":138,"line":7,"column":10},"end":{"offset":139,"line":7,"column":11}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t64"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date16",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t_date16",
+        "type": {
+          "name": "Date"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "date_32",
+        "type": {
+          "name": "Date32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t_date32",
+        "type": {
+          "name": "Date32"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t64"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "date_32"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t64"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "date16"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "t_date16"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t64"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "date_32"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "t_date32"
+        ]
+      }
+    }
+  }
+]

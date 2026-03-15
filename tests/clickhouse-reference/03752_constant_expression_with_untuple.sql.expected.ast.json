@@ -1,1 +1,61 @@
-{"expected":[{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":";","location":{"start":{"offset":123,"line":3,"column":56},"end":{"offset":124,"line":3,"column":57}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- untuple is not available without analyzer"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "default"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "untuple",
+          "args": [
+            {
+              "kind": "tuple",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "source": "(1,1)"
+            }
+          ]
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
+  }
+]

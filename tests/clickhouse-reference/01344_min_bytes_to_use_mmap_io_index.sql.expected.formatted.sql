@@ -1,7 +1,7 @@
 CREATE TABLE test_01344
 (
     x String,
-    INDEX idx (x) TYPE set(10) GRANULARITY 1
+    INDEX idx x TYPE set(10) GRANULARITY 1
 )
 ENGINE = MergeTree
 ORDER BY tuple()

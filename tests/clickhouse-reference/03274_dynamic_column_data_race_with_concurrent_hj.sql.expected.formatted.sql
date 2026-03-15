@@ -6,7 +6,7 @@ SET allow_dynamic_type_in_join_keys = 1;
 
 CREATE TABLE t0
 (
-    c0 Tuple(c1 Int,c2 Dynamic)
+    c0 Tuple(c1 Int, c2 Dynamic)
 )
 ENGINE = Memory();
 

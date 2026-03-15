@@ -4,7 +4,7 @@ SET enable_full_text_index = 1;
 CREATE TABLE tab
 (
     col LowCardinality(String),
-    INDEX idx col TYPE text(tokenizer='array')
+    INDEX idx col TYPE text(tokenizer = 'array')
 )
 ENGINE = MergeTree
 ORDER BY tuple();

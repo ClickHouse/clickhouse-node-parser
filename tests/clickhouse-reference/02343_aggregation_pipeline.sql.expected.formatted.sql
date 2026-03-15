@@ -41,7 +41,7 @@ CREATE TABLE t
     a UInt64
 )
 ENGINE = MergeTree
-ORDER BY a;
+ORDER BY (a);
 
 CREATE TABLE dist_t AS t
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), t, a % 2);

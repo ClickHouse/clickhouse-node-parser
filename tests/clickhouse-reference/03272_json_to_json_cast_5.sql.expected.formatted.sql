@@ -6,7 +6,7 @@ SET output_format_native_write_json_as_string = 0;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=4, k1 UInt32, k2 String)
+    json JSON(max_dynamic_paths = 4, k1 UInt32, k2 String)
 )
 ENGINE = Memory;
 

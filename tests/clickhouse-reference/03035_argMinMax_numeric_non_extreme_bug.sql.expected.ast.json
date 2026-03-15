@@ -10,19 +10,57 @@
       {
         "kind": "columnDef",
         "name": "value",
-        "type": "Float64",
-        "codec": "CODEC(Delta, LZ4)"
+        "type": {
+          "name": "Float64"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
       },
       {
         "kind": "columnDef",
         "name": "uuid",
-        "type": "LowCardinality(String)"
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "time",
-        "type": "DateTime64(3, 'UTC')",
-        "codec": "CODEC(DoubleDelta, LZ4)"
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
       }
     ],
     "engine": {
@@ -31,10 +69,12 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "uuid"
-        ]
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "uuid"
+          ]
+        }
       }
     ]
   },

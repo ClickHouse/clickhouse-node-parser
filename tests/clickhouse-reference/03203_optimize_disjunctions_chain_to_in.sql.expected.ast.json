@@ -1,1 +1,160 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":87,"line":4,"column":34},"end":{"offset":88,"line":4,"column":35}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel-replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_min_equality_disjunction_chain_length",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "foo",
+              "i"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffort",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2020-01-01"
+              }
+            ]
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "foo",
+              "i"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffort",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2020-01-02"
+              }
+            ]
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "foo",
+              "i"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffort",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2020-01-03"
+              }
+            ]
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "foo",
+            "i"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

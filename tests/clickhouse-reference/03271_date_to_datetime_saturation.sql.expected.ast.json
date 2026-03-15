@@ -1,1 +1,2013 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":38,"line":1,"column":39},"end":{"offset":39,"line":1,"column":40}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "stamp",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "stamp"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "parseDateTimeBestEffort",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-11-01"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- implicit toDateTime (always saturate)"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "parseDateTimeBestEffort",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-11-01"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "date_time_overflow_behavior",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "saturate"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "parseDateTimeBestEffort",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-11-01"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "date_time_overflow_behavior",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "ignore"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "parseDateTimeBestEffort",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-11-01"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "date_time_overflow_behavior",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError VALUE_IS_OUT_OF_RANGE_OF_DATA_TYPE }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "stamp",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "stamp"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- The following tests are timezone sensitive"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_use_implicit_projections",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Boundary at UNIX epoch"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-10-24 21:30:00"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Arbitrary DateTime"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-10-24 21:30:00"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4294967295"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Extreme value beyond supported range"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4294967295"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Int64",
+            "value": "-1"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Negative timestamp"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Int64",
+            "value": "-1"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1000-01-01 00:00:00"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Pre-Gregorian date"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1000-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1970-01-01 00:00:00"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- UNIX epoch"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1970-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2023-01-01 00:00:00"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Modern date within supported range"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2023-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2100-12-31 23:59:59"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Far future but still valid"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2100-12-31 23:59:59"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2147483647"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Maximum 32-bit timestamp"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2147483647"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "0000-01-01"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Minimum Date boundary"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "0000-01-01"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "9999-12-31"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Maximum Date boundary"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "9999-12-31"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Convert stamp to Date"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "identity",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "stamp"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Convert stamp to DateTime (This will overflow and should not use primary key)"
+    ],
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "identity",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "stamp"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2023-01-01"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Exact Date match"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2023-01-01"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2023-01-01 00:00:00"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Exact DateTime match"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2023-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Int64",
+            "value": "-1"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Invalid DateTime (negative)"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Int64",
+            "value": "-1"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "9999999999"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Extremely large DateTime"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "9999999999"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- NULL DateTime"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "stamp"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- NULL Date"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<=",
+      "left": {
+        "kind": "functionCall",
+        "name": "identity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "stamp"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          }
+        ]
+      }
+    }
+  }
+]

@@ -6,9 +6,9 @@ CREATE TABLE t
     amount Int64
 )
 ENGINE = ReplacingMergeTree
+PRIMARY KEY (toStartOfDay(created_at), toStartOfDay(processed_at))
 ORDER BY (toStartOfDay(created_at), toStartOfDay(processed_at), tid)
 PARTITION BY toStartOfQuarter(created_at)
-PRIMARY KEY (toStartOfDay(created_at), toStartOfDay(processed_at))
 SETTINGS index_granularity = 1;
 
 SELECT

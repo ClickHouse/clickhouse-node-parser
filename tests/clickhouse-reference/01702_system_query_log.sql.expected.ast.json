@@ -1,1 +1,465 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"D","location":{"start":{"offset":167,"line":5,"column":8},"end":{"offset":168,"line":5,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "system.query_log logging test"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- fire all kinds of queries and then check if those are present in the system.query_log"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "sqllt"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "sqllt",
+      "table": "table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "tuple",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "database": "sqllt",
+      "table": "view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "sqllt",
+        "table": "table"
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "sqllt",
+      "table": "dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "sqllt"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table"
+            }
+          },
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9001"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "range": null,
+      "settings": null,
+      "comment": null
+    }
+  },
+  {
+    "kind": "createUser",
+    "names": [
+      {
+        "name": "sqllt_user"
+      }
+    ],
+    "auth": [
+      {
+        "secret": "password"
+      }
+    ]
+  },
+  {
+    "kind": "createRole",
+    "names": [
+      {
+        "name": "sqllt_role"
+      }
+    ]
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "sqllt_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "database": "sqllt",
+          "table": "table"
+        }
+      },
+      {
+        "names": [
+          "sqllt_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "database": "sqllt",
+          "table": "view"
+        }
+      },
+      {
+        "names": [
+          "sqllt_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "database": "sqllt",
+          "table": "dictionary"
+        }
+      }
+    ],
+    "restrictive": "PERMISSIVE",
+    "to": {
+      "kind": "all"
+    }
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "sqllt_row_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "database": "sqllt",
+          "table": "table"
+        }
+      },
+      {
+        "names": [
+          "sqllt_row_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "database": "sqllt",
+          "table": "view"
+        }
+      },
+      {
+        "names": [
+          "sqllt_row_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "database": "sqllt",
+          "table": "dictionary"
+        }
+      }
+    ],
+    "restrictive": "PERMISSIVE",
+    "to": {
+      "kind": "all"
+    }
+  },
+  {
+    "kind": "createQuota",
+    "names": [
+      "sqllt_quota"
+    ],
+    "keyed": {
+      "keys": [
+        "user_name"
+      ]
+    },
+    "to": {
+      "kind": "names",
+      "names": [
+        "sqllt_role"
+      ]
+    }
+  },
+  {
+    "kind": "createSettingsProfile",
+    "names": [
+      "sqllt_settings_profile"
+    ],
+    "hasSettingsKeyword": true,
+    "settings": [
+      {
+        "kind": "setting",
+        "name": "interactive_delay",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "200000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_profile_events",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "setRole",
+    "roles": {
+      "kind": "names",
+      "names": [
+        "sqllt_role"
+      ]
+    },
+    "users": [
+      "sqllt_user"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "query_kind"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "query"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "log_comment"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%system.query_log%"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "==",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryStart"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "==",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "is_internal"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_time_microseconds"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- Try to filter out all possible previous junk events by excluding old log entries,"
+    ]
+  }
+]

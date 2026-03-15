@@ -1,1 +1,16 @@
-<Parse Error>
+CREATE VIEW c
+AS
+SELECT 3 AS result
+WHERE {a:Int16} = 0;
+
+SET enable_analyzer = 1;
+
+SELECT
+    1,
+    result
+FROM c(a = 0);
+
+SELECT
+    2,
+    result
+FROM c(a = 3);

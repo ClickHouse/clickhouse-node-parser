@@ -1,1 +1,10 @@
-<Parse Error>
+CREATE TABLE t_00472
+(
+    x UInt8
+)
+ENGINE = Null;
+
+CREATE VIEW IF NOT EXISTS mv_00472
+AS
+SELECT *
+FROM t_00472;

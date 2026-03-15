@@ -17,7 +17,7 @@ CREATE TABLE foo
     metric_1 UInt32
 )
 ENGINE = MergeTree()
-ORDER BY server_date
+ORDER BY (server_date)
 PARTITION BY toYYYYMM(server_date);
 
 CREATE TABLE bar
@@ -27,7 +27,7 @@ CREATE TABLE bar
     metric_2 UInt32
 )
 ENGINE = MergeTree()
-ORDER BY server_date
+ORDER BY (server_date)
 PARTITION BY toYYYYMM(server_date);
 
 SELECT

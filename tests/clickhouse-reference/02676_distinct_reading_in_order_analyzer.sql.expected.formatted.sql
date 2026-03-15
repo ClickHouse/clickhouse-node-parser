@@ -6,7 +6,7 @@ CREATE TABLE t
     b UInt64
 )
 ENGINE = MergeTree()
-ORDER BY a;
+ORDER BY (a);
 
 SET optimize_distinct_in_order = 1;
 

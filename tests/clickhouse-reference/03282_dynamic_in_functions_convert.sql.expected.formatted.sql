@@ -2,7 +2,7 @@ SET enable_dynamic_type = 1;
 
 CREATE TABLE test
 (
-    d Dynamic(max_types=3)
+    d Dynamic(max_types = 3)
 )
 ENGINE = Memory;
 

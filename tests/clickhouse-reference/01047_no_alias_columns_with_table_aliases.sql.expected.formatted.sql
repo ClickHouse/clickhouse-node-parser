@@ -5,7 +5,7 @@ CREATE TABLE requests
     event_tm DateTime ALIAS event_time
 )
 ENGINE = MergeTree
-ORDER BY event_time;
+ORDER BY (event_time);
 
 SELECT *
 FROM requests

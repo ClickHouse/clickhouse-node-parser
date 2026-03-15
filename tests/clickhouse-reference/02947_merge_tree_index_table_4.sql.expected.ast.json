@@ -48,37 +48,99 @@
       {
         "kind": "columnDef",
         "name": "a",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "b",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "sp",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       },
       {
         "kind": "columnDef",
         "name": "arr",
-        "type": "Array(LowCardinality(String))"
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "n",
-        "type": "Nested(c1 String, c2 UInt64)"
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "c1",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "c2",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "t",
-        "type": "Tuple(c1 UInt64, c2 UInt64)"
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "c1",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "c2",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
       },
       {
         "kind": "columnDef",
         "name": "column.with.dots",
-        "type": "UInt64"
+        "type": {
+          "name": "UInt64"
+        }
       }
     ],
     "engine": {
@@ -86,36 +148,42 @@
     },
     "orderBy": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "a"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "b"
-        ]
-      },
-      {
-        "kind": "binaryExpr",
-        "op": "%",
-        "left": {
-          "kind": "functionCall",
-          "name": "sipHash64",
-          "args": [
-            {
-              "kind": "columnRef",
-              "parts": [
-                "sp"
-              ]
-            }
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
           ]
-        },
-        "right": {
-          "kind": "literal",
-          "type": "UInt64",
-          "value": "100"
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "functionCall",
+            "name": "sipHash64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "sp"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
         }
       }
     ],
@@ -168,7 +236,8 @@
           "value": "1"
         }
       }
-    ]
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

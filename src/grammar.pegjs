@@ -74,6 +74,7 @@
     sql_tsi_week: 'Week', sql_tsi_month: 'Month', sql_tsi_quarter: 'Quarter',
     sql_tsi_year: 'Year',
   };
+
 }}
 
 {
@@ -118,7 +119,8 @@ Statements
 // SETTINGS can appear before FORMAT (inside SELECT) or after FORMAT
 TopLevelStatement
   = ExplainStatement
-  / CreateTableStatement
+  / ParallelWithStatement
+  / CreateStatement
   / SetStatement
   / UseStatement
   / SystemStatement
@@ -148,22 +150,714 @@ IntoOutfileClause
 
 // SetStatement: SET key = value [, key = value ...] — changes session-level settings
 SetStatement
-  = "SET"i ![a-zA-Z0-9_] _ items:SettingsList { return loc({ kind: 'set', settings: items }); }
+  = "SET"i ![a-zA-Z0-9_] _ "TRANSACTION"i ![a-zA-Z0-9_] _ "SNAPSHOT"i ![a-zA-Z0-9_] _ snapshot:$[0-9]+ { return loc({ kind: 'transactionControl', snapshot }); }
+  / "SET"i ![a-zA-Z0-9_] _ "DEFAULT"i ![a-zA-Z0-9_] _ "ROLE"i ![a-zA-Z0-9_] _ roles:SetRoleList _ "TO"i ![a-zA-Z0-9_] _ users:SetRoleUserList { return loc({ kind: 'setRole', roles, users }); }
+  / "SET"i ![a-zA-Z0-9_] _ items:SettingsList { return loc({ kind: 'set', settings: items }); }
+
+SetRoleList
+  = "ALL"i ![a-zA-Z0-9_] except:( _ "EXCEPT"i ![a-zA-Z0-9_] _ SetRoleNameList )? { return { kind: 'all', except: except ? except[4] : undefined }; }
+  / "NONE"i ![a-zA-Z0-9_] { return { kind: 'none' }; }
+  / names:SetRoleNameList { return { kind: 'names', names }; }
+
+SetRoleNameList
+  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
+
+SetRoleUserList
+  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
 
 // UseStatement: USE database — selects the current database
 UseStatement
-  = "USE"i ![a-zA-Z0-9_] _ db:AliasName { return loc({ kind: 'use', database: db }); }
+  = "USE"i ![a-zA-Z0-9_] _ db:( QueryParamIdentifier / AliasName ) { return loc({ kind: 'use', database: db }); }
 
 // SystemStatement: SYSTEM FLUSH LOGS, SYSTEM RELOAD CONFIG, etc. — admin commands (body discarded)
 SystemStatement
   = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return loc({ kind: 'system', body: body.trim() }); }
 
-// ── CREATE TABLE ─────────────────────────────────────────────────────────────
+// ── CREATE statements ────────────────────────────────────────────────────────
+
+// PARALLEL WITH: chains multiple CREATE statements
+ParallelWithStatement
+  = head:CreateStatement tail:( _ "PARALLEL"i ![a-zA-Z0-9_] _ "WITH"i ![a-zA-Z0-9_] _ CreateStatement )+ {
+      return loc({ kind: 'parallelWith', queries: [head, ...tail.map(t => t[7])] });
+    }
+
+// Unified entry point for all CREATE/REPLACE statements
+CreateStatement
+  = CreateFunctionStatement
+  / CreateViewStatement
+  / CreateMaterializedViewStatement
+  / CreateDatabaseStatement
+  / CreateIndexStatement
+  / CreateDictionaryStatement
+  / CreateWorkloadStatement
+  / CreateUserStatement
+  / CreateRoleStatement
+  / CreateRowPolicyStatement
+  / CreateQuotaStatement
+  / CreateSettingsProfileStatement
+  / CreateNamedCollectionStatement
+  / CreateResourceStatement
+  / CreateWindowViewStatement
+  / CreateLiveViewStatement
+  / CreateTableStatement
+
+// CreateFunctionStatement: CREATE [OR REPLACE] FUNCTION name AS lambda
+CreateFunctionStatement
+  = "CREATE"i ![a-zA-Z0-9_] _ orReplace:( "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] _ )? "FUNCTION"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName cluster:( _ OnClusterClause )? _ KW_AS _ expr:Expression {
+      return loc({ kind: 'createFunction', name, functionExpr: expr });
+    }
+
+// CreateViewStatement: CREATE [OR REPLACE] [TEMPORARY] VIEW [IF NOT EXISTS] [db.]name [(columns)] [ON CLUSTER ...] AS query
+CreateViewStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    temp:( _ "TEMPORARY"i ![a-zA-Z0-9_] )?
+    _ "VIEW"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    cluster:( _ OnClusterClause )?
+    schema:( _ CreateTableSchema )?
+    _ KW_AS _ query:UnionQuery {
+      const result = { kind: 'createView', table };
+      if (orReplace !== null) result.orReplace = true;
+      if (temp !== null) result.temporary = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (schema !== null) Object.assign(result, schema[1]);
+      result.asQuery = query;
+      return loc(result);
+    }
+
+// CreateMaterializedViewStatement: CREATE MATERIALIZED VIEW [IF NOT EXISTS] [db.]name [REFRESH ...] [TO [db.]table] [ENGINE ...] [POPULATE] AS query
+CreateMaterializedViewStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "MATERIALIZED"i ![a-zA-Z0-9_] _ "VIEW"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    uuid:( _ "UUID"i ![a-zA-Z0-9_] _ StringLiteral )?
+    cluster:( _ OnClusterClause )?
+    refresh:( _ RefreshClause )?
+    toTable:( _ "TO"i ![a-zA-Z0-9_] _ TableRef )?
+    schema:( _ CreateTableSchema )?
+    engine:( _ EngineClause )?
+    clauses:CreateTableClauses
+    populate:( _ "POPULATE"i ![a-zA-Z0-9_] )?
+    empty:( _ "EMPTY"i ![a-zA-Z0-9_] )?
+    _ KW_AS _ query:UnionQuery
+    format:( _ FormatClause )? {
+      const result = { kind: 'createMaterializedView', table };
+      if (orReplace !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (refresh !== null) result.refresh = refresh[1];
+      if (toTable !== null) result.toTable = toTable[4];
+      if (schema !== null) Object.assign(result, schema[1]);
+      if (engine !== null) result.engine = engine[1];
+      Object.assign(result, clauses);
+      if (populate !== null) result.populate = true;
+      if (empty !== null) result.empty = true;
+      result.asQuery = query;
+      if (format !== null) result.format = format[1];
+      return loc(result);
+    }
+
+// CreateDatabaseStatement: CREATE DATABASE [IF NOT EXISTS] name [ON CLUSTER ...] [ENGINE ...] [COMMENT ...]
+// Also accepts ORDER BY / SETTINGS (which ClickHouse may reject but should parse)
+CreateDatabaseStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "DATABASE"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:( QueryParamIdentifier / AliasName )
+    cluster:( _ OnClusterClause )?
+    engine:( _ EngineClause )?
+    clauses:CreateTableClauses
+    comment:( _ CreateCommentClause )?
+    format:( _ FormatClause )? {
+      const result = { kind: 'createDatabase', name };
+      if (orReplace !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (engine !== null) result.engine = engine[1];
+      if (comment !== null) result.comment = comment[1];
+      if (clauses.orderBy) result.orderBy = clauses.orderBy;
+      if (clauses.settings) result.settings = clauses.settings;
+      if (format !== null) result.format = format[1];
+      return loc(result);
+    }
+
+// CreateIndexStatement: CREATE [UNIQUE] INDEX name ON [db.]table (expr) [TYPE type] [GRANULARITY n]
+CreateIndexStatement
+  = "CREATE"i ![a-zA-Z0-9_] unique:( _ "UNIQUE"i ![a-zA-Z0-9_] )?
+    _ "INDEX"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName _ "ON"i ![a-zA-Z0-9_] _ table:TableRef
+    _ indexExpr:CreateIndexExprs
+    indexType:( _ "TYPE"i ![a-zA-Z0-9_] _ IndexTypeSpec )?
+    gran:( _ "GRANULARITY"i ![a-zA-Z0-9_] _ n:$[0-9]+ { return parseInt(n, 10); } )? {
+      const result = { kind: 'createIndex', table, indexName: name, indexExpr: indexExpr };
+      if (indexType !== null) result.indexType = indexType[4];
+      if (gran !== null) result.granularity = gran;
+      return loc(result);
+    }
+
+CreateIndexExprs
+  = "(" _ head:IndexColumnExpr tail:(_ "," _ IndexColumnExpr)* _ ")" {
+      const exprs = [head, ...tail.map(t => t[3])];
+      return exprs.length > 1 ? loc({ kind: 'functionCall', name: 'tuple', args: exprs }) : exprs[0];
+    }
+  / expr:TernaryExpr { return expr; }
+
+// CreateDictionaryStatement: CREATE [OR REPLACE] DICTIONARY [IF NOT EXISTS] [db.]name (attrs) PRIMARY KEY ... SOURCE(...) LIFETIME(...) LAYOUT(...)
+CreateDictionaryStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "DICTIONARY"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    cluster:( _ OnClusterClause )?
+    _ "(" _ attrs:DictAttrList _ ")"
+    _ dictDef:DictDefinition {
+      const result = { kind: 'createDictionary', table };
+      if (orReplace !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      result.dictAttrs = attrs;
+      result.dictDef = dictDef;
+      return loc(result);
+    }
+
+DictAttrList
+  = head:DictAttr tail:(_ "," _ DictAttr)* (_ ",")? { return [head, ...tail.map(t => t[3])]; }
+
+DictAttr
+  = name:AliasName _ type:ColumnDataType
+    def:( _ "DEFAULT"i ![a-zA-Z0-9_] _ TernaryExpr )?
+    expr:( _ "EXPRESSION"i ![a-zA-Z0-9_] _ TernaryExpr )?
+    injective:( _ "INJECTIVE"i ![a-zA-Z0-9_] )?
+    isObjMap:( _ "IS_OBJECT_ID"i ![a-zA-Z0-9_] )?
+    hierarch:( _ "HIERARCHICAL"i ![a-zA-Z0-9_] )?
+    bidirect:( _ "BIDIRECTIONAL"i ![a-zA-Z0-9_] )? {
+      const result = { name, type };
+      if (def !== null) result.defaultValue = def[4];
+      if (expr !== null) result.expression = expr[4];
+      return result;
+    }
+
+DictDefinition
+  = clauses:( _ DictClause )+ {
+      const result = { primaryKey: null, source: null, lifetime: null, layout: null, range: null, settings: null, comment: null };
+      for (const c of clauses) {
+        const clause = c[1];
+        if (clause.primaryKey) result.primaryKey = clause.primaryKey;
+        else if (clause.source) result.source = clause.source;
+        else if (clause.lifetime) result.lifetime = clause.lifetime;
+        else if (clause.layout) result.layout = clause.layout;
+        else if (clause.range) result.range = clause.range;
+        else if (clause.settings) result.settings = clause.settings;
+        else if (clause.comment !== undefined) result.comment = clause.comment;
+      }
+      return result;
+    }
+
+DictClause
+  = "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ head:Expression tail:(_ "," _ Expression)* {
+      return { primaryKey: [head, ...tail.map(t => t[3])] };
+    }
+  / "SOURCE"i ![a-zA-Z0-9_] _ "(" _ name:AliasName _ "(" _ pairs:DictKeyValueList? _ ")" _ ")" {
+      return { source: { name: name.toLowerCase(), pairs: pairs || [] } };
+    }
+  / "LIFETIME"i ![a-zA-Z0-9_] _ "(" _ items:DictLifetimeItems _ ")" {
+      return { lifetime: items };
+    }
+  / "LIFETIME"i ![a-zA-Z0-9_] _ "(" _ val:$[0-9]+ _ ")" {
+      return { lifetime: { value: parseInt(val, 10) } };
+    }
+  / "LAYOUT"i ![a-zA-Z0-9_] _ "(" _ name:AliasName args:( _ "(" _ DictKeyValueList? _ ")" )? _ ")" {
+      return { layout: { name: name.toUpperCase(), pairs: args !== null ? (args[3] || []) : [] } };
+    }
+  / "RANGE"i ![a-zA-Z0-9_] _ "(" _ items:DictKeyValueList _ ")" {
+      return { range: items };
+    }
+  / KW_SETTINGS _ items:SettingsList {
+      return { settings: items };
+    }
+  / "SETTINGS"i ![a-zA-Z0-9_] _ "(" _ items:SettingsList? _ ")" {
+      return { settings: items || [] };
+    }
+  / "COMMENT"i ![a-zA-Z0-9_] _ str:StringLiteral {
+      return { comment: str.value };
+    }
+
+DictLifetimeItems
+  = head:DictLifetimeItem tail:( _ DictLifetimeItem )* {
+      const result = {};
+      const items = [head, ...tail.map(t => t[1])];
+      for (const item of items) Object.assign(result, item);
+      return result;
+    }
+
+DictLifetimeItem
+  = "MIN"i ![a-zA-Z0-9_] _ val:$[0-9]+ { return { min: parseInt(val, 10) }; }
+  / "MAX"i ![a-zA-Z0-9_] _ val:$[0-9]+ { return { max: parseInt(val, 10) }; }
+
+DictKeyValueList
+  = head:DictKeyValuePair tail:( _ DictKeyValuePair )* { return [head, ...tail.map(t => t[1])]; }
+
+DictKeyValuePair
+  = name:AliasName _ value:Expression { return { name, value }; }
+  / name:AliasName _ "(" _ pairs:DictStructurePairList _ ")" { return { name, value: pairs }; }
+  / name:AliasName _ value:ClickHouseTypeArgs { return { name, value: loc({ kind: 'literal', type: 'String', value: value }) }; }
+
+// Structure pairs inside dictionary SOURCE: "a String\n b Decimal(18,8)"
+DictStructurePairList
+  = head:DictStructurePair tail:( _ DictStructurePair )* { return [head, ...tail.map(t => t[1])]; }
+
+DictStructurePair
+  = name:AliasName _ type:ColumnDataType { return { name, type }; }
+
+// Index column expression: expression with optional ASC/DESC (DESC is ignored in explain output)
+IndexColumnExpr
+  = expr:Expression dir:( _ ("ASC"i / "DESC"i) ![a-zA-Z0-9_] )? { return expr; }
+
+// CreateWorkloadStatement: CREATE [OR REPLACE] WORKLOAD name [IN parent] [SETTINGS ...]
+CreateWorkloadStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "WORKLOAD"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    parent:( _ "IN"i ![a-zA-Z0-9_] _ AliasName )?
+    settings:( _ SettingsClause )? {
+      const result = { kind: 'createWorkload', name };
+      if (orReplace !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (parent !== null) result.parentWorkload = parent[4];
+      return loc(result);
+    }
+
+// Individual CREATE statement rules for access control and other object types.
+
+// ── CREATE USER ──────────────────────────────────────────────────────────────
+CreateUserStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplacePre:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "USER"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    orReplacePost:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ names:CreateUserNameList
+    clauses:( _ CreateUserClause )*
+    {
+      const result = { kind: 'createUser', names };
+      if (orReplacePre !== null || orReplacePost !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      for (const c of clauses) {
+        const clause = c[1];
+        if (clause.auth !== undefined) result.auth = clause.auth;
+        if (clause.host !== undefined) result.host = clause.host;
+        if (clause.settings !== undefined) result.settings = clause.settings;
+        if (clause.defaultRole !== undefined) result.defaultRole = clause.defaultRole;
+        if (clause.defaultDatabase !== undefined) result.defaultDatabase = clause.defaultDatabase;
+        if (clause.grantees !== undefined) result.grantees = clause.grantees;
+        if (clause.validUntil !== undefined) result.validUntil = clause.validUntil;
+        if (clause.onCluster !== undefined) result.onCluster = clause.onCluster;
+      }
+      return loc(result);
+    }
+
+CreateUserClause
+  = CreateUserIdentifiedClause
+  / CreateUserHostClause
+  / CreateUserSettingsClause
+  / CreateUserDefaultRoleClause
+  / CreateUserDefaultDatabaseClause
+  / CreateUserGranteesClause
+  / CreateUserValidUntilClause
+  / CreateUserOnClusterClause
+
+CreateUserIdentifiedClause
+  = "NOT"i ![a-zA-Z0-9_] _ "IDENTIFIED"i ![a-zA-Z0-9_] { return { auth: [{}] }; }
+  / "IDENTIFIED"i ![a-zA-Z0-9_] _ auth:CreateUserAuthMethods { return { auth }; }
+
+CreateUserHostClause
+  = "HOST"i ![a-zA-Z0-9_] _ items:HostItemList { return { host: items }; }
+
+CreateUserSettingsClause
+  = "SETTINGS"i ![a-zA-Z0-9_] _ "NONE"i ![a-zA-Z0-9_] { return { settings: 'NONE' }; }
+  / "SETTINGS"i ![a-zA-Z0-9_] _ items:AccessControlSettingsList { return { settings: items }; }
+
+CreateUserDefaultRoleClause
+  = "DEFAULT"i ![a-zA-Z0-9_] _ "ROLE"i ![a-zA-Z0-9_] _ roles:SetRoleList { return { defaultRole: roles }; }
+
+CreateUserDefaultDatabaseClause
+  = "DEFAULT"i ![a-zA-Z0-9_] _ "DATABASE"i ![a-zA-Z0-9_] _ db:AliasName { return { defaultDatabase: db }; }
+
+CreateUserGranteesClause
+  = "GRANTEES"i ![a-zA-Z0-9_] _ target:SetRoleList { return { grantees: target }; }
+
+CreateUserValidUntilClause
+  = "VALID"i ![a-zA-Z0-9_] _ "UNTIL"i ![a-zA-Z0-9_] _ str:StringLiteral { return { validUntil: str.value }; }
+
+CreateUserOnClusterClause
+  = "ON"i ![a-zA-Z0-9_] _ "CLUSTER"i ![a-zA-Z0-9_] _ name:( StringLiteral { return text(); } / AliasName ) { return { onCluster: name }; }
+
+CreateUserNameList
+  = head:CreateUserNameItem tail:( _ "," _ CreateUserNameItem )* { return [head, ...tail.map(t => t[3])]; }
+
+CreateUserNameItem
+  = name:CreateUserNameValue host:( "@" host:( "'" chars:$[^']* "'" { return "'" + chars + "'"; } / $[a-zA-Z0-9_.%:]+ ) { return host; } )? {
+      const result = { name };
+      if (host !== null) result.host = host;
+      return result;
+    }
+
+CreateUserNameValue
+  = "{" body:$[^}]* "}" { return '{' + body + '}'; }
+  / "'" chars:SingleQuotedUserChar* "'" { return "'" + chars.join("") + "'"; }
+  / AliasName
+
+SingleQuotedUserChar
+  = "''" { return "'"; }
+  / "\\'" { return "'"; }
+  / "\\\\" { return "\\"; }
+  / !"'" c:. { return c; }
+
+CreateUserAuthMethods
+  // SSH key auth: all KEY...TYPE... entries are one method
+  = "WITH"i ![a-zA-Z0-9_] _ "ssh_key"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ keys:CreateUserSSHKeyList {
+      return [{ sshKeys: keys }];
+    }
+  // Comma-separated auth methods
+  / head:CreateUserAuthMethod tail:( _ "," _ CreateUserAuthMethod )* {
+      return [head, ...tail.map(t => t[3])];
+    }
+
+CreateUserAuthMethod
+  // WITH type_name BY/REALM/SERVER 'secret'
+  = "WITH"i ![a-zA-Z0-9_] _ [a-zA-Z_][a-zA-Z0-9_]* _ secret:CreateUserAuthSecret { return secret; }
+  // WITH type_name (no secret, e.g. no_password)
+  / "WITH"i ![a-zA-Z0-9_] _ [a-zA-Z_][a-zA-Z0-9_]* { return {}; }
+  // type_name BY/REALM/SERVER 'secret' (after comma, no WITH keyword)
+  / [a-zA-Z_][a-zA-Z0-9_]* _ secret:CreateUserAuthSecret { return secret; }
+  // bare BY 'secret' (implicit continuation of previous type)
+  / secret:CreateUserAuthSecret { return secret; }
+
+CreateUserAuthSecret
+  = "BY"i ![a-zA-Z0-9_] _ str:CreateUserAuthSecretValue { return { secret: str }; }
+  / "REALM"i ![a-zA-Z0-9_] _ str:CreateUserAuthSecretValue { return { secret: str }; }
+  / "SERVER"i ![a-zA-Z0-9_] _ str:CreateUserAuthSecretValue { return { secret: str }; }
+
+CreateUserAuthSecretValue
+  = str:StringLiteral { return str.value; }
+  / "{" body:$[^}]* "}" { return '{' + body + '}'; }
+
+CreateUserSSHKeyList
+  = head:CreateUserSSHKey tail:( _ "," _ CreateUserSSHKey )* { return 1 + tail.length; }
+
+CreateUserSSHKey
+  = "KEY"i ![a-zA-Z0-9_] _ StringLiteral _ "TYPE"i ![a-zA-Z0-9_] _ StringLiteral
+
+// ── HOST items ───────────────────────────────────────────────────────────────
+HostItemList
+  = head:HostItems tail:( _ "," _ HostItems )* {
+      const result = [];
+      for (const items of [head, ...tail.map(t => t[3])]) {
+        if (Array.isArray(items)) result.push(...items);
+        else result.push(items);
+      }
+      return result;
+    }
+
+HostItems
+  = "ANY"i ![a-zA-Z0-9_] { return { kind: 'any' }; }
+  / "NONE"i ![a-zA-Z0-9_] { return { kind: 'none' }; }
+  / "LOCAL"i ![a-zA-Z0-9_] { return { kind: 'local' }; }
+  / "NAME"i ![a-zA-Z0-9_] _ str:StringLiteral { return { kind: 'name', value: str.value }; }
+  / "REGEXP"i ![a-zA-Z0-9_] _ str:StringLiteral { return { kind: 'regexp', value: str.value }; }
+  / "LIKE"i ![a-zA-Z0-9_] _ strs:HostStringList { return strs.map(s => ({ kind: 'like', value: s })); }
+  / "IP"i ![a-zA-Z0-9_] _ strs:HostStringList { return strs.map(s => ({ kind: 'ip', value: s })); }
+
+HostStringList
+  = head:StringLiteral tail:( _ "," _ StringLiteral )* { return [head.value, ...tail.map(t => t[3].value)]; }
+
+// ── Access Control SETTINGS ──────────────────────────────────────────────────
+AccessControlSettingsList
+  = head:AccessControlSettingsItem tail:( _ "," _ AccessControlSettingsItem )* { return [head, ...tail.map(t => t[3])]; }
+
+AccessControlSettingsItem
+  = "PROFILE"i ![a-zA-Z0-9_] _ name:( StringLiteral { return text(); } / AliasName ) { return { kind: 'profile', name }; }
+  / "INHERIT"i ![a-zA-Z0-9_] _ name:( StringLiteral { return text(); } / AliasName ) { return { kind: 'inherit', name }; }
+  / name:AccessControlSettingName val:( _ "=" _ Expression )? min:( _ "MIN"i ![a-zA-Z0-9_] _ ( "=" _ )? Expression )? max:( _ "MAX"i ![a-zA-Z0-9_] _ ( "=" _ )? Expression )? mod:( _ ("CONST"i / "WRITABLE"i / "READONLY"i) ![a-zA-Z0-9_] )? {
+      const result = { kind: 'setting', name };
+      if (val !== null) result.value = val[3];
+      if (min !== null) result.min = min[5];
+      if (max !== null) result.max = max[5];
+      if (mod !== null) result.modifier = mod[1].toUpperCase();
+      return result;
+    }
+
+AccessControlSettingName
+  = head:AliasName tail:( "." AliasName )* { return tail.length > 0 ? head + tail.map(t => '.' + t[1]).join('') : head; }
+
+// ── CREATE ROLE ──────────────────────────────────────────────────────────────
+CreateRoleStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "ROLE"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ names:CreateUserNameList
+    settings:( _ CreateRoleSettingsClause )?
+    {
+      const result = { kind: 'createRole', names };
+      if (orReplace !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+
+CreateRoleSettingsClause
+  = "SETTINGS"i ![a-zA-Z0-9_] _ "NONE"i ![a-zA-Z0-9_] { return 'NONE'; }
+  / "SETTINGS"i ![a-zA-Z0-9_] _ items:AccessControlSettingsList { return items; }
+
+// ── CREATE ROW POLICY ────────────────────────────────────────────────────────
+CreateRowPolicyStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplacePre:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ hasRow:( "ROW"i ![a-zA-Z0-9_] _ )? "POLICY"i ![a-zA-Z0-9_]
+    orReplacePost:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ targetsResult:RowPolicyTargets
+    clauses:( _ RowPolicyClause )*
+    {
+      const result = { kind: 'createRowPolicy', targets: targetsResult.targets };
+      if (orReplacePre !== null || orReplacePost !== null) result.orReplace = true;
+      if (hasRow !== null) result.hasRowKeyword = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (targetsResult.onCluster) result.onCluster = targetsResult.onCluster;
+      for (const c of clauses) {
+        const clause = c[1];
+        if (clause.using !== undefined) result.using = clause.using;
+        if (clause.restrictive !== undefined) result.restrictive = clause.restrictive;
+        if (clause.to !== undefined) result.to = clause.to;
+        if (clause.onCluster !== undefined) result.onCluster = clause.onCluster;
+      }
+      return loc(result);
+    }
+
+RowPolicyTargets
+  = head:RowPolicyTarget tail:( _ "," _ RowPolicyTarget )* {
+      const result = { targets: [], onCluster: null };
+      for (const target of [head, ...tail.map(t => t[3])]) {
+        if (target.onCluster) result.onCluster = target.onCluster;
+        for (const table of target.tables) {
+          result.targets.push({ names: target.names, table });
+        }
+      }
+      return result;
+    }
+
+RowPolicyTarget
+  = names:RowPolicyNameList cluster:( _ OnClusterClause )? _ "ON"i ![a-zA-Z0-9_] _ tables:RowPolicyTableList {
+      const result = { names, tables };
+      if (cluster !== null) result.onCluster = cluster[1];
+      return result;
+    }
+
+RowPolicyTableList
+  = head:RowPolicyTableRef tail:( _ "," _ !RowPolicyTargetLookahead RowPolicyTableRef )* { return [head, ...tail.map(t => t[4])]; }
+
+RowPolicyTableRef
+  = db:( QueryParamIdentifier / AliasName ) _ "." _ table:( "*" { return '*'; } / QueryParamIdentifier / AliasName ) {
+      return loc({ kind: 'tableRef', database: db, table: table });
+    }
+  / table:( QueryParamIdentifier / AliasName ) {
+      return loc({ kind: 'tableRef', table: table });
+    }
+
+RowPolicyTargetLookahead
+  = AliasName _ "ON"i ![a-zA-Z0-9_]
+
+RowPolicyNameList
+  = head:AliasName tail:( _ "," _ AliasName !( _ "." ) )* { return [head, ...tail.map(t => t[3])]; }
+
+RowPolicyClause
+  = "FOR"i ![a-zA-Z0-9_] _ "SELECT"i ![a-zA-Z0-9_] { return {}; }
+  / "USING"i ![a-zA-Z0-9_] _ expr:Expression { return { using: expr }; }
+  / "AS"i ![a-zA-Z0-9_] _ mode:("RESTRICTIVE"i / "PERMISSIVE"i) ![a-zA-Z0-9_] { return { restrictive: mode.toUpperCase() }; }
+  / "TO"i ![a-zA-Z0-9_] _ target:SetRoleList { return { to: target }; }
+  / "ON"i ![a-zA-Z0-9_] _ "CLUSTER"i ![a-zA-Z0-9_] _ name:( StringLiteral { return text(); } / AliasName ) { return { onCluster: name }; }
+
+// ── CREATE QUOTA ─────────────────────────────────────────────────────────────
+CreateQuotaStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "QUOTA"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ names:QuotaNameList
+    clauses:( _ ","? _ QuotaClause )*
+    {
+      const result = { kind: 'createQuota', names };
+      if (orReplace !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      const intervals = [];
+      for (const c of clauses) {
+        const clause = c[3];
+        if (clause.keyed !== undefined) result.keyed = clause.keyed;
+        if (clause.interval !== undefined) intervals.push(clause.interval);
+        if (clause.to !== undefined) result.to = clause.to;
+      }
+      if (intervals.length > 0) result.intervals = intervals;
+      return loc(result);
+    }
+
+QuotaNameList
+  = head:AccessControlNameValue tail:( _ "," _ AccessControlNameValue )* { return [head, ...tail.map(t => t[3])]; }
+
+AccessControlNameValue
+  = "'" chars:SingleQuotedUserChar* "'" { return "'" + chars.join("") + "'"; }
+  / AliasName
+
+QuotaClause
+  = QuotaKeyedClause
+  / QuotaIntervalClause
+  / "TO"i ![a-zA-Z0-9_] _ target:SetRoleList { return { to: target }; }
+
+QuotaKeyedClause
+  = "NOT"i ![a-zA-Z0-9_] _ "KEYED"i ![a-zA-Z0-9_] { return { keyed: { notKeyed: true } }; }
+  / ("KEYED"i / "KEY"i) ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ keys:QuotaKeyList { return { keyed: { keys } }; }
+
+QuotaKeyList
+  = head:QuotaKeyName tail:( _ "," _ QuotaKeyName )* { return [head, ...tail.map(t => t[3])]; }
+
+QuotaKeyName
+  = StringLiteral { return text(); }
+  / AliasName
+
+QuotaIntervalClause
+  = "FOR"i ![a-zA-Z0-9_] _ randomized:( "RANDOMIZED"i ![a-zA-Z0-9_] _ )? ( "INTERVAL"i ![a-zA-Z0-9_] _ )? duration:QuotaDuration _ unit:QuotaTimeUnit body:( _ QuotaIntervalBody )? {
+      const result = { duration, unit: unit.toUpperCase() };
+      if (randomized !== null) result.randomized = true;
+      if (body !== null) {
+        const b = body[1];
+        if (b.trackingOnly) result.trackingOnly = true;
+        if (b.noLimits) result.noLimits = true;
+        if (b.limits) result.limits = b.limits;
+      }
+      return { interval: result };
+    }
+
+QuotaDuration
+  = $( [0-9]+ ( "." [0-9]+ )? )
+
+QuotaTimeUnit
+  = ("SECOND"i / "MINUTE"i / "HOUR"i / "DAY"i / "WEEK"i / "MONTH"i / "QUARTER"i / "YEAR"i) ("S"i)? ![a-zA-Z0-9_] { return text().replace(/s$/i, ''); }
+
+QuotaIntervalBody
+  = "TRACKING"i ![a-zA-Z0-9_] _ "ONLY"i ![a-zA-Z0-9_] { return { trackingOnly: true }; }
+  / "NO"i ![a-zA-Z0-9_] _ "LIMITS"i ![a-zA-Z0-9_] { return { noLimits: true }; }
+  / limits:QuotaLimitList { return { limits }; }
+
+QuotaLimitList
+  = head:QuotaLimitItem tail:( _ "," _ !QuotaLimitListEnd QuotaLimitItem )* { return [head, ...tail.map(t => t[4])]; }
+
+QuotaLimitListEnd
+  = "FOR"i ![a-zA-Z0-9_]
+  / "TO"i ![a-zA-Z0-9_]
+  / "KEYED"i ![a-zA-Z0-9_]
+  / "KEY"i ![a-zA-Z0-9_]
+  / "NOT"i ![a-zA-Z0-9_] _ "KEYED"i ![a-zA-Z0-9_]
+
+QuotaLimitItem
+  // MAX name = value / MAX name value / name MAX value / name = value / name value
+  = "MAX"i ![a-zA-Z0-9_] _ name:QuotaLimitName _ ( "=" _ )? value:Expression { return { name: name.toUpperCase(), value }; }
+  / name:QuotaLimitName _ "MAX"i ![a-zA-Z0-9_] _ value:Expression { return { name: name.toUpperCase(), value }; }
+  / name:QuotaLimitName _ "=" _ value:Expression { return { name: name.toUpperCase(), value }; }
+  / name:QuotaLimitName _ value:Expression { return { name: name.toUpperCase(), value }; }
+
+QuotaLimitName
+  = ("RESULT"i / "READ"i / "EXECUTION"i) " " ("ROWS"i / "BYTES"i / "TIME"i) { return text().toUpperCase().replace(/ /g, '_'); }
+  / $( [a-zA-Z_]+ ( "_" [a-zA-Z_]+ )* )
+
+// ── CREATE SETTINGS PROFILE ──────────────────────────────────────────────────
+CreateSettingsProfileStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplacePre:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ hasSK:( "SETTINGS"i ![a-zA-Z0-9_] _ )? "PROFILE"i ![a-zA-Z0-9_]
+    orReplacePost:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ names:QuotaNameList
+    settings:( _ CreateRoleSettingsClause )?
+    to:( _ "TO"i ![a-zA-Z0-9_] _ SetRoleList )?
+    {
+      const result = { kind: 'createSettingsProfile', names };
+      if (orReplacePre !== null || orReplacePost !== null) result.orReplace = true;
+      if (hasSK !== null) result.hasSettingsKeyword = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (settings !== null) result.settings = settings[1];
+      if (to !== null) result.to = to[4];
+      return loc(result);
+    }
+
+// ── CREATE NAMED COLLECTION ──────────────────────────────────────────────────
+CreateNamedCollectionStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "NAMED"i ![a-zA-Z0-9_] _ "COLLECTION"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    cluster:( _ OnClusterClause )?
+    _ "AS"i ![a-zA-Z0-9_] _ items:NamedCollectionItemList
+    {
+      const result = { kind: 'createNamedCollection', name, items };
+      if (orReplace !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      return loc(result);
+    }
+
+NamedCollectionItemList
+  = head:NamedCollectionItem tail:( _ "," _ NamedCollectionItem )* { return [head, ...tail.map(t => t[3])]; }
+
+NamedCollectionItem
+  = key:AliasName _ "=" _ value:Expression { return { key, value }; }
+
+// ── CREATE RESOURCE ──────────────────────────────────────────────────────────
+CreateResourceStatement
+  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+    _ "RESOURCE"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    _ "(" _ specs:ResourceSpecList _ ")"
+    {
+      const result = { kind: 'createResource', name, specs };
+      if (orReplace !== null) result.orReplace = true;
+      if (ifne !== null) result.ifNotExists = true;
+      return loc(result);
+    }
+
+ResourceSpecList
+  = head:ResourceSpec tail:( _ "," _ ResourceSpec )* { return [head, ...tail.map(t => t[3])]; }
+
+ResourceSpec
+  = operation:$("READ"i / "WRITE"i) ![a-zA-Z0-9_] _ resourceType:$("DISK"i / "ANY"i) ![a-zA-Z0-9_] _ resourceName:AliasName {
+      return { operation: operation.toUpperCase(), resourceType: resourceType.toUpperCase(), resourceName };
+    }
+
+// ── CREATE WINDOW VIEW (raw body) ───────────────────────────────────────────
+CreateWindowViewStatement
+  = "CREATE"i ![a-zA-Z0-9_] _ ( "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] _ )? "WINDOW"i ![a-zA-Z0-9_] _ "VIEW"i ![a-zA-Z0-9_] body:$( ![;] . )* {
+      return loc({ kind: 'createWindowView', rawBody: body.trim() });
+    }
+
+// ── CREATE LIVE VIEW (raw body) ─────────────────────────────────────────────
+CreateLiveViewStatement
+  = "CREATE"i ![a-zA-Z0-9_] _ ( "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] _ )? "LIVE"i ![a-zA-Z0-9_] _ "VIEW"i ![a-zA-Z0-9_] body:$( ![;] . )* {
+      return loc({ kind: 'createLiveView', rawBody: body.trim() });
+    }
 
 // CreateTableStatement: handles all CREATE TABLE and REPLACE TABLE forms
 CreateTableStatement
-  = header:CreateTableHeader _ body:CreateTableBody {
-      return loc({ ...header, ...body });
+  = header:CreateTableHeader _ body:CreateTableBody format:( _ FormatClause )? {
+      const result = { ...header, ...body };
+      if (format !== null) result.format = format[1];
+      // Promote column-level PRIMARY KEY to primaryKey if no explicit PRIMARY KEY clause
+      if (result._columnPrimaryKeys && !result.primaryKey) {
+        result.primaryKey = result._columnPrimaryKeys;
+      }
+      delete result._columnPrimaryKeys;
+      return loc(result);
     }
 
 // Header: CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS] [db.]table [ON CLUSTER ...]
@@ -191,37 +885,91 @@ CreateTableHeader
 OnClusterClause
   = "ON"i ![a-zA-Z0-9_] _ "CLUSTER"i ![a-zA-Z0-9_] _ name:( StringLiteral { return text(); } / AliasName ) { return name; }
 
+// RefreshClause: REFRESH AFTER|EVERY N unit [APPEND]
+RefreshClause
+  = "REFRESH"i ![a-zA-Z0-9_] body:$( _ !("TO"i ![a-zA-Z0-9_] / "ENGINE"i ![a-zA-Z0-9_] / "(" / KW_AS / "EMPTY"i ![a-zA-Z0-9_] / "POPULATE"i ![a-zA-Z0-9_] / "ORDER"i ![a-zA-Z0-9_] / "PARTITION"i ![a-zA-Z0-9_] / "PRIMARY"i ![a-zA-Z0-9_] / "SAMPLE"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / KW_SETTINGS / "COMMENT"i ![a-zA-Z0-9_]) . )+ {
+      return body.trim();
+    }
+
 // Body: the various syntax forms after the header
 CreateTableBody
-  // Form: CLONE AS [db.]table [ENGINE = ...]
-  = "CLONE"i ![a-zA-Z0-9_] _ "AS"i ![a-zA-Z0-9_] _ asTable:TableRef engine:( _ EngineClause )? {
+  // Form: CLONE AS [db.]table [ENGINE ...] [clauses]
+  = "CLONE"i ![a-zA-Z0-9_] _ "AS"i ![a-zA-Z0-9_] _ asTable:TableRef engine:( _ EngineClause )? clauses:CreateTableClauses {
       const result = { clone: true, asTable };
       if (engine !== null) result.engine = engine[1];
+      Object.assign(result, clauses);
       return result;
     }
-  // Form: (columns) ENGINE = ... [clauses] [AS SELECT ...]
+  // UUID clause (ignored, just skip it)
+  / "UUID"i ![a-zA-Z0-9_] _ StringLiteral _ body:CreateTableBody { return body; }
+  // Form: (columns) ENGINE ... [clauses] [AS SELECT ...]
   / schema:CreateTableSchema _ engine:EngineClause clauses:CreateTableClauses asQuery:( _ KW_AS _ UnionQuery )? {
       const result = { ...schema, engine };
       Object.assign(result, clauses);
       if (asQuery !== null) result.asQuery = asQuery[3];
       return result;
     }
+  // Form: (columns) [clauses] AS table_function(...) — explicit columns with table function
+  / schema:CreateTableSchema clauses:CreateTableClauses _ "AS"i ![a-zA-Z0-9_] _ name:AliasName _ "(" _ args:EngineArgList? _ ")" {
+      const result = { ...schema, asTableFunction: { name, args: args || [] } };
+      Object.assign(result, clauses);
+      return result;
+    }
   // Form: (columns) — no ENGINE (for TEMPORARY tables etc.)
-  / schema:CreateTableSchema clauses:CreateTableClauses {
+  / schema:CreateTableSchema clauses:CreateTableClauses empty:( _ "EMPTY"i ![a-zA-Z0-9_] )? asQuery:( _ KW_AS _ &( KW_SELECT / KW_WITH / "(" ) UnionQuery )? {
       const result = { ...schema };
       Object.assign(result, clauses);
+      if (empty !== null) result.empty = true;
+      if (asQuery !== null) result.asQuery = asQuery[4];
       return result;
     }
-  // Form: ENGINE = ... [clauses] AS SELECT ... (no explicit column schema)
-  / engine:EngineClause clauses:CreateTableClauses _ KW_AS _ asQuery:UnionQuery {
+  // Form: ENGINE ... [clauses] [EMPTY] AS SELECT ... (no explicit column schema)
+  / engine:EngineClause clauses:CreateTableClauses empty:( _ "EMPTY"i ![a-zA-Z0-9_] )? _ KW_AS _ asQuery:UnionQuery {
       const result = { engine, asQuery };
+      Object.assign(result, clauses);
+      if (empty !== null) result.empty = true;
+      return result;
+    }
+  // Form: ENGINE ... [clauses] AS table_name — schema from another table with explicit engine
+  / engine:EngineClause clauses:CreateTableClauses _ "AS"i ![a-zA-Z0-9_] _ asTable:TableRef {
+      const result = { engine, asTable };
       Object.assign(result, clauses);
       return result;
     }
-  // Form: AS [db.]table [ENGINE = ...] — schema from another table (or table function)
-  / "AS"i ![a-zA-Z0-9_] _ asTable:TableRef engine:( _ EngineClause )? {
+  // Form: ENGINE ... [clauses] (no columns, no AS — empty table with engine)
+  / engine:EngineClause clauses:CreateTableClauses {
+      const result = { engine };
+      Object.assign(result, clauses);
+      return result;
+    }
+  // Form: [clauses] AS SELECT ... (no schema, no engine, e.g. default engine with ORDER BY)
+  / &( "ORDER"i / "PARTITION"i / "PRIMARY"i / "SAMPLE"i / "TTL"i ) clauses:CreateTableClauses _ KW_AS _ asQuery:UnionQuery {
+      const result = { asQuery };
+      Object.assign(result, clauses);
+      return result;
+    }
+  // Form: "EMPTY AS table_name" — ClickHouse extension (table ref, not SELECT)
+  / "EMPTY"i ![a-zA-Z0-9_] _ "AS"i ![a-zA-Z0-9_] _ !( KW_SELECT / KW_WITH / "(" ) asTable:TableRef {
+      return { empty: true, asTable };
+    }
+  // Form: "EMPTY AS SELECT ..." — ClickHouse extension
+  / "EMPTY"i ![a-zA-Z0-9_] _ KW_AS _ asQuery:UnionQuery {
+      return { empty: true, asQuery };
+    }
+  // Form: AS SELECT ... (no engine, for temporary tables)
+  / KW_AS _ &( KW_SELECT / KW_WITH / "(" ) asQuery:UnionQuery {
+      return { asQuery };
+    }
+  // Form: AS table_function(...) — must check before AS [db.]table
+  / "AS"i ![a-zA-Z0-9_] _ name:AliasName _ "(" _ args:EngineArgList? _ ")" {
+      const result = { asTableFunction: { name, args: args || [] } };
+      return result;
+    }
+  // Form: AS [db.]table [ENGINE ...] [clauses] — schema from another table
+  / "AS"i ![a-zA-Z0-9_] _ asTable:TableRef engine:( _ EngineClause )? clauses:CreateTableClauses {
       const result = { asTable };
       if (engine !== null) result.engine = engine[1];
+      Object.assign(result, clauses);
       return result;
     }
 
@@ -231,16 +979,21 @@ CreateTableSchema
       // Separate primary key from other elements
       const tableElements = [];
       let primaryKeyInSchema = null;
+      const columnPrimaryKeys = [];
       for (const el of elements) {
         if (el._primaryKey) {
           primaryKeyInSchema = el._primaryKey;
         } else {
           tableElements.push(el);
+          if (el.kind === 'columnDef' && el.primaryKey) {
+            columnPrimaryKeys.push({ kind: 'columnRef', parts: [el.name] });
+          }
         }
       }
       const result = {};
       if (tableElements.length > 0) result.tableElements = tableElements;
       if (primaryKeyInSchema !== null) result.primaryKeyInSchema = primaryKeyInSchema;
+      if (columnPrimaryKeys.length > 0) result._columnPrimaryKeys = columnPrimaryKeys;
       return result;
     }
 
@@ -251,26 +1004,46 @@ TableElementList
 
 TableElement
   = ConstraintElement
+  / ForeignKeyElement
+  / ProjectionIndexElement
   / IndexElement
   / ProjectionElement
   / PrimaryKeyElement
   / ColumnElement
 
+// PROJECTION with INDEX: e.g. "PROJECTION region_proj INDEX region TYPE basic"
+ProjectionIndexElement
+  = "PROJECTION"i ![a-zA-Z0-9_] _ name:AliasName _ "INDEX"i ![a-zA-Z0-9_] _ col:AliasName _ "TYPE"i ![a-zA-Z0-9_] _ typeName:AliasName {
+      return loc({ kind: 'projectionDef', name, projectionIndex: { column: col, typeName } });
+    }
+
 ColumnElement
   = name:AliasName
-    type:( _ !("DEFAULT"i ![a-zA-Z0-9_] / "MATERIALIZED"i ![a-zA-Z0-9_] / "EPHEMERAL"i ![a-zA-Z0-9_] / "ALIAS"i ![a-zA-Z0-9_] / "COMMENT"i ![a-zA-Z0-9_] / "CODEC"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / "," / ")") ClickHouseType )?
-    nullable:( _ NullableModifier )?
+    type:( _ !("DEFAULT"i ![a-zA-Z0-9_] / "MATERIALIZED"i ![a-zA-Z0-9_] / "EPHEMERAL"i ![a-zA-Z0-9_] / "ALIAS"i ![a-zA-Z0-9_] / "COMMENT"i ![a-zA-Z0-9_] / "CODEC"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / "STATISTICS"i ![a-zA-Z0-9_] / "SETTINGS"i ![a-zA-Z0-9_] / "NULL"i ![a-zA-Z0-9_] / "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] / "AUTO_INCREMENT"i ![a-zA-Z0-9_] / "COLLATE"i ![a-zA-Z0-9_] / "PRIMARY"i ![a-zA-Z0-9_] / "," / ")") ColumnDataType )?
+    collate:( _ "COLLATE"i ![a-zA-Z0-9_] _ AliasName )?
+    nullable1:( _ NullableModifier )?
+    autoIncrement:( _ "AUTO_INCREMENT"i ![a-zA-Z0-9_] )?
+    primaryKey:( _ "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] )?
     def:( _ ColumnDefault )?
+    nullable2:( _ NullableModifier )?
     comment:( _ ColumnComment )?
     codec:( _ ColumnCodec )?
-    ttl:( _ ColumnTTL )? {
+    stats:( _ ColumnStatistics )?
+    ttl:( _ ColumnTTL )?
+    colSettings:( _ ColumnSettings )? {
       const result = loc({ kind: 'columnDef', name });
       if (type !== null) result.type = type[2];
-      if (nullable !== null) result.nullable = nullable[1];
+      else if (autoIncrement !== null) result.type = { name: 'INT', args: [] };
+      const nullable = nullable2 !== null ? nullable2[1] : (nullable1 !== null ? nullable1[1] : null);
+      if (collate !== null) result.collate = collate[4];
+      if (nullable !== null) result.nullable = nullable;
+      if (primaryKey !== null) result.primaryKey = true;
       if (def !== null) { result.defaultKind = def[1].kind; if (def[1].expr) result.defaultExpr = def[1].expr; }
       if (comment !== null) result.comment = comment[1];
       if (codec !== null) result.codec = codec[1];
+      if (stats !== null) result.statistics = stats[1];
       if (ttl !== null) result.ttl = ttl[1];
+      if (colSettings !== null) result.columnSettings = colSettings[1];
       return result;
     }
 
@@ -282,9 +1055,9 @@ ColumnDefault
   = "DEFAULT"i ![a-zA-Z0-9_] _ expr:TernaryExpr { return { kind: 'DEFAULT', expr }; }
   / "MATERIALIZED"i ![a-zA-Z0-9_] _ expr:TernaryExpr { return { kind: 'MATERIALIZED', expr }; }
   / "ALIAS"i ![a-zA-Z0-9_] _ expr:TernaryExpr { return { kind: 'ALIAS', expr }; }
-  / "EPHEMERAL"i ![a-zA-Z0-9_] expr:( _ TernaryExpr )? {
+  / "EPHEMERAL"i ![a-zA-Z0-9_] expr:( _ !("COMMENT"i ![a-zA-Z0-9_] / "CODEC"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / "STATISTICS"i ![a-zA-Z0-9_] / "SETTINGS"i ![a-zA-Z0-9_] / "NULL"i ![a-zA-Z0-9_] / "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] / "," / ")") TernaryExpr )? {
       const result = { kind: 'EPHEMERAL' };
-      if (expr !== null) result.expr = expr[1];
+      if (expr !== null) result.expr = expr[2];
       return result;
     }
 
@@ -292,34 +1065,93 @@ ColumnComment
   = "COMMENT"i ![a-zA-Z0-9_] _ str:StringLiteral { return str.value; }
 
 ColumnCodec
-  = "CODEC"i ![a-zA-Z0-9_] _ codecArgs:CodecArgs { return 'CODEC' + codecArgs; }
+  = "CODEC"i ![a-zA-Z0-9_] _ "(" _ items:CodecItemList _ ")" { return items; }
 
-CodecArgs
-  = "(" parts:CodecArgPart* ")" { return '(' + parts.join('') + ')'; }
+CodecItemList
+  = head:CodecItemEntry tail:( _ "," _ CodecItemEntry )* { return [head, ...tail.map(t => t[3])]; }
 
-CodecArgPart
-  = nested:CodecArgs { return nested; }
-  / chars:$[^()]+ { return chars; }
+CodecItemEntry
+  = name:$([a-zA-Z_][a-zA-Z0-9_-]*) args:( _ "(" _ ExpressionList? _ ")" )? {
+      const result = { name };
+      if (args !== null) result.args = args[3] || [];
+      return result;
+    }
+  // Quoted codec name like 'AES-128-GCM-SIV'
+  / "'" name:$[^']+ "'" args:( _ "(" _ ExpressionList? _ ")" )? {
+      const result = { name };
+      if (args !== null) result.args = args[3] || [];
+      return result;
+    }
+
+ColumnStatistics
+  = "STATISTICS"i ![a-zA-Z0-9_] _ "(" _ items:CodecItemList _ ")" { return items; }
 
 ColumnTTL
   = "TTL"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+
+ColumnSettings
+  = "SETTINGS"i ![a-zA-Z0-9_] _ "(" _ head:ColumnSettingItem tail:( _ "," _ ColumnSettingItem )* _ ")" {
+      return [head, ...tail.map(t => t[3])];
+    }
+
+ColumnSettingItem
+  = name:$([a-zA-Z_][a-zA-Z0-9_]*) _ "=" _ val:TernaryExpr {
+      return { name, value: val };
+    }
 
 ConstraintElement
   = "CONSTRAINT"i ![a-zA-Z0-9_] _ name:AliasName _ ct:("CHECK"i / "ASSUME"i) ![a-zA-Z0-9_] _ expr:Expression {
       return loc({ kind: 'constraintDef', name, constraintType: ct.toUpperCase(), expr });
     }
 
+// FOREIGN KEY: parsed and ignored (ClickHouse accepts but ignores foreign keys)
+ForeignKeyElement
+  = "FOREIGN"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ "(" _ cols:ExpressionList _ ")"
+    _ "REFERENCES"i ![a-zA-Z0-9_] _ table:TableRef _ "(" _ refCols:ExpressionList _ ")"
+    actions:( _ ForeignKeyAction )* {
+      return loc({ kind: 'foreignKeyDef', columns: cols, refTable: table, refColumns: refCols });
+    }
+
+ForeignKeyAction
+  = "ON"i ![a-zA-Z0-9_] _ ("DELETE"i / "UPDATE"i) ![a-zA-Z0-9_] _
+    ("CASCADE"i / "RESTRICT"i / "SET"i ![a-zA-Z0-9_] _ "NULL"i / "NO"i ![a-zA-Z0-9_] _ "ACTION"i) ![a-zA-Z0-9_]
+
 IndexElement
-  = "INDEX"i ![a-zA-Z0-9_] _ name:AliasName _ expr:Expression _ "TYPE"i ![a-zA-Z0-9_] _ indexType:$([a-zA-Z_][a-zA-Z0-9_]* ( "(" [^)]* ")" )?)
+  = "INDEX"i ![a-zA-Z0-9_] _ name:AliasName _ expr:IndexExpr _ "TYPE"i ![a-zA-Z0-9_] _ indexType:IndexTypeSpec
     gran:( _ "GRANULARITY"i ![a-zA-Z0-9_] _ n:$[0-9]+ { return parseInt(n, 10); } )? {
       const result = loc({ kind: 'indexDef', name, expr, indexType });
       if (gran !== null) result.granularity = gran;
       return result;
     }
 
+// Index expression: either a parenthesized expression or a regular expression
+IndexExpr
+  = "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
+      if (tail.length === 0) return head;
+      return loc({ kind: 'functionCall', name: 'tuple', args: [head, ...tail.map(t => t[3])] });
+    }
+  / Expression
+
+// Index type: name with optional args. Args can contain settings like tokenizer = ngrams(3)
+IndexTypeSpec
+  = name:$([a-zA-Z_][a-zA-Z0-9_]*) args:( _ "(" _ IndexTypeArgList? _ ")" )? {
+      const result = { name };
+      if (args !== null) result.args = args[3] || [];
+      return result;
+    }
+
+IndexTypeArgList
+  = head:IndexTypeArgEntry tail:( _ "," _ IndexTypeArgEntry )* { return [head, ...tail.map(t => t[3])]; }
+
+// Each index type arg is parsed as an Expression (handles tokenizer = ngrams(3) as equals expr)
+IndexTypeArgEntry = Expression
+
 ProjectionElement
-  = "PROJECTION"i ![a-zA-Z0-9_] _ name:AliasName _ "(" _ query:SelectStatement _ ")" {
-      return loc({ kind: 'projectionDef', name, query });
+  = "PROJECTION"i ![a-zA-Z0-9_] _ name:AliasName _ "(" _ query:SelectStatement _ ")"
+    projSettings:( _ "WITH"i ![a-zA-Z0-9_] _ "SETTINGS"i ![a-zA-Z0-9_] _ "(" _ SettingsList _ ")" )? {
+      const result = loc({ kind: 'projectionDef', name, query });
+      if (projSettings !== null) result.projectionSettings = projSettings[9];
+      return result;
     }
 
 PrimaryKeyElement
@@ -328,14 +1160,15 @@ PrimaryKeyElement
     }
 
 PrimaryKeyExprs
-  = "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
+  = "(" _ ")" { return []; }
+  / "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
       return [head, ...tail.map(t => t[3])];
     }
   / expr:Expression { return [expr]; }
 
-// Engine clause: ENGINE = name[(args)]
+// Engine clause: ENGINE [=] name[(args)]
 EngineClause
-  = "ENGINE"i ![a-zA-Z0-9_] _ "=" _ name:AliasName args:( _ "(" _ EngineArgList? _ ")" )? {
+  = "ENGINE"i ![a-zA-Z0-9_] _ "="? _ name:AliasName args:( _ "(" _ EngineArgList? _ ")" )? {
       const result = { name };
       if (args !== null) result.args = args[3] !== null ? args[3] : [];
       return result;
@@ -351,15 +1184,20 @@ EngineArgList
 CreateTableClauses
   = clauses:( _ CreateTableClause )* {
       const result = {};
+      let sawOrdering = false; // true after ORDER BY or PRIMARY KEY
+      let sawComment = false;
       for (const c of clauses) {
         const clause = c[1];
-        if (clause.orderBy) result.orderBy = clause.orderBy;
+        if (clause.orderBy) { result.orderBy = clause.orderBy; sawOrdering = true; }
         else if (clause.partitionBy) result.partitionBy = clause.partitionBy;
-        else if (clause.primaryKey) result.primaryKey = clause.primaryKey;
+        else if (clause.primaryKey) { result.primaryKey = clause.primaryKey; if (sawOrdering) result.primaryKeyAfterOrderBy = true; sawOrdering = true; }
         else if (clause.sampleBy) result.sampleBy = clause.sampleBy;
         else if (clause.ttl) result.ttl = clause.ttl;
-        else if (clause.settings) result.settings = clause.settings;
-        else if (clause.comment !== undefined) result.comment = clause.comment;
+        else if (clause.settings) {
+          if (result.settings || sawComment) { result.querySettings = clause.settings; }
+          else { result.settings = clause.settings; if (sawOrdering) result.settingsAfterOrderBy = true; }
+        }
+        else if (clause.comment !== undefined) { result.comment = clause.comment; sawComment = true; }
       }
       return result;
     }
@@ -374,29 +1212,66 @@ CreateTableClause
   / c:CreateCommentClause { return { comment: c }; }
 
 CreateOrderByClause
-  = "ORDER"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
+  = "ORDER"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ "(" _ head:CreateOrderByItem tail:(_ "," _ CreateOrderByItem)* _ ")" !( _ [*/%+\-] ) {
+      const items = [head, ...tail.map(t => t[3])];
+      items._parenthesized = true;
+      return items;
+    }
+  / "ORDER"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ head:CreateOrderByItem tail:(_ "," _ CreateOrderByItem)* {
       return [head, ...tail.map(t => t[3])];
     }
-  / "ORDER"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ head:Expression tail:(_ "," _ Expression)* {
-      return [head, ...tail.map(t => t[3])];
-    }
+
+CreateOrderByItem
+  = expr:TernaryExpr dir:( _ ("ASC"i / "DESC"i) ![a-zA-Z0-9_] )? { return { expr, dir: dir ? dir[1].toUpperCase() : undefined }; }
 
 CreatePartitionByClause
-  = "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+  = "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ "(" _ ")" {
+      return loc({ kind: 'functionCall', name: 'tuple', args: [] });
+    }
+  / "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ expr:TernaryExpr { return expr; }
 
 CreatePrimaryKeyClause
-  = "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
+  = "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ "(" _ ")" {
+      return [];
+    }
+  / "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ "(" _ head:Expression tail:(_ "," _ Expression)* _ ")" {
       return [head, ...tail.map(t => t[3])];
     }
-  / "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ expr:Expression {
+  / "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] _ expr:TernaryExpr {
       return [expr];
     }
 
 CreateSampleByClause
-  = "SAMPLE"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+  = "SAMPLE"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ expr:TernaryExpr { return expr; }
 
 CreateTTLClause
-  = "TTL"i ![a-zA-Z0-9_] _ expr:Expression { return expr; }
+  = "TTL"i ![a-zA-Z0-9_] _ head:TTLItem tail:( _ "," _ TTLItem )* {
+      return [head, ...tail.map(t => t[3])];
+    }
+
+TTLItem
+  = expr:TernaryExpr suffix:( _ TTLSuffix )? {
+      const item = { expr };
+      if (suffix !== null && suffix[1].where) item.where = suffix[1].where;
+      return item;
+    }
+
+// TTL suffixes — we capture WHERE clause but discard others
+TTLSuffix
+  = "DELETE"i ![a-zA-Z0-9_] w:( _ "WHERE"i ![a-zA-Z0-9_] _ TernaryExpr )? { return w !== null ? { where: w[4] } : {}; }
+  / "TO"i ![a-zA-Z0-9_] _ ("DISK"i / "VOLUME"i) ![a-zA-Z0-9_] _ ( "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] _ )? StringLiteral { return {}; }
+  / "RECOMPRESS"i ![a-zA-Z0-9_] _ ColumnCodec { return {}; }
+  / "WHERE"i ![a-zA-Z0-9_] _ w:TernaryExpr { return { where: w }; }
+  / "GROUP"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ TTLGroupByList ( _ "SET"i ![a-zA-Z0-9_] _ TTLSetList )? { return {}; }
+
+TTLGroupByList
+  = head:TernaryExpr tail:( _ "," _ TernaryExpr )* { return [head, ...tail.map(t => t[3])]; }
+
+TTLSetList
+  = head:TTLSetItem tail:( _ "," _ TTLSetItem )* { return [head, ...tail.map(t => t[3])]; }
+
+TTLSetItem
+  = name:AddExpr _ "=" _ value:TernaryExpr { return { name, value }; }
 
 CreateCommentClause
   = "COMMENT"i ![a-zA-Z0-9_] _ str:StringLiteral { return str.value; }
@@ -801,8 +1676,8 @@ FromAtomAlias
   = _ KW_AS _ alias:AliasName cols:( _ "(" _ head:AliasName tail:( _ "," _ AliasName )* _ ")" { return [head, ...tail.map((t) => t[3])]; } )? {
       return cols !== null ? { alias, columnAliases: cols } : alias;
     }
-  // Column aliases without table alias: (n1, n2) — standard SQL subquery column aliases
-  / _ "(" _ head:AliasName tail:( _ "," _ AliasName )+ _ ")" {
+  // Column aliases without table alias: (n1, n2) or (n1) — standard SQL subquery column aliases
+  / _ "(" _ !( KW_SELECT / KW_WITH / "EXPLAIN"i ![a-zA-Z0-9_] ) head:AliasName tail:( _ "," _ AliasName )* _ ")" {
       return { columnAliases: [head, ...tail.map((t) => t[3])] };
     }
   / _ !JoinKeyword !ArrayJoinKeyword !KW_FORMAT alias:Identifier { return alias; }
@@ -821,8 +1696,8 @@ TableFunctionArgList
     }
 
 JoinPart
-  = join_type:ArrayJoinKeyword _ exprs:ExpressionList {
-      return loc({ kind: 'arrayJoin', joinType: join_type, expressions: exprs });
+  = join_type:ArrayJoinKeyword exprs:( _ ExpressionList )? {
+      return loc({ kind: 'arrayJoin', joinType: join_type, expressions: exprs ? exprs[1] : [] });
     }
   / join_type:JoinKeyword _ right:FromAtom _ constraint:JoinConstraint {
       return loc({ kind: 'join', joinType: join_type, right, constraint });
@@ -1017,14 +1892,17 @@ SettingsList
     }
 
 // SettingName allows any identifier including reserved keywords (e.g. SETTINGS limit=5)
+// Also supports compound names like custom_compound.identifier.v1 and param_$1
 SettingName
-  = head:[a-zA-Z_] tail:[a-zA-Z0-9_]* { return head + tail.join(''); }
+  = head:[a-zA-Z_] tail:[a-zA-Z0-9_$.]* { return head + tail.join(''); }
   / '"' chars:DoubleQuotedChar* '"' { return chars.join(''); }
   / '`' chars:BacktickChar* '`' { return chars.join(''); }
 
 SettingItem
-  = name:SettingName _ "=" _ value:UnaryExpr {
-      return { name, value };
+  = name:SettingName _ "=" _ value:UnaryExpr forResource:( _ "FOR"i ![a-zA-Z0-9_] _ AliasName )? {
+      const result = { name, value };
+      if (forResource !== null) result.forResource = forResource[3];
+      return result;
     }
   // Bare setting name without value (e.g. SETTINGS force_index_by_date) — treated as = 1
   / name:SettingName {
@@ -1238,10 +2116,6 @@ CompareBaseSuffix
         return arith.reduce((acc, t) => (loc({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] })), base);
       };
     }
-  // Plain comparison operator
-  / _ op:CompareOp _ right:CompareRightExpr {
-      return (left) => (loc({ kind: 'binaryExpr', op, left, right }));
-    }
 
 // InTarget: the target expression for IN — array literal, parenthesized list, or bare expression
 InTarget
@@ -1271,7 +2145,10 @@ CompareOp = "<=>" / ">=" / "<=" / "<>" / "!=" / "==" / ">" / "<" / "="
 // Allows: 1 != NOT 1, k = x + y, k > -5. Does not allow: k = (a = b) unless in parens.
 CompareRightExpr
   = KW_NOT _ expr:CompareRightExpr { return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr }); }
-  / AddExpr
+  / left:AddExpr suffix:CompareBaseSuffix? {
+      if (suffix === null) return left;
+      return suffix(left);
+    }
 
 InValues
   = query:UnionQuery { return loc({ kind: 'subqueryExpr', query: query }); }
@@ -1540,13 +2417,95 @@ MultiWordType
 
 MultiWordTypeInner
   = "DOUBLE"i _ "PRECISION"i ![a-zA-Z0-9_]
+  / "NATIONAL"i _ ( "CHARACTER"i / "CHAR"i ) _ "LARGE"i _ "OBJECT"i ![a-zA-Z0-9_]
   / "NATIONAL"i _ ( "CHARACTER"i / "CHAR"i ) _ "VARYING"i ![a-zA-Z0-9_]
   / "NATIONAL"i _ ( "CHARACTER"i / "CHAR"i ) ![a-zA-Z0-9_]
+  / "NCHAR"i _ "LARGE"i _ "OBJECT"i ![a-zA-Z0-9_]
   / "NCHAR"i _ "VARYING"i ![a-zA-Z0-9_]
   / ( "CHARACTER"i / "CHAR"i / "BINARY"i ) _ "LARGE"i _ "OBJECT"i ![a-zA-Z0-9_]
   / ( "CHARACTER"i / "CHAR"i / "BINARY"i ) _ "VARYING"i ![a-zA-Z0-9_]
+  / "INT1"i _ ( "SIGNED"i / "UNSIGNED"i ) ![a-zA-Z0-9_]
   / ( "TINYINT"i / "SMALLINT"i / "BIGINT"i ) _ ( "SIGNED"i / "UNSIGNED"i ) ![a-zA-Z0-9_]
-  / ( "MEDIUMINT"i / "INT"i / "INTEGER"i ) _ ( "SIGNED"i / "UNSIGNED"i ) ![a-zA-Z0-9_]
+  / ( "MEDIUMINT"i / "INTEGER"i / "INT"i ) _ ( "SIGNED"i / "UNSIGNED"i ) ![a-zA-Z0-9_]
+
+// ── Structured data type parsing (for column definitions) ────────────────────
+
+// ColumnDataType: returns a structured { name, args? } object for EXPLAIN AST rendering.
+ColumnDataType
+  = mw:MultiWordType args:( _ "(" _ ColumnDataTypeArgList? _ ")" )? {
+      const result = { name: mw };
+      if (args !== null) result.args = args[3] !== null ? args[3] : [];
+      return result;
+    }
+  / "`" name:$[^`]+ "`" { return { name }; }
+  / "\"" name:$[^"]+ "\"" { return { name }; }
+  // Enum types: parse values as structured list
+  / name:$("Enum8"i / "Enum16"i / "Enum"i ![a-zA-Z0-9_]) _ "(" _ values:EnumValueList _ ")" {
+      return { name: name.trim(), args: [{ kind: 'enumValues', values }] };
+    }
+  / name:$("Enum8"i / "Enum16"i / "Enum"i ![a-zA-Z0-9_]) {
+      return { name: name.trim() };
+    }
+  / name:$([a-zA-Z_][a-zA-Z0-9_]*) args:( _ "(" _ ColumnDataTypeArgList? _ ")" )? suffix:( _ ("SIGNED"i / "UNSIGNED"i) ![a-zA-Z0-9_] )? {
+      let typeName = name;
+      if (suffix !== null) typeName = (name + ' ' + suffix[1]).toUpperCase();
+      const result = { name: typeName };
+      if (args !== null) result.args = args[3] || [];
+      return result;
+    }
+
+EnumValueList
+  = head:EnumValue tail:( _ "," _ EnumValue )* {
+      return [head, ...tail.map(t => t[3])];
+    }
+
+EnumValue
+  = name:StringLiteral _ "=" _ value:$("-"? _ [0-9]+) { return { name: name.value, value: value.replace(/\s/g, '') }; }
+  / "NULL"i ![a-zA-Z0-9_] { return { name: null, value: null }; }
+  / name:StringLiteral { return { name: name.value }; }
+
+ColumnDataTypeArgList
+  = head:ColumnDataTypeArg tail:( _ "," _ ColumnDataTypeArg )* trailing_comma:( _ "," )? {
+      return [head, ...tail.map(t => t[3])];
+    }
+
+// A single type argument: could be a sub-type, a named field (Nested/Tuple), a literal, a setting, or a SKIP/REGEXP spec
+ColumnDataTypeArg
+  // SKIP REGEXP 'pattern' (for JSON type)
+  = "SKIP"i ![a-zA-Z0-9_] _ "REGEXP"i ![a-zA-Z0-9_] _ str:$("'" [^']* "'") {
+      return { kind: 'literal', value: 'SKIP REGEXP ' + str };
+    }
+  // SKIP path (for JSON type)
+  / "SKIP"i ![a-zA-Z0-9_] _ path:TypeArgFieldName {
+      return { kind: 'literal', value: 'SKIP ' + path };
+    }
+  // Named field: "name Type" (for Nested, named Tuple, JSON typed paths)
+  / name:TypeArgFieldName _ &([a-zA-Z_`] / "(" / "'" / "\"") type:ColumnDataType {
+      return { kind: 'namedField', name: name.replace(/[`"]/g, ''), type };
+    }
+  // String literal
+  / str:$("'" [^']* "'") { return { kind: 'literal', value: str }; }
+  // Numeric literal (possibly negative, with decimal)
+  / val:$("-"? [0-9]+ ("." [0-9]*)?) { return { kind: 'literal', value: val }; }
+  // Setting: name = value  (for Dynamic(max_types=3), JSON(max_dynamic_paths=10))
+  / name:$([a-zA-Z_][a-zA-Z0-9_]*) _ "=" _ val:TernaryExpr {
+      return { kind: 'setting', name: name, value: val };
+    }
+  // Subtype (must be after named field to avoid consuming the name)
+  / type:ColumnDataType { return { kind: 'type', type }; }
+  // Raw text for other specials
+  / raw:$([^ ,)]+) { return { kind: 'literal', value: raw }; }
+
+// Field name for type args: supports bare identifiers, dotted paths, backtick-quoted, and double-quoted identifiers
+TypeArgFieldName
+  = parts:( TypeArgFieldPart ( "." TypeArgFieldPart )* ) { return text(); }
+
+TypeArgFieldPart
+  = "`" [^`]+ "`"
+  / '"' [^"]+ '"'
+  / [a-zA-Z_\u0080-\uffff][a-zA-Z0-9_\u0080-\uffff]*
+
+// ── Raw data type parsing (for CAST and expression contexts) ─────────────────
 
 // ClickHouseType: a type identifier with optional parenthesized arguments (balanced).
 // e.g. Int32, Nullable(String), Enum8('Hello' = 0, 'World' = 1), Tuple(Int32, String),
@@ -1557,7 +2516,7 @@ ClickHouseType
   = mw:MultiWordType { return mw; }
   / "`" name:$[^`]+ "`" { return name; }
   / "\"" name:$[^"]+ "\"" { return name; }
-  / name:$([a-zA-Z_][a-zA-Z0-9_]*) args:ClickHouseTypeArgs? {
+  / name:$([a-zA-Z_][a-zA-Z0-9_]*) _ args:ClickHouseTypeArgs? {
       return name + (args !== null ? args : '');
     }
 // Parenthesized type arguments (balanced)
@@ -1644,8 +2603,12 @@ MySQLGlobalVariable
 // ParenGroup: left-factored rule for all "("-prefixed expressions in PrimaryBase.
 // After consuming "(", branches on what follows to avoid re-entering "(" for each alternative.
 ParenGroup
+  // Empty-arg lambda: () -> expr
+  = "(" _ ")" _ "->" _ body:Expression {
+      return loc({ kind: 'lambdaExpr', params: [], body });
+    }
   // Empty tuple: ()
-  = "(" _ ")" { return loc({ kind: 'functionCall', name: 'tuple', args: [] }); }
+  / "(" _ ")" { return loc({ kind: 'functionCall', name: 'tuple', args: [] }); }
   // Subquery: (SELECT ...) / (WITH ... SELECT ...) / (EXPLAIN ...)
   / "(" beforeQuery:_ &(KW_SELECT / KW_WITH / "EXPLAIN"i ![a-zA-Z0-9_]) query:UnionQuery afterQuery:_ ")" {
       return loc({ kind: 'subqueryExpr', query: addSurroundingWs(query, beforeQuery, afterQuery) });
@@ -2348,6 +3311,8 @@ AliasName
 DoubleQuotedChar
   = '""' { return '"'; }
   / '\\"' { return '"'; }
+  / '\\\\' { return '\\'; }
+  / '\\' c:. { return '\\' + c; }
   / [^"\\] { return text(); }
 
 BacktickChar

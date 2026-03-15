@@ -4,10 +4,10 @@ WHERE toIntervalHour(number) = 0;
 
 CREATE TABLE t1
 (
-    c0 Decimal(18,0)
+    c0 Decimal(18, 0)
 )
 ENGINE = MergeTree()
-ORDER BY c0;
+ORDER BY (c0);
 
 SELECT c0 = 6812671276462221925::Int64
 FROM t1;

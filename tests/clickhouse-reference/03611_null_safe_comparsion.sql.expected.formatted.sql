@@ -22,17 +22,14 @@ CREATE TABLE `03611_nscmp_tbl`
     c_enum8 Nullable(Enum8('a' = 1, 'b' = 2, '' = 0)),
     c_enum16 Nullable(Enum16('x' = 100, 'y' = 200, '' = 0)),
     c_array Array(Nullable(Int32)),
-    c_tuple Tuple(Nullable(Int32),Nullable(String)),
+    c_tuple Tuple(Nullable(Int32), Nullable(String)),
     c_map Map(String, Nullable(Int32)),
     c_nullable Nullable(Int32),
     c_uuid Nullable(UUID),
     c_ipv4 Nullable(IPv4),
     c_ipv6 Nullable(IPv6),
     c_json Nullable(JSON),
-    c_nested Nested(
-        id Nullable(Int32),
-        value Nullable(String)
-    ),
+    c_nested Nested(id Nullable(Int32), value Nullable(String)),
     c_variant Variant(UInt64, String, Array(UInt64)),
     c_dynamic Dynamic
 )

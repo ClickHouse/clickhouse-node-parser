@@ -6,8 +6,8 @@ CREATE TABLE tab
     INDEX idx str TYPE set(1000)
 )
 ENGINE = MergeTree
-ORDER BY (uint64, str)
-PRIMARY KEY uint64;
+PRIMARY KEY uint64
+ORDER BY (uint64, str);
 
 SELECT '--- Aliases of SHOW COLUMNS';
 
@@ -32,9 +32,22 @@ CREATE TABLE `tab.with.dots`
 ENGINE = MergeTree
 ORDER BY c;
 
+CREATE DATABASE `'`;
+
 CREATE TABLE `'`.`'`
 (
     c String
 )
 ENGINE = MergeTree
 ORDER BY c;
+
+CREATE DATABASE database_123456789abcde; -- pseudo-random database name
+
+CREATE TABLE database_123456789abcde.tab
+(
+    uint64 UInt64,
+    int32 Int32,
+    str String
+)
+ENGINE = MergeTree
+ORDER BY uint64;

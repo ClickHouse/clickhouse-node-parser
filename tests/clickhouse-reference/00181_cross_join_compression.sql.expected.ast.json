@@ -1,1 +1,84 @@
-{"expected":[{"type":"literal","text":"OR","ignoreCase":true},{"type":"literal","text":"TEMPORARY","ignoreCase":true},{"type":"literal","text":"TABLE","ignoreCase":true}],"found":"V","location":{"start":{"offset":25,"line":2,"column":8},"end":{"offset":26,"line":2,"column":9}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "unit"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ],
+      "parenthesized": true
+    },
+    "leadingComments": [
+      "-- Tags: stateful"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "CounterID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "StartURL"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "unit"
+      },
+      "kind": "join",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "visits"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "CounterID"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "StartURL"
+              ]
+            }
+          ],
+          "source": "(CounterID, StartURL)"
+        },
+        "direction": "DESC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1000"
+      }
+    }
+  }
+]

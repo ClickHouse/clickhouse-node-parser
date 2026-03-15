@@ -1,1 +1,30 @@
-<Parse Error>
+-- Tags: no-fasttest
+-- no-fasttest: 'countmin' sketches need a 3rd party library
+SET mutations_sync = 2;
+
+SET allow_experimental_statistics = 1;
+
+CREATE TABLE t_alter_auto_statistics
+(
+    a UInt64,
+    b UInt64 STATISTICS(minmax),
+    c String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_alter_auto_statistics', '1')
+ORDER BY a
+SETTINGS auto_statistics_types = '';
+
+SELECT
+    column,
+    type,
+    statistics,
+    estimates.cardinality,
+    estimates.min,
+    estimates.max
+FROM `system`.parts_columns
+WHERE table = 't_alter_auto_statistics'
+    AND database = currentDatabase()
+    AND active = 1
+ORDER BY
+    name ASC,
+    column ASC;

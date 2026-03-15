@@ -1,1 +1,80 @@
-{"expected":[{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"ORDER","ignoreCase":true},{"type":"literal","text":"PARTITION","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"PRIMARY","ignoreCase":true},{"type":"literal","text":"SAMPLE","ignoreCase":true},{"type":"literal","text":"TTL","ignoreCase":true},{"type":"literal","text":"SETTINGS","ignoreCase":true},{"type":"literal","text":"COMMENT","ignoreCase":true},{"type":"literal","text":"AS","ignoreCase":true}],"found":"F","location":{"start":{"offset":104,"line":3,"column":58},"end":{"offset":105,"line":3,"column":59}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_time_series_table",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03222_timeseries_table1"
+    },
+    "engine": {
+      "name": "TimeSeries"
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03222_timeseries_table2"
+    },
+    "engine": {
+      "name": "TimeSeries"
+    },
+    "settings": [
+      {
+        "name": "store_min_time_and_max_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "aggregate_min_time_and_max_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03222_timeseries_table4"
+    },
+    "engine": {
+      "name": "TimeSeries"
+    },
+    "settings": [
+      {
+        "name": "store_min_time_and_max_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "format": "Null",
+    "leadingComments": [
+      "--- This doesn't work because allow_nullable_key cannot be set in query for the internal MergeTree tables",
+      "--- CREATE TABLE 03222_timeseries_table3 ENGINE = TimeSeries SETTINGS store_min_time_and_max_time = 1, aggregate_min_time_and_max_time = 0;"
+    ]
+  }
+]

@@ -1,1 +1,314 @@
-{"expected":[{"type":"literal","text":"=","ignoreCase":false}],"found":"M","location":{"start":{"offset":106,"line":3,"column":46},"end":{"offset":107,"line":3,"column":47}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_pretty_color",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table1",
+      "alias": "t1"
+    },
+    "format": "PrettyCompact"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        "alias": "a"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        "alias": "b"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table2"
+    },
+    "format": "PrettyCompact"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "table1",
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "alias": "b"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "table2"
+          }
+        },
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "a"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "PrettyCompact"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "table1",
+        "alias": "t1"
+      },
+      "kind": "join",
+      "joinType": "INNER",
+      "right": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "alias": "b"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "table2"
+          }
+        },
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "a"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "PrettyCompact"
+  }
+]

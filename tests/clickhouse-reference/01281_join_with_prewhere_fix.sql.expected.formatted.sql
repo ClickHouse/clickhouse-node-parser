@@ -4,7 +4,7 @@ CREATE TABLE t
     id UInt8
 )
 ENGINE = MergeTree()
-ORDER BY id;
+ORDER BY (id);
 
 SET enable_optimize_predicate_expression = 0;
 

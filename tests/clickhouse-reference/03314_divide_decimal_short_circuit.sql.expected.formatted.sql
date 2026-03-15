@@ -1,7 +1,7 @@
 CREATE TABLE `03314_divide_decimal_short_circuit`
 (
-    n1 Decimal(38,2),
-    n2 Decimal(38,2)
+    n1 Decimal(38, 2),
+    n2 Decimal(38, 2)
 )
 ENGINE = Memory;
 

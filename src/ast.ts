@@ -1419,8 +1419,74 @@ export type ExplainStatement = {
 export type SetStatement = {
   kind: 'set';
   /** The settings to set. */
-  settings: SettingItem[];
+  settings?: SettingItem[];
 } & NodeMetadata;
+
+// ── Role target ──────────────────────────────────────────────────────────────
+
+/** A target clause for role/user specifications (TO ALL/NONE/names). */
+export type RoleTarget =
+  | { kind: 'all'; except?: string[] }
+  | { kind: 'none' }
+  | { kind: 'names'; names: string[] };
+
+/** Default role clause (same structure as RoleTarget). */
+export type DefaultRoleClause = RoleTarget;
+
+/**
+ * A SET TRANSACTION SNAPSHOT statement.
+ *
+ * @example `SET TRANSACTION SNAPSHOT 1` → `{ kind: 'transactionControl', snapshot: '1' }`
+ */
+export type TransactionControlStatement = {
+  kind: 'transactionControl';
+  /** The snapshot number. */
+  snapshot: string;
+} & NodeMetadata;
+
+/**
+ * A SET DEFAULT ROLE statement.
+ *
+ * @example `SET DEFAULT ROLE ALL TO u1` → `{ kind: 'setRole', roles: { kind: 'all' }, users: ['u1'] }`
+ */
+export type SetRoleStatement = {
+  kind: 'setRole';
+  /** The role specification. */
+  roles: RoleTarget;
+  /** The user names the role applies to. */
+  users: string[];
+} & NodeMetadata;
+
+// ── Access control shared types ──────────────────────────────────────────────
+
+/** Name with optional @'host' for access control entities. */
+export type AccessControlName = { name: string; host?: string };
+
+/** HOST specification items for CREATE USER. */
+export type HostItem =
+  | { kind: 'any' }
+  | { kind: 'none' }
+  | { kind: 'local' }
+  | { kind: 'name'; value: string }
+  | { kind: 'regexp'; value: string }
+  | { kind: 'like'; value: string }
+  | { kind: 'ip'; value: string };
+
+/**
+ * Access control SETTINGS items (different from query-level SettingItem).
+ * Used in CREATE USER, CREATE ROLE, CREATE SETTINGS PROFILE.
+ */
+export type AccessControlSettingsItem =
+  | { kind: 'profile'; name: string }
+  | { kind: 'inherit'; name: string }
+  | {
+      kind: 'setting';
+      name: string;
+      value?: Expression;
+      min?: Expression;
+      max?: Expression;
+      modifier?: 'CONST' | 'WRITABLE' | 'READONLY';
+    };
 
 /**
  * A USE statement: `USE database` — selects the current database.
@@ -1450,6 +1516,42 @@ export type SystemStatement = {
 // ── CREATE TABLE types ───────────────────────────────────────────────────────
 
 /**
+ * A parsed ClickHouse data type, e.g. `Array(UInt8)`, `Nullable(String)`, `Enum8('a' = 1)`.
+ *
+ * @example `{ name: 'Array', args: [{ kind: 'type', type: { name: 'UInt8' } }] }`
+ */
+export type DataType = {
+  /** Type name, e.g. `'UInt64'`, `'Array'`, `'Enum8'`, `'DOUBLE PRECISION'`. */
+  name: string;
+  /** Type arguments. `undefined` means no parentheses. */
+  args?: DataTypeArg[];
+};
+
+/** A single argument inside a parameterized type like `Array(UInt8)` or `Nested(x UInt8, y String)`. */
+export type DataTypeArg =
+  | { kind: 'type'; type: DataType }
+  | { kind: 'namedField'; name: string; type: DataType }
+  | { kind: 'literal'; value: string }
+  | { kind: 'enumValues'; values: { name: string | null; value?: string | null }[] }
+  | { kind: 'setting'; name: string; value: Expression };
+
+/** A single codec in a CODEC(...) pipeline, e.g. `LZ4` or `Delta(4)`. */
+export type CodecItem = {
+  /** Codec name, e.g. `'LZ4'`, `'ZSTD'`, `'Delta'`. */
+  name: string;
+  /** Codec arguments. `undefined` means no parentheses. */
+  args?: Expression[];
+};
+
+/** An index type, e.g. `minmax`, `set(100)`, `bloom_filter(0.01)`. */
+export type IndexType = {
+  /** Type name, e.g. `'minmax'`, `'set'`, `'bloom_filter'`. */
+  name: string;
+  /** Type arguments. `undefined` means no parentheses. */
+  args?: Expression[];
+};
+
+/**
  * A column definition in a CREATE TABLE statement.
  *
  * @example `name String DEFAULT 'foo' COMMENT 'the name' CODEC(ZSTD) TTL created + INTERVAL 1 DAY`
@@ -1458,8 +1560,8 @@ export type ColumnDef = {
   kind: 'columnDef';
   /** Column name. */
   name: string;
-  /** Column data type as raw text (e.g. `'UInt64'`, `'Nullable(String)'`). */
-  type?: string;
+  /** Column data type (structured). */
+  type?: DataType;
   /** Nullability modifier: `'NULL'` or `'NOT NULL'`. */
   nullable?: 'NULL' | 'NOT NULL';
   /** Default value kind: `'DEFAULT'`, `'MATERIALIZED'`, `'EPHEMERAL'`, or `'ALIAS'`. */
@@ -1468,10 +1570,18 @@ export type ColumnDef = {
   defaultExpr?: Expression;
   /** Column comment string. */
   comment?: string;
-  /** Compression codec pipeline as raw text (e.g. `'CODEC(ZSTD, Delta)'`). */
-  codec?: string;
+  /** Compression codec pipeline. */
+  codec?: CodecItem[];
+  /** Statistics types. */
+  statistics?: CodecItem[];
   /** TTL expression for the column. */
   ttl?: Expression;
+  /** Collation name (e.g. `'utf8_unicode_ci'`). */
+  collate?: string;
+  /** `true` when the column has an inline `PRIMARY KEY` modifier. */
+  primaryKey?: boolean;
+  /** Column-level SETTINGS. */
+  columnSettings?: SettingItem[];
 } & NodeMetadata;
 
 /**
@@ -1501,8 +1611,8 @@ export type IndexDef = {
   name: string;
   /** The indexed expression. */
   expr: Expression;
-  /** Index type as raw text (e.g. `'minmax'`, `'set(100)'`). */
-  indexType: string;
+  /** Index type (structured). */
+  indexType: IndexType;
   /** Granularity value. */
   granularity?: number;
 } & NodeMetadata;
@@ -1516,12 +1626,30 @@ export type ProjectionDef = {
   kind: 'projectionDef';
   /** Projection name. */
   name: string;
-  /** The projection SELECT query. */
-  query: SelectStatement;
+  /** The projection SELECT query (for standard projections). */
+  query?: SelectStatement;
+  /** PROJECTION ... INDEX col TYPE name (for projection index syntax). */
+  projectionIndex?: { column: string; typeName: string };
+} & NodeMetadata;
+
+/**
+ * A foreign key definition in a CREATE TABLE column list.
+ * ClickHouse accepts but ignores foreign keys.
+ *
+ * @example `FOREIGN KEY (a) REFERENCES other (b)`
+ */
+export type ForeignKeyDef = {
+  kind: 'foreignKeyDef';
+  /** Columns in this table. */
+  columns: Expression[];
+  /** Referenced table. */
+  refTable: TableRef;
+  /** Referenced columns. */
+  refColumns: Expression[];
 } & NodeMetadata;
 
 /** Any element that can appear in a CREATE TABLE column list. */
-export type TableElement = ColumnDef | ConstraintDef | IndexDef | ProjectionDef;
+export type TableElement = ColumnDef | ConstraintDef | IndexDef | ProjectionDef | ForeignKeyDef;
 
 /**
  * An engine clause: `ENGINE = name[(args)]`.
@@ -1537,56 +1665,272 @@ export type EngineClause = {
   args?: Expression[];
 };
 
+/** Common fields for DDL CREATE statements. */
+type CreateCommonFields = {
+  orReplace?: boolean;
+  ifNotExists?: boolean;
+  onCluster?: string;
+} & NodeMetadata;
+
+export type TableOrderByItem = { expr: Expression; dir?: 'ASC' | 'DESC' };
+
+/** A single TTL item with an expression and optional WHERE clause. */
+export type TTLItem = { expr: Expression; where?: Expression };
+
+/** Storage-related clauses shared by CREATE TABLE and CREATE MATERIALIZED VIEW. */
+type StorageClauses = {
+  engine?: EngineClause;
+  orderBy?: TableOrderByItem[];
+  partitionBy?: Expression;
+  primaryKey?: Expression[];
+  sampleBy?: Expression;
+  ttl?: TTLItem[];
+  settings?: SettingItem[];
+  comment?: string;
+};
+
 /**
- * A CREATE TABLE statement.
- *
- * Supports all syntax forms: explicit schema, AS other table, CLONE AS, AS table function,
- * AS SELECT, and REPLACE TABLE.
- *
+ * `CREATE TABLE`, `CREATE OR REPLACE TABLE`, or `REPLACE TABLE`.
  * @example `CREATE TABLE t (id UInt64) ENGINE = MergeTree ORDER BY id`
- * @example `CREATE TABLE t AS other_table ENGINE = Memory`
- * @example `CREATE TABLE t ENGINE = MergeTree ORDER BY id AS SELECT * FROM src`
  */
 export type CreateTableStatement = {
   kind: 'createTable';
-  /** Whether this is `OR REPLACE` / `REPLACE TABLE`. */
-  orReplace?: boolean;
-  /** Whether this is a `REPLACE TABLE` statement (as opposed to `CREATE OR REPLACE`). */
   replace?: boolean;
-  /** Whether this is a `TEMPORARY TABLE`. */
   temporary?: boolean;
-  /** Whether `IF NOT EXISTS` was specified. */
-  ifNotExists?: boolean;
-  /** The table being created. */
   table: TableRef;
-  /** ON CLUSTER clause value. */
-  onCluster?: string;
-  /** Column definitions, constraints, indexes, and projections in the column list. */
   tableElements?: TableElement[];
-  /** Primary key defined inside the column list: `PRIMARY KEY(expr, ...)`. */
   primaryKeyInSchema?: Expression[];
-  /** The table engine. */
-  engine?: EngineClause;
-  /** ORDER BY clause expression(s). */
-  orderBy?: Expression[];
-  /** PARTITION BY expression. */
-  partitionBy?: Expression;
-  /** PRIMARY KEY clause (outside column list). */
-  primaryKey?: Expression[];
-  /** SAMPLE BY expression. */
-  sampleBy?: Expression;
-  /** Table-level TTL expression. */
-  ttl?: Expression;
-  /** Engine-level SETTINGS. */
-  settings?: SettingItem[];
-  /** Table comment string. */
-  comment?: string;
-  /** AS table reference (for `CREATE TABLE t AS other_table`). */
   asTable?: TableRef;
-  /** Whether this is a CLONE AS (vs. plain AS). */
   clone?: boolean;
-  /** AS SELECT query (for `CREATE TABLE t ... AS SELECT ...`). */
   asQuery?: QueryStatement;
+  asTableFunction?: { name: string; args: Expression[] };
+  empty?: boolean;
+} & StorageClauses &
+  CreateCommonFields;
+
+/** `CREATE VIEW` or `CREATE OR REPLACE VIEW`. */
+export type CreateViewStatement = {
+  kind: 'createView';
+  temporary?: boolean;
+  table: TableRef;
+  tableElements?: TableElement[];
+  asQuery: QueryStatement;
+} & CreateCommonFields;
+
+/** `CREATE MATERIALIZED VIEW`. */
+export type CreateMaterializedViewStatement = {
+  kind: 'createMaterializedView';
+  table: TableRef;
+  tableElements?: TableElement[];
+  toTable?: TableRef;
+  populate?: boolean;
+  empty?: boolean;
+  asQuery: QueryStatement;
+} & StorageClauses &
+  CreateCommonFields;
+
+/** `CREATE DATABASE`. */
+export type CreateDatabaseStatement = {
+  kind: 'createDatabase';
+  name: string;
+  engine?: EngineClause;
+  orderBy?: TableOrderByItem[];
+  comment?: string;
+  settings?: SettingItem[];
+} & CreateCommonFields;
+
+/** `CREATE FUNCTION`. */
+export type CreateFunctionStatement = {
+  kind: 'createFunction';
+  name: string;
+  functionExpr: Expression;
+} & CreateCommonFields;
+
+/** `CREATE INDEX` (standalone, not inside CREATE TABLE). */
+export type CreateIndexStatement = {
+  kind: 'createIndex';
+  indexName: string;
+  table: TableRef;
+  indexExpr: Expression;
+  indexType?: IndexType;
+  granularity?: number;
+} & CreateCommonFields;
+
+/** `CREATE DICTIONARY`. */
+export type CreateDictionaryStatement = {
+  kind: 'createDictionary';
+  table: TableRef;
+  dictAttrs: {
+    name: string;
+    type: DataType;
+    defaultValue?: Expression;
+    expression?: Expression;
+  }[];
+  dictDef: {
+    primaryKey: Expression[] | null;
+    source: { name: string; pairs: { name: string; value: Expression }[] } | null;
+    lifetime: { min?: number; max?: number; value?: number } | null;
+    layout: { name: string; pairs: { name: string; value: Expression }[] } | null;
+    range: { name: string; value: Expression }[] | null;
+    settings: SettingItem[] | null;
+    comment: string | null;
+  };
+} & CreateCommonFields;
+
+/** `CREATE WORKLOAD`. */
+export type CreateWorkloadStatement = {
+  kind: 'createWorkload';
+  name: string;
+  parentWorkload?: string;
+} & CreateCommonFields;
+
+/** Authentication data for a CREATE USER statement. */
+export type AuthenticationData = {
+  /** Secret value (password, hash, realm, server name). */
+  secret?: string;
+  /** Number of SSH keys (for ssh_key type). */
+  sshKeys?: number;
+};
+
+/** `CREATE USER`. */
+export type CreateUserStatement = {
+  kind: 'createUser';
+  /** User name(s) with optional @'host' suffix. */
+  names: AccessControlName[];
+  /** Parsed authentication methods. */
+  auth?: AuthenticationData[];
+  /** HOST specification items. */
+  host?: HostItem[];
+  /** Access control settings. */
+  settings?: AccessControlSettingsItem[] | 'NONE';
+  /** Default role clause. */
+  defaultRole?: DefaultRoleClause;
+  /** DEFAULT DATABASE clause. */
+  defaultDatabase?: string;
+  /** GRANTEES clause. */
+  grantees?: RoleTarget;
+  /** VALID UNTIL value. */
+  validUntil?: string;
+} & CreateCommonFields;
+
+/** `CREATE ROLE`. */
+export type CreateRoleStatement = {
+  kind: 'createRole';
+  /** Role name(s) with optional @'host' suffix. */
+  names: AccessControlName[];
+  /** Access control settings. */
+  settings?: AccessControlSettingsItem[] | 'NONE';
+} & CreateCommonFields;
+
+/** `CREATE ROW POLICY` (or `CREATE POLICY`). */
+export type CreateRowPolicyStatement = {
+  kind: 'createRowPolicy';
+  /** Whether the ROW keyword was used (vs plain POLICY). */
+  hasRowKeyword?: boolean;
+  /** Policy name(s) and their target table(s). */
+  targets: { names: string[]; table: TableRef }[];
+  /** USING expression. */
+  using?: Expression;
+  /** AS RESTRICTIVE or AS PERMISSIVE. */
+  restrictive?: 'RESTRICTIVE' | 'PERMISSIVE';
+  /** TO clause. */
+  to?: RoleTarget;
+} & CreateCommonFields;
+
+/** `CREATE QUOTA`. */
+export type CreateQuotaStatement = {
+  kind: 'createQuota';
+  /** Quota name(s). */
+  names: string[];
+  /** KEY/KEYED BY clause. */
+  keyed?: { notKeyed: true } | { keys: string[] };
+  /** Interval definitions. */
+  intervals?: {
+    randomized?: boolean;
+    duration: string;
+    unit: string;
+    trackingOnly?: boolean;
+    noLimits?: boolean;
+    limits?: { name: string; value: Expression }[];
+  }[];
+  /** TO clause. */
+  to?: RoleTarget;
+} & CreateCommonFields;
+
+/** `CREATE SETTINGS PROFILE` (or `CREATE PROFILE`). */
+export type CreateSettingsProfileStatement = {
+  kind: 'createSettingsProfile';
+  /** Whether the SETTINGS keyword was used before PROFILE. */
+  hasSettingsKeyword?: boolean;
+  /** Profile name(s). */
+  names: string[];
+  /** Access control settings. */
+  settings?: AccessControlSettingsItem[] | 'NONE';
+  /** TO clause. */
+  to?: RoleTarget;
+} & CreateCommonFields;
+
+/** `CREATE NAMED COLLECTION`. */
+export type CreateNamedCollectionStatement = {
+  kind: 'createNamedCollection';
+  /** Collection name. */
+  name: string;
+  /** Key-value items. */
+  items: { key: string; value: Expression }[];
+} & CreateCommonFields;
+
+/** `CREATE RESOURCE`. */
+export type CreateResourceStatement = {
+  kind: 'createResource';
+  /** Resource name. */
+  name: string;
+  /** Resource specifications: (operation disk name). */
+  specs: { operation: string; resourceType: string; resourceName: string }[];
+} & CreateCommonFields;
+
+/** `CREATE WINDOW VIEW`. Raw body stored since syntax is extremely complex. */
+export type CreateWindowViewStatement = {
+  kind: 'createWindowView';
+  /** Raw body text after CREATE [OR REPLACE] WINDOW VIEW. */
+  rawBody: string;
+} & NodeMetadata;
+
+/** `CREATE LIVE VIEW`. Raw body stored since syntax is rarely used. */
+export type CreateLiveViewStatement = {
+  kind: 'createLiveView';
+  /** Raw body text after CREATE [OR REPLACE] LIVE VIEW. */
+  rawBody: string;
+} & NodeMetadata;
+
+/** Union of all CREATE statement types. */
+export type CreateStatement =
+  | CreateTableStatement
+  | CreateViewStatement
+  | CreateMaterializedViewStatement
+  | CreateDatabaseStatement
+  | CreateFunctionStatement
+  | CreateIndexStatement
+  | CreateDictionaryStatement
+  | CreateWorkloadStatement
+  | CreateUserStatement
+  | CreateRoleStatement
+  | CreateRowPolicyStatement
+  | CreateQuotaStatement
+  | CreateSettingsProfileStatement
+  | CreateNamedCollectionStatement
+  | CreateResourceStatement
+  | CreateWindowViewStatement
+  | CreateLiveViewStatement;
+
+/**
+ * A PARALLEL WITH statement: chains multiple CREATE statements for parallel execution.
+ *
+ * @example `CREATE TABLE t1 (...) ENGINE=X PARALLEL WITH CREATE TABLE t2 (...) ENGINE=Y`
+ */
+export type ParallelWithStatement = {
+  kind: 'parallelWith';
+  /** The CREATE statements being executed in parallel (always 2+). */
+  queries: CreateStatement[];
 } & NodeMetadata;
 
 /**
@@ -1598,9 +1942,12 @@ export type Statement =
   | QueryStatement
   | ExplainStatement
   | SetStatement
+  | TransactionControlStatement
+  | SetRoleStatement
   | UseStatement
   | SystemStatement
-  | CreateTableStatement;
+  | CreateStatement
+  | ParallelWithStatement;
 
 // ── AST node kind map ────────────────────────────────────────────────────────
 
@@ -1640,13 +1987,33 @@ export interface ASTNodeKindMap {
   intersect: IntersectStatement;
   explain: ExplainStatement;
   set: SetStatement;
+  transactionControl: TransactionControlStatement;
+  setRole: SetRoleStatement;
   use: UseStatement;
   system: SystemStatement;
   createTable: CreateTableStatement;
+  createView: CreateViewStatement;
+  createMaterializedView: CreateMaterializedViewStatement;
+  createDatabase: CreateDatabaseStatement;
+  createFunction: CreateFunctionStatement;
+  createIndex: CreateIndexStatement;
+  createDictionary: CreateDictionaryStatement;
+  createWorkload: CreateWorkloadStatement;
+  createUser: CreateUserStatement;
+  createRole: CreateRoleStatement;
+  createRowPolicy: CreateRowPolicyStatement;
+  createQuota: CreateQuotaStatement;
+  createSettingsProfile: CreateSettingsProfileStatement;
+  createNamedCollection: CreateNamedCollectionStatement;
+  createResource: CreateResourceStatement;
+  createWindowView: CreateWindowViewStatement;
+  createLiveView: CreateLiveViewStatement;
+  parallelWith: ParallelWithStatement;
   columnDef: ColumnDef;
   constraintDef: ConstraintDef;
   indexDef: IndexDef;
   projectionDef: ProjectionDef;
+  foreignKeyDef: ForeignKeyDef;
 }
 
 /**
@@ -1855,32 +2222,132 @@ export const ExplainStatementSchema: z.ZodType<ExplainStatement> = z.lazy(() =>
 );
 
 /** Zod schema for {@link SetStatement}. */
-export const SetStatementSchema: z.ZodType<SetStatement> = z.object({
-  kind: z.literal('set'),
-  settings: z.array(SettingItemSchema),
-  ...NodeMetadataSchema,
+export const SetStatementSchema: z.ZodType<SetStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('set'),
+    settings: z.array(SettingItemSchema).optional(),
+    ...NodeMetadataSchema,
+  }),
+);
+
+/** Zod schema for {@link RoleTarget}. */
+export const RoleTargetSchema: z.ZodType<RoleTarget> = z.union([
+  z.object({ kind: z.literal('all'), except: z.array(z.string()).optional() }),
+  z.object({ kind: z.literal('none') }),
+  z.object({ kind: z.literal('names'), names: z.array(z.string()) }),
+]);
+
+/** Zod schema for {@link TransactionControlStatement}. */
+export const TransactionControlStatementSchema: z.ZodType<TransactionControlStatement> = z.lazy(
+  () =>
+    z.object({
+      kind: z.literal('transactionControl'),
+      snapshot: z.string(),
+      ...NodeMetadataSchema,
+    }),
+);
+
+/** Zod schema for {@link SetRoleStatement}. */
+export const SetRoleStatementSchema: z.ZodType<SetRoleStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('setRole'),
+    roles: RoleTargetSchema,
+    users: z.array(z.string()),
+    ...NodeMetadataSchema,
+  }),
+);
+
+/** Zod schema for {@link AccessControlName}. */
+const AccessControlNameSchema: z.ZodType<AccessControlName> = z.object({
+  name: z.string(),
+  host: z.string().optional(),
 });
+
+/** Zod schema for {@link HostItem}. */
+const HostItemSchema: z.ZodType<HostItem> = z.union([
+  z.object({ kind: z.literal('any') }),
+  z.object({ kind: z.literal('none') }),
+  z.object({ kind: z.literal('local') }),
+  z.object({ kind: z.literal('name'), value: z.string() }),
+  z.object({ kind: z.literal('regexp'), value: z.string() }),
+  z.object({ kind: z.literal('like'), value: z.string() }),
+  z.object({ kind: z.literal('ip'), value: z.string() }),
+]);
+
+/** Zod schema for {@link AccessControlSettingsItem}. */
+const AccessControlSettingsItemSchema: z.ZodType<AccessControlSettingsItem> = z.lazy(() =>
+  z.union([
+    z.object({ kind: z.literal('profile'), name: z.string() }),
+    z.object({ kind: z.literal('inherit'), name: z.string() }),
+    z.object({
+      kind: z.literal('setting'),
+      name: z.string(),
+      value: ExpressionSchema.optional(),
+      min: ExpressionSchema.optional(),
+      max: ExpressionSchema.optional(),
+      modifier: z
+        .union([z.literal('CONST'), z.literal('WRITABLE'), z.literal('READONLY')])
+        .optional(),
+    }),
+  ]),
+);
 
 /** Zod schema for {@link UseStatement}. */
-export const UseStatementSchema: z.ZodType<UseStatement> = z.object({
-  kind: z.literal('use'),
-  database: z.string(),
-  ...NodeMetadataSchema,
-});
+export const UseStatementSchema: z.ZodType<UseStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('use'),
+    database: z.string(),
+    ...NodeMetadataSchema,
+  }),
+);
 
 /** Zod schema for {@link SystemStatement}. */
-export const SystemStatementSchema: z.ZodType<SystemStatement> = z.object({
-  kind: z.literal('system'),
-  body: z.string(),
-  ...NodeMetadataSchema,
-});
+export const SystemStatementSchema: z.ZodType<SystemStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('system'),
+    body: z.string(),
+    ...NodeMetadataSchema,
+  }),
+);
 
 /** Zod schema for {@link ColumnDef}. */
+const DataTypeArgSchema: z.ZodType<DataTypeArg> = z.lazy(() =>
+  z.union([
+    z.object({ kind: z.literal('type'), type: DataTypeSchema }),
+    z.object({ kind: z.literal('namedField'), name: z.string(), type: DataTypeSchema }),
+    z.object({ kind: z.literal('literal'), value: z.string() }),
+    z.object({
+      kind: z.literal('enumValues'),
+      values: z.array(
+        z.object({
+          name: z.union([z.string(), z.null()]),
+          value: z.union([z.string(), z.null()]).optional(),
+        }),
+      ),
+    }),
+    z.object({ kind: z.literal('setting'), name: z.string(), value: ExpressionSchema }),
+  ]),
+);
+
+const DataTypeSchema: z.ZodType<DataType> = z.lazy(() =>
+  z.object({ name: z.string(), args: z.array(DataTypeArgSchema).optional() }),
+);
+
+const CodecItemSchema = z.object({
+  name: z.string(),
+  args: z.array(ExpressionSchema).optional(),
+});
+
+const IndexTypeSchema = z.object({
+  name: z.string(),
+  args: z.array(ExpressionSchema).optional(),
+});
+
 export const ColumnDefSchema: z.ZodType<ColumnDef> = z.lazy(() =>
   z.object({
     kind: z.literal('columnDef'),
     name: z.string(),
-    type: z.string().optional(),
+    type: DataTypeSchema.optional(),
     nullable: z.union([z.literal('NULL'), z.literal('NOT NULL')]).optional(),
     defaultKind: z
       .union([
@@ -1892,8 +2359,12 @@ export const ColumnDefSchema: z.ZodType<ColumnDef> = z.lazy(() =>
       .optional(),
     defaultExpr: ExpressionSchema.optional(),
     comment: z.string().optional(),
-    codec: z.string().optional(),
+    codec: z.array(CodecItemSchema).optional(),
+    statistics: z.array(CodecItemSchema).optional(),
     ttl: ExpressionSchema.optional(),
+    collate: z.string().optional(),
+    primaryKey: z.boolean().optional(),
+    columnSettings: z.array(SettingItemSchema).optional(),
     ...NodeMetadataSchema,
   }),
 );
@@ -1915,7 +2386,7 @@ export const IndexDefSchema: z.ZodType<IndexDef> = z.lazy(() =>
     kind: z.literal('indexDef'),
     name: z.string(),
     expr: ExpressionSchema,
-    indexType: z.string(),
+    indexType: IndexTypeSchema,
     granularity: z.number().optional(),
     ...NodeMetadataSchema,
   }),
@@ -1926,14 +2397,31 @@ export const ProjectionDefSchema: z.ZodType<ProjectionDef> = z.lazy(() =>
   z.object({
     kind: z.literal('projectionDef'),
     name: z.string(),
-    query: SelectStatementSchema,
+    query: SelectStatementSchema.optional(),
+    projectionIndex: z.object({ column: z.string(), typeName: z.string() }).optional(),
+    ...NodeMetadataSchema,
+  }),
+);
+
+export const ForeignKeyDefSchema: z.ZodType<ForeignKeyDef> = z.lazy(() =>
+  z.object({
+    kind: z.literal('foreignKeyDef'),
+    columns: z.array(ExpressionSchema),
+    refTable: TableRefSchema,
+    refColumns: z.array(ExpressionSchema),
     ...NodeMetadataSchema,
   }),
 );
 
 /** Zod schema for {@link TableElement}. */
 export const TableElementSchema: z.ZodType<TableElement> = z.lazy(() =>
-  z.union([ColumnDefSchema, ConstraintDefSchema, IndexDefSchema, ProjectionDefSchema]),
+  z.union([
+    ColumnDefSchema,
+    ConstraintDefSchema,
+    IndexDefSchema,
+    ProjectionDefSchema,
+    ForeignKeyDefSchema,
+  ]),
 );
 
 /** Zod schema for {@link EngineClause}. */
@@ -1942,31 +2430,270 @@ export const EngineClauseSchema = z.object({
   args: z.array(ExpressionSchema).optional(),
 });
 
-/** Zod schema for {@link CreateTableStatement}. */
+export const TableOrderByItemSchema: z.ZodType<TableOrderByItem> = z.object({
+  expr: ExpressionSchema,
+  dir: z.union([z.literal('ASC'), z.literal('DESC')]).optional(),
+});
+
+const StorageClausesFields = {
+  engine: EngineClauseSchema.optional(),
+  orderBy: z.array(TableOrderByItemSchema).optional(),
+  partitionBy: ExpressionSchema.optional(),
+  primaryKey: z.array(ExpressionSchema).optional(),
+  sampleBy: ExpressionSchema.optional(),
+  ttl: z.array(z.object({ expr: ExpressionSchema, where: ExpressionSchema.optional() })).optional(),
+  settings: z.array(SettingItemSchema).optional(),
+  comment: z.string().optional(),
+};
+
+const CreateCommonFields = {
+  orReplace: z.boolean().optional(),
+  ifNotExists: z.boolean().optional(),
+  onCluster: z.string().optional(),
+  ...NodeMetadataSchema,
+};
+
 export const CreateTableStatementSchema: z.ZodType<CreateTableStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('createTable'),
-    orReplace: z.boolean().optional(),
     replace: z.boolean().optional(),
     temporary: z.boolean().optional(),
-    ifNotExists: z.boolean().optional(),
     table: TableRefSchema,
-    onCluster: z.string().optional(),
     tableElements: z.array(TableElementSchema).optional(),
     primaryKeyInSchema: z.array(ExpressionSchema).optional(),
-    engine: EngineClauseSchema.optional(),
-    orderBy: z.array(ExpressionSchema).optional(),
-    partitionBy: ExpressionSchema.optional(),
-    primaryKey: z.array(ExpressionSchema).optional(),
-    sampleBy: ExpressionSchema.optional(),
-    ttl: ExpressionSchema.optional(),
-    settings: z.array(SettingItemSchema).optional(),
-    comment: z.string().optional(),
     asTable: TableRefSchema.optional(),
     clone: z.boolean().optional(),
     asQuery: QueryStatementSchema.optional(),
-    ...NodeMetadataSchema,
+    asTableFunction: z.object({ name: z.string(), args: z.array(ExpressionSchema) }).optional(),
+    empty: z.boolean().optional(),
+    ...StorageClausesFields,
+    ...CreateCommonFields,
   }),
+);
+
+export const CreateViewStatementSchema: z.ZodType<CreateViewStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createView'),
+    temporary: z.boolean().optional(),
+    table: TableRefSchema,
+    tableElements: z.array(TableElementSchema).optional(),
+    asQuery: QueryStatementSchema,
+    ...CreateCommonFields,
+  }),
+);
+
+export const CreateMaterializedViewStatementSchema: z.ZodType<CreateMaterializedViewStatement> =
+  z.lazy(() =>
+    z.object({
+      kind: z.literal('createMaterializedView'),
+      table: TableRefSchema,
+      tableElements: z.array(TableElementSchema).optional(),
+      toTable: TableRefSchema.optional(),
+      populate: z.boolean().optional(),
+      empty: z.boolean().optional(),
+      asQuery: QueryStatementSchema,
+      ...StorageClausesFields,
+      ...CreateCommonFields,
+    }),
+  );
+
+export const CreateDatabaseStatementSchema: z.ZodType<CreateDatabaseStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createDatabase'),
+    name: z.string(),
+    engine: EngineClauseSchema.optional(),
+    orderBy: z.array(TableOrderByItemSchema).optional(),
+    comment: z.string().optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    ...CreateCommonFields,
+  }),
+);
+
+export const CreateFunctionStatementSchema: z.ZodType<CreateFunctionStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createFunction'),
+    name: z.string(),
+    functionExpr: ExpressionSchema,
+    ...CreateCommonFields,
+  }),
+);
+
+export const CreateIndexStatementSchema: z.ZodType<CreateIndexStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createIndex'),
+    indexName: z.string(),
+    table: TableRefSchema,
+    indexExpr: ExpressionSchema,
+    indexType: IndexTypeSchema.optional(),
+    granularity: z.number().optional(),
+    ...CreateCommonFields,
+  }),
+);
+
+export const CreateDictionaryStatementSchema: z.ZodType<CreateDictionaryStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createDictionary'),
+    table: TableRefSchema,
+    dictAttrs: z.array(
+      z.object({
+        name: z.string(),
+        type: DataTypeSchema,
+        defaultValue: ExpressionSchema.optional(),
+        expression: ExpressionSchema.optional(),
+      }),
+    ),
+    dictDef: z.any(),
+    ...CreateCommonFields,
+  }),
+);
+
+export const CreateWorkloadStatementSchema: z.ZodType<CreateWorkloadStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createWorkload'),
+    name: z.string(),
+    parentWorkload: z.string().optional(),
+    ...CreateCommonFields,
+  }),
+);
+
+const AccessControlSettingsField = z
+  .union([z.array(AccessControlSettingsItemSchema), z.literal('NONE' as const)])
+  .optional();
+
+export const CreateUserStatementSchema: z.ZodType<CreateUserStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createUser'),
+    names: z.array(AccessControlNameSchema),
+    auth: z
+      .array(
+        z.object({
+          secret: z.string().optional(),
+          sshKeys: z.number().optional(),
+        }),
+      )
+      .optional(),
+    host: z.array(HostItemSchema).optional(),
+    settings: AccessControlSettingsField,
+    defaultRole: RoleTargetSchema.optional(),
+    defaultDatabase: z.string().optional(),
+    grantees: RoleTargetSchema.optional(),
+    validUntil: z.string().optional(),
+    ...CreateCommonFields,
+  }),
+);
+export const CreateRoleStatementSchema: z.ZodType<CreateRoleStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createRole'),
+    names: z.array(AccessControlNameSchema),
+    settings: AccessControlSettingsField,
+    ...CreateCommonFields,
+  }),
+);
+export const CreateRowPolicyStatementSchema: z.ZodType<CreateRowPolicyStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createRowPolicy'),
+    hasRowKeyword: z.boolean().optional(),
+    targets: z.array(
+      z.object({
+        names: z.array(z.string()),
+        table: TableRefSchema,
+      }),
+    ),
+    using: ExpressionSchema.optional(),
+    restrictive: z.union([z.literal('RESTRICTIVE'), z.literal('PERMISSIVE')]).optional(),
+    to: RoleTargetSchema.optional(),
+    ...CreateCommonFields,
+  }),
+);
+export const CreateQuotaStatementSchema: z.ZodType<CreateQuotaStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createQuota'),
+    names: z.array(z.string()),
+    keyed: z
+      .union([z.object({ notKeyed: z.literal(true) }), z.object({ keys: z.array(z.string()) })])
+      .optional(),
+    intervals: z
+      .array(
+        z.object({
+          randomized: z.boolean().optional(),
+          duration: z.string(),
+          unit: z.string(),
+          trackingOnly: z.boolean().optional(),
+          noLimits: z.boolean().optional(),
+          limits: z.array(z.object({ name: z.string(), value: ExpressionSchema })).optional(),
+        }),
+      )
+      .optional(),
+    to: RoleTargetSchema.optional(),
+    ...CreateCommonFields,
+  }),
+);
+export const CreateSettingsProfileStatementSchema: z.ZodType<CreateSettingsProfileStatement> =
+  z.object({
+    kind: z.literal('createSettingsProfile'),
+    hasSettingsKeyword: z.boolean().optional(),
+    names: z.array(z.string()),
+    settings: AccessControlSettingsField,
+    to: RoleTargetSchema.optional(),
+    ...CreateCommonFields,
+  });
+export const CreateNamedCollectionStatementSchema: z.ZodType<CreateNamedCollectionStatement> =
+  z.lazy(() =>
+    z.object({
+      kind: z.literal('createNamedCollection'),
+      name: z.string(),
+      items: z.array(z.object({ key: z.string(), value: ExpressionSchema })),
+      ...CreateCommonFields,
+    }),
+  );
+export const CreateResourceStatementSchema: z.ZodType<CreateResourceStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createResource'),
+    name: z.string(),
+    specs: z.array(
+      z.object({
+        operation: z.string(),
+        resourceType: z.string(),
+        resourceName: z.string(),
+      }),
+    ),
+    ...CreateCommonFields,
+  }),
+);
+const rawBodyFields = { rawBody: z.string(), ...NodeMetadataSchema };
+export const CreateWindowViewStatementSchema: z.ZodType<CreateWindowViewStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createWindowView'),
+    ...rawBodyFields,
+  }),
+);
+export const CreateLiveViewStatementSchema: z.ZodType<CreateLiveViewStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('createLiveView'),
+    ...rawBodyFields,
+  }),
+);
+
+const CreateStatementSchema: z.ZodType<CreateStatement> = z.lazy(() =>
+  z.union([
+    CreateTableStatementSchema,
+    CreateViewStatementSchema,
+    CreateMaterializedViewStatementSchema,
+    CreateDatabaseStatementSchema,
+    CreateFunctionStatementSchema,
+    CreateIndexStatementSchema,
+    CreateDictionaryStatementSchema,
+    CreateWorkloadStatementSchema,
+    CreateUserStatementSchema,
+    CreateRoleStatementSchema,
+    CreateRowPolicyStatementSchema,
+    CreateQuotaStatementSchema,
+    CreateSettingsProfileStatementSchema,
+    CreateNamedCollectionStatementSchema,
+    CreateResourceStatementSchema,
+    CreateWindowViewStatementSchema,
+    CreateLiveViewStatementSchema,
+  ]),
 );
 
 /** Zod schema for {@link QueryStatement}. */
@@ -1979,6 +2706,15 @@ export const QueryStatementSchema: z.ZodType<QueryStatement> = z.lazy(() =>
   ]),
 );
 
+/** Zod schema for {@link ParallelWithStatement}. */
+export const ParallelWithStatementSchema: z.ZodType<ParallelWithStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('parallelWith'),
+    queries: z.array(CreateStatementSchema),
+    ...NodeMetadataSchema,
+  }),
+);
+
 /** Zod schema for {@link Statement}. */
 export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
   z.union([
@@ -1987,9 +2723,12 @@ export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
     IntersectStatementSchema,
     ExplainStatementSchema,
     SetStatementSchema,
+    TransactionControlStatementSchema,
+    SetRoleStatementSchema,
     UseStatementSchema,
     SystemStatementSchema,
-    CreateTableStatementSchema,
+    CreateStatementSchema,
+    ParallelWithStatementSchema,
   ]),
 );
 

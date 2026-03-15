@@ -5,7 +5,7 @@ CREATE TABLE data_02771
     y Int,
     INDEX x_idx x TYPE minmax GRANULARITY 1,
     INDEX y_idx y TYPE minmax GRANULARITY 1,
-    INDEX xy_idx (x,y) TYPE minmax GRANULARITY 1
+    INDEX xy_idx tuple(x, y) TYPE minmax GRANULARITY 1
 )
 ENGINE = MergeTree()
 ORDER BY key;

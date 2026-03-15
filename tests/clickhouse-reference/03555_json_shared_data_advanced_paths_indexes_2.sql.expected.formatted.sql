@@ -3,7 +3,7 @@ SET output_format_json_quote_64bit_integers = 0;
 
 CREATE TABLE test
 (
-    json JSON(max_dynamic_paths=0)
+    json JSON(max_dynamic_paths = 0)
 )
 ENGINE = MergeTree
 ORDER BY tuple()

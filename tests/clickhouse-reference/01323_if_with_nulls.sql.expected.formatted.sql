@@ -136,8 +136,8 @@ CREATE TABLE test_nullable_float_issue7347
     test Nullable(Float64)
 )
 ENGINE = MergeTree()
-ORDER BY ne
-PRIMARY KEY ne;
+PRIMARY KEY ne
+ORDER BY (ne);
 
 SELECT
     test,

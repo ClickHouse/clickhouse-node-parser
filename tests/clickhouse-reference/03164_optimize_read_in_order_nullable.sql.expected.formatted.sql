@@ -5,7 +5,7 @@ CREATE TABLE `03164_users`
     age Int16
 )
 ENGINE = MergeTree
-ORDER BY uid
+ORDER BY (uid)
 SETTINGS allow_nullable_key = 1;
 
 SELECT '-- Reproducer result:';

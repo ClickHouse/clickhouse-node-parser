@@ -49,9 +49,9 @@ FORMAT TSVRaw;
 CREATE TABLE test_table
 (
     key UInt32,
-    A SimpleAggregateFunction(anyLast,Nullable(Int64)),
-    B SimpleAggregateFunction(anyLast,Nullable(DateTime)),
-    C SimpleAggregateFunction(anyLast,Nullable(String))
+    A SimpleAggregateFunction(anyLast, Nullable(Int64)),
+    B SimpleAggregateFunction(anyLast, Nullable(DateTime)),
+    C SimpleAggregateFunction(anyLast, Nullable(String))
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY key;

@@ -1,6 +1,6 @@
 CREATE TABLE test_compact_without_substreams_advanced
 (
-    json JSON(max_dynamic_paths=8)
+    json JSON(max_dynamic_paths = 8)
 )
 ENGINE = MergeTree
 ORDER BY tuple()
@@ -12,7 +12,7 @@ FORMAT Null;
 
 CREATE TABLE test_compact_advanced
 (
-    json JSON(max_dynamic_paths=8)
+    json JSON(max_dynamic_paths = 8)
 )
 ENGINE = MergeTree
 ORDER BY tuple()

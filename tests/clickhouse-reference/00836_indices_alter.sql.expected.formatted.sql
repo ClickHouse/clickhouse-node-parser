@@ -14,7 +14,7 @@ CREATE TABLE minmax_idx2
 (
     u64 UInt64,
     i32 Int32,
-    INDEX idx1 (u64 + i32) TYPE minmax GRANULARITY 10,
+    INDEX idx1 u64 + i32 TYPE minmax GRANULARITY 10,
     INDEX idx2 u64 * i32 TYPE minmax GRANULARITY 10
 )
 ENGINE = MergeTree()

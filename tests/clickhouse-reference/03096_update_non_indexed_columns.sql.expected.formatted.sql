@@ -5,7 +5,7 @@ CREATE TABLE test_03096
     c UInt32,
     d UInt32 MATERIALIZED 0,
     sum UInt32 MATERIALIZED (a + b) + c,
-    INDEX idx (c, d) TYPE minmax GRANULARITY 1
+    INDEX idx tuple(c, d) TYPE minmax GRANULARITY 1
 )
 ENGINE = MergeTree
 ORDER BY a
