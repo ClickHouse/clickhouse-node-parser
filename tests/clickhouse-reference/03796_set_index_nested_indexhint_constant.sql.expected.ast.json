@@ -1,5 +1,75 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test for a bug where nested indexHint with non-UInt8 constant caused a logical error",
+      "-- \"ColumnUInt8 is expected as a Set index condition result\"",
+      "-- The issue was that constant columns of non-UInt8 type weren't being wrapped with __bitWrapperFunc"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": "LowCardinality(Nullable(UInt16))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": "Nullable(UInt256)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "i",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        "indexType": "set(100)",
+        "granularity": 2
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_nullable_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "distinct": {
       "kind": "distinct"

@@ -1,3 +1,7 @@
+CREATE TABLE join_any_inner (s String, x Array(UInt8), k UInt64) ENGINE = Join(ANY, INNER, k);
+CREATE TABLE join_any_left (s String, x Array(UInt8), k UInt64) ENGINE = Join(ANY, LEFT, k);
+CREATE TABLE join_all_inner (s String, x Array(UInt8), k UInt64) ENGINE = Join(ALL, INNER, k);
+CREATE TABLE join_all_left (s String, x Array(UInt8), k UInt64) ENGINE = Join(ALL, LEFT, k);
 -- read from StorageJoin
 
 SELECT '--------read--------';
@@ -5,12 +9,20 @@ SELECT * from join_any_inner ORDER BY k;
 SELECT * from join_any_left ORDER BY k;
 SELECT * from join_all_inner ORDER BY k;
 SELECT * from join_all_left ORDER BY k;
+-- create StorageJoin tables with customized settings
+
+CREATE TABLE join_any_left_null (s String, k UInt64) ENGINE = Join(ANY, LEFT, k) SETTINGS join_use_nulls = 1;
 SELECT joinGet('join_any_left', 's', number) FROM numbers(3);
 SELECT joinGet('join_any_left_null', 's', number) FROM numbers(3);
 -- Using identifier as the first argument
 
 SELECT joinGet(join_any_left, 's', number) FROM numbers(3);
 SELECT joinGet(join_any_left_null, 's', number) FROM numbers(3);
+CREATE TABLE join_string_key (s String, x Array(UInt8), k UInt64) ENGINE = Join(ANY, LEFT, s);
 SELECT joinGet('join_string_key', 'x', 'abc'), joinGet('join_string_key', 'k', 'abc');
+USE default;
+CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.join_test (a UInt8, b UInt8) Engine = Join(ANY, LEFT, a);
+USE {CLICKHOUSE_DATABASE:Identifier};
 select joinGet('join_test', 'b', 1);
+USE system;
 SELECT joinGet({CLICKHOUSE_DATABASE:String} || '.join_test', 'b', 1);

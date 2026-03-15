@@ -1,3 +1,10 @@
+CREATE TABLE rollup_having
+(
+    a Nullable(String),
+    b Nullable(String)
+)
+ENGINE = Memory;
+
 SELECT
     a,
     b,

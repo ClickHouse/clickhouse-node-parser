@@ -1,3 +1,4 @@
+CREATE TABLE decimal_in_float_test ( `a` Decimal(18, 0), `b` Decimal(36, 2) ) ENGINE = Memory;
 SELECT toDecimal32(1.555,3) IN (1.5551);
 SELECT toDecimal32(1.555,3) IN (1.5551,1.555);
 SELECT toDecimal32(1.555,3) IN (1.5551,1.555000);
@@ -19,3 +20,4 @@ SELECT count() == 1 FROM decimal_in_float_test WHERE a IN (33.0);
 SELECT count() == 1 FROM decimal_in_float_test WHERE a NOT IN (33.333);
 SELECT count() == 1 FROM decimal_in_float_test WHERE b IN (44.44);
 SELECT count() == 1 FROM decimal_in_float_test WHERE b NOT IN (44.4,44.444);
+SET enable_analyzer = 1;

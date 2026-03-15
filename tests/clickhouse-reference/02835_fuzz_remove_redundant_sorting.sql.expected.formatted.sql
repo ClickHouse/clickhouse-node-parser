@@ -1,3 +1,10 @@
+CREATE TABLE numbers500k
+(
+    number UInt32
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT intDiv(number, NULL) AS k
 FROM (
         SELECT *

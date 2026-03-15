@@ -1,5 +1,38 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "EmbeddedRocksDB"
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: use-rocksdb"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -30,6 +63,9 @@
         }
       }
     ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ],
     "trailingComments": [
       "-- { serverError TOO_MANY_ROWS }"
     ]
@@ -58,6 +94,19 @@
       },
       {
         "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_trivial_approximate_count_query",
         "value": {
           "kind": "literal",
           "type": "UInt64",

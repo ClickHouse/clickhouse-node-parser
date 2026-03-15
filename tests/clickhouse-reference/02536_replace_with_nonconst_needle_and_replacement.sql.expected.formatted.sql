@@ -1,3 +1,13 @@
+CREATE TABLE test_tab
+(
+    id UInt32,
+    haystack String,
+    needle String,
+    replacement String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
 SELECT
     id,
     haystack,

@@ -1,5 +1,91 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test SELECT * REPLACE with all SQL clauses using new analyzer",
+      "-- This test verifies comprehensive fix for SELECT * REPLACE in all applicable clauses",
+      "-- See issue: https://github.com/ClickHouse/ClickHouse/issues/85313",
+      "-- See PR: https://github.com/ClickHouse/ClickHouse/pull/87630"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_replace_main"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_replace_merge"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -53,6 +139,28 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_arith"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
     "kind": "select",
@@ -218,6 +326,28 @@
         "type": "UInt64",
         "value": "11"
       }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_replace_str"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
     }
   },
   {
@@ -418,6 +548,33 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_limit_by"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
     "kind": "select",
@@ -962,6 +1119,33 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_group_by"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1050,6 +1234,28 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_group_by_sub"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
     "kind": "select",
@@ -1141,6 +1347,28 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_group_by_direct"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1208,6 +1436,33 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_having"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "amount",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
     "kind": "select",
@@ -1315,6 +1570,28 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_having_sub"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "amount",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1411,6 +1688,28 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_having_direct"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "amount",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
     "kind": "select",

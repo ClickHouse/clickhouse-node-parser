@@ -1,3 +1,7 @@
+-- Test for issue #88166: DateTimeTransforms UBSAN overflow
+-- This test ensures that accurateCast with out-of-range values doesn't cause UBSAN errors
+SET session_timezone = 'UTC';
+
 -- Test with large positive value (should throw exception with proper error message)
 SELECT accurateCast(100000000000000000000, 'DateTime'); -- {serverError CANNOT_CONVERT_TYPE}
 

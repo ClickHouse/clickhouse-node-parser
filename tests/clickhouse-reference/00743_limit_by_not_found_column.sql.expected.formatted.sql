@@ -1,3 +1,11 @@
+CREATE TABLE installation_stats
+(
+    message String,
+    info String,
+    message_type String
+)
+ENGINE = Log;
+
 SELECT count(*) AS total
 FROM (
         SELECT
@@ -13,6 +21,12 @@ FROM (
         LIMIT 5 BY message
     );
 
+CREATE TEMPORARY TABLE Accounts
+(
+    AccountID UInt64,
+    Currency String
+);
+
 SELECT AccountID
 FROM (
         SELECT
@@ -21,6 +35,13 @@ FROM (
         FROM Accounts
         LIMIT 2 BY Currency
     );
+
+CREATE TEMPORARY TABLE commententry1
+(
+    created_date Date,
+    link_id String,
+    subreddit String
+);
 
 SELECT concat('http://reddit.com/r/', subreddit, '/comments/', replaceRegexpOne(link_id, 't[0-9]_', ''))
 FROM (

@@ -1,3 +1,14 @@
+CREATE TABLE t0
+(
+    c0 Float64,
+    c1 BFloat16
+)
+ENGINE = MergeTree()
+PARTITION BY (murmurHash3_64(c0))
+PRIMARY KEY c0;
+
+SET join_algorithm = 'full_sorting_merge';
+
 SELECT count()
 FROM
     t0 AS t0d0

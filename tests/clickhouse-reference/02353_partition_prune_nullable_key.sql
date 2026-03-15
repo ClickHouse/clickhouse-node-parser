@@ -1,1 +1,2 @@
+create table n(nc Nullable(int)) engine = MergeTree order by (tuple()) partition by (nc) settings allow_nullable_key = 1;
 select * from n where nc is null;

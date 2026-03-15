@@ -4,5 +4,12 @@ SELECT polygonsDistanceCartesian([[[(0, 0), (0, 0.1), (0.1, 0.1), (0.1, 0)]]], [
 
 SELECT polygonsDistanceSpherical([[[(23.725750, 37.971536)]]], [[[(4.3826169, 50.8119483)]]]);
 
+CREATE TABLE polygon_01302
+(
+    x Array(Array(Array(Tuple(Float64, Float64)))),
+    y Array(Array(Array(Tuple(Float64, Float64))))
+)
+ENGINE = Memory();
+
 SELECT polygonsDistanceSpherical(x, y)
 FROM polygon_01302;

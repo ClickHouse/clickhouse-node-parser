@@ -1,3 +1,15 @@
+-- Test for verifying TopN optimizations
+-- Tags: no-parallel-replicas
+
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0; -- for stable max_rows_to_read
+SET read_overflow_mode = 'break';
+CREATE TABLE tab
+(
+    id Int32,
+    v1 Int32,
+    v2 Int32,
+    INDEX v1idx v1 TYPE minmax
+) Engine = MergeTree ORDER BY id SETTINGS index_granularity = 64, min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, max_bytes_to_merge_at_max_space_in_pool = 1, use_const_adaptive_granularity = 1, index_granularity_bytes = 0;
 -- Only 10 granules should be read
 SELECT id, v1 FROM tab ORDER BY v1 ASC LIMIT 10 SETTINGS max_rows_to_read = 640, use_skip_indexes_for_top_k = 1, use_skip_indexes_on_data_read = 0;
 SELECT id, v1 FROM tab ORDER BY v1 DESC LIMIT 10 SETTINGS max_rows_to_read = 640, use_skip_indexes_for_top_k = 1, use_skip_indexes_on_data_read = 0;

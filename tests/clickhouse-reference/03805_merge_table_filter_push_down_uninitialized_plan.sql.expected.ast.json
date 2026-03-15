@@ -1,5 +1,87 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Val",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Val"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Val",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Val"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo_merge"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Val",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^t1$"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Create a Merge table that matches only t1"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

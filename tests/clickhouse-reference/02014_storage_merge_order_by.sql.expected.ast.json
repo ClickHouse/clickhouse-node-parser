@@ -1,5 +1,121 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "short"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "e"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "long"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "e"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toStartOfMonth",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(e, toStartOfMonth(t))"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "merged"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "short"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "short|long"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

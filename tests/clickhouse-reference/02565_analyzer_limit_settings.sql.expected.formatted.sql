@@ -1,3 +1,8 @@
+SET enable_analyzer = 1;
+
+-- { echoOn }
+SET limit = 0;
+
 SELECT *
 FROM numbers(10);
 
@@ -46,6 +51,12 @@ FROM view((
         FROM numbers(10)
     ))
 SETTINGS limit = 5;
+
+SET limit = 3;
+
+SET limit = 4;
+
+SET offset = 1;
 
 SELECT *
 FROM numbers(10)

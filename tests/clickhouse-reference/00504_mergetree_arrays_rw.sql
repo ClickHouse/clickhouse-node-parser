@@ -1,6 +1,15 @@
+set allow_deprecated_syntax_for_merge_tree=1;
+set max_threads = 1;
+set max_insert_threads = 1;
+create table test_ins_arr (date Date, val Array(UInt64)) engine = MergeTree(date, (date), 8192);
 select * from test_ins_arr limit 10;
+create table test_ins_null (date Date, val Nullable(UInt64)) engine = MergeTree(date, (date), 8192);
 select * from test_ins_null limit 10;
+create table test_ins_arr_null (date Date, val Array(Nullable(UInt64))) engine = MergeTree(date, (date), 8192);
 select * from test_ins_arr_null limit 10;
+create table test_ins_arr_arr (date Date, val Array(Array(UInt64))) engine = MergeTree(date, (date), 8192);
 select * from test_ins_arr_arr limit 10;
+create table test_ins_arr_arr_null (date Date, val Array(Array(Nullable(UInt64)))) engine = MergeTree(date, (date), 8192);
 select * from test_ins_arr_arr_null limit 10;
+create table test_ins_arr_arr_arr (date Date, val Array(Array(Array(UInt64)))) engine = MergeTree(date, (date), 8192);
 select * from test_ins_arr_arr_arr limit 10;

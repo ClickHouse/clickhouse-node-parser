@@ -1,4 +1,1 @@
-SELECT
-    x,
-    toTypeName(x)
-FROM t1;
+<Parse Error>

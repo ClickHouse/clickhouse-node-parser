@@ -1,3 +1,5 @@
+CREATE TABLE test_collate (x UInt32, s LowCardinality(String)) ENGINE=Memory();
+CREATE TABLE test_collate_null (x UInt32, s LowCardinality(Nullable(String))) ENGINE=Memory();
 SELECT * FROM test_collate ORDER BY s;
 SELECT * FROM test_collate ORDER BY s COLLATE 'ru';
 SELECT * FROM test_collate ORDER BY x, s;

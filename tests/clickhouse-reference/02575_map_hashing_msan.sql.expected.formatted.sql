@@ -7,6 +7,13 @@ SELECT
     cityHash64(map(), CAST(materialize('') AS LowCardinality(Nullable(String))), last_element)
 FROM numbers(3);
 
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TEMPORARY TABLE datetime__fuzz_14
+(
+    d LowCardinality(Nullable(UInt128))
+);
+
 SELECT max(mapPopulateSeries(mapPopulateSeries(map(toInt64(1048), toInt64(9223), 3, -2147))), toInt64(1048), map('11', 257, '', NULL), cityHash64(*)) > NULL
 FROM (
         SELECT

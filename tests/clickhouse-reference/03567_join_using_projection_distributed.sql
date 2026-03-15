@@ -1,3 +1,5 @@
+CREATE TABLE t1 ( `key` String, `attr` UInt32 ) ENGINE = MergeTree ORDER BY key;
+CREATE TABLE t2 ( `key` String, `attr` UInt32 ) ENGINE = MergeTree ORDER BY key;
 SELECT
     CASE
               WHEN key = 'a' THEN 'AA'

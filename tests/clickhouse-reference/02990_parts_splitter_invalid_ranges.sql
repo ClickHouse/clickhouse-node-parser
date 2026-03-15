@@ -1,3 +1,13 @@
+CREATE TABLE test_table
+(
+    `eventType` String,
+    `timestamp` UInt64,
+    `key` UInt64
+)
+ENGINE = ReplacingMergeTree
+PRIMARY KEY (eventType, timestamp)
+ORDER BY (eventType, timestamp, key)
+SETTINGS index_granularity = 1;
 SELECT eventType, timestamp, key FROM test_table
 WHERE (eventType IN ('2', '4')) AND
     ((timestamp >= max2(toInt64('1698938519999'), toUnixTimestamp64Milli(now64() - toIntervalDay(90)))) AND

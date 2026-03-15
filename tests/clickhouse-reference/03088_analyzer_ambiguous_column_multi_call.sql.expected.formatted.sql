@@ -1,4 +1,1 @@
-SELECT {CLICKHOUSE_DATABASE:Identifier}.a.i
-FROM
-    {CLICKHOUSE_DATABASE:Identifier}.a
-CROSS JOIN {CLICKHOUSE_DATABASE:Identifier}.a AS x;
+<Parse Error>

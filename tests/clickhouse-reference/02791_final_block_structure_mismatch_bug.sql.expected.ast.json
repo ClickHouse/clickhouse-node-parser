@@ -1,5 +1,72 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "do_not_merge_across_partitions_select_final",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_block_mismatch"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -19,6 +86,77 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_block_mismatch_sk1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      ]
+    },
+    "primaryKey": [
+      {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- variations of the test above with slightly modified table definitions"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,6 +174,68 @@
       "table": "test_block_mismatch_sk1",
       "final": true
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_block_mismatch_sk2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      ]
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
     "kind": "select",

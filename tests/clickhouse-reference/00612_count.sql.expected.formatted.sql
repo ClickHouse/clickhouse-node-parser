@@ -1,3 +1,11 @@
+CREATE TABLE count
+(
+    x UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT count()
 FROM count;
 

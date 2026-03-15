@@ -4,6 +4,18 @@ select groupArray(s) from (select sum(n) s from (select toDecimal128(1, 10) as n
 select groupArray(s) from (select sum(n) s from (select toDecimal32(number, 2) as n from numbers(1000)));
 select groupArray(s) from (select sum(n) s from (select toDecimal64(number, 5) as n from numbers(1000)));
 select groupArray(s) from (select sum(n) s from (select toDecimal128(number, 10) as n from numbers(1000)));
+CREATE TABLE sensor_value (
+    received_at DateTime('Asia/Istanbul'),
+    device_id UUID,
+    sensor_id UUID,
+    value Nullable(Decimal(18, 4)),
+    low_warning Nullable(Decimal(18, 4)),
+    low_critical Nullable(Decimal(18, 4)),
+    high_warning Nullable(Decimal(18, 4)),
+    high_critical Nullable(Decimal(18, 4))
+) ENGINE = MergeTree
+PARTITION BY toDate(received_at)
+ORDER BY (device_id, sensor_id);
 SELECT `time`, groupArray((sensor_id, volume)) AS groupArr FROM (
     SELECT (intDiv(toUInt32(received_at), 900) * 900) AS `time`, sensor_id, avg(value) AS volume
     FROM sensor_value

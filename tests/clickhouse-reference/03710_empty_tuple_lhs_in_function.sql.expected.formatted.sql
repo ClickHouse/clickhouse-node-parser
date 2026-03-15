@@ -22,6 +22,12 @@ SELECT tuple() IN ((tuple()));
 
 SELECT tuple() IN ([(((tuple())))]);
 
+CREATE TABLE test_empty_tuple
+(
+    t Tuple()
+)
+ENGINE = Memory;
+
 SELECT t
 FROM test_empty_tuple
 WHERE t IN (tuple());
@@ -51,3 +57,5 @@ FROM test_empty_tuple
 WHERE t IN ([tuple()]);
 
 SELECT arrayJoin([tuple(), tuple()]) IN (tuple());
+
+SET enable_analyzer = 0;

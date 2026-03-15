@@ -40,5 +40,9 @@ FROM
     SELECT number * 1e7 AS number
     FROM numbers(20)
 );
+CREATE TABLE `02919_ddsketch_quantile`
+ENGINE = Log AS
+SELECT quantilesDDState(0.001, 0.9)(number) AS sketch
+FROM numbers(1000);
 SELECT arrayMap(a -> round(a, 2), (quantilesDDMerge(0.001, 0.9)(sketch)))
 FROM `02919_ddsketch_quantile`;

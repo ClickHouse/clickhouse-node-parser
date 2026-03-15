@@ -1,5 +1,157 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mutations_and_quorum1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "server_date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "something",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_01090/mutations_and_quorum"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "server_date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "server_date"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "something"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mutations_and_quorum2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "server_date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "something",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_01090/mutations_and_quorum"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "server_date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "server_date"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "something"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_quorum",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "insert_quorum_parallel",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "insert_quorum_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "300e3"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Should not be larger then 600e6 (default timeout in clickhouse-test)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

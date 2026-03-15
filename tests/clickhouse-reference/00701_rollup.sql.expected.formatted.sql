@@ -1,3 +1,11 @@
+CREATE TABLE `rollup`
+(
+    a String,
+    b Int32,
+    s Int32
+)
+ENGINE = Memory;
+
 SELECT
     a,
     b,
@@ -47,6 +55,8 @@ GROUP BY a
 WITH ROLLUP
 WITH TOTALS
 ORDER BY a ASC;
+
+SET group_by_two_level_threshold = 1;
 
 SELECT
     a,

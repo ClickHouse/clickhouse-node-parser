@@ -1,3 +1,6 @@
+-- Tags: no-fasttest, use-vectorscan
+SET send_logs_level = 'fatal';
+
 -- run queries multiple times to test the pattern caching
 SELECT multiFuzzyMatchAny('abc', 0, ['a1c'])
 FROM `system`.numbers

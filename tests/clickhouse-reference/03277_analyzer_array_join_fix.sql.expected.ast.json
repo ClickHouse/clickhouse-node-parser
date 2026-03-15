@@ -1,5 +1,76 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "repro"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "foos",
+        "type": "Nested(x LowCardinality(String))"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "repro_dist"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "foos",
+        "type": "Nested(\n      \"x\" LowCardinality(String),\n   )"
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "repro"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

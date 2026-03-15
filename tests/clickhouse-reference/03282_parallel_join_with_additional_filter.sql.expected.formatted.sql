@@ -1,3 +1,27 @@
+CREATE TABLE t1
+(
+    key UInt32,
+    a UInt32,
+    attr String
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+CREATE TABLE t2
+(
+    key UInt32,
+    a UInt32,
+    attr String
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+SET allow_experimental_join_condition = 1;
+
+SET enable_analyzer = 1;
+
+SET max_threads = 16;
+
 SELECT '---- HASH';
 
 SELECT

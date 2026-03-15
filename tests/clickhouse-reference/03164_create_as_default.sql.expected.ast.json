@@ -1,5 +1,59 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "src_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": "DateTime('UTC')",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "fromUnixTimestamp",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "sipTimestamp"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sipTimestamp",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "time"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "copied_table"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "src_table"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

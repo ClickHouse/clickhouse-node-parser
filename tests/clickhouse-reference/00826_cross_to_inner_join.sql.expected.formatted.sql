@@ -1,8 +1,28 @@
+SET enable_optimize_predicate_expression = 0;
+
+SET optimize_move_to_prewhere = 1;
+
+SET convert_query_to_cnf = 0;
+
 SELECT *
 FROM
     `system`.one AS l
 CROSS JOIN `system`.one AS r
 ORDER BY `all` ASC;
+
+CREATE TABLE t1_00826
+(
+    a Int8,
+    b Nullable(Int8)
+)
+ENGINE = Memory;
+
+CREATE TABLE t2_00826
+(
+    a Int8,
+    b Nullable(Int8)
+)
+ENGINE = Memory;
 
 SELECT '--- cross ---';
 

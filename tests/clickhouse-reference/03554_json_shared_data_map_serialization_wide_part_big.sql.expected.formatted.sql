@@ -1,3 +1,11 @@
+CREATE TABLE test_wide_map
+(
+    json JSON(max_dynamic_paths=8)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 1, min_rows_for_wide_part = 1, write_marks_for_substreams_in_compact_parts = 1, object_serialization_version = 'v3', object_shared_data_serialization_version = 'map', object_shared_data_serialization_version_for_zero_level_parts = 'map';
+
 SELECT json
 FROM test_wide_map
 FORMAT Null;
@@ -47,6 +55,14 @@ SELECT
     json.`^a`
 FROM test_wide_map
 FORMAT Null;
+
+CREATE TABLE test_wide_map_tuple
+(
+    json Tuple(data JSON(max_dynamic_paths=8))
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 1, min_rows_for_wide_part = 1, write_marks_for_substreams_in_compact_parts = 1, object_serialization_version = 'v3', object_shared_data_serialization_version = 'map', object_shared_data_serialization_version_for_zero_level_parts = 'map';
 
 SELECT json.data
 FROM test_wide_map_tuple

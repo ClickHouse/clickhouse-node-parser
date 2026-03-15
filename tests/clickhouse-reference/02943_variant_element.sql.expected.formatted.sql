@@ -1,3 +1,7 @@
+SET allow_experimental_variant_type = 1;
+
+SET use_variant_as_common_type = 1;
+
 SELECT variantElement(NULL::Variant(String, UInt64), 'UInt64')
 FROM numbers(4);
 

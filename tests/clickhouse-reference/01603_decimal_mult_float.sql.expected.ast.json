@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_arithmetic_operations_in_aggregate_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -159,6 +172,68 @@
             "type": "UInt64",
             "value": "6"
           }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test01603"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Decimal64(3)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toDecimal32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "f64"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f32",
+        "type": "Float32",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "f64"
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "f32"
         ]
       }
     ]

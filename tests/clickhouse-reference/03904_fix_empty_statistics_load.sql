@@ -1,3 +1,18 @@
+-- Test for issue #96068
+
+SET use_statistics = 1;
+-- The table has no manually or automatically created statistics
+CREATE TABLE tab
+(
+    u64                 UInt64,
+    u64_tdigest         UInt64,
+    u64_minmax          UInt64,
+    u64_countmin        UInt64,
+    f64                 Float64,
+    b                   Bool,
+    s                   String,
+) Engine = MergeTree() ORDER BY tuple() PARTITION BY u64_minmax
+SETTINGS min_bytes_for_wide_part = 0, auto_statistics_types = '';
 SELECT * FROM tab
 WHERE u64_countmin > 3500 and u64_countmin < 3600
 FORMAT NULL

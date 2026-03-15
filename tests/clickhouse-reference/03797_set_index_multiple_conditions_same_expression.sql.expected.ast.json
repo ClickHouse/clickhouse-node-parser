@@ -1,5 +1,54 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_set_index_multiple_conditions"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "labels",
+        "type": "Map(String, String)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_labels",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "labels"
+              ]
+            }
+          ]
+        },
+        "indexType": "SET(0)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

@@ -1,3 +1,11 @@
+CREATE TABLE tbl
+(
+    key UInt64,
+    agg UInt64
+)
+ENGINE = MergeTree
+ORDER BY key;
+
 SELECT
     key,
     sum(agg)

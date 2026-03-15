@@ -20,6 +20,8 @@ FROM (
         FROM numbers(3)
     ) AS ITBL; -- { serverError ILLEGAL_AGGREGATION }
 
+SET prefer_column_name_to_alias = 1;
+
 SELECT
     sum(x) AS x,
     max(x)
@@ -38,6 +40,15 @@ FROM (
         FROM numbers(3)
     ) AS ITBL
 SETTINGS prefer_column_name_to_alias = 1;
+
+CREATE TABLE IF NOT EXISTS mytable
+(
+    start_ts UInt32,
+    end_ts UInt32,
+    uuid String
+)
+ENGINE = MergeTree()
+ORDER BY start_ts;
 
 SELECT
     any(uuid) AS id,

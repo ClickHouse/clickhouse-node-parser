@@ -1,3 +1,11 @@
+CREATE TABLE lc
+(
+    a LowCardinality(Nullable(String)),
+    b LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     a,
     b,

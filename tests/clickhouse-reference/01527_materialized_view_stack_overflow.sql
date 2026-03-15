@@ -1,0 +1,8 @@
+SET allow_materialized_view_with_bad_select = 1;
+CREATE TABLE t (c String) ENGINE = Memory;
+CREATE MATERIALIZED VIEW v to v AS SELECT c FROM t; -- { serverError BAD_ARGUMENTS }
+CREATE MATERIALIZED VIEW v to t AS SELECT * FROM v; -- { serverError UNKNOWN_TABLE }
+CREATE TABLE t1 (c String) ENGINE = Memory;
+CREATE TABLE t2 (c String) ENGINE = Memory;
+CREATE MATERIALIZED VIEW v1 to t1 AS SELECT * FROM t2;
+CREATE MATERIALIZED VIEW v2 to t2 AS SELECT * FROM t1;

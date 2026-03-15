@@ -1,0 +1,1 @@
+CREATE TABLE alter_02834 (a UInt64) ENGINE=MergeTree() ORDER BY a;

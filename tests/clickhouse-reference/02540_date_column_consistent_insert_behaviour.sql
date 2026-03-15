@@ -1,3 +1,4 @@
+CREATE TABLE 02540_date (txt String, x Date) engine=Memory;
 SELECT x, txt FROM 02540_date WHERE txt == '65535';
 SELECT x, txt FROM 02540_date WHERE txt == 'toUInt16(65535)';
 SELECT x, txt FROM 02540_date WHERE txt == 'toInt32(65535)';

@@ -57,6 +57,14 @@ SELECT
     endsWithCaseInsensitive('中国', '�'),
     endsWithCaseInsensitiveUTF8('中国', '�');
 
+CREATE TABLE tab
+(
+    S1 String,
+    S2 String,
+    S3 FixedString(4)
+)
+ENGINE = Memory;
+
 SELECT COUNT()
 FROM tab
 WHERE startsWithCaseInsensitive(S1, '1');

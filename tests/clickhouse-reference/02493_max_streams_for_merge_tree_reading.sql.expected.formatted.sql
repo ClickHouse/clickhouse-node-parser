@@ -1,3 +1,17 @@
+-- Tags: no-random-merge-tree-settings
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+
+CREATE TABLE t
+(
+    x UInt64
+)
+ENGINE = MergeTree
+ORDER BY x;
+
+SET allow_prefetched_read_pool_for_remote_filesystem = 0;
+
+SET allow_prefetched_read_pool_for_local_filesystem = 0;
+
 -- { echo }
 -- The number of output streams is limited by max_streams_for_merge_tree_reading
 SELECT sum(x)
@@ -86,6 +100,9 @@ FROM (
     )
 WHERE like(`explain`, '%Resize%')
     OR like(`explain`, '%MergeTreeSelect%');
+
+-- For read-in-order, disable everything
+SET query_plan_remove_redundant_sorting = 0; -- to keep reading in order
 
 SELECT sum(x)
 FROM (

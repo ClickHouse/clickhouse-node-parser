@@ -1,3 +1,16 @@
+CREATE TABLE t_02784
+(
+    c1 UInt64,
+    c2 UInt64
+)
+ENGINE = MergeTree()
+ORDER BY c1
+SETTINGS min_bytes_for_wide_part = 1;
+
+SET enable_analyzer = 1;
+
+SET move_all_conditions_to_prewhere = 1;
+
 SELECT
     c1,
     c2

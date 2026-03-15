@@ -1,3 +1,23 @@
+SET joined_subquery_requires_alias = 0;
+
+SET max_threads = 1;
+
+CREATE TABLE tab1
+(
+    a1 Int32,
+    b1 Int32
+)
+ENGINE = MergeTree
+ORDER BY a1;
+
+CREATE TABLE tab2
+(
+    a2 Int32,
+    b2 Int32
+)
+ENGINE = MergeTree
+ORDER BY a2;
+
 SELECT a1
 FROM
     tab1

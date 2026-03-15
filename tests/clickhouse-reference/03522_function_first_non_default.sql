@@ -39,6 +39,13 @@ SELECT firstNonDefault(
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     number
 ) FROM numbers(3);
+CREATE TABLE test_first_truthy
+(
+    a Nullable(Int32),
+    b Nullable(Int32),
+    c Nullable(String),
+    d Array(Int32)
+) ENGINE = Memory;
 SELECT
     a, b,
     firstNonDefault(a, b) AS result,

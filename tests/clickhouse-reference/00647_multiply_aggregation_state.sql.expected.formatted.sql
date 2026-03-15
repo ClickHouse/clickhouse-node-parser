@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT countMerge(x) AS y
 FROM (
         SELECT countState() * 2 AS x
@@ -53,6 +55,13 @@ FROM (
                 SELECT 2 AS x
             )
     );
+
+CREATE TABLE mult_aggregation
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
 
 SELECT
     sumMerge(x * 5),

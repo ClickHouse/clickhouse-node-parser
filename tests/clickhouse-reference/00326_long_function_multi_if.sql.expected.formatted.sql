@@ -5422,6 +5422,15 @@ SELECT multiIf((number % 2) = 0, [toFloat64(1), toFloat64(2)], (number % 3) = 0,
 FROM `system`.numbers
 LIMIT 10;
 
+CREATE TABLE multi_if_check
+(
+    col1 UInt64,
+    col2 String,
+    col3 String,
+    col4 String
+)
+ENGINE = TinyLog;
+
 SELECT multiIf((col1 % 2) = 0, col2, (col1 % 3) = 0, col3, col4)
 FROM multi_if_check;
 
@@ -6189,6 +6198,18 @@ FROM multi_if_check;
 
 SELECT multiIf(1, 'foo', 1, 'bar', 'baz')
 FROM multi_if_check;
+
+CREATE TABLE multi_if_check
+(
+    col1 UInt64,
+    col2 String,
+    col3 String,
+    col4 String,
+    col5 String,
+    col6 String,
+    col7 String
+)
+ENGINE = TinyLog;
 
 SELECT multiIf((col1 % 2) = 0, [col2, col3], (col1 % 3) = 0, [col4, col5], [col6, col7])
 FROM multi_if_check;
@@ -6958,11 +6979,23 @@ FROM multi_if_check;
 SELECT multiIf(1, ['foo', 'bar'], 1, ['foo', 'bar'], ['foo', 'bar'])
 FROM multi_if_check;
 
+CREATE TABLE multi_if_check
+(
+    col1 UInt64
+)
+ENGINE = TinyLog;
+
 SELECT DISTINCT
     col1,
     multiIf(col1 != 213, 'Москва', 'Мир') AS k
 FROM multi_if_check
 LIMIT 10;
+
+CREATE TABLE multi_if_check
+(
+    value String
+)
+ENGINE = TinyLog;
 
 SELECT
     multiIf(2 > 1, 'Value', 'ElseValue') AS a,

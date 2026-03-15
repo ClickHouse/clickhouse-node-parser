@@ -1,1 +1,2 @@
+CREATE TABLE test_02504 (`a` UInt32,`b` UInt32) ENGINE = MergeTree ORDER BY a;
 SELECT * FROM test_02504;

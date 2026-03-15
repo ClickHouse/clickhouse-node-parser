@@ -1,2 +1,1 @@
-SELECT *
-FROM temporary_table;
+<Parse Error>

@@ -1,3 +1,5 @@
+SET transform_null_in = 1;
+
 SELECT NULL IN (NULL);
 
 SELECT 1 IN (NULL);

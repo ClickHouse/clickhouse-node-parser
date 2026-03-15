@@ -1,3 +1,17 @@
+CREATE TABLE `left`
+(
+    x UUID
+)
+ORDER BY tuple();
+
+CREATE TABLE `right`
+(
+    x UUID
+)
+ORDER BY tuple();
+
+SET enable_analyzer = 0;
+
 SELECT
     `left`.x,
     (isNull(`right`.x))::Boolean
@@ -33,3 +47,5 @@ GROUP BY
     (isNull(number))::Boolean,
     now()
 FORMAT Null;
+
+SET enable_analyzer = 1;

@@ -1,3 +1,12 @@
+CREATE TABLE midpoint_jit
+(
+    xi Int64,
+    yi Int64,
+    xf Float64,
+    yf Float64
+)
+ENGINE = Memory;
+
 SELECT sum(midpoint(midpoint(xi, yi), midpoint(yi, xi))) AS s
 FROM midpoint_jit
 SETTINGS

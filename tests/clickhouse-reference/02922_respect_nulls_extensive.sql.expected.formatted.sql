@@ -1,3 +1,4 @@
+-- { echoOn }
 -- The function name is case insensitive, with or without respect nulls and using any of the aliases
 SELECT
     number,

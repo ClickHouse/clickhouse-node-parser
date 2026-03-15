@@ -1,3 +1,18 @@
+CREATE TABLE defaults
+(
+    param1 Float64,
+    param2 Float64,
+    target Float64,
+    predict1 Float64,
+    predict2 Float64
+)
+ENGINE = Memory;
+
+CREATE TABLE model
+ENGINE = Memory AS
+SELECT stochasticLinearRegressionState(0.1, 0.0, 2, 'SGD')(target, param1, param2) AS state
+FROM defaults;
+
 SELECT ans < -61.374
     AND ans > -61.375
 FROM (

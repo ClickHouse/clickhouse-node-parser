@@ -1,3 +1,14 @@
+SET enable_analyzer = 1;
+
+SET optimize_syntax_fuse_functions = 1;
+
+CREATE TABLE fuse_tbl
+(
+    a Nullable(Int8),
+    b Int8
+)
+ENGINE = Log;
+
 SELECT
     avg(a),
     sum(a)

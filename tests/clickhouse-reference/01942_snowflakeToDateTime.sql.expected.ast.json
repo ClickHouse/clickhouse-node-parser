@@ -1,5 +1,21 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_snowflake_conversion_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- Force-enable deprecated snowflake conversion functions (in case this is randomized in CI)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -181,6 +197,28 @@
     "trailingComments": [
       "-- { serverError DEPRECATED_FUNCTION }"
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "tz",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
   },
   {
     "kind": "select",

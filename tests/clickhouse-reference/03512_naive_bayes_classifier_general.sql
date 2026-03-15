@@ -15,6 +15,14 @@ Output language code mapping:
 
 SELECT number, naiveBayesClassifier('lang_byte_2', 'She painted the wall a bright yellow')
 FROM numbers(10) ORDER BY number;
+CREATE TABLE model_names (
+    model_name String,
+) ENGINE = MergeTree()
+ORDER BY model_name;
+CREATE TABLE input_texts (
+    input_text String,
+) ENGINE = MergeTree()
+ORDER BY input_text;
 SELECT
     model_name,
     input_text,

@@ -19,6 +19,8 @@ FROM (
             )
     );
 
+SET max_rows_to_read = 0;
+
 SELECT
     roundBankers(result.1, 5),
     roundBankers(result.2, 5)

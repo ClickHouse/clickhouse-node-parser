@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     `pow(four, 2)`,
     `pow(two, 2)`

@@ -1,3 +1,22 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_table_join_1
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE TABLE test_table_join_2
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+-- { echoOn }
 SELECT *
 FROM
     test_table_join_1 AS t1

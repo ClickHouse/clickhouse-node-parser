@@ -18,6 +18,7 @@ SELECT quantiles(0.5)(arrayJoin([-inf, inf, 0]));
 SELECT quantiles(0.5)(arrayJoin([inf, inf, 0, -inf, -inf, -0]));
 SELECT quantiles(0.5)(arrayJoin([inf, -inf, 0, -inf, inf, -0]));
 SELECT quantiles(0.5)(arrayJoin([-inf, -inf, 0, inf, inf, -0]));
+CREATE TABLE issue32107(A Int64, s_quantiles AggregateFunction(quantilesTDigest(0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99), Float64)) ENGINE = AggregatingMergeTree ORDER BY A;
 SELECT quantileTDigest(inf) FROM numbers(200);
 SELECT quantileTDigest(inf) FROM numbers(500);
 SELECT quantileTDigest(-inf) FROM numbers(200);

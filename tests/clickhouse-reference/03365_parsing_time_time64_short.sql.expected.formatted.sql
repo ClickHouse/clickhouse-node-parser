@@ -1,3 +1,5 @@
+SET use_legacy_to_time = 0;
+
 -- Regular Time formats (MM:SS)
 SELECT toTime('45:30');
 

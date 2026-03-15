@@ -1,3 +1,11 @@
+CREATE TABLE `02898_parallel_replicas_final`
+(
+    x String,
+    y Int32
+)
+ENGINE = ReplacingMergeTree
+ORDER BY cityHash64(x);
+
 SELECT
     y,
     count()

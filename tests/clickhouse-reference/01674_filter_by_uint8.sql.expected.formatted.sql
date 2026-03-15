@@ -13,6 +13,16 @@ SELECT count()
 FROM numbers(256)
 WHERE toUInt8(number);
 
+CREATE TABLE t_filter
+(
+    s String,
+    a Array(FixedString(3)),
+    u UInt64,
+    f UInt8
+)
+ENGINE = MergeTree
+ORDER BY u;
+
 SELECT *
 FROM t_filter
 WHERE f

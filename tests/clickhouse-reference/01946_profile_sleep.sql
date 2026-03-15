@@ -1,3 +1,5 @@
+SET log_queries=1;
+SET log_profile_events=true;
 SELECT 'SLEEP #1 TEST', sleep(0.001) FORMAT Null;
 SELECT 'SLEEP #1 CHECK', ProfileEvents['SleepFunctionCalls'] as calls, ProfileEvents['SleepFunctionMicroseconds'] as microseconds
 FROM system.query_log
@@ -30,6 +32,7 @@ WHERE query like '%SELECT ''SLEEP #4 TEST''%'
   AND current_database = currentDatabase()
   AND event_date >= yesterday()
     FORMAT JSONEachRow;
+CREATE VIEW sleep_view AS SELECT sleepEachRow(0.001) FROM system.numbers;
 SELECT 'SLEEP #5 CHECK', ProfileEvents['SleepFunctionCalls'] as calls, ProfileEvents['SleepFunctionMicroseconds'] as microseconds
 FROM system.query_log
 WHERE query like '%CREATE VIEW sleep_view AS%'

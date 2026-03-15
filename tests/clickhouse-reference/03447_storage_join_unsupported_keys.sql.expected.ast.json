@@ -1,5 +1,157 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "segmented_ctr_cache"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "product_id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "segment_id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "count_in_viewport",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "count_in_viewed",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bookmarks_join"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "product_id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "segment_id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "count_in_bookmark",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "product_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "segment_id"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cart_join"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "product_id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "segment_id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "count_in_cart",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "product_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "segment_id"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

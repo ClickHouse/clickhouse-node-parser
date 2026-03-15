@@ -1,3 +1,10 @@
+CREATE TABLE t0
+(
+    c0 Int
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT 1
 FROM
     t0
@@ -32,6 +39,8 @@ ORDER BY
     ty.c0 ASC,
     ty.c1 ASC
 SETTINGS query_plan_join_swap_table = 'true';
+
+SET enable_analyzer = 1;
 
 SELECT *
 FROM

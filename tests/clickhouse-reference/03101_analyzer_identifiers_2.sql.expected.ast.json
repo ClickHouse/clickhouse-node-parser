@@ -1,5 +1,41 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/23194"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "nest",
+        "type": "Nested(x String, y String)"
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -68,6 +104,26 @@
         }
       ]
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "nest",
+        "type": "Array(Tuple(x String, y String))"
+      }
+    ]
   },
   {
     "kind": "select",

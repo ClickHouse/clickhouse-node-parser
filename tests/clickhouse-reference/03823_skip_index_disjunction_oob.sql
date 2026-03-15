@@ -1,3 +1,13 @@
+CREATE TABLE t_skip_index_disj_oob
+(
+    a UInt64,
+    b UInt64,
+    INDEX idx_a a TYPE minmax,
+    INDEX idx_b b TYPE minmax
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 4;
 -- 9 groups of (a = X AND b = X) connected by OR produce 35 RPN elements:
 -- 9 * 3 (leaf, leaf, AND) + 8 OR = 35, exceeding the limit of 32.
 -- optimize_min_equality_disjunction_chain_length = 100 prevents OR-to-IN conversion.

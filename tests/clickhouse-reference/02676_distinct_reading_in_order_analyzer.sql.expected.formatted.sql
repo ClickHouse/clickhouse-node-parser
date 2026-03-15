@@ -1,3 +1,15 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE t
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree()
+ORDER BY a;
+
+SET optimize_distinct_in_order = 1;
+
 SELECT trimBoth(`explain`)
 FROM (
         EXPLAIN PIPELINE

@@ -1,3 +1,8 @@
+-- { echo }
+SET intersect_default_mode = 'DISTINCT';
+
+SET except_default_mode = 'DISTINCT';
+
 SELECT 1
 INTERSECT
 SELECT 1;
@@ -295,3 +300,5 @@ INTERSECT
         UNION ALL
         SELECT 1
     );
+
+SET limit = 1;

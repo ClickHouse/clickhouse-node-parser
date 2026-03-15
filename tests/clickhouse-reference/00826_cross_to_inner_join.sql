@@ -1,4 +1,9 @@
+SET enable_optimize_predicate_expression = 0;
+SET optimize_move_to_prewhere = 1;
+SET convert_query_to_cnf = 0;
 select * from system.one l cross join system.one r order by all;
+CREATE TABLE t1_00826 (a Int8, b Nullable(Int8)) ENGINE = Memory;
+CREATE TABLE t2_00826 (a Int8, b Nullable(Int8)) ENGINE = Memory;
 SELECT '--- cross ---';
 SELECT * FROM t1_00826 cross join t2_00826 where t1_00826.a = t2_00826.a ORDER BY ALL;
 SELECT * FROM t1_00826 cross join t2_00826 where t1_00826.b = t2_00826.b ORDER BY ALL;

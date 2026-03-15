@@ -1,3 +1,12 @@
+CREATE TABLE t
+(
+    a Int,
+    b Int,
+    c Int
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT count()
 FROM t
 PREWHERE NOT ignore(a)

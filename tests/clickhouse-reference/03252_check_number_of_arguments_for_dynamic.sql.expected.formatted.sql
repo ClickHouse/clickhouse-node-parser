@@ -1,3 +1,14 @@
+SET enable_analyzer = 1;
+
+SET enable_json_type = 1;
+
+CREATE TABLE t
+(
+    a JSON
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT 1
 FROM
     (

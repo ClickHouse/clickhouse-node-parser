@@ -1,3 +1,13 @@
+CREATE TABLE t_sparse_sort_limit
+(
+    date Date,
+    i UInt64,
+    v Int16
+)
+ENGINE = MergeTree
+ORDER BY (date, i)
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0.9;
+
 SELECT count()
 FROM (
         SELECT toStartOfMonth(date) AS d

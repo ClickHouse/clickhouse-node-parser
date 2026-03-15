@@ -1,3 +1,24 @@
+-- separate log entry for localhost queries
+SET prefer_localhost_replica = 0;
+
+SET force_optimize_skip_unused_shards = 2;
+
+SET optimize_skip_unused_shards = 1;
+
+SET optimize_skip_unused_shards_rewrite_in = 0;
+
+SET log_queries = 1;
+
+-- { echoOn }
+-- SELECT
+--     intHash64(0) % 2,
+--     intHash64(2) % 2
+-- ┌─modulo(intHash64(0), 2)─┬─modulo(intHash64(2), 2)─┐
+-- │                       0 │                       1 │
+-- └─────────────────────────┴─────────────────────────┘
+CREATE TABLE dist_01756 AS `system`.one
+ENGINE = Distributed(test_cluster_two_shards, `system`, one, intHash64(dummy));
+
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log
 WHERE event_date >= yesterday()
@@ -7,6 +28,11 @@ WHERE event_date >= yesterday()
     AND like(query, concat('%', currentDatabase(), '%AS%id_no%'))
     AND type = 'QueryFinish'
 ORDER BY query ASC;
+
+--
+-- w/ optimize_skip_unused_shards_rewrite_in=1
+--
+SET optimize_skip_unused_shards_rewrite_in = 1;
 
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log
@@ -37,6 +63,12 @@ WHERE event_date >= yesterday()
     AND like(query, concat('%', currentDatabase(), '%AS%id_00%'))
     AND type = 'QueryFinish'
 ORDER BY query ASC;
+
+CREATE TABLE data_01756_signed
+(
+    key Int
+)
+ENGINE = Null;
 
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log
@@ -112,6 +144,22 @@ FORMAT Null;
 -- different type
 SELECT 'different types -- prohibited';
 
+CREATE TABLE data_01756_str
+(
+    key String
+)
+ENGINE = Memory();
+
+-- SELECT
+--     cityHash64(0) % 2,
+--     cityHash64(2) % 2
+--
+-- ┌─modulo(cityHash64(0), 2)─┬─modulo(cityHash64(2), 2)─┐
+-- │                        0 │                        1 │
+-- └──────────────────────────┴──────────────────────────┘
+CREATE TABLE dist_01756_str AS data_01756_str
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01756_str, cityHash64(key));
+
 SELECT *
 FROM dist_01756_str
 WHERE key IN ('0', '2');
@@ -125,6 +173,9 @@ SELECT *
 FROM dist_01756_str
 WHERE key IN ('0', NULL)
 SETTINGS enable_analyzer = 0; -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }
+
+CREATE TABLE dist_01756_column AS `system`.one
+ENGINE = Distributed(test_cluster_two_shards, `system`, one, dummy);
 
 SELECT *
 FROM dist_01756_column

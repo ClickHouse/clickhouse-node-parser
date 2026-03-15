@@ -521,6 +521,26 @@ INNER JOIN (
     OR t1.f = t2.f))
 SETTINGS enable_analyzer = 1;
 
+SET joined_subquery_requires_alias = 0;
+
+SET max_threads = 1;
+
+CREATE TABLE tab2
+(
+    a2 Int32,
+    b2 Int32
+)
+ENGINE = MergeTree
+ORDER BY a2;
+
+CREATE TABLE tab3
+(
+    a3 Int32,
+    b3 Int32
+)
+ENGINE = MergeTree
+ORDER BY a3;
+
 SELECT
     a2,
     b2,

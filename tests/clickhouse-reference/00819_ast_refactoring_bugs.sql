@@ -1,3 +1,11 @@
+CREATE TABLE visits1
+(
+    Sign Int8,
+    Arr Array(Int8),
+    `ParsedParams.Key1` Array(String),
+    `ParsedParams.Key2` Array(String),
+    CounterID UInt32
+) ENGINE = Memory;
 SELECT arrayMap(x -> x * Sign, Arr) FROM visits1;
 SELECT PP.Key2 AS `ym:s:pl2`
 FROM visits1

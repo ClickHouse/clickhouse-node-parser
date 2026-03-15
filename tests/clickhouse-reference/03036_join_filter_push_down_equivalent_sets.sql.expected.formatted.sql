@@ -1,3 +1,29 @@
+SET enable_analyzer = 1;
+
+SET optimize_move_to_prewhere = 0;
+
+SET query_plan_convert_outer_join_to_inner_join = 0;
+
+SET parallel_hash_join_threshold = 0;
+
+CREATE TABLE test_table_1
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+CREATE TABLE test_table_2
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT '--';
 
 SELECT

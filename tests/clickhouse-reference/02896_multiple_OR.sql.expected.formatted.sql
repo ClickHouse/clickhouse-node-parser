@@ -1,3 +1,11 @@
+CREATE TABLE or_bug
+(
+    key UInt8
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+-- { echoOn }
 SELECT *
 FROM or_bug
 WHERE (key = 1)
@@ -13,6 +21,16 @@ SELECT *
 FROM or_bug
 WHERE (key = 1);
 
+CREATE TABLE forms
+(
+    form_id FixedString(24),
+    text_field String
+)
+ENGINE = MergeTree
+ORDER BY form_id
+PRIMARY KEY form_id;
+
+-- { echoOn }
 SELECT *
 FROM forms
 WHERE like(text_field, '%this%')

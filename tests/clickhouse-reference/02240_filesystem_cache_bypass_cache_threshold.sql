@@ -1,3 +1,19 @@
+SET enable_filesystem_cache_on_write_operations=0;
+CREATE TABLE test (key UInt32, value String)
+Engine=MergeTree()
+ORDER BY key
+SETTINGS min_bytes_for_wide_part = 10485760,
+         compress_marks=false,
+         compress_primary_key=false,
+         serialization_info_version='basic',
+         disk = disk(
+            type = cache,
+            name = '02240_bypass_cache_threshold',
+            max_size = '128Mi',
+            path = 'filesystem_cache_bypass_cache_threshold/',
+            enable_bypass_cache_with_threshold = 1,
+            bypass_cache_threshold = 100,
+            disk = 's3_disk');
 SELECT  * FROM test FORMAT Null;
 SELECT file_segment_range_begin, file_segment_range_end, size FROM system.filesystem_cache WHERE cache_name = '02240_bypass_cache_threshold' ORDER BY file_segment_range_end, size;
 SELECT file_segment_range_begin, file_segment_range_end, size FROM system.filesystem_cache WHERE cache_name = '02240_bypass_cache_threshold';

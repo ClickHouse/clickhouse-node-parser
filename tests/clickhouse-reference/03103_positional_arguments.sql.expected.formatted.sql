@@ -1,3 +1,14 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/56466
+SET enable_analyzer = 1;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = Memory;
+
 -- The query works when using a single SELECT *
 SELECT *
 FROM (

@@ -1,3 +1,26 @@
+CREATE TABLE codecTest (
+    key      UInt64,
+    ref_valueU64 UInt64,
+    ref_valueU32 UInt32,
+    ref_valueU16 UInt16,
+    ref_valueU8  UInt8,
+    ref_valueI64 Int64,
+    ref_valueI32 Int32,
+    ref_valueI16 Int16,
+    ref_valueI8  Int8,
+    ref_valueDT  DateTime,
+    ref_valueD   Date,
+    valueU64 UInt64   CODEC(DoubleDelta),
+    valueU32 UInt32   CODEC(DoubleDelta),
+    valueU16 UInt16   CODEC(DoubleDelta),
+    valueU8  UInt8    CODEC(DoubleDelta),
+    valueI64 Int64    CODEC(DoubleDelta),
+    valueI32 Int32    CODEC(DoubleDelta),
+    valueI16 Int16    CODEC(DoubleDelta),
+    valueI8  Int8     CODEC(DoubleDelta),
+    valueDT  DateTime CODEC(DoubleDelta),
+    valueD   Date     CODEC(DoubleDelta)
+) Engine = MergeTree ORDER BY key SETTINGS min_bytes_for_wide_part = 0, ratio_of_defaults_for_sparse_serialization = 1;
 SELECT
     key,
     ref_valueU64, valueU64, ref_valueU64 - valueU64 as dU64

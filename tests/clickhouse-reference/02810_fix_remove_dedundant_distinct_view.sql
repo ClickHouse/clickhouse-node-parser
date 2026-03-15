@@ -1,3 +1,7 @@
+create table tab (x UInt64, y UInt64) engine MergeTree() order by (x, y);
+create view tab_v as select distinct(x) from tab;
+-- { echoOn }
+set query_plan_remove_redundant_distinct=1;
 -- DISTINCT has to be removed since the view already has DISTINCT on the same column
 SELECT count()
 FROM

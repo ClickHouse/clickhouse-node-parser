@@ -1,5 +1,83 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "join_inner_table__fuzz_146"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UUID"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": "Nullable(Int64)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/49559"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -142,6 +220,68 @@
           "value": "0"
         }
       }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_02709__fuzz_23"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Nullable(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sign",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "DateTime64(3)"
+      }
+    ],
+    "engine": {
+      "name": "CollapsingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "sign"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "date"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_nullable_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/48496"
     ]
   },
   {

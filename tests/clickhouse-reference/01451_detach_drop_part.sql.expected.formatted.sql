@@ -1,3 +1,11 @@
+CREATE TABLE mt_01451
+(
+    v UInt8
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+SETTINGS old_parts_lifetime = 0;
+
 SELECT v
 FROM mt_01451
 ORDER BY v ASC;

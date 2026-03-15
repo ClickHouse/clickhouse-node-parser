@@ -1,4 +1,7 @@
-
+CREATE TABLE table_02513 (n UInt64) ENGINE=MergeTree() ORDER BY tuple() SETTINGS index_granularity=100;
+SET mutations_sync=2;
+SET max_threads=1;
+-- { echoOn }
 SELECT * FROM table_02513;
 SELECT * FROM table_02513 WHERE n%11;
 SELECT * FROM table_02513 PREWHERE n%11;

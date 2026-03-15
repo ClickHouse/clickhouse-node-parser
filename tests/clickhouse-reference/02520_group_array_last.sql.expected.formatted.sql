@@ -68,6 +68,15 @@ FROM remote('127.{1,1}', view((
         FROM numbers(10)
     )));
 
+-- SimpleAggregateFunction
+CREATE TABLE simple_agg_groupArrayLastArray
+(
+    key Int,
+    value SimpleAggregateFunction(groupArrayLastArray(5), Array(UInt64))
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY key;
+
 SELECT *
 FROM simple_agg_groupArrayLastArray
 ORDER BY

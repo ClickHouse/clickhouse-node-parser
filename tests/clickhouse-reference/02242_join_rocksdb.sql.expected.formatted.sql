@@ -1,3 +1,26 @@
+CREATE TABLE rdb
+(
+    key UInt32,
+    value Array(UInt32),
+    value2 String
+)
+ENGINE = EmbeddedRocksDB
+PRIMARY KEY key;
+
+CREATE TABLE t1
+(
+    k UInt32
+)
+ENGINE = TinyLog;
+
+CREATE TABLE t2
+(
+    k UInt16
+)
+ENGINE = TinyLog;
+
+SET join_algorithm = 'direct';
+
 SELECT '-- key rename';
 
 SELECT *

@@ -2,6 +2,7 @@
 -- Tag: no-fasttest due to only SIMD JSON is available in fasttest
 
 SELECT '--allow_simdjson=1--';
+SET allow_simdjson=1;
 SELECT JSONLength('{"a": "hello", "b": [-100, 200.0, 300]}');
 SELECT JSONLength('{"a": "hello", "b": [-100, 200.0, 300]}', 'b');
 SELECT JSONLength('{}');
@@ -146,6 +147,7 @@ SELECT JSONExtractString('["a", "b", "c", "d", "e"]', idx) FROM (SELECT arrayJoi
 SELECT JSONExtractString(json, 's') FROM (SELECT arrayJoin(['{"s":"u"}', '{"s":"v"}']) AS json);
 SELECT JSONExtractKeysAndValues([], JSONLength('^?V{LSwp')); -- { serverError ILLEGAL_COLUMN }
 SELECT JSONExtract('{"a": [100.0, 200], "b": [-100, 200.0, 300]}', 'Map(Int64, Array(Float64))'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+SET allow_simdjson=0;
 SELECT JSONExtractKeys('{"a": "hello", "b": [-100, 200.0, 300]}');
 SELECT JSONExtractKeys('{"a": "hello", "b": [-100, 200.0, 300]}', 'b');
 SELECT JSONExtractKeys('{"a": "hello", "b": [-100, 200.0, 300]}', 'a');

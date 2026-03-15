@@ -1,3 +1,7 @@
+SET any_join_distinct_right_table_keys = 1;
+
+SET joined_subquery_requires_alias = 0;
+
 SELECT
     k,
     x,
@@ -175,6 +179,24 @@ RIGHT JOIN (
     USING (k)
 WHERE k < 10
 ORDER BY k ASC;
+
+CREATE TABLE t1_00203
+(
+    k1 UInt32,
+    k2 UInt32,
+    k3 UInt32,
+    val_t1 String
+)
+ENGINE = TinyLog;
+
+CREATE TABLE t2_00203
+(
+    val_t2 String,
+    k3 UInt32,
+    k2 UInt32,
+    k1 UInt32
+)
+ENGINE = TinyLog;
 
 SELECT
     k1,
@@ -205,3 +227,5 @@ ORDER BY
     k1 ASC,
     k2 ASC,
     k3 ASC;
+
+SET any_join_distinct_right_table_keys = 0;

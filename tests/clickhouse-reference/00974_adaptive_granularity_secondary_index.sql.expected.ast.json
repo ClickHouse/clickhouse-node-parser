@@ -1,5 +1,65 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "indexed_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "tm",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "log_message",
+        "type": "String"
+      },
+      {
+        "kind": "indexDef",
+        "name": "log_message",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "log_message"
+          ]
+        },
+        "indexType": "tokenbf_v1(4096, 2, 0)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tm"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      },
+      {
+        "name": "min_index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "40"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,6 +89,82 @@
         }
       ]
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "another_indexed_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "tm",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "log_message",
+        "type": "String"
+      },
+      {
+        "kind": "indexDef",
+        "name": "log_message",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "log_message"
+          ]
+        },
+        "indexType": "tokenbf_v1(4096, 2, 0)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tm"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      },
+      {
+        "name": "min_index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "40"
+        }
+      },
+      {
+        "name": "vertical_merge_algorithm_min_rows_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "vertical_merge_algorithm_min_columns_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",

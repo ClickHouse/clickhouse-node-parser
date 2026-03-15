@@ -1,3 +1,13 @@
+CREATE TABLE data_02295
+(
+    b Int64,
+    a Int64,
+    grp_aggreg AggregateFunction(groupArrayArray, Array(UInt64))
+)
+ENGINE = MergeTree()
+ORDER BY a;
+
+-- { echoOn }
 SELECT grp_aggreg
 FROM data_02295
 GROUP BY

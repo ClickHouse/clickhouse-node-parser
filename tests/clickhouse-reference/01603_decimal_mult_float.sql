@@ -1,7 +1,13 @@
+SET optimize_arithmetic_operations_in_aggregate_functions = 0;
 SELECT round(toDecimal32(2, 2) * 1.2, 6);
 SELECT round(toDecimal64(0.5, 2) * 20.33, 6);
 SELECT round(0.00001 * toDecimal32(12, 2), 6);
 SELECT round(30.033 * toDecimal32(5, 1), 6);
+CREATE TABLE IF NOT EXISTS test01603 (
+    f64 Float64,
+    d Decimal64(3) DEFAULT toDecimal32(f64, 3),
+    f32 Float32 DEFAULT f64
+) ENGINE=MergeTree() ORDER BY f32;
 SELECT round(sum(d * 1.1), 6) FROM test01603;
 SELECT round(sum(8.01 * d), 6) FROM test01603;
 SELECT round(sum(f64 * toDecimal64(80, 2)), 6) FROM test01603;

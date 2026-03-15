@@ -1,3 +1,11 @@
+-- Tags: long
+
+set allow_experimental_dynamic_type = 1;
+SET enable_json_type = 1;
+set allow_experimental_variant_type = 1;
+set use_variant_as_common_type = 1;
+set max_block_size = 10000;
+create table test_json_dynamic_aggregate_functions (json JSON(a1 String, max_dynamic_paths=2, max_dynamic_types=2)) engine=Memory;
 select arrayJoin(distinctJSONPaths(json)) from test_json_dynamic_aggregate_functions;
 select arrayJoin(distinctJSONPathsAndTypes(json)) from test_json_dynamic_aggregate_functions;
 select arrayJoin(distinctDynamicTypes(json.a2)) from test_json_dynamic_aggregate_functions;

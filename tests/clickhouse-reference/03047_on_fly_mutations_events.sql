@@ -1,3 +1,7 @@
+SET apply_mutations_on_fly = 1;
+SET max_streams_for_merge_tree_reading = 1;
+CREATE TABLE t_lightweight_mut_7 (id UInt64, v UInt64)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_7', '1') ORDER BY id;
 SELECT count() FROM t_lightweight_mut_7;
 SELECT 1, sum(v) FROM t_lightweight_mut_7;
 SELECT 2, sum(v) FROM t_lightweight_mut_7 SETTINGS apply_mutations_on_fly = 0;

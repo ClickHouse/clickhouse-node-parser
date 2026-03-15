@@ -1,3 +1,31 @@
+SET analyzer_compatibility_join_using_top_level_identifier = 1;
+
+CREATE TABLE t1
+(
+    id String,
+    val String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE t2
+(
+    id String,
+    code String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE t3
+(
+    id String,
+    code String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+SET enable_analyzer = 1;
+
 SELECT
     concat(t1.id, '_1') AS id,
     t1.val

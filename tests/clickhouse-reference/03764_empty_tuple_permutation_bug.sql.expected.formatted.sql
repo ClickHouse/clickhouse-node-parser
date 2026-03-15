@@ -1,3 +1,14 @@
+SET limit = 4;
+
+CREATE TABLE t0
+(
+    c0 Tuple(),
+    c1 Array(Int)
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY tuple()
+SETTINGS allow_suspicious_primary_key = 1;
+
 SELECT c0
 FROM t0 FINAL
 ORDER BY c1 ASC;

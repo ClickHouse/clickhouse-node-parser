@@ -1,3 +1,19 @@
+SET enable_variant_type = 1;
+
+CREATE TABLE t_tuple_elem
+(
+    t1 Tuple(
+        a Array(UInt64),
+        b Array(LowCardinality(String))),
+    v Variant(
+        Array(UInt64),
+        Array(LowCardinality(String)))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET optimize_functions_to_subcolumns = 1;
+
 SELECT (tupleElement(t1, 1), tupleElement(t1, 2))
 FROM t_tuple_elem
 ORDER BY `ALL` ASC;

@@ -1,3 +1,50 @@
+-- Tags: long, no-asan, no-msan
+SET use_statistics = 0;
+
+CREATE TABLE tab_l
+(
+    a UInt32,
+    b UInt32,
+    c UInt32,
+    d UInt32
+)
+ENGINE = MergeTree
+ORDER BY (a * 2, b + c);
+
+CREATE TABLE tab_m
+(
+    a UInt32,
+    b UInt32,
+    c UInt32,
+    d UInt32
+)
+ENGINE = MergeTree
+ORDER BY (c + d, b * 2);
+
+CREATE TABLE tab_r
+(
+    a UInt32,
+    b UInt32,
+    c UInt32,
+    d UInt32
+)
+ENGINE = MergeTree
+ORDER BY (a * 2, c * 2);
+
+--select explain e from (explain actions = 1 )
+--where e like '%ReadFromMergeTree%' or e like '%Expression%' or e like '%Join%' or e like '%Clauses%' or e like '%Sharding%';
+SET enable_analyzer = 1;
+
+SET query_plan_join_swap_table = 0;
+
+SET query_plan_join_shard_by_pk_ranges = 1;
+
+SET allow_experimental_parallel_reading_from_replicas = 0;
+
+SET enable_join_runtime_filters = 0;
+
+SET max_threads = 4;
+
 -- { echo On }
 -- two tables
 SELECT *
@@ -166,6 +213,8 @@ WHERE like(e, '%ReadFromMergeTree%')
     OR like(e, '%Join%')
     OR like(e, '%Clauses%')
     OR like(e, '%Sharding%');
+
+SET join_use_nulls = 1;
 
 -- two tables
 SELECT *

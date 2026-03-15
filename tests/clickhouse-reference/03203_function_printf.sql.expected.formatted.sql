@@ -1,3 +1,5 @@
+SET output_format_pretty_fallback_to_vertical = 0;
+
 -- Testing integer formats
 SELECT printf('%%d: %d', 123);
 

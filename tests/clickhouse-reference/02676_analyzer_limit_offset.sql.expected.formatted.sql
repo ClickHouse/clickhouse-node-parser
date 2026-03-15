@@ -1,3 +1,15 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test
+(
+    i UInt64
+)
+ENGINE = MergeTree()
+ORDER BY i;
+
+-- Only set limit
+SET limit = 5;
+
 SELECT *
 FROM test
 ORDER BY i ASC; -- 5 rows
@@ -28,10 +40,17 @@ ORDER BY i ASC
 LIMIT 10
 OFFSET 195; -- 5 rows
 
+-- Only set offset
+SET limit = 0;
+
+SET offset = 195;
+
 SELECT *
 FROM test
 ORDER BY i ASC
 LIMIT 100; -- no result
+
+SET offset = 10;
 
 SELECT *
 FROM test
@@ -44,6 +63,9 @@ FROM test
 ORDER BY i ASC
 LIMIT 11
 OFFSET 100; -- 1 rows
+
+-- offset and limit together
+SET limit = 10;
 
 SELECT *
 FROM test

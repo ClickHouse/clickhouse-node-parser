@@ -1,3 +1,21 @@
+CREATE TABLE IF NOT EXISTS decimal
+(
+    a DECIMAL(9,0),
+    b DECIMAL(18,0),
+    c DECIMAL(38,0),
+    d DECIMAL(9, 9),
+    e DEC(18, 18),
+    f dec(38, 38),
+    g Decimal(9, 3),
+    h decimal(18, 9),
+    i deciMAL(38, 18),
+    j dec(4, 2),
+    k NumEriC(23, 4),
+    l numeric(9, 3),
+    m NUMEric(18, 9),
+    n FixED(12, 6),
+    o fixed(8, 6)
+) ENGINE = Memory;
 SELECT a + a, a - a, a * a, a / a, intDiv(a, a), intDivOrZero(a, a) FROM decimal WHERE a = 42;
 SELECT b + b, b - b, b * b, b / b, intDiv(b, b), intDivOrZero(b, b) FROM decimal WHERE b = 42;
 SELECT c + c, c - c, c * c, c / c, intDiv(c, c), intDivOrZero(c, c) FROM decimal WHERE c = 42;
@@ -30,6 +48,7 @@ SELECT 21 + i, 21 - i, 84 - i, 21 * i, -21 * i, 21 / i, 84 / i, intDiv(21, i), i
 SELECT 21 + j, 21 - j, 84 - j, 21 * j, -21 * j, 21 / j, 84 / j, intDiv(21, j), intDivOrZero(84, j) FROM decimal WHERE j > 0;
 SELECT a, -a, -b, -c, -d, -e, -f, -g, -h, -j from decimal ORDER BY a;
 SELECT abs(a), abs(b), abs(c), abs(d), abs(e), abs(f), abs(g), abs(h), abs(j) from decimal ORDER BY a;
+SET decimal_check_overflow = 0;
 SELECT (h * h) != 0, (h / h) != 1 FROM decimal WHERE h > 0;
 SELECT (i * i) != 0, (i / i) = 1 FROM decimal WHERE i > 0;
 SELECT e + 1 > e, e + 10 > e, 1 + e > e, 10 + e > e FROM decimal WHERE e > 0;
@@ -46,7 +65,7 @@ SELECT toDecimal128(0, 2) / toInt64(0); -- { serverError ILLEGAL_DIVISION }
 SELECT toDecimal32(0, 4) AS x, multiIf(x = 0, NULL, intDivOrZero(1, x)), multiIf(x = 0, NULL, intDivOrZero(x, 0));
 SELECT toDecimal64(0, 8) AS x, multiIf(x = 0, NULL, intDivOrZero(1, x)), multiIf(x = 0, NULL, intDivOrZero(x, 0));
 SELECT toDecimal64(0, 18) AS x, multiIf(x = 0, NULL, intDivOrZero(1, x)), multiIf(x = 0, NULL, intDivOrZero(x, 0));
-
+-- { echoOn }
 SELECT toDecimal128(1, 38) / toDecimal128(1, 0) SETTINGS decimal_check_overflow=1;
 SELECT toDecimal128(1, 38) / toDecimal128(1, 1) SETTINGS decimal_check_overflow=1; -- { serverError DECIMAL_OVERFLOW }
 SELECT toDecimal128(1, 38) / toDecimal128(1, 1) SETTINGS decimal_check_overflow=0;

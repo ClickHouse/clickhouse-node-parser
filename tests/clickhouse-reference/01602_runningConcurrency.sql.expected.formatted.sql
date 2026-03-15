@@ -1,5 +1,26 @@
+CREATE TABLE runningConcurrency_test
+(
+    begin Date,
+    `end` Date
+)
+ENGINE = Memory;
+
 SELECT runningConcurrency(begin, `end`)
 FROM runningConcurrency_test;
+
+CREATE TABLE runningConcurrency_test
+(
+    begin DateTime,
+    `end` DateTime
+)
+ENGINE = Memory;
+
+CREATE TABLE runningConcurrency_test
+(
+    begin DateTime64(3),
+    `end` DateTime64(3)
+)
+ENGINE = Memory;
 
 -- Constant columns are currently not supported.
 SELECT runningConcurrency(toDate(arrayJoin([1, 2])), toDate('2000-01-01')); -- { serverError ILLEGAL_COLUMN }

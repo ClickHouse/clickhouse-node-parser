@@ -1,3 +1,32 @@
+CREATE TABLE tabc
+(
+    a UInt32,
+    b UInt32 ALIAS a + 1,
+    c UInt32 ALIAS b + 1,
+    s String
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+CREATE TABLE ta
+(
+    a Int32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE tb
+(
+    b Int32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET join_use_nulls = 1;
+
+SET analyzer_compatibility_join_using_top_level_identifier = 1;
+
+-- { echoOn }
 SELECT 1 AS c0
 FROM
     (
@@ -229,6 +258,14 @@ ORDER BY `ALL` ASC
 SETTINGS
     analyzer_compatibility_join_using_top_level_identifier = 0,
     enable_analyzer = 1;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    spouse_name String
+)
+ENGINE = Memory;
 
 SELECT
     u1.uid,

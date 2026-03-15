@@ -1,3 +1,27 @@
+SET allow_experimental_analyzer = 1;
+
+CREATE TABLE Session
+(
+    id String,
+    site Enum8('STORE_A' = 1, 'STORE_B' = 2),
+    device Enum8('DESKTOP' = 1, 'MOBILE' = 2)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE TABLE AddedToCart
+(
+    sessionId String,
+    `order` Int32,
+    `top` Nullable(Int32),
+    screenHeight Nullable(Int32),
+    screenWidth Nullable(Int32),
+    isPromotion UInt8,
+    date DateTime64(3)
+)
+ENGINE = MergeTree
+ORDER BY (sessionId, date);
+
 SELECT
     s.site AS site,
     if((isNull(a.`order`))

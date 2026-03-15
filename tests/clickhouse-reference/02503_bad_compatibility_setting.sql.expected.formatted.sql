@@ -1,3 +1,5 @@
+SET compatibility = 'a.a'; -- { serverError BAD_ARGUMENTS }
+
 SELECT
     value,
     changed

@@ -16,6 +16,13 @@ SELECT _state
 FROM `system`.parts
 FORMAT Null;
 
+CREATE TABLE data_01660
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
 -- Empty
 SELECT _state
 FROM `system`.parts

@@ -1,3 +1,12 @@
+CREATE TABLE account_test
+(
+    id UInt64,
+    row_ver UInt64
+)
+ENGINE = ReplacingMergeTree(row_ver)
+ORDER BY id
+SETTINGS index_granularity = 16, index_granularity_bytes = 0, min_rows_for_wide_part = 0, min_bytes_for_wide_part = 0, min_rows_for_compact_part = 0, min_bytes_for_compact_part = 0;
+
 SELECT
     'Disabled',
     *

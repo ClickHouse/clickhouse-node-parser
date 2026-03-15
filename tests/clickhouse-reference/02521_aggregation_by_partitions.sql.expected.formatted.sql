@@ -1,3 +1,29 @@
+-- Tags: long, no-object-storage, no-msan
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+
+SET max_threads = 16;
+
+SET allow_aggregate_partitions_independently = 1;
+
+SET force_aggregate_partitions_independently = 1;
+
+SET optimize_use_projections = 0;
+
+SET optimize_trivial_insert_select = 1;
+
+SET allow_prefetched_read_pool_for_remote_filesystem = 0;
+
+SET allow_prefetched_read_pool_for_local_filesystem = 0;
+
+CREATE TABLE t1
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY a % 4
+SETTINGS index_granularity = 8192, index_granularity_bytes = 10485760;
+
 -- { echoOff }
 SELECT count()
 FROM (
@@ -6,6 +32,15 @@ FROM (
         GROUP BY a
     );
 
+CREATE TABLE t2
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY a % 8
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 -- { echoOff }
 SELECT count()
 FROM (
@@ -13,6 +48,15 @@ FROM (
         FROM t2
         GROUP BY a
     );
+
+CREATE TABLE t3
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY a % 16
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 -- { echoOff }
 SELECT count()
@@ -38,6 +82,18 @@ SETTINGS
     max_bytes_before_external_group_by = '1Ki',
     max_bytes_ratio_before_external_group_by = 0;
 
+-- aggregation in order --
+SET optimize_aggregation_in_order = 1;
+
+CREATE TABLE t4
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a % 4
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 -- { echoOff }
 SELECT count()
 FROM (
@@ -45,6 +101,15 @@ FROM (
         FROM t4
         GROUP BY a
     );
+
+CREATE TABLE t5
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a % 8
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 -- { echoOff }
 SELECT count()
@@ -54,6 +119,15 @@ FROM (
         GROUP BY a
     );
 
+CREATE TABLE t6
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a % 16
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 -- { echoOff }
 SELECT count()
 FROM (
@@ -61,6 +135,17 @@ FROM (
         FROM t6
         GROUP BY a
     );
+
+SET optimize_aggregation_in_order = 0;
+
+CREATE TABLE t7
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY intDiv(a, 2)
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
@@ -71,6 +156,15 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+CREATE TABLE t8
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY intDiv(a, 2) * 2 + 1
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
         EXPLAIN actions = 1
@@ -80,6 +174,15 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+CREATE TABLE t9
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY intDiv(a, 2)
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
         EXPLAIN actions = 1
@@ -88,6 +191,16 @@ FROM (
         GROUP BY a1
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+CREATE TABLE t10
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY (intDiv(a, 2), intDiv(b, 3))
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
@@ -103,6 +216,17 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+-- multiplication by 2 is not injective, so optimization is not applicable
+CREATE TABLE t11
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY (intDiv(a, 2), intDiv(b, 3))
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
         EXPLAIN actions = 1
@@ -116,6 +240,15 @@ FROM (
             pi()
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+CREATE TABLE t12
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a % 16;
 
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
@@ -131,6 +264,16 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+CREATE TABLE t13
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY (intDiv(a, 2), intDiv(b, 3))
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
         EXPLAIN actions = 1
@@ -141,6 +284,16 @@ FROM (
             pi()
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+CREATE TABLE t14
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY intDiv(a, 2) + intDiv(b, 3)
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
@@ -156,6 +309,17 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+-- to few partitions --
+CREATE TABLE t15
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a < 90
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
         EXPLAIN actions = 1
@@ -165,6 +329,17 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %')
 SETTINGS force_aggregate_partitions_independently = 0;
+
+-- to many partitions --
+CREATE TABLE t16
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a % 16
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
@@ -178,6 +353,17 @@ SETTINGS
     force_aggregate_partitions_independently = 0,
     max_number_of_partitions_for_independent_aggregation = 4;
 
+-- to big skew --
+CREATE TABLE t17
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a < 90
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
         EXPLAIN actions = 1
@@ -190,6 +376,16 @@ SETTINGS
     force_aggregate_partitions_independently = 0,
     max_threads = 4;
 
+CREATE TABLE t18
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
         EXPLAIN actions = 1
@@ -198,6 +394,16 @@ FROM (
         GROUP BY intDiv(a, 2) AS a1
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+CREATE TABLE t19
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
@@ -208,6 +414,16 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+CREATE TABLE t20
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (
         EXPLAIN actions = 1
@@ -217,11 +433,31 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+CREATE TABLE t21
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a % 16
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT a
 FROM t21
 GROUP BY a
 LIMIT 10
 FORMAT Null;
+
+CREATE TABLE t22
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = SummingMergeTree
+ORDER BY a
+PARTITION BY a % 16
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT replaceRegexpOne(`explain`, '^[ ]*(.*)', '\\1')
 FROM (

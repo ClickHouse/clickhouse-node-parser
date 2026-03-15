@@ -1,3 +1,12 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = TinyLog;
+
 SELECT arrayMap(x -> x + 1, [1,2,3]);
 
 SELECT
@@ -12,6 +21,13 @@ FROM test_table;
 
 SELECT arrayMap(((x -> concat(concat(toString(x), '_'), toString(id)))) AS lambda, [1,2,3])
 FROM test_table;
+
+CREATE TABLE test_table_tuple
+(
+    id UInt64,
+    value Tuple(value_0_level_0 String, value_1_level_0 String)
+)
+ENGINE = TinyLog;
 
 SELECT arrayMap(lambda(tuple(x), x + 1), [1, 2, 3]);
 

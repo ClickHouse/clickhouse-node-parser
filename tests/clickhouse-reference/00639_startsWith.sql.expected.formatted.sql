@@ -16,6 +16,14 @@ SELECT startsWith('123', '1234');
 
 SELECT startsWith('123', '');
 
+CREATE TABLE startsWith_test
+(
+    S1 String,
+    S2 String,
+    S3 FixedString(2)
+)
+ENGINE = Memory;
+
 SELECT COUNT()
 FROM startsWith_test
 WHERE startsWith(S1, S1);

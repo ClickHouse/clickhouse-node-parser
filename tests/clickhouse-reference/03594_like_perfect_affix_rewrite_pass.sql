@@ -1,3 +1,19 @@
+-- Test for LikePerfectAffixRewritePass optimization in analyzer
+
+SET enable_analyzer = 1;
+SET optimize_rewrite_like_perfect_affix = 1;
+CREATE TABLE tab (
+    id UInt32,
+    col_string String,
+    col_fixedstring FixedString(32),
+    col_lowcardinality_string LowCardinality(String),
+    col_lowcardinality_fixedstring LowCardinality(FixedString(32)),
+    col_nullable_string Nullable(String),
+    col_nullable_fixedstring Nullable(FixedString(32)),
+    col_lowcardinality_nullable_string LowCardinality(Nullable(String)),
+    col_lowcardinality_nullable_fixedstring LowCardinality(Nullable(FixedString(32)))
+) ENGINE = MergeTree()
+ORDER BY col_string;
 SELECT '-- Test LIKE perfect prefix on String column - should be rewritten';
 SELECT count() FROM tab WHERE col_string LIKE 'app%';
 SELECT count() FROM tab WHERE col_string LIKE 'app%' SETTINGS optimize_rewrite_like_perfect_affix = 0;

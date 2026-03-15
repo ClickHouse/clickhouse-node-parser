@@ -1,5 +1,85 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test: read-in-order optimization should use InReverseOrder when constant ORDER BY columns are skipped",
+      "-- This test specifically tests read-in-order optimization, so we need to ensure it's enabled"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Ensure plan stabiliity with parallel replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_03789"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "tenant",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "event_time",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tenant"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_time"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

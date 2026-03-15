@@ -1,3 +1,5 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
 SELECT *
 FROM file(concat(currentDatabase(), '.03004_data.bsonEachRow'), auto, 'null UInt32, foo UInt32');
 

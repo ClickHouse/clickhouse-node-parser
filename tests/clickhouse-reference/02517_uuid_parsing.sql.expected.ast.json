@@ -1,5 +1,134 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "temp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field1",
+        "type": "UUID"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field2",
+        "type": "UUID"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field3",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field4",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field5",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field6",
+        "type": "FixedString(3)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field7",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field8",
+        "type": "Nullable(UUID)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "event_at",
+        "type": "DateTime('UTC')"
+      },
+      {
+        "kind": "columnDef",
+        "name": "order_id",
+        "type": "Nullable(UUID)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "identity",
+        "type": "LowCardinality(String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "event_at"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "field1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_at"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "field2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "field5"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/44668"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

@@ -1,3 +1,8 @@
+-- Tags: no-fasttest, no-random-settings
+
+set max_insert_threads=1;
+set schema_inference_make_columns_nullable=0;
+set engine_file_truncate_on_insert=1;
 -- Default limits are high, everything goes in one block.
 SELECT max(blockSize())+sum(ignore(short, long2)) FROM file(currentDatabase() || '03164_adapting_parquet_reader_output_size.parquet');
 -- Small column doesn't take a lot of bytes, everything goes in one block.

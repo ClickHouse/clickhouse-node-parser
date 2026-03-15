@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET optimize_arithmetic_operations_in_aggregate_functions = 1;
+
 SELECT round(avg(log(2) * number), 6) AS k
 FROM numbers(10000000)
 GROUP BY

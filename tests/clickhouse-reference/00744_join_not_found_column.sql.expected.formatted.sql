@@ -1,3 +1,10 @@
+SET joined_subquery_requires_alias = 0;
+
+CREATE TEMPORARY TABLE test_00744
+(
+    x Int32
+);
+
 SELECT x
 FROM (
         SELECT

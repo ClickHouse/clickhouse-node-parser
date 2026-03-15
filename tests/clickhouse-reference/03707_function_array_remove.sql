@@ -28,6 +28,7 @@ SELECT arrayRemove(['foo', 'bar', 'foo'], repeat('f',1) || 'oo');
 SELECT arrayRemove([[[]], [[], []], [[], []], [[]]], [[]]);
 SELECT arrayRemove([[1], [1,2], [2,3], [1,2]], [1,2]);
 SELECT arrayRemove([[1], [1,2], [2,3], [1,2]], [3]);
+CREATE TABLE test (array Array(UInt32), element UInt32) engine=Memory;
 SELECT arrayRemove(array, element) from test;
 SELECT arrayRemove([(1,2), (3,4)], (1,2));
 SELECT arrayRemove([1,2,3]); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
@@ -64,8 +65,11 @@ SELECT arrayRemove(
     ],
     NULL
 );
+CREATE TABLE arr_test (arr Array(Int32)) ENGINE = Memory;
 SELECT arrayRemove(arr, 3) FROM arr_test;
+CREATE TABLE elem_test (arr Array(Int32), elem Nullable(Int32)) ENGINE = Memory;
 SELECT arrayRemove(arr, elem) FROM elem_test;
+CREATE TABLE nullable_arr (arr Array(Nullable(Int32))) ENGINE = Memory;
 SELECT arrayRemove(arr, 2) FROM nullable_arr;
 SELECT arrayRemove(arr, NULL) FROM nullable_arr;
 SELECT arrayRemove(arr, elem)

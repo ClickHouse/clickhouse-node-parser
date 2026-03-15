@@ -1,3 +1,9 @@
+SET join_use_nulls = 0;
+
+SET any_join_distinct_right_table_keys = 1;
+
+SET joined_subquery_requires_alias = 0;
+
 SELECT
     k,
     a,
@@ -85,3 +91,5 @@ FULL JOIN (
     )
     USING (k)
 ORDER BY k ASC;
+
+SET join_use_nulls = 1;

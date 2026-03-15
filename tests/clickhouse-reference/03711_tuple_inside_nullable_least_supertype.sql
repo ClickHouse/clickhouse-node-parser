@@ -1,8 +1,15 @@
+SET allow_experimental_nullable_tuple_type = 1;
+SET use_variant_as_common_type = 0;
 SELECT toTypeName([CAST((8, 9), 'Tuple(Int32, Int32)'), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
 SELECT toTypeName([(8, 9), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
 SELECT toTypeName([NULL, '3', CAST('3', 'Nullable(String)')]);
 SELECT toTypeName([NULL, (8, 9), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
 SELECT toTypeName([NULL, (8, 9), CAST((2, 5), 'Tuple(Int32, Int32)')]);
+CREATE TABLE test_nullable_tuples
+(
+    id UInt32,
+    data Nullable(Tuple(val1 Int32, val2 String, val3 Float64))
+) ENGINE = Memory;
 SELECT * FROM test_nullable_tuples ORDER BY id;
 SELECT toTypeName([
     CAST((1, 2), 'Tuple(Int8, Int8)'),

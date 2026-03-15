@@ -47,6 +47,18 @@ SELECT ignore(decrypt('aes-128-cbc', 'hello there', '1111111111111111')); -- {se
 SELECT ignore(decrypt('aes-128-ofb', 'hello there', '1111111111111111')); -- GIGO
 SELECT ignore(decrypt('aes-128-ctr', 'hello there', '1111111111111111')); -- GIGO
 SELECT decrypt('aes-128-ctr', '', '1111111111111111') == '';
+-----------------------------------------------------------------------------------------
+-- Validate against predefined ciphertext,plaintext,key and IV for MySQL compatibility mode
+-----------------------------------------------------------------------------------------
+CREATE TABLE encryption_test
+(
+    input String,
+    key String DEFAULT unhex('fb9958e2e897ef3fdb49067b51a24af645b3626eed2f9ea1dc7fd4dd71b7e38f9a68db2a3184f952382c783785f9d77bf923577108a88adaacae5c141b1576b0'),
+    iv String DEFAULT unhex('8CA3554377DFF8A369BC50A89780DD85'),
+    key32 String DEFAULT substring(key, 1, 32),
+    key24 String DEFAULT substring(key, 1, 24),
+    key16 String DEFAULT substring(key, 1, 16)
+) Engine = Memory;
 SELECT 'aes-128-cbc' as mode, aes_decrypt_mysql(mode, aes_encrypt_mysql(mode, input, key, iv), key, iv) == input FROM encryption_test;
 SELECT 'aes-192-cbc' as mode, aes_decrypt_mysql(mode, aes_encrypt_mysql(mode, input, key, iv), key, iv) == input FROM encryption_test;
 SELECT 'aes-256-cbc' as mode, aes_decrypt_mysql(mode, aes_encrypt_mysql(mode, input, key, iv), key, iv) == input FROM encryption_test;
@@ -74,6 +86,13 @@ SELECT 'aes-256-gcm' as mode, decrypt(mode, encrypt(mode, input, key32, iv), key
 SELECT 'aes-128-gcm' as mode, decrypt(mode, encrypt(mode, input, key16, iv, 'AAD'), key16, iv, 'AAD') == input FROM encryption_test;
 SELECT 'aes-192-gcm' as mode, decrypt(mode, encrypt(mode, input, key24, iv, 'AAD'), key24, iv, 'AAD') == input FROM encryption_test;
 SELECT 'aes-256-gcm' as mode, decrypt(mode, encrypt(mode, input, key32, iv, 'AAD'), key32, iv, 'AAD') == input FROM encryption_test;
+-- tryDecrypt
+CREATE TABLE decrypt_null (
+  dt DateTime,
+  user_id UInt32,
+  encrypted String,
+  iv String
+) ENGINE = Memory;
 SELECT dt, user_id FROM decrypt_null WHERE (user_id > 0) AND (decrypt('aes-256-gcm', encrypted, 'keykeykeykeykeykeykeykeykeykey02', iv) = 'value2'); --{serverError OPENSSL_ERROR}
 SELECT dt, user_id FROM decrypt_null WHERE (user_id > 0) AND (tryDecrypt('aes-256-gcm', encrypted, 'keykeykeykeykeykeykeykeykeykey02', iv) = 'value2');
 SELECT dt, user_id, (tryDecrypt('aes-256-gcm', encrypted, 'keykeykeykeykeykeykeykeykeykey02', iv)) as value FROM decrypt_null ORDER BY user_id;

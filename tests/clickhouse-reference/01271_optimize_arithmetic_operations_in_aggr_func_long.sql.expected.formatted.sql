@@ -1,3 +1,8 @@
+-- Tags: long
+SET enable_analyzer = 1;
+
+SET optimize_arithmetic_operations_in_aggregate_functions = 1;
+
 SELECT
     sum(n + 1),
     sum(1 + n),
@@ -462,3 +467,5 @@ FROM numbers(100);
 
 SELECT round(max(log(2) * 3 * sin(0.3) * number * 4))
 FROM numbers(100);
+
+SET optimize_arithmetic_operations_in_aggregate_functions = 0;

@@ -1,0 +1,66 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_break_ddl"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "event_date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "event_time",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "event_date"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_date"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_time"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test for issue #84442: ALTER MODIFY ORDER BY does not check if the new column has TTL",
+      "-- This test verifies that ALTER TABLE properly validates TTL columns in ORDER BY clauses"
+    ]
+  }
+]

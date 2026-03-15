@@ -1,3 +1,18 @@
+CREATE TABLE mt
+(
+    p int,
+    n int
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY p;
+
+CREATE TABLE m
+(
+    n int
+)
+ENGINE = Memory;
+
 SELECT
     *,
     _part

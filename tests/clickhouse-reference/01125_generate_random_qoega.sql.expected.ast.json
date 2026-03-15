@@ -1,5 +1,82 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mass_table_117"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "site_id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "site_key",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dt"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "site_id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "site_key"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt"
+              ]
+            }
+          ],
+          "source": "(site_id, site_key, dt)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

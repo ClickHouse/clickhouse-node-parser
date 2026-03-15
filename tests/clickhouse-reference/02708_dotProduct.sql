@@ -36,6 +36,7 @@ SELECT (1::UInt16, 2::UInt8, 3::Float32) AS x, (4::Int16, 5::Float32, 6::UInt8) 
 SELECT scalarProduct([1, 2, 3], [4, 5, 6]);
 SELECT scalarProduct((1, 2, 3), (4, 5, 6));
 SELECT arrayDotProduct([1, 2, 3], [4, 5, 6]); -- actually no alias but the internal function for arrays
+CREATE TABLE tab(id UInt64, vec Array(Float32)) ENGINE = MergeTree ORDER BY id;
 SELECT id, arrayDotProduct(vec, vec) FROM tab ORDER BY id;
 SELECT id, arrayDotProduct(vec::Array(Float64), vec::Array(Float64)) FROM tab ORDER BY id;
 SELECT id, arrayDotProduct(vec::Array(UInt32), vec::Array(UInt32)) FROM tab ORDER BY id;

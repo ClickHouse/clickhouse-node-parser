@@ -1,5 +1,198 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias10__fuzz_13"
+    },
+    "orReplace": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Id",
+        "type": "Array(Array(UInt256))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field1",
+        "type": "Array(Array(Nullable(Int8)))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field2",
+        "type": "Array(Date)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field3",
+        "type": "Array(Array(Array(UInt128)))"
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "alias_local10"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Tags: no-ordinary-database"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_local10"
+    },
+    "orReplace": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Id",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": "Date",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "field1",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field3",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "field1"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "field2"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "0"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "EventDate"
+              ]
+            }
+          ],
+          "source": "(Id, EventDate)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -87,6 +280,61 @@
     "trailingComments": [
       "-- { serverError TYPE_MISMATCH }"
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "local"
+    },
+    "orReplace": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "Int8"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed"
+    },
+    "orReplace": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "Array(Int8)"
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "local"
+          ]
+        }
+      ]
+    }
   },
   {
     "kind": "select",

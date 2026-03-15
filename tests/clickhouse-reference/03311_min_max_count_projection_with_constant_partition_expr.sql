@@ -1,0 +1,1 @@
+CREATE TABLE t0 (c0 Int) ENGINE = MergeTree() PARTITION BY (EXISTS (SELECT 1)) ORDER BY tuple();

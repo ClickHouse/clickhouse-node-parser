@@ -1,3 +1,17 @@
+-- An attempt to reproduce https://github.com/ClickHouse/ClickHouse/issues/70015
+-- The issue was that binary arithmetic operations like minus would throw
+-- "Arguments of 'minus' have incorrect data types" logical error when
+-- the arguments had different numeric types (e.g., Int64 - Int32).
+-- However, this test didn't reproduce the issue in any previous ClickHouse versions,
+-- and the actual issue was already fixed a long time ago.
+
+SET compile_expressions = 0; -- Disable JIT to avoid unrelated issues
+CREATE TABLE t_70015 (
+    c_izfnu Int64,
+    c_l8d2_b Int64,
+    c_hmbcdw Int64,
+    c_zjw Int32
+) ENGINE = Memory;
 -- The problematic query pattern from the issue:
 -- if(CAST(equals(), 'Nullable(Bool)'), sign(Int64), Int64) - Int32
 SELECT if(CAST(c_izfnu = c_l8d2_b, 'Nullable(Bool)'), sign(c_izfnu), c_hmbcdw) - c_zjw AS result

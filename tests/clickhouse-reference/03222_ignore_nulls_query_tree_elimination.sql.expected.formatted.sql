@@ -1,3 +1,11 @@
+CREATE TABLE with_fill_date__fuzz_0
+(
+    d Date,
+    d32 Nullable(Int32),
+    d33 Int32
+)
+ENGINE = Memory;
+
 SELECT count()
 FROM with_fill_date__fuzz_0
 ORDER BY

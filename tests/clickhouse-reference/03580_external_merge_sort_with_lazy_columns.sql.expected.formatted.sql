@@ -1,3 +1,13 @@
+CREATE TABLE test
+(
+    c1 LowCardinality(String),
+    c2 LowCardinality(String),
+    c3 UInt32
+)
+ENGINE = MergeTree
+ORDER BY (c1, c2, c3)
+SETTINGS index_granularity = 8192;
+
 -- weird settings to force external sort
 SELECT *
 FROM test

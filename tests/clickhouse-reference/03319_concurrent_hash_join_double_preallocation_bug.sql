@@ -1,3 +1,6 @@
+create table lhs(a UInt64, b UInt64) Engine = MergeTree order by tuple();
+create table rhs(a UInt64, b UInt64) Engine = MergeTree order by tuple();
+set max_threads = 8, query_plan_join_swap_table = 1, join_algorithm = 'parallel_hash', enable_analyzer = 1;
 -- First populate the cache of hash table sizes
 select * from lhs as t1 join rhs as t2 on t1.a = t2.a format Null;
 -- For the next run we will preallocate the space

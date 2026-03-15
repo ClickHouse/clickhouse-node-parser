@@ -1,3 +1,11 @@
+-- Tags: no-parallel
+SET system_events_show_zero_values = 1;
+
+CREATE TEMPORARY TABLE t
+(
+    x UInt64
+);
+
 SELECT count()
 FROM `system`.numbers
 FORMAT Null

@@ -1,3 +1,4 @@
+SET least_greatest_legacy_null_behavior = default;
 SELECT greatest(NULL), least(NULL);
 SELECT greatest(1, NULL), least(1, NULL);
 SELECT greatest(NULL, 1), least(NULL, 1);
@@ -14,3 +15,4 @@ SELECT greatest(materialize(NULL), 'a'), least(materialize(NULL), 'a');
 SELECT greatest(materialize('a'), NULL), least(materialize('a'), NULL);
 SELECT greatest(toNullable(1), 2), least(toNullable(1), 2);
 SELECT greatest(toLowCardinality(1), NULL), least(toLowCardinality(1), NULL);
+SET least_greatest_legacy_null_behavior = true;

@@ -1,3 +1,11 @@
+CREATE TABLE decimal
+(
+    a Decimal32(4),
+    b Decimal64(8),
+    c Decimal128(8)
+)
+ENGINE = Memory;
+
 SELECT
     medianInterpolatedWeighted(a, 1),
     medianInterpolatedWeighted(b, 2),

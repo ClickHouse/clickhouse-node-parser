@@ -1,3 +1,5 @@
+SET max_rows_to_read = 1e11;
+
 SELECT *
 FROM `system`.numbers
 LIMIT 1e12

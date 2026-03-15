@@ -1,7 +1,21 @@
+CREATE TABLE t_mem
+(
+    key Int
+)
+ENGINE = Memory();
+
 SELECT columns_descriptions_cache_size
 FROM `system`.tables
 WHERE database = currentDatabase()
     AND table = 't_mem';
+
+-- { echoOn }
+CREATE TABLE t_mt
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
 
 SELECT columns_descriptions_cache_size
 FROM `system`.tables

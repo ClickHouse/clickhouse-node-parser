@@ -1,3 +1,23 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_table_join_1
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id
+SAMPLE BY id;
+
+CREATE TABLE test_table_join_2
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id
+SAMPLE BY id;
+
 SELECT
     t1.id AS t1_id,
     t2.id AS t2_id,

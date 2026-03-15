@@ -1,3 +1,40 @@
+Set
+
+CreateQuery test_table_sharded (children 3)
+ Identifier test_table_sharded
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration text (children 1)
+    DataType String
+   ColumnDeclaration hash (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier date
+    Function tuple (children 1)
+     ExpressionList (children 2)
+      Identifier hash
+      Identifier date
+    Literal UInt64_8192
+
+CreateQuery test_table (children 2)
+ Identifier test_table
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Identifier test_cluster_two_shards
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_table_sharded
+    Identifier hash
+
+Set
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)

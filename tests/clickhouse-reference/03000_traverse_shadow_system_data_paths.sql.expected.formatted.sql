@@ -1,3 +1,12 @@
+CREATE TABLE `03000_traverse_shadow_system_data_path_table`
+(
+    id Int64,
+    data String
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS storage_policy = 's3_cache';
+
 SELECT count() > 0
 FROM `system`.remote_data_paths
 WHERE disk_name = 's3_cache'

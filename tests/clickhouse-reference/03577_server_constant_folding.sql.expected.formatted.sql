@@ -1,3 +1,5 @@
+SET prefer_localhost_replica = 0;
+
 SELECT '-- IN subquery';
 
 SELECT

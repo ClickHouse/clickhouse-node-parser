@@ -1,3 +1,10 @@
+CREATE TABLE `02540_date`
+(
+    txt String,
+    x Date
+)
+ENGINE = Memory;
+
 SELECT
     x,
     txt

@@ -1,3 +1,15 @@
+-- Tags: no-parallel
+SET prefer_localhost_replica = 1;
+
+CREATE TABLE null_01293
+(
+    key Int
+)
+ENGINE = Null();
+
+CREATE TABLE dist_01293 AS null_01293
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), null_01293, key);
+
 -- no rows, since no active monitor
 SELECT *
 FROM `system`.distribution_queue

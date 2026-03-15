@@ -1,6 +1,20 @@
+-- enable query cache session-wide but also force it individually in each of below statements
+SET use_query_cache = true;
+
+SET query_cache_system_table_handling = 'save';
+
 -- check that SELECT statements create entries in the query cache ...
 SELECT 1
 SETTINGS use_query_cache = true;
 
 SELECT COUNT(*)
 FROM `system`.query_cache;
+
+-- ... and all other statements also should not create entries:
+-- CREATE
+CREATE TABLE eligible_test
+(
+    a String
+)
+ENGINE = MergeTree
+ORDER BY a; --  SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown

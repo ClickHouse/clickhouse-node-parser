@@ -296,3 +296,5 @@ INTERSECT
         UNION ALL
         SELECT 1
     );
+
+SET limit = 1;

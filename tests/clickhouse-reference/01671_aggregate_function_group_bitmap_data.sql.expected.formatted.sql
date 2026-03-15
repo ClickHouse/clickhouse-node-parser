@@ -1,3 +1,13 @@
+SET group_by_two_level_threshold = 10000;
+
+CREATE TABLE group_bitmap_data_test
+(
+    pickup_date Date,
+    city_id UInt32,
+    uid UInt32
+)
+ENGINE = Memory;
+
 SELECT
     bitmapCardinality(day_today) AS today_users,
     bitmapCardinality(day_before) AS before_users,

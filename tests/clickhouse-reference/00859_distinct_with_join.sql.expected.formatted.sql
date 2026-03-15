@@ -1,3 +1,17 @@
+CREATE TABLE fooL
+(
+    a Int32,
+    v String
+)
+ENGINE = Memory;
+
+CREATE TABLE fooR
+(
+    a Int32,
+    v String
+)
+ENGINE = Memory;
+
 SELECT DISTINCT a
 FROM
     fooL

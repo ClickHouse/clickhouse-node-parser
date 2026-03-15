@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT 0 = multiSearchAny('\0', CAST([], 'Array(String)'));
 
 SELECT 0 = multiSearchAnyCaseInsensitive('\0', CAST([], 'Array(String)'));

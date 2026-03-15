@@ -1,3 +1,15 @@
+-- Tags: shard
+SET optimize_skip_unused_shards = 1;
+
+CREATE TABLE data_02000
+(
+    key Int
+)
+ENGINE = Null();
+
+CREATE TABLE dist_02000 AS data_02000
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_02000, key);
+
 SELECT *
 FROM data_02000
 WHERE key = 0xdeadbeafdeadbeaf;

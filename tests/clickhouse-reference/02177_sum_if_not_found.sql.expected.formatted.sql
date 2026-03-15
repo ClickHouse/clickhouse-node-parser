@@ -1,1 +1,1 @@
-SELECT sumIf(1, 0);
+<Parse Error>

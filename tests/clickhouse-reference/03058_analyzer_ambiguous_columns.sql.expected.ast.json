@@ -1,5 +1,113 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/4567"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "fact"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "animal_key",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "color_key",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "animals"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "animal_key",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "animal_name",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "colors"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "color_key",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "color_name",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

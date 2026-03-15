@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT startsWithUTF8('富强民主文明和谐', '富强');
 
 SELECT startsWithUTF8('富强民主文明和谐', '�');

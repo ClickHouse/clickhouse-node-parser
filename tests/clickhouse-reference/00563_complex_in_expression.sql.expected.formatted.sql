@@ -1,3 +1,13 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE test_00563
+(
+    dt Date,
+    site_id Int32,
+    site_key String
+)
+ENGINE = MergeTree(dt, (site_id, site_key, dt), 8192);
+
 SELECT *
 FROM test_00563
 WHERE toInt32(site_id) IN (100);
@@ -5,6 +15,15 @@ WHERE toInt32(site_id) IN (100);
 SELECT *
 FROM test_00563
 WHERE toInt32(site_id) IN (100, 101);
+
+CREATE TABLE join_with_index
+(
+    key UInt32,
+    data UInt64
+)
+ENGINE = MergeTree
+ORDER BY key
+SETTINGS index_granularity = 1;
 
 SELECT key + 1
 FROM

@@ -1,3 +1,4 @@
+CREATE TABLE t0 (c0 Int) ENGINE = Memory;
 SELECT * FROM loop(remote('localhost:9000', currentDatabase(), 't0')) tx; -- { serverError TOO_MANY_RETRIES_TO_FETCH_PARTS }
 SELECT '---';
 SELECT * FROM loop(remote('localhost:9000', currentDatabase(), 't0')) tx LIMIT 3;

@@ -21,6 +21,12 @@ PASTE JOIN (
         ORDER BY a DESC
     ) AS t2;
 
+CREATE TABLE IF NOT EXISTS test
+(
+    number UInt64
+)
+ENGINE = Memory;
+
 SELECT *
 FROM
     (
@@ -53,6 +59,20 @@ PASTE JOIN (
     ) AS t2
 SETTINGS max_threads = 1;
 
+CREATE TABLE t1
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Memory;
+
 SELECT *
 FROM
     (
@@ -76,6 +96,8 @@ PASTE JOIN (
         FROM numbers(10)
     ) AS t2
 SETTINGS join_use_nulls = 1;
+
+SET max_threads = 2;
 
 SELECT *
 FROM
@@ -177,6 +199,22 @@ PASTE JOIN (
         SELECT 3 AS a
     )
 SETTINGS enable_analyzer = 1; -- { serverError AMBIGUOUS_COLUMN_NAME }
+
+SET enable_analyzer = 1;
+
+CREATE TABLE test1
+(
+    a Int32
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+CREATE TABLE test2
+(
+    a Int32
+)
+ENGINE = MergeTree
+ORDER BY a;
 
 SELECT *
 FROM

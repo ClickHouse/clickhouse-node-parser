@@ -1,3 +1,24 @@
+SET enable_analyzer = 1;
+
+SET join_use_nulls = 1;
+
+CREATE TABLE test_table_join_1
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE test_table_join_2
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+-- { echoOn }
 SELECT
     t1.id AS t1_id,
     toTypeName(t1_id),

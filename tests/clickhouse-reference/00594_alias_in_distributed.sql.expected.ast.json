@@ -1,5 +1,169 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_local10"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Id",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": "Date",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "field1",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field3",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "field1"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "field2"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "0"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "EventDate"
+              ]
+            }
+          ],
+          "source": "(Id, EventDate)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias10"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "alias_local10"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "alias_local10"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Id"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -399,6 +563,62 @@
         "type": "String",
         "value": "12345"
       }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias10"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Id",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field1",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field3",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "alias_local10"
+          ]
+        }
+      ]
     }
   }
 ]

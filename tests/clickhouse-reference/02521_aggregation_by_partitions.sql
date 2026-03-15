@@ -1,70 +1,110 @@
+-- Tags: long, no-object-storage, no-msan
+
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+set max_threads = 16;
+set allow_aggregate_partitions_independently = 1;
+set force_aggregate_partitions_independently = 1;
+set optimize_use_projections = 0;
+set optimize_trivial_insert_select = 1;
+set allow_prefetched_read_pool_for_remote_filesystem = 0;
+set allow_prefetched_read_pool_for_local_filesystem = 0;
+create table t1(a UInt32) engine=MergeTree order by tuple() partition by a % 4 settings index_granularity = 8192, index_granularity_bytes = 10485760;
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t1 group by a);
+create table t2(a UInt32) engine=MergeTree order by tuple() partition by a % 8 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t2 group by a);
+create table t3(a UInt32) engine=MergeTree order by tuple() partition by a % 16 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t3 group by a);
 select throwIf(count() != 4) from remote('127.0.0.{1,2}', currentDatabase(), t3) group by a format Null;
 -- if we happened to switch to external aggregation at some point, merging will happen as usual
 select count() from (select throwIf(count() != 2) from t3 group by a) settings max_bytes_before_external_group_by = '1Ki', max_bytes_ratio_before_external_group_by = 0;
+-- aggregation in order --
+
+set optimize_aggregation_in_order = 1;
+create table t4(a UInt32) engine=MergeTree order by a partition by a % 4 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t4 group by a);
+create table t5(a UInt32) engine=MergeTree order by a partition by a % 8 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t5 group by a);
+create table t6(a UInt32) engine=MergeTree order by a partition by a % 16 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t6 group by a);
+set optimize_aggregation_in_order = 0;
+create table t7(a UInt32) engine=MergeTree order by a partition by intDiv(a, 2) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select intDiv(a, 2) as a1 from t7 group by a1
 ) where explain like '%Skip merging: %';
+create table t8(a UInt32) engine=MergeTree order by a partition by intDiv(a, 2) * 2 + 1 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select intDiv(a, 2) + 1 as a1 from t8 group by a1
 ) where explain like '%Skip merging: %';
+create table t9(a UInt32) engine=MergeTree order by a partition by intDiv(a, 2) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select intDiv(a, 3) as a1 from t9 group by a1
 ) where explain like '%Skip merging: %';
+create table t10(a UInt32, b UInt32) engine=MergeTree order by a partition by (intDiv(a, 2), intDiv(b, 3)) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select intDiv(a, 2) + 1 as a1, intDiv(b, 3) as b1 from t10 group by a1, b1, pi()
 ) where explain like '%Skip merging: %';
+-- multiplication by 2 is not injective, so optimization is not applicable
+create table t11(a UInt32, b UInt32) engine=MergeTree order by a partition by (intDiv(a, 2), intDiv(b, 3)) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select intDiv(a, 2) + 1 as a1, intDiv(b, 3) * 2 as b1 from t11 group by a1, b1, pi()
 ) where explain like '%Skip merging: %';
+create table t12(a UInt32, b UInt32) engine=MergeTree order by a partition by a % 16;
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select a, b from t12 group by a, b, pi()
 ) where explain like '%Skip merging: %';
+create table t13(a UInt32, b UInt32) engine=MergeTree order by a partition by (intDiv(a, 2), intDiv(b, 3)) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select s from t13 group by intDiv(a, 2) + intDiv(b, 3) as s, pi()
 ) where explain like '%Skip merging: %';
+create table t14(a UInt32, b UInt32) engine=MergeTree order by a partition by intDiv(a, 2) + intDiv(b, 3) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select intDiv(a, 2) as a1, intDiv(b, 3) as b1 from t14 group by a1, b1, pi()
 ) where explain like '%Skip merging: %';
+-- to few partitions --
+create table t15(a UInt32, b UInt32) engine=MergeTree order by a partition by a < 90 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select a from t15 group by a
 ) where explain like '%Skip merging: %'
 settings force_aggregate_partitions_independently = 0;
+-- to many partitions --
+create table t16(a UInt32, b UInt32) engine=MergeTree order by a partition by a % 16 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select a from t16 group by a
 ) where explain like '%Skip merging: %'
 settings force_aggregate_partitions_independently = 0, max_number_of_partitions_for_independent_aggregation = 4;
+-- to big skew --
+create table t17(a UInt32, b UInt32) engine=MergeTree order by a partition by a < 90 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select a from t17 group by a
 ) where explain like '%Skip merging: %'
 settings force_aggregate_partitions_independently = 0, max_threads = 4;
+create table t18(a UInt32, b UInt32) engine=MergeTree order by a partition by a SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select a1 from t18 group by intDiv(a, 2) as a1
 ) where explain like '%Skip merging: %';
+create table t19(a UInt32, b UInt32) engine=MergeTree order by a partition by a SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select a1 from t19 group by blockNumber() as a1
 ) where explain like '%Skip merging: %';
+create table t20(a UInt32, b UInt32) engine=MergeTree order by a partition by a SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select a1 from t20 group by rand(a) as a1
 ) where explain like '%Skip merging: %';
+create table t21(a UInt64, b UInt64) engine=MergeTree order by a partition by a % 16 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select a from t21 group by a limit 10 format Null;
+create table t22(a UInt32, b UInt32) engine=SummingMergeTree order by a partition by a % 16 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select replaceRegexpOne(explain, '^[ ]*(.*)', '\\1') from (
     explain actions=1 select a from t22 final group by a
 ) where explain like '%Skip merging: %';

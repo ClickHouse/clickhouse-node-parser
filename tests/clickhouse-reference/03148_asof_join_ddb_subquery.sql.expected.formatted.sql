@@ -1,3 +1,17 @@
+CREATE TABLE events
+(
+    begin Float64,
+    value Int32
+)
+ENGINE = MergeTree()
+ORDER BY begin;
+
+SET enable_analyzer = 1;
+
+SET join_algorithm = 'full_sorting_merge';
+
+SET joined_subquery_requires_alias = 0;
+
 SELECT
     begin,
     value IN (

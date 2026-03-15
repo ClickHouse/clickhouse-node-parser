@@ -1,3 +1,11 @@
+CREATE TABLE ColumnsClauseTest
+(
+    product_price Int64,
+    product_weight Int16,
+    amount Int64
+)
+ENGINE = TinyLog;
+
 SELECT COLUMNS('product.*')
 FROM ColumnsClauseTest
 ORDER BY product_price ASC;

@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT NULL
 GROUP BY
     tuple('0.0000000007'),

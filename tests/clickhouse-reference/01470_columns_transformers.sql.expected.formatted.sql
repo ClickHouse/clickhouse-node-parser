@@ -1,3 +1,11 @@
+CREATE TABLE columns_transformers
+(
+    i Int64,
+    j Int16,
+    k Int64
+)
+ENGINE = TinyLog;
+
 SELECT * APPLY(sum)
 FROM columns_transformers;
 

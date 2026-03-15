@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+SET input_format_parquet_use_native_reader_v3=1;
 -- Reproduces prewhere optimization bug where intermediate columns are kept in outputs:
 -- 1. Virtual column (_row_number) in SELECT affects optimizer cost calculations
 -- 2. Same expression (x < 60) used in both WHERE and ORDER BY

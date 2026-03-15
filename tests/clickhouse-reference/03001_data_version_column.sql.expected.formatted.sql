@@ -1,3 +1,11 @@
+CREATE TABLE t_data_version
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT
     _part,
     _part_data_version,

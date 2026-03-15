@@ -1,3 +1,22 @@
+SET enable_json_type = 1;
+
+SET allow_experimental_analyzer = 1;
+
+CREATE TABLE test
+(
+    id Int64,
+    data JSON(arr1 Array(String), arr2 Array(Int32))
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE TABLE test_distr
+(
+    id Int64,
+    data JSON(arr1 Array(String), arr2 Array(Int32))
+)
+ENGINE = Distributed(test_cluster_one_shard_three_replicas_localhost, currentDatabase(), 'test', murmurHash2_32(id));
+
 SELECT count()
 FROM
     test_distr AS `left`

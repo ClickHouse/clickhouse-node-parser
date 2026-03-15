@@ -1,3 +1,4 @@
+SET allow_experimental_nullable_tuple_type = 1;
 SELECT tupleElement(CAST(NULL AS Nullable(Tuple(Int32, String))), 1);
 SELECT toTypeName(tupleElement(CAST(NULL AS Nullable(Tuple(Int32, String))), 1));
 SELECT tupleElement(CAST((1, 'hello') AS Nullable(Tuple(Int32, String))), 2);
@@ -54,6 +55,11 @@ SELECT tupleElement([
     NULL,
     CAST((3, 'c') AS Nullable(Tuple(Int32, String)))
 ], 2);
+CREATE TABLE test_nullable_tuples
+(
+    id UInt32,
+    data Nullable(Tuple(Int32, String))
+) ENGINE = Memory;
 SELECT id, tupleElement(data, 1) as value, toTypeName(tupleElement(data, 1)) as type
 FROM test_nullable_tuples
 ORDER BY id;
@@ -76,6 +82,11 @@ SELECT
     max(tupleElement(data, 1)) as max_value,
     count(tupleElement(data, 1)) as count_non_null
 FROM test_nullable_tuples;
+CREATE TABLE test_array_nullable_tuples
+(
+    id UInt32,
+    records Array(Nullable(Tuple(Int32, String)))
+) ENGINE = Memory;
 SELECT id, tupleElement(records, 1) as values, toTypeName(tupleElement(records, 1)) as type
 FROM test_array_nullable_tuples
 ORDER BY id;
@@ -87,6 +98,11 @@ FROM test_array_nullable_tuples
 ARRAY JOIN records as record
 WHERE record IS NOT NULL
 ORDER BY id, value;
+CREATE TABLE test_nullable_named_tuples
+(
+    id UInt32,
+    person Nullable(Tuple(name String, age UInt8, salary Float64))
+) ENGINE = Memory;
 SELECT id,
     tupleElement(person, 'name') as name,
     tupleElement(person, 'age') as age,
@@ -150,6 +166,11 @@ ORDER BY id;
 SELECT id, tupleElement(data, 5, 'default_string') as value
 FROM test_nullable_tuples
 ORDER BY id;
+CREATE TABLE test_complex_nullable
+(
+    id UInt32,
+    matrix Array(Array(Nullable(Tuple(x Int32, y Int32))))
+) ENGINE = Memory;
 SELECT id, tupleElement(matrix, 'x') as x_values, toTypeName(tupleElement(matrix, 'x')) as type
 FROM test_complex_nullable
 ORDER BY id;

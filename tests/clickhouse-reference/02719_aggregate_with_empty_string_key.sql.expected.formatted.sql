@@ -1,3 +1,10 @@
+CREATE TABLE test
+(
+    str Nullable(String),
+    i Int64
+)
+ENGINE = Memory();
+
 SELECT '-----------String------------';
 
 SELECT

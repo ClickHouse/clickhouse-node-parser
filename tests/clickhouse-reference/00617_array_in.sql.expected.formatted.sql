@@ -1,3 +1,9 @@
+CREATE TABLE test_array_ops
+(
+    arr Array(Nullable(Int64))
+)
+ENGINE = Memory;
+
 SELECT count(*)
 FROM test_array_ops
 WHERE arr < CAST([10, -20] AS Array(Nullable(Int64)));

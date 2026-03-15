@@ -1,3 +1,16 @@
+SET apply_mutations_on_fly = 1;
+
+CREATE TABLE t_lightweight_mut_6
+(
+    id UInt64,
+    v UInt64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_6', '1')
+ORDER BY id
+SETTINGS ratio_of_defaults_for_sparse_serialization = 1.0; -- There is a bug.
+
+SET mutations_sync = 2;
+
 SELECT
     count(),
     sum(v)
@@ -8,6 +21,8 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 't_lightweight_mut_6'
     AND active;
+
+SET mutations_sync = 0;
 
 SELECT
     count(),

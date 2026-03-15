@@ -1,3 +1,14 @@
+CREATE TABLE `order`
+(
+    ID Int64,
+    Type Int64,
+    Num UInt64,
+    t DateTime
+)
+ENGINE = MergeTree()
+ORDER BY (ID, Type, Num)
+PARTITION BY toYYYYMMDD(t);
+
 SELECT Num
 FROM `order`
 WHERE Type = 1

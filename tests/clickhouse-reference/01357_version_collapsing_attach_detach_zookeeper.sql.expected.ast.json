@@ -1,5 +1,91 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "versioned_collapsing_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key2",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sign",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "version",
+        "type": "UInt16"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedVersionedCollapsingMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/{database}/versioned_collapsing_table/{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "sign"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "version"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "d"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key2"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

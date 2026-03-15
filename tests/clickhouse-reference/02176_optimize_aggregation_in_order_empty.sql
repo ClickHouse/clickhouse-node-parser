@@ -1,4 +1,6 @@
-
+create table data_02176 (key Int) Engine=MergeTree() order by key;
+set optimize_aggregation_in_order=1;
+-- { echoOn }
 
 -- regression for optimize_aggregation_in_order with empty result set
 -- that cause at first

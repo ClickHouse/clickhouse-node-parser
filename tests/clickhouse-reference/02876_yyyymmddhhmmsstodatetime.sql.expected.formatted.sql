@@ -1,3 +1,5 @@
+SET session_timezone = 'UTC'; -- no time zone randomization, please
+
 -----------------------------------------------------------
 SELECT '--- YYYYMMDDToDateTime';
 

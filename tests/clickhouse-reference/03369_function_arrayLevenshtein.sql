@@ -1,3 +1,5 @@
+-- arrayLevenshteinDistance
+CREATE TABLE simple_levenshtein (lhs Array(UInt8), rhs Array(UInt8)) ENGINE MergeTree ORDER BY tuple();
 SELECT arrayLevenshteinDistance(lhs, rhs) FROM simple_levenshtein;
 -- arrayLevenshteinDistance for different types
 SELECT arrayLevenshteinDistance(['1', '2'], ['1']),
@@ -6,6 +8,8 @@ SELECT arrayLevenshteinDistance(['1', '2'], ['1']),
   arrayLevenshteinDistance([toFloat32(1.1), 2], [toFloat32(1.1)]),
   arrayLevenshteinDistance([toFloat64(1.1), 2], [toFloat64(1.1)]),
   arrayLevenshteinDistance([toDate('2025-01-01'), toDate('2025-01-02')], [toDate('2025-01-01')]);
+-- arrayLevenshteinDistanceWeighted
+CREATE TABLE weighted_levenshtein (lhs Array(String), rhs Array(String), lhs_weights Array(Float64), rhs_weights Array(Float64)) ENGINE MergeTree ORDER BY tuple();
 SELECT arrayLevenshteinDistanceWeighted(lhs, rhs, lhs_weights, rhs_weights) FROM weighted_levenshtein;
 -- arrayLevenshteinDistance for different arrays' types
 SELECT arrayLevenshteinDistanceWeighted(['1', '2'], ['1'], [1., 2], [1.]),

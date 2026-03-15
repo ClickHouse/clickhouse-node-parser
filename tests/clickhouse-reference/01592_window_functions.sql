@@ -1,3 +1,13 @@
+CREATE TABLE product_groups (
+	group_id Int64,
+	group_name String
+) Engine = Memory;
+CREATE TABLE products (
+	product_id Int64,
+	product_name String,
+	price DECIMAL(11, 2),
+	group_id Int64
+) Engine = Memory;
 select '---- Q1 ----';
 SELECT
 	product_name,

@@ -1,5 +1,81 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_has_const_array"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "bf",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "abf",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_bf",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "bf"
+          ]
+        },
+        "indexType": "bloom_filter(0.01)",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_abf",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "abf"
+          ]
+        },
+        "indexType": "bloom_filter(0.01)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

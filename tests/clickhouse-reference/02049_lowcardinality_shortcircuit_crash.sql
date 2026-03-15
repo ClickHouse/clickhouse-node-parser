@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/30231
+SET allow_suspicious_low_cardinality_types=1;
+
 SELECT *
 FROM (
       SELECT number,
@@ -12,6 +15,7 @@ FROM (
      )
 ORDER BY number
 SETTINGS short_circuit_function_evaluation='enable';
+
 SELECT *
 FROM (
       SELECT number,
@@ -26,6 +30,7 @@ FROM (
          )
 ORDER BY number
 SETTINGS short_circuit_function_evaluation='enable';
+
 SELECT *
 FROM (
       SELECT number,

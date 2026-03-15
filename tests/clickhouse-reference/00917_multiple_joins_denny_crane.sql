@@ -1,3 +1,5 @@
+SET joined_subquery_requires_alias = 0;
+CREATE TABLE ANIMAL ( ANIMAL Nullable(String) ) engine = MergeTree ORDER BY tuple();
 select * from (
 select x.b x, count(distinct x.c) ANIMAL
 from (

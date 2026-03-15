@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SET system_events_show_zero_values = 1;
+CREATE TEMPORARY TABLE t (x UInt64);
 SELECT count() FROM system.numbers FORMAT Null SETTINGS max_rows_to_read = 1, read_overflow_mode = 'break';
 SELECT max(x) - min(x) FROM t;
 SELECT count() FROM system.numbers SETTINGS max_rows_to_read = 1, read_overflow_mode = 'throw'; -- { serverError TOO_MANY_ROWS }

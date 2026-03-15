@@ -1,3 +1,4 @@
+create table tba (event_id Int64, event_dt Int64) Engine =MergeTree order by event_id ;
 select count() from (
    SELECT event_dt FROM (
       select event_dt, 403 AS event_id from (

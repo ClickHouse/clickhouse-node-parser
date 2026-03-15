@@ -123,6 +123,14 @@ SELECT
     toTypeName(tokenized),
     isConstant(tokenized);
 
+CREATE TABLE tab
+(
+    id Int64,
+    str String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
 SELECT
     tokens(str, 'splitByNonAlpha') AS tokenized,
     toTypeName(tokenized),

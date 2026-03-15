@@ -42,6 +42,10 @@ SELECT tokens('abc def', 'array') AS tokenized, toTypeName(tokenized), isConstan
 SELECT '-- FixedString inputs';
 SELECT tokens(toFixedString('abc+ def- foo! bar? baz= code; hello: world/', 44)) AS tokenized, toTypeName(tokenized), isConstant(tokenized);
 SELECT tokens(materialize('abc+ def- foo! bar? baz= code; hello: world/')) AS tokenized, toTypeName(tokenized), isConstant(tokenized);
+CREATE TABLE tab (
+    id Int64,
+    str String
+) ENGINE = MergeTree() ORDER BY id;
 SELECT tokens(str, 'splitByNonAlpha') AS tokenized, toTypeName(tokenized), isConstant(tokenized) FROM tab;
 SELECT tokens(str, 'ngrams', 3) AS tokenized, toTypeName(tokenized), isConstant(tokenized) FROM tab;
 SELECT tokens(str, 'splitByString', ['()', ',']) AS tokenized, toTypeName(tokenized), isConstant(tokenized) FROM tab;

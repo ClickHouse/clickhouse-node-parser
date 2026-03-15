@@ -1,3 +1,12 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE partitions
+(
+    EventDate Date,
+    CounterID UInt32
+)
+ENGINE = MergeTree(EventDate, CounterID, 8192);
+
 SELECT count()
 FROM partitions;
 

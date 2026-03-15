@@ -25,6 +25,16 @@ FROM (
     )
 WHERE 25;
 
+CREATE TABLE ttttttt
+(
+    timestamp DateTime,
+    col1 Float64,
+    col2 Float64,
+    col3 Float64
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 -- Query that https://github.com/ClickHouse/ClickHouse/pull/42827 broke
 SELECT
     argMax(col1, timestamp) AS col1,
@@ -40,6 +50,15 @@ SELECT
     final_col + 1 AS final_col2
 FROM ttttttt
 GROUP BY col3;
+
+-- https://github.com/ClickHouse/ClickHouse/issues/46724
+CREATE TABLE table1
+(
+    id String,
+    device UUID
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
 
 SELECT
     if(empty(id), toString(device), id) AS device,

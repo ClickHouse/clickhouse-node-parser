@@ -1,3 +1,57 @@
+CreateQuery test_input (children 3)
+ Identifier test_input
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType Int32
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery test (children 3)
+ Identifier test
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType Int32
+   ColumnDeclaration pv (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier sum
+      DataType Int32
+ Storage definition (children 2)
+  Function AggregatingMergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery test_mv (children 4)
+ Identifier test_mv
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType Int32
+   ColumnDeclaration pv (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier sum
+      DataType Int32
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier id
+     Function sumState (alias pv) (children 1)
+      ExpressionList (children 1)
+       Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test_input
+    ExpressionList (children 1)
+     Identifier id
+ ViewTargets
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -13,3 +67,32 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier test
+
+CreateQuery test_mv (children 4)
+ Identifier test_mv
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType Int32
+   ColumnDeclaration pv (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier sum
+      DataType Int32
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier id
+     Function sumState (alias pv) (children 1)
+      ExpressionList (children 1)
+       Function toInt32 (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test_input
+    ExpressionList (children 1)
+     Identifier id
+ ViewTargets

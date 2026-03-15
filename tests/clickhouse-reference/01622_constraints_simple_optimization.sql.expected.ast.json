@@ -1,5 +1,170 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "convert_query_to_cnf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_using_constraints",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_substitute_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_append_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "URL",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "Int32"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "domainWithoutWWW",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "bigmir.net"
+          }
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c2",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "zzz"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "startsWith",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "URL"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "test"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "Bool",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -496,6 +661,102 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Int32"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c2",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -527,6 +788,113 @@
     "trailingComments": [
       "---> assumption -> 1"
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_strong_connectivity"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
   },
   {
     "kind": "select",
@@ -727,6 +1095,113 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -925,6 +1400,74 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "Int64"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -989,6 +1532,99 @@
     "trailingComments": [
       "---> assumption -> 1"
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants_repl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Int64"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "20"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
   },
   {
     "kind": "select",
@@ -1189,6 +1825,74 @@
     "trailingComments": [
       "---> assumption -> 1"
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "Int64"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
   },
   {
     "kind": "select",

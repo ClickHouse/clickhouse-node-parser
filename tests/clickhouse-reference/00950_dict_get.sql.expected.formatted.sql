@@ -1,3 +1,37 @@
+-- Tags: no-parallel
+-- Must use `default` database and these tables - they're configured in tests/*_dictionary.xml
+USE default;
+
+CREATE TABLE ints
+(
+    key UInt64,
+    i8 Int8,
+    i16 Int16,
+    i32 Int32,
+    i64 Int64,
+    u8 UInt8,
+    u16 UInt16,
+    u32 UInt32,
+    u64 UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE strings
+(
+    key UInt64,
+    str String
+)
+ENGINE = Memory;
+
+CREATE TABLE decimals
+(
+    key UInt64,
+    d32 Decimal32(4),
+    d64 Decimal64(6),
+    d128 Decimal128(1)
+)
+ENGINE = Memory;
+
 SELECT
     'dictGet',
     'flat_ints' AS dict_name,

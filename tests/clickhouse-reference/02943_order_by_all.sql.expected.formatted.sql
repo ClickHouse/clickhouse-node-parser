@@ -1,4 +1,13 @@
+CREATE TABLE order_by_all
+(
+    a String,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
 SELECT '-- no modifiers';
+
+SET enable_analyzer = 0;
 
 SELECT
     a,
@@ -11,6 +20,8 @@ SELECT
     a
 FROM order_by_all
 ORDER BY `ALL` ASC;
+
+SET enable_analyzer = 1;
 
 SELECT
     a,
@@ -39,6 +50,14 @@ ORDER BY `ALL` ASC;
 SELECT *
 FROM order_by_all
 ORDER BY `all` ASC;
+
+CREATE TABLE order_by_all
+(
+    a String,
+    b Nullable(Int32),
+    `all` UInt64
+)
+ENGINE = Memory;
 
 SELECT
     a,

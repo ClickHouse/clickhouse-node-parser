@@ -1,3 +1,13 @@
+CREATE TABLE numbers1
+ENGINE = Memory AS
+SELECT number AS _table
+FROM numbers(1000);
+
+CREATE TABLE numbers2
+ENGINE = Memory AS
+SELECT number AS _table
+FROM numbers(1000);
+
 SELECT count()
 FROM merge(currentDatabase(), '^numbers\\d+$')
 WHERE _table = 'numbers1'; -- { serverError TYPE_MISMATCH }

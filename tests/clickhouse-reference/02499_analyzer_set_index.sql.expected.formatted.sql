@@ -1,3 +1,14 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String,
+    INDEX value_idx (value) TYPE set(1000) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT count()
 FROM test_table
 WHERE value = '1'

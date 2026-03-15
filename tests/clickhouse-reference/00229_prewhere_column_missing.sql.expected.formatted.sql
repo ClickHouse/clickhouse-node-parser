@@ -1,3 +1,12 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE prewhere_column_missing
+(
+    d Date DEFAULT '2015-01-01',
+    x UInt64
+)
+ENGINE = MergeTree(d, x, 1);
+
 SELECT *
 FROM prewhere_column_missing;
 

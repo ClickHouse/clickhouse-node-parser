@@ -1,3 +1,9 @@
+CREATE TABLE decimal
+(
+    a Decimal32(4),
+    b Decimal64(8),
+    c Decimal128(8)
+) ENGINE = Memory;
 SELECT count(a), count(b), count(c) FROM decimal;
 SELECT [min(a), max(a)], [min(b), max(b)], [min(c), max(c)] FROM decimal;
 SELECT sum(a), sum(b), sum(c), sumWithOverflow(a), sumWithOverflow(b), sumWithOverflow(c) FROM decimal;

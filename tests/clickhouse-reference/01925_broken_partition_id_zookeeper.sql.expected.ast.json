@@ -1,0 +1,137 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "broken_partition"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/test_01925_{database}/rmt"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "date"
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "old_partition_key"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "sd",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "dh",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ak",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ed",
+        "type": "Date"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "sd"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dh"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ak"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ed"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dh"
+              ]
+            }
+          ],
+          "source": "(ak, ed, dh)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  }
+]

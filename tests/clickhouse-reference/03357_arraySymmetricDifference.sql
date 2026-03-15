@@ -14,6 +14,14 @@ SELECT arraySort(arraySymmetricDifference([1, 2], [1, 2]));
 SELECT arraySort(arraySymmetricDifference([1, 2], [1, 2], [1, 2]));
 SELECT arraySort(arraySymmetricDifference([1, 2], [1, 2], [1, 3]));
 SELECT toTypeName(arraySymmetricDifference([(1, ['a', 'b']), (Null, ['c'])], [(2, ['c', Null]), (1, ['a', 'b'])]));
+CREATE TABLE test_arraySymmetricDifference
+(
+    `id` Int8,
+    `arr1` Array(String),
+    `arr2` Array(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT
 	ta.id AS id,
     arraySort(arraySymmetricDifference(ta.arr1, ta.arr2)) AS symmetricDifference

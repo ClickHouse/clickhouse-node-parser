@@ -1,3 +1,8 @@
+set enable_analyzer=1;
+create table test1(a UInt64, b UInt64) engine=Memory;
+create table test2(a UInt64, c UInt64) engine=Memory;
+create table test3(a UInt64, d UInt64) engine=Memory;
+create table test_merge (a UInt64, b UInt64, c UInt64, d UInt64, e UInt64) engine=Merge(database(), 'test');
 select a from test_merge order by all;
 select b from test_merge order by all;
 select c from test_merge order by all;

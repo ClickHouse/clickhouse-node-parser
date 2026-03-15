@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT number
 FROM numbers_mt(10)
 HAVING number >= 9;

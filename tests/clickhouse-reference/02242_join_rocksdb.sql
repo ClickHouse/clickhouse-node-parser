@@ -1,3 +1,7 @@
+CREATE TABLE rdb (key UInt32, value Array(UInt32), value2 String) ENGINE = EmbeddedRocksDB PRIMARY KEY (key);
+CREATE TABLE t1 (k UInt32) ENGINE = TinyLog;
+CREATE TABLE t2 (k UInt16) ENGINE = TinyLog;
+SET join_algorithm = 'direct';
 SELECT '-- key rename';
 SELECT * FROM (SELECT k as key FROM t2) as t2 INNER JOIN rdb ON rdb.key == t2.key ORDER BY key;
 SELECT * FROM (SELECT k as key FROM t2) as t2 INNER JOIN rdb USING key ORDER BY key;

@@ -1,3 +1,19 @@
+SET flatten_nested = 0;
+
+SET use_uncompressed_cache = 0;
+
+SET local_filesystem_read_method = 'pread';
+
+CREATE TABLE nested
+(
+    col1 Nested(a UInt32, s String),
+    col2 Nested(a UInt32, n Nested(s String, b UInt32)),
+    col3 Nested(n1 Nested(a UInt32, b UInt32), n2 Nested(s String, t String))
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0;
+
 SELECT *
 FROM nested;
 
@@ -43,6 +59,15 @@ WHERE (type = 'QueryFinish')
     AND (like(lower(query), lower('SELECT col3.n2.s FROM %nested%')))
     AND event_date >= yesterday()
     AND current_database = currentDatabase();
+
+CREATE TABLE nested
+(
+    id UInt32,
+    col1 Nested(a UInt32, n Nested(s String, b UInt32))
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_bytes_for_wide_part = 0;
 
 SELECT
     id % 10,

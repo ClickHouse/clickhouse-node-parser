@@ -1,5 +1,297 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "aliases_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "array",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "array",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "zero"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "one"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "two"
+            }
+          ],
+          "source": "['zero','one','two']"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d1",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "array"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a1",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "array"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a2",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "a1"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a3",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "a2"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a4",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a5",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "a4"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a6",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "a5"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "struct.d1",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "array"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "struct.a1",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "array"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "struct.a2",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "struct.a1"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "struct.a3",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "struct.a2"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "struct.a4",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "struct.a5",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "struct.a4"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "struct.a6",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "struct.a5"
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

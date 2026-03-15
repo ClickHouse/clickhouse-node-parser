@@ -1,3 +1,5 @@
+SET join_algorithm = 'partial_merge';
+
 SELECT
     count(1),
     uniqExact(1)

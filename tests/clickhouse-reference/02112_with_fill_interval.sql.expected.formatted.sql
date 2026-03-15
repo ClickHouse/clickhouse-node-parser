@@ -1,3 +1,10 @@
+CREATE TABLE with_fill_date
+(
+    d Date,
+    d32 Date32
+)
+ENGINE = Memory;
+
 SELECT
     d,
     count()
@@ -68,6 +75,13 @@ FROM with_fill_date
 GROUP BY d32
 ORDER BY d32 ASC WITH FILL FROM toDate('2020-01-01') TO toDate('2021-01-01') STEP toIntervalMonth(3);
 
+CREATE TABLE with_fill_date
+(
+    d DateTime('UTC'),
+    d64 DateTime64(3, 'UTC')
+)
+ENGINE = Memory;
+
 SELECT
     d,
     count()
@@ -119,6 +133,13 @@ LIMIT 5;
 SELECT number
 FROM numbers(100)
 ORDER BY number ASC WITH FILL STEP toIntervalHour(1); -- { serverError INVALID_WITH_FILL_EXPRESSION }
+
+CREATE TABLE with_fill_date
+(
+    d Date,
+    id UInt32
+)
+ENGINE = Memory;
 
 SELECT
     toStartOfMonth(d) AS d,

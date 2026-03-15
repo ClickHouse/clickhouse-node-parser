@@ -1,3 +1,12 @@
+-- Tags: no-random-merge-tree-settings, no-random-settings
+-- Because we compare part sizes, and they could be affected by index granularity and index compression settings.
+
+CREATE TABLE part_log_bytes_uncompressed (
+    key UInt8,
+    value UInt8
+)
+Engine=MergeTree()
+ORDER BY key;
 SELECT event_type, table, part_name, bytes_uncompressed > 0, (bytes_uncompressed > 0 ? (size_in_bytes < bytes_uncompressed ? '1' : toString((size_in_bytes, bytes_uncompressed))) : '0')
 FROM system.part_log
 WHERE event_date >= yesterday() AND database = currentDatabase() AND table = 'part_log_bytes_uncompressed'

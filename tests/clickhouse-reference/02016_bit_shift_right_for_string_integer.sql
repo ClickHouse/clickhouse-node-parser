@@ -88,6 +88,7 @@ SELECT 77,toFixedString('Hello', 10), bin(bitShiftRight(toFixedString('Hello', 1
 SELECT 78,toFixedString('Hello', 10), bin(bitShiftRight(toFixedString('Hello', 10), 78));
 SELECT 79,toFixedString('Hello', 10), bin(bitShiftRight(toFixedString('Hello', 10), 79));
 SELECT 80,toFixedString('Hello', 10), bin(bitShiftRight(toFixedString('Hello', 10), 80));
+CREATE TABLE test_bit_shift_right_string_integer (str String, fixedStr FixedString(10), id Int64) engine=Log;
 SELECT bin(bitShiftRight('Hello', 40));  --A blank line
 SELECT id as shift_right_bit,str as arg,bin(bitShiftRight(str, id)) as string_res FROM test_bit_shift_right_string_integer;
 SELECT id as shift_right_bit,str as arg,bin(bitShiftRight(str, id)) as string_res FROM test_bit_shift_right_string_integer WHERE (str='Hello' AND (id=23 OR id=24 OR id=25)) OR (str='Hel' AND (id=7 OR id=8 OR id=9));

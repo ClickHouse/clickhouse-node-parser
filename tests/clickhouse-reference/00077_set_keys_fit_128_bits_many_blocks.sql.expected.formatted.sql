@@ -1,3 +1,5 @@
+SET max_block_size = 1000;
+
 SELECT number
 FROM (
         SELECT *

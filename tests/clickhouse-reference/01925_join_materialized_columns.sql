@@ -1,3 +1,21 @@
+CREATE TABLE t1 (
+    time DateTime,
+    foo String,
+    dimension_1 String,
+    dt Date MATERIALIZED toDate(time),
+    dt1 Date MATERIALIZED toDayOfYear(time),
+    aliascol1 ALIAS foo || dimension_1,
+    time_alias DateTime ALIAS time
+) ENGINE = MergeTree() PARTITION BY toYYYYMM(dt) ORDER BY (dt, foo);
+CREATE TABLE t2 (
+    time DateTime,
+    bar String,
+    dimension_2 String,
+    dt Date MATERIALIZED toDate(time),
+    dt2 Date MATERIALIZED toDayOfYear(time),
+    aliascol2 ALIAS bar || dimension_2,
+    time_alias DateTime ALIAS time
+) ENGINE = MergeTree() PARTITION BY toYYYYMM(dt) ORDER BY (dt, bar);
 SELECT * FROM t1 JOIN t2 ON t1.foo = t2.bar WHERE t2.dt >= '2020-02-01';
 SELECT t1.*, t1.dt, t2.*, t2.dt FROM t1 JOIN t2 ON t1.foo = t2.bar WHERE t2.dt >= '2020-02-01';
 SELECT t1.dt, t2.dt FROM t1 JOIN t2 ON t1.foo = t2.bar ORDER BY t1.dt;

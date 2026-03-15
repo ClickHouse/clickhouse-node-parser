@@ -1,3 +1,13 @@
+SET max_threads = 1;
+
+SET max_block_size = 65536;
+
+SET max_rows_to_group_by = 65535;
+
+SET group_by_overflow_mode = 'any';
+
+SET totals_mode = 'before_having';
+
 SELECT
     number,
     count()
@@ -11,3 +21,11 @@ WITH TOTALS
 HAVING number % 3 = 0
 ORDER BY number ASC
 LIMIT 1;
+
+SET totals_mode = 'after_having_inclusive';
+
+SET totals_mode = 'after_having_exclusive';
+
+SET totals_mode = 'after_having_auto';
+
+SET totals_auto_threshold = 0.5;

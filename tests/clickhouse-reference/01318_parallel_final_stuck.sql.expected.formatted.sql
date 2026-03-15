@@ -1,3 +1,12 @@
+CREATE TABLE final_bug
+(
+    x UInt64,
+    y UInt8
+)
+ENGINE = ReplacingMergeTree(y)
+ORDER BY x
+SETTINGS index_granularity = 8;
+
 SELECT x
 FROM final_bug FINAL
 ORDER BY x ASC

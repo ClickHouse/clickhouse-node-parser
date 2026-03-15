@@ -1,3 +1,15 @@
+SET enable_full_text_index = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+CREATE TABLE tab
+(
+    id UInt64,
+    s1 String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT id
 FROM tab
 WHERE hasAllTokens(lower(s1), 'a')
@@ -7,6 +19,15 @@ SELECT id
 FROM tab
 WHERE hasAllTokens(lower(s1), 'b')
 ORDER BY id ASC;
+
+CREATE TABLE tab
+(
+    id UInt64,
+    s1 String,
+    s2 String
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT id
 FROM tab

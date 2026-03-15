@@ -1,3 +1,29 @@
+CREATE TABLE tableA
+(
+    key String
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+CREATE TABLE tableB
+(
+    key String,
+    value2 Int32
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+CREATE TABLE tableC
+(
+    key String
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+SET enable_analyzer = 1;
+
+SET join_use_nulls = 1;
+
 SELECT
     value2 = 1 AS x,
     toTypeName(x)

@@ -1,4 +1,8 @@
+-- Tags: no-fasttest
 
+set engine_file_truncate_on_insert = 1;
+set flatten_nested = 0;
+-- { echoOn }
 -- Test primitive types
 select int64_column, string_column, float64_column from file(currentDatabase() || '_02906.orc') where int64_column % 15 = 0;
 -- Test tuple type with names

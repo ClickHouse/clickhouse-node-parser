@@ -1,3 +1,11 @@
+CREATE TABLE table_3
+(
+    uid UUID,
+    date DateTime('Asia/Kamchatka')
+)
+ENGINE = ReplicatedMergeTree('/pr_local_plan/{database}/table_3', 'r1')
+ORDER BY date;
+
 SELECT
     uid,
     date,

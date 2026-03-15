@@ -1,8 +1,31 @@
+CREATE TABLE t_index_agg_func
+(
+    id UInt64,
+    v AggregateFunction(avg, UInt64),
+    INDEX idx_v v TYPE minmax GRANULARITY 1
+)
+ENGINE = AggregatingMergeTree
+ORDER BY id
+SETTINGS index_granularity = 4; -- { serverError BAD_ARGUMENTS }
+
+CREATE TABLE t_index_agg_func
+(
+    id UInt64,
+    v AggregateFunction(avg, UInt64)
+)
+ENGINE = AggregatingMergeTree
+ORDER BY id
+SETTINGS index_granularity = 4;
+
 SELECT count()
 FROM `system`.parts
 WHERE table = 't_index_agg_func'
     AND database = currentDatabase()
     AND active;
+
+SET force_data_skipping_indices = 'idx_v';
+
+SET use_skip_indexes_if_final = 1;
 
 SELECT
     id,

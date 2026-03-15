@@ -1,3 +1,5 @@
+CREATE TABLE test1 (a UInt8, b Array(DateTime)) ENGINE Memory;
+CREATE TABLE test2 as test1 ENGINE Distributed(test_shard_localhost, currentDatabase(), test1);
 SELECT 1
 FROM test2 AS test2
 ARRAY JOIN arrayFilter(t -> (t GLOBAL IN

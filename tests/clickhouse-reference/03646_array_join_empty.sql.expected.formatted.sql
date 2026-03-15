@@ -1,3 +1,13 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    x UInt32,
+    arr1 Array(Int32),
+    arr2 Array(Int32)
+)
+ENGINE = Memory;
+
 -- Test normal COLUMNS() ARRAY JOIN (should work)
 SELECT
     x,

@@ -1,3 +1,11 @@
+CREATE TABLE a
+(
+    x String,
+    y String MATERIALIZED 'str'
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/a', 'r1')
+ORDER BY x;
+
 SELECT
     'BEFORE',
     table,

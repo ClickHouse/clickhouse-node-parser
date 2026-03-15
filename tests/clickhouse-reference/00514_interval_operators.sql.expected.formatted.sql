@@ -1,3 +1,5 @@
+SET session_timezone = 'Etc/UTC';
+
 SELECT toDateTime('2017-10-30 08:18:19') + toIntervalDay(1) + toIntervalMonth(1) - toIntervalYear(1);
 
 SELECT toDateTime('2017-10-30 08:18:19') + toIntervalHour(1) + toIntervalMinute(1000) + toIntervalSecond(10);

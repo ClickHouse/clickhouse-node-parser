@@ -1,1 +1,17 @@
+CREATE TABLE lightweight_test
+(
+    ts DateTime,
+    value String,
+    key String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/lightweight_test', '1')
+PARTITION BY toYYYYMMDD(ts)
+ORDER BY (key)
+SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
+CREATE TABLE keys
+(
+    key String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/keys', '1')
+ORDER BY (key);
 SELECT key, value FROM lightweight_test ORDER BY key;

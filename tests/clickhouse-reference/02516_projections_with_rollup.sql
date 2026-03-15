@@ -1,3 +1,35 @@
+CREATE TABLE video_log
+(
+    `datetime` DateTime,
+    `user_id` UInt64,
+    `device_id` UInt64,
+    `domain` LowCardinality(String),
+    `bytes` UInt64,
+    `duration` UInt64
+)
+ENGINE = MergeTree
+PARTITION BY toDate(datetime)
+ORDER BY (user_id, device_id)
+SETTINGS index_granularity_bytes=10485760, index_granularity=8192;
+CREATE TABLE video_log_result__fuzz_0
+(
+    `hour` Nullable(DateTime),
+    `sum_bytes` UInt64,
+    `avg_duration` Float64
+)
+ENGINE = MergeTree
+PARTITION BY toDate(hour)
+ORDER BY sum_bytes
+SETTINGS allow_nullable_key = 1;
+CREATE TABLE rng
+(
+    `user_id_raw` UInt64,
+    `device_id_raw` UInt64,
+    `domain_raw` UInt64,
+    `bytes_raw` UInt64,
+    `duration_raw` UInt64
+)
+ENGINE = GenerateRandom(1024);
 -- We are not interested in the result of this query, but it should not produce a logical error.
 SELECT
     avg_duration1,

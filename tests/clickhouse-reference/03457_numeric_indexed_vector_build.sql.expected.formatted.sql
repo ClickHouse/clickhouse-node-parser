@@ -1,3 +1,12 @@
+CREATE TABLE uin_value_details
+(
+    ds Date,
+    uin UInt32,
+    value UInt64
+)
+ENGINE = MergeTree()
+ORDER BY ds;
+
 SELECT numericIndexedVectorShortDebugString(groupNumericIndexedVectorState(uin, value))
 FROM uin_value_details;
 

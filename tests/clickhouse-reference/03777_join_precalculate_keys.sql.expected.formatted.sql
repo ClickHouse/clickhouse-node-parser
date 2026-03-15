@@ -1,3 +1,16 @@
+CREATE TABLE t0
+(
+    c0 Int,
+    c1 Int
+)
+ENGINE = Memory;
+
+SET enable_analyzer = 1;
+
+SET enable_parallel_replicas = 0;
+
+SET enable_join_runtime_filters = 1;
+
 SELECT `explain`
 FROM (
         EXPLAIN header = 1, keep_logical_steps = 1

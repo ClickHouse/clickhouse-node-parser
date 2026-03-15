@@ -1,3 +1,11 @@
+-- Tags: no-parallel, no-fasttest
+-- no-parallel: it checks the number of threads, which can be lowered in presence of other queries
+SET log_queries = 1;
+
+SET max_threads = 16;
+
+SET prefer_localhost_replica = 1;
+
 SELECT sum(number)
 FROM remote('127.0.0.{1|2}', numbers_mt(1000000))
 GROUP BY number % 2

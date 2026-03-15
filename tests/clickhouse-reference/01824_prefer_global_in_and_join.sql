@@ -1,3 +1,13 @@
+-- Tags: global, no-parallel
+
+-- { echo }
+CREATE DATABASE IF NOT EXISTS test_01824;
+USE test_01824;
+create table t1_shard (id Int32) engine MergeTree order by id;
+create table t2_shard (id Int32) engine MergeTree order by id;
+create table t1_distr as t1_shard engine Distributed(test_cluster_two_shards_localhost, test_01824, t1_shard, id);
+create table t2_distr as t2_shard engine Distributed(test_cluster_two_shards_localhost, test_01824, t2_shard, id);
+SET prefer_global_in_and_join = 1;
 select d0.id from t1_distr d0
 join (
     select d1.id
@@ -6,3 +16,5 @@ join (
     where d1.id  > 0
     order by d1.id
 ) s0 using id;
+-- Force using local mode
+set distributed_product_mode = 'local';

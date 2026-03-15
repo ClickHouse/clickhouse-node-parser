@@ -1,3 +1,12 @@
+CREATE TABLE table_with_defaults_on_aliases
+(
+    col1 UInt32,
+    col2 ALIAS col1,
+    col3 DEFAULT col2
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT *
 FROM table_with_defaults_on_aliases
 WHERE col1 = 1;

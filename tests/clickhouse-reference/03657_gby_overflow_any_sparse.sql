@@ -1,3 +1,5 @@
+CREATE TABLE 03657_gby_overflow(key UInt64, val UInt16) ENGINE = MergeTree ORDER BY tuple()
+AS SELECT number, 0 from numbers(100000);
 SELECT key, any(val) FROM 03657_gby_overflow GROUP BY key ORDER BY key LIMIT 10
 SETTINGS group_by_overflow_mode = 'any',
          max_rows_to_group_by = 100,

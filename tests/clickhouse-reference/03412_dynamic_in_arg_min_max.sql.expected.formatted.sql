@@ -1,3 +1,17 @@
+CREATE TABLE test
+(
+    a UInt32,
+    d Dynamic,
+    ad Array(Dynamic),
+    td Tuple(Dynamic),
+    md Map(String, Dynamic),
+    j JSON,
+    x UInt32,
+    y UInt32,
+    z UInt32
+)
+ENGINE = Memory;
+
 SELECT
     x,
     y,

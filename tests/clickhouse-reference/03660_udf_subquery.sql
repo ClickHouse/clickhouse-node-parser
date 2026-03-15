@@ -1,3 +1,11 @@
+-- Tags: no-parallel
+
+SET enable_analyzer = 1;
+create table dict engine=MergeTree() order by id as
+select 1 as id, 'one' as name union all
+select 2 as id, 'two' as name;
+CREATE OR REPLACE FUNCTION udf_type_of_int AS
+int_ -> (select if(name = 'one', 'The One', 'other') from dict where id = int_);
 -- this part worked successfully
 SELECT * FROM (
 select udf_type_of_int(1) union all

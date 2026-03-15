@@ -1,3 +1,4 @@
+SET enable_analyzer=1;
 -- Illegal column String of first argument of function concatWithSeparator. Must be a constant String.
 SELECT concatWithSeparator('a', 'b') GROUP BY 'a';
 -- use-of-uninitialized-value
@@ -8,6 +9,8 @@ select dumpColumnStructure('x') GROUP BY 'x';
 select dumpColumnStructure('x');
 -- from https://github.com/ClickHouse/ClickHouse/pull/60046
 SELECT cityHash64('limit', _CAST(materialize('World'), 'LowCardinality(String)')) FROM system.one GROUP BY GROUPING SETS ('limit');
+CREATE TABLE ttt (hr DateTime, ts DateTime) ENGINE=Memory
+as select '2000-01-01' d, d;
 SELECT
     count(),
     now() AS c1

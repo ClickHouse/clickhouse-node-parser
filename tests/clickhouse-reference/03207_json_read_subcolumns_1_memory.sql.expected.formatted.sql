@@ -1,3 +1,19 @@
+-- Tags: no-fasttest, long
+SET enable_json_type = 1;
+
+SET allow_experimental_variant_type = 1;
+
+SET use_variant_as_common_type = 1;
+
+SET session_timezone = 'UTC';
+
+CREATE TABLE test
+(
+    id UInt64,
+    json JSON(max_dynamic_paths=2, a.b.c UInt32)
+)
+ENGINE = Memory;
+
 SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(json)) AS paths_with_types
 FROM test
 ORDER BY paths_with_types ASC;

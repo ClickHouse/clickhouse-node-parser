@@ -1,0 +1,76 @@
+CreateQuery base_table (children 3)
+ Identifier base_table
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration date (children 1)
+    DataType DateTime
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration cost (children 1)
+    DataType Float64
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier date
+
+CreateQuery target_table (children 3)
+ Identifier target_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration total (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier sum
+      DataType Float64
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery mv_from_base_to_target (children 3)
+ Identifier mv_from_base_to_target
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier id
+     Function sumState (alias total) (children 1)
+      ExpressionList (children 1)
+       Identifier cost
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier base_table
+    ExpressionList (children 1)
+     Identifier id
+ ViewTargets
+
+CreateQuery mv_with_storage (children 3)
+ Identifier mv_with_storage
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier id
+     Function sumState (children 1)
+      ExpressionList (children 1)
+       Identifier cost
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier base_table
+    ExpressionList (children 1)
+     Identifier id
+ ViewTargets (children 1)
+  Storage definition (children 2)
+   Function MergeTree (children 1)
+    ExpressionList
+   Identifier id
+
+CreateQuery other_table_1 (children 1)
+ Identifier other_table_1
+
+CreateQuery other_table_2 (children 1)
+ Identifier other_table_2

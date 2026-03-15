@@ -1,3 +1,16 @@
+CREATE TABLE decimal
+(
+    a Array(Decimal32(3)),
+    b Array(Decimal64(3)),
+    c Array(Decimal128(3)),
+    nest Nested
+    (
+        a Decimal(9,2),
+        b Decimal(18,2),
+        c Decimal(38,2)
+    ),
+    tup Tuple(Decimal32(1), Decimal64(1), Decimal128(1))
+) ENGINE = Memory;
 SELECT toTypeName(a), toTypeName(b), toTypeName(c) FROM decimal;
 SELECT toTypeName(nest.a), toTypeName(nest.b), toTypeName(nest.c) FROM decimal;
 SELECT toTypeName(a[1]), toTypeName(b[2]), toTypeName(c[3]) FROM decimal;

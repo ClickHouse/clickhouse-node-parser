@@ -1,3 +1,4 @@
+set allow_suspicious_low_cardinality_types = 1;
 select * from file(concat(currentDatabase(), '.03004_data.bsonEachRow'), auto, 'null UInt32, foo UInt32');
 select * from file(concat(currentDatabase(), '.03004_data.bsonEachRow'), auto, 'null UInt32, foo UInt32') settings input_format_force_null_for_omitted_fields = 1; -- { serverError TYPE_MISMATCH }
 select * from file(concat(currentDatabase(), '.03004_data.bsonEachRow'), auto, 'null UInt32, foo Nullable(UInt32)');

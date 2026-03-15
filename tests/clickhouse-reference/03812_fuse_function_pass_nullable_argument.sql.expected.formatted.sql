@@ -1,3 +1,13 @@
+-- { echo }
+SET optimize_syntax_fuse_functions = 1;
+
+CREATE TABLE test
+(
+    a Float64,
+    b Nullable(Int8)
+)
+ENGINE = Log;
+
 SELECT count(b) * count(b)
 FROM (
         SELECT b
@@ -32,3 +42,5 @@ SELECT
 FROM (
         SELECT CAST(materialize(1), 'Nullable(Int32)') AS a
     ) AS t;
+
+SET enable_analyzer = 1;

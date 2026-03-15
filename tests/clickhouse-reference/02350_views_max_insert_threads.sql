@@ -1,3 +1,5 @@
+create table t (a UInt64) Engine = Null;
+create materialized view t_mv Engine = Null AS select now() as ts, max(a) from t group by ts;
 select peak_threads_usage>=10 from system.query_log where
     event_date >= yesterday() and
     current_database = currentDatabase() and

@@ -1,6 +1,22 @@
+CREATE TABLE test_compact_without_substreams_advanced
+(
+    json JSON(max_dynamic_paths=8)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = '200G', min_rows_for_wide_part = 1, write_marks_for_substreams_in_compact_parts = 0, object_serialization_version = 'v3', object_shared_data_serialization_version = 'advanced', object_shared_data_serialization_version_for_zero_level_parts = 'advanced', object_shared_data_buckets_for_compact_part = 2;
+
 SELECT json
 FROM test_compact_without_substreams_advanced
 FORMAT Null;
+
+CREATE TABLE test_compact_advanced
+(
+    json JSON(max_dynamic_paths=8)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = '200G', min_rows_for_wide_part = 1, write_marks_for_substreams_in_compact_parts = 1, object_serialization_version = 'v3', object_shared_data_serialization_version = 'advanced', object_shared_data_serialization_version_for_zero_level_parts = 'advanced', object_shared_data_buckets_for_compact_part = 2;
 
 SELECT json
 FROM test_compact_advanced

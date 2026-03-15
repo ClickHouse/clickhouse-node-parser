@@ -1,3 +1,5 @@
+SET output_format_pretty_fallback_to_vertical_min_columns = 2;
+
 SELECT
     repeat('x', 100 - number) AS x,
     repeat('x', 100 - number) AS y

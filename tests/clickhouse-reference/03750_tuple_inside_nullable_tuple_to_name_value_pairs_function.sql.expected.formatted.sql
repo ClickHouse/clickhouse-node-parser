@@ -1,3 +1,6 @@
+-- { echoOn }
+SET allow_experimental_nullable_tuple_type = 1;
+
 SELECT
     tupleToNameValuePairs(CAST((1, ('x', 7)) AS Nullable(Tuple(a Int32, b Tuple(String, Int32))))) AS res,
     toTypeName(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

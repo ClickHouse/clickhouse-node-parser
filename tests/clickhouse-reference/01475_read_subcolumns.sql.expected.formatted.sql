@@ -1,3 +1,14 @@
+-- Tags: no-object-storage, no-random-settings, no-parallel
+SET use_uncompressed_cache = 0;
+
+CREATE TABLE t_arr
+(
+    a Array(UInt32)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0;
+
 SELECT a.size0
 FROM t_arr;
 
@@ -6,6 +17,14 @@ FROM `system`.query_log
 WHERE (type = 'QueryFinish')
     AND (like(lower(query), lower('SELECT a.size0 FROM %t_arr%')))
     AND current_database = currentDatabase();
+
+CREATE TABLE t_tup
+(
+    t Tuple(s String, u UInt32)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0, serialization_info_version = 'basic';
 
 SELECT t.s
 FROM t_tup;
@@ -19,6 +38,14 @@ WHERE (type = 'QueryFinish')
     AND (like(lower(query), lower('SELECT t._ FROM %t_tup%')))
     AND current_database = currentDatabase();
 
+CREATE TABLE t_nul
+(
+    n Nullable(UInt32)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0;
+
 SELECT n.`null`
 FROM t_nul;
 
@@ -27,6 +54,14 @@ FROM `system`.query_log
 WHERE (type = 'QueryFinish')
     AND (like(lower(query), lower('SELECT n.null FROM %t_nul%')))
     AND current_database = currentDatabase();
+
+CREATE TABLE t_map
+(
+    m Map(String, UInt32)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0, serialization_info_version = 'basic';
 
 SELECT m.keys
 FROM t_map;

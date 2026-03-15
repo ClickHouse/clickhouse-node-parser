@@ -1,3 +1,12 @@
+SET cross_to_inner_join_rewrite = 1;
+CREATE TABLE codecTest (
+    key      UInt64,
+    name     String,
+    ref_valueF64 Float64,
+    ref_valueF32 Float32,
+    valueF64 Float64  CODEC(Gorilla),
+    valueF32 Float32  CODEC(Gorilla)
+) Engine = MergeTree ORDER BY key;
 SELECT
 	c1.key, c1.name,
 	c1.ref_valueF64, c1.valueF64, c1.ref_valueF64 - c1.valueF64 AS dF64,

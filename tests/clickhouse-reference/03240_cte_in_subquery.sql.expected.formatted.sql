@@ -1,3 +1,14 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE subquery_cte_in
+(
+    date DateTime64(3),
+    label UInt32,
+    id UInt32
+)
+ENGINE = MergeTree
+ORDER BY (label, id, date);
+
 SELECT max(date_out)
 FROM (
         WITH (

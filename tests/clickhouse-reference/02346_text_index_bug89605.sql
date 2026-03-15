@@ -1,3 +1,25 @@
+-- Test for issue #89605
+
+SET enable_full_text_index = 1;
+SET use_skip_indexes_on_data_read = 1;
+SET query_plan_direct_read_from_text_index = 0;
+SET max_threads = 2; -- make sure it's running multi-threaded
+CREATE TABLE tab
+(
+  id UInt64,
+  msg String,
+  INDEX id_msg msg TYPE text(tokenizer = sparseGrams)
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+SETTINGS index_granularity = 128;
 SELECT count() FROM tab WHERE hasAllTokens(msg, sparseGrams('click'));
 SELECT count() FROM tab WHERE hasAnyTokens(msg, sparseGrams('click'));
+CREATE TABLE tab
+(
+  id UInt64,
+  msg String
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
 SELECT sum(length(tokens(msg, 'sparseGrams'))) FROM tab;

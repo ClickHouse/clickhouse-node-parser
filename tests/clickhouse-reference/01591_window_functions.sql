@@ -1,3 +1,11 @@
+-- Tags: long
+
+SET enable_analyzer = 1;
+-- Too slow
+SET max_bytes_before_external_sort = 0;
+SET max_bytes_ratio_before_external_sort = 0;
+SET max_bytes_before_external_group_by = 0;
+SET max_bytes_ratio_before_external_group_by = 0;
 -- { echo }
 
 -- just something basic
@@ -254,6 +262,8 @@ SELECT
     max(number) OVER (ORDER BY number ASC NULLS FIRST)
 FROM numbers(2)
 ;
+create table window_mt engine MergeTree order by number
+    as select number, mod(number, 3) p from numbers(100);
 select number, count(*) over (partition by p)
     from window_mt order by number limit 10 settings optimize_read_in_order = 0;
 select number, count(*) over (partition by p)

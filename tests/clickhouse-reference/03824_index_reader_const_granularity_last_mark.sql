@@ -1,3 +1,16 @@
+CREATE TABLE tab
+(
+    id Int32,
+    v1 Int32,
+    v2 Int32,
+    INDEX v1idx v1 TYPE minmax
+) Engine = MergeTree ORDER BY id
+SETTINGS index_granularity = 64,
+    min_bytes_for_wide_part = 0,
+    min_bytes_for_full_part_storage = 0,
+    max_bytes_to_merge_at_max_space_in_pool = 1,
+    use_const_adaptive_granularity = 1,
+    index_granularity_bytes = 0;
 -- This query triggers lazy materialization with index reader as the first reader in the chain.
 -- The bug was that the index reader reported 64 rows for the last granule (instead of 16),
 -- causing a mismatch with the actual data reader.

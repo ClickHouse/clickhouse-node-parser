@@ -1,4 +1,4 @@
-
+-- { echoOn }
 -- year
 select parseDateTime('2020', '%Y', 'UTC') = toDateTime('2020-01-01', 'UTC');
 -- month
@@ -16,9 +16,11 @@ select parseDateTime('13', '%c'); -- { serverError CANNOT_PARSE_DATETIME }
 select parseDateTime('12345', '%c'); -- { serverError CANNOT_PARSE_DATETIME }
 select parseDateTime('jun', '%b', 'UTC') = toDateTime('2000-06-01', 'UTC');
 select parseDateTime('abc', '%b'); -- { serverError CANNOT_PARSE_DATETIME }
+set formatdatetime_parsedatetime_m_is_month_name = 1;
 select parseDateTime('may', '%M', 'UTC') = toDateTime('2000-05-01', 'UTC');
 select parseDateTime('september', '%M', 'UTC') = toDateTime('2000-09-01', 'UTC');
 select parseDateTime('summer', '%M'); -- { serverError CANNOT_PARSE_DATETIME }
+set formatdatetime_parsedatetime_m_is_month_name = 0;
 select parseDateTime('08', '%M', 'UTC') = toDateTime('1970-01-01 00:08:00', 'UTC');
 select parseDateTime('59', '%M', 'UTC') = toDateTime('1970-01-01 00:59:00', 'UTC');
 select parseDateTime('00/', '%M/', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
@@ -158,6 +160,8 @@ select parseDateTime('08 13, 2022, 07:58:32', '%m %e, %G, %k:%i:%s', 'UTC');
 -- %c accepts single or double digits inputs
 select parseDateTime('8 13, 2022, 7:58:32', '%c %e, %G, %k:%i:%s', 'UTC');
 select parseDateTime('08 13, 2022, 07:58:32', '%c %e, %G, %k:%i:%s', 'UTC');
+-- The format string argument is optional
+set session_timezone = 'UTC'; -- don't randomize the session timezone
 select parseDateTime('2021-01-04 23:12:34') = toDateTime('2021-01-04 23:12:34');
 select parseDateTime(''); -- { serverError NOT_ENOUGH_SPACE }
 -- Test setting 'parsedatetime_e_requires_space_padding'

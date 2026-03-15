@@ -1,1 +1,2 @@
+CREATE TEMPORARY TABLE test_00724 (d Date, dt DateTime);
 SELECT * FROM test_00724;

@@ -1,3 +1,12 @@
+-- Tags: no-parallel-replicas
+
+SET enable_full_text_index = 1;
+CREATE TABLE tab
+(
+    col LowCardinality(String),
+    INDEX idx col type text(tokenizer='array')
+)
+ENGINE = MergeTree ORDER BY tuple();
 SELECT count() FROM tab WHERE col = 'config';
 SELECT trim(explain) FROM
 (

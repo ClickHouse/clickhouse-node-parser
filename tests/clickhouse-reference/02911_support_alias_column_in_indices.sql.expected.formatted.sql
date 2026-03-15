@@ -1,0 +1,21 @@
+-- add_minmax_index_for_numeric_columns=0: Different plan
+CREATE TABLE test1
+(
+    c UInt32,
+    a ALIAS c + 1,
+    INDEX i (a) TYPE minmax
+)
+ENGINE = MergeTree
+ORDER BY c
+SETTINGS index_granularity = 8192, min_index_granularity_bytes = 1024, index_granularity_bytes = 10485760, add_minmax_index_for_numeric_columns = 0; -- default settings, prevent randomization in tests
+
+CREATE TABLE test2
+(
+    c UInt32,
+    a1 ALIAS c + 1,
+    a2 ALIAS a1 + 1,
+    INDEX i (a2) TYPE minmax
+)
+ENGINE = MergeTree
+ORDER BY c
+SETTINGS index_granularity = 8192, min_index_granularity_bytes = 1024, index_granularity_bytes = 10485760, add_minmax_index_for_numeric_columns = 0; -- default settings, prevent randomization in tests

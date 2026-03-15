@@ -1,5 +1,244 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "joined_subquery_requires_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, no-object-storage, no-asan, no-msan"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- We are no longer interested in the old analyzer."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "video_views"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "entityIri",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "courseId",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "learnerId",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "actorId",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "duration",
+        "type": "UInt16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatched",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatchedDate",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatchedDuration",
+        "type": "UInt16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatchedTime",
+        "type": "UInt16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatchedViews",
+        "type": "UInt16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.viewId",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.startedAt",
+        "type": "Array(DateTime)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.endedAt",
+        "type": "Array(DateTime)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.viewDuration",
+        "type": "Array(UInt16)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.watchedPart",
+        "type": "Array(Float32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.fullWatched",
+        "type": "Array(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.progress",
+        "type": "Array(Float32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.reject",
+        "type": "Array(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.viewNumber",
+        "type": "Array(UInt16)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.repeatingView",
+        "type": "Array(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.ranges",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "version",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "version"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "entityIri"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "learnerId"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "entityIri"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_string"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "entityIri",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_ui64"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "learnerId",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -3354,6 +3593,96 @@
         }
       }
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "32"
+        }
+      },
+      {
+        "name": "max_memory_usage",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10G"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test for tsan: Ensure cache is used from one thread"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sample_00632"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Date",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "UInt16"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300"
+        }
+      }
+    ]
   },
   {
     "kind": "select",

@@ -1,3 +1,9 @@
+CREATE TABLE test_00681
+(
+    x Int32
+)
+ENGINE = Log;
+
 SELECT a1
 FROM (
         SELECT

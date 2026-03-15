@@ -1,3 +1,20 @@
+CREATE TABLE dict_src_neg
+(
+    id   UInt64,
+    u64  UInt64,
+    i32n Nullable(Int32)
+) ENGINE = Memory;
+CREATE DICTIONARY dict_neg
+(
+    id   UInt64,
+    u64  UInt64,
+    i32n Nullable(Int32)
+)
+
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(TABLE 'dict_src_neg'))
+LIFETIME(0)
+LAYOUT(HASHED());
 SELECT dictGetKeys(toString(number), 'u64', toUInt64(7)) FROM numbers(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT dictGetKeys('dict_neg', toString(number), toUInt64(7)) FROM numbers(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT dictGetKeys('dict_neg', 'no_such_attr', toUInt64(7)); -- { serverError ILLEGAL_COLUMN }
@@ -6,14 +23,137 @@ SELECT dictGetKeys('dict_neg', 'u64', toUInt64(7), 1); -- { serverError NUMBER_O
 SELECT dictGetKeys('dict_neg', 'i32n', tuple(number)) FROM numbers(3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT dictGetKeys('non_a_dict_name', 'i32n', tuple(number)) FROM numbers(3); -- { serverError BAD_ARGUMENTS }
 SELECT dictGetKeys('dict_neg', 'not_a_attr_col', tuple(number)) FROM numbers(3); -- { serverError ILLEGAL_COLUMN }
+CREATE TABLE dict_src_simple_kv
+(
+    id   UInt64,
+    attr Int32
+) ENGINE = Memory;
+CREATE DICTIONARY dict_simple_kv
+(
+    id   UInt64,
+    attr Int32
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(TABLE 'dict_src_simple_kv'))
+LIFETIME(0)
+LAYOUT(HASHED());
 SELECT dictGetKeys('dict_simple_kv', 'attr', toUInt32(10));
 SELECT toTypeName(dictGetKeys('dict_simple_kv', 'attr', toUInt32(10)));
+CREATE TABLE dict_src_complex2_kv
+(
+    k1   UInt64,
+    k2   String,
+    attr Int32
+) ENGINE = Memory;
+CREATE DICTIONARY dict_complex2_kv
+(
+    k1   UInt64,
+    k2   String,
+    attr Int32
+)
+PRIMARY KEY k1, k2
+SOURCE(CLICKHOUSE(TABLE 'dict_src_complex2_kv'))
+LIFETIME(0)
+LAYOUT(COMPLEX_KEY_HASHED());
 SELECT dictGetKeys('dict_complex2_kv', 'attr', 10);
 SELECT toTypeName(dictGetKeys('dict_complex2_kv', 'attr', 10));
+CREATE TABLE dict_src_complex1_kv
+(
+    k1   UInt64,
+    attr Int32
+) ENGINE = Memory;
+CREATE DICTIONARY dict_complex1_kv
+(
+    k1   UInt64,
+    attr Int32
+)
+PRIMARY KEY k1
+SOURCE(CLICKHOUSE(TABLE 'dict_src_complex1_kv'))
+LIFETIME(0)
+LAYOUT(COMPLEX_KEY_HASHED());
 SELECT dictGetKeys('dict_complex1_kv', 'attr', 1);
 SELECT toTypeName(dictGetKeys('dict_complex1_kv', 'attr', 1));
+CREATE TABLE dict_src_complex_wide_kv
+(
+    a1 UInt64,
+    a2 Int64,
+    a3 String,
+    a4 Date,
+    a5 UUID,
+    a6 IPv4,
+    a7 IPv6,
+    a8 DateTime64(3),
+    attr Int32
+) ENGINE = Memory;
+CREATE DICTIONARY dict_complex_wide_kv
+(
+    a1 UInt64,
+    a2 Int64,
+    a3 String,
+    a4 Date,
+    a5 UUID,
+    a6 IPv4,
+    a7 IPv6,
+    a8 DateTime64(3),
+    attr Int32
+)
+
+PRIMARY KEY a1, a2, a3, a4, a5, a6, a7, a8
+SOURCE(CLICKHOUSE(TABLE 'dict_src_complex_wide_kv'))
+LIFETIME(0)
+LAYOUT(COMPLEX_KEY_HASHED());
 SELECT dictGetKeys('dict_complex_wide_kv', 'attr', 10);
 SELECT toTypeName(dictGetKeys('dict_complex_wide_kv', 'attr', 10));
+CREATE TABLE dict_src_types
+(
+    id   UInt64,
+    i8   Int8,
+    u8   UInt8,
+    i64  Int64,
+    u64  UInt64,
+    f32  Float32,
+    f64  Float64,
+    dec32 Decimal32(3),
+    dec64 Decimal64(3),
+    d    Date,
+    dt   DateTime,
+    dt64 DateTime64(3),
+    uuid UUID,
+    ip4  IPv4,
+    ip6  IPv6,
+    s    String,
+    arr_u64    Array(UInt64),
+    arr_nested Array(Array(UInt8)),
+    n_i32 Nullable(Int32),
+    n_str Nullable(String)
+) ENGINE = Memory;
+CREATE DICTIONARY dict_types
+(
+    id   UInt64,
+    i8   Int8,
+    u8   UInt8,
+    i64  Int64,
+    u64  UInt64,
+    f32  Float32,
+    f64  Float64,
+    dec32 Decimal32(3),
+    dec64 Decimal64(3),
+    d    Date,
+    dt   DateTime,
+    dt64 DateTime64(3),
+    uuid UUID,
+    ip4  IPv4,
+    ip6  IPv6,
+    s    String,
+    arr_u64    Array(UInt64),
+    arr_nested Array(Array(UInt8)),
+    n_i32 Nullable(Int32),
+    n_str Nullable(String)
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(TABLE 'dict_src_types'))
+LIFETIME(0)
+LAYOUT(HASHED());
 SELECT dictGetKeys('dict_types', 'i8', '-128');
 SELECT dictGetKeys('dict_types', 'i8', '0');
 SELECT dictGetKeys('dict_types', 'i8', '127');
@@ -45,6 +185,24 @@ SELECT dictGetKeys('dict_types', 'ip6', '2001:db8::1');
 SELECT dictGetKeys('dict_types', 's', '');
 SELECT dictGetKeys('dict_types', 'dec32', '1.234');
 SELECT dictGetKeys('dict_types', 'dec64', '42.500');
+CREATE TABLE dict_src_valexpr
+(
+    id    UInt64,
+    s     String,
+    i32n  Nullable(Int32),
+    u64   UInt64
+) ENGINE = Memory;
+CREATE DICTIONARY dict_valexpr
+(
+    id    UInt64,
+    s     String,
+    i32n  Nullable(Int32),
+    u64   UInt64
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(TABLE 'dict_src_valexpr'))
+LIFETIME(0)
+LAYOUT(HASHED());
 SELECT dictGetKeys('dict_valexpr', 's', 'alpha');
 SELECT dictGetKeys('dict_valexpr', 's', v)
 FROM (SELECT arrayJoin(['alpha','beta','zzz']) AS v);
@@ -60,6 +218,20 @@ SELECT dictGetKeys('dict_valexpr', 'u64', CAST('42' AS Nullable(String)));
 SELECT dictGetKeys('dict_valexpr', 'i32n', x)
 FROM (SELECT arrayJoin([CAST(NULL AS Nullable(Int32)), CAST(10 AS Nullable(Int32)), CAST(NULL AS Nullable(Int32)), CAST(-5 AS Nullable(Int32))]) AS x);
 SELECT dictGetKeys('dict_valexpr', 'u64', '42');
+CREATE TABLE dict_src_match
+(
+    id  UInt64,
+    grp String
+) ENGINE = Memory;
+CREATE DICTIONARY dict_match
+(
+    id  UInt64,
+    grp String
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(TABLE 'dict_src_match'))
+LIFETIME(0)
+LAYOUT(HASHED());
 SELECT dictGetKeys('dict_match', 'grp', 'Z');
 SELECT dictGetKeys('dict_match', 'grp', v)
 FROM (SELECT arrayJoin(['Z','Y']) AS v);

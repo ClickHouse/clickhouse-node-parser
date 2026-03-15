@@ -1,3 +1,6 @@
+SET optimize_on_insert = 0;
+set allow_deprecated_syntax_for_merge_tree=1;
+CREATE TABLE summing_composite_key (d Date, k UInt64, FirstMap Nested(k1 UInt32, k2ID Int8, s Float64), SecondMap Nested(k1ID UInt64, k2Key String, k3Type Int32, s Int64)) ENGINE = SummingMergeTree(d, k, 1);
 SELECT * FROM summing_composite_key ORDER BY d, k, FirstMap.k1, FirstMap.k2ID, FirstMap.s, SecondMap.k1ID, SecondMap.k2Key, SecondMap.k3Type, SecondMap.s;
 SELECT d, k, m.k1, m.k2ID, m.s FROM summing_composite_key ARRAY JOIN FirstMap AS m ORDER BY d, k, m.k1, m.k2ID, m.s, SecondMap.k1ID, SecondMap.k2Key, SecondMap.k3Type, SecondMap.s;
 SELECT d, k, m.k1, m.k2ID, sum(m.s) FROM summing_composite_key ARRAY JOIN FirstMap AS m GROUP BY d, k, m.k1, m.k2ID ORDER BY d, k, m.k1, m.k2ID;

@@ -1,3 +1,4 @@
+CREATE TABLE nested_test (s String, nest Nested(x UInt8, y UInt32)) ENGINE = Memory;
 SELECT * FROM nested_test;
 SELECT s, nest.x, nest.y FROM nested_test ARRAY JOIN nest;
 SELECT s, nest.x, nest.y FROM nested_test ARRAY JOIN nest.x;

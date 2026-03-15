@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT 1.1::Decimal(60, 30);
 
 SELECT round(1.1::Decimal(60, 30));
@@ -89,6 +90,14 @@ SELECT coalesce(cast('123', 'Nullable(Decimal(20, 10))'), 0);
 SELECT coalesce(cast('123', 'Nullable(Decimal(40, 10))'), 0);
 
 SELECT coalesce(cast('123', 'Decimal(40, 10)'), 0);
+
+CREATE TABLE decimal_insert_cast_issue
+(
+    a Decimal(76, 0)
+)
+ENGINE = TinyLog;
+
+SET param_param = 1;
 
 SELECT *
 FROM decimal_insert_cast_issue;

@@ -1,5 +1,75 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: distributed"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test5346"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Id",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Timestamp",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "updated",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "updated"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "tuple",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Timestamp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

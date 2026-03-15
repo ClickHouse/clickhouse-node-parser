@@ -1,3 +1,10 @@
+CREATE TABLE num_10m
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT *
 FROM (
         SELECT sum(number)

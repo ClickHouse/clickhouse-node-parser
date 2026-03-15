@@ -1,3 +1,10 @@
+CREATE TABLE t_subcolumns_if
+(
+    id Nullable(Int64)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT sum(multiIf(isNotNull(id), 1, 0))
 FROM t_subcolumns_if
 SETTINGS

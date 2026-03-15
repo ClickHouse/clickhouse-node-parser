@@ -1,3 +1,17 @@
+SET allow_experimental_statistics = 1;
+CREATE TABLE test_table
+(
+    id UInt64,
+    v1 String STATISTICS(uniq),
+    v2 UInt64 STATISTICS(tdigest),
+    v3 String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS
+    enable_block_number_column = 0,
+    enable_block_offset_column = 0,
+    auto_statistics_types = 'uniq,minmax';
 SELECT name, column, type, statistics, estimates.cardinality, estimates.min, estimates.max
 FROM system.parts_columns
 WHERE database = currentDatabase() AND table = 'test_table' AND active

@@ -1,3 +1,17 @@
+CREATE TABLE test
+(
+    a DateTime,
+    b DateTime(),
+    c DateTime(2),
+    d DateTime('Asia/Istanbul'),
+    e DateTime(3, 'Asia/Istanbul'),
+    f DateTime32,
+    g DateTime32('Asia/Istanbul'),
+    h DateTime(0)
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT
     a,
     toTypeName(a),

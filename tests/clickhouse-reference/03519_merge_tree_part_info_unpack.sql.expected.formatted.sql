@@ -1,3 +1,13 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE mt
+(
+    key UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY key;
+
 SELECT _part
 FROM mt
 ORDER BY tupleElement(mergeTreePartInfo(_part), 'max_block') DESC;

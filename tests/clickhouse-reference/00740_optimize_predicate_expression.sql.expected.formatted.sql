@@ -1,3 +1,11 @@
+CREATE TABLE perf
+(
+    site String,
+    user_id UInt64,
+    z Float64
+)
+ENGINE = Log;
+
 SELECT *
 FROM (
         SELECT perf_1.z AS z_1

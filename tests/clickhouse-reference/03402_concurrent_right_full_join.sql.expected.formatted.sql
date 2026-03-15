@@ -1,3 +1,25 @@
+SET join_use_nulls = 1;
+
+SET enable_analyzer = 1;
+
+SET join_algorithm = 'parallel_hash';
+
+SET query_plan_join_swap_table = 0;
+
+CREATE TABLE t_l_small
+(
+    id UInt32,
+    value String
+)
+ENGINE = Memory;
+
+CREATE TABLE t_r_small
+(
+    id UInt32,
+    description String
+)
+ENGINE = Memory;
+
 SELECT
     l.id,
     l.value,
@@ -22,6 +44,20 @@ ORDER BY
     coalesce(l.id, r.id) ASC,
     r.id ASC;
 
+CREATE TABLE t_l_any
+(
+    id UInt32,
+    value String
+)
+ENGINE = Memory;
+
+CREATE TABLE t_r_any
+(
+    id UInt32,
+    description String
+)
+ENGINE = Memory;
+
 SELECT
     count(),
     countIf(isNull(l.value))
@@ -29,6 +65,20 @@ FROM
     t_l_any AS l
 RIGHT JOIN t_r_any AS r
     ON l.id = r.id;
+
+CREATE TABLE t_l_filter
+(
+    id UInt32,
+    value String
+)
+ENGINE = Memory;
+
+CREATE TABLE t_r_filter
+(
+    id UInt32,
+    description String
+)
+ENGINE = Memory;
 
 SELECT
     l.id,
@@ -41,6 +91,20 @@ RIGHT JOIN t_r_filter AS r
     AND like(r.description, 'F%')
 ORDER BY r.id ASC;
 
+CREATE TABLE t_l_null
+(
+    id UInt32,
+    v String
+)
+ENGINE = Memory;
+
+CREATE TABLE t_r_null
+(
+    id Nullable(UInt32),
+    d String
+)
+ENGINE = Memory;
+
 SELECT
     l.id,
     l.v,
@@ -50,6 +114,22 @@ FROM
 RIGHT JOIN t_r_null AS r
     ON l.id = r.id
 ORDER BY r.d ASC;
+
+CREATE TABLE t_l_cmp
+(
+    id UInt32,
+    grp UInt8,
+    val String
+)
+ENGINE = Memory;
+
+CREATE TABLE t_r_cmp
+(
+    id UInt32,
+    grp UInt8,
+    descr String
+)
+ENGINE = Memory;
 
 SELECT
     l.id,
@@ -95,6 +175,26 @@ FULL JOIN (
         FROM numbers(15500)
     ) AS r
     ON l.id = r.id;
+
+SET allow_experimental_analyzer = 1;
+
+CREATE TABLE l
+(
+    k UInt8,
+    v UInt8
+)
+ENGINE = Memory;
+
+CREATE TABLE r
+(
+    k UInt8,
+    v UInt8
+)
+ENGINE = Memory;
+
+SET max_threads = 8;
+
+SET join_algorithm = 'hash';
 
 SELECT
     'hash' AS alg,

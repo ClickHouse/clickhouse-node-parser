@@ -1,3 +1,20 @@
+CREATE TABLE tab_with_primary_key_index
+(
+    id UInt32,
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE TABLE tab_with_primary_key_index_and_skipping_index
+(
+    id UInt32,
+    a UInt32,
+    INDEX idx a TYPE set(0)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 -- Check that information_schema.tables.index_length is larger than 0 for both tables
 SELECT if(index_length > 0, 'OK', 'FAIL')
 FROM information_schema.tables

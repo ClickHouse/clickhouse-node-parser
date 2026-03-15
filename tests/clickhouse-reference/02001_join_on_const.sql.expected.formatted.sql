@@ -1,3 +1,19 @@
+CREATE TABLE t1
+(
+    id Int
+)
+ENGINE = TinyLog;
+
+CREATE TABLE t2
+(
+    id Int
+)
+ENGINE = TinyLog;
+
+SET min_joined_block_size_bytes = 0;
+
+SET max_block_size = 100;
+
 SELECT count() == 2222
 FROM
     t1

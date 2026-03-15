@@ -1,3 +1,14 @@
+CREATE TABLE trend
+(
+    `event_date` Date,
+    `user_id` Int32,
+    `timestamp` DateTime,
+    `eventID` Int32,
+    `product` String
+)
+ENGINE = MergeTree()
+PARTITION BY toYYYYMM(event_date)
+ORDER BY user_id;
 SELECT
     level,
     count() AS c

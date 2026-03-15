@@ -1,2 +1,18 @@
+CREATE TABLE table_with_lc_key
+(
+    enum_key Enum8('x' = 2, 'y' = 1),
+    lc_key LowCardinality(String),
+    value String
+)
+ENGINE MergeTree()
+ORDER BY (enum_key, lc_key);
 SELECT * FROM table_with_lc_key WHERE enum_key > 0 and lc_key like 'h%';
+CREATE TABLE table_with_string_key
+(
+    int_key Int8,
+    str_key String,
+    value String
+)
+ENGINE MergeTree()
+ORDER BY (int_key, str_key);
 SELECT * FROM table_with_string_key WHERE int_key > 0 and str_key like 'h%';

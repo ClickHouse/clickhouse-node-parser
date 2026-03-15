@@ -1,3 +1,5 @@
+CREATE TABLE ts_data (timestamp DateTime('UTC'), value Float64) ENGINE=MergeTree() ORDER BY tuple();
+SET allow_experimental_ts_to_grid_aggregate_function = 1;
 SELECT groupArraySorted(30)((toUnixTimestamp(timestamp), value)) FROM ts_data;
 -- Test for returning multiple rows in batch
 SELECT intDiv(toUnixTimestamp(timestamp), 130)*130 as fake_key, timeSeriesResampleToGridWithStaleness(100, 200, 10, 15)(timestamp, value) FROM ts_data GROUP BY fake_key ORDER BY fake_key;
@@ -6,6 +8,8 @@ SELECT avgForEach(values), countForEach(values) AS avg_values
 FROM (
     SELECT intDiv(toUnixTimestamp(timestamp), 130)*130 as fake_key, timeSeriesResampleToGridWithStaleness(100, 200, 10, 15)(timestamp, value) AS values FROM ts_data GROUP BY fake_key
 );
+-- AggregatingMergeTree Table to test (de)serialization of timeSeriesResampleToGridWithStaleness state
+CREATE TABLE ts_data_agg(k UInt64, agg AggregateFunction(timeSeriesResampleToGridWithStaleness(100, 200, 10, 15), DateTime('UTC'), Float64)) ENGINE AggregatingMergeTree() ORDER BY k;
 SELECT k, finalizeAggregation(agg) FROM ts_data_agg FINAL ORDER BY k;
 -- Check that -Merge returns the same result as the result form original table
 SELECT timeSeriesResampleToGridWithStaleness(100, 200, 10, 15)(timestamp, value) FROM ts_data;

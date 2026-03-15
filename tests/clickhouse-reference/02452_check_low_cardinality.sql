@@ -1,3 +1,6 @@
+CREATE TABLE test_low_cardinality_string (data String) ENGINE MergeTree ORDER BY data;
+CREATE TABLE test_low_cardinality_uuid (data String) ENGINE MergeTree ORDER BY data;
+CREATE TABLE test_low_cardinality_int (data String) ENGINE MergeTree ORDER BY data;
 SELECT JSONExtract(data, 'Tuple(
                             a LowCardinality(String),
                             b LowCardinality(String),

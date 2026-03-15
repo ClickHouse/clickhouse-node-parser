@@ -1,3 +1,11 @@
+CREATE TABLE prd_bid_events_simple_no_partition
+(
+    `type` LowCardinality(String),
+    `timestamp` DateTime64(9)
+)
+ENGINE = MergeTree()
+PRIMARY KEY (timestamp, type)
+ORDER BY (timestamp, type);
 SELECT
     type,
     count()

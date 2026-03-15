@@ -1,3 +1,4 @@
+CREATE TABLE tb2 (`period` UInt32, `ts` Array(Float64)) ENGINE = Memory;
 SELECT seriesDecomposeSTL([10.1, 20.45, 40.34, 10.1, 20.45, 40.34, 10.1, 20.45, 40.34, 10.1, 20.45, 40.34, 10.1, 20.45, 40.34, 10.1, 20.45, 40.34, 10.1, 20.45, 40.34, 10.1, 20.45, 40.34], 3);
 SELECT seriesDecomposeSTL([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], 0);
 SELECT seriesDecomposeSTL(ts, period) FROM tb2 ORDER BY period;

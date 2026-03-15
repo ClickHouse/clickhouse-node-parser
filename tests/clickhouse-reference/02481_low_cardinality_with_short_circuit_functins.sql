@@ -1,3 +1,4 @@
+set short_circuit_function_evaluation='force_enable';
 select if(0, toLowCardinality('a'), 'b');
 select if(1, toLowCardinality('a'), 'b');
 select if(materialize(0), materialize(toLowCardinality('a')), materialize('b'));

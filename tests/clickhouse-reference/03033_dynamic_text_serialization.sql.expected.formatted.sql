@@ -1,3 +1,7 @@
+SET allow_experimental_dynamic_type = 1;
+
+SET input_format_json_infer_array_of_dynamic_from_array_of_different_types = 0;
+
 SELECT
     d,
     dynamicType(d)
@@ -74,6 +78,14 @@ FROM format(Values, 'd Dynamic', '
 (true)
 ')
 FORMAT Values;
+
+CREATE TABLE test
+(
+    s String
+)
+ENGINE = Memory;
+
+SET cast_string_to_dynamic_use_inference = 1;
 
 SELECT
     s::Dynamic AS d,

@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+
+SET enable_analyzer = 1;
+CREATE TABLE one(dummy UInt8) ENGINE = Memory;
 SELECT database, t.name
     FROM system.tables AS t
     ALL INNER JOIN (SELECT name AS database FROM system.databases) AS db USING database
@@ -30,6 +34,7 @@ SELECT x, t.name
     WHERE x = 'system' AND t.name = 'one'
     SETTINGS join_default_strictness = 'ALL'
     FORMAT PrettyCompactNoEscapes;
+SET join_default_strictness = 'ALL';
 SELECT database, t.name
     FROM (SELECT * FROM system.tables) AS t
     JOIN (SELECT name, name AS database FROM system.databases) AS db USING database

@@ -1,2 +1,22 @@
+CREATE TABLE 03409_users
+(
+    `uid` Int16,
+    `name` String,
+    `age` Nullable(Int16),
+    `age2` Nullable(Int16),
+    `version` Nullable(UInt8)
+)
+ENGINE = CoalescingMergeTree()
+ORDER BY (uid, name);
 SELECT * FROM 03409_users FINAL ORDER BY ALL;
 SELECT * FROM 03409_users ORDER BY ALL;
+CREATE TABLE 03409_users
+(
+    `uid` Int16,
+    `name` String,
+    `age` Nullable(Int16),
+    `age2` Nullable(Int16),
+    `version` Nullable(UInt8)
+)
+ENGINE = CoalescingMergeTree(version)
+ORDER BY (uid, name);

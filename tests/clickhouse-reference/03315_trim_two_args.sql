@@ -62,6 +62,7 @@ SELECT trimLeft('hello', 'a', 'b'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_
 SELECT trimRight(123, 'a'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT trimBoth('hello', 123); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT trimBoth('hello', materialize('a')); -- { serverError ILLEGAL_COLUMN }
+CREATE TABLE tab (col FixedString(3)) ENGINE = Memory;
 SELECT trim(trailing char(0) from col) FROM tab;
 SELECT trim(both 'ac' from col) FROM tab;
 -- Bug 78796

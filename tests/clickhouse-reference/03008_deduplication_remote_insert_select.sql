@@ -1,7 +1,25 @@
-
+CREATE TABLE src (a UInt64, b UInt64)
+    ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/03008_deduplication_remote_insert_select/src', '{replica}')
+    ORDER BY tuple();
+SET allow_experimental_parallel_reading_from_replicas=1;
+SET max_parallel_replicas=3;
+SET parallel_replicas_for_non_replicated_merge_tree=1;
+SET cluster_for_parallel_replicas='parallel_replicas';
+-- { echoOn }
 SELECT count() FROM src;
 SELECT a, sum(b), uniq(b), FROM src GROUP BY a ORDER BY a;
 SELECT count() FROM remote('127.0.0.{1..2}', currentDatabase(), src);
+CREATE TABLE dst_null(a UInt64, b UInt64)
+    ENGINE = Null;
+CREATE MATERIALIZED VIEW mv_dst
+    ENGINE = AggregatingMergeTree()
+    ORDER BY a
+    AS SELECT
+        a,
+        sumState(b)  AS sum_b,
+        uniqState(b) AS uniq_b
+    FROM dst_null
+    GROUP BY a;
 SELECT
     a,
     sumMerge(sum_b) AS sum_b,

@@ -1,3 +1,16 @@
+-- Tags: distributed
+SET enable_parallel_replicas = 0;
+
+CREATE TABLE test5346
+(
+    Id String,
+    Timestamp DateTime,
+    updated DateTime
+)
+ENGINE = ReplacingMergeTree(updated)
+ORDER BY (Timestamp, Id)
+PARTITION BY tuple();
+
 SELECT
     Id,
     Timestamp

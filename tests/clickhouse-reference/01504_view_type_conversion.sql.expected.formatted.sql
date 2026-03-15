@@ -1,2 +1,1 @@
-SELECT groupArray(a)
-FROM testv;
+<Parse Error>

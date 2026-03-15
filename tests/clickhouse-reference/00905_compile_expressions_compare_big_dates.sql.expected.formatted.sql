@@ -1,3 +1,13 @@
+SET compile_expressions = 1;
+
+SET min_count_to_compile_expression = 1;
+
+CREATE TABLE foo_c
+(
+    d DateTime
+)
+ENGINE = Memory;
+
 SELECT toDate(d) AS dd
 FROM foo_c
 WHERE (dd >= '2019-02-06')

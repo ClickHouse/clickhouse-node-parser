@@ -14,6 +14,11 @@ FROM (
         SELECT arrayJoin([1, 2, 3]) = 3 AS x
     );
 
+CREATE TEMPORARY TABLE test
+(
+    x String NULL
+);
+
 SELECT *
 FROM test
 WHERE x != 'xyz';

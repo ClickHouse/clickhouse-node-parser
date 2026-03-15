@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     count(1) AS num,
     hostName() AS hostName

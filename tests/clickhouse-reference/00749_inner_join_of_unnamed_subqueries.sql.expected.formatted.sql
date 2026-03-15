@@ -1,3 +1,21 @@
+SET joined_subquery_requires_alias = 0;
+
+CREATE TABLE left_table
+(
+    APIKey Int32,
+    SomeColumn String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE right_table
+(
+    APIKey Int32,
+    EventValueForPostback String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     APIKey,
     ConversionEventValue

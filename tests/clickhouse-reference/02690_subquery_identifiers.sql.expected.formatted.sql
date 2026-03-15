@@ -1,3 +1,11 @@
+CREATE TABLE t_str
+(
+    creation_time String
+)
+ENGINE = MergeTree
+ORDER BY creation_time
+PARTITION BY creation_time;
+
 SELECT 1 AS x
 FROM t_str
 WHERE CAST('1970-01-01' AS date) <= CAST((

@@ -1,3 +1,12 @@
+SET use_skip_indexes=1;
+SET use_skip_indexes_if_final=1;
+SET use_skip_indexes_if_final_exact_mode=1;
+CREATE TABLE rmt1
+(
+    id UInt32,
+    val UInt32,
+    INDEX vidx val TYPE minmax
+) Engine = ReplacingMergeTree ORDER BY id SETTINGS index_granularity = 64;
 -- Verify granules selected for the next 5 queries
 SELECT splitByChar('/',trimLeft(explain))[1] FROM (
     EXPLAIN indexes=1 SELECT count(*) FROM rmt1 FINAL WHERE id = 25 AND val = 88888888)

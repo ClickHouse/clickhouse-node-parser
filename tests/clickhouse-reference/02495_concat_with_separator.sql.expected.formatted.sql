@@ -1,3 +1,5 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
 -- negative tests
 SELECT concatWithSeparator(materialize('|'), 'a', 'b'); -- { serverError ILLEGAL_COLUMN }
 

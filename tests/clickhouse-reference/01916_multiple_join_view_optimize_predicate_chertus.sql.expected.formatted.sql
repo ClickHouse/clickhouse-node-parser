@@ -1,3 +1,17 @@
+CREATE TABLE a
+(
+    id UInt32,
+    val UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE j
+(
+    id UInt32,
+    val UInt8
+)
+ENGINE = Join(`ANY`, `LEFT`, id);
+
 SELECT *
 FROM
     a
@@ -17,6 +31,13 @@ ORDER BY
     a.id ASC,
     a.val ASC
 SETTINGS enable_optimize_predicate_expression = 0;
+
+CREATE TABLE j
+(
+    id UInt8,
+    val UInt8
+)
+ENGINE = Join(`ALL`, `INNER`, id);
 
 SELECT *
 FROM

@@ -1,3 +1,21 @@
+CREATE TABLE lhs
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE rhs
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET enable_parallel_replicas = 0; -- join swap/reordering disabled with parallel replicas
+
+SET enable_analyzer = 1, query_plan_join_swap_table = 'auto';
+
 SELECT *
 FROM
     lhs

@@ -1,3 +1,21 @@
+CREATE TABLE tokenbf_tab
+(
+    id UInt32,
+    str String,
+    INDEX idx str TYPE tokenbf_v1(256, 2, 0)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 1;
+CREATE TABLE ngrambf_tab
+(
+    id UInt32,
+    str String,
+    INDEX idx str TYPE ngrambf_v1(3, 256, 2, 0)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 1;
 SELECT * FROM tokenbf_tab WHERE match(str, ' Hello (ClickHouse|World) ') ORDER BY id;
 SELECT * FROM ngrambf_tab WHERE match(str, 'Hello (ClickHouse|World)') ORDER BY id;
 -- Read 2/6 granules

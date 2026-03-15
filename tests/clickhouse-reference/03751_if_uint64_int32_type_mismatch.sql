@@ -1,3 +1,11 @@
+CREATE TABLE test_if_type_mismatch (
+    c_f7nvvq Int32,
+    c_ooi4e9x212 Float64,
+    c_h16pd String,
+    c_j3 String,
+    c_u37 Float64,
+    c_d9n_3 Int32
+) ENGINE = MergeTree() ORDER BY c_d9n_3;
 -- Test case 1: Simple if with UInt64 literal (fits in Int64) and Int32 column
 SELECT toTypeName(if(rand() % 2, floor(4373163444658715090), c_f7nvvq)) FROM test_if_type_mismatch LIMIT 1;
 -- Test case 2: Case expression (which uses if internally)

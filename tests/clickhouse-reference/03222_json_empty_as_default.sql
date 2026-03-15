@@ -1,5 +1,6 @@
+SET input_format_json_empty_as_default = 1, allow_experimental_variant_type = 1;
 -- Simple types
-
+-- { echoOn }
 SELECT x FROM format(JSONEachRow, 'x Date', '{"x":""}');
 SELECT x FROM format(JSONEachRow, 'x Date32', '{"x":""}');
 SELECT toTimeZone(x, 'UTC') FROM format(JSONEachRow, 'x DateTime', '{"x":""}');
@@ -7,12 +8,18 @@ SELECT toTimeZone(x, 'UTC') FROM format(JSONEachRow, 'x DateTime64', '{"x":""}')
 SELECT x FROM format(JSONEachRow, 'x IPv4', '{"x":""}');
 SELECT x FROM format(JSONEachRow, 'x IPv6', '{"x":""}');
 SELECT x FROM format(JSONEachRow, 'x UUID', '{"x":""}');
-
+CREATE TABLE table1(col AggregateFunction(uniq, UInt64)) ENGINE=Memory();
+CREATE TABLE table2(UserID UInt64) ENGINE=Memory();
+-- { echoOn }
 SELECT COUNT(DISTINCT col) FROM table1;
-
+-- The setting input_format_defaults_for_omitted_fields determines the default value if enabled.
+CREATE TABLE table1(address IPv6 DEFAULT toIPv6('2001:db8:3333:4444:5555:6666:7777:8888')) ENGINE=Memory();
+SET input_format_defaults_for_omitted_fields = 0;
+SET input_format_defaults_for_omitted_fields = 1;
+-- { echoOn }
 SELECT * FROM table1 ORDER BY address ASC;
 -- Nullable
-
+-- { echoOn }
 SELECT x FROM format(JSONEachRow, 'x Nullable(IPv6)', '{"x":""}');
 -- Compound types
 SELECT x FROM format(JSONEachRow, 'x Array(UUID)', '{"x":["00000000-0000-0000-0000-000000000000","b15f852c-c41a-4fd6-9247-1929c841715e",""]}');

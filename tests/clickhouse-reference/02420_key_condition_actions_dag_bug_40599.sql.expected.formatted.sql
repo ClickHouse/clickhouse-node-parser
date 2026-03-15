@@ -1,3 +1,11 @@
+CREATE TABLE tba
+(
+    event_id Int64,
+    event_dt Int64
+)
+ENGINE = MergeTree
+ORDER BY event_id;
+
 SELECT count()
 FROM (
         SELECT event_dt

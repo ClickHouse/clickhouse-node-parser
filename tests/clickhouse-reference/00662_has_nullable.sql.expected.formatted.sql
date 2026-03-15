@@ -1,7 +1,19 @@
+CREATE TABLE `00662_has_nullable`
+(
+    a Nullable(UInt64)
+)
+ENGINE = Memory;
+
 SELECT
     a,
     has([0, 1], a)
 FROM `00662_has_nullable`;
+
+CREATE TABLE `00662_has_nullable`
+(
+    a UInt64
+)
+ENGINE = Memory;
 
 SELECT
     a,

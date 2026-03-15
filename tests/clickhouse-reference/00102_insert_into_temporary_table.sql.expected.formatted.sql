@@ -1,2 +1,7 @@
+CREATE TEMPORARY TABLE t
+(
+    a UInt8
+);
+
 SELECT *
 FROM t;

@@ -1,3 +1,17 @@
+CREATE TABLE table1
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE table2
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT *
 FROM (
 (        SELECT *

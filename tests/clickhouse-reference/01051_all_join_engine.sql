@@ -1,4 +1,15 @@
+CREATE TABLE t1 (x UInt32, str String) engine = Memory;
+CREATE TABLE left_join (x UInt32, s String) engine = Join(ALL, LEFT, x);
+CREATE TABLE inner_join (x UInt32, s String) engine = Join(ALL, INNER, x);
+CREATE TABLE right_join (x UInt32, s String) engine = Join(ALL, RIGHT, x);
+CREATE TABLE full_join (x UInt32, s String) engine = Join(ALL, FULL, x);
+SET join_use_nulls = 0;
 SELECT * FROM t1 LEFT JOIN left_join j USING(x) ORDER BY x, str, s;
 SELECT * FROM t1 INNER JOIN inner_join j USING(x) ORDER BY x, str, s;
 SELECT * FROM t1 RIGHT JOIN right_join j USING(x) ORDER BY x, str, s;
 SELECT * FROM t1 FULL JOIN full_join j USING(x) ORDER BY x, str, s;
+SET join_use_nulls = 1;
+CREATE TABLE left_join (x UInt32, s String) engine = Join(ALL, LEFT, x) SETTINGS join_use_nulls = 1;
+CREATE TABLE inner_join (x UInt32, s String) engine = Join(ALL, INNER, x) SETTINGS join_use_nulls = 1;
+CREATE TABLE right_join (x UInt32, s String) engine = Join(ALL, RIGHT, x) SETTINGS join_use_nulls = 1;
+CREATE TABLE full_join (x UInt32, s String) engine = Join(ALL, FULL, x) SETTINGS join_use_nulls = 1;

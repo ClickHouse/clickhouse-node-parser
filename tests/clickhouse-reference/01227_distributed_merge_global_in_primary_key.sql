@@ -1,3 +1,14 @@
+CREATE TABLE test_local (name String) 
+ENGINE = MergeTree
+ORDER BY name as select 'x';
+CREATE TABLE test_distributed as test_local
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), test_local);
+CREATE TABLE test_merge as test_local
+ENGINE = Merge(currentDatabase(), 'test_local');
+CREATE TABLE test_merge_distributed as test_local
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), test_merge);
+CREATE TABLE test_distributed_merge as test_local
+ENGINE = Merge(currentDatabase(), 'test_distributed');
 SELECT '------------------- Distributed ------------------';
 SELECT count()
 FROM test_distributed

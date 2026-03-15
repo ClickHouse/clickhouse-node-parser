@@ -1,3 +1,6 @@
+-- {echo}
+SET allow_suspicious_variant_types = 1;
+
 SELECT flipCoordinates(CAST((10.0, 20.0) AS Point));
 
 SELECT flipCoordinates(CAST([(10, 20), (30, 40), (50, 60)] AS LineString));
@@ -30,6 +33,13 @@ SELECT flipCoordinates(readWkt('POLYGON((-180 -90, 180 -90, 180 90, -180 90, -18
 
 SELECT flipCoordinates(materialize(readWkt('POINT(5 10)')))
 FROM numbers(3);
+
+CREATE TABLE test_geom
+(
+    id UInt32,
+    geom Geometry
+)
+ENGINE = Memory;
 
 SELECT
     id,

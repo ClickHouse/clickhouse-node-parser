@@ -22,6 +22,8 @@ SELECT reverse([]);
 
 SELECT reverse([[[[]]]]);
 
+SET send_logs_level = 'fatal';
+
 SELECT
     '[RE7',
     (

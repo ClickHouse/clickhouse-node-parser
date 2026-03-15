@@ -1,4 +1,19 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/23194
+-- This test add query-templates for fuzzer
+SET enable_analyzer = 1;
+CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier};
+USE {CLICKHOUSE_DATABASE:Identifier};
+CREATE TABLE table (
+    column UInt64,
+    nest Nested
+    (
+        key Nested (
+            subkey UInt16
+        )
+    )
+) ENGINE = Memory();
 SELECT t.column FROM table AS t;
+USE default;
 SELECT column FROM {CLICKHOUSE_DATABASE:Identifier}.table;
 SELECT {CLICKHOUSE_DATABASE:Identifier}.table.column FROM table;
 --

@@ -1,3 +1,16 @@
+SET optimize_on_insert = 0;
+
+SET max_threads = 1;
+
+CREATE TABLE data_01285
+(
+    key Int,
+    value SimpleAggregateFunction(max, Nullable(Int)),
+    INDEX value_idx assumeNotNull(value) TYPE minmax GRANULARITY 1
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY key;
+
 SELECT *
 FROM data_01285;
 

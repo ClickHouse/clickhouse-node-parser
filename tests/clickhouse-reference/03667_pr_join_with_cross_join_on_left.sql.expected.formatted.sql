@@ -1,3 +1,29 @@
+CREATE TABLE n1
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number
+SETTINGS index_granularity = 1;
+
+CREATE TABLE n2
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number
+SETTINGS index_granularity = 1;
+
+CREATE TABLE n3
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number
+SETTINGS index_granularity = 1;
+
+SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost', parallel_replicas_for_non_replicated_merge_tree = 1;
+
 SELECT *
 FROM
     n1

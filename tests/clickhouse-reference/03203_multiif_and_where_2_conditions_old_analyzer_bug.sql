@@ -1,3 +1,9 @@
+CREATE TABLE bugcheck1
+ENGINE = MergeTree
+ORDER BY tuple()
+AS SELECT
+    'c1' as column_a,
+    'c2' as column_b;
 SELECT *,
   multiIf(column_b IN (SELECT 'c2' as someproduct), 'yes', 'no') AS condition_1,
   multiIf(column_b  = 'c2', 'true', 'false') AS condition_2

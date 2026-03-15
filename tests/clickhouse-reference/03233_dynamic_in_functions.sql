@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+
+set allow_experimental_dynamic_type = 1;
+create table test (x UInt64, d Dynamic) engine=Memory;
 select d + 1 as res, toTypeName(res) from test;
 select 1 + d as res, toTypeName(res) from test;
 select d + x as res, toTypeName(res) from test;
@@ -50,6 +54,8 @@ select 'str_' || d || d as res, toTypeName(res) from test;
 select 'str_' || d || x || d as res, toTypeName(res) from test;
 select d || NULL as res, toTypeName(res) from test;
 select 'str_' || d || NULL as res, toTypeName(res) from test;
+create table test (x Nullable(UInt64), d Dynamic) engine=Memory;
+create table test (x String, d Dynamic) engine=Memory;
 select d < 'str_2' as res, toTypeName(res) from test;
 select d > 'str_2' as res, toTypeName(res) from test;
 select d = 'str_2' as res, toTypeName(res) from test;
@@ -66,7 +72,9 @@ select length(d) as res, toTypeName(res) from test;
 select replaceAll(d, 'str', 'a') as res, toTypeName(res) from test;
 select repeat(d, 2) as res, toTypeName(res) from test;
 select substring(d, 1, 3) as res, toTypeName(res) from test;
+create table test (x Nullable(String), d Dynamic) engine=Memory;
 select sipHash64(d, d) as res, toTypeName(res) from test;
+create table test (x UInt64, d Dynamic(max_types=5)) engine=Memory;
 select d + 1 as res, toTypeName(res), dynamicType(res) from test;
 select 1 + d as res, toTypeName(res), dynamicType(res) from test;
 select d + x as res, toTypeName(res), dynamicType(res) from test;
@@ -81,6 +89,7 @@ select d = 5 as res, toTypeName(res) from test;
 select * from test where d < 5;
 select * from test where d > 5;
 select * from test where d = 5;
+create table test (d Dynamic) engine=Memory;
 select d[1] as res, toTypeName(res) from test;
 select d + 1 from test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 select length(d) from test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}

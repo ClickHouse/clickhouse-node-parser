@@ -1,3 +1,4 @@
+create table tab (id UInt32, haystack String, pattern String) engine = MergeTree() order by id;
 select countSubstrings('aaaxxxaa\0xxx', pattern) from tab where id = 1;
 select countSubstringsCaseInsensitive('aaaxxxaa\0xxx', pattern) from tab where id = 1;
 select countSubstringsCaseInsensitiveUTF8('aaaxxxaa\0xxx', pattern) from tab where id = 1;

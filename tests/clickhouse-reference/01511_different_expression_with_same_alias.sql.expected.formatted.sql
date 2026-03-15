@@ -1,3 +1,11 @@
+CREATE TABLE repro_hits
+(
+    date Date,
+    metric Float64
+)
+ENGINE = MergeTree()
+ORDER BY date;
+
 -- From https://github.com/ClickHouse/ClickHouse/issues/12513#issue-657202535
 SELECT
     date AS period,

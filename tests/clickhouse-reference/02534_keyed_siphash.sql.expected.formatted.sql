@@ -404,6 +404,13 @@ SELECT hex(sipHash64Keyed());
 
 SELECT hex(sipHash128Keyed());
 
+CREATE TABLE tab
+(
+    key Tuple(UInt64, UInt64),
+    val UInt64
+)
+ENGINE = Memory;
+
 -- these two statements must produce the same result
 SELECT sipHash64Keyed(key, val)
 FROM tab;
@@ -428,6 +435,12 @@ GROUP BY
 SELECT sipHash64Keyed((toUInt64(9223372036854775806), 9223372036854775808::UInt64), char(2))
 GROUP BY toUInt64(9223372036854775806);
 
+CREATE TABLE sipHashKeyed_test
+ENGINE = Memory() AS
+SELECT
+    1 AS a,
+    'test' AS b;
+
 SELECT sipHash64Keyed((toUInt64(0), toUInt64(0)), 1, 'test');
 
 SELECT sipHash64(tuple(*))
@@ -450,6 +463,13 @@ FROM sipHashKeyed_test;
 SELECT hex(sipHash128Keyed((toUInt64(0), toUInt64(0)), a, b))
 FROM sipHashKeyed_test;
 
+CREATE TABLE sipHashKeyed_keys
+(
+    key Tuple(UInt64, UInt64),
+    val UInt64
+)
+ENGINE = Memory;
+
 SELECT sipHash64Keyed(key, val)
 FROM sipHashKeyed_keys
 ORDER BY key ASC;
@@ -457,6 +477,14 @@ ORDER BY key ASC;
 SELECT hex(sipHash128Keyed(key, val))
 FROM sipHashKeyed_keys
 ORDER BY key ASC;
+
+CREATE TABLE sipHashKeyed_keys
+(
+    key0 UInt64,
+    key1 UInt64,
+    val UInt64
+)
+ENGINE = Memory;
 
 SELECT sipHash64Keyed((key0, key1), val)
 FROM sipHashKeyed_keys
@@ -473,6 +501,13 @@ ORDER BY val ASC;
 SELECT hex(sipHash128Keyed((2::UInt64, 2::UInt64), val))
 FROM sipHashKeyed_keys
 ORDER BY val ASC;
+
+CREATE TABLE sipHashKeyed_keys
+(
+    key0 UInt64,
+    key1 UInt64
+)
+ENGINE = Memory;
 
 SELECT sipHash64Keyed((key0, key1), 4::UInt64)
 FROM sipHashKeyed_keys
@@ -497,6 +532,12 @@ GROUP BY tupleElement((NULL, NULL, NULL, -1), toUInt64(2), 2) = NULL
 SETTINGS enable_analyzer = 1; -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT hex(sipHash128ReferenceKeyed((0::UInt64, 0::UInt64), ([1, 1])));
+
+CREATE TABLE sipHashKeyed_keys
+(
+    a Map(String, String)
+)
+ENGINE = Memory;
 
 SELECT hex(sipHash128ReferenceKeyed((0::UInt64, materialize(0::UInt64)), a))
 FROM sipHashKeyed_keys

@@ -1,3 +1,7 @@
+SET max_memory_usage = 50000000;
+
+SET join_algorithm = 'partial_merge';
+
 SELECT count(1)
 FROM (
         SELECT t2.n

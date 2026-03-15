@@ -1,3 +1,18 @@
+SET parallel_replicas_for_non_replicated_merge_tree = 1;
+
+-- https://github.com/ClickHouse/ClickHouse/issues/49559
+CREATE TABLE join_inner_table__fuzz_146
+(
+    id UUID,
+    key String,
+    number Int64,
+    value1 String,
+    value2 String,
+    time Nullable(Int64)
+)
+ENGINE = MergeTree
+ORDER BY (id, number, key);
+
 SELECT
     key,
     value1,
@@ -15,6 +30,18 @@ ORDER BY
 LIMIT 9223372036854775806
 FORMAT Null
 SETTINGS max_parallel_replicas = 3, prefer_localhost_replica = 1, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost', enable_parallel_replicas = 1, use_hedged_requests = 0;
+
+-- https://github.com/ClickHouse/ClickHouse/issues/48496
+CREATE TABLE t_02709__fuzz_23
+(
+    key Nullable(UInt8),
+    sign Int8,
+    date DateTime64(3)
+)
+ENGINE = CollapsingMergeTree(sign)
+ORDER BY key
+PARTITION BY date
+SETTINGS allow_nullable_key = 1;
 
 SELECT NULL
 FROM t_02709__fuzz_23 FINAL

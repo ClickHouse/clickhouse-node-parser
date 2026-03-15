@@ -1,0 +1,198 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "address"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "email_address",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "domain",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "first_name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "last_name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "country",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "esp",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "list_import_sid",
+        "type": "LowCardinality(String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "list_import_sid"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "country"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "esp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "email_address"
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "list_import_sid"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "country"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "esp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "email_address"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "fact_click"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "sid",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "campaign_sid",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "campaign_batch_sid",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "email_address",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "campaign_sid"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "campaign_batch_sid"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sid"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

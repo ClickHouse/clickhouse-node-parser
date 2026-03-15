@@ -1,3 +1,18 @@
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = Memory;
+
+CREATE TABLE users_ext
+(
+    uid Int16,
+    nullableStringCol Nullable(String)
+)
+ENGINE = Memory;
+
 SELECT isNotNull(nullableStringCol)
 FROM
     users

@@ -1,3 +1,21 @@
+CREATE TABLE join_inner_table__fuzz_1
+(
+    id UUID,
+    key Nullable(Date),
+    number Int64,
+    value1 LowCardinality(String),
+    value2 LowCardinality(String),
+    time Int128
+)
+ENGINE = MergeTree
+ORDER BY (id, number, key)
+SETTINGS allow_nullable_key = 1;
+
+SET max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost', enable_parallel_replicas = 1, parallel_replicas_for_non_replicated_merge_tree = 1;
+
+-- SELECT query will write a Warning to the logs
+SET send_logs_level = 'error';
+
 SELECT
     key,
     value1,

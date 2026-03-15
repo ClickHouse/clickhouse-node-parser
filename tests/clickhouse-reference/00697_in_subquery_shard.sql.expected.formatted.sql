@@ -45,3 +45,5 @@ SELECT sumIf(number, arrayExists(x -> (x IN (
         SELECT 1
     )), [1]))
 FROM remote('127.0.0.{1,2}', numbers(10));
+
+SET prefer_localhost_replica = 0;

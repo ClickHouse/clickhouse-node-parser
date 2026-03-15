@@ -74,5 +74,6 @@ SELECT JSON_EXISTS('{"hello":["world"]}', '$.hello[1]');
 SELECT JSON_EXISTS('{"a":[{"b":1},{"c":2}]}', '$.a[*].b');
 SELECT JSON_EXISTS('{"a":[{"b":1},{"c":2}]}', '$.a[*].f');
 SELECT JSON_EXISTS('{"a":[[{"b":1}, {"g":1}],[{"h":1},{"y":1}]]}', '$.a[*][0].h');
+CREATE TABLE 01889_sql_json (id UInt8, json String) ENGINE = MergeTree ORDER BY id;
 SELECT id, JSON_QUERY(json, '$.friends[0 to 2]') FROM 01889_sql_json ORDER BY id;
 SELECT id, JSON_VALUE(json, '$.friends[0]') FROM 01889_sql_json ORDER BY id;

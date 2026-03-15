@@ -1,3 +1,13 @@
+CREATE TABLE t
+(
+    x UInt8,
+    id UInt8
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+SET enable_optimize_predicate_expression = 0;
+
 SELECT 1
 FROM
     t AS l
@@ -43,6 +53,8 @@ INNER JOIN t AS r
     USING (id)
 WHERE l.x
     AND r.x;
+
+SET optimize_move_to_prewhere = 0;
 
 SELECT 7
 FROM

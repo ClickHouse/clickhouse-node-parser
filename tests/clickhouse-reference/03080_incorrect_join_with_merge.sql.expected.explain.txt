@@ -1,3 +1,82 @@
+Set
+
+Set
+
+CreateQuery first_table_lr (children 3)
+ Identifier first_table_lr
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_03080/alter'
+    Literal 'r1'
+  Identifier id
+
+CreateQuery first_table (children 3)
+ Identifier first_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'first_table_lr'
+
+CreateQuery second_table_lr (children 3)
+ Identifier second_table_lr
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery second_table (children 3)
+ Identifier second_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'second_table_lr'
+
+CreateQuery two_tables (children 3)
+ Identifier two_tables
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Merge (children 1)
+   ExpressionList (children 2)
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal '^(first_table)$'
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)

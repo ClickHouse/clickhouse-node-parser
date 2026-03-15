@@ -1,3 +1,12 @@
+SET enable_multiple_prewhere_read_steps = 1;
+CREATE TABLE test_column_function_filter (
+    id UInt64,
+    name String,
+    attrs Map(String, String),
+    filter_val UInt64
+) ENGINE = MergeTree()
+ORDER BY id
+SETTINGS index_granularity = 100;
 -- Test case 1: ColumnFunction shares ColumnConst columns for ['12'] and ['key']
 SELECT count() FROM test_column_function_filter
 PREWHERE filter_val BETWEEN 20 AND 80

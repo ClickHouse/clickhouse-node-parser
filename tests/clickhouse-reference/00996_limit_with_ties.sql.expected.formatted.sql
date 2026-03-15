@@ -1,3 +1,10 @@
+CREATE TABLE `ties`
+(
+    a Int
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT a
 FROM `ties`
 ORDER BY a ASC
@@ -12,6 +19,8 @@ SELECT a
 FROM `ties`
 ORDER BY a ASC
 LIMIT 5 WITH TIES;
+
+SET max_block_size = 2;
 
 SELECT a
 FROM `ties`
@@ -38,6 +47,8 @@ FROM `ties`
 ORDER BY a ASC
 LIMIT 4 WITH TIES;
 
+SET max_block_size = 3;
+
 SELECT a
 FROM `ties`
 ORDER BY a ASC
@@ -60,6 +71,8 @@ FROM (
         ORDER BY number < 100 DESC
         LIMIT 10 WITH TIES
     );
+
+SET max_block_size = 5;
 
 SELECT count()
 FROM (

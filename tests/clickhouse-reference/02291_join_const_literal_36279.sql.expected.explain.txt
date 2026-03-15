@@ -1,3 +1,36 @@
+Set
+
+CreateQuery test_local (children 3)
+ Identifier test_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration text (children 1)
+    DataType String
+   ColumnDeclaration text2 (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier text
+
+CreateQuery test_distributed (children 3)
+ Identifier test_distributed
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration text (children 1)
+    DataType String
+   ColumnDeclaration text2 (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_local
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -43,6 +76,56 @@ SelectWithUnionQuery (children 1)
       ExpressionList (children 2)
        Identifier text2
        Literal '%text-for-search%'
+
+CreateQuery user_local (children 3)
+ Identifier user_local
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType Int64
+   ColumnDeclaration name (children 1)
+    DataType String
+   ColumnDeclaration age (children 1)
+    DataType Int32
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier name
+
+CreateQuery user_all (children 3)
+ Identifier user_all
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType Int64
+   ColumnDeclaration name (children 1)
+    DataType String
+   ColumnDeclaration age (children 1)
+    DataType Int32
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier user_local
+    Function rand (children 1)
+     ExpressionList
+
+CreateQuery event (children 3)
+ Identifier event
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration id (children 1)
+    DataType Int64
+   ColumnDeclaration user_id (children 1)
+    DataType Int64
+   ColumnDeclaration content (children 1)
+    DataType String
+   ColumnDeclaration created_time (children 1)
+    DataType DateTime
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier user_id
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

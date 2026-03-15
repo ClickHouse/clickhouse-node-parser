@@ -1,11 +1,1 @@
-SELECT x
-FROM quorum1
-ORDER BY x ASC;
-
-SELECT x
-FROM quorum2
-ORDER BY x ASC;
-
-SELECT x
-FROM quorum3
-ORDER BY x ASC; -- {serverError REPLICA_IS_NOT_IN_QUORUM}
+<Parse Error>

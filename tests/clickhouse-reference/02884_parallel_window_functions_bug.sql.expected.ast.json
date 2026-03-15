@@ -1,5 +1,168 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "posts"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "page_id",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "post_id",
+        "type": "String",
+        "codec": "CODEC(LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "host_id",
+        "type": "UInt32",
+        "codec": "CODEC(T64, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "path_id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "created",
+        "type": "DateTime",
+        "codec": "CODEC(T64, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "as_of",
+        "type": "DateTime",
+        "codec": "CODEC(T64, LZ4)"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "as_of"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toStartOfMonth",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "created"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "page_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "post_id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "post_metrics"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "page_id",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "post_id",
+        "type": "String",
+        "codec": "CODEC(LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "created",
+        "type": "DateTime",
+        "codec": "CODEC(T64, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "impressions",
+        "type": "UInt32",
+        "codec": "CODEC(T64, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "clicks",
+        "type": "UInt32",
+        "codec": "CODEC(T64, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "as_of",
+        "type": "DateTime",
+        "codec": "CODEC(T64, LZ4)"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "as_of"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toStartOfMonth",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "created"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "page_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "post_id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

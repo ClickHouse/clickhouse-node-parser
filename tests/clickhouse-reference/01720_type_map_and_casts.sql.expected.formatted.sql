@@ -1,3 +1,11 @@
+CREATE TABLE table_map_with_key_integer
+(
+    d DATE,
+    m Map(Int8, Int8)
+)
+ENGINE = MergeTree()
+ORDER BY d;
+
 SELECT m
 FROM table_map_with_key_integer;
 
@@ -17,6 +25,14 @@ SELECT count()
 FROM table_map_with_key_integer
 WHERE m = map();
 
+CREATE TABLE table_map_with_key_integer
+(
+    d DATE,
+    m Map(Int32, UInt16)
+)
+ENGINE = MergeTree()
+ORDER BY d;
+
 SELECT
     m[-1],
     m[2147483647],
@@ -27,6 +43,14 @@ SELECT m[toInt32(number - 2)]
 FROM
     table_map_with_key_integer
 ARRAY JOIN [0, 1, 2, 3, 4] AS number;
+
+CREATE TABLE table_map_with_key_integer
+(
+    d DATE,
+    m Map(Date, Int32)
+)
+ENGINE = MergeTree()
+ORDER BY d;
 
 SELECT
     m[toDate('2020-01-01')],
@@ -39,6 +63,14 @@ FROM
     table_map_with_key_integer
 ARRAY JOIN [0, 1, 2] AS number;
 
+CREATE TABLE table_map_with_key_integer
+(
+    d DATE,
+    m Map(UUID, UInt16)
+)
+ENGINE = MergeTree()
+ORDER BY d;
+
 SELECT
     m[toUUID('00001192-0000-4000-6000-000000000001')],
     m[toUUID('00001192-0000-4000-7000-000000000001')],
@@ -49,6 +81,14 @@ SELECT
     m[257],
     m[1]
 FROM table_map_with_key_integer; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+CREATE TABLE table_map_with_key_integer
+(
+    d DATE,
+    m Map(Int128, String)
+)
+ENGINE = MergeTree()
+ORDER BY d;
 
 SELECT
     m[toInt128(-1)],
@@ -75,3 +115,24 @@ SELECT
     m[toUInt8(0)],
     m[toUInt16(0)]
 FROM table_map_with_key_integer;
+
+CREATE TABLE table_map_with_key_integer
+(
+    m Map(Float32, String)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+CREATE TABLE table_map_with_key_integer
+(
+    m Map(Array(UInt32), String)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+CREATE TABLE table_map_with_key_integer
+(
+    m Map(Nullable(String), String)
+)
+ENGINE = MergeTree()
+ORDER BY tuple(); -- { serverError BAD_ARGUMENTS}

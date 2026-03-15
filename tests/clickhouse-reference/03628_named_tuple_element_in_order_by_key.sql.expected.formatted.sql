@@ -1,3 +1,11 @@
+CREATE TABLE test
+(
+    x Tuple(a UInt64, b String)
+)
+ENGINE = MergeTree
+ORDER BY x.b
+SETTINGS index_granularity = 1;
+
 SELECT *
 FROM test
 ORDER BY x ASC;

@@ -21,10 +21,12 @@ SELECT toTypeName(x), x, isNull(x), if(x = 0, 'fail', 'ok'), if(x = 1, 'fail', '
 FROM (SELECT if(1 = 0, toNullable(toUInt8(0)), NULL) AS x);
 SELECT toTypeName(x), x, isNull(x), if(x = 0, 'fail', 'ok'), if(x = 1, 'fail', 'ok'), if(x >= 0, 'fail', 'ok')
 FROM (SELECT materialize(if(1 = 0, toNullable(toUInt8(0)), NULL)) AS x);
+SET join_use_nulls = 1;
 SELECT b_num, isNull(b_num), toTypeName(b_num), b_num = 0, if(b_num = 0, 'fail', 'ok')
 FROM (SELECT 1 k, toInt8(1) a_num) AS x
 LEFT JOIN (SELECT 2 k, toInt8(1) b_num) AS y
 USING (k);
+CREATE TABLE test_nullable_float_issue7347 (ne UInt64,test Nullable(Float64)) ENGINE = MergeTree() PRIMARY KEY (ne) ORDER BY (ne);
 SELECT test, toTypeName(test), IF(test = 0, 1, 0) FROM test_nullable_float_issue7347;
 -- test case from https://github.com/ClickHouse/ClickHouse/issues/10846
 

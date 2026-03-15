@@ -1,2 +1,11 @@
+-- Tags: no-parallel
+SET send_logs_level = 'fatal';
+set allow_deprecated_database_ordinary=1;
+-- Creation of a database with Ordinary engine emits a warning.
+create database db_hang engine=Ordinary;
+use db_hang;
+create table db_hang.test(A Int64) Engine=MergeTree order by A;
+create materialized view db_hang.test_mv(A Int64) Engine=MergeTree order by A as select * from db_hang.test;
+create database db_hang_temp engine=Atomic;
 select count() from db_hang.test;
 select count() from db_hang.test_mv;

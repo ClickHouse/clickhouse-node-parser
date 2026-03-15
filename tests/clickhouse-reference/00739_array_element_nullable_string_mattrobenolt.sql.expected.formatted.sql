@@ -1,3 +1,8 @@
+CREATE TEMPORARY TABLE wups
+(
+    a Array(Nullable(String))
+);
+
 SELECT
     count(),
     a[1]

@@ -53,6 +53,13 @@ SELECT
     toJSONString(m) AS s,
     isValidJSON(s);
 
+CREATE TEMPORARY TABLE map_json
+(
+    m1 Map(String, UInt64),
+    m2 Map(UInt32, UInt32),
+    m3 Map(Date, String)
+);
+
 SELECT
     m1,
     m2,

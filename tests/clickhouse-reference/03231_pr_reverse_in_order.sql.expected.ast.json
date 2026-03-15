@@ -1,5 +1,62 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "checks"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "check_name",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_status",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_start_time",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_name",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_status",
+        "type": "LowCardinality(String)"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/{database}/checks"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "check_start_time"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

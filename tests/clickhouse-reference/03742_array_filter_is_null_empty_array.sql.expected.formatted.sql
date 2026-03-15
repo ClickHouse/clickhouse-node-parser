@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT arrayFilter(x -> (isNotNull(x)), []);
 
 SELECT arrayFilter(x -> (isNotNull(x)), [NULL]);

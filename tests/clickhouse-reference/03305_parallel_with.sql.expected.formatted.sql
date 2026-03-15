@@ -1,7 +1,1 @@
-SELECT *
-FROM table1
-ORDER BY x ASC;
-
-SELECT *
-FROM table2
-ORDER BY y ASC;
+<Parse Error>

@@ -1,5 +1,12 @@
 SELECT 'Const point; No holes';
 
+CREATE TABLE polygons
+(
+    id Int32,
+    poly Array(Tuple(Int32, Int32))
+)
+ENGINE = Log();
+
 SELECT pointInPolygon((-9, 0), poly)
 FROM polygons
 ORDER BY id ASC;
@@ -34,6 +41,45 @@ ORDER BY id ASC;
 
 SELECT 'Non-const point; No holes';
 
+CREATE TABLE polygons
+(
+    id Int32,
+    pt Tuple(Int32, Int32),
+    poly Array(Tuple(Int32, Int32))
+)
+ENGINE = Log();
+
 SELECT pointInPolygon(pt, poly)
 FROM polygons
 ORDER BY id ASC;
+
+CREATE TABLE polygons
+(
+    id Int32,
+    poly Array(Array(Tuple(Int32, Int32)))
+)
+ENGINE = Log();
+
+CREATE TABLE polygons
+(
+    id Int32,
+    pt Tuple(Int32, Int32),
+    poly Array(Array(Tuple(Int32, Int32)))
+)
+ENGINE = Log();
+
+CREATE TABLE polygons
+(
+    id Int32,
+    pt Tuple(Int32, Int32),
+    poly Array(Array(Array(Tuple(Int32, Int32))))
+)
+ENGINE = Log();
+
+CREATE TABLE polygons
+(
+    id Int32,
+    pt Tuple(Int32, Int32),
+    poly Array(Array(Array(Tuple(Int32, Int32))))
+)
+ENGINE = Log();

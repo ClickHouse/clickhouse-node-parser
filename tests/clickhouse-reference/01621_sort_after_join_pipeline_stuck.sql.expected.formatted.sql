@@ -1,3 +1,5 @@
+SET enable_positional_arguments = 0;
+
 SELECT k
 FROM
     (

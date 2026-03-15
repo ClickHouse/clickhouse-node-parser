@@ -1,3 +1,12 @@
+CREATE TABLE t_fill_arrays
+(
+    id String,
+    mapCol Map(String, Array(String))
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1, min_bytes_for_full_part_storage = 0;
+
 SELECT count()
 FROM t_fill_arrays
 WHERE NOT ignore(arrCol, mapCol.values);

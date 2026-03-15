@@ -1,3 +1,33 @@
+CREATE TABLE adaptive_spill_03277_1
+(
+    k String,
+    x String
+)
+ENGINE = Memory;
+
+CREATE TABLE adaptive_spill_03277_2
+(
+    k String,
+    x String
+)
+ENGINE = Memory;
+
+CREATE TABLE adaptive_spill_03277_3
+(
+    k String,
+    x String
+)
+ENGINE = Memory;
+
+SET max_threads = 4;
+
+SET join_algorithm = 'grace_hash';
+
+SET max_bytes_in_join = 0;
+
+--set max_memory_usage=629145600
+SET enable_adaptive_memory_spill_scheduler = true;
+
 SELECT *
 FROM (
         SELECT

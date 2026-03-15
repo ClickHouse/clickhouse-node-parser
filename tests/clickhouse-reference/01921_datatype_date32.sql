@@ -1,3 +1,4 @@
+create table t1(x1 Date32) engine Memory;
 select x1 from t1;
 select '-------toYear---------';
 select toYear(x1) from t1;

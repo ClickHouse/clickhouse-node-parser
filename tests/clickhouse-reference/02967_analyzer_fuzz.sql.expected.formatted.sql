@@ -9,6 +9,18 @@ GROUP BY
 WITH CUBE
 SETTINGS enable_analyzer = 1;
 
+CREATE TABLE data_01223
+(
+    key Int
+)
+ENGINE = Memory;
+
+CREATE TABLE dist_layer_01223 AS data_01223
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01223);
+
+CREATE TABLE dist_01223 AS data_01223
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), dist_layer_01223);
+
 SELECT count(round('92233720368547758.07', '-0.01', NULL, nan, '25.7', '-92233720368547758.07', NULL))
 FROM dist_01223
 WHERE round(NULL, 1025, 1.1754943508222875e-38, NULL)

@@ -1,3 +1,19 @@
+CREATE TABLE t_00818
+(
+    a Nullable(Int64),
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = Memory;
+
+CREATE TABLE s_00818
+(
+    a Nullable(Int64),
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = Memory;
+
 SELECT *
 FROM
     t_00818

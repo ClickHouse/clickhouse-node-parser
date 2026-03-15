@@ -1,3 +1,29 @@
+CREATE TABLE distributor
+(
+    id String,
+    name String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE product
+(
+    id String,
+    name String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE sales
+(
+    id String,
+    distributor String,
+    product String,
+    amount Float32
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
 SELECT *
 FROM
     view((

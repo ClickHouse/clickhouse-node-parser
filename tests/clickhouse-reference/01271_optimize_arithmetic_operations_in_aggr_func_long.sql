@@ -1,3 +1,7 @@
+-- Tags: long
+
+SET enable_analyzer = 1;
+SET optimize_arithmetic_operations_in_aggregate_functions = 1;
 SELECT sum(n + 1), sum(1 + n), sum(n - 1), sum(1 - n) FROM (SELECT number n FROM numbers(10));
 SELECT sum(n * 2), sum(2 * n), sum(n / 2), sum(1 / n) FROM (SELECT number n FROM numbers(10));
 SELECT min(n + 1), min(1 + n), min(n - 1), min(1 - n) FROM (SELECT number n FROM numbers(10));
@@ -49,3 +53,4 @@ SELECT max(n * 2) + max(2 * n) + max(n / 2) + max(1 / n) FROM (SELECT number n F
 SELECT sum(number * -3) + min(2 * number * -3) - max(-1 * -2 * number * -3) FROM numbers(100);
 SELECT max(log(2) * number) FROM numbers(100);
 SELECT round(max(log(2) * 3 * sin(0.3) * number * 4)) FROM numbers(100);
+SET optimize_arithmetic_operations_in_aggregate_functions = 0;

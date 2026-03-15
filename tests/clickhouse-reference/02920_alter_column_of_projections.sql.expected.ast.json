@@ -1,5 +1,135 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": "Int16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "age",
+        "type": "Nullable(Int8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": "Int16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": "Int16"
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "age"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "uniq",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "i"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "j"
+                  ]
+                }
+              ]
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "age"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uid"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "alter_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -38,6 +168,19 @@
     },
     "leadingComments": [
       "-- Projection query works without mutation applied."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "alter_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
     ]
   }
 ]

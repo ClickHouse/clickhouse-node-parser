@@ -1,3 +1,4 @@
+CREATE TABLE nested (n Nested(x UInt8)) ENGINE = Memory;
 SELECT 1 AS x FROM remote('127.0.0.2', currentDatabase(), nested) ARRAY JOIN n.x;
 SELECT dummy AS dummy, dummy AS b FROM system.one;
 SELECT dummy AS dummy, dummy AS b, b AS c FROM system.one;

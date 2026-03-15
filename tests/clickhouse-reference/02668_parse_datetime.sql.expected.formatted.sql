@@ -1,3 +1,4 @@
+-- { echoOn }
 -- year
 SELECT parseDateTime('2020', '%Y', 'UTC') = toDateTime('2020-01-01', 'UTC');
 
@@ -30,11 +31,15 @@ SELECT parseDateTime('jun', '%b', 'UTC') = toDateTime('2000-06-01', 'UTC');
 
 SELECT parseDateTime('abc', '%b'); -- { serverError CANNOT_PARSE_DATETIME }
 
+SET formatdatetime_parsedatetime_m_is_month_name = 1;
+
 SELECT parseDateTime('may', '%M', 'UTC') = toDateTime('2000-05-01', 'UTC');
 
 SELECT parseDateTime('september', '%M', 'UTC') = toDateTime('2000-09-01', 'UTC');
 
 SELECT parseDateTime('summer', '%M'); -- { serverError CANNOT_PARSE_DATETIME }
+
+SET formatdatetime_parsedatetime_m_is_month_name = 0;
 
 SELECT parseDateTime('08', '%M', 'UTC') = toDateTime('1970-01-01 00:08:00', 'UTC');
 
@@ -295,6 +300,9 @@ SELECT parseDateTime('08 13, 2022, 07:58:32', '%m %e, %G, %k:%i:%s', 'UTC');
 SELECT parseDateTime('8 13, 2022, 7:58:32', '%c %e, %G, %k:%i:%s', 'UTC');
 
 SELECT parseDateTime('08 13, 2022, 07:58:32', '%c %e, %G, %k:%i:%s', 'UTC');
+
+-- The format string argument is optional
+SET session_timezone = 'UTC'; -- don't randomize the session timezone
 
 SELECT parseDateTime('2021-01-04 23:12:34') = toDateTime('2021-01-04 23:12:34');
 

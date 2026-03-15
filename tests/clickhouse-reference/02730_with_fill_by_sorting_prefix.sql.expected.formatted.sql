@@ -1,3 +1,6 @@
+-- { echoOn }
+SET use_with_fill_by_sorting_prefix = 1;
+
 -- corner case with constant sort prefix
 SELECT number
 FROM numbers(1)
@@ -5,6 +8,15 @@ ORDER BY
     10 ASC,
     number DESC WITH FILL FROM 1
 SETTINGS enable_positional_arguments = 0;
+
+CREATE TABLE ts
+(
+    sensor_id UInt64,
+    timestamp UInt64,
+    value Float64
+)
+ENGINE = MergeTree()
+ORDER BY (sensor_id, timestamp);
 
 -- FillingTransform: 6 rows will be processed in 1 chunks
 SELECT *

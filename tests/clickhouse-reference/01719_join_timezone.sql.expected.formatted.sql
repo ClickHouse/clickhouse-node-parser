@@ -1,3 +1,12 @@
+CREATE TABLE test
+(
+    timestamp DateTime('UTC'),
+    i UInt8
+)
+ENGINE = MergeTree()
+ORDER BY i
+PARTITION BY toYYYYMM(timestamp);
+
 SELECT
     toTimeZone(timestamp, 'America/Sao_Paulo') AS converted,
     timestamp AS original

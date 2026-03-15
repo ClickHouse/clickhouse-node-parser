@@ -1,3 +1,7 @@
+set enable_json_type=1;
+set enable_analyzer=1;
+create table test (data JSON) engine=Memory;
+create view test_view as select data from test;
 select * from test_view;
 select data from test_view;
 select data.a from test_view;

@@ -1,3 +1,15 @@
+create table test1 (
+    `pt` String,
+    `brand_name` String,
+    `total_indirect_order_cnt` Float64,
+    `total_indirect_gmv` Float64
+) ENGINE = Memory;
+create table test2 (
+    `pt` String,
+    `brand_name` String,
+    `exposure_uv` Float64,
+    `click_uv` Float64
+) ENGINE = Memory;
 SELECT * FROM (
         SELECT  m0.pt                                                                                     AS pt
                ,m0.`uvctr`                                                                                AS uvctr

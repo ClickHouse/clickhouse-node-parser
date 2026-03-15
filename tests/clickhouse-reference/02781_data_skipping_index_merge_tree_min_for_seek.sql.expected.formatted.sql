@@ -1,3 +1,13 @@
+CREATE TABLE data
+(
+    key Int,
+    v1 DateTime,
+    INDEX v1_index v1 TYPE minmax GRANULARITY 1
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY key
+SETTINGS index_granularity = 8192;
+
 -- Set `parallel_replicas_index_analysis_only_on_coordinator = 0` to prevent remote replicas from skipping index analysis in Parallel Replicas.
 -- Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
 SELECT *

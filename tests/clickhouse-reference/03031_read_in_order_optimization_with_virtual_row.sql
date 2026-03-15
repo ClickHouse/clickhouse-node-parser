@@ -1,3 +1,21 @@
+-- Tags: no-parallel-replicas
+-- ^ because we are using query_log
+-- add_minmax_index_for_numeric_columns=0: Different read rows
+
+SET read_in_order_use_virtual_row = 1;
+SET use_query_condition_cache = 0;
+CREATE TABLE t
+(
+    `x` UInt64,
+    `y` UInt64,
+    `z` UInt64,
+    `k` UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y, z)
+SETTINGS index_granularity = 8192,
+index_granularity_bytes = 10485760,
+add_minmax_index_for_numeric_columns=0;
 -- Expecting 2 virtual rows + one chunk (8192) for result + one extra chunk for next consumption in merge transform (8192),
 -- both chunks come from the same part.
 SELECT x
@@ -72,6 +90,9 @@ AND log_comment = 'no preliminary merge, with filter'
 AND type = 'QueryFinish'
 ORDER BY query_start_time DESC
 LIMIT 1;
+CREATE TABLE fixed_prefix(a UInt32, b UInt32)
+ENGINE = MergeTree ORDER BY (a, b)
+SETTINGS index_granularity = 3;
 SELECT a, b
 FROM fixed_prefix
 WHERE a = 1
@@ -86,6 +107,13 @@ ORDER BY b
 SETTINGS max_threads = 1,
 optimize_read_in_order = 1,
 read_in_order_two_level_merge_threshold = 5;  --avoid preliminary merge
+CREATE TABLE function_pk
+(
+    `A` Int64,
+    `B` Int64
+)
+ENGINE = MergeTree ORDER BY (A, -B)
+SETTINGS index_granularity = 1;
 SELECT *
 FROM function_pk
 ORDER BY (A,-B) ASC
@@ -95,6 +123,16 @@ optimize_read_in_order = 1,
 read_in_order_two_level_merge_threshold = 5;  --avoid preliminary merge
 -- modified from 02317_distinct_in_order_optimization
 SELECT '-- test distinct ----';
+CREATE TABLE distinct_in_order
+(
+    `a` int,
+    `b` int,
+    `c` int
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+SETTINGS index_granularity = 8192,
+index_granularity_bytes = '10Mi';
 SELECT DISTINCT a
 FROM distinct_in_order
 ORDER BY a ASC

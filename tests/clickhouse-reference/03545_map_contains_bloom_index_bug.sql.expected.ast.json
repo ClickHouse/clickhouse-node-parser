@@ -1,5 +1,83 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_map_contains_values"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ResourceAttributes",
+        "type": "Map(LowCardinality(String), String)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_res_attr_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mapValues",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ResourceAttributes"
+              ]
+            }
+          ]
+        },
+        "indexType": "bloom_filter(0.01)",
+        "granularity": 1
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_map_contains_keys"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ResourceAttributes",
+        "type": "Map(LowCardinality(String), String)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_res_attr_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ResourceAttributes"
+              ]
+            }
+          ]
+        },
+        "indexType": "bloom_filter(0.01)",
+        "granularity": 1
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

@@ -1,3 +1,6 @@
+-- { echoOn }
+SET compile_aggregate_expressions = 0;
+
 SELECT max(number)
 FROM numbers(100)
 SETTINGS
@@ -384,6 +387,10 @@ FROM (
         SELECT if(number % 3 == 0, NULL, number) AS n
         FROM numbers(10)
     );
+
+SET compile_aggregate_expressions = 1;
+
+SET min_count_to_compile_aggregate_expression = 0;
 
 SELECT minIf(number, rand() % 2 == 3)
 FROM numbers(10);

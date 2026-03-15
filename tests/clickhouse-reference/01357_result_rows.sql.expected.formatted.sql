@@ -1,3 +1,5 @@
+SET log_queries = 1;
+
 SELECT count() > 0
 FROM `system`.`settings`;
 

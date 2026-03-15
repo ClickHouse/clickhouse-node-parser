@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+CREATE TABLE t1 (`a` Int64, `b` Int64) ENGINE = MergeTree ORDER BY a;
+CREATE TABLE t2 (`key` Int32, `val` Int64) ENGINE = MergeTree ORDER BY key;
 SELECT
     1 * 1000.0001,
     (count(1.) = -2147483647) AND (count(a) = 1.1920928955078125e-7) AND (count(val) = 1048577) AND (sum(val) = ((NULL * 1048576) / -9223372036854775807)) AND (sum(a) = ((9223372036854775806 * 10000000000.) / 1048575))

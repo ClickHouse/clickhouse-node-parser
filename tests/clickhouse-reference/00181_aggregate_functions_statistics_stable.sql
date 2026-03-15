@@ -1,3 +1,6 @@
+SET any_join_distinct_right_table_keys = 1;
+SET joined_subquery_requires_alias = 0;
+CREATE TABLE series(i UInt32, x_value Float64, y_value Float64) ENGINE = Memory;
 /* varSampStable */
 
 SELECT varSampStable(x_value) FROM (SELECT x_value FROM series LIMIT 0);

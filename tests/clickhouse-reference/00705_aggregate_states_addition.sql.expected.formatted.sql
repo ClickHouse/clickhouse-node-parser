@@ -1,3 +1,12 @@
+SET send_logs_level = 'fatal';
+
+CREATE TABLE add_aggregate
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
+
 SELECT countMerge(x + y)
 FROM (
         SELECT

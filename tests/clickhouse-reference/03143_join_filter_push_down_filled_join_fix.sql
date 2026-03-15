@@ -1,3 +1,27 @@
+CREATE TABLE t1
+(
+    id UInt64,
+    external_id UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
+CREATE TABLE t2
+(
+    id UInt64,
+    name String
+)
+ENGINE = MergeTree
+ORDER BY id;
+CREATE DICTIONARY d2
+(
+    id UInt64,
+    name String,
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(
+    table t2))
+LIFETIME(MIN 600 MAX 900)
+LAYOUT(HASHED());
 SELECT
     *
 FROM

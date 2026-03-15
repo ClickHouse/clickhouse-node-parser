@@ -1,3 +1,20 @@
+CREATE TABLE ev
+(
+    a Int32,
+    b Int32
+)
+ENGINE = MergeTree()
+ORDER BY a
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+CREATE TABLE idx
+(
+    a Int32
+)
+ENGINE = MergeTree()
+ORDER BY a
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 -- test_enable_global_with_statement_performance_2
 SELECT count()
 FROM ev

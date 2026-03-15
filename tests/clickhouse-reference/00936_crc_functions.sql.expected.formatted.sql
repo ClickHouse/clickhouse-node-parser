@@ -1,3 +1,10 @@
+CREATE TABLE table1
+(
+    str1 String,
+    str2 String
+)
+ENGINE = Memory;
+
 SELECT CRC32('string');
 
 SELECT

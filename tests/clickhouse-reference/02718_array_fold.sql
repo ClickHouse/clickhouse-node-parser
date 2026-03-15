@@ -18,12 +18,14 @@ SELECT arrayFold( acc,x -> x%2 ? (arrayPushBack(acc.1, x), acc.2): (acc.1, array
 SELECT arrayFold( acc,x -> acc+x,  range(number), number) FROM system.numbers LIMIT 5;
 SELECT arrayFold( acc,x -> arrayPushFront(acc,x),  range(number), emptyArrayUInt64()) FROM system.numbers LIMIT 5;
 SELECT arrayFold( acc,x -> x%2 ? arrayPushFront(acc,x) : arrayPushBack(acc,x),  range(number), emptyArrayUInt64()) FROM system.numbers LIMIT 5;
+CREATE TABLE tab (line String, patterns Array(String)) ENGINE = MergeTree ORDER BY line;
 SELECT
     line,
     patterns,
     arrayFold(acc, pat -> position(line, pat), patterns, 0::UInt64)
 FROM tab
 ORDER BY line;
+CREATE TABLE tab (line String) ENGINE = Memory();
 SELECT
     line,
     splitByNonAlpha(line),

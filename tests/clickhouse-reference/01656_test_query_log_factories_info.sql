@@ -1,3 +1,7 @@
+-- Tags: no-parallel, memory-engine
+
+SET database_atomic_wait_for_drop_and_detach_synchronously=1;
+SET log_queries=1;
 SELECT uniqArray([1, 1, 2]),
        SUBSTRING('Hello, world', 7, 5),
        POW(1, 2), ROUND(TANh(1)), CrC32(''),
@@ -35,10 +39,12 @@ ORDER BY query_start_time DESC LIMIT 1 FORMAT TabSeparatedWithNames;
 SELECT arraySort(used_data_type_families)
 FROM system.query_log WHERE current_database = currentDatabase() AND type = 'QueryFinish' AND (query LIKE '%toDate(\'2000-12-05\')%')
 ORDER BY query_start_time DESC LIMIT 1 FORMAT TabSeparatedWithNames;
+CREATE database test_query_log_factories_info1 ENGINE=Atomic;
 SELECT used_database_engines
 FROM system.query_log
 WHERE current_database = currentDatabase() AND type == 'QueryFinish' AND (query LIKE '%database test_query_log_factories_info%')
 ORDER BY query_start_time DESC LIMIT 1 FORMAT TabSeparatedWithNames;
+CREATE OR REPLACE TABLE test_query_log_factories_info1.memory_table (id BIGINT, date DATETIME, date2 DateTime) ENGINE=Memory();
 SELECT arraySort(used_data_type_families), used_storages
 FROM system.query_log
 WHERE current_database = currentDatabase() AND type == 'QueryFinish' AND (query LIKE '%TABLE test%')

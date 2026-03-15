@@ -1,10 +1,28 @@
+-- { echoOn }
+set enable_analyzer=1;
+-- simple test case
+create table if not exists replacing_mt (x String) engine=ReplacingMergeTree() ORDER BY x;
 -- expected output is 2 because final is turned off
 select count() from replacing_mt;
+set final = 1;
+-- JOIN test cases
+create table if not exists lhs (x String) engine=ReplacingMergeTree() ORDER BY x;
+create table if not exists rhs (x String) engine=ReplacingMergeTree() ORDER BY x;
+set final = 0;
 -- expected output is 4 because select_final == 0
 select count() from lhs inner join rhs on lhs.x = rhs.x;
+create table if not exists regular_mt_table (x String) engine=MergeTree() ORDER BY x;
 -- expected output is 2, it should silently ignore final modifier
 select count() from regular_mt_table;
+-- view test
+create materialized VIEW mv_regular_mt_table TO regular_mt_table AS SELECT * FROM regular_mt_table;
+create view nv_regular_mt_table AS SELECT * FROM mv_regular_mt_table;
+set final=1;
 select count() from nv_regular_mt_table;
+-- join on mix of tables that support / do not support select final with explain
+create table if not exists left_table (id UInt64, val_left String) engine=ReplacingMergeTree() ORDER BY id;
+create table if not exists middle_table (id UInt64, val_middle String) engine=MergeTree() ORDER BY id;
+create table if not exists right_table (id UInt64, val_right String) engine=ReplacingMergeTree() ORDER BY id;
 -- expected output
 -- 1 c a c
 -- 1 c b c
@@ -17,6 +35,10 @@ select left_table.id,val_left, val_middle, val_right from left_table
                                                               inner join middle_table on left_table.id = middle_table.id
                                                               inner join (SELECT * FROM right_table WHERE id = 1) r on middle_table.id = r.id
 ORDER BY left_table.id, val_left, val_middle, val_right;
+create table if not exists table_to_merge_a (id UInt64, val String) engine=ReplacingMergeTree() ORDER BY id;
+create table if not exists table_to_merge_b (id UInt64, val String) engine=MergeTree() ORDER BY id;
+create table if not exists table_to_merge_c (id UInt64, val String) engine=ReplacingMergeTree() ORDER BY id;
+CREATE TABLE merge_table Engine=Merge(currentDatabase(), '^(table_to_merge_[a-z])$') AS table_to_merge_a;
 -- expected output:
 -- 1 c, 2 a, 2 b, 3 c
 SELECT * FROM merge_table ORDER BY id, val;

@@ -1,3 +1,16 @@
+SET optimize_read_in_order = 1;
+
+CREATE TABLE mytable
+(
+    timestamp UInt64,
+    insert_timestamp UInt64,
+    key UInt64,
+    value Float64
+)
+ENGINE = ReplacingMergeTree(insert_timestamp)
+ORDER BY (key, timestamp)
+PRIMARY KEY (key, timestamp);
+
 SELECT
     timestamp,
     value

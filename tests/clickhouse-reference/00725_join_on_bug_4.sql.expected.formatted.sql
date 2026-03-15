@@ -1,3 +1,19 @@
+CREATE TABLE t_00725_4
+(
+    a Int64,
+    b Int64,
+    c String
+)
+ENGINE = TinyLog;
+
+CREATE TABLE s_00725_4
+(
+    a Int64,
+    b Int64,
+    c String
+)
+ENGINE = TinyLog;
+
 SELECT t_00725_4.*
 FROM
     t_00725_4

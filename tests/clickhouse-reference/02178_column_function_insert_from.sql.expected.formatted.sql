@@ -1,3 +1,20 @@
+CREATE TABLE TESTTABLE
+(
+    _id UInt64,
+    pt String,
+    attr_list Array(String)
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+PARTITION BY (pt);
+
+SET max_threads = 1;
+
+-- There is a bug which is fixed in new analyzer.
+SET max_bytes_before_external_sort = 0;
+
+SET max_bytes_ratio_before_external_sort = 0;
+
 SELECT
     attr,
     _id,

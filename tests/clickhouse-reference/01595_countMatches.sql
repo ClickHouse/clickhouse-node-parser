@@ -1,3 +1,4 @@
+SET count_matches_stop_at_empty_match = 0;
 select countMatches('', 'foo');
 select countMatches('foo', '');
 -- simply stop if zero bytes was processed
@@ -28,6 +29,7 @@ select countMatches(materialize(toFixedString('foobarfoo', 9)), 'foo');
 select countMatches('  foo bar   ', '[a-zA-Z]*');
 select countMatches(toFixedString('  foo bar   ', 12), '[a-zA-Z]*');
 select countMatches(materialize(toFixedString('  foo bar   ', 12)), '[a-zA-Z]*');
+SET count_matches_stop_at_empty_match = 1;
 select countMatches('foo bar   ', '[a-zA-Z]*');
 select countMatches(toFixedString('foo bar   ', 12), '[a-zA-Z]*');
 select countMatches(materialize(toFixedString('foo bar   ', 12)), '[a-zA-Z]*');

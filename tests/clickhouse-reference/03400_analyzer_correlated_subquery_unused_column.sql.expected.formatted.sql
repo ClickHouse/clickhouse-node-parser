@@ -1,3 +1,26 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = MergeTree()
+ORDER BY uid;
+
+CREATE TABLE users2
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = MergeTree()
+ORDER BY uid;
+
+-- { echoOn }
+SET allow_experimental_correlated_subqueries = 1;
+
 SELECT name
 FROM users AS u1
 WHERE EXISTS((

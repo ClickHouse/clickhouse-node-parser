@@ -1,3 +1,5 @@
+SET enable_dynamic_type = 1;
+
 SELECT
     NOT materialize(1)::Dynamic AS res,
     toTypeName(res);

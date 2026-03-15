@@ -1,3 +1,5 @@
+SET allow_experimental_nullable_tuple_type = 1;
+
 SELECT CAST(NULL AS Nullable(Tuple(Int32, String))).1;
 
 SELECT toTypeName(CAST(NULL AS Nullable(Tuple(Int32, String))).1);
@@ -98,6 +100,13 @@ SELECT [
     CAST((3, 'c') AS Nullable(Tuple(Int32, String)))
 ].2;
 
+CREATE TABLE test_nullable_tuples
+(
+    id UInt32,
+    data Nullable(Tuple(Int32, String))
+)
+ENGINE = Memory;
+
 SELECT
     id,
     data.1 AS value,
@@ -133,6 +142,13 @@ SELECT
     count(data.1) AS count_non_null
 FROM test_nullable_tuples;
 
+CREATE TABLE test_array_nullable_tuples
+(
+    id UInt32,
+    records Array(Nullable(Tuple(Int32, String)))
+)
+ENGINE = Memory;
+
 SELECT
     id,
     records.1 AS values,
@@ -158,6 +174,13 @@ WHERE isNotNull(record)
 ORDER BY
     id ASC,
     value ASC;
+
+CREATE TABLE test_nullable_named_tuples
+(
+    id UInt32,
+    person Nullable(Tuple(name String, age UInt8, salary Float64))
+)
+ENGINE = Memory;
 
 SELECT
     id,
@@ -241,6 +264,13 @@ SELECT
     tupleElement(data, 5, 'default_string') AS value
 FROM test_nullable_tuples
 ORDER BY id ASC;
+
+CREATE TABLE test_complex_nullable
+(
+    id UInt32,
+    matrix Array(Array(Nullable(Tuple(x Int32, y Int32))))
+)
+ENGINE = Memory;
 
 SELECT
     id,

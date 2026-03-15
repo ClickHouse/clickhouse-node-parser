@@ -1,0 +1,4 @@
+create table src (key Int) engine=MergeTree order by ();
+create table dst (key Int) engine=MergeTree order by ();
+create dictionary dict (key Int, value Int) primary key key layout(direct) source(clickhouse(query 'select 0 key, 0 value'));
+create materialized view mv to dst as select * from src;

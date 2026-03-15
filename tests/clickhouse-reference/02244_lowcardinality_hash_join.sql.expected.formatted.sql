@@ -1,3 +1,9 @@
+CREATE TABLE lc_table
+(
+    col LowCardinality(String)
+)
+ENGINE = TinyLog;
+
 SELECT *
 FROM
     lc_table

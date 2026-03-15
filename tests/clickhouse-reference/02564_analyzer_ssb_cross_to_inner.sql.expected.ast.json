@@ -1,0 +1,436 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "customer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "C_CUSTKEY",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C_NAME",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C_ADDRESS",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C_CITY",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C_NATION",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C_REGION",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C_PHONE",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C_MKTSEGMENT",
+        "type": "LowCardinality(String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "C_CUSTKEY"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "lineorder"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "LO_ORDERKEY",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_LINENUMBER",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_CUSTKEY",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_PARTKEY",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_SUPPKEY",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_ORDERDATE",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_ORDERPRIORITY",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_SHIPPRIORITY",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_QUANTITY",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_EXTENDEDPRICE",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_ORDTOTALPRICE",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_DISCOUNT",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_REVENUE",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_SUPPLYCOST",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_TAX",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_COMMITDATE",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LO_SHIPMODE",
+        "type": "LowCardinality(String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYear",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LO_ORDERDATE"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "LO_ORDERDATE"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "LO_ORDERKEY"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "part"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "P_PARTKEY",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "P_NAME",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "P_MFGR",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "P_CATEGORY",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "P_BRAND",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "P_COLOR",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "P_TYPE",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "P_SIZE",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "P_CONTAINER",
+        "type": "LowCardinality(String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "P_PARTKEY"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "supplier"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "S_SUPPKEY",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "S_NAME",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "S_ADDRESS",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "S_CITY",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "S_NATION",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "S_REGION",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "S_PHONE",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "S_SUPPKEY"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "date"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "D_DATEKEY",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_DATE",
+        "type": "FixedString(18)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_DAYOFWEEK",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_MONTH",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_YEAR",
+        "type": "UInt16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_YEARMONTHNUM",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_YEARMONTH",
+        "type": "LowCardinality(FixedString(7))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_DAYNUMINWEEK",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_DAYNUMINMONTH",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_DAYNUMINYEAR",
+        "type": "UInt16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_MONTHNUMINYEAR",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_WEEKNUMINYEAR",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_SELLINGSEASON",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_LASTDAYINWEEKFL",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_LASTDAYINMONTHFL",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_HOLIDAYFL",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_WEEKDAYFL",
+        "type": "UInt8"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "D_DATEKEY"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cross_to_inner_join_rewrite",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  }
+]

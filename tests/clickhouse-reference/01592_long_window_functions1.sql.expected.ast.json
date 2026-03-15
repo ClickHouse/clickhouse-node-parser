@@ -1,5 +1,140 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_sort",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long",
+      "-- test became more than an order of magnitude slower with max_bytes_before_external_sort=1"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_ratio_before_external_sort",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "stack"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "item_id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "brand_id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "rack_id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "expiration_dt",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "quantity",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dt"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "brand_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toStartOfHour",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt"
+            ]
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

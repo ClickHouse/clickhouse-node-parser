@@ -1,3 +1,17 @@
+SET allow_experimental_parallel_reading_from_replicas = 1, parallel_replicas_for_non_replicated_merge_tree = 1, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+
+CREATE TABLE `03581_data`
+(
+    key UInt32,
+    val_minmax UInt32,
+    val_set UInt32,
+    INDEX skip_minmax val_minmax TYPE set(0) GRANULARITY 1,
+    INDEX skip_set val_set TYPE set(0) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY key
+SETTINGS index_granularity = 10;
+
 SELECT
     'Primary key:',
     count()

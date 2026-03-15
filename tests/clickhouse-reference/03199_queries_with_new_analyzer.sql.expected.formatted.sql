@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     *,
     ngramMinHash(*) AS minhash,
@@ -8,3 +10,19 @@ FROM (
     )
 ORDER BY z ASC
 LIMIT 100;
+
+CREATE TABLE test
+(
+    idx UInt64,
+    coverage Array(UInt64),
+    test_name String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE seq
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();

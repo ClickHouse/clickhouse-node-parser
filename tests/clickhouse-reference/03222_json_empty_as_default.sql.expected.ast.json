@@ -1,5 +1,26 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_json_empty_as_default",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "allow_experimental_variant_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -32,7 +53,8 @@
       ]
     },
     "leadingComments": [
-      "-- Simple types"
+      "-- Simple types",
+      "-- { echoOn }"
     ]
   },
   {
@@ -256,6 +278,42 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": "AggregateFunction(uniq, UInt64)"
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -274,7 +332,69 @@
     "from": {
       "kind": "tableRef",
       "table": "table1"
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "address",
+        "type": "IPv6",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toIPv6",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2001:db8:3333:4444:5555:6666:7777:8888"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "leadingComments": [
+      "-- The setting input_format_defaults_for_omitted_fields determines the default value if enabled."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_defaults_for_omitted_fields",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_defaults_for_omitted_fields",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -298,6 +418,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -333,7 +456,8 @@
       ]
     },
     "leadingComments": [
-      "-- Nullable"
+      "-- Nullable",
+      "-- { echoOn }"
     ]
   },
   {

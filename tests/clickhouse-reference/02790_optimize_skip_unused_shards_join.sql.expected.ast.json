@@ -1,5 +1,227 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "outer"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "organization_id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "version",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "version"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "%",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "organization_id"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "8"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "organization_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "inner"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "outer_id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "organization_id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "version",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "version"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "organization_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "outer_id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "inner_distributed"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "inner"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "inner"
+        },
+        {
+          "kind": "functionCall",
+          "name": "intHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "organization_id"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "outer_distributed"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "outer"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "outer"
+        },
+        {
+          "kind": "functionCall",
+          "name": "intHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "organization_id"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

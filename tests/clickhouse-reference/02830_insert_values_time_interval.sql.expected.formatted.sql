@@ -1,3 +1,1 @@
-SELECT *
-FROM t1
-ORDER BY n ASC;
+<Parse Error>

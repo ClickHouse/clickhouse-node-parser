@@ -1,3 +1,12 @@
+CREATE TABLE test_group_by_with_rollup_order
+(
+    id Int64,
+    a Nullable(Int64),
+    b Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     toString(a) AS r1,
     b,

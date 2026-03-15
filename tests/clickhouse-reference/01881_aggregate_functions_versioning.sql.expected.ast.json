@@ -1,0 +1,210 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col1",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "col3",
+        "type": "AggregateFunction(sumMap, Tuple(Array(UInt8), Array(UInt8)))"
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col2"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "engine": {
+      "name": "Null"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "expr",
+          "name": "all_metrics",
+          "expr": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayReduce",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "sumMapState"
+                    },
+                    {
+                      "kind": "array",
+                      "elements": [
+                        {
+                          "kind": "tuple",
+                          "elements": [
+                            {
+                              "kind": "array",
+                              "elements": [
+                                {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "foo"
+                                }
+                              ],
+                              "source": "['foo']"
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "arrayMap",
+                              "args": [
+                                {
+                                  "kind": "lambdaExpr",
+                                  "params": [
+                                    "x"
+                                  ],
+                                  "body": {
+                                    "kind": "literal",
+                                    "type": "Float64",
+                                    "value": "-0."
+                                  }
+                                },
+                                {
+                                  "kind": "array",
+                                  "elements": [
+                                    {
+                                      "kind": "literal",
+                                      "type": "String",
+                                      "value": "foo"
+                                    }
+                                  ],
+                                  "source": "['foo']"
+                                }
+                              ]
+                            }
+                          ],
+                          "source": "(['foo'], arrayMap(x -> -0., ['foo']))"
+                        }
+                      ],
+                      "source": "[(['foo'], arrayMap(x -> -0., ['foo']))]"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "finalizeAggregation",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "arrayReduce",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "sumMapMergeState"
+                        },
+                        {
+                          "kind": "array",
+                          "elements": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "all_metrics"
+                              ]
+                            }
+                          ],
+                          "source": "[all_metrics]"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "alias": "metrics_tuple",
+                "parenthesized": true
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "alias": "metric_names"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "metrics_tuple"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          "alias": "metric_values"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "one"
+      }
+    }
+  }
+]

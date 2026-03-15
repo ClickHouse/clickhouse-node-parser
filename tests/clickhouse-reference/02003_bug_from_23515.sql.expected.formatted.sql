@@ -1,3 +1,13 @@
+CREATE TABLE tab
+(
+    a LowCardinality(String),
+    b LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY a
+SETTINGS min_bytes_for_wide_part = 0, min_rows_for_wide_part = 0;
+
 SELECT a = '1'
 FROM tab
 WHERE a = '1'

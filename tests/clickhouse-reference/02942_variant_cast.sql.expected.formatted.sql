@@ -1,3 +1,5 @@
+SET allow_experimental_variant_type = 1;
+
 SELECT NULL::Variant(String, UInt64);
 
 SELECT 42::UInt64::Variant(String, UInt64);

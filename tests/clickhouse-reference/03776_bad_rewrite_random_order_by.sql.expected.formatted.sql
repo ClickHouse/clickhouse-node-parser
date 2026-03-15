@@ -1,3 +1,16 @@
+CREATE TABLE join_inner_table__fuzz_146_replicated
+(
+    id UUID,
+    key String,
+    number Int64,
+    value1 String,
+    value2 String,
+    time Nullable(Int64)
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/join_inner_table__fuzz_146_replicated', 'r1')
+ORDER BY (id, number, key)
+SETTINGS index_granularity = 8192;
+
 SELECT number
 FROM join_inner_table__fuzz_146_replicated
 SETTINGS

@@ -1,3 +1,11 @@
+CREATE TABLE t0
+(
+    c0 Int32,
+    c1 Int32,
+    c2 String
+)
+ENGINE = Log();
+
 SELECT *
 FROM t0
 FORMAT PrettyMonoBlock;

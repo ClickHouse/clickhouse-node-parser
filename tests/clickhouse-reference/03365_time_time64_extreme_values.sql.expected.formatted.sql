@@ -1,3 +1,5 @@
+SET use_legacy_to_time = 0;
+
 -- Within the acceptable range
 SELECT toTime('999:59:59');
 

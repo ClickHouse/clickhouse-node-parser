@@ -1,3 +1,13 @@
+CREATE TABLE t_parts_profile_events
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_rows_for_wide_part = 10, min_bytes_for_wide_part = 0;
+
+SET log_comment = '02306_part_types_profile_events';
+
 SELECT
     count(),
     sum(ProfileEvents['InsertedWideParts']),

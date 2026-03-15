@@ -1,3 +1,6 @@
+CREATE TABLE dist AS `system`.one
+ENGINE = Distributed('test_shard_localhost', `system`, one);
+
 -- { echo }
 SELECT dummy AS foo
 FROM remote('127.{2,3}', currentDatabase(), dist)

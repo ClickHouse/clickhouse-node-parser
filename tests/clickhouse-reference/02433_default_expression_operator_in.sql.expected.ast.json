@@ -1,0 +1,345 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "id_join"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "country",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "location",
+        "type": "Array(Int32)"
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ANY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "country"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dep"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "country",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "purchase_location",
+        "type": "UInt16",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "values": [
+                {
+                  "kind": "functionCall",
+                  "name": "joinGet",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "concat",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "currentDatabase",
+                          "args": []
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": ".id_join"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "location"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "CLICK"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "456"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02433/{database}/dep"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dep2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "country",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "purchase_location",
+        "type": "UInt16",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "values": [
+                {
+                  "kind": "functionCall",
+                  "name": "joinGet",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "concat",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "currentDatabase",
+                          "args": []
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": ".id_join"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "location"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "CLICK"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "456"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02433/{database}/dep"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": "int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "m",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "default.table_name"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "-- Ensure that a table name cannot be passed to IN as string literal"
+    ],
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": "int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "m",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "in",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "default.table_name"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
+  }
+]

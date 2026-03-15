@@ -1,5 +1,99 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "product",
+        "type": "Enum8('IU' = 1, 'WS' = 2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "machine",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "branch",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "generated_time",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/t"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "product"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toYYYYMM",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "generated_time"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(product, toYYYYMM(generated_time))"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "machine"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "branch"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "generated_time"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

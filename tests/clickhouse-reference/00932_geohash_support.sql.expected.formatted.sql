@@ -1,3 +1,12 @@
+CREATE TABLE geohash_test_data
+(
+    latitude Float64,
+    longitude Float64,
+    encoded String
+)
+ENGINE = MergeTree
+ORDER BY (latitude, longitude, encoded);
+
 SELECT geohashEncode(181.0, 91.0);
 
 SELECT geohashEncode(-181.0, -91.0);

@@ -1,3 +1,23 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/13210
+SET enable_analyzer = 1;
+
+CREATE TABLE test_a_table
+(
+    name String,
+    a_col String
+)
+ENGINE = MergeTree()
+ORDER BY name;
+
+CREATE TABLE test_b_table
+(
+    name String,
+    b_col String,
+    some_val String
+)
+ENGINE = MergeTree()
+ORDER BY name;
+
 SELECT
     b.name AS name,
     a.a_col AS a_col,

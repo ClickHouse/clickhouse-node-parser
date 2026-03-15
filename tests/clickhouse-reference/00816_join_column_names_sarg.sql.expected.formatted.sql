@@ -1,3 +1,17 @@
+CREATE TABLE t1_00816
+(
+    a Int8,
+    val Float32
+)
+ENGINE = Memory();
+
+CREATE TABLE t2_00816
+(
+    a Int8,
+    val Float32
+)
+ENGINE = Memory();
+
 SELECT
     t1_00816.a,
     t2_00816.a

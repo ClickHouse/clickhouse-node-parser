@@ -1,3 +1,17 @@
+CREATE TABLE midpoint_test
+(
+    ui8  UInt8,
+    ui16 UInt16,
+    ui32 UInt32,
+    i8   Int8,
+    i16  Int16,
+    i32  Int32,
+    f32  Float32,
+    f64  Float64,
+    d32  Decimal32(3),
+    d64  Decimal64(3)
+)
+ENGINE = Memory;
 -- ===============================================================
 -- Integer types (signed, unsigned, mixed)
 -- ===============================================================
@@ -78,6 +92,13 @@ SELECT midpoint(materialize(toNullable(1)), 11) AS result, toTypeName(result) AS
 SELECT midpoint(materialize(toNullable(1)), materialize(toNullable(11))) AS result, toTypeName(result) AS type;
 -- Nullable temporal return type
 SELECT midpoint(toNullable(toDate('2025-01-01')), toDate('2025-01-05')) AS result, toTypeName(result) AS type;
+CREATE TABLE midpoint_nullable_test
+(
+    a Nullable(Int32),
+    b Nullable(Int32),
+    c Int32
+)
+ENGINE = Memory;
 SELECT a, b, midpoint(a, b) AS result, toTypeName(result) AS type
 FROM midpoint_nullable_test
 ORDER BY ifNull(a, -999), ifNull(b, -999);
@@ -128,6 +149,13 @@ ORDER BY ifNull(b, -999), c;
 -- ===============================================================
 
 SELECT midpoint(materialize(toNullable(ui8)), 11) AS result, toTypeName(result) AS type FROM midpoint_test;
+CREATE TABLE midpoint_nullable3_test
+(
+    a Nullable(Int32),
+    b Nullable(Int32),
+    c Nullable(Int32)
+)
+ENGINE = Memory;
 SELECT
     a, b, c,
     midpoint(a, b, c) AS result,
@@ -151,6 +179,11 @@ SELECT midpoint(1, 10) AS result, toTypeName(result) AS type;
 SELECT midpoint(-1, -10) AS result, toTypeName(result) AS type;
 SELECT midpoint(toNullable(-1), toNullable(-10)) AS result, toTypeName(result) AS type;
 SELECT midpoint(toNullable(1), toNullable(10)) AS result, toTypeName(result) AS type;
+-- ===============================================================
+-- Overflow / boundary tests
+-- ===============================================================
+
+SET compile_expressions = 0;
 SELECT
     midpoint(toInt64('-9223372036854775808'), toInt64('9223372036854775807')) AS result,
     toTypeName(result) AS type;

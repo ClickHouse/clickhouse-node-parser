@@ -1,5 +1,98 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "weird_partitions_02245"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d1",
+        "type": "DateTime",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "toYYYYMM",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toDateTime",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "ignore",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d1"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(toYYYYMM(toDateTime(d)), ignore(d1))"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "distinct": {
       "kind": "distinct"

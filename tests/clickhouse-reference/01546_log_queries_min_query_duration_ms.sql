@@ -1,3 +1,6 @@
+set log_queries_min_query_duration_ms=300000;
+set log_query_threads=1;
+set log_queries=1;
 --
 -- fast -- no logging
 --
@@ -15,6 +18,10 @@ where
     query like 'select \'01546_log_queries_min_query_duration_ms-fast%'
     and current_database = currentDatabase()
     and event_date >= yesterday();
+--
+-- slow -- query logged
+--
+set log_queries_min_query_duration_ms=300;
 select '01546_log_queries_min_query_duration_ms-slow', sleep(0.4) format Null;
 -- With the limit on minimum execution time, "query start" and "exception before start" events are not logged, only query finish.
 select count()

@@ -1,3 +1,1 @@
-SELECT *
-FROM TestView
-ORDER BY key ASC;
+<Parse Error>

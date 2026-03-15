@@ -1,3 +1,13 @@
+CREATE TABLE data
+(
+    ts DateTime,
+    field String,
+    num_field Nullable(Float64)
+)
+ENGINE = MergeTree()
+ORDER BY ts
+PARTITION BY ts;
+
 SELECT
     field,
     countIf(num_field > 6.0)

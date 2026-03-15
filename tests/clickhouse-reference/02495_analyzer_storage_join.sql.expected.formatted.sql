@@ -1,4 +1,27 @@
+SET enable_analyzer = 1;
+
+SET single_join_prefer_left_table = 0;
+
+CREATE TABLE tj
+(
+    key2 UInt64,
+    key1 Int64,
+    a UInt64,
+    b UInt64,
+    x UInt64,
+    y UInt64
+)
+ENGINE = Join(`ALL`, `RIGHT`, key1, key2);
+
 SELECT '--- no name clashes ---';
+
+CREATE TABLE t1
+(
+    id2 UInt64,
+    id1 Int64,
+    val UInt64
+)
+ENGINE = Memory;
 
 SELECT *
 FROM
@@ -66,6 +89,16 @@ RIGHT JOIN tj
     AND t1.id2 == tj.key2
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
+
+CREATE TABLE t
+(
+    key2 UInt64,
+    key1 Int64,
+    b UInt64,
+    x UInt64,
+    val UInt64
+)
+ENGINE = Memory;
 
 SELECT *
 FROM

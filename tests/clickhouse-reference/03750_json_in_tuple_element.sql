@@ -1,3 +1,4 @@
+set enable_analyzer=1;
 select tupleElement('{"a" : 42}'::JSON, 'a');
 select tupleElement('{"a" : 42}'::JSON(a UInt32), 'a');
 select tupleElement(materialize('{"a" : 42}')::JSON, 'a');
@@ -10,6 +11,7 @@ select ['{"a" : 42}']::Array(JSON)[1].a;
 select ['{"a" : 42}']::Array(JSON(a UInt32))[1].a;
 select materialize(['{"a" : 42}'])::Array(JSON)[1].a;
 select materialize(['{"a" : 42}'])::Array(JSON(a UInt32))[1].a;
+create table test (json JSON(a UInt32)) engine=Memory;
 select tupleElement(json, 'a') from test;
 select tupleElement(json, 'b') from test;
 select tupleElement(json, 'c') from test;

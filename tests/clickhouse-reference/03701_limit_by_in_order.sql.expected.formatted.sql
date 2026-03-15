@@ -1,3 +1,15 @@
+-- In order version of LIMIT BY works only if analyzer enabled
+SET enable_analyzer = 1;
+
+CREATE TABLE `03701_unsorted`
+(
+    key UInt32,
+    val UInt32,
+    dt Date
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 -- DISTINCT for explain outputs are required due to parallel replicas tests, as there
 -- are created multiple LimitByTransforms (pushed down to replicas and the global one)
 SELECT DISTINCT concat('Unsorted ORDER BY key LIMIT BY key: ', trimBoth(`explain`, ' '))
@@ -106,6 +118,15 @@ FROM `03701_unsorted`
 ORDER BY key ASC
 LIMIT 2 BY key
 LIMIT 16;
+
+CREATE TABLE `03701_sorted`
+(
+    key UInt32,
+    val UInt32,
+    dt Date
+)
+ENGINE = MergeTree
+ORDER BY key;
 
 SELECT DISTINCT concat('Sorted ORDER BY key LIMIT BY key: ', trimBoth(`explain`, ' '))
 FROM (

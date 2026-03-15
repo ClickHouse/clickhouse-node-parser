@@ -14,6 +14,13 @@ FROM (
     )
 ORDER BY X ASC;
 
+CREATE TABLE globalin
+(
+    CounterID UInt32,
+    StartDate Date
+)
+ENGINE = Memory;
+
 SELECT *
 FROM (
         SELECT CounterID
@@ -56,6 +63,13 @@ FROM (
     );
 
 SELECT 'finish ===========================;';
+
+CREATE TABLE union_bug
+(
+    Event String,
+    Datetime DateTime('Asia/Istanbul')
+)
+ENGINE = Memory;
 
 SELECT *
 FROM (

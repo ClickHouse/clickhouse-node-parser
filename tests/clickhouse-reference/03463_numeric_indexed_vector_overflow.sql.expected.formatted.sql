@@ -1,3 +1,11 @@
+CREATE TABLE uin_value_details
+(
+    uin UInt8,
+    value Float64
+)
+ENGINE = MergeTree()
+ORDER BY uin;
+
 -- https://github.com/ClickHouse/ClickHouse/issues/82239
 SELECT 'Test with NaN, INFs and Nulls' AS test;
 
@@ -15,3 +23,17 @@ FROM values('x Nullable(Int32), y Nullable(Float64)', (1, 0), (3, -inf), (3, 2),
 
 -- https://github.com/ClickHouse/ClickHouse/issues/83591
 SELECT 'Test for overflows' AS test;
+
+CREATE TABLE test
+(
+    t AggregateFunction(groupNumericIndexedVectorState, UInt32, Float64)
+)
+ENGINE = AggregatingMergeTree
+ORDER BY tuple();
+
+CREATE TABLE test2
+(
+    t AggregateFunction(groupNumericIndexedVectorState, UInt32, UInt64)
+)
+ENGINE = AggregatingMergeTree
+ORDER BY tuple();

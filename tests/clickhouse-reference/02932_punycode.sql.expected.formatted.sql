@@ -184,12 +184,26 @@ SELECT
     tryPunycodeDecode(puny) AS original_try
 FORMAT Vertical;
 
+CREATE TABLE tab
+(
+    str String
+)
+ENGINE = MergeTree
+ORDER BY str;
+
 SELECT
     str,
     punycodeEncode(str) AS puny,
     punycodeDecode(puny) AS original,
     tryPunycodeDecode(puny) AS original_try
 FROM tab;
+
+CREATE TABLE tab
+(
+    puny String
+)
+ENGINE = MergeTree
+ORDER BY puny;
 
 SELECT
     puny,

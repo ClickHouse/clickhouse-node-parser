@@ -1,0 +1,10 @@
+CREATE TABLE mergeTree_02184 (id UInt64, name String, dt Date) Engine=MergeTree ORDER BY id;
+CREATE TABLE distributed_02184 (id UInt64, name String, dt Date) Engine=Distributed('test_cluster_two_shards', 'default', 'mergeTree_02184', rand());
+CREATE TABLE buffer_02184 (id UInt64, name String, dt Date) ENGINE = Buffer(default, mergeTree_02184, 16, 10, 100, 10000, 1000000, 10000000, 100000000);
+CREATE TABLE merge_02184 (id UInt64, name String, dt Date) ENGINE = Merge('default', 'distributed_02184');
+CREATE TABLE null_02184 AS system.one Engine=Null();
+CREATE TABLE file_02184 (id UInt64, name String, dt Date) ENGINE = File(TabSeparated);
+CREATE TABLE memory_02184 (id UInt64, name String, dt Date) ENGINE = Memory();
+CREATE TABLE log_02184 (id UInt64, name String, dt Date) ENGINE = Log();
+CREATE TABLE ting_log_02184 (id UInt64, name String, dt Date) ENGINE = TinyLog();
+CREATE TABLE stripe_log_02184 (id UInt64, name String, dt Date) ENGINE = StripeLog;

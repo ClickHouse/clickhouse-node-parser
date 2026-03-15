@@ -1,3 +1,10 @@
+CREATE TABLE limit_by
+(
+    Num UInt32,
+    Name String
+)
+ENGINE = Memory;
+
 -- Two elemens in each group
 SELECT Num
 FROM limit_by

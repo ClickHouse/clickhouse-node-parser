@@ -1,4 +1,9 @@
-
+CREATE TABLE t1 (x Nullable(Int64), y Nullable(UInt64)) ENGINE = TinyLog;
+CREATE TABLE t2 (x Nullable(Int64), y Nullable(UInt64)) ENGINE = TinyLog;
+CREATE TABLE t1n (x Int64, y UInt64) ENGINE = TinyLog;
+CREATE TABLE t2n (x Int64, y UInt64) ENGINE = TinyLog;
+SET enable_analyzer = 1;
+-- { echoOn }
 SELECT * FROM t1 JOIN t2 ON (t1.x <=> t2.x OR (t1.x IS NULL AND t2.x IS NULL)) ORDER BY t1.x NULLS LAST;
 SELECT * FROM t1 JOIN t2 ON (t1.x <=> t2.x OR t1.x IS NULL AND t2.x IS NULL) OR t1.y <=> t2.y ORDER BY t1.x NULLS LAST;
 SELECT * FROM t1 JOIN t2 ON (t1.x = t2.x OR t1.x IS NULL AND t2.x IS NULL) ORDER BY t1.x;

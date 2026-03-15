@@ -1,3 +1,19 @@
+CREATE TABLE foo
+(
+    id UInt64,
+    seq UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE bar
+(
+    id UInt64,
+    seq UInt64,
+    name String
+)
+ENGINE = ReplacingMergeTree
+ORDER BY id;
+
 SELECT *
 FROM
     bar
@@ -5,6 +21,17 @@ INNER JOIN foo
     USING (id)
 WHERE bar.seq > foo.seq
 SETTINGS final = 1;
+
+CREATE TABLE t
+(
+    k1 UInt64,
+    k2 UInt64,
+    v UInt64
+)
+ENGINE = ReplacingMergeTree()
+ORDER BY (k1, k2);
+
+SET optimize_on_insert = 0;
 
 -- { echo ON }
 SELECT

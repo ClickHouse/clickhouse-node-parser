@@ -1,1 +1,4 @@
+CREATE TABLE log (x UInt8) ENGINE = StripeLog;
 SELECT * FROM log ORDER BY x;
+CREATE TABLE log (x UInt8) ENGINE = TinyLog;
+CREATE TABLE log (x UInt8) ENGINE = Log;

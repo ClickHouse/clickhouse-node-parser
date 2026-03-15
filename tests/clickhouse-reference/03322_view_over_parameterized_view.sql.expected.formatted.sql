@@ -1,2 +1,1 @@
-SELECT *
-FROM vv; -- { serverError STORAGE_REQUIRES_PARAMETER }
+<Parse Error>

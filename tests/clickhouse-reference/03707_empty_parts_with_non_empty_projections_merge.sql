@@ -1,0 +1,1 @@
+create table mt1 (time DateTime, projection proj (select min(time))) engine MergeTree order by () TTL time + interval 1 second settings remove_empty_parts=0, merge_with_ttl_timeout=0, deduplicate_merge_projection_mode='ignore';

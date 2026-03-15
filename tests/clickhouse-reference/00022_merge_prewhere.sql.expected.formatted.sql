@@ -1,3 +1,6 @@
+CREATE TABLE IF NOT EXISTS merge_hits AS test.hits
+ENGINE = Merge(test, '^hits$');
+
 SELECT count()
 FROM merge_hits
 WHERE AdvEngineID = 2;

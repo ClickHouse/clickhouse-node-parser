@@ -1,3 +1,24 @@
+SET compile_expressions = 1;
+
+SET min_count_to_compile_expression = 1;
+
+SET optimize_move_to_prewhere = 0;
+
+CREATE TABLE dt
+(
+    tkey Int32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE testx
+(
+    t Int32,
+    a UInt8
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT COUNT(*)
 FROM testx
 WHERE NOT a

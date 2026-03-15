@@ -1,3 +1,6 @@
+create table dist_01757 as system.one engine=Distributed(test_cluster_two_shards, system, one, dummy);
+set optimize_skip_unused_shards=1;
+set force_optimize_skip_unused_shards=2;
 -- in
 select * from dist_01757 where dummy in (0,) format Null;
 select * from dist_01757 where dummy in (0, 1) format Null settings optimize_skip_unused_shards_limit=2;

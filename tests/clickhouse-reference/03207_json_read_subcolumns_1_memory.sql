@@ -1,3 +1,9 @@
+-- Tags: no-fasttest, long
+SET enable_json_type = 1;
+set allow_experimental_variant_type = 1;
+set use_variant_as_common_type=1;
+set session_timezone = 'UTC';
+create table test (id UInt64, json JSON(max_dynamic_paths=2, a.b.c UInt32)) engine=Memory;
 select distinct arrayJoin(JSONAllPathsWithTypes(json)) as paths_with_types from test order by paths_with_types;
 select json.non.existing.path, json.a.b.c, json.a.b.d, json.a.b.d.:Int64, json.a.b.d.:UUID, json.a.b.e, json.a.b.e.:String, json.a.b.e.:UUID, json.b.b.`_25`, json.b.b.`_25`.:Int64, json.b.b.`_25`.:UUID, json.b.b.`_26`, json.b.b.`_26`.:Int64, json.b.b.`_26`.:UUID, json.b.b.`_27`, json.b.b.`_27`.:Int64, json.b.b.`_27`.:UUID, json.b.b.`_28`, json.b.b.`_28`.:Int64, json.b.b.`_28`.:UUID, json.b.b.`_29`, json.b.b.`_29`.:Int64,  json.b.b.`_29`.:UUID, json.b.b.d, json.b.b.d.:Int64, json.b.b.d.:UUID, json.b.b.e, json.b.b.e.:String, json.b.b.e.:UUID, json.d.a, json.d.a.:`Array(Nullable(Int64))`, json.d.a.:UUID, json.d.b, json.d.b.:Int64, json.d.b.:UUID, json.d.c, json.d.c.:Date, json.d.c.:UUID, json.^n, json.^a, json.^a.b, json.^b, json.^d from test order by id format JSONColumns;
 select json, json.non.existing.path, json.a.b.c, json.a.b.d, json.a.b.d.:Int64, json.a.b.d.:UUID, json.a.b.e, json.a.b.e.:String, json.a.b.e.:UUID, json.b.b.`_25`, json.b.b.`_25`.:Int64, json.b.b.`_25`.:UUID, json.b.b.`_26`, json.b.b.`_26`.:Int64, json.b.b.`_26`.:UUID, json.b.b.`_27`, json.b.b.`_27`.:Int64, json.b.b.`_27`.:UUID, json.b.b.`_28`, json.b.b.`_28`.:Int64, json.b.b.`_28`.:UUID, json.b.b.`_29`, json.b.b.`_29`.:Int64,  json.b.b.`_29`.:UUID, json.b.b.d, json.b.b.d.:Int64, json.b.b.d.:UUID, json.b.b.e, json.b.b.e.:String, json.b.b.e.:UUID, json.d.a, json.d.a.:`Array(Nullable(Int64))`, json.d.a.:UUID, json.d.b, json.d.b.:Int64, json.d.b.:UUID, json.d.c, json.d.c.:Date, json.d.c.:UUID, json.^n, json.^a, json.^a.b, json.^b, json.^d from test order by id format JSONColumns;

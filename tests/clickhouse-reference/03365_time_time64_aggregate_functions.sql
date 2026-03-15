@@ -1,3 +1,10 @@
+SET enable_time_time64_type = 1;
+CREATE TABLE dt
+(
+    `time` Time,
+    `event_id` UInt8
+)
+ENGINE = TinyLog;
 SELECT max(time)
 FROM dt;
 SELECT min(time)

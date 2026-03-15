@@ -1,3 +1,10 @@
+CREATE TABLE t0
+(
+    c0 UInt32,
+    c1 UInt64
+)
+ENGINE = Memory;
+
 SELECT ty.c0
 FROM
     t0

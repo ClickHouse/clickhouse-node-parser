@@ -10,6 +10,7 @@ SELECT bitmapXorCardinality(bitmapBuild([1,2,3]),bitmapBuild([3,4,5]));
 SELECT bitmapAndnotCardinality(bitmapBuild([1,2,3]),bitmapBuild([3,4,5]));
 SELECT bitmapAndCardinality(bitmapBuild([100, 200, 500]), bitmapBuild(CAST([100, 200], 'Array(UInt16)')));
 SELECT bitmapToArray(bitmapAnd(bitmapBuild([100, 200, 500]), bitmapBuild(CAST([100, 200], 'Array(UInt16)'))));
+CREATE TABLE bitmap_test(pickup_date Date, city_id UInt32, uid UInt32)ENGINE = Memory;
 SELECT groupBitmap( uid ) AS user_num FROM bitmap_test;
 SELECT pickup_date, groupBitmap( uid ) AS user_num, bitmapToArray(groupBitmapState( uid )) AS users FROM bitmap_test GROUP BY pickup_date ORDER BY pickup_date;
 SELECT
@@ -51,11 +52,34 @@ SELECT count(*) FROM bitmap_test WHERE bitmapContains((SELECT groupBitmapState(u
 SELECT count(*) FROM bitmap_test WHERE 0 = bitmapContains((SELECT groupBitmapState(uid) FROM bitmap_test WHERE pickup_date = '2019-01-01'), uid);
 -- PR#8082
 SELECT bitmapToArray(bitmapAnd(groupBitmapState(uid), bitmapBuild(CAST([1, 2, 3], 'Array(UInt32)')))) FROM bitmap_test GROUP BY city_id ORDER BY city_id;
+set allow_deprecated_syntax_for_merge_tree=1;
+CREATE TABLE bitmap_state_test
+(
+	pickup_date Date,
+	city_id UInt32,
+    uv AggregateFunction( groupBitmap, UInt32 )
+)
+ENGINE = AggregatingMergeTree( pickup_date, ( pickup_date, city_id ), 8192);
 SELECT pickup_date, groupBitmapMerge(uv) AS users from bitmap_state_test group by pickup_date order by pickup_date;
+CREATE TABLE bitmap_column_expr_test
+(
+    t DateTime,
+    z AggregateFunction(groupBitmap, UInt32)
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMMDD(t)
+ORDER BY t;
 SELECT bitmapAndCardinality( bitmapBuild(cast([19,7] AS Array(UInt32))), z) FROM bitmap_column_expr_test;
 SELECT bitmapAndCardinality( z, bitmapBuild(cast([19,7] AS Array(UInt32))) ) FROM bitmap_column_expr_test;
 SELECT bitmapCardinality(bitmapAnd(bitmapBuild(cast([19,7] AS Array(UInt32))), z )) FROM bitmap_column_expr_test;
 SELECT bitmapCardinality(bitmapAnd(z, bitmapBuild(cast([19,7] AS Array(UInt32))))) FROM bitmap_column_expr_test;
+CREATE TABLE bitmap_column_expr_test2
+(
+    tag_id String,
+    z AggregateFunction(groupBitmap, UInt32)
+)
+ENGINE = MergeTree
+ORDER BY tag_id;
 SELECT groupBitmapMerge(z) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
 SELECT arraySort(bitmapToArray(groupBitmapMergeState(z))) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
 SELECT groupBitmapOr(z) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
@@ -64,6 +88,18 @@ SELECT groupBitmapAnd(z) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%'
 SELECT arraySort(bitmapToArray(groupBitmapAndState(z))) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
 SELECT groupBitmapXor(z) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
 SELECT arraySort(bitmapToArray(groupBitmapXorState(z))) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
+CREATE TABLE bitmap_column_expr_test3
+(
+    tag_id String,
+    z AggregateFunction(groupBitmap, UInt64),
+    replace Nested (
+        from UInt16,
+        to UInt64
+    )
+)
+ENGINE = MergeTree
+ORDER BY tag_id;
+CREATE VIEW numbers10 AS SELECT number FROM system.numbers LIMIT 10;
 SELECT tag_id, bitmapToArray(z), replace.from, replace.to, bitmapToArray(bitmapTransform(z, replace.from, replace.to)) FROM bitmap_column_expr_test3 ORDER BY tag_id;
 -- bitmapHasAny:
 ---- Empty

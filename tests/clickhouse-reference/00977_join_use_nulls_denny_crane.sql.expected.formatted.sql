@@ -1,3 +1,21 @@
+CREATE TABLE t
+(
+    a Int64,
+    b Int64,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE s
+(
+    a Int64,
+    b Int64,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     t.*,
     s.a,
@@ -43,6 +61,24 @@ RIGHT JOIN s
     ON (s.a = t.a
     AND s.b = t.b)
 SETTINGS join_use_nulls = 1;
+
+CREATE TABLE t
+(
+    a Int64,
+    b Int64,
+    c Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE s
+(
+    a Int64,
+    b Int64,
+    c Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT *
 FROM
@@ -78,6 +114,24 @@ RIGHT JOIN s
     AND s.b = t.b)
 SETTINGS join_use_nulls = 1;
 
+CREATE TABLE t
+(
+    a Int64,
+    b Nullable(Int64),
+    c String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE s
+(
+    a Int64,
+    b Nullable(Int64),
+    c String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     t.*,
     s.*
@@ -111,3 +165,39 @@ RIGHT JOIN s
     ON (s.a = t.a
     AND s.b = t.b)
 SETTINGS join_use_nulls = 1;
+
+CREATE TABLE t
+(
+    a Int64,
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE s
+(
+    a Int64,
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t
+(
+    a Nullable(Int64),
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE s
+(
+    a Nullable(Int64),
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();

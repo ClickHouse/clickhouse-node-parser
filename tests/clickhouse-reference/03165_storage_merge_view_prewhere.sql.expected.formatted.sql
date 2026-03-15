@@ -1,3 +1,29 @@
+CREATE TABLE ids
+(
+    id UUID,
+    whatever String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE data
+(
+    id UUID,
+    event_time DateTime,
+    status String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE data2
+(
+    id UUID,
+    event_time DateTime,
+    status String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     id,
     whatever

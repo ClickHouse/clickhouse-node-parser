@@ -1,3 +1,10 @@
+CREATE TABLE t1 (n UInt64) ENGINE = MergeTree() SETTINGS auto_statistics_types='uniq';
+CREATE TABLE t2 (key1 UInt64, key2 UInt64, key3 UInt64, value UInt64) ENGINE = MergeTree() SETTINGS auto_statistics_types='uniq';
+SET enable_analyzer = 1;
+SET query_plan_join_swap_table = 0;
+SET use_statistics = 1;
+SET enable_parallel_replicas = 0;
+SET enable_join_runtime_filters = 0;
 SELECT explain FROM
 (
 EXPLAIN keep_logical_steps=1, actions=1

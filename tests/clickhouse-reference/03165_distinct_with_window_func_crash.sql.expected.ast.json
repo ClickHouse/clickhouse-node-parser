@@ -1,5 +1,72 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "atable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "cdu_date",
+        "type": "Int16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "loanx_id",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "rating_sp",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_enable_multithreading_after_window_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- disable parallelization after window function otherwise",
+      "-- generated pipeline contains enormous number of transformers (should be fixed separately)"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- max_threads is randomized, and can significantly increase number of parallel transformers after window func, so set to small value explicitly"
+    ]
+  },
+  {
     "kind": "select",
     "distinct": {
       "kind": "distinct"

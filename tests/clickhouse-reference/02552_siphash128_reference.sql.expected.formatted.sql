@@ -271,6 +271,13 @@ SELECT hex(sipHash128Reference()) = hex(reverse(unhex('1CE422FEE7BD8DE2000000000
 SELECT hex(sipHash128ReferenceKeyed()) = hex(reverse(unhex('1CE422FEE7BD8DE20000000000000000')))
     OR hex(sipHash128Keyed()) = '1CE422FEE7BD8DE20000000000000000';
 
+CREATE TABLE tab
+(
+    key Tuple(UInt64, UInt64),
+    val UInt64
+)
+ENGINE = Memory;
+
 -- these two statements must produce the same result
 SELECT hex(sipHash128ReferenceKeyed(key, val))
 FROM tab;
@@ -285,6 +292,12 @@ GROUP BY
     NULL + NULL,
     char(-2147483649, 1);
 
+CREATE TABLE sipHashKeyed_test
+ENGINE = Memory() AS
+SELECT
+    1 AS a,
+    'test' AS b;
+
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(0), toUInt64(0)), 1, 'test'));
 
 SELECT hex(sipHash128Reference(tuple(*)))
@@ -296,9 +309,24 @@ FROM sipHashKeyed_test;
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(0), toUInt64(0)), a, b))
 FROM sipHashKeyed_test;
 
+CREATE TABLE sipHashKeyed_keys
+(
+    key Tuple(UInt64, UInt64),
+    val UInt64
+)
+ENGINE = Memory;
+
 SELECT hex(sipHash128ReferenceKeyed(key, val))
 FROM sipHashKeyed_keys
 ORDER BY key ASC;
+
+CREATE TABLE sipHashKeyed_keys
+(
+    key0 UInt64,
+    key1 UInt64,
+    val UInt64
+)
+ENGINE = Memory;
 
 SELECT hex(sipHash128ReferenceKeyed((key0, key1), val))
 FROM sipHashKeyed_keys
@@ -307,6 +335,13 @@ ORDER BY key0 ASC;
 SELECT hex(sipHash128ReferenceKeyed((2::UInt64, 2::UInt64), val))
 FROM sipHashKeyed_keys
 ORDER BY val ASC;
+
+CREATE TABLE sipHashKeyed_keys
+(
+    key0 UInt64,
+    key1 UInt64
+)
+ENGINE = Memory;
 
 SELECT hex(sipHash128ReferenceKeyed((key0, key1), 4::UInt64))
 FROM sipHashKeyed_keys

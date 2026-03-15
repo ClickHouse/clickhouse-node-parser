@@ -1,3 +1,15 @@
+SET force_primary_key = 1;
+
+CREATE TABLE test_23634
+(
+    id Nullable(String),
+    s Nullable(String),
+    s1 Nullable(String)
+)
+ENGINE = MergeTree()
+ORDER BY (id, s)
+SETTINGS allow_nullable_key = 1;
+
 SELECT '---Q1---';
 
 SELECT *
@@ -14,6 +26,8 @@ FROM test_23634
 WHERE id != ''
     AND s != ''
     AND s1 != '';
+
+SET force_primary_key = 0;
 
 SELECT *
 FROM test_23634

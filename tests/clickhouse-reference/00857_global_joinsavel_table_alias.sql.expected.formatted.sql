@@ -1,3 +1,25 @@
+CREATE TABLE local_table
+(
+    id Int32,
+    name String,
+    ts DateTime,
+    oth_id Int32
+)
+ENGINE = MergeTree()
+ORDER BY (ts, id)
+PARTITION BY toMonday(ts);
+
+CREATE TABLE other_table
+(
+    id Int32,
+    name String,
+    ts DateTime,
+    trd_id Int32
+)
+ENGINE = MergeTree()
+ORDER BY (ts, id)
+PARTITION BY toMonday(ts);
+
 SELECT t2.name
 FROM
     remote('127.0.0.2', currentDatabase(), 'local_table') AS t1

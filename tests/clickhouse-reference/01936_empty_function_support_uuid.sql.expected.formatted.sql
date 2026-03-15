@@ -13,6 +13,19 @@ FROM (
         SELECT toUUID('00000000-0000-0000-0000-000000000001') AS uuid
     );
 
+CREATE TABLE users
+(
+    user_id UUID
+)
+ENGINE = Memory;
+
+CREATE TABLE orders
+(
+    order_id UUID,
+    user_id UUID
+)
+ENGINE = Memory;
+
 SELECT
     uniq(user_id) AS users,
     uniqIf(order_id, notEmpty(order_id)) AS orders

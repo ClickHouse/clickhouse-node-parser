@@ -1,5 +1,69 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mut"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": "int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "m",
+        "type": "int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": "int"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02441/{database}/mut"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database, no-shared-merge-tree",
+      "-- no-shared-merge-tree: depend on system.replication_queue"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -261,6 +325,19 @@
         }
       ]
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "receive_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "30"
+        }
+      }
+    ]
   },
   {
     "kind": "select",

@@ -1,1 +1,3 @@
+SET param_preceding_rows = 1;
+
 SELECT sum(1) OVER (ORDER BY 1 ASC ROWS BETWEEN {preceding_rows:UInt64} PRECEDING AND CURRENT ROW);

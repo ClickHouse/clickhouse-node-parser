@@ -1,3 +1,12 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/23194
+SET enable_analyzer = 1;
+
+CREATE TEMPORARY TABLE test1
+(
+    a String,
+    nest Nested(x String, y String)
+);
+
 SELECT
     a,
     nest.*
@@ -11,6 +20,12 @@ SELECT
 FROM
     test1
 ARRAY JOIN nest AS n;
+
+CREATE TEMPORARY TABLE test2
+(
+    a String,
+    nest Array(Tuple(x String, y String))
+);
 
 SELECT
     a,

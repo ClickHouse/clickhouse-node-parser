@@ -1,3 +1,27 @@
+-- For cloud version, should also consider min_bytes_for_full_part_storage since packed storage exists,
+-- but for less redundancy, just let CI test the parameter.
+SET lightweight_deletes_sync = 2, alter_sync = 2;
+
+CREATE TABLE users_compact
+(
+    uid Int16,
+    name String,
+    age Int16,
+    PROJECTION p1 (    SELECT
+        count(),
+        age
+    GROUP BY age),
+    PROJECTION p2 (    SELECT
+        age,
+        name
+    GROUP BY
+        age,
+        name)
+)
+ENGINE = MergeTree
+ORDER BY uid
+SETTINGS min_bytes_for_wide_part = 10485760;
+
 SELECT *
 FROM users_compact
 ORDER BY uid ASC;
@@ -27,6 +51,26 @@ WHERE (database = currentDatabase())
     AND (table = 'users_compact')
     AND (active = 1)
     AND like(parent_name, 'all_3_3%');
+
+CREATE TABLE users_wide
+(
+    uid Int16,
+    name String,
+    age Int16,
+    PROJECTION p1 (    SELECT
+        count(),
+        age
+    GROUP BY age),
+    PROJECTION p2 (    SELECT
+        age,
+        name
+    GROUP BY
+        age,
+        name)
+)
+ENGINE = MergeTree
+ORDER BY uid
+SETTINGS min_bytes_for_wide_part = 0;
 
 SELECT *
 FROM users_wide

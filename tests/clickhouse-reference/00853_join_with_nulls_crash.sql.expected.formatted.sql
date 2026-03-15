@@ -1,3 +1,21 @@
+CREATE TABLE table_a
+(
+    event_id UInt64,
+    something String,
+    other Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY event_id;
+
+CREATE TABLE table_b
+(
+    event_id UInt64,
+    something Nullable(String),
+    other String
+)
+ENGINE = MergeTree
+ORDER BY event_id;
+
 SELECT
     s1.other,
     s2.other,
@@ -81,6 +99,8 @@ ORDER BY
     count_a DESC,
     s1.something ASC,
     s2.something ASC;
+
+SET joined_subquery_requires_alias = 0;
 
 SELECT
     something,

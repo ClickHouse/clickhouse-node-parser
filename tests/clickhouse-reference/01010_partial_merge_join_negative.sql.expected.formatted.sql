@@ -1,3 +1,21 @@
+CREATE TABLE t0
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+CREATE TABLE t1
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+SET join_algorithm = 'partial_merge';
+
 SELECT *
 FROM
     t0

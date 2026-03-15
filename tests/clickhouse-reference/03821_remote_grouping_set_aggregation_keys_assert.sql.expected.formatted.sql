@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     count(),
     number AS k
@@ -6,3 +8,5 @@ GROUP BY GROUPING SETS ((k), (k, k))
 ORDER BY k ASC;
 
 SELECT '---';
+
+SET enable_analyzer = 0;

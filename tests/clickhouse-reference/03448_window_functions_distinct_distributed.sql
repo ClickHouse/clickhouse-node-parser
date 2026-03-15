@@ -1,3 +1,6 @@
+-- Tags: distributed
+
+SET distributed_aggregation_memory_efficient = 1;
 SELECT any(total) AS total_distinct_avg
 FROM (
     SELECT number,
@@ -28,3 +31,4 @@ FROM (
         argMinDistinct(ts, s) OVER (PARTITION BY ts % 3 ORDER BY ts) AS argMin_val
     FROM remote('127.0.0.{1,2,3}', numbers_mt(100_000)) ORDER BY ts
 );
+SET distributed_aggregation_memory_efficient = 0;

@@ -1,3 +1,21 @@
+Set
+
+Set
+
+CreateQuery modify_sample (children 3)
+ Identifier modify_sample
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration d (children 2)
+    DataType Date
+    Literal '2000-01-01'
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier d
+  Identifier x
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -22,6 +40,28 @@ SelectWithUnionQuery (children 1)
       TableIdentifier modify_sample
       SampleRatio 1 / 10
 
+CreateQuery modify_sample_replicated (children 3)
+ Identifier modify_sample_replicated
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration d (children 2)
+    DataType Date
+    Literal '2000-01-01'
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+   ColumnDeclaration y (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_01430'
+    Literal 'modify_sample'
+  Identifier d
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier x
+    Identifier y
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -69,3 +109,26 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 2)
       TableIdentifier modify_sample_replicated
       SampleRatio 1 / 10
+
+Set
+
+CreateQuery modify_sample_old (children 3)
+ Identifier modify_sample_old
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration d (children 2)
+    DataType Date
+    Literal '2000-01-01'
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+   ColumnDeclaration y (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier d
+    Function tuple (children 1)
+     ExpressionList (children 2)
+      Identifier x
+      Identifier y
+    Literal UInt64_8192

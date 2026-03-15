@@ -1,5 +1,61 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "31M"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "perf_lc_num"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "num",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": "Array(LowCardinality(Int64))",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "array",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "num"
+              ]
+            }
+          ],
+          "source": "[num]"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

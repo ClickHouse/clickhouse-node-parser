@@ -1,3 +1,8 @@
+CREATE TABLE test_system_zookeeper_auxiliary (
+    key UInt64
+)
+ENGINE ReplicatedMergeTree('zookeeper2:/clickhouse/{database}/02731_test_system_zookeeper_auxiliary/{shard}', '{replica}')
+ORDER BY tuple();
 SELECT DISTINCT zookeeperName FROM system.zookeeper WHERE path = '/' AND zookeeperName = 'default';
 SELECT DISTINCT zookeeperName FROM system.zookeeper WHERE path = '/' AND zookeeperName = 'zookeeper2';
 SELECT count() FROM system.zookeeper WHERE path IN '/' AND zookeeperName = 'zookeeper3'; -- { serverError BAD_ARGUMENTS }

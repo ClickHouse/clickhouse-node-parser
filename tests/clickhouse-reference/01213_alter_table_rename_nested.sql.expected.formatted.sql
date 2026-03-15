@@ -1,3 +1,14 @@
+CREATE TABLE table_for_rename_nested
+(
+    date Date,
+    key UInt64,
+    n Nested(x UInt32, y String),
+    value1 String
+)
+ENGINE = MergeTree()
+ORDER BY key
+PARTITION BY date;
+
 SELECT n.x
 FROM table_for_rename_nested
 WHERE key = 7;

@@ -1,3 +1,11 @@
+CREATE TABLE test_01073_crlf_end_of_line
+(
+    value UInt8,
+    word String
+)
+ENGINE = MergeTree()
+ORDER BY value;
+
 SELECT *
 FROM test_01073_crlf_end_of_line
 FORMAT CSV

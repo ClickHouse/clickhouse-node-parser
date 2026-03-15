@@ -1,5 +1,14 @@
+CREATE TABLE test
+(
+    project LowCardinality(String)
+)
+ENGINE = MergeTree()
+ORDER BY project;
+
 SELECT sum(project IN ('val1', 'val2'))
 FROM test;
+
+SET force_primary_key = 1;
 
 SELECT sum(project IN ('val1', 'val2'))
 FROM test

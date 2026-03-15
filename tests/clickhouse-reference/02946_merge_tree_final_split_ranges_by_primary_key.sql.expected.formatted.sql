@@ -1,3 +1,12 @@
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = ReplacingMergeTree
+ORDER BY id
+SETTINGS index_granularity = 2;
+
 SELECT COUNT()
 FROM `system`.parts
 WHERE database = currentDatabase()

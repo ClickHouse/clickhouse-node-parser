@@ -1,3 +1,17 @@
+CREATE TABLE a1
+(
+    a UInt8,
+    b UInt8
+)
+ENGINE = Memory;
+
+CREATE TABLE a2
+(
+    a UInt8,
+    b UInt8
+)
+ENGINE = Memory;
+
 SELECT *
 FROM
     a1 AS a

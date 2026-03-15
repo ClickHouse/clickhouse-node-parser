@@ -1,3 +1,8 @@
+CREATE TABLE data_01409
+ENGINE = Memory AS
+SELECT *
+FROM numbers(20);
+
 SELECT length(topK(20)(number))
 FROM remote('127.{1,1}', currentDatabase(), data_01409);
 

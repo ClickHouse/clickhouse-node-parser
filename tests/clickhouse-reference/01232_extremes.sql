@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+
+set send_logs_level = 'error';
+set extremes = 1;
 select * from remote('127.0.0.1', numbers(2));
 select * from remote('127.0.0.{1,1}', numbers(2));
 select * from remote('127.0.0.{1,2}', numbers(2));
@@ -7,5 +11,13 @@ select '------';
 select * from (select * from numbers(2) union all select * from numbers(3) union all select * from numbers(1)) order by number;
 select * from (select * from numbers(1) union all select * from numbers(2) union all select * from numbers(3)) order by number;
 select * from (select * from numbers(3) union all select * from numbers(1) union all select * from numbers(2)) order by number;
+create database if not exists shard_0;
+create database if not exists shard_1;
+create table shard_0.num_01232 (number UInt64) engine = MergeTree order by number;
+create table shard_1.num_01232 (number UInt64) engine = MergeTree order by number;
+create table distr (number UInt64) engine = Distributed(test_cluster_two_shards_different_databases, '', num_01232);
+create table shard_0.num2_01232 (number UInt64) engine = MergeTree order by number;
+create table shard_1.num2_01232 (number UInt64) engine = MergeTree order by number;
+create table distr2 (number UInt64) engine = Distributed(test_cluster_two_shards_different_databases, '', num2_01232);
 select * from distr order by number;
 select * from distr2 order by number;

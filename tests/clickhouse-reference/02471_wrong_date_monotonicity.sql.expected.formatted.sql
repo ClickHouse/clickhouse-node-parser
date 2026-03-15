@@ -1,3 +1,11 @@
+CREATE TABLE tdm__fuzz_23
+(
+    x UInt256
+)
+ENGINE = MergeTree
+ORDER BY x
+SETTINGS write_final_mark = 0;
+
 SELECT count(x)
 FROM tdm__fuzz_23
 WHERE toDate(x) < toDate(now(), 'Asia/Istanbul')

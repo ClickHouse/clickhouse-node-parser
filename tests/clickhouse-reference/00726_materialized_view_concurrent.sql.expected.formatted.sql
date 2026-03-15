@@ -1,7 +1,1 @@
-SELECT *
-FROM mv1_00726
-ORDER BY x ASC;
-
-SELECT *
-FROM mv2_00726
-ORDER BY x ASC;
+<Parse Error>

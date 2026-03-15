@@ -1,3 +1,16 @@
+CREATE TABLE t
+(
+    tid UInt64,
+    processed_at DateTime,
+    created_at DateTime,
+    amount Int64
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (toStartOfDay(created_at), toStartOfDay(processed_at), tid)
+PARTITION BY toStartOfQuarter(created_at)
+PRIMARY KEY (toStartOfDay(created_at), toStartOfDay(processed_at))
+SETTINGS index_granularity = 1;
+
 SELECT
     tid,
     processed_at,

@@ -1,3 +1,13 @@
+-- Tags: no-random-settings
+-- Check remerge_sort_lowered_memory_bytes_ratio setting
+SET max_memory_usage = '200Mi';
+
+-- enter remerge once limit*2 is reached
+SET max_bytes_before_remerge_sort = '10Mi';
+
+-- more blocks
+SET max_block_size = 40960;
+
 -- remerge_sort_lowered_memory_bytes_ratio default 2, slightly not enough
 --     MergeSortingTransform: Re-merging intermediate ORDER BY data (20 blocks with 819200 rows) to save memory consumption
 --     MergeSortingTransform: Memory usage is lowered from 186.25 MiB to 95.00 MiB

@@ -1,3 +1,11 @@
+CREATE TABLE `02526_keeper_map`
+(
+    key String,
+    value UInt32
+)
+ENGINE = KeeperMap(concat('/', currentDatabase(), '/02526_kv_filter_types'))
+PRIMARY KEY key;
+
 SELECT *
 FROM `02526_keeper_map`
 WHERE key IN (
@@ -5,6 +13,14 @@ WHERE key IN (
         FROM numbers(1000)
     )
 FORMAT Null;
+
+CREATE TABLE `02526_rocksdb`
+(
+    key String,
+    value UInt32
+)
+ENGINE = EmbeddedRocksDB
+PRIMARY KEY key;
 
 SELECT *
 FROM `02526_rocksdb`

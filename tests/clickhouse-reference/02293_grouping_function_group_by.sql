@@ -1,3 +1,5 @@
+set optimize_group_by_function_keys=0;
+
 SELECT
     number,
     grouping(number, number % 2, number % 3) = 6
@@ -7,6 +9,7 @@ GROUP BY
     number % 2
 ORDER BY number; -- { serverError BAD_ARGUMENTS }
 
+-- { echoOn }
 SELECT
     number,
     grouping(number, number % 2) = 3
@@ -16,6 +19,7 @@ GROUP BY
     number % 2
 ORDER BY number
 SETTINGS force_grouping_standard_compatibility=0;
+
 SELECT
     number,
     grouping(number),
@@ -26,6 +30,7 @@ GROUP BY
     number % 2
 ORDER BY number
 SETTINGS force_grouping_standard_compatibility=0;
+
 SELECT
     number,
     grouping(number, number % 2) AS gr
@@ -37,6 +42,7 @@ GROUP BY
 ORDER BY
     number, gr
 SETTINGS force_grouping_standard_compatibility=0;
+
 SELECT
     number,
     grouping(number, number % 2) AS gr
@@ -46,6 +52,7 @@ GROUP BY
 ORDER BY
     number, gr
 SETTINGS force_grouping_standard_compatibility=0;
+
 SELECT
     number,
     grouping(number, number % 2) AS gr
@@ -57,6 +64,7 @@ GROUP BY
 ORDER BY
     number, gr
 SETTINGS force_grouping_standard_compatibility=0;
+
 SELECT
     number,
     grouping(number, number % 2) AS gr
@@ -66,6 +74,7 @@ GROUP BY
 ORDER BY
     number, gr
 SETTINGS force_grouping_standard_compatibility=0;
+
 SELECT
     number,
     grouping(number, number % 2) + 3 as gr
@@ -76,6 +85,7 @@ HAVING grouping(number) != 0
 ORDER BY
     number, gr
 SETTINGS force_grouping_standard_compatibility=0;
+
 SELECT
     number,
     grouping(number, number % 2) as gr
@@ -85,6 +95,7 @@ GROUP BY
 HAVING grouping(number) != 0
 ORDER BY
     number, gr; -- { serverError NOT_IMPLEMENTED }
+
 SELECT
     number,
     grouping(number, number % 2) as gr
@@ -94,6 +105,7 @@ GROUP BY
 ORDER BY
     number, gr
 SETTINGS force_grouping_standard_compatibility=0;
+
 SELECT
     number,
     grouping(number, number % 2) as gr
@@ -103,6 +115,7 @@ GROUP BY
 HAVING grouping(number) != 0
 ORDER BY
     number, gr; -- { serverError NOT_IMPLEMENTED }
+
 SELECT
     number,
     grouping(number, number % 2) as gr

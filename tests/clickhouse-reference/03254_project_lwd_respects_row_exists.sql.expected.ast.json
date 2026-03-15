@@ -1,5 +1,89 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users_compact"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": "Int16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "age",
+        "type": "Int16"
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "age"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "age"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uid"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "lightweight_mutation_projection_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "rebuild"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10485760"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -64,6 +148,90 @@
       },
       {
         "name": "optimize_aggregation_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users_wide"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": "Int16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "age",
+        "type": "Int16"
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "age"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "age"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uid"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "lightweight_mutation_projection_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "rebuild"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
         "value": {
           "kind": "literal",
           "type": "UInt64",

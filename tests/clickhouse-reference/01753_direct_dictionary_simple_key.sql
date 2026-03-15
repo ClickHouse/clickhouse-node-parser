@@ -1,3 +1,20 @@
+CREATE DATABASE 01753_dictionary_db;
+CREATE TABLE 01753_dictionary_db.simple_key_simple_attributes_source_table
+(
+   id UInt64,
+   value_first String,
+   value_second String
+)
+ENGINE = TinyLog;
+CREATE DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_simple_attributes
+(
+   id UInt64,
+   value_first String DEFAULT 'value_first_default',
+   value_second String DEFAULT 'value_second_default'
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'simple_key_simple_attributes_source_table'))
+LAYOUT(DIRECT());
 SELECT dictGet('01753_dictionary_db.direct_dictionary_simple_key_simple_attributes', 'value_first', number) as value_first,
     dictGet('01753_dictionary_db.direct_dictionary_simple_key_simple_attributes', 'value_second', number) as value_second FROM system.numbers LIMIT 3;
 SELECT dictGet('01753_dictionary_db.direct_dictionary_simple_key_simple_attributes', 'value_first', number) as value_first,
@@ -8,6 +25,22 @@ SELECT dictGetOrDefault('01753_dictionary_db.direct_dictionary_simple_key_simple
     dictGetOrDefault('01753_dictionary_db.direct_dictionary_simple_key_simple_attributes', 'value_second', number, toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01753_dictionary_db.direct_dictionary_simple_key_simple_attributes', number) FROM system.numbers LIMIT 4;
 SELECT * FROM 01753_dictionary_db.direct_dictionary_simple_key_simple_attributes ORDER BY ALL;
+CREATE TABLE 01753_dictionary_db.simple_key_complex_attributes_source_table
+(
+   id UInt64,
+   value_first String,
+   value_second Nullable(String)
+)
+ENGINE = TinyLog;
+CREATE DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_complex_attributes
+(
+   id UInt64,
+   value_first String DEFAULT 'value_first_default',
+   value_second Nullable(String) DEFAULT 'value_second_default'
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'simple_key_complex_attributes_source_table'))
+LAYOUT(DIRECT());
 SELECT dictGet('01753_dictionary_db.direct_dictionary_simple_key_complex_attributes', 'value_first', number) as value_first,
     dictGet('01753_dictionary_db.direct_dictionary_simple_key_complex_attributes', 'value_second', number) as value_second FROM system.numbers LIMIT 3;
 SELECT dictGet('01753_dictionary_db.direct_dictionary_simple_key_complex_attributes', 'value_first', number) as value_first,
@@ -18,6 +51,19 @@ SELECT dictGetOrDefault('01753_dictionary_db.direct_dictionary_simple_key_comple
     dictGetOrDefault('01753_dictionary_db.direct_dictionary_simple_key_complex_attributes', 'value_second', number, toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01753_dictionary_db.direct_dictionary_simple_key_complex_attributes', number) FROM system.numbers LIMIT 4;
 SELECT * FROM 01753_dictionary_db.direct_dictionary_simple_key_complex_attributes ORDER BY ALL;
+CREATE TABLE 01753_dictionary_db.simple_key_hierarchy_table
+(
+    id UInt64,
+    parent_id UInt64
+) ENGINE = TinyLog();
+CREATE DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_hierarchy
+(
+   id UInt64,
+   parent_id UInt64 HIERARCHICAL
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'simple_key_hierarchy_table'))
+LAYOUT(DIRECT());
 SELECT dictGet('01753_dictionary_db.direct_dictionary_simple_key_hierarchy', 'parent_id', number) FROM system.numbers LIMIT 5;
 SELECT dictGetHierarchy('01753_dictionary_db.direct_dictionary_simple_key_hierarchy', toUInt64(1));
 SELECT dictGetHierarchy('01753_dictionary_db.direct_dictionary_simple_key_hierarchy', toUInt64(4));

@@ -1,3 +1,5 @@
+SET max_threads = 1;
+
 SELECT *
 FROM (
         SELECT 1 AS x

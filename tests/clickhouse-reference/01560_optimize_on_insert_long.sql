@@ -1,7 +1,13 @@
+CREATE TABLE replacing_merge_tree (key UInt32, date Datetime) ENGINE=ReplacingMergeTree() PARTITION BY date ORDER BY key;
 SELECT * FROM replacing_merge_tree ORDER BY key;
+CREATE TABLE collapsing_merge_tree (key UInt32, sign Int8, date Datetime) ENGINE=CollapsingMergeTree(sign) PARTITION BY date ORDER BY key;
 SELECT * FROM collapsing_merge_tree ORDER BY key;
+CREATE TABLE versioned_collapsing_merge_tree (key UInt32, sign Int8, version Int32, date Datetime) ENGINE=VersionedCollapsingMergeTree(sign, version) PARTITION BY date ORDER BY (key, version);
 SELECT * FROM versioned_collapsing_merge_tree ORDER BY key;
+CREATE TABLE summing_merge_tree (key UInt32, val UInt32, date Datetime) ENGINE=SummingMergeTree(val) PARTITION BY date ORDER BY key;
 SELECT * FROM summing_merge_tree ORDER BY key;
+CREATE TABLE aggregating_merge_tree (key UInt32, val SimpleAggregateFunction(max, UInt32), date Datetime) ENGINE=AggregatingMergeTree() PARTITION BY date ORDER BY key;
 SELECT * FROM aggregating_merge_tree ORDER BY key;
+CREATE TABLE empty (key UInt32, val UInt32, date Datetime) ENGINE=SummingMergeTree(val) PARTITION BY date ORDER BY key;
 SELECT * FROM empty ORDER BY key;
 SELECT table, partition, active FROM system.parts where table = 'empty' and active = 1 and database = currentDatabase();

@@ -1,2 +1,12 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE empty_summing
+(
+    d Date,
+    k UInt64,
+    v Int8
+)
+ENGINE = SummingMergeTree(d, k, 8192);
+
 SELECT *
 FROM empty_summing;

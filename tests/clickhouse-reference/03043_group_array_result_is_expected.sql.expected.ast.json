@@ -1,5 +1,70 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/27115"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "fill_ex"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "eventDate",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "storeId",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "eventDate"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "storeId"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "eventDate"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

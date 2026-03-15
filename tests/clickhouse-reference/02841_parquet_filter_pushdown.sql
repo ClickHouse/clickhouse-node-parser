@@ -1,3 +1,13 @@
+-- Tags: no-fasttest, no-parallel
+
+set output_format_parquet_row_group_size = 100;
+set input_format_null_as_default = 1;
+set engine_file_truncate_on_insert = 1;
+set optimize_or_like_chain = 0;
+set max_block_size = 100000;
+set max_insert_threads = 1;
+set input_format_parquet_bloom_filter_push_down = 0;
+set input_format_parquet_page_filter_push_down = 0;
 select count(), sum(number) from file('02841.parquet') where indexHint(u8 in (10, 15, 250));
 select count(), sum(number) from file('02841.parquet') where indexHint(i8 between -3 and 2);
 select count(), sum(number) from file('02841.parquet') where indexHint(u16 between 4000 and 61000 or u16 == 42);

@@ -1,4 +1,21 @@
-
+-- Tags: no-fasttest
+set optimize_move_to_prewhere = 1;
+set move_all_conditions_to_prewhere = 1;
+set enable_multiple_prewhere_read_steps = 1;
+set move_primary_key_columns_to_end_of_prewhere = 1;
+set allow_reorder_prewhere_conditions = 1;
+set enable_analyzer = 1;
+set enable_parallel_replicas = 0;
+set allow_experimental_statistics = 1;
+set use_statistics = 1;
+CREATE TABLE test_improve_prewhere (
+    primary_key String STATISTICS(CountMin),
+    normal_column String STATISTICS(CountMin),
+    value UInt32 STATISTICS(TDigest),
+    date Date STATISTICS(CountMin),
+) ENGINE = MergeTree()
+ORDER BY primary_key;
+-- { echoOn }
 -- Condition: lower(primary_key) = '00' can't make use of primary key index. It shouldn't be moved to the end of prewhere conditions.
 select trimLeft(explain) from (
 EXPLAIN actions=1

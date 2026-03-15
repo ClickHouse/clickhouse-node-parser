@@ -1,3 +1,21 @@
+-- Tags: no-fasttest, no-ordinary-database, no-parallel-replicas
+-- Test for setting 'vector_search_with_rescoring' with filters.
+SET enable_analyzer = 1;
+
+SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to force local plan for parallel replicas
+
+CREATE TABLE tab
+(
+    id Int32,
+    attr1 Int32,
+    attr2 Int32,
+    vec Array(Float32),
+    INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 2)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 2;
+
 SELECT
     id,
     attr1,

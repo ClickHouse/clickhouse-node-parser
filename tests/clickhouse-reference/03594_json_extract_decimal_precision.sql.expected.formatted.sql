@@ -1,3 +1,10 @@
+CREATE TABLE test_json_decimal_precision
+(
+    id UInt32,
+    json_data String
+)
+ENGINE = Memory;
+
 -- Test 1: Verify that JSONExtract preserves precision for numeric JSON values
 SELECT
     'Test 1: JSONExtract with numeric JSON values' AS test_name,

@@ -36,6 +36,12 @@ SELECT wordShingleMinHashUTF8('what a cute cat.');
 
 SELECT wordShingleMinHashCaseInsensitiveUTF8('what a cute cat.');
 
+CREATE TABLE defaults
+(
+    s String
+)
+ENGINE = Memory();
+
 SELECT ngramSimHash(s)
 FROM defaults;
 

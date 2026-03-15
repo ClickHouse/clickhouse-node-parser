@@ -1,3 +1,20 @@
+SET enable_analyzer = 1;
+SET single_join_prefer_left_table = 0;
+CREATE TABLE test_table_join_1
+(
+    id UInt64,
+    value String
+) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE test_table_join_2
+(
+    id UInt64,
+    value String
+) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE test_table_join_3
+(
+    id UInt64,
+    value String
+) ENGINE = MergeTree ORDER BY tuple();
 SELECT test_table_join_1.id, test_table_join_1.value, test_table_join_2.id, test_table_join_2.value
 FROM test_table_join_1, test_table_join_2 ORDER BY ALL;
 SELECT '--';

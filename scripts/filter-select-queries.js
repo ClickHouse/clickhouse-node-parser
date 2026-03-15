@@ -137,8 +137,8 @@ function getLeadingKeyword(statement) {
   return match ? match[1].toUpperCase() : '';
 }
 
-function isSelectStatement(statement) {
-  return getLeadingKeyword(statement) === 'SELECT';
+function isSupportedStatement(statement) {
+  return ['SELECT', 'SET', 'CREATE', 'USE'].includes(getLeadingKeyword(statement));
 }
 
 /**
@@ -200,7 +200,7 @@ for (const file of sqlFiles) {
 
   const selectStatements = statements.filter(
     (s) =>
-      isSelectStatement(s) &&
+      isSupportedStatement(s) &&
       !isStringOnlySelect(s) &&
       !hasClientError(s) &&
       !hasDisallowedSetting(s),

@@ -1,4 +1,1 @@
-SELECT a
-FROM
-    x
-ARRAY JOIN arr AS a;
+<Parse Error>

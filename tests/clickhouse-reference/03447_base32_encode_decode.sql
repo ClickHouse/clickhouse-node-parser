@@ -1,5 +1,6 @@
 SELECT base32Encode('This is a test string');
 SELECT base32Encode('This is a test string', 'Second arg'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+CREATE TABLE t3447 (id Int32, str String, b32 String) ENGINE = Memory;
 SELECT id, str AS input, hex(str) AS input_hex, base32Encode(str) AS result, b32, result == b32 FROM t3447;
 SELECT id, b32 as input, base32Decode(input) AS result, hex(result) as result_hex, hex(str) as expected_hex, result == str FROM t3447;
 SELECT id, lower(b32) as input, base32Decode(input) AS result, hex(result) as result_hex, hex(str) as expected_hex, result == str FROM t3447;

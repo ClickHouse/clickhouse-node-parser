@@ -1,3 +1,11 @@
+CREATE TABLE t
+(
+    x UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 8;
+
 SELECT uniqHLL12(x)
 FROM t
 SETTINGS

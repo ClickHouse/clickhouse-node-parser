@@ -1,3 +1,13 @@
+CREATE TABLE test_new_col
+(
+    _csv String,
+    csv_as_array Array(String) ALIAS splitByChar(';', _csv),
+    csv_col1 String DEFAULT csv_as_array[1],
+    csv_col2 String DEFAULT csv_as_array[2]
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     csv_col1,
     csv_col2

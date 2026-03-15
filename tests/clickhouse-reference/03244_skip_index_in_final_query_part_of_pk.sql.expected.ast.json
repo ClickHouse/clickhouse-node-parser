@@ -1,5 +1,109 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_if_final",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Testcase for bug #85897",
+      "-- If skip index is part of primary key, then optimization 'use_skip_indexes_if_final_exact_mode' should",
+      "-- not perform additional primary key intersection expand step."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_if_final_exact_mode",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id1",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "id2",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": "UInt32"
+      },
+      {
+        "kind": "indexDef",
+        "name": "id2_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id2"
+          ]
+        },
+        "indexType": "minmax"
+      },
+      {
+        "kind": "indexDef",
+        "name": "v_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        "indexType": "minmax"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id2"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -174,6 +278,50 @@
         }
       ]
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Int64"
+      },
+      {
+        "kind": "indexDef",
+        "name": "i1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        },
+        "indexType": "set(0)"
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "c0"
+      ],
+      "parenthesized": true
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",

@@ -1,1 +1,9 @@
+SET max_memory_usage = '1G';
 SELECT value FROM system.settings WHERE name = 'max_memory_usage';
+SET max_memory_usage = '3Gi';
+SET max_memory_usage = '15678k';
+SET max_memory_usage = '12345ki';
+SET max_memory_usage = '12M';
+SET max_memory_usage = '31Mi';
+SET max_memory_usage = '1T';
+SET max_memory_usage = '1Ti';

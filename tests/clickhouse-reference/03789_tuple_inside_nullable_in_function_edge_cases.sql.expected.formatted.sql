@@ -1,3 +1,8 @@
+-- { echoOn }
+SET allow_experimental_nullable_tuple_type = 1;
+
+SET enable_analyzer = 1;
+
 SELECT tuple(NULL, NULL)::Nullable(Tuple(Nullable(UInt32), Nullable(UInt32))) IN (NULL, NULL)
 SETTINGS transform_null_in = 1;
 
@@ -27,3 +32,5 @@ SETTINGS transform_null_in = 0;
 
 SELECT tuple(NULL, 42)::Nullable(Tuple(Nullable(UInt32), Nullable(UInt32))) IN (NULL, 42)
 SETTINGS transform_null_in = 0;
+
+SET enable_analyzer = 0;

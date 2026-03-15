@@ -1,3 +1,8 @@
+CREATE TABLE locations ( location_id UInt32, city_id UInt32, name String ) ENGINE = MergeTree ORDER BY location_id;
+CREATE TABLE location_tags ( location_id UInt32, name String, value String ) ENGINE = MergeTree ORDER BY name;
+SET query_plan_optimize_join_order_limit = 0;
+SET query_plan_join_swap_table = 0;
+SET join_algorithm = 'hash';
 SELECT z1.value
 FROM location_tags AS z2
 RIGHT JOIN (

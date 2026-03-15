@@ -1,3 +1,13 @@
+-- Tags: no-parallel
+CREATE TABLE mut
+(
+    n int
+)
+ENGINE = ReplicatedMergeTree('/test/02440/{database}/mut', '1')
+ORDER BY tuple();
+
+SET insert_keeper_fault_injection_probability = 0;
+
 SELECT
     mutation_id,
     command,
@@ -6,6 +16,15 @@ SELECT
 FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'mut';
+
+-- merges (and mutations) will start again after detach/attach, we need to avoid this somehow...
+CREATE TABLE tmp
+(
+    n int
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 1;
 
 SELECT sleepEachRow(2) AS higher_probablility_of_reproducing_the_issue
 FORMAT Null;

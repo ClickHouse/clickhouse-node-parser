@@ -1,3 +1,4 @@
+create table utf8_overlap (str String) engine=Memory();
 -- NOTE: regression test for introduced bug
 -- https://github.com/ClickHouse/ClickHouse/issues/42756
 SELECT lowerUTF8('КВ АМ И СЖ');

@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     1 AS a,
     a;
@@ -26,6 +28,13 @@ SELECT
 SELECT
     a AS b,
     b AS a; -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = TinyLog;
 
 SELECT
     id_alias_2,
@@ -59,3 +68,7 @@ FROM test_table;
 
 SELECT (id + 1 + 1 + 1 + id) AS id
 FROM test_table;
+
+SET prefer_column_name_to_alias = 1;
+
+SET prefer_column_name_to_alias = 0;

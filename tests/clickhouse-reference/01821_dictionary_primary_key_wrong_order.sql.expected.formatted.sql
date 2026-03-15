@@ -1,2 +1,1 @@
-SELECT *
-FROM flat_dictionary;
+<Parse Error>

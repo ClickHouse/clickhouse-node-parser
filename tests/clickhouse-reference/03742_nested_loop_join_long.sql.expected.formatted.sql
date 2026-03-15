@@ -1,3 +1,47 @@
+CREATE TABLE events
+(
+    Id Nullable(UInt64),
+    Payload String,
+    Time DateTime
+)
+ENGINE = MergeTree
+ORDER BY Time;
+
+CREATE TABLE attributes
+(
+    EventId UInt64,
+    AnotherId Nullable(UInt64),
+    Attribute String
+)
+ENGINE = MergeTree
+ORDER BY EventId;
+
+CREATE TABLE events2
+(
+    Id UInt64,
+    Payload String,
+    Time DateTime
+)
+ENGINE = MergeTree
+ORDER BY Time;
+
+CREATE TABLE attributes2
+(
+    EventId UInt64,
+    OtherId Nullable(UInt32),
+    Attribute String
+)
+ENGINE = MergeTree
+ORDER BY EventId;
+
+SET query_plan_join_swap_table = 0;
+
+SET enable_analyzer = 1;
+
+SET join_algorithm = 'direct';
+
+SET min_joined_block_size_rows = 0, min_joined_block_size_bytes = 0;
+
 SELECT
     t0.Id,
     sum(sipHash64(t0.Payload)),

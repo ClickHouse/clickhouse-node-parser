@@ -1,3 +1,12 @@
+CREATE TABLE tab
+(
+    x UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'parallel_replicas', parallel_replicas_for_non_replicated_merge_tree = true;
+
 SELECT *
 FROM
     tab AS l

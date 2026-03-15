@@ -4,6 +4,7 @@ SELECT endsWith('123', '3');
 SELECT endsWith('123', '23');
 SELECT endsWith('123', '32');
 SELECT endsWith('123', '');
+CREATE TABLE endsWith_test(S1 String, S2 String, S3 FixedString(2)) ENGINE=Memory;
 SELECT COUNT() FROM endsWith_test WHERE endsWith(S1, S1);
 SELECT COUNT() FROM endsWith_test WHERE endsWith(S1, S2);
 SELECT COUNT() FROM endsWith_test WHERE endsWith(S2, S3);

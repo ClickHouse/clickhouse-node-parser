@@ -34,4 +34,6 @@ SELECT *
 FROM generateRandom(10000000, 2, 2, 2)
 LIMIT 1; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
+SET allow_suspicious_low_cardinality_types = 1;
+
 SELECT generateRandomStructure(5, 4);

@@ -1,5 +1,45 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_join_nullable_string"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Nullable(String)"
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "INNER"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Case 1: Nullable(String) key column with INNER JOIN"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,6 +69,46 @@
       "kind": "tableRef",
       "table": "t_join_nullable_string"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_join_nullable_string"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Nullable(String)"
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Case 2: Nullable(String) key column with LEFT JOIN (NULL keys are not stored in join tables)"
+    ]
   },
   {
     "kind": "select",
@@ -74,6 +154,91 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_join_nullable_string"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Nullable(String)"
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ANY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Case 3: ANY strictness"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_join_nullable_string"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Nullable(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ANY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Case 4: Multiple empty strings (should deduplicate for ANY)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -93,6 +258,51 @@
       "kind": "tableRef",
       "table": "t_join_nullable_string"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_join_nullable_string"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Nullable(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Case 5: Multiple empty strings with ALL strictness (should keep all)"
+    ]
   },
   {
     "kind": "select",

@@ -1,3 +1,20 @@
+CREATE TABLE test1
+(
+    col UInt64,
+    col_sq UInt64 MATERIALIZED col * col
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY tuple();
+
+CREATE TABLE test2
+(
+    col UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY tuple();
+
 SELECT
     t1.col,
     t1.col_sq

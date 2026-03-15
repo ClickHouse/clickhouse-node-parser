@@ -1,3 +1,16 @@
+-- { echoOn }
+SET enable_analyzer = 1;
+
+SET optimize_trivial_count_query = 1;
+
+CREATE TABLE m3
+(
+    a Int64,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT count()
 FROM m3;
 
@@ -20,6 +33,15 @@ FROM m3;
 
 SELECT count() + 1
 FROM m3;
+
+-- checking queries with FINAL
+CREATE TABLE replacing_m3
+(
+    a Int64,
+    b UInt64
+)
+ENGINE = ReplacingMergeTree()
+ORDER BY (a, b);
 
 SELECT count()
 FROM replacing_m3;

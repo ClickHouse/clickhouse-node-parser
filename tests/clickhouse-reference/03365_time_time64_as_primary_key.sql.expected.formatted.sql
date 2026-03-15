@@ -1,3 +1,15 @@
+SET allow_experimental_time_time64_type = 1;
+
+SET use_legacy_to_time = 0;
+
+CREATE TABLE test_time
+(
+    a Time,
+    b String
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT
     a,
     b

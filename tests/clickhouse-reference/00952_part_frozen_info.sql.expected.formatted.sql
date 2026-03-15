@@ -1,3 +1,11 @@
+CREATE TABLE part_info
+(
+    t DateTime
+)
+ENGINE = MergeTree
+ORDER BY t
+PARTITION BY toDate(t);
+
 SELECT
     name,
     is_frozen

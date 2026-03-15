@@ -342,6 +342,23 @@ LIMIT 20;
 
 SELECT toString('CHECKPOINT1');
 
+CREATE TABLE tab
+(
+    id Int32,
+    scale Int16,
+    u8 UInt8,
+    u16 UInt16,
+    u32 UInt32,
+    u64 UInt64,
+    i8 Int8,
+    i16 Int16,
+    i32 Int32,
+    i64 Int64,
+    f32 Float32,
+    f64 Float64
+)
+ENGINE = Memory;
+
 SELECT toString('id u8 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
 
 SELECT
@@ -484,6 +501,17 @@ ORDER BY id ASC;
 
 --
 SELECT toString('CHECKPOINT2');
+
+CREATE TABLE tab
+(
+    id Int32,
+    scale Int16,
+    d32 Decimal32(4),
+    d64 Decimal64(4),
+    d128 Decimal128(4),
+    d256 Decimal256(4)
+)
+ENGINE = Memory;
 
 SELECT
     id,

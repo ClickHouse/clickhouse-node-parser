@@ -1,3 +1,9 @@
+CREATE TABLE has_function
+(
+    arr Array(Nullable(String))
+)
+ENGINE = Memory;
+
 SELECT
     arr,
     has(arr, 'str1')

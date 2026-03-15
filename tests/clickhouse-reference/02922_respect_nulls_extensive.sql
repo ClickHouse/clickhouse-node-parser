@@ -1,4 +1,4 @@
-
+-- { echoOn }
 
 -- The function name is case insensitive, with or without respect nulls and using any of the aliases
 Select number, first_value (number) RESPECT NULLS over (order by number) from numbers(1);

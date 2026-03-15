@@ -5,6 +5,12 @@ SELECT reverse(tuple());
 SELECT reverse(tuple())
 FROM numbers(3);
 
+CREATE TABLE table_rev_empty_tuple
+(
+    x Tuple()
+)
+ENGINE = Memory;
+
 SELECT reverse(x)
 FROM table_rev_empty_tuple
 LIMIT 3;

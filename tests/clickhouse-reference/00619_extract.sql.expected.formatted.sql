@@ -16,6 +16,14 @@ SELECT toMonth(toDateTime('2017-12-31 18:59:58'));
 
 SELECT toYear(toDateTime('2017-12-31 18:59:58'));
 
+CREATE TABLE Orders
+(
+    OrderId UInt64,
+    OrderName String,
+    OrderDate DateTime
+)
+ENGINE = Log;
+
 SELECT
     toYear(OrderDate) AS OrderYear,
     toMonth(OrderDate) AS OrderMonth,

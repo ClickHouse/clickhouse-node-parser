@@ -1,3 +1,12 @@
+CREATE TABLE replicated_mutations_empty_partitions
+(
+    key UInt64,
+    value String
+)
+ENGINE = ReplicatedMergeTree(concat('/clickhouse/test/', currentDatabase(), '/01586_replicated_mutations_empty_partitions/{shard}'), '{replica}')
+ORDER BY key
+PARTITION BY key;
+
 SELECT countDistinct(value)
 FROM replicated_mutations_empty_partitions;
 

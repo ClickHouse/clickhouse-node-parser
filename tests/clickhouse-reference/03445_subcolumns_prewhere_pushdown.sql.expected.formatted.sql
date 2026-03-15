@@ -1,3 +1,17 @@
+-- Tags: no-parallel-replicas
+SET enable_analyzer = 1;
+
+CREATE TABLE test
+(
+    x UInt64,
+    n Nullable(UInt32),
+    t Tuple(a UInt32, b UInt32),
+    json JSON
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 4;
+
 SELECT *
 FROM test
 WHERE n.`null`

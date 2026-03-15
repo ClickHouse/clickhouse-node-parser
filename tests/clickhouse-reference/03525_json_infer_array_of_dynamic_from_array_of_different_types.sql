@@ -1,3 +1,4 @@
+set enable_analyzer=1;
 select a, toTypeName(a), arrayMap(x -> dynamicType(x), a) from format(JSONEachRow, '{"a" : [42, "hello", [1, 2, 3]]}');
 select a, toTypeName(a), arrayMap(x -> dynamicType(x), a) from format(JSONEachRow, '{"a" : [42, "hello"]}');
 select a, toTypeName(a), arrayMap(x -> dynamicType(x), a) from format(JSONEachRow, '{"a" : [42, "hello", {"b" : 42}]}');

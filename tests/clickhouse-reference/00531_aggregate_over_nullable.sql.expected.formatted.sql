@@ -1,3 +1,14 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE agg_over_nullable
+(
+    `partition` Date,
+    timestamp DateTime,
+    user_id Nullable(UInt32),
+    description Nullable(String)
+)
+ENGINE = MergeTree(`partition`, timestamp, 8192);
+
 SELECT arraySort(groupUniqArray(description))
 FROM agg_over_nullable;
 

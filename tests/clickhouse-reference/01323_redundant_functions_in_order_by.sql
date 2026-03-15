@@ -1,3 +1,6 @@
+SET single_join_prefer_left_table = 0;
+CREATE TABLE test (key UInt64, a UInt8, b String, c Float64) ENGINE = MergeTree() ORDER BY key;
+set optimize_redundant_functions_in_order_by = 1;
 SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY x, exp(x));
 SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY x, exp(x)) SETTINGS enable_analyzer=1;
 SELECT groupArray(x) from (SELECT number as x FROM numbers(3) ORDER BY x, exp(exp(x)));
@@ -10,3 +13,6 @@ SELECT key, a FROM test ORDER BY key, a, exp(key + a);
 SELECT key, a FROM test ORDER BY key, a, exp(key + a) SETTINGS enable_analyzer=1;
 SELECT key, a FROM test ORDER BY key, exp(key + a);
 SELECT key, a FROM test ORDER BY key, exp(key + a) SETTINGS enable_analyzer=1;
+CREATE TABLE t1 (id UInt64) ENGINE = MergeTree() ORDER BY id;
+CREATE TABLE t2 (id UInt64) ENGINE = MergeTree() ORDER BY id;
+set optimize_redundant_functions_in_order_by = 0;

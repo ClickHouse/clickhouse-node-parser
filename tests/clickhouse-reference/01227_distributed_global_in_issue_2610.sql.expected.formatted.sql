@@ -1,3 +1,10 @@
+CREATE TABLE data_01227
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
 SELECT *
 FROM remote('127.1', currentDatabase(), data_01227)
 PREWHERE key GLOBAL IN (

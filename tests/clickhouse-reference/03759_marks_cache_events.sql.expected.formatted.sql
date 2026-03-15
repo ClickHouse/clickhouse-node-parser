@@ -1,3 +1,13 @@
+CREATE TABLE data
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+SETTINGS prewarm_mark_cache = 0;
+
+SET load_marks_asynchronously = 0;
+
 --
 -- SELECTs
 --

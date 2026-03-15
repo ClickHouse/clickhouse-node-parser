@@ -1,5 +1,653 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "projection_test__fuzz_0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "sum(block_count)",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "domain_alias",
+        "type": "UInt64",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "length",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "domain"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "datetime",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "domain",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "x_id",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "y_id",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_count",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "retry_count",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "duration",
+        "type": "Decimal(76, 13)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "kbytes",
+        "type": "LowCardinality(Int64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "buffer_time",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "first_time",
+        "type": "UInt256"
+      },
+      {
+        "kind": "columnDef",
+        "name": "total_bytes",
+        "type": "LowCardinality(Nullable(UInt64))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "valid_bytes",
+        "type": "Nullable(UInt64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "completed_bytes",
+        "type": "Nullable(UInt64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "fixed_bytes",
+        "type": "LowCardinality(Nullable(UInt64))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "force_bytes",
+        "type": "Int256"
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toStartOfMinute",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "datetime"
+                    ]
+                  }
+                ]
+              },
+              "alias": "dt_m"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "countIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "first_time"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "avg",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "/",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "kbytes"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "8"
+                    },
+                    "parenthesized": true
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "duration"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "block_count"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "duration"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "avg",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "/",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "block_count"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "duration"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "buffer_time"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "duration"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "avg",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "/",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "buffer_time"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "duration"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "valid_bytes"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_bytes"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "completed_bytes"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_bytes"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "fixed_bytes"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_bytes"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "force_bytes"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_bytes"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "valid_bytes"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "total_bytes"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "retry_count"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "duration"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "avg",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "/",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "retry_count"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "duration"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "countIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": ">",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "block_count"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "countIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "first_time"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "uniqHLL12",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "uniqHLL12",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y_id"
+                  ]
+                }
+              ]
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "dt_m"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "domain"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "datetime"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "toStartOfTenMinutes",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "datetime"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

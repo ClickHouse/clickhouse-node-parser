@@ -1,3 +1,15 @@
+create table test_bm(
+	dim UInt64,
+	id UInt64 ) 
+ENGINE = MergeTree()
+ORDER BY( dim, id )
+SETTINGS index_granularity = 8192;
+create table test_bm_join( 
+  dim UInt64,
+  id UInt64 )
+ENGINE = MergeTree()
+ORDER BY(dim,id)
+SETTINGS index_granularity = 8192;
 select
 	dim ,
 	sum(idnum)

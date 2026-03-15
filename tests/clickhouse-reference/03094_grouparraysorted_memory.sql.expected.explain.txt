@@ -1,0 +1,88 @@
+CreateQuery 03094_grouparrysorted_dest (children 3)
+ Identifier 03094_grouparrysorted_dest
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration ServiceName (children 2)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function ZSTD (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_1
+   ColumnDeclaration SlowSpans (children 2)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Function groupArraySorted (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_100
+      TupleDataType Tuple (children 1)
+       ExpressionList (children 4)
+        DataType Int64
+        DataType DateTime64 (children 1)
+         ExpressionList (children 1)
+          Literal UInt64_9
+        DataType String
+        DataType String
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function ZSTD (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_1
+ Storage definition (children 2)
+  Function AggregatingMergeTree (children 1)
+   ExpressionList
+  Identifier ServiceName
+
+CreateQuery 03094_grouparrysorted_src (children 3)
+ Identifier 03094_grouparrysorted_src
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration ServiceName (children 1)
+    DataType String
+   ColumnDeclaration Duration (children 1)
+    DataType Int64
+   ColumnDeclaration Timestamp (children 1)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_9
+   ColumnDeclaration TraceId (children 1)
+    DataType String
+   ColumnDeclaration SpanId (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery 03094_grouparrysorted_mv (children 3)
+ Identifier 03094_grouparrysorted_mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier ServiceName
+     Function groupArraySortedState (alias SlowSpans) (children 2)
+      ExpressionList (children 1)
+       Function CAST (children 1)
+        ExpressionList (children 2)
+         Function tuple (children 1)
+          ExpressionList (children 4)
+           Function negate (children 1)
+            ExpressionList (children 1)
+             Identifier Duration
+           Identifier Timestamp
+           Identifier TraceId
+           Identifier SpanId
+         Literal 'Tuple(NegativeDurationNs Int64, Timestamp DateTime64(9), TraceId String, SpanId String)'
+      ExpressionList (children 1)
+       Literal UInt64_100
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier 03094_grouparrysorted_src
+    ExpressionList (children 1)
+     Identifier ServiceName
+ ViewTargets

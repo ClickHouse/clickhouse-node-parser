@@ -1,3 +1,12 @@
+-- Tags: no-parallel, no-random-settings, no-object-storage
+-- add_minmax_index_for_numeric_columns=0: More opened files
+
+-- Does additional index analysis round that the test doesn't expect
+set automatic_parallel_replicas_mode=0;
+SET enable_analyzer = 1;
+CREATE TABLE t_index_hint (a UInt64, b UInt64)
+ENGINE = MergeTree ORDER BY a
+SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, serialization_info_version = 'basic', add_minmax_index_for_numeric_columns=0;
 SELECT sum(b) FROM t_index_hint WHERE b >= 100 AND b < 200 SETTINGS max_threads = 1;
 SELECT sum(b) FROM t_index_hint WHERE a >= 100 AND a < 200 AND b >= 100 AND b < 200 SETTINGS max_threads = 1, force_primary_key = 1;
 SELECT sum(b) FROM t_index_hint WHERE indexHint(a >= 100 AND a < 200) AND b >= 100 AND b < 200 SETTINGS max_threads = 1, force_primary_key = 1;
@@ -10,6 +19,15 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND query LIKE '%SELECT sum(b) FROM t_index_hint%'
 ORDER BY event_time_microseconds;
+CREATE TABLE t_index_hint
+(
+    a UInt64,
+    s String,
+    s_tokens Array(String) MATERIALIZED arrayDistinct(splitByWhitespace(s)),
+    INDEX idx_tokens s_tokens TYPE bloom_filter(0.01) GRANULARITY 1,
+)
+ENGINE = MergeTree ORDER BY a
+SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, serialization_info_version = 'basic';
 SELECT count() FROM t_index_hint WHERE s LIKE '%my_token%' SETTINGS max_threads = 1;
 SELECT count() FROM t_index_hint WHERE has(s_tokens, 'my_token') AND s LIKE '%my_token%' SETTINGS max_threads = 1, force_data_skipping_indices = 'idx_tokens';
 SELECT count() FROM t_index_hint WHERE indexHint(has(s_tokens, 'my_token')) AND s LIKE '%my_token%' SETTINGS max_threads = 1, force_data_skipping_indices = 'idx_tokens';

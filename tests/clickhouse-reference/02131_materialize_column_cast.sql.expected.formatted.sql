@@ -1,3 +1,12 @@
+CREATE TABLE t_materialize_column
+(
+    i Int32
+)
+ENGINE = MergeTree
+ORDER BY i
+PARTITION BY i
+SETTINGS min_bytes_for_wide_part = 0;
+
 SELECT
     name,
     column,

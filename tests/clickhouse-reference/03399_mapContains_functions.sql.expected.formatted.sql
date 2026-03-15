@@ -1,3 +1,12 @@
+CREATE TABLE map_containsValueLike_test
+(
+    id UInt32,
+    map Map(String, String)
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS index_granularity = 2;
+
 SELECT
     id,
     map

@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on AWS
+SET s3_truncate_on_insert = 1;
+
 SELECT
     _file,
     _path

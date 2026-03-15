@@ -10,4 +10,6 @@ SELECT reverse([(1, 'Hello', []), (nan, 'World', [NULL])]);
 SELECT reverse(NULL);
 SELECT reverse([]);
 SELECT reverse([[[[]]]]);
+
+SET send_logs_level = 'fatal';
 SELECT '[RE7', ( SELECT '\0' ) AS riwwq, ( SELECT reverse([( SELECT bitTestAll(NULL) ) , ( SELECT '\0' ) AS ddfweeuy]) ) AS xuvv, '', ( SELECT * FROM file() ) AS wqgdswyc, ( SELECT * FROM file() ); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

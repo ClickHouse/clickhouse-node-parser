@@ -1,3 +1,13 @@
+-- Tags: no-random-settings
+CREATE TABLE IF NOT EXISTS t_group_by_lowcardinality
+(
+    p_date Date,
+    val LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+PARTITION BY p_date;
+
 SELECT
     val,
     avg(toUInt32(val))

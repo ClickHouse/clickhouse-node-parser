@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET allow_experimental_correlated_subqueries = 1;
+
 SELECT deltaSumMerge(`rows`) AS delta_sum
 FROM (
         SELECT *
@@ -22,6 +26,14 @@ FROM (
             x ASC
     )
 ORDER BY `ALL` DESC; -- { serverError ILLEGAL_AGGREGATION }
+
+CREATE TABLE t
+(
+    id Int64,
+    path String
+)
+ENGINE = MergeTree
+ORDER BY path;
 
 SELECT `explain`
 FROM (

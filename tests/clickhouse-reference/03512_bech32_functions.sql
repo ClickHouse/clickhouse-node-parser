@@ -35,12 +35,28 @@ FROM
 );
 -- roundtrip
 SELECT tup.1 AS hrp, hex(tup.2) AS data FROM (SELECT bech32Decode(bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'))) AS tup);
+CREATE TABLE hex_data
+(
+    hrp String,
+    data String,
+    witver UInt8
+)
+ENGINE = Memory;
 -- test const hrp with column data
 SELECT bech32Encode('bc', unhex(data)) FROM hex_data limit 1;
 -- test const data with column hrp
 SELECT bech32Encode(hrp, unhex('6687112a6eadb4d88d29c7a45da56eff0c23b0e14e757d408e')) FROM hex_data limit 1;
 -- test column hrp and data with const witver
 SELECT bech32Encode(hrp, unhex(data), 1) FROM hex_data limit 1;
+CREATE TABLE bech32_test
+(
+    hrp String,
+    data String,
+    hrp_fixed FixedString(4),
+    data_fixed FixedString(50),
+    witver UInt8
+)
+ENGINE = Memory;
 SELECT
     bech32Encode(hrp, unhex(data)) AS enc,
     bech32Encode(hrp, unhex(data), witver) AS enc_witver,
@@ -82,6 +98,17 @@ SELECT t1.1 != '', t1.1 == t2.1, t1.2 == t2.2 FROM (
 SELECT tup.1 AS hrp, hex(tup.2) AS data FROM (SELECT bech32Decode('b1pw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y565gdg8') AS tup);
 -- testing max length, this should return nothing
 SELECT tup.1 AS hrp, hex(tup.2) AS data FROM (SELECT bech32Decode('b1w508dfqejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5xgqsaanm') AS tup);
+CREATE TABLE addresses
+(
+    address String
+)
+ENGINE = Memory;
+CREATE TABLE bech32_test
+(
+    address String,
+    address_fixed FixedString(45)
+)
+ENGINE = Memory;
 SELECT
     address,
     bech32Decode(address).1 AS hrp,

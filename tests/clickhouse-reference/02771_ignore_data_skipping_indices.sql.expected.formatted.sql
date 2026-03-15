@@ -1,3 +1,15 @@
+CREATE TABLE data_02771
+(
+    key Int,
+    x Int,
+    y Int,
+    INDEX x_idx x TYPE minmax GRANULARITY 1,
+    INDEX y_idx y TYPE minmax GRANULARITY 1,
+    INDEX xy_idx (x,y) TYPE minmax GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
 SELECT *
 FROM data_02771;
 
@@ -27,6 +39,8 @@ WHERE x = 1
     AND y = 2
 SETTINGS ignore_data_skipping_indices = 'xy_idx';
 
+SET enable_analyzer = 0;
+
 SELECT *
 FROM (
         EXPLAIN indexes = 1
@@ -49,3 +63,5 @@ FROM (
     )
 WHERE notLike(`explain`, '%Expression%')
     AND notLike(`explain`, '%Filter%');
+
+SET enable_analyzer = 1;

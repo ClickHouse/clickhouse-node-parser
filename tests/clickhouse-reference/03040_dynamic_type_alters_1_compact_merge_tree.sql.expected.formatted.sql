@@ -1,3 +1,18 @@
+SET allow_experimental_dynamic_type = 1;
+
+SET allow_experimental_variant_type = 1;
+
+SET use_variant_as_common_type = 1;
+
+CREATE TABLE test
+(
+    x UInt64,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY x
+SETTINGS min_rows_for_wide_part = 100000000, min_bytes_for_wide_part = 1000000000;
+
 SELECT
     count(),
     dynamicType(d),

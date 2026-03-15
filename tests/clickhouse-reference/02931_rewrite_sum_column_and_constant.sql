@@ -1,9 +1,16 @@
-
+set enable_analyzer = 1;
+-- { echoOn }
 Select sum(number + 1) from numbers(10);
 Select sum(1 + number) from numbers(10);
 Select sum(number - 1) from numbers(10);
 Select sum(1 - number) from numbers(10);
-
+CREATE TABLE test_table
+(
+    uint64 UInt64,
+    float64 Float64,
+    decimal32 Decimal32(5),
+) ENGINE=MergeTree ORDER BY uint64;
+-- { echoOn }
 SELECT sum(uint64 + 1 AS i) from test_table where i > 0;
 SELECT sum(uint64 + 1) AS j from test_table having j > 0;
 SELECT sum(uint64 + 1 AS i) j from test_table where i > 0 having j > 0;

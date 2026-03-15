@@ -1,3 +1,12 @@
+CREATE TABLE group_by_pk
+(
+    k UInt64,
+    v UInt64
+)
+ENGINE = MergeTree
+ORDER BY k
+PARTITION BY v % 50;
+
 SELECT sum(v) AS s
 FROM group_by_pk
 GROUP BY k

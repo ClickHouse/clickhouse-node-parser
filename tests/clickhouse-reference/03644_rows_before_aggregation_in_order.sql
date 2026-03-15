@@ -1,3 +1,6 @@
+create table 03644_data (i UInt32) engine = MergeTree order by i
+as
+select number from numbers(10000);
 select i
 from 03644_data
 group by i

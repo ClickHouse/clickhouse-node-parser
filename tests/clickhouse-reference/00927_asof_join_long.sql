@@ -1,3 +1,6 @@
+-- to use different algorithms for in subquery
+SET enable_analyzer = 1;
+CREATE TABLE tvs(k UInt32, t UInt32, tv UInt64) ENGINE = Memory;
 SELECT SUM(trades.price - tvs.tv) FROM
 (SELECT k, t, t as price
     FROM (SELECT toUInt32(number) AS k FROM numbers(1000)) keys

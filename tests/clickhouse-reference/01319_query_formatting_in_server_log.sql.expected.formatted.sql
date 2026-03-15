@@ -5,6 +5,8 @@ cd',
     -- world
     1;
 
+SET max_rows_to_read = 0; -- system.text_log can be really big
+
 SELECT extract(message, 'SeL.+?;')
 FROM `system`.text_log
 WHERE event_date >= yesterday()

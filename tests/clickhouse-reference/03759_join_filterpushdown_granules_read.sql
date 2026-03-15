@@ -1,3 +1,12 @@
+CREATE TABLE t_mem (a Int32, b Int32) ENGINE = Memory;
+CREATE TABLE t_mt (a Int32, b Int32) ENGINE = MergeTree ORDER BY a SETTINGS index_granularity = 1024, index_granularity_bytes = '10Mi';
+CREATE VIEW t_view AS SELECT a, b, 'aaa_' || toString(a) FROM t_mt;
+CREATE TEMPORARY TABLE start_ts AS ( SELECT now() AS ts );
+SET enable_parallel_replicas = 0;
+SET query_plan_join_swap_table = false;
+SET enable_analyzer = 1;
+SET query_plan_filter_push_down = 1;
+SET join_use_nulls = 1;
 SELECT * FROM t_view AS t1
 LEFT JOIN t_mem AS t2
 USING (b)
@@ -12,10 +21,20 @@ WHERE t2.a < 2000
 SETTINGS log_comment = 'right_join'
 FORMAT Null
 ;
+CREATE VIEW left_joined_view AS
+SELECT t1.a as t1_a, t2.a as t2_a
+FROM t_mt AS t1
+LEFT JOIN t_mem AS t2
+USING (b);
 SELECT * FROM left_joined_view
 WHERE t1_a < 2000
 SETTINGS log_comment = 'left_join_view'
 FORMAT Null;
+CREATE VIEW right_joined_view AS
+SELECT t1.a as t1_a, t2.a as t2_a
+FROM t_mem AS t1
+RIGHT JOIN t_mt AS t2
+USING (b);
 SELECT * FROM right_joined_view
 WHERE t2_a < 2000
 SETTINGS log_comment = 'right_join_view'

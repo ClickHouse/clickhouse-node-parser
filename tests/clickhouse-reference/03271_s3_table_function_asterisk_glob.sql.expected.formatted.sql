@@ -1,3 +1,9 @@
+-- Tags: no-parallel, no-fasttest
+-- Tag no-fasttest: Depends on AWS
+SET s3_truncate_on_insert = 1;
+
+SET s3_skip_empty_files = 0;
+
 SELECT *
 FROM s3(s3_conn, filename = 'dir1/03271_s3_table_function_asterisk_glob/*')
 ORDER BY `ALL` ASC

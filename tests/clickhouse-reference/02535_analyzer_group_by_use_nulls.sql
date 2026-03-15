@@ -1,9 +1,11 @@
-
+SET enable_analyzer=1;
+-- { echoOn }
 SELECT number, number % 2, sum(number) AS val
 FROM numbers(10)
 GROUP BY ROLLUP(number, number % 2)
 ORDER BY (number, number % 2, val)
 SETTINGS group_by_use_nulls=1;
+set optimize_group_by_function_keys = 0;
 SELECT number, number % 2, sum(number) AS val
 FROM numbers(10)
 GROUP BY ROLLUP(number, number % 2)
@@ -65,6 +67,10 @@ GROUP BY
     )
 ORDER BY 1, tuple(val)
 SETTINGS group_by_use_nulls = 1, max_bytes_before_external_sort=10, max_bytes_ratio_before_external_sort=0;
+CREATE TABLE test
+ENGINE = ReplacingMergeTree
+PRIMARY KEY id
+AS SELECT number AS id FROM numbers(100);
 SELECT id
 FROM test
 GROUP BY id

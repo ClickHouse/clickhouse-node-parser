@@ -1,3 +1,28 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE hourly
+(
+    hour datetime,
+    `metric.names` Array(String),
+    `metric.values` Array(Int64)
+)
+ENGINE = Memory AS
+SELECT
+    '2020-01-01',
+    ['a', 'b'],
+    [1,2];
+
+-- { echoOff }
+CREATE TABLE tab
+(
+    `x.a` Array(String),
+    `x.b.first` Array(Array(UInt32)),
+    `x.b.second` Array(Array(String))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+-- { echoOn }
 SELECT
     nested(['click', 'house'], x.b.`first`, x.b.second) AS n,
     toTypeName(n)
@@ -13,6 +38,8 @@ SELECT
     toTypeName(n)
 FROM tab; -- {serverError BAD_ARGUMENTS}
 
+SET analyzer_compatibility_allow_compound_identifiers_in_unflatten_nested = 0;
+
 SELECT x
 FROM tab;
 
@@ -23,3 +50,5 @@ SELECT
 FROM
     tab
 ARRAY JOIN x AS y; -- { serverError UNKNOWN_IDENTIFIER }
+
+SET analyzer_compatibility_allow_compound_identifiers_in_unflatten_nested = 1;

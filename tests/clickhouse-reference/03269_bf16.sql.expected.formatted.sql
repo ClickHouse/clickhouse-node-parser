@@ -51,6 +51,12 @@ SELECT
     toTypeName(c),
     toTypeName(d);
 
+CREATE TEMPORARY TABLE t
+(
+    n UInt64,
+    x BFloat16
+);
+
 SELECT
     *,
     n = x,
@@ -74,6 +80,14 @@ SELECT
     uniqExact(n),
     uniqExact(x)
 FROM t;
+
+CREATE TABLE t
+(
+    n UInt64,
+    x BFloat16
+)
+ENGINE = MergeTree
+ORDER BY n;
 
 -- Introspection
 SELECT

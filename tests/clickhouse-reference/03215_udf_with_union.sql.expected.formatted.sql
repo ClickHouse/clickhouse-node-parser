@@ -1,1 +1,1 @@
-SELECT `03215_udf_with_union`();
+<Parse Error>

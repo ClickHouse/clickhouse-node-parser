@@ -1,3 +1,21 @@
+CREATE TABLE t1
+(
+    key UInt8
+)
+ENGINE = MergeTree
+ORDER BY key
+SETTINGS index_granularity = 1024;
+
+CREATE TABLE t2
+(
+    key UInt64
+)
+ENGINE = MergeTree
+ORDER BY key
+SETTINGS index_granularity = 1024;
+
+SET enable_parallel_replicas = 1, max_parallel_replicas = 2, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost', parallel_replicas_for_non_replicated_merge_tree = 1, parallel_replicas_filter_pushdown = 1;
+
 SELECT a
 FROM (
         SELECT

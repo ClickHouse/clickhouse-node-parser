@@ -1,5 +1,59 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mytable_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "created",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "eventday",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "user_id",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "eventday"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "eventday"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "user_id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -119,6 +173,42 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_float"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "f",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "u",
+        "type": "UInt32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "f"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "u"
+        ]
       }
     ]
   },

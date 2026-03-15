@@ -1,5 +1,27 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE tab
+(
+    x LowCardinality(Nullable(Float64))
+)
+ENGINE = MergeTree
+ORDER BY x
+SETTINGS allow_nullable_key = 1;
+
 SELECT [(arrayJoin([x]), x)] AS `row`
 FROM tab;
+
+CREATE TABLE t__fuzz_307
+(
+    k1 DateTime,
+    k2 LowCardinality(Nullable(Float64)),
+    v Nullable(UInt32)
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (k1, k2)
+SETTINGS allow_nullable_key = 1;
 
 SELECT
     arrayJoin([tuple([(toNullable(NULL), -9223372036854775808, toNullable(3.4028234663852886e38), arrayJoin(
@@ -16,6 +38,16 @@ ORDER BY
     '10.25' DESC,
     k ASC
 FORMAT Null;
+
+CREATE TABLE t__fuzz_282
+(
+    k1 DateTime,
+    k2 LowCardinality(Nullable(Float64)),
+    v Nullable(UInt32)
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (k1, k2)
+SETTINGS allow_nullable_key = 1;
 
 SELECT
     arrayJoin([tuple([(toNullable(NULL), -9223372036854775808, toNullable(3.4028234663852886e38), arrayJoin([tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]), k2)])]) AS `row`,

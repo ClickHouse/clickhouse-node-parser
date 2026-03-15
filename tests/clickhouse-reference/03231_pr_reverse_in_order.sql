@@ -1,3 +1,13 @@
+CREATE TABLE checks
+(
+    `check_name` LowCardinality(String),
+    `check_status` LowCardinality(String),
+    `check_start_time` DateTime,
+    `test_name` LowCardinality(String),
+    `test_status` LowCardinality(String),
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/checks', '{replica}')
+ORDER BY check_start_time;
 SELECT trimBoth(explain)
 FROM
 (

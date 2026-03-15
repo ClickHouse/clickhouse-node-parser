@@ -1,3 +1,14 @@
+SET enable_analyzer = 1;
+
+SET optimize_syntax_fuse_functions = 1;
+
+CREATE TABLE fuse_tbl
+(
+    a Nullable(Int32),
+    b Int32
+)
+ENGINE = Log;
+
 SELECT
     quantile(0.8)(a),
     toTypeName(quantile(0.8)(a)),

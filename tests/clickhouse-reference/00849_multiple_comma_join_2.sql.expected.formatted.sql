@@ -1,3 +1,39 @@
+SET enable_optimize_predicate_expression = 0;
+
+SET convert_query_to_cnf = 0;
+
+SET cross_to_inner_join_rewrite = 1;
+
+CREATE TABLE t1
+(
+    a UInt32,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    a UInt32,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+CREATE TABLE t3
+(
+    a UInt32,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+CREATE TABLE t4
+(
+    a UInt32,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+SET enable_analyzer = 0;
+
 --- EXPLAIN SYNTAX (old AST based optimization)
 SELECT
     countIf(like(`explain`, '%COMMA%')
@@ -469,6 +505,8 @@ FROM (
         CROSS JOIN t3
     )
 SETTINGS enable_analyzer = 1;
+
+SET enable_analyzer = 1;
 
 SELECT *
 FROM

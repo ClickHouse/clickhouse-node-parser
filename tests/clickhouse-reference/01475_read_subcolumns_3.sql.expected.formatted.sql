@@ -1,3 +1,11 @@
+CREATE TABLE null_subcolumns
+(
+    id UInt32,
+    n Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT count()
 FROM null_subcolumns
 WHERE n.`null`;
@@ -5,6 +13,14 @@ WHERE n.`null`;
 SELECT count()
 FROM null_subcolumns
 PREWHERE n.`null`;
+
+CREATE TABLE map_subcolumns
+(
+    id UInt32,
+    m Map(String, UInt32)
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT count()
 FROM map_subcolumns

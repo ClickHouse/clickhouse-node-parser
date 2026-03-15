@@ -1,3 +1,29 @@
+CREATE TABLE IF NOT EXISTS posts
+(
+    page_id LowCardinality(String),
+    post_id String CODEC(LZ4),
+    host_id UInt32 CODEC(T64, LZ4),
+    path_id UInt32,
+    created DateTime CODEC(T64, LZ4),
+    as_of DateTime CODEC(T64, LZ4)
+)
+ENGINE = ReplacingMergeTree(as_of)
+ORDER BY (page_id, post_id)
+PARTITION BY toStartOfMonth(created);
+
+CREATE TABLE IF NOT EXISTS post_metrics
+(
+    page_id LowCardinality(String),
+    post_id String CODEC(LZ4),
+    created DateTime CODEC(T64, LZ4),
+    impressions UInt32 CODEC(T64, LZ4),
+    clicks UInt32 CODEC(T64, LZ4),
+    as_of DateTime CODEC(T64, LZ4)
+)
+ENGINE = ReplacingMergeTree(as_of)
+ORDER BY (page_id, post_id)
+PARTITION BY toStartOfMonth(created);
+
 SELECT
     host_id,
     path_id,

@@ -1,11 +1,115 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tests maps with \"unusual\" key types (Float32, Nothing, LowCardinality(String))"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
         "kind": "literal",
         "type": "String",
         "value": "Map(Nothing, ...) is non-comparable --> not usable as primary key"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "m1",
+        "type": "Map(String, AggregateFunction(sum, UInt32))"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "m1"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "m3",
+        "type": "Map(Nothing, String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "m1",
+        "type": "Map(Float32, String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "m2",
+        "type": "Map(LowCardinality(String), String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "m1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "m2"
+        ]
       }
     ]
   },
@@ -40,6 +144,35 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "m1",
+        "type": "Map(Float32, String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "m2",
+        "type": "Map(LowCardinality(String), String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
       }
     ]
   }

@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- ^ certain functions are disabled in the fast test build.
+
+SET session_timezone = 'UTC';
 SELECT array() FROM system.one;
 SELECT arrayZip() FROM system.one;
 SELECT arrayZipUnaligned() FROM system.one;

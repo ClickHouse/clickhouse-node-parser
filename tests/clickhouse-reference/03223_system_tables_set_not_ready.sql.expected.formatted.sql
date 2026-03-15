@@ -1,3 +1,9 @@
+CREATE TABLE `null` AS `system`.one
+ENGINE = Null;
+
+CREATE TABLE dist AS `null`
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), 'null', rand());
+
 SELECT
     'system.distribution_queue',
     count()
@@ -6,6 +12,13 @@ WHERE exists((
         SELECT 1
     ))
     AND database = currentDatabase();
+
+CREATE TABLE rocksdb
+(
+    key Int
+)
+ENGINE = EmbeddedRocksDB()
+PRIMARY KEY key;
 
 SELECT
     'system.rocksdb',
@@ -25,6 +38,13 @@ WHERE exists((
     ))
     AND database = currentDatabase();
 
+CREATE TABLE mt
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
 SELECT
     'system.mutations',
     count()
@@ -33,6 +53,20 @@ WHERE exists((
         SELECT 1
     ))
     AND database = currentDatabase();
+
+CREATE TABLE rep1
+(
+    key Int
+)
+ENGINE = ReplicatedMergeTree('/{database}/rep', '{table}')
+ORDER BY key;
+
+CREATE TABLE rep2
+(
+    key Int
+)
+ENGINE = ReplicatedMergeTree('/{database}/rep', '{table}')
+ORDER BY key;
 
 SELECT
     'system.replication_queue',

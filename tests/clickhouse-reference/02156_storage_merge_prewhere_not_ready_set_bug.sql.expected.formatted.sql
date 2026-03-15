@@ -1,3 +1,19 @@
+CREATE TABLE merge_kek_1
+(
+    x UInt32,
+    y UInt32
+)
+ENGINE = MergeTree
+ORDER BY x;
+
+CREATE TABLE merge_kek_2
+(
+    x UInt32,
+    y UInt32
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT
     sum(x),
     min(x + x),

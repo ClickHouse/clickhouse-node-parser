@@ -2,6 +2,7 @@ SELECT isIPAddressInRange('127.0.0.1', '127.0.0.0/8');
 SELECT isIPAddressInRange('128.0.0.1', '127.0.0.0/8');
 SELECT isIPAddressInRange('ffff::1', 'ffff::/16');
 SELECT isIPAddressInRange('fffe::1', 'ffff::/16');
+CREATE TABLE test_data (cidr String) ENGINE = Memory;
 SELECT sum(isIPAddressInRange('0.0.0.0', cidr)) == 1 FROM test_data;
 SELECT sum(isIPAddressInRange('127.0.0.0', cidr)) == 1 FROM test_data;
 SELECT sum(isIPAddressInRange('128.0.0.0', cidr)) == 2 FROM test_data;

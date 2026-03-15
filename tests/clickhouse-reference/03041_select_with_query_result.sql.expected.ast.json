@@ -1,0 +1,151 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/44153"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "parent"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a_id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b_id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "created_at",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "created_at"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "join_table_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a_id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b_id",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b_id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "join_table_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c_id",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "created_at",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "created_at"
+        ]
+      }
+    ]
+  }
+]

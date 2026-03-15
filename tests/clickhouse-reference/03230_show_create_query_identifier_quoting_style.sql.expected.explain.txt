@@ -1,3 +1,265 @@
+CreateQuery uk_price_paid (children 3)
+ Identifier uk_price_paid
+ Columns definition (children 3)
+  ExpressionList (children 16)
+   ColumnDeclaration Table (children 1)
+    DataType String
+   ColumnDeclaration Engine (children 1)
+    DataType String
+   ColumnDeclaration price (children 1)
+    DataType UInt32
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration postcode1 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration postcode2 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration type (children 1)
+    EnumDataType Enum
+   ColumnDeclaration is_new (children 1)
+    DataType UInt8
+   ColumnDeclaration duration (children 1)
+    EnumDataType Enum
+   ColumnDeclaration addr1 (children 1)
+    DataType String
+   ColumnDeclaration addr2 (children 1)
+    DataType String
+   ColumnDeclaration street (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration locality (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration town (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration district (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration county (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier county
+    Function set (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_10
+  ExpressionList (children 2)
+   Projection (children 1)
+    ProjectionSelectQuery (children 2)
+     ExpressionList (children 3)
+      Identifier town
+      Identifier date
+      Identifier price
+     Function tuple (children 1)
+      ExpressionList (children 2)
+       Identifier town
+       Identifier date
+   Projection (children 1)
+    ProjectionSelectQuery (children 2)
+     ExpressionList (children 3)
+      Function avg (children 1)
+       ExpressionList (children 1)
+        Identifier price
+      Function max (children 1)
+       ExpressionList (children 1)
+        Identifier price
+      Function sum (children 1)
+       ExpressionList (children 1)
+        Identifier price
+     ExpressionList (children 1)
+      Identifier town
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList (children 3)
+    Identifier postcode1
+    Identifier postcode2
+    Identifier date
+
+CreateQuery prices_by_year_dest (children 3)
+ Identifier prices_by_year_dest
+ Columns definition (children 1)
+  ExpressionList (children 10)
+   ColumnDeclaration Table (children 1)
+    DataType String
+   ColumnDeclaration Engine (children 1)
+    DataType String
+   ColumnDeclaration price (children 1)
+    DataType UInt32
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration addr1 (children 1)
+    DataType String
+   ColumnDeclaration addr2 (children 1)
+    DataType String
+   ColumnDeclaration street (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration town (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration district (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration county (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+ Storage definition (children 3)
+  Function MergeTree
+  Function toYear (children 1)
+   ExpressionList (children 1)
+    Identifier date
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier town
+    Identifier date
+
+CreateQuery prices_by_year_view (children 3)
+ Identifier prices_by_year_view
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 8)
+     Identifier price
+     Identifier date
+     Identifier addr1
+     Identifier addr2
+     Identifier street
+     Identifier town
+     Identifier district
+     Identifier county
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier uk_price_paid
+ ViewTargets
+
+CreateQuery uk_prices_aggs_dest (children 3)
+ Identifier uk_prices_aggs_dest
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration month (children 1)
+    DataType Date
+   ColumnDeclaration min_price (children 1)
+    DataType SimpleAggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier min
+      DataType UInt32
+   ColumnDeclaration max_price (children 1)
+    DataType SimpleAggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier max
+      DataType UInt32
+   ColumnDeclaration volume (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier count
+      DataType UInt32
+   ColumnDeclaration avg_price (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier avg
+      DataType UInt32
+ Storage definition (children 2)
+  Function AggregatingMergeTree
+  Identifier month
+
+CreateQuery uk_prices_aggs_view (children 3)
+ Identifier uk_prices_aggs_view
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 4)
+    ExpressionList (children 1)
+     Function toStartOfMonth (alias month) (children 1)
+      ExpressionList (children 1)
+       Identifier date
+    ExpressionList (children 5)
+     Identifier month
+     Function minSimpleState (alias min_price) (children 1)
+      ExpressionList (children 1)
+       Identifier price
+     Function maxSimpleState (alias max_price) (children 1)
+      ExpressionList (children 1)
+       Identifier price
+     Function countState (alias volume) (children 1)
+      ExpressionList (children 1)
+       Identifier price
+     Function avgState (alias avg_price) (children 1)
+      ExpressionList (children 1)
+       Identifier price
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier uk_price_paid
+    ExpressionList (children 1)
+     Identifier month
+ ViewTargets
+
+CreateQuery uk_mortgage_rates (children 3)
+ Identifier uk_mortgage_rates
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration date (children 1)
+    DataType DateTime64
+   ColumnDeclaration variable (children 1)
+    DataType Decimal32 (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_2
+   ColumnDeclaration fixed (children 1)
+    DataType Decimal32 (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_2
+   ColumnDeclaration bank (children 1)
+    DataType Decimal32 (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_2
+ Storage definition (children 1)
+  Function Memory (children 1)
+   ExpressionList
+
+CreateQuery uk_mortgage_rates_dict (children 3)
+ Identifier uk_mortgage_rates_dict
+ ExpressionList (children 4)
+  DictionaryAttributeDeclaration date (children 1)
+   DataType DateTime64
+  DictionaryAttributeDeclaration variable (children 1)
+   DataType Decimal32 (children 1)
+    ExpressionList (children 1)
+     Literal UInt64_2
+  DictionaryAttributeDeclaration fixed (children 1)
+   DataType Decimal32 (children 1)
+    ExpressionList (children 1)
+     Literal UInt64_2
+  DictionaryAttributeDeclaration bank (children 1)
+   DataType Decimal32 (children 1)
+    ExpressionList (children 1)
+     Literal UInt64_2
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier date
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 1)
+    pair (children 1)
+     Literal 'uk_mortgage_rates'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)

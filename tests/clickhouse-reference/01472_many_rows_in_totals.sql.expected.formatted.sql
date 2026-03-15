@@ -1,3 +1,12 @@
+SET output_format_pretty_color = 1;
+
+-- Disable external aggregation because it may produce several blocks instead of one.
+SET max_bytes_before_external_group_by = 0;
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
+SET output_format_write_statistics = 0;
+
 SELECT
     g,
     s

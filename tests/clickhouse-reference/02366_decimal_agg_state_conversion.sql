@@ -12,6 +12,34 @@ select minMerge(y) from
      select arrayReduce('minState', [toDecimal64('0.000001', 10), toDecimal64('1.1', 10)]) x
    )
 );
+CREATE TABLE consumer_02366
+(
+    `id` UInt16,
+    `dec` AggregateFunction(argMin, Decimal(24, 10), UInt16)
+)
+ENGINE = AggregatingMergeTree
+PRIMARY KEY id
+ORDER BY id;
+CREATE TABLE producer_02366
+(
+    `id` UInt16,
+    `dec` String
+)
+ENGINE = MergeTree
+PRIMARY KEY id
+ORDER BY id;
+CREATE MATERIALIZED VIEW mv_02366 TO consumer_02366 AS
+SELECT
+    id,
+    argMinState(dec, id) AS dec
+FROM
+(
+    SELECT
+        id,
+        toDecimal128(dec, 10) AS dec
+    FROM producer_02366
+)
+GROUP BY id;
 SELECT
     id,
     finalizeAggregation(dec)

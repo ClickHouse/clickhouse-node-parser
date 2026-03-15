@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT '-- negative tests';
 
 SELECT locate(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

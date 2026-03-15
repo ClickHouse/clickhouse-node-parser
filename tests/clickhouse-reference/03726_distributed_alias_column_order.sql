@@ -1,3 +1,10 @@
+CREATE TABLE test_local
+(
+    `a` UInt64,
+    `e` String ALIAS 'e',
+    `f` String ALIAS 'f'
+)
+ENGINE = Memory;
 SELECT e, f
 FROM remote('127.0.0.{1,2}', currentDatabase(), test_local)
 ORDER BY a;

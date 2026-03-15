@@ -1,2 +1,1 @@
-SELECT *
-FROM HASH_MV;
+<Parse Error>

@@ -1,3 +1,11 @@
+CREATE TABLE test
+(
+    key String,
+    val Array(String)
+)
+ENGINE = MergeTree
+ORDER BY key;
+
 SELECT
     key,
     arrayJoin(val) AS res

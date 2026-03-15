@@ -1,3 +1,9 @@
+CREATE TABLE IF NOT EXISTS v
+(
+    value Array(Enum('foo' = 1, 'bar' = 2))
+)
+ENGINE = Memory;
+
 SELECT *
 FROM v
 WHERE has(value, 'foo')
@@ -12,6 +18,12 @@ SELECT *
 FROM v
 WHERE has(value, 'x')
 ORDER BY value ASC;
+
+CREATE TABLE IF NOT EXISTS v2
+(
+    value Array(Array(Nullable(Enum('foo' = 1, 'bar' = 2))))
+)
+ENGINE = Memory;
 
 SELECT *
 FROM v2

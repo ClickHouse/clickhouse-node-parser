@@ -1,3 +1,16 @@
+CREATE TABLE null_in_subquery
+(
+    dt DateTime,
+    idx int,
+    i Nullable(UInt64)
+)
+ENGINE = MergeTree()
+ORDER BY idx
+PARTITION BY dt
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+SET transform_null_in = 1;
+
 SELECT count() == 33333
 FROM null_in_subquery
 WHERE i IN (
@@ -110,6 +123,19 @@ WHERE i GLOBAL NOT IN (
         FROM null_in_subquery
         WHERE dt = 2
     );
+
+CREATE TABLE null_in_tuple
+(
+    dt DateTime,
+    idx int,
+    t Tuple(Nullable(UInt64), Nullable(String))
+)
+ENGINE = MergeTree()
+ORDER BY idx
+PARTITION BY dt
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+SET transform_null_in = 0;
 
 SELECT arraySort(x -> (x.1, x.2), groupArray(t)) == [(1, '1')]
 FROM null_in_tuple

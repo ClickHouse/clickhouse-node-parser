@@ -1,5 +1,145 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bf_tokenbf_lowcard_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "row_id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "lc",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "lc_fixed",
+        "type": "LowCardinality(FixedString(8))"
+      },
+      {
+        "kind": "indexDef",
+        "name": "lc_bf_tokenbf",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "lc"
+          ]
+        },
+        "indexType": "tokenbf_v1(256,2,0)",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "lc_fixed_bf_tokenbf",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "lc_fixed"
+          ]
+        },
+        "indexType": "tokenbf_v1(256,2,0)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "row_id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bf_ngram_lowcard_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "row_id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "lc",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "lc_fixed",
+        "type": "LowCardinality(FixedString(8))"
+      },
+      {
+        "kind": "indexDef",
+        "name": "lc_ngram",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "lc"
+          ]
+        },
+        "indexType": "ngrambf_v1(4,256,2,0)",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "lc_fixed_ngram",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "lc_fixed"
+          ]
+        },
+        "indexType": "ngrambf_v1(4,256,2,0)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "row_id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

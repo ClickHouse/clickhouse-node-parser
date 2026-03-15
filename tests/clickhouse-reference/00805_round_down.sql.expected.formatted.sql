@@ -26,6 +26,8 @@ SELECT
     1 AS x,
     roundDown(x, [6, 5, 4]);
 
+SET send_logs_level = 'fatal';
+
 SELECT
     1 AS x,
     roundDown(x, []); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

@@ -1,3 +1,23 @@
+-- Tags: long, zookeeper, no-replicated-database, no-shared-merge-tree, no-async-insert
+
+-- no-replicated-database:
+--   The number of replicas is doubled, so `SYSTEM STOP FETCHES` stop not enough replicas.
+-- no-shared-merge-tree: no quorum inserts
+--- Tag no-async-insert: async inserts are not supported with non-parallel quorum inserts
+
+SET insert_quorum_parallel = false;
+SET select_sequential_consistency = 1;
+CREATE TABLE quorum1(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum', '1') ORDER BY x PARTITION BY y;
+CREATE TABLE quorum2(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum', '2') ORDER BY x PARTITION BY y;
+-- insert_quorum = n/2 + 1 , so insert will be written to both replica
+SET insert_quorum = 'auto';
+SET insert_keeper_fault_injection_probability=0;
 SELECT x FROM quorum1 ORDER BY x;
 SELECT x FROM quorum2 ORDER BY x;
+-- Create 3 replicas and stop sync 2 replicas
+CREATE TABLE quorum1(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum1', '1') ORDER BY x PARTITION BY y;
+CREATE TABLE quorum2(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum1', '2') ORDER BY x PARTITION BY y;
+CREATE TABLE quorum3(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum1', '3') ORDER BY x PARTITION BY y;
 SELECT x FROM quorum3 ORDER BY x; -- {serverError REPLICA_IS_NOT_IN_QUORUM}
+SET insert_quorum_timeout = 5000;
+SET insert_quorum_timeout = 600000; -- set default value back

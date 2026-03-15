@@ -1,3 +1,17 @@
+CREATE TABLE table1
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table2
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
+
 SELECT
     t1.a AS t1_a,
     t2.a

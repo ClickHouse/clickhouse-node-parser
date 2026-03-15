@@ -1,3 +1,9 @@
+SET enable_analyzer = 1;
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+) ENGINE=TinyLog;
 SELECT 1 AS value, 1 AS value;
 SELECT id AS value, id AS value FROM test_table;
 SELECT (SELECT 1) AS subquery, (SELECT 1) AS subquery;

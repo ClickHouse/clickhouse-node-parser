@@ -1,3 +1,19 @@
+CREATE TABLE null_sink_00126
+(
+    a UInt8,
+    b String,
+    c Array(UInt32)
+)
+ENGINE = Null;
+
+CREATE TABLE buffer_00126
+(
+    a UInt8,
+    b String,
+    c Array(UInt32)
+)
+ENGINE = Buffer(currentDatabase(), null_sink_00126, 1, 1000, 1000, 1000, 1000, 1000000, 1000000);
+
 SELECT
     a,
     b,

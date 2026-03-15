@@ -1,5 +1,101 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tracking_events_tmp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "APIKey",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": "Date"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "APIKey"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "EventDate"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "open_events_tmp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "APIKey",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": "Date"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toMonday",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "APIKey"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "EventDate"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

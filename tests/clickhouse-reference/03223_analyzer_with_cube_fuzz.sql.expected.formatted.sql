@@ -1,3 +1,21 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    a Int64,
+    b Int64
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+CREATE TABLE t2
+(
+    key Int32,
+    val Int64
+)
+ENGINE = MergeTree
+ORDER BY key;
+
 SELECT
     1 * 1000.0001,
     (count(1.) = -2147483647)

@@ -1,3 +1,20 @@
+CREATE TABLE test.hits_1m AS test.hits
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(EventDate)
+ORDER BY (CounterID, EventDate, intHash32(UserID))
+SAMPLE BY intHash32(UserID)
+SETTINGS storage_policy = 'default',
+-- set index_granularity correctly to avoid time out
+index_granularity = 8192,
+index_granularity_bytes = 10485760;
+SET max_execution_time = 300;
+CREATE DATABASE IF NOT EXISTS db_dict;
+CREATE DICTIONARY db_dict.cache_hits
+(WatchID UInt64, UserID UInt64, SearchPhrase String)
+PRIMARY KEY WatchID
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'hits_1m' PASSWORD '' DB 'test'))
+LIFETIME(MIN 1 MAX 10)
+LAYOUT(CACHE(SIZE_IN_CELLS 1 QUERY_WAIT_TIMEOUT_MILLISECONDS 60000));
 SELECT count() FROM (SELECT WatchID, arrayDistinct(groupArray(dictGetUInt64( 'db_dict.cache_hits', 'UserID', toUInt64(WatchID)))) as arr
 FROM test.hits_1m PREWHERE WatchID % 5 == 0 GROUP BY  WatchID order by length(arr) desc) WHERE arr = [0];
 SELECT count() FROM (SELECT WatchID, arrayDistinct(groupArray(dictGetUInt64( 'db_dict.cache_hits', 'UserID', toUInt64(WatchID)))) as arr

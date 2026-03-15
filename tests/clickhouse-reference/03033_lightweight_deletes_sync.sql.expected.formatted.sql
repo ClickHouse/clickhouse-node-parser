@@ -1,3 +1,10 @@
+CREATE TABLE t_lightweight_deletes
+(
+    a UInt64
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT count()
 FROM t_lightweight_deletes;
 

@@ -27,6 +27,9 @@ SETTINGS
     use_query_cache = 1,
     query_cache_system_table_handling = 'ignore';
 
+-- Edge case which doesn't work well due to conceptual reasons (QueryCache is AST-based), test it anyways to have it documented.
+USE system;
+
 SELECT *
 FROM one
 SETTINGS use_query_cache = 1; -- doesn't throw but should
@@ -39,6 +42,13 @@ SETTINGS use_query_cache = 1;
 SELECT *
 FROM information_schema.tables
 SETTINGS use_query_cache = 1; -- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }
+
+CREATE TABLE tab
+(
+    uid Int16,
+    name String
+)
+ENGINE = Memory;
 
 SELECT *
 FROM tab
@@ -54,9 +64,21 @@ SELECT *
 FROM clusterAllReplicas('test_shard_localhost', 'system.one')
 SETTINGS use_query_cache = 1; -- {serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }
 
+CREATE TABLE `system`
+(
+    c UInt64
+)
+ENGINE = Memory;
+
 SELECT *
 FROM `system`
 SETTINGS use_query_cache = 1;
+
+CREATE TABLE `system`.`system`
+(
+    c UInt64
+)
+ENGINE = Memory;
 
 SELECT *
 FROM `system`.`system`

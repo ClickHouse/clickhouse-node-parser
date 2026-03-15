@@ -1,3 +1,15 @@
+CREATE TABLE table_for_rename
+(
+    date Date,
+    key UInt64,
+    value1 String,
+    value2 String,
+    value3 String
+)
+ENGINE = MergeTree()
+ORDER BY key
+PARTITION BY date;
+
 SELECT value1
 FROM table_for_rename
 WHERE key = 1;

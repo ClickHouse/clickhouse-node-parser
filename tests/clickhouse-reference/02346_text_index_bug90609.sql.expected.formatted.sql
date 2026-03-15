@@ -1,3 +1,14 @@
+-- Test for Bug 90609
+SET enable_full_text_index = 1;
+
+CREATE TABLE tab
+(
+    text String,
+    INDEX idx text TYPE text(tokenizer = splitByNonAlpha)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT 1
 FROM (
         SELECT *

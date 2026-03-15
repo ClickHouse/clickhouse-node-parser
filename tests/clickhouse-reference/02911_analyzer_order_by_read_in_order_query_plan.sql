@@ -1,4 +1,6 @@
-
+SET optimize_read_in_order = 1, query_plan_read_in_order = 1, enable_analyzer = 1;
+create table tab (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by ((a + b) * c, sin(a / b));
+-- { echoOn }
 
 -- Exact match, single key
 select * from tab order by (a + b) * c;
@@ -54,7 +56,10 @@ select * from (select *, a + b as x, a / b as y from tab) order by x * c, sin(y)
 select * from (explain plan actions = 1 select * from (select *, a + b as x, a / b as y from tab) order by x * c, sin(y)) where explain like '%sort description%';
 select * from (select *, a / b as y from (select *, a + b as x from tab)) order by x * c, sin(y);
 select * from (explain plan actions = 1 select * from (select *, a / b as y from (select *, a + b as x from tab)) order by x * c, sin(y)) where explain like '%sort description%';
+-- { echoOff }
 
+create table tab2 (x DateTime, y UInt32, z UInt32) engine = MergeTree order by (x, y);
+-- { echoOn }
 
 select * from tab2 order by toTimeZone(toTimezone(x, 'UTC'), 'CET'), intDiv(intDiv(y, -2), -3);
 select * from (explain plan actions = 1 select * from tab2 order by toTimeZone(toTimezone(x, 'UTC'), 'CET'), intDiv(intDiv(y, -2), -3)) where explain like '%sort description%';
@@ -62,7 +67,12 @@ select * from tab2 order by toStartOfDay(x), intDiv(intDiv(y, -2), -3);
 select * from (explain plan actions = 1 select * from tab2 order by toStartOfDay(x), intDiv(intDiv(y, -2), -3)) where explain like '%sort description%';
 -- select * from tab2 where toTimezone(x, 'CET') = '2020-02-03 01:00:00' order by intDiv(intDiv(y, -2), -3);
 select * from (explain plan actions = 1 select * from tab2 where toTimezone(x, 'CET') = '2020-02-03 01:00:00' order by intDiv(intDiv(y, -2), -3)) where explain like '%sort description%';
+-- { echoOff }
 
+create table tab3 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by ((a + b) * c, sin(a / b));
+create table tab4 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by sin(a / b);
+create table tab5 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by (a + b) * c;
+-- { echoOn }
 
 -- Union (not fully supported)
 select * from (select * from tab union all select * from tab3) order by (a + b) * c, sin(a / b);

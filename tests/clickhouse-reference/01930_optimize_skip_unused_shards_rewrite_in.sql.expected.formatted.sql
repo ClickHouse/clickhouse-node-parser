@@ -1,3 +1,25 @@
+-- Tags: shard
+SET optimize_skip_unused_shards = 1;
+
+SET force_optimize_skip_unused_shards = 2;
+
+CREATE TEMPORARY TABLE data
+(
+    id UInt64
+)
+ENGINE = Memory() AS
+WITH [
+    0,
+    1,
+    0x7f, 0x80, 0xff,
+    0x7fff, 0x8000, 0xffff,
+    0x7fffffff, 0x80000000, 0xffffffff,
+    0x7fffffffffffffff, 0x8000000000000000, 0xffffffffffffffff
+] AS values
+
+SELECT arrayJoin(values) AS id;
+
+-- { echoOn }
 -- Int8, Int8
 SELECT
     _shard_num,

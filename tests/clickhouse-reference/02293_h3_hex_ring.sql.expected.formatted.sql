@@ -7,6 +7,14 @@ SELECT h3HexRing(581276613233082367, -1); -- { serverError ILLEGAL_TYPE_OF_ARGUM
 
 SELECT h3HexRing(581276613233082367, toUInt16(-1)); -- { serverError PARAMETER_OUT_OF_BOUND }
 
+-- Test h3 indices and k selected from original test fixture: https://github.com/uber/h3/blob/master/src/apps/testapps
+CREATE TABLE h3_indexes
+(
+    h3_index UInt64,
+    k UInt16
+)
+ENGINE = Memory;
+
 SELECT arraySort(h3HexRing(h3_index, k))
 FROM h3_indexes
 ORDER BY h3_index ASC;

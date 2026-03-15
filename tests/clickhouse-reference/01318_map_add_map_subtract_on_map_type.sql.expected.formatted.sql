@@ -1,3 +1,8 @@
+CREATE TABLE tab
+ENGINE = Memory() AS
+SELECT map(1, toInt32(2), number, 2) AS m
+FROM numbers(1, 10);
+
 -- mapAdd
 SELECT mapAdd(map(1, 1)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 

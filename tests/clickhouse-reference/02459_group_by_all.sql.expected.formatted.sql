@@ -1,3 +1,11 @@
+CREATE TABLE group_by_all
+(
+    a String,
+    b int,
+    c int
+)
+ENGINE = Memory;
+
 SELECT
     a,
     count(b)
@@ -59,3 +67,5 @@ SELECT
     substring(a, 1, len)
 FROM group_by_all
 GROUP BY ALL;
+
+SET enable_analyzer = 1;

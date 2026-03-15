@@ -1,3 +1,11 @@
+CREATE TABLE order_by_another
+(
+    a Nullable(UInt64),
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     a,
     b

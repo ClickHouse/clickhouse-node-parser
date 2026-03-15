@@ -1,3 +1,16 @@
+SET insert_keeper_max_retries = 100;
+
+SET insert_keeper_retry_max_backoff_ms = 10;
+
+CREATE TABLE table1
+(
+    id Int64,
+    v UInt64
+)
+ENGINE = ReplicatedReplacingMergeTree('/clickhouse/tables/{database}/test_table12', '1', v)
+ORDER BY id
+PARTITION BY id % 200;
+
 SELECT toInt64(`partition`) AS p
 FROM `system`.parts
 WHERE table = 'table1'
@@ -20,17 +33,46 @@ FROM table1
 WHERE id % 200 < 0
 ORDER BY id ASC;
 
+CREATE TABLE table2
+(
+    id Int64,
+    v UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY (toInt32(id / 2) % 3, id % 200);
+
 SELECT `partition` AS p
 FROM `system`.parts
 WHERE table = 'table2'
     AND database = currentDatabase()
 ORDER BY p ASC;
 
+CREATE TABLE table3
+(
+    id Int64,
+    v UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY (id % 200, (id % 200) % 10, toInt32(round((id % 200) / 2, 0)));
+
 SELECT `partition` AS p
 FROM `system`.parts
 WHERE table = 'table3'
     AND database = currentDatabase()
 ORDER BY p ASC;
+
+CREATE TABLE table4
+(
+    id Int64,
+    v UInt64,
+    s String,
+    INDEX a (id * 2, s) TYPE minmax GRANULARITY 3
+)
+ENGINE = MergeTree()
+ORDER BY v
+PARTITION BY id % 10;
 
 SELECT count()
 FROM table4

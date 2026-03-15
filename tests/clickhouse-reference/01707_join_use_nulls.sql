@@ -1,3 +1,5 @@
+CREATE TABLE X (id Int) ENGINE=Memory;
+CREATE TABLE Y (id Int) ENGINE=Memory;
 SELECT Y.id - 1 FROM X RIGHT JOIN Y ON (X.id + 1) = Y.id SETTINGS join_use_nulls=1;
 SELECT Y.id - 1 FROM X RIGHT JOIN Y ON (X.id + 1) = toInt64(Y.id) SETTINGS join_use_nulls=1;
 -- Fix issue #20366 

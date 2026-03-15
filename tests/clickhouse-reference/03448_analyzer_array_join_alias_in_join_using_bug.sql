@@ -1,4 +1,11 @@
-
+CREATE TABLE local_table
+(
+    id Int8,
+    `arr` Array(UInt8)
+)
+ENGINE = MergeTree
+ORDER BY id;
+-- { echoOn }
 
 SELECT arr
 FROM remote('127.0.0.2', currentDatabase(), local_table) r

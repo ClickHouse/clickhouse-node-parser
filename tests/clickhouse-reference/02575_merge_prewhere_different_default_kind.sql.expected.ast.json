@@ -1,5 +1,94 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "m"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "f",
+        "type": "UInt8"
+      }
+    ],
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^(t1|t2)$"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "f",
+        "type": "UInt8",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -26,6 +115,7 @@
       }
     },
     "leadingComments": [
+      "-- { echoOn }",
       "-- for pure PREWHERE it is not addressed yet."
     ]
   },
@@ -131,6 +221,53 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "f",
+        "type": "UInt8"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOff }"
     ]
   }
 ]

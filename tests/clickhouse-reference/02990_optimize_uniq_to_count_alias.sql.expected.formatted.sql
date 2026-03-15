@@ -1,3 +1,10 @@
+CREATE TABLE tags
+(
+    dev_tag String
+)
+ENGINE = Memory AS
+SELECT '1';
+
 SELECT *
 FROM (
         SELECT countDistinct(dev_tag) AS total_devtags
@@ -25,6 +32,14 @@ FROM (
             ) AS t
     )
 SETTINGS optimize_uniq_to_count = 1;
+
+CREATE TABLE users
+(
+    id Int64,
+    name String
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (id, name);
 
 SELECT uniqExact(id)
 FROM (

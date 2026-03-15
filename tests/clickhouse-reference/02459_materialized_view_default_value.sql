@@ -1,3 +1,23 @@
+CREATE TABLE session
+(
+    `day` Date,
+    `uid` String,
+    `dummy` String DEFAULT ''
+)
+ENGINE = MergeTree
+ORDER BY (day, uid);
+CREATE TABLE queue
+(
+    `day` Date,
+    `uid` String
+)
+ENGINE = MergeTree
+ORDER BY (day, uid);
+CREATE MATERIALIZED VIEW IF NOT EXISTS forward TO session AS
+SELECT
+    day,
+    uid
+FROM queue;
 SELECT * FROM queue;
 SELECT * FROM session;
 SELECT * FROM forward;

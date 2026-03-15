@@ -1,3 +1,14 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE t_01411
+(
+    str LowCardinality(String),
+    arr Array(LowCardinality(String)) DEFAULT [str]
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 SELECT count()
 FROM t_01411
 WHERE str = 'asdf337';
@@ -25,6 +36,15 @@ WHERE has(arr, str);
 SELECT count()
 FROM t_01411
 WHERE indexOf(arr, str) > 0;
+
+CREATE TABLE t_01411_num
+(
+    num UInt8,
+    arr Array(LowCardinality(Int64)) DEFAULT [num]
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT count()
 FROM t_01411_num

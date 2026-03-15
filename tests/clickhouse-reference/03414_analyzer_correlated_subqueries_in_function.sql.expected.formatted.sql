@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET allow_experimental_correlated_subqueries = 1;
+
 SELECT count()
 FROM numbers(3) AS t
 WHERE 1 IN (

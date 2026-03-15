@@ -1,3 +1,13 @@
+CREATE TABLE t_lwd_mutations
+(
+    id UInt64,
+    v UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+SET mutations_sync = 2;
+
 SELECT
     count(),
     sum(v),

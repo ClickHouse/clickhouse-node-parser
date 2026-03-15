@@ -1,2 +1,24 @@
+CREATE TABLE t_vertical_merges
+(
+  a   Nullable(String),
+  b   Int8
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+settings
+    vertical_merge_algorithm_min_columns_to_activate=1,
+    vertical_merge_algorithm_min_rows_to_activate=1,
+    min_bytes_for_wide_part=0;
 SELECT a, b, c FROM t_vertical_merges;
+CREATE TABLE t_vertical_merges
+(
+  a   Array(Int16),
+  b   Int8
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+settings
+    vertical_merge_algorithm_min_columns_to_activate=1,
+    vertical_merge_algorithm_min_rows_to_activate=1,
+    min_bytes_for_wide_part=0;
 SELECT a, b FROM t_vertical_merges;

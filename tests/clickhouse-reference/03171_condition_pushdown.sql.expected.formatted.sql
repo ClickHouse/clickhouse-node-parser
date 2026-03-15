@@ -1,3 +1,6 @@
+-- This query succeeds only if it is correctly optimized.
+SET enable_analyzer = 1;
+
 SELECT *
 FROM
     (

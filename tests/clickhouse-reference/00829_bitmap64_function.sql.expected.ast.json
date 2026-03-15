@@ -1,5 +1,86 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bitmap_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pickup_date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "city_id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bitmap_state_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pickup_date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "city_id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "uv",
+        "type": "AggregateFunction( groupBitmap, UInt64 )"
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pickup_date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pickup_date"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "city_id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

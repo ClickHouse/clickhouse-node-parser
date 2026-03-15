@@ -1,5 +1,248 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_disk_requires_disk"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "table_disk",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- table_disk is supported only by s3_plain/s3_plain_rewritable/web"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_disk_requires_proper_disk"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "disk",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "default"
+        }
+      },
+      {
+        "name": "table_disk",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "uk_price_paid"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "price",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "postcode1",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "postcode2",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "type",
+        "type": "Enum8('other' = 0, 'terraced' = 1, 'semi-detached' = 2, 'detached' = 3, 'flat' = 4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_new",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "duration",
+        "type": "Enum8('unknown' = 0, 'freehold' = 1, 'leasehold' = 2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "addr1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "addr2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "street",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "locality",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "town",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "district",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "county",
+        "type": "LowCardinality(String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "postcode1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "postcode2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "addr1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "addr2"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "disk",
+        "value": {
+          "kind": "functionCall",
+          "name": "disk",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "type"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "web"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "endpoint"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "https://raw.githubusercontent.com/ClickHouse/web-tables-demo/main/web/store/cf7/cf712b4f-2ca8-435c-ac23-c4393efe52f7/"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "table_disk",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,5 +255,32 @@
       "kind": "tableRef",
       "table": "uk_price_paid"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_disk_is_immutable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "leadingComments": [
+      "-- now let's ensure that the table_disk is immutable"
+    ]
   }
 ]

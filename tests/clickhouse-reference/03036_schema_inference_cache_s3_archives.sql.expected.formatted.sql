@@ -12,6 +12,8 @@ FROM `system`.schema_inference_cache
 WHERE file = '03036_archive1.zip::example1.csv'
 ORDER BY file ASC;
 
+SET schema_inference_mode = 'union';
+
 SELECT *
 FROM s3(s3_conn, filename = '03036_json_archive.zip :: example{11,12}.jsonl')
 ORDER BY tuple(*) ASC;

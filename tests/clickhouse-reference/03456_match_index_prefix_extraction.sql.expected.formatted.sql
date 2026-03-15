@@ -1,3 +1,14 @@
+SET parallel_replicas_local_plan = 1;
+
+CREATE TABLE foo
+(
+    id UInt8,
+    path String
+)
+ENGINE = MergeTree
+ORDER BY path
+SETTINGS index_granularity = 1;
+
 -- check if also escaped sequence are properly extracted
 SELECT trimLeft(`explain`)
 FROM (

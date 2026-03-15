@@ -1,3 +1,4 @@
+create table array_intersect (date Date, arr Array(UInt8)) engine=MergeTree partition by date order by date;
 select arraySort(arrayIntersect(arr, [1,2])) from array_intersect order by arr;
 select arraySort(arrayIntersect(arr, [])) from array_intersect order by arr;
 select arraySort(arrayIntersect([], arr)) from array_intersect order by arr;

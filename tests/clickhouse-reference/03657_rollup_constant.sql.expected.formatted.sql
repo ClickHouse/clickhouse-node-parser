@@ -1,3 +1,16 @@
+CREATE TABLE my_first_table
+(
+    user_id UInt32,
+    job_id UInt32,
+    message String,
+    timestamp DateTime,
+    metric Float32
+)
+ENGINE = MergeTree()
+PRIMARY KEY (user_id, timestamp);
+
+SET enable_analyzer = 1;
+
 SELECT
     1 AS constant,
     user_id,

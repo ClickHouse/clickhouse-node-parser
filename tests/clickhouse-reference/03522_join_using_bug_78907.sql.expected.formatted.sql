@@ -1,3 +1,20 @@
+CREATE TABLE tabc__fuzz_21
+(
+    a Int64,
+    b Int8 ALIAS a + 1,
+    c DateTime ALIAS b + 1,
+    s Nullable(DateTime64(3))
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+CREATE TABLE tb__fuzz_0
+(
+    b Nullable(Int32)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     (*, 8, 8, 8, toFixedString('FirstKey', 8), 8, 8, (toNullable(8) IS NOT NULL) IS NULL, 8, toNullable(toNullable(toNullable(8))), 8, 8, 'FirstKey', (8 IS NOT NULL) IS NOT NULL),
     *,

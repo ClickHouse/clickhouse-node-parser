@@ -1,3 +1,5 @@
+set allow_suspicious_low_cardinality_types=1;
+CREATE TABLE group_by_null_key (c1 Nullable(Int32), c2 LowCardinality(Nullable(Int32))) ENGINE = Memory();
 select c1, count(*) from group_by_null_key group by c1 WITH TOTALS;
 select c2, count(*) from group_by_null_key group by c2 WITH TOTALS;
 select c1, count(*) from group_by_null_key group by ROLLUP(c1);

@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_snowflake_conversion_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -589,6 +602,28 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "tz",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1907,6 +1942,821 @@
           "kind": "literal",
           "type": "UInt64",
           "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_nonconst_timezone_arguments",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "country",
+        "type": "LowCardinality(FixedString(7))",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "city",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "region",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "continent",
+        "type": "LowCardinality(FixedString(7))",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_eu_country",
+        "type": "Bool"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "DateTime",
+        "codec": "CODEC(DoubleDelta, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "viewer_date",
+        "type": "DateTime",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toTimezone",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "timezone"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_browser",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "metro_code",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "domain",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_platform",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_type",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_vendor",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": "FixedString(39)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "lat",
+        "type": "Decimal(8, 6)",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "lng",
+        "type": "Decimal(9, 6)",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "asset_id",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_personalized",
+        "type": "Bool"
+      },
+      {
+        "kind": "columnDef",
+        "name": "metric",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "origin",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "product_id",
+        "type": "UInt64",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "referer",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "server_side",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "third_party_id",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "partner_slug",
+        "type": "LowCardinality(FixedString(10))",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "user_agent",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "user_id",
+        "type": "UUID"
+      },
+      {
+        "kind": "columnDef",
+        "name": "zip",
+        "type": "FixedString(10)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timezone",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "as_organization",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "content_cat",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "playback_method",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "store_id",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "store_url",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": "Nullable(DateTime)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ad_count",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ad_type",
+        "type": "LowCardinality(FixedString(10))",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ad_categories",
+        "type": "Array(FixedString(8))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "blocked_ad_categories",
+        "type": "Array(FixedString(8))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "break_max_ad_length",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "break_max_ads",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "break_max_duration",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "break_min_ad_length",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "break_position",
+        "type": "LowCardinality(FixedString(18))",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "media_playhead",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "placement_type",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "transaction_id",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "universal_ad_id",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "client_ua",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_ip",
+        "type": "FixedString(39)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_ua",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ifa",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ifa_type",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vast_lat",
+        "type": "Decimal(8, 6)",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "vast_long",
+        "type": "Decimal(9, 6)",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "server_ua",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "app_bundle",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "page_url",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "api_framework",
+        "type": "Array(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "click_type",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "extensions",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "media_mime",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "om_id_partner",
+        "type": "LowCardinality(String)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "player_capabilities",
+        "type": "Array(FixedString(12))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "vast_versions",
+        "type": "Array(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "verification_vendors",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ad_play_head",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ad_serving_id",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "asset_uri",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "content_id",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "content_uri",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "inventory_state",
+        "type": "Array(FixedString(14))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "player_size",
+        "type": "Array(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "player_state",
+        "type": "Array(FixedString(12))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "pod_sequence",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "click_position",
+        "type": "Array(UInt32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "error_code",
+        "type": "Int16",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "error_reason",
+        "type": "Int8",
+        "codec": "CODEC(T64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "gdpr_consent",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "limited_tracking",
+        "type": "Bool"
+      },
+      {
+        "kind": "columnDef",
+        "name": "regulations",
+        "type": "String",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unknown"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "content_category",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "projectionDef",
+        "name": "projection_TPAG_VAST_date",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toYYYYMMDD",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "date"
+                    ]
+                  }
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "metric"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "product_id"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "asset_id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "asset_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toYYYYMMDD",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "date"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_nonconst_timezone_arguments",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
         }
       }
     ]

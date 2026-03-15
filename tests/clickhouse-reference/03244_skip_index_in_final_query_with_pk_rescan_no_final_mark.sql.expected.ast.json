@@ -1,5 +1,207 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- More tests for use_skip_index_if_final_exact_mode optimization",
+      "-- Test when part does not have final mark, optimization will just expand to all ranges"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_if_final",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_if_final_exact_mode",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- The CREATE TABLE raises a warning due to index_granularity_bytes = 0"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "valueDate",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "bb_ticker",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ric",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "update_timestamp",
+        "type": "DateTime"
+      },
+      {
+        "kind": "indexDef",
+        "name": "tab1_bb_ticker_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "bb_ticker"
+          ]
+        },
+        "indexType": "bloom_filter",
+        "granularity": 4
+      },
+      {
+        "kind": "indexDef",
+        "name": "tab1_ric_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ric"
+          ]
+        },
+        "indexType": "bloom_filter",
+        "granularity": 4
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "update_timestamp"
+          ]
+        }
+      ]
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueDate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "bb_ticker"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ric"
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueDate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "bb_ticker"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ric"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "111"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "compress_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "warning"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

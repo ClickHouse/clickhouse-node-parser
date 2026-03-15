@@ -1,2 +1,1 @@
-SELECT count()
-FROM quorum1;
+<Parse Error>

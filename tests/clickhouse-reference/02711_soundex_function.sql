@@ -12,6 +12,7 @@ SELECT soundex('MacDonald');
 SELECT soundex('S3344mith0000');
 SELECT soundex('Smith');
 SELECT '---';
+CREATE TABLE tab (col String) Engine=MergeTree ORDER BY col;
 SELECT soundex(col) FROM tab;
 -- negative tests
 SELECT soundex(toFixedString('Smith', 5)); -- { serverError ILLEGAL_COLUMN }

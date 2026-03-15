@@ -1,3 +1,14 @@
+CREATE TABLE skip_table
+(
+    k UInt64,
+    v UInt64,
+    INDEX v_set v TYPE set(100) GRANULARITY 2,
+    INDEX v_mm v TYPE minmax GRANULARITY 2
+)
+ENGINE = MergeTree
+PRIMARY KEY k
+SETTINGS index_granularity = 8192;
+
 SELECT trim(`explain`)
 FROM (
         EXPLAIN indexes = 1

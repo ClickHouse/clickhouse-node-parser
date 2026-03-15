@@ -56,6 +56,19 @@ SELECT space(30303030303030303030303030303030::UInt64); -- { serverError TOO_LAR
 
 SELECT space(NULL);
 
+CREATE TABLE defaults
+(
+    u8 UInt8,
+    u16 UInt16,
+    u32 UInt32,
+    u64 UInt64,
+    i8 Int8,
+    i16 Int16,
+    i32 Int32,
+    i64 Int64
+)
+ENGINE = Memory();
+
 SELECT space(30::UInt8)
 FROM defaults;
 

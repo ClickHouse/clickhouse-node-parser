@@ -1,3 +1,11 @@
+CREATE TABLE `distinct`
+(
+    Num UInt32,
+    Name String
+)
+ENGINE = Memory;
+
+-- { echoOn }
 -- String field
 SELECT Name
 FROM (

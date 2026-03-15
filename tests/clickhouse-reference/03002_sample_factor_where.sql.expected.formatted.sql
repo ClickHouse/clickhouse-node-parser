@@ -1,3 +1,12 @@
+CREATE TABLE t_sample_factor
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+SAMPLE BY b;
+
 SELECT uniq(b) * any(_sample_factor)
 FROM t_sample_factor SAMPLE 200000;
 

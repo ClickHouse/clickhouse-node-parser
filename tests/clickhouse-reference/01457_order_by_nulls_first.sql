@@ -1,3 +1,6 @@
+CREATE TABLE  order_by_nulls_first
+(diff Nullable(Int16), traf UInt64)
+ENGINE = MergeTree ORDER BY tuple();
 SELECT
     diff,
     traf

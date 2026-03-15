@@ -1,3 +1,25 @@
+CREATE TABLE lhs
+(
+    a UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE rhs
+(
+    a UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET enable_parallel_replicas = 0; -- join optimization (and table size estimation) disabled with parallel replicas
+
+SET enable_analyzer = 1, use_query_condition_cache = 0;
+
+SET join_algorithm = 'direct,parallel_hash,hash'; -- default
+
+SET parallel_hash_join_threshold = 100001;
+
 -- Tables should be swapped; the new right table is below the threshold - use HashJoin
 SELECT trimBoth(`explain`)
 FROM (
@@ -37,6 +59,9 @@ FROM (
         SETTINGS query_plan_join_swap_table = true
     )
 WHERE ilike(`explain`, '%Algorithm%');
+
+-- Same queries but we cannot do fallback to `hash`
+SET join_algorithm = 'parallel_hash';
 
 -- Check estimations obtained from the cache
 -- Right table is big, regardless of cardinality of join key, we should use ConcurrentHashJoin

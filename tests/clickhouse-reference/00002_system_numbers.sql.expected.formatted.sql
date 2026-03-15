@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT *
 FROM `system`.numbers
 LIMIT 3;

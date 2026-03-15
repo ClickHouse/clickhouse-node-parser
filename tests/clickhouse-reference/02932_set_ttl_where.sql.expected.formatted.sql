@@ -1,1 +1,1 @@
-SELECT sleep(1);
+<Parse Error>

@@ -1,3 +1,17 @@
+CREATE TABLE join_inner_table
+(
+    id UUID,
+    key String,
+    number Int64,
+    value1 String,
+    value2 String,
+    time Int64
+)
+ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/join_inner_table', 'r1')
+ORDER BY (id, number, key);
+SET max_parallel_replicas = 3;
+SET cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+SET joined_subquery_requires_alias = 0;
 SELECT
     key,
     value1,
@@ -47,6 +61,16 @@ GROUP BY key, value1, value2
 ORDER BY key, value1, value2
 LIMIT 10
 SETTINGS enable_parallel_replicas = 1, enable_analyzer=1;
+CREATE TABLE join_outer_table
+(
+    id UUID,
+    key String,
+    otherValue1 String,
+    otherValue2 String,
+    time Int64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/join_outer_table', 'r1')
+ORDER BY (id, time, key);
 SELECT
     value1,
     value2,

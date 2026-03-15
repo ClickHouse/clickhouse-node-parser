@@ -1,3 +1,68 @@
+CreateQuery TestTbl (children 3)
+ Identifier TestTbl
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType UInt16
+   ColumnDeclaration dt (children 1)
+    DataType Date
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier dt
+  Identifier id
+
+CreateQuery TestTbl_view (children 2)
+ Identifier TestTbl_view
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier TestTbl
+    Function equals (children 1)
+     ExpressionList (children 2)
+      Identifier dt
+      Subquery (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 2)
+          ExpressionList (children 1)
+           Function max (children 1)
+            ExpressionList (children 1)
+             Identifier dt
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             TableIdentifier TestTbl
+
+CreateQuery TestTblDict (children 3)
+ Identifier TestTblDict
+ ExpressionList (children 3)
+  DictionaryAttributeDeclaration id (children 1)
+   DataType UInt16
+  DictionaryAttributeDeclaration dt (children 1)
+   DataType Date
+  DictionaryAttributeDeclaration val (children 1)
+   DataType String
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier id
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 2)
+    pair (children 1)
+     Identifier TestTbl_view
+    pair (children 1)
+     Function currentDatabase (children 1)
+      ExpressionList
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)

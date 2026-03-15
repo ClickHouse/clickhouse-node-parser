@@ -1,3 +1,10 @@
+CREATE TABLE datetime64_cmp
+(
+    dt6 DateTime64(6, 'UTC'),
+    dt3 DateTime64(3, 'UTC')
+)
+ENGINE = Memory;
+
 -- Compare equal and unequal values of different precicion/scale
 SELECT
     dt6,

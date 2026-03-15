@@ -1,3 +1,20 @@
+SET enable_analyzer = 1;
+
+SET optimize_extract_common_expressions = 1;
+
+CREATE TABLE x
+(
+    x Int64,
+    A UInt8,
+    B UInt8,
+    C UInt8,
+    D UInt8,
+    E UInt8,
+    F UInt8
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 -- Test multiple cases
 SELECT *
 FROM x
@@ -379,6 +396,19 @@ WHERE (((A
     AND F)))
 ORDER BY x ASC
 LIMIT 10;
+
+CREATE TABLE y
+(
+    x Int64,
+    A UInt8,
+    B UInt8,
+    C UInt8,
+    D UInt8,
+    E UInt8,
+    F UInt8
+)
+ENGINE = MergeTree
+ORDER BY x;
 
 -- JOIN expressions
 -- As the optimization code is shared between ON and WHERE, it is enough to test that the optimization is done also in ON

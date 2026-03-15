@@ -1,3 +1,9 @@
+-- add_minmax_index_for_numeric_columns=0: Different plan
+set serialize_query_plan = 0;
+set enable_analyzer=1;
+set enable_parallel_replicas=0;
+set prefer_localhost_replica=1;
+create table tab0 (x UInt32, y UInt32) engine = MergeTree order by x settings index_granularity=8192, min_bytes_for_wide_part=1e9, index_granularity_bytes=10e6, add_minmax_index_for_numeric_columns=0;
 -- { echo }
 select sum(y) from (select * from remote('127.0.0.1', currentDatabase(), tab0)) where x in (select number + 42 from numbers(1));
 select sum(y) from (select * from remote('127.0.0.1', currentDatabase(), tab0)) where x global in (select number + 42 from numbers(1));

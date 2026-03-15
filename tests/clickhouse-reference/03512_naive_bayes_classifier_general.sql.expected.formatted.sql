@@ -17,6 +17,20 @@ SELECT
 FROM numbers(10)
 ORDER BY number ASC;
 
+CREATE TABLE model_names
+(
+    model_name String
+)
+ENGINE = MergeTree()
+ORDER BY model_name;
+
+CREATE TABLE input_texts
+(
+    input_text String
+)
+ENGINE = MergeTree()
+ORDER BY input_text;
+
 SELECT
     model_name,
     input_text,

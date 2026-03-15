@@ -1,1 +1,5 @@
+-- Random settings limits: index_granularity=(100, None)
+
+set allow_experimental_dynamic_type=1;
+create table test (d Dynamic) engine=MergeTree order by tuple() settings min_rows_for_wide_part=1, min_bytes_for_wide_part=1;
 select count(), dynamicType(d), isDynamicElementInSharedData(d) from test group by dynamicType(d), isDynamicElementInSharedData(d) order by count();

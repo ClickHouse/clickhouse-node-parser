@@ -1,3 +1,24 @@
+CREATE TABLE t1
+(
+    Val UInt64
+)
+ENGINE = MergeTree
+ORDER BY Val;
+
+CREATE TABLE t2
+(
+    Val UInt64
+)
+ENGINE = MergeTree
+ORDER BY Val;
+
+-- Create a Merge table that matches only t1
+CREATE TABLE foo_merge
+(
+    Val UInt64
+)
+ENGINE = Merge(currentDatabase(), '^t1$');
+
 -- This query used to cause "QueryPlan was not initialized" error
 -- when filter push-down optimization tried to add filter to an uninitialized child plan
 SELECT count() > 0

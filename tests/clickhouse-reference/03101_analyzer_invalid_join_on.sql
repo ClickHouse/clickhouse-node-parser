@@ -1,3 +1,6 @@
+set enable_analyzer=1;
+create table t1 (c3 String, primary key(c3)) engine = MergeTree;
+create table t2 (c11 String, primary key(c11)) engine = MergeTree;
 select
     ref_0.c11 as c_2_c30_0
   from

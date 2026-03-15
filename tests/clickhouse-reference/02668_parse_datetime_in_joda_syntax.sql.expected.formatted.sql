@@ -1,3 +1,4 @@
+-- { echoOn }
 -- empty
 SELECT parseDateTimeInJodaSyntax(' ', ' ', 'UTC') = toDateTime('1970-01-01', 'UTC');
 
@@ -342,6 +343,9 @@ SELECT isNull(parseDateTimeInJodaSyntaxOrNull('2001 invalid 366 2000', 'yyyy D y
 SELECT parseDateTimeInJodaSyntax(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT parseDateTimeInJodaSyntax('12 AM', 'h a', 'UTC', 'a fourth argument'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
+-- The format string argument is optional
+SET session_timezone = 'UTC'; -- don't randomize the session timezone
 
 SELECT parseDateTimeInJodaSyntax('2021-01-04 23:12:34') = toDateTime('2021-01-04 23:12:34');
 

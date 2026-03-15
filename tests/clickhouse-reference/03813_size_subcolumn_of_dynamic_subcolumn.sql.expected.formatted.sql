@@ -1,3 +1,11 @@
+CREATE TABLE test
+(
+    ad Array(Array(Dynamic)),
+    jd Array(Array(JSON))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     ad.`Array(UInt64)`.size2,
     jd.a.:`Array(Nullable(Int64))`.size2,

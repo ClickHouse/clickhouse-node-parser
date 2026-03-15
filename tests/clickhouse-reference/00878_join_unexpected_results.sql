@@ -1,3 +1,6 @@
+create table t(a Int64, b Int64) engine = MergeTree ORDER BY tuple();
+create table s(a Int64, b Int64) engine = MergeTree ORDER BY tuple();
+set join_use_nulls = 1;
 select * from t left outer join s using (a,b) order by t.a;
 select * from t join s using (a,b);
 select * from t join s on (t.a=s.a and t.b=s.b);
@@ -12,3 +15,4 @@ select t.*, s.* from t left join s on (s.a=t.a and t.b=s.b and t.a=toInt64(2)) o
 select t.*, s.* from t left join s on (s.a=t.a) order by t.a;
 select t.*, s.* from t left join s on (t.b=toInt64(1) and s.a=t.a) where s.b=1;
 select t.*, s.* from t left join s on (t.b=toInt64(2) and s.a=t.a) where t.b=2;
+set join_use_nulls = 0;

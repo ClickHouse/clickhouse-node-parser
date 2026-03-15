@@ -1,3 +1,4 @@
+CREATE TABLE arrays_test (s String, arr Array(UInt8)) ENGINE = Memory;
 SELECT * FROM arrays_test;
 SELECT s, arr FROM arrays_test ARRAY JOIN arr;
 SELECT s, arr, a FROM arrays_test ARRAY JOIN arr AS a;

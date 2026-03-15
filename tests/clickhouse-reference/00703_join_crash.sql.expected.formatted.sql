@@ -1,3 +1,19 @@
+CREATE TABLE tab1
+(
+    a1 Int32,
+    b1 Int32
+)
+ENGINE = MergeTree
+ORDER BY a1;
+
+CREATE TABLE tab1_copy
+(
+    a1 Int32,
+    b1 Int32
+)
+ENGINE = MergeTree
+ORDER BY a1;
+
 SELECT
     tab1.a1,
     tab1_copy.a1,

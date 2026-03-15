@@ -1,3 +1,14 @@
+-- Context: https://github.com/ClickHouse/ClickHouse/issues/42916
+
+-- STRING WITH 10 CHARACTERS
+-- SELECT version() AS v, hex(argMaxState('0123456789', number)) AS state FROM numbers(1) FORMAT CSV
+
+CREATE TABLE argmaxstate_hex_small
+(
+    `v` String,
+    `state` String
+)
+ENGINE = TinyLog;
 -- Assert that the current version will write the same as 22.8.5 (last known good 22.8 minor)
 SELECT
     (SELECT hex(argMaxState('0123456789', number)) FROM numbers(1)) = state
@@ -8,6 +19,14 @@ SELECT
     v,
     length(finalizeAggregation(CAST(unhex(state) AS AggregateFunction(argMax, String, UInt64))))
 FROM argmaxstate_hex_small;
+-- STRING WITH 54 characters
+-- SELECT version() AS v, hex(argMaxState('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', number)) AS state FROM numbers(1) FORMAT CSV
+CREATE TABLE argmaxstate_hex_large
+(
+    `v` String,
+    `state` String
+)
+ENGINE = TinyLog;
 SELECT
     (SELECT hex(argMaxState('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', number)) FROM numbers(1)) = state
 FROM argmaxstate_hex_large
@@ -16,6 +35,14 @@ SELECT
     v,
     length(finalizeAggregation(CAST(unhex(state) AS AggregateFunction(argMax, String, UInt64))))
 FROM argmaxstate_hex_large;
+-- STRING WITH 0 characters
+-- SELECT version() AS v, hex(argMaxState('', number)) AS state FROM numbers(1) FORMAT CSV
+CREATE TABLE argmaxstate_hex_empty
+(
+    `v` String,
+    `state` String
+)
+ENGINE = TinyLog;
 SELECT
     (SELECT hex(argMaxState('', number)) FROM numbers(1)) = state
 FROM argmaxstate_hex_empty
@@ -56,5 +83,6 @@ SELECT 'fuzz2', finalizeAggregation(CAST(unhex('04000000' || '30313233' || '01' 
 SELECT 'fuzz3', finalizeAggregation(CAST(unhex('04000000' || '30313233' || '00' || 'ffffffffffffffff'), 'AggregateFunction(argMax, String, UInt64)')) as x, length(x); -- { serverError INCORRECT_DATA }
 SELECT 'fuzz4', finalizeAggregation(CAST(unhex('04000000' || '30313233' || '00'), 'AggregateFunction(argMax, String, UInt64)')) as x, length(x); -- { serverError INCORRECT_DATA }
 SELECT 'fuzz5', finalizeAggregation(CAST(unhex('0100000000000000000FFFFFFFF0'), 'AggregateFunction(argMax, UInt64, String)')); -- { serverError INCORRECT_DATA }
+create table aggr (n int, s AggregateFunction(max, String)) engine=MergeTree order by n;
 select n, maxMerge(s) as x, length(x) from aggr group by n order by n;
 select maxMerge(s) as x, length(x) from aggr;

@@ -1,5 +1,1 @@
-SELECT *
-FROM file;
-
-SELECT *
-FROM file2;
+<Parse Error>

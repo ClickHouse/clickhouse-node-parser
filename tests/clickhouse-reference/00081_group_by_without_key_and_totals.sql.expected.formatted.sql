@@ -1,3 +1,6 @@
+-- Tags: stateful
+SET enable_analyzer = 1;
+
 SELECT count() AS c
 FROM test.hits
 WHERE CounterID = 1704509

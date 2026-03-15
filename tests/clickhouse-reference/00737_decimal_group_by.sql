@@ -7,5 +7,11 @@ select materialize(toDecimal128(3.2, 12)) as x group by x;
 select x from (select toDecimal32(1.3, 2) x) group by x;
 select x from (select toDecimal64(2.3, 4) x) group by x;
 select x from (select toDecimal128(3.3, 12) x) group by x;
+CREATE TABLE IF NOT EXISTS decimal
+(
+    A UInt64,
+    B Decimal128(18),
+    C Decimal128(18)
+) Engine = Memory;
 SELECT A, toString(B) AS B_str, toString(SUM(C)) AS c_str FROM decimal GROUP BY A, B_str;
 SELECT A, B_str, toString(cc) FROM (SELECT A, toString(B) AS B_str, SUM(C) AS cc FROM decimal GROUP BY A, B_str);

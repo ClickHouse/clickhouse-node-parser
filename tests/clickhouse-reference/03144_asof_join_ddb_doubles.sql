@@ -1,3 +1,9 @@
+SET join_algorithm = 'full_sorting_merge';
+SET enable_analyzer = 1;
+CREATE TABLE events0 (
+    begin Float64,
+    value Int32
+) ENGINE = MergeTree ORDER BY begin;
 SELECT p.ts, e.value
 FROM
     (SELECT number :: Float64 AS ts FROM numbers(10)) p
@@ -12,6 +18,22 @@ ON p.ts >= e.begin
 ORDER BY p.ts ASC
 -- SETTINGS join_use_nulls = 1
 ;
+CREATE TABLE events (
+    key Int32,
+    begin Float64,
+    value Int32
+) ENGINE = MergeTree ORDER BY (key, begin);
+CREATE TABLE probes (
+    key Int32,
+    ts Float64
+) ENGINE = MergeTree ORDER BY (key, ts) AS
+SELECT
+    key.number,
+    ts.number
+FROM
+    numbers(1, 2) as key,
+    numbers(10) as ts
+SETTINGS join_algorithm = 'hash';
 SELECT p.key, p.ts, e.value
 FROM probes p
 ASOF JOIN events e

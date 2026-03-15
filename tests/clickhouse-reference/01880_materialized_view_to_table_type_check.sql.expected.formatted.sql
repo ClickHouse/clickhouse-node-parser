@@ -1,4 +1,1 @@
-SELECT '----------test--------:';
-
-SELECT *
-FROM test;
+<Parse Error>

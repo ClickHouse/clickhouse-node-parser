@@ -1,3 +1,8 @@
+-- Tags: stateful
+SET max_bytes_before_external_group_by = '1G';
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
 SELECT
     k,
     any(u) AS u,

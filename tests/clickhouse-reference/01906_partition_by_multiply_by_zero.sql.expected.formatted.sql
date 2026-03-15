@@ -1,3 +1,13 @@
+CREATE TABLE t_01906
+(
+    id UInt64,
+    update_ts DateTime,
+    value UInt32
+)
+ENGINE = ReplacingMergeTree(update_ts)
+ORDER BY (update_ts, id)
+PARTITION BY 0 * id;
+
 SELECT count()
 FROM t_01906
 WHERE id >= 42;

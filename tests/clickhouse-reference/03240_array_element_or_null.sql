@@ -1,5 +1,11 @@
+CREATE TABLE array_element_or_null_test (arr Array(Int32), id Int32) ENGINE = Memory;
 select arrayElementOrNull(arr, id) from array_element_or_null_test;
+CREATE TABLE array_element_or_null_test (arr Array(Int32), id UInt32) ENGINE = Memory;
+CREATE TABLE array_element_or_null_test (arr Array(String), id Int32) ENGINE = Memory;
+CREATE TABLE array_element_or_null_test (arr Array(String), id UInt32) ENGINE = Memory;
+CREATE TABLE array_element_or_null_test (id UInt32) ENGINE = Memory;
 select [1, 2, 3] as arr, arrayElementOrNull(arr, id) from array_element_or_null_test;
+CREATE TABLE array_element_or_null_test (id Int32) ENGINE = Memory;
 SELECT arrayElementOrNull(range(0), -1);
 SELECT arrayElementOrNull(range(0), 1);
 SELECT arrayElementOrNull(range(number), 2) FROM system.numbers LIMIT 3;

@@ -1,3 +1,14 @@
+SET session_timezone = 'Europe/Amsterdam';
+
+CREATE TABLE with_fill_staleness
+(
+    a DateTime,
+    b DateTime,
+    c UInt64
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT
     a,
     c,

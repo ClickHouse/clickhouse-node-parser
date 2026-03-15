@@ -1,4 +1,9 @@
-
+CREATE TABLE tabc (a UInt32, b UInt32 ALIAS a + 1, c UInt32 ALIAS b + 1, s String) ENGINE = MergeTree ORDER BY a;
+CREATE TABLE ta (a Int32) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE tb (b Int32) ENGINE = MergeTree ORDER BY tuple();
+SET join_use_nulls = 1;
+SET analyzer_compatibility_join_using_top_level_identifier = 1;
+-- { echoOn }
 SELECT 1 AS c0 FROM (SELECT 1 AS c1) t0 JOIN (SELECT 1 AS c0) t1 USING (c0);
 SELECT 1 AS c0 FROM (SELECT 1 AS c0) t0 JOIN (SELECT 1 AS c0) t1 USING (c0);
 SELECT 1 AS a FROM tb JOIN tabc USING (a) ORDER BY ALL;
@@ -27,6 +32,7 @@ SETTINGS analyzer_compatibility_join_using_top_level_identifier = 1; -- { server
 -- In new analyzer with `analyzer_compatibility_join_using_top_level_identifier = 0` we get `b` from left table
 SELECT a + 2 AS b FROM tb JOIN tabc USING (b) ORDER BY ALL
 SETTINGS analyzer_compatibility_join_using_top_level_identifier = 0, enable_analyzer = 1;
+CREATE TABLE users (uid Int16, name String, spouse_name String) ENGINE=Memory;
 SELECT u1.uid, u1.spouse_name as name, u2.uid, u2.name
 FROM users u1 JOIN users u2 USING (name)
 ORDER BY u1.uid

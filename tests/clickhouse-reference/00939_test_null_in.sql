@@ -1,3 +1,4 @@
+CREATE TABLE nullt (c1 Nullable(UInt32), c2 Nullable(String))ENGINE = Log;
 SELECT c2 = ('abc') FROM nullt;
 SELECT c2 IN ('abc') FROM nullt;
 SELECT c2 IN ('abc', NULL) FROM nullt;

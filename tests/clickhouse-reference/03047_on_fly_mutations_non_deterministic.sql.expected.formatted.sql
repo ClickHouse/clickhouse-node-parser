@@ -1,3 +1,13 @@
+SET apply_mutations_on_fly = 1;
+
+CREATE TABLE t_lightweight_mut_2
+(
+    id UInt64,
+    v UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT *
 FROM t_lightweight_mut_2; -- { serverError BAD_ARGUMENTS }
 

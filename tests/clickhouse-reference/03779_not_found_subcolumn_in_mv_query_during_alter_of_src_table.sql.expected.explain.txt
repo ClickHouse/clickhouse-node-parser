@@ -1,3 +1,61 @@
+Set
+
+CreateQuery src (children 3)
+ Identifier src
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration data (children 1)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      TupleDataType Tuple (children 1)
+       ExpressionList (children 1)
+        DataType UInt32
+   ColumnDeclaration dummy (children 1)
+    DataType UInt8
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery dst (children 3)
+ Identifier dst
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery mv (children 3)
+ Identifier mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Identifier data_joined.id (alias id)
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 2)
+           ExpressionList (children 1)
+            Function arrayJoin (alias data_joined) (children 1)
+             ExpressionList (children 1)
+              Identifier data
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier src
+    Function notEquals (children 1)
+     ExpressionList (children 2)
+      Identifier data_joined.id
+      Literal UInt64_42
+ ViewTargets
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)

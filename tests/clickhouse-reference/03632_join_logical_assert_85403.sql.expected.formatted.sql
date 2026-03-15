@@ -10,3 +10,5 @@ INNER JOIN (
     ) AS b
     USING (y)
 WHERE round(*) = b.y;
+
+SET query_plan_use_new_logical_join_step = 0;

@@ -1,5 +1,25 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "-- Test 1: Memory engine - UPDATE + RENAME on same column should be rejected"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -91,6 +111,39 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test 2: MergeTree engine - same behavior expected"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -179,6 +232,44 @@
         },
         "direction": "ASC"
       }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test 4: Verify UPDATE + RENAME on DIFFERENT columns works fine"
     ]
   },
   {

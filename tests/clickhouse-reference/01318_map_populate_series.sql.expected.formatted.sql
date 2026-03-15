@@ -1,3 +1,10 @@
+CREATE TABLE map_test
+ENGINE = TinyLog() AS
+SELECT
+    (number + 1) AS n,
+    ([1, number], [1,2]) AS map
+FROM numbers(1, 5);
+
 SELECT mapPopulateSeries(map.1, map.2)
 FROM map_test;
 

@@ -1,3 +1,4 @@
+create table test (name String, uuid UUID) engine=Memory();
 -- { echo }
 select count() from (select * from test union distinct select * from test);
 select count() from (select * from test union distinct select * from test union all select * from test);

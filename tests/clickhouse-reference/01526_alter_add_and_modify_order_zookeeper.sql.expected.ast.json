@@ -1,5 +1,119 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": "Int8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "version",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sign",
+        "type": "Int8",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedVersionedCollapsingMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/01526_alter_add/t1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "sign"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "version"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "y"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

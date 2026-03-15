@@ -28,6 +28,13 @@ SELECT ignore(now64(3, 1111)); -- { serverError ILLEGAL_COLUMN } # invalid timez
 
 SELECT toDateTime64('2019-09-16 19:20:11', 3, 'UTC'); -- this now works OK and produces timestamp with no subsecond part
 
+CREATE TABLE A
+(
+    t DateTime64(3, 'UTC')
+)
+ENGINE = MergeTree()
+ORDER BY t;
+
 SELECT
     toString(t, 'UTC'),
     toDate(t),

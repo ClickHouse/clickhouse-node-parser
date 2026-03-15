@@ -1,3 +1,9 @@
+CREATE TABLE t0
+(
+    c0 String
+)
+ENGINE = Log();
+
 SELECT isNull(t0.c0)
     OR COUNT('\n?pVa')
 FROM t0

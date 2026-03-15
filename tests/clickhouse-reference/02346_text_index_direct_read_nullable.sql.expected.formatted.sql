@@ -1,3 +1,15 @@
+-- Test that text index direct read optimization works correctly with nullable needles.
+SET enable_full_text_index = 1;
+
+CREATE TABLE tab
+(
+    key UInt64,
+    val String,
+    INDEX idx val TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY key;
+
 -- When hasAnyTokens has a nullable needle, the result type is Nullable(UInt8).
 -- The text index direct read optimization should correctly handle this by wrapping the result with toNullable.
 SELECT *

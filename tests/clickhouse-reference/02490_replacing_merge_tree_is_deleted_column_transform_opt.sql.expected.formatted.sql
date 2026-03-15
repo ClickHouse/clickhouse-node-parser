@@ -1,3 +1,18 @@
+CREATE TABLE tab
+(
+    pkey String,
+    id Int32,
+    v Int32,
+    version UInt64,
+    is_deleted UInt8
+)
+ENGINE = ReplacingMergeTree(version, is_deleted)
+ORDER BY id
+PARTITION BY pkey
+SETTINGS index_granularity = 512;
+
+SET do_not_merge_across_partitions_select_final = 1;
+
 -- verify : 10000 rows expected
 SELECT count()
 FROM tab FINAL;

@@ -1,3 +1,5 @@
+SET least_greatest_legacy_null_behavior = default;
+
 SELECT
     greatest(NULL),
     least(NULL);
@@ -61,3 +63,5 @@ SELECT
 SELECT
     greatest(toLowCardinality(1), NULL),
     least(toLowCardinality(1), NULL);
+
+SET least_greatest_legacy_null_behavior = true;

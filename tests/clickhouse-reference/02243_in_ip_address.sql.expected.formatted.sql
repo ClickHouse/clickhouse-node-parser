@@ -1,3 +1,12 @@
+CREATE TABLE test_table
+(
+    id UInt64,
+    value_ipv4 IPv4,
+    value_ipv6 IPv6
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT id
 FROM test_table
 WHERE value_ipv4 IN (

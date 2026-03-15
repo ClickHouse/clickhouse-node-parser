@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT arrayJoin([1, 2, 3]);
 
 SELECT '--';
@@ -27,6 +29,15 @@ SELECT arrayMap(x -> arrayJoin(cast(x, 'Array(UInt8)')), [[1, 2, 3]]); -- { serv
 SELECT
     arrayMap(x -> x + a, [1, 2, 3]),
     arrayJoin([1,2,3]) AS a;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value_1 Array(UInt8),
+    value_2 Array(UInt8)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT
     id,

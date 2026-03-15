@@ -1,3 +1,9 @@
+CREATE TABLE test
+(
+    x UInt8
+)
+ORDER BY x;
+
 SELECT
     ProfileEvents['Merge'],
     ProfileEvents['MergeSourceParts'],

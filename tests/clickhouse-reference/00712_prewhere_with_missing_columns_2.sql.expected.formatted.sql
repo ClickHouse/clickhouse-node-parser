@@ -1,3 +1,12 @@
+CREATE TABLE t_00712_1
+(
+    a Int32,
+    b Int32
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY (a,b);
+
 SELECT b
 FROM t_00712_1
 PREWHERE a < 1000;

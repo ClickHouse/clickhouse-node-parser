@@ -1,3 +1,11 @@
+CREATE TABLE grop_uniq_array_date
+(
+    d Date,
+    dt DateTime,
+    id Integer
+)
+ENGINE = Memory;
+
 SELECT
     groupUniqArray(d),
     groupUniqArray(dt)

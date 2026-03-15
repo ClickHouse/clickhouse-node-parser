@@ -1,3 +1,21 @@
+-- Tags: no-fasttest, no-ordinary-database, no-parallel-replicas
+-- no-parallel-replicas: If parallel replicas are on, the optimization (no rescoring) may not work.
+-- Test for setting 'vector_search_with_rescoring'
+SET enable_analyzer = 1;
+
+SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to force local plan for parallel replicas
+
+CREATE TABLE tab
+(
+    id Int32,
+    vec Array(Float32),
+    attr1 Int32,
+    INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 2)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 2;
+
 SELECT '-- Expect column "_distance" in EXPLAIN. Column "vec" is not expected for ReadFromMergeTree.';
 
 SELECT trimLeft(`explain`) AS `explain`

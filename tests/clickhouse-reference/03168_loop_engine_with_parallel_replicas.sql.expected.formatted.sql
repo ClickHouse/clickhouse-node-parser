@@ -1,4 +1,1 @@
-SELECT *
-FROM loop(`03147_db`.t)
-LIMIT 15
-FORMAT Null;
+<Parse Error>

@@ -1,3 +1,12 @@
+CREATE TABLE literal_alias_misclassification
+(
+    id Int64,
+    a Nullable(String),
+    b Nullable(Int64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     'const' AS r,
     b

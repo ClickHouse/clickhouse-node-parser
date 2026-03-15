@@ -1,3 +1,41 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE lc_str_0
+(
+    str LowCardinality(String)
+)
+ENGINE = Memory;
+
+CREATE TABLE lc_null_str_0
+(
+    str LowCardinality(Nullable(String))
+)
+ENGINE = Memory;
+
+CREATE TABLE lc_int8_0
+(
+    val LowCardinality(Int8)
+)
+ENGINE = Memory;
+
+CREATE TABLE lc_null_int8_0
+(
+    val LowCardinality(Nullable(Int8))
+)
+ENGINE = Memory;
+
+CREATE TABLE lc_fix_str_0
+(
+    str LowCardinality(FixedString(2))
+)
+ENGINE = Memory;
+
+CREATE TABLE lc_null_fix_str_0
+(
+    str LowCardinality(Nullable(FixedString(2)))
+)
+ENGINE = Memory;
+
 SELECT str
 FROM lc_str_0;
 
@@ -43,6 +81,14 @@ FROM (
     )
 GROUP BY val
 ORDER BY val ASC;
+
+CREATE TABLE lc_str_uuid
+(
+    str1 String,
+    str2 LowCardinality(String),
+    str3 LowCardinality(String)
+)
+ENGINE = Memory;
 
 SELECT
     toUUID(str1),

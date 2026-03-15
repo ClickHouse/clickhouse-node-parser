@@ -1,3 +1,12 @@
+SET joined_subquery_requires_alias = 0;
+
+CREATE TABLE ANIMAL
+(
+    ANIMAL Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT *
 FROM (
         SELECT

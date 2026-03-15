@@ -1,3 +1,13 @@
+-- Context: https://github.com/ClickHouse/ClickHouse/issues/42916
+-- STRING WITH 10 CHARACTERS
+-- SELECT version() AS v, hex(argMaxState('0123456789', number)) AS state FROM numbers(1) FORMAT CSV
+CREATE TABLE argmaxstate_hex_small
+(
+    v String,
+    state String
+)
+ENGINE = TinyLog;
+
 -- Assert that the current version will write the same as 22.8.5 (last known good 22.8 minor)
 SELECT (
         SELECT hex(argMaxState('0123456789', number))
@@ -12,6 +22,15 @@ SELECT
     length(finalizeAggregation(CAST(unhex(state) AS AggregateFunction(argMax, String, UInt64))))
 FROM argmaxstate_hex_small;
 
+-- STRING WITH 54 characters
+-- SELECT version() AS v, hex(argMaxState('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', number)) AS state FROM numbers(1) FORMAT CSV
+CREATE TABLE argmaxstate_hex_large
+(
+    v String,
+    state String
+)
+ENGINE = TinyLog;
+
 SELECT (
         SELECT hex(argMaxState('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', number))
         FROM numbers(1)
@@ -23,6 +42,15 @@ SELECT
     v,
     length(finalizeAggregation(CAST(unhex(state) AS AggregateFunction(argMax, String, UInt64))))
 FROM argmaxstate_hex_large;
+
+-- STRING WITH 0 characters
+-- SELECT version() AS v, hex(argMaxState('', number)) AS state FROM numbers(1) FORMAT CSV
+CREATE TABLE argmaxstate_hex_empty
+(
+    v String,
+    state String
+)
+ENGINE = TinyLog;
 
 SELECT (
         SELECT hex(argMaxState('', number))
@@ -180,6 +208,14 @@ SELECT
 SELECT
     'fuzz5',
     finalizeAggregation(CAST(unhex('0100000000000000000FFFFFFFF0'), 'AggregateFunction(argMax, UInt64, String)')); -- { serverError INCORRECT_DATA }
+
+CREATE TABLE aggr
+(
+    n int,
+    s AggregateFunction(max, String)
+)
+ENGINE = MergeTree
+ORDER BY n;
 
 SELECT
     n,

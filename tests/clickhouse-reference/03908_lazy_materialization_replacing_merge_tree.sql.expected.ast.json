@@ -1,5 +1,83 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_optimize_lazy_materialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Regression test for https://github.com/ClickHouse/ClickHouse/issues/88489",
+      "-- ReplacingMergeTree with Array(Tuple) columns failed with TOO_LARGE_ARRAY_SIZE",
+      "-- when using WHERE + ORDER BY + small LIMIT due to lazy materialization bug."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_max_limit_for_lazy_materialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lm_replacing"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "domain",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "alert_match",
+        "type": "Array(Tuple(String, String))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

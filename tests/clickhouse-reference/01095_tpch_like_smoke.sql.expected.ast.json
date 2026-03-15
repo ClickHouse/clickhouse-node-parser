@@ -1,5 +1,823 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cross_to_inner_join_rewrite",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "part"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "p_partkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_mfgr",
+        "type": "FixedString(25)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_brand",
+        "type": "FixedString(10)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_type",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_size",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_container",
+        "type": "FixedString(10)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_retailprice",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_comment",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "p_partkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "positive",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "p_size"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "p_retailprice"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "p_partkey"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "supplier"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s_suppkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_name",
+        "type": "FixedString(25)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_address",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_nationkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_phone",
+        "type": "FixedString(15)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_acctbal",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_comment",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s_suppkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s_suppkey"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "partsupp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ps_partkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_suppkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_availqty",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_supplycost",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_comment",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "ps_partkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "ps_availqty"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "ps_supplycost"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ps_partkey"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ps_suppkey"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "customer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c_custkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_address",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_nationkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_phone",
+        "type": "FixedString(15)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_acctbal",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_mktsegment",
+        "type": "FixedString(10)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_comment",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c_custkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c_custkey"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "orders"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "o_orderkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_custkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_orderstatus",
+        "type": "FixedString(1)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_totalprice",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_orderdate",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_orderpriority",
+        "type": "FixedString(15)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_clerk",
+        "type": "FixedString(15)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_shippriority",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_comment",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "o_totalprice"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "o_orderdate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "o_orderkey"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "lineitem"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "l_orderkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_partkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_suppkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_linenumber",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_quantity",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_extendedprice",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_discount",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_tax",
+        "type": "Decimal(18,2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_returnflag",
+        "type": "FixedString(1)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_linestatus",
+        "type": "FixedString(1)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_shipdate",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_commitdate",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_receiptdate",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_shipinstruct",
+        "type": "FixedString(25)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_shipmode",
+        "type": "FixedString(10)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_comment",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_quantity"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_extendedprice"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_tax"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_shipdate"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_receiptdate"
+                ]
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "l_shipdate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "l_receiptdate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "l_orderkey"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "l_linenumber"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nation"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n_nationkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "n_name",
+        "type": "FixedString(25)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "n_regionkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "n_comment",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n_nationkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n_nationkey"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "region"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "r_regionkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "r_name",
+        "type": "FixedString(25)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "r_comment",
+        "type": "String"
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "r_regionkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "r_regionkey"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

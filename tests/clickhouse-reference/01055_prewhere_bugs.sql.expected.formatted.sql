@@ -1,6 +1,23 @@
+CREATE TABLE test_prewhere_default_column
+(
+    APIKey UInt8,
+    SessionType UInt8
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+PARTITION BY APIKey;
+
 SELECT OperatingSystem
 FROM test_prewhere_default_column
 PREWHERE SessionType = 42;
+
+CREATE TABLE test_prewhere_column_type
+(
+    a LowCardinality(String),
+    x Nullable(Int32)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT
     a,

@@ -1,5 +1,81 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "remote_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "its",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "action_code",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "day",
+        "type": "Date"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "day"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "uid"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "its"
+              ]
+            }
+          ],
+          "source": "(uid, its)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

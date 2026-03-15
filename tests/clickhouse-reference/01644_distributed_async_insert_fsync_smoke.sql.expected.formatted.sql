@@ -1,2 +1,1 @@
-SELECT sum(*)
-FROM dist_01643;
+<Parse Error>

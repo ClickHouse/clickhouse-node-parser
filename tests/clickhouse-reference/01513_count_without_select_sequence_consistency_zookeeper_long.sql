@@ -1,3 +1,14 @@
+-- Tags: long, zookeeper, no-shared-merge-tree, no-async-insert
+-- Tag no-shared-merge-tree: no-shared-merge-tree: No quorum
+--- Tag no-async-insert: async inserts are not supported with non-parallel quorum inserts
+
+SET send_logs_level = 'fatal';
+CREATE TABLE quorum1(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_01513/sequence_consistency', '1') ORDER BY x PARTITION BY y;
+CREATE TABLE quorum2(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_01513/sequence_consistency', '2') ORDER BY x PARTITION BY y;
+CREATE TABLE quorum3(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_01513/sequence_consistency', '3') ORDER BY x PARTITION BY y;
+SET select_sequential_consistency=0;
+SET optimize_trivial_count_query=1;
+SET insert_quorum=2, insert_quorum_parallel=0;
 -- Should read local committed parts instead of throwing error code: 289. DB::Exception: Replica doesn't have part 20201216_1_1_0 which was successfully written to quorum of other replicas.
 SELECT count() FROM quorum1;
 SELECT count() FROM quorum2;

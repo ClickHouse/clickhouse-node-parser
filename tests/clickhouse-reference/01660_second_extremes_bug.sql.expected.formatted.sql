@@ -1,4 +1,1 @@
-SELECT *
-FROM t_v
-FORMAT JSON
-SETTINGS extremes = 1;
+<Parse Error>

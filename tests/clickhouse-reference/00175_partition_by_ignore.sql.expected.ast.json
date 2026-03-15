@@ -8,5 +8,82 @@
         "value": "-- check that partition key with ignore works correctly"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "partition_by_ignore"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ts_2",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "toYYYYMM",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "ignore",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ts_2"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(toYYYYMM(ts), ignore(ts_2))"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ]
   }
 ]

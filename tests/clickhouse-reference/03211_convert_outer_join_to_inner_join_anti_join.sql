@@ -1,3 +1,4 @@
+CREATE TABLE t0 (c0 Int32, c1 Int32, c2 String) ENGINE = Log() ;
 SELECT * FROM t0 FORMAT PrettyMonoBlock;
 SELECT left.c2 FROM t0 AS left
 LEFT ANTI JOIN t0 AS right_0 ON ((left.c0)=(right_0.c1))

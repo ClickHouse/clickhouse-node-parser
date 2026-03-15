@@ -1,3 +1,17 @@
+CREATE TABLE im
+(
+    id Int32,
+    dd Int32
+)
+ENGINE = Memory();
+
+CREATE TABLE ts
+(
+    tid Int32,
+    id Int32
+)
+ENGINE = Memory();
+
 SELECT *
 FROM
     im AS m

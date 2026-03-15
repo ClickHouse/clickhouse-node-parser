@@ -1,7 +1,26 @@
+CREATE TABLE t0
+(
+    c0 Int16,
+    PROJECTION h (    SELECT
+        min(c0),
+        max(c0),
+        count()
+    GROUP BY negate(c0))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT count()
 FROM t0
 GROUP BY gcd(negate(sign(c0)), negate(c0))
 SETTINGS optimize_use_implicit_projections = 1;
+
+CREATE TABLE t1
+(
+    c0 Int32
+)
+ENGINE = MergeTree
+ORDER BY sin(c0);
 
 SELECT c0
 FROM t1

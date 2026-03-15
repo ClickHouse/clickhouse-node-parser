@@ -1,3 +1,34 @@
+CREATE TABLE t1
+(
+    x Nullable(Int64),
+    y Nullable(UInt64)
+)
+ENGINE = TinyLog;
+
+CREATE TABLE t2
+(
+    x Nullable(Int64),
+    y Nullable(UInt64)
+)
+ENGINE = TinyLog;
+
+CREATE TABLE t1n
+(
+    x Int64,
+    y UInt64
+)
+ENGINE = TinyLog;
+
+CREATE TABLE t2n
+(
+    x Int64,
+    y UInt64
+)
+ENGINE = TinyLog;
+
+SET enable_analyzer = 1;
+
+-- { echoOn }
 SELECT *
 FROM
     t1

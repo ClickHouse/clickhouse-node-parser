@@ -1,9 +1,3 @@
-SELECT
-    number,
-    1 + sum(number) OVER (PARTITION BY number % 10)
-FROM numbers(100)
-ORDER BY number ASC;
-
 SELECT sum(number) + 1 AS x
 FROM numbers(100)
 GROUP BY number % 10

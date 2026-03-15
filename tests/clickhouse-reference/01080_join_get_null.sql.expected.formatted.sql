@@ -1,3 +1,10 @@
+CREATE TABLE test_joinGet
+(
+    user_id Nullable(Int32),
+    name String
+)
+ENGINE = Join(`ANY`, `LEFT`, user_id);
+
 SELECT toNullable(toInt32(2)) AS user_id
 WHERE joinGet(test_joinGet, 'name', user_id) != '';
 

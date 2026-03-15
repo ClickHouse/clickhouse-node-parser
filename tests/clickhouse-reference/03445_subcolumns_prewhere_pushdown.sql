@@ -1,3 +1,7 @@
+-- Tags: no-parallel-replicas
+
+set enable_analyzer=1;
+create table test (x UInt64, n Nullable(UInt32), t Tuple(a UInt32, b UInt32), json JSON) engine=MergeTree order by tuple() settings index_granularity=4;
 select * from test where n.null settings optimize_move_to_prewhere=1;
 select * from test where n.null settings optimize_move_to_prewhere=0;
 select * from test where t.a < 4 settings optimize_move_to_prewhere=1;

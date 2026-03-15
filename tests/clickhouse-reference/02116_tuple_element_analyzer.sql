@@ -1,3 +1,6 @@
+CREATE TABLE t_tuple_element(t1 Tuple(a UInt32, s String), t2 Tuple(UInt32, String)) ENGINE = Memory;
+SET optimize_functions_to_subcolumns = 1;
+SET enable_analyzer = 1;
 SELECT t1.1 FROM t_tuple_element;
 SELECT tupleElement(t1, 2) FROM t_tuple_element;
 SELECT tupleElement(t1, 'a') FROM t_tuple_element;

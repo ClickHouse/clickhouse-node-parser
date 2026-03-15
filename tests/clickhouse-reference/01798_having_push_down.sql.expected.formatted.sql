@@ -1,3 +1,11 @@
+CREATE TABLE t_having
+(
+    c0 Int32,
+    c1 UInt64
+)
+ENGINE = MergeTree
+ORDER BY c0;
+
 SELECT
     sum(c0 = 0),
     min(c0 + 1),
@@ -6,6 +14,8 @@ FROM t_having
 GROUP BY c0
 HAVING c0 = 0
 SETTINGS enable_optimize_predicate_expression = 0;
+
+SET enable_positional_arguments = 0;
 
 SELECT
     c0 + -1,
@@ -41,6 +51,8 @@ GROUP BY
 HAVING c0 = 0.9998999834060669
 SETTINGS enable_optimize_predicate_expression = 0;
 
+SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'parallel_replicas', parallel_replicas_for_non_replicated_merge_tree = 1;
+
 SELECT
     sum(c0 = 0),
     min(c0 + 1),
@@ -48,6 +60,14 @@ SELECT
 FROM t_having
 GROUP BY c0
 HAVING c0 = 0;
+
+CREATE TABLE t_exact
+(
+    c0 Bool,
+    c1 Int
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
 
 SELECT c1
 FROM t_exact

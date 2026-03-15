@@ -1,3 +1,26 @@
+CREATE TABLE test_in_tuple_1
+(
+    key Int32,
+    key_2 Int32,
+    x Array(Int32),
+    y Array(Int32)
+)
+ENGINE = MergeTree
+ORDER BY (key, key_2);
+
+CREATE TABLE test_in_tuple_2
+(
+    key Int32,
+    key_2 Int32,
+    x Array(Int32),
+    y Array(Int32)
+)
+ENGINE = MergeTree
+ORDER BY (key, key_2);
+
+CREATE TABLE test_in_tuple AS test_in_tuple_1
+ENGINE = Merge(currentDatabase(), '^test_in_tuple_[0-9]+$');
+
 SELECT
     key,
     arr_x,

@@ -1,5 +1,22 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "my.json",
+        "type": "JSON"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -140,6 +157,235 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "my.json",
+        "type": "JSON(a UInt32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a1",
+        "type": "UInt32",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a2",
+        "type": "UInt32",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b1",
+        "type": "UInt32",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "b"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b2",
+        "type": "UInt32",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "b"
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "a"
+          ]
+        },
+        "indexType": "minmax"
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx2",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "my",
+              "json",
+              "b"
+            ]
+          },
+          "type": "Int64",
+          "operator": true
+        },
+        "indexType": "minmax"
+      },
+      {
+        "kind": "projectionDef",
+        "name": "prj1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "json"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "json",
+                "a"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "json",
+                "b"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "my",
+                  "json",
+                  "a"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "my",
+                    "json",
+                    "b"
+                  ]
+                },
+                "type": "Int32",
+                "operator": true
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "my",
+          "json",
+          "a"
+        ]
+      },
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "b"
+          ]
+        },
+        "type": "Int32",
+        "operator": true
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "42"
+        }
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "my",
+              "json",
+              "b"
+            ]
+          },
+          "type": "Int32",
+          "operator": true
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "42"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -205,6 +451,129 @@
           "operator": true
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "my.tuple",
+        "type": "Tuple(a UInt32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a1",
+        "type": "UInt32",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "tuple",
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a2",
+        "type": "UInt32",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "tuple",
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "tuple",
+            "a"
+          ]
+        },
+        "indexType": "minmax"
+      },
+      {
+        "kind": "projectionDef",
+        "name": "prj1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "tuple"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "tuple",
+                "a"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "my",
+                  "tuple",
+                  "a"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "my",
+          "tuple",
+          "a"
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "tuple",
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "42"
+        }
       }
     ]
   },

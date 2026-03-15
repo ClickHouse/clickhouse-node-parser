@@ -12,5 +12,6 @@ SELECT ignore(now64(number)) FROM system.numbers LIMIT 10; -- { serverError ILLE
 SELECT ignore(now64(3, 'invalid timezone')); -- { serverError BAD_ARGUMENTS }
 SELECT ignore(now64(3, 1111)); -- { serverError ILLEGAL_COLUMN } # invalid timezone parameter type
 SELECT toDateTime64('2019-09-16 19:20:11', 3, 'UTC'); -- this now works OK and produces timestamp with no subsecond part
+CREATE TABLE A(t DateTime64(3, 'UTC')) ENGINE = MergeTree() ORDER BY t;
 SELECT toString(t, 'UTC'), toDate(t), toStartOfDay(t), toStartOfQuarter(t), toTimeWithFixedDate(t), toStartOfMinute(t) FROM A ORDER BY t;
 SELECT toDateTime64('2019-09-16 19:20:11.234', 3, 'Europe/Minsk');

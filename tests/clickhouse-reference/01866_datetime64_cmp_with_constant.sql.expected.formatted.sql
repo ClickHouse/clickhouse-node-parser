@@ -1,3 +1,12 @@
+CREATE TABLE dt64test
+(
+    dt64_column DateTime64(3),
+    dt_column DateTime DEFAULT toDateTime(dt64_column)
+)
+ENGINE = MergeTree
+ORDER BY dt64_column
+PARTITION BY toYYYYMM(dt64_column);
+
 SELECT 'dt64 < const dt'
 FROM dt64test
 WHERE dt64_column < toDateTime('2020-01-13 13:37:00');

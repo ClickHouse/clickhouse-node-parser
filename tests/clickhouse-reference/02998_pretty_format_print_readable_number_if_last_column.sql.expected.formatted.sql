@@ -1,3 +1,5 @@
+SET output_format_pretty_display_footer_column_names = 0;
+
 SELECT 1000000 AS a
 FORMAT Pretty;
 
@@ -333,6 +335,8 @@ SELECT 1000000000 AS a
 FROM `system`.numbers
 LIMIT 2
 FORMAT PrettySpaceNoEscapesMonoBlock;
+
+SET output_format_pretty_single_large_number_tip_threshold = 1;
 
 SELECT '2024-02-29'::Date
 FORMAT Pretty;

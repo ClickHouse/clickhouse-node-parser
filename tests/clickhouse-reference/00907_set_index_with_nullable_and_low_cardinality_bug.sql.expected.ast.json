@@ -1,5 +1,93 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_lc_set_index"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "action",
+        "type": "LowCardinality(Nullable(String))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "user",
+        "type": "LowCardinality(Nullable(String))"
+      },
+      {
+        "kind": "indexDef",
+        "name": "test_user_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "user"
+          ],
+          "parenthesized": true
+        },
+        "indexType": "set(0)",
+        "granularity": 8192
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMMDD",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "action"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "cityHash64",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "user"
+            ]
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_nullable_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

@@ -1,3 +1,10 @@
+CREATE TABLE test
+(
+    id UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT concat(current_database(), '')
 FROM (
         SELECT id

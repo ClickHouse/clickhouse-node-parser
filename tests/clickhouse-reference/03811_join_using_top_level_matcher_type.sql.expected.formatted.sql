@@ -1,3 +1,23 @@
+CREATE TABLE t0
+(
+    a Int32,
+    b String,
+    a1 Int32 ALIAS a + 1
+)
+ENGINE = Memory;
+
+CREATE TABLE t1
+(
+    a Int16,
+    b String,
+    a1 Int16 ALIAS a + 1
+)
+ENGINE = Memory;
+
+SET enable_analyzer = 1;
+
+SET analyzer_compatibility_join_using_top_level_identifier = 1;
+
 SELECT
     tuple(*),
     2 AS a

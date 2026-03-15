@@ -1,3 +1,4 @@
+CREATE TABLE 03811_sparse_column_aggregation_with_sum(key UInt128, val UInt16) ENGINE = MergeTree ORDER BY tuple();
 SELECT key, sum(val) AS c
 FROM 03811_sparse_column_aggregation_with_sum
 GROUP BY key

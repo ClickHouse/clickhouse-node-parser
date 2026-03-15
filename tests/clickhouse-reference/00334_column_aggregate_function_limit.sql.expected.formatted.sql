@@ -1,3 +1,11 @@
+CREATE TABLE ontime
+(
+    FlightDate Date,
+    Carrier String,
+    FlightNum String
+)
+ENGINE = Memory;
+
 SELECT ignore(finalizeAggregation(Users))
 FROM (
         SELECT

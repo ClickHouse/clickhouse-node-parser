@@ -1,3 +1,4 @@
+CREATE TABLE mt (x UInt8, y Date) ENGINE = MergeTree ORDER BY x;
 SELECT count()
 FROM mt
 ANY LEFT JOIN

@@ -1,3 +1,6 @@
+-- Tags: no-parallel, long
+SET output_format_write_statistics = 0;
+
 SELECT
     sum(cnt) > 0 AS total,
     k[1],

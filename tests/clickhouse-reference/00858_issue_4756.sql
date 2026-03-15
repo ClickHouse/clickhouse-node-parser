@@ -1,3 +1,9 @@
+set enable_analyzer = 1;
+set distributed_product_mode = 'local';
+create table shard1 (id Int32) engine = MergeTree order by cityHash64(id);
+create table shard2 (id Int32) engine = MergeTree order by cityHash64(id);
+create table distr1 as shard1 engine Distributed (test_cluster_two_shards_localhost, currentDatabase(), shard1, cityHash64(id));
+create table distr2 as shard2 engine Distributed (test_cluster_two_shards_localhost, currentDatabase(), shard2, cityHash64(id));
 select distinct(distr1.id) from distr1
 where distr1.id in
 (

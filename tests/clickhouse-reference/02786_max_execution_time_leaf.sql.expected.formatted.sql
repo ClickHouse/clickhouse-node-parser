@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SET max_rows_to_read = 0;
+
 SELECT count()
 FROM cluster('test_cluster_two_shards', view((
         SELECT *

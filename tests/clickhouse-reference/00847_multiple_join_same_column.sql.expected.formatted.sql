@@ -1,3 +1,24 @@
+CREATE TABLE t
+(
+    a Int64,
+    b Int64
+)
+ENGINE = TinyLog;
+
+CREATE TABLE s
+(
+    a Int64,
+    b Int64
+)
+ENGINE = TinyLog;
+
+CREATE TABLE y
+(
+    a Int64,
+    b Int64
+)
+ENGINE = TinyLog;
+
 SELECT
     t.a,
     s.b,

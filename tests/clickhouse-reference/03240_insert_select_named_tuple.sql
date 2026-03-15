@@ -1,2 +1,8 @@
+-- Tags: no-parallel-replicas
+
+SET enable_analyzer = 1;
+SET enable_named_columns_in_function_tuple = 1;
+CREATE TABLE src (id UInt32, type String, data String) ENGINE=MergeTree ORDER BY tuple();
+CREATE TABLE dst (id UInt32, a Tuple (col_a Nullable(String), type String), b Tuple (col_b Nullable(String), type String)) ENGINE = MergeTree ORDER BY id;
 SELECT * FROM dst;
 SELECT id, tuple(replaceAll(data, 'a', 'e') AS col_a, type) AS a, tuple(replaceAll(data, 'a', 'e') AS col_b, type) AS b FROM cluster(test_cluster_two_shards, currentDatabase(), src) SETTINGS prefer_localhost_replica=0 FORMAT JSONEachRow;

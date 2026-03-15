@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT x
 FROM (
         WITH 1 AS x

@@ -1,3 +1,23 @@
+CREATE TABLE part_log_profile_events_r1
+(
+    x UInt64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_02378/part_log_profile_events', 'r1')
+ORDER BY x
+PARTITION BY x >= 128;
+
+CREATE TABLE part_log_profile_events_r2
+(
+    x UInt64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_02378/part_log_profile_events', 'r2')
+ORDER BY x
+PARTITION BY x >= 128;
+
+-- SYSTEM STOP MERGES part_log_profile_events_r1;
+-- SYSTEM STOP MERGES part_log_profile_events_r2;
+SET max_block_size = 64, max_insert_block_size = 64, min_insert_block_size_rows = 64;
+
 SELECT count() > 1
     AND SUM(ProfileEvents['ZooKeeperTransactions']) >= 4
 FROM `system`.part_log

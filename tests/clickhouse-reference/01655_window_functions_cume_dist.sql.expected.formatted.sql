@@ -1,3 +1,8 @@
+-- Tags: long
+-- { echo }
+-- Test for the cume_dist window function.
+SET enable_analyzer = 1;
+
 SELECT '-- Basic functionality';
 
 SELECT
@@ -15,6 +20,13 @@ SELECT
     number,
     cume_dist() OVER (ORDER BY number DESC)
 FROM numbers(5);
+
+CREATE TABLE IF NOT EXISTS test_cume_dist
+(
+    a Int,
+    b Nullable(Int)
+)
+ENGINE = Memory;
 
 SELECT
     a,

@@ -1,3 +1,33 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE table1
+(
+    a UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table2
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table3
+(
+    b UInt32,
+    c UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table5
+(
+    a UInt32,
+    b UInt32,
+    c UInt32
+)
+ENGINE = Memory;
+
 SELECT
     t1.a,
     t2.b,
@@ -159,6 +189,12 @@ INNER JOIN table2 AS t2
 INNER JOIN table3 AS t3
     ON t2_b = t3_b
 ORDER BY t1.a ASC;
+
+CREATE TABLE table_set
+(
+    x UInt32
+)
+ENGINE = Set;
 
 SELECT count()
 FROM

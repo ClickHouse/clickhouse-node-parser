@@ -1,5 +1,117 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "tid",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "processed_at",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "created_at",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "amount",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toStartOfQuarter",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "created_at"
+          ]
+        }
+      ]
+    },
+    "primaryKey": [
+      {
+        "kind": "functionCall",
+        "name": "toStartOfDay",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "created_at"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toStartOfDay",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "processed_at"
+            ]
+          }
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "toStartOfDay",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "created_at"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toStartOfDay",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "processed_at"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tid"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

@@ -1,3 +1,10 @@
+CREATE TABLE sessions
+(
+  `user_id` UInt64
+)
+ENGINE = MergeTree
+ORDER BY user_id 
+SAMPLE BY user_id;
 SELECT
     sum(user_id * _sample_factor) 
 FROM sessions

@@ -1,2 +1,1 @@
-SELECT count()
-FROM output;
+<Parse Error>

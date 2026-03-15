@@ -1,28 +1,37 @@
+SET allow_suspicious_low_cardinality_types=1;
+
 -- negative tests
 SELECT concatWithSeparator(materialize('|'), 'a', 'b'); -- { serverError ILLEGAL_COLUMN }
 SELECT concatWithSeparator();                           -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
 -- special cases
 SELECT concatWithSeparator('|') = '';
 SELECT concatWithSeparator('|', 'a') == 'a';
+
 SELECT concatWithSeparator('|', 'a', 'b') == 'a|b';
 SELECT concatWithSeparator('|', 'a', materialize('b')) == 'a|b';
 SELECT concatWithSeparator('|', materialize('a'), 'b') == 'a|b';
 SELECT concatWithSeparator('|', materialize('a'), materialize('b')) == 'a|b';
+
 SELECT concatWithSeparator('|', 'a', toFixedString('b', 1)) == 'a|b';
 SELECT concatWithSeparator('|', 'a', materialize(toFixedString('b', 1))) == 'a|b';
 SELECT concatWithSeparator('|', materialize('a'), toFixedString('b', 1)) == 'a|b';
 SELECT concatWithSeparator('|', materialize('a'), materialize(toFixedString('b', 1))) == 'a|b';
+
 SELECT concatWithSeparator('|', toFixedString('a', 1), 'b') == 'a|b';
 SELECT concatWithSeparator('|', toFixedString('a', 1), materialize('b')) == 'a|b';
 SELECT concatWithSeparator('|', materialize(toFixedString('a', 1)), 'b') == 'a|b';
 SELECT concatWithSeparator('|', materialize(toFixedString('a', 1)), materialize('b')) == 'a|b';
+
 SELECT concatWithSeparator('|', toFixedString('a', 1), toFixedString('b', 1)) == 'a|b';
 SELECT concatWithSeparator('|', toFixedString('a', 1), materialize(toFixedString('b', 1))) == 'a|b';
 SELECT concatWithSeparator('|', materialize(toFixedString('a', 1)), toFixedString('b', 1)) == 'a|b';
 SELECT concatWithSeparator('|', materialize(toFixedString('a', 1)), materialize(toFixedString('b', 1))) == 'a|b';
+
 SELECT concatWithSeparator(null, 'a', 'b') == null;
 SELECT concatWithSeparator('1', null, 'b') == null;
 SELECT concatWithSeparator('1', 'a', null) == null;
+
 -- Const String + non-const non-String/non-FixedString type'
 SELECT concatWithSeparator('|', 'a', materialize(42 :: Int8)) == 'a|42';
 SELECT concatWithSeparator('|', 'a', materialize(43 :: Int16)) == 'a|43';

@@ -1,3 +1,8 @@
+CREATE TABLE t1 (x UInt32, s String) engine = MergeTree ORDER BY tuple();
+CREATE TABLE t2 (x UInt32, s String) engine = MergeTree ORDER BY tuple();
+SET join_algorithm = 'prefer_partial_merge';
+SET join_use_nulls = 0;
+SET any_join_distinct_right_table_keys = 0;
 SELECT t1.*, t2.* FROM t1 ANY LEFT JOIN t2 USING(x) ORDER BY t1.x, t2.x;
 SELECT t1.*, t2.* FROM t2 ANY LEFT JOIN t1 USING(x) ORDER BY t1.x, t2.x;
 SELECT t1.*, t2.* FROM t1 ANY INNER JOIN t2 USING(x) ORDER BY t1.x, t2.x;

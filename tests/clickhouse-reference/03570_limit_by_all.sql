@@ -1,3 +1,13 @@
+SET max_threads = 1;
+SET max_insert_threads = 1;
+SET max_block_size = 65536;
+SET allow_experimental_analyzer = 1;
+CREATE TABLE test_limit_by_all (
+    id Int32,
+    category String,
+    value Int32,
+    name String
+) ENGINE = Memory;
 -- Test 1: Basic LIMIT BY ALL usage
 SELECT id, category, value 
 FROM test_limit_by_all 
@@ -76,6 +86,7 @@ LIMIT 2;
 SELECT count()
 FROM test_limit_by_all
 LIMIT 1 BY ALL; -- { serverError 62 }
+CREATE TABLE test_limit_by_all_tags (id Int32, tags Array(String)) ENGINE = Memory;
 SELECT t.id, tag
 FROM test_limit_by_all AS t
 LEFT JOIN test_limit_by_all_tags AS g USING (id)

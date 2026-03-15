@@ -1,3 +1,19 @@
+-- Testing basic functionality with compact parts
+SET mutations_sync = 2;
+
+CREATE TABLE mt_compact
+(
+    a UInt64,
+    b UInt64 DEFAULT a * a,
+    s String,
+    n Nested(x UInt32, y String),
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY a % 10
+SETTINGS index_granularity = 8, min_bytes_for_wide_part = 0, min_rows_for_wide_part = 10;
+
 SELECT *
 FROM mt_compact
 ORDER BY a ASC

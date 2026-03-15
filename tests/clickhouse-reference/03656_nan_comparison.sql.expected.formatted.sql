@@ -1,3 +1,10 @@
+CREATE TABLE t7
+(
+    c57 UInt32
+)
+ENGINE = MergeTree
+ORDER BY c57;
+
 SELECT (
         SELECT count(*)
         FROM t7 AS ref_0

@@ -1,3 +1,34 @@
+Set
+
+CreateQuery 03578_rocksdb_local (children 3)
+ Identifier 03578_rocksdb_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function EmbeddedRocksDB (children 1)
+   ExpressionList
+  Identifier key
+
+CreateQuery 03578_rocksdb_dist (children 3)
+ Identifier 03578_rocksdb_dist
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_cluster_two_shards_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier 03578_rocksdb_local
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -81,6 +112,41 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier event_time_microseconds
+
+CreateQuery 03578_keepermap_local (children 3)
+ Identifier 03578_keepermap_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function KeeperMap (children 1)
+   ExpressionList (children 1)
+    Function concat (children 1)
+     ExpressionList (children 3)
+      Literal '/'
+      Function currentDatabase (children 1)
+       ExpressionList
+      Literal '/test_03578_global_in'
+  Identifier key
+
+CreateQuery 03578_keepermap_dist (children 3)
+ Identifier 03578_keepermap_dist
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_cluster_two_shards_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier 03578_keepermap_local
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

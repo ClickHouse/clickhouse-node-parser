@@ -1,3 +1,10 @@
+-- Test 1: Memory engine - UPDATE + RENAME on same column should be rejected
+CREATE TABLE test_alter_atomic
+(
+    c0 Int32
+)
+ENGINE = Memory;
+
 -- Verify the column still has its original name (c0) since the ALTER was rejected
 SELECT *
 FROM test_alter_atomic;
@@ -11,6 +18,15 @@ SELECT *
 FROM test_alter_atomic
 ORDER BY c0 ASC;
 
+-- Test 2: MergeTree engine - same behavior expected
+CREATE TABLE test_alter_atomic
+(
+    key Int32,
+    c0 Int32
+)
+ENGINE = MergeTree
+ORDER BY key;
+
 -- Verify column still has original name
 SELECT name
 FROM `system`.`columns`
@@ -21,6 +37,16 @@ ORDER BY position ASC;
 SELECT *
 FROM test_alter_atomic
 ORDER BY key ASC;
+
+-- Test 4: Verify UPDATE + RENAME on DIFFERENT columns works fine
+CREATE TABLE test_alter_atomic
+(
+    key Int32,
+    c0 Int32,
+    c1 Int32
+)
+ENGINE = MergeTree
+ORDER BY key;
 
 -- Wait for mutation to complete
 SELECT sleepEachRow(0.1)

@@ -1,3 +1,10 @@
+CREATE TABLE retention_test
+(
+    date Date,
+    uid Int32
+)
+ENGINE = Memory;
+
 SELECT
     sum(r[1]) AS r1,
     sum(r[2]) AS r2

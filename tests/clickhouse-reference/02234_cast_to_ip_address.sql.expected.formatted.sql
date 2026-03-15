@@ -36,11 +36,15 @@ SELECT cast('test', 'IPv4'); --{serverError CANNOT_PARSE_IPV4}
 
 SELECT cast('127.0.0.1', 'IPv4');
 
+SET cast_ipv4_ipv6_default_on_conversion_error = 1;
+
 SELECT IPv4StringToNum('');
 
 SELECT toIPv4('');
 
 SELECT cast('', 'IPv4');
+
+SET cast_ipv4_ipv6_default_on_conversion_error = 0;
 
 SELECT IPv6StringToNum('test'); --{serverError CANNOT_PARSE_IPV6}
 

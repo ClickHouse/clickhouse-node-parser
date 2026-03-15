@@ -1,3 +1,12 @@
+CREATE TABLE local_02175
+ENGINE = Memory() AS
+SELECT *
+FROM `system`.one;
+
+CREATE TABLE dist_02175 AS local_02175
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), local_02175);
+
+-- { echoOn }
 SELECT *
 FROM
     dist_02175 AS l

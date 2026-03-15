@@ -1,3 +1,11 @@
+CREATE TABLE tab_00612
+(
+    key UInt64,
+    arr Array(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY key;
+
 SELECT *
 FROM tab_00612
 ORDER BY key ASC;
@@ -27,6 +35,14 @@ FROM
 LEFT ARRAY JOIN arr AS val
 WHERE (key, val) IN ((1, 1), (2, 2))
 ORDER BY key ASC;
+
+CREATE TABLE tab_00612
+(
+    key UInt64,
+    n Nested(x UInt64)
+)
+ENGINE = MergeTree
+ORDER BY key;
 
 SELECT
     key,
@@ -101,6 +117,16 @@ LEFT JOIN (
     ) AS js2
     USING (key)
 WHERE (key, val) IN ((1, 1), (2, 2));
+
+CREATE TABLE tab_00612
+(
+    key1 Int32,
+    id1 Int64,
+    c1 Int64
+)
+ENGINE = MergeTree
+ORDER BY key1
+PARTITION BY id1;
 
 SELECT count(*)
 FROM tab_00612

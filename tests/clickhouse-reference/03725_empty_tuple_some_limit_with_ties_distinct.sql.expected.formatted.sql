@@ -2,6 +2,14 @@ SELECT tuple()
 ORDER BY 1 ASC
 LIMIT 1 WITH TIES;
 
+CREATE TABLE t0
+(
+    v1 Nullable(Int8),
+    v2 Decimal(18,4)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT DISTINCT *
 FROM t0
 ORDER BY tuple() ASC

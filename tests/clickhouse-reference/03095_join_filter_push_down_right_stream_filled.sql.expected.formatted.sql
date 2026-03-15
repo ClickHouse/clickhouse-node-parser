@@ -1,3 +1,18 @@
+CREATE TABLE t1__fuzz_0
+(
+    x UInt8,
+    str String
+)
+ENGINE = MergeTree
+ORDER BY x;
+
+CREATE TABLE left_join__fuzz_2
+(
+    x UInt32,
+    s LowCardinality(String)
+)
+ENGINE = Join(`ALL`, `LEFT`, x);
+
 SELECT 14
 FROM
     t1__fuzz_0

@@ -1,3 +1,21 @@
+CREATE TABLE open_events_tmp
+(
+    APIKey UInt32,
+    EventDate Date
+)
+ENGINE = MergeTree
+ORDER BY (APIKey, EventDate)
+PARTITION BY toMonday(EventDate);
+
+CREATE TABLE tracking_events_tmp
+(
+    APIKey UInt32,
+    EventDate Date
+)
+ENGINE = MergeTree
+ORDER BY (APIKey, EventDate)
+PARTITION BY toYYYYMM(EventDate);
+
 SELECT EventDate
 FROM
     (

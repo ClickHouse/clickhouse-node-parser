@@ -5,6 +5,7 @@
 SELECT * FROM system.parts FORMAT Null;
 SELECT *, _state FROM system.parts FORMAT Null;
 SELECT _state FROM system.parts FORMAT Null;
+CREATE TABLE data_01660 (key Int) Engine=MergeTree() ORDER BY key;
 -- Empty
 SELECT _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660';
 SELECT name, _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660';

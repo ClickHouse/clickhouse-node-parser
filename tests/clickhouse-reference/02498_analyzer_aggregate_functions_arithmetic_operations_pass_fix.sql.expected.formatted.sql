@@ -1,3 +1,15 @@
+SET enable_analyzer = 1;
+
+SET optimize_arithmetic_operations_in_aggregate_functions = 1;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     sum((2 * id) AS func),
     func

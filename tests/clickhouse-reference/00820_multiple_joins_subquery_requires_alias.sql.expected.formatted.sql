@@ -1,3 +1,35 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE table1
+(
+    a UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table2
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table3
+(
+    b UInt32,
+    c UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table5
+(
+    a UInt32,
+    b UInt32,
+    c UInt32
+)
+ENGINE = Memory;
+
+SET joined_subquery_requires_alias = 1;
+
 SELECT
     t1.a,
     t2.b,

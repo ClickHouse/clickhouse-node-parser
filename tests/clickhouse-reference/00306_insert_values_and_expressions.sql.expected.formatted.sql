@@ -1,6 +1,1 @@
-SELECT *
-FROM insert
-ORDER BY i ASC;
-
-SELECT *
-FROM t_306;
+<Parse Error>

@@ -1,1 +1,1 @@
-SELECT joinGetOrNull('join_test', 'num', 500);
+<Parse Error>

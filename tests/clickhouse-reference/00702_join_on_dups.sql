@@ -1,3 +1,5 @@
+create table X (id Int32, x_a String, x_b Nullable(Int32)) engine MergeTree ORDER BY tuple();
+create table Y (id Int32, y_a String, y_b Nullable(String)) engine MergeTree ORDER BY tuple();
 select X.*, Y.* from X inner join Y on X.id = Y.id order by X.id, X.x_a, X.x_b, Y.id, Y.y_a, Y.y_b;
 select s.*, j.* from (select * from X) as s inner join (select * from Y) as j on s.id = j.id order by s.id, s.x_a, s.x_b, j.id, j.y_a, j.y_b;
 select X.*, Y.* from X inner join Y on (X.id + 1) = (Y.id + 1) order by X.id, X.x_a, X.x_b, Y.id, Y.y_a, Y.y_b;

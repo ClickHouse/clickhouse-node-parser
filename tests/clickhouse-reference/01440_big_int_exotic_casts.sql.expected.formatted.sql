@@ -248,6 +248,15 @@ SELECT
 FROM numbers_mt(10)
 ORDER BY number ASC;
 
+CREATE TABLE t
+(
+    x UInt64,
+    i256 Int256,
+    u256 UInt256,
+    d256 Decimal256(2)
+)
+ENGINE = Memory;
+
 SELECT
     sum(x),
     sum(i256),

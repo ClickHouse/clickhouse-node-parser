@@ -1,3 +1,25 @@
+CREATE TABLE t1
+(
+    a UInt32,
+    b String
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    c UInt32,
+    d String
+)
+ENGINE = Memory;
+
+CREATE TABLE t3
+(
+    a UInt32
+)
+ENGINE = Memory;
+
+SET enable_optimize_predicate_expression = 0;
+
 SELECT *
 FROM
     t1
@@ -177,3 +199,5 @@ FROM
     t1 AS table1
 INNER JOIN t3 AS table3
     ON t1_a = t3_a;
+
+SET enable_optimize_predicate_expression = 1;

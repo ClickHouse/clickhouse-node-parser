@@ -1,3 +1,15 @@
+CREATE TABLE index_test
+(
+    id UInt32,
+    arr Array(String),
+    INDEX array_index arrayMap(x -> lower(x), arr) TYPE bloom_filter(0.01) GRANULARITY 1,
+    INDEX array_index_2 arrayMap((x, y) -> concat(lower(x), y), arr, arr) TYPE bloom_filter(0.01) GRANULARITY 1,
+    INDEX array_index_3 arrayMap((x, y) -> concat(lower(x), y, '_', toString(id)), arr, arr) TYPE bloom_filter(0.01) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS allow_suspicious_indices = 1, index_granularity = 4;
+
 SELECT arr
 FROM index_test
 WHERE has(arrayMap(x -> lower(x), arr), lower('a_12'))

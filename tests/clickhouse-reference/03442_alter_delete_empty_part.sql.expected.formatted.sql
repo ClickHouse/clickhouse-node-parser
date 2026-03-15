@@ -1,3 +1,14 @@
+CREATE TABLE t_delete_empty_part
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY b
+PARTITION BY a;
+
+SET mutations_sync = 2;
+
 SELECT count()
 FROM t_delete_empty_part;
 

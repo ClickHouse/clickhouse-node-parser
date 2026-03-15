@@ -1,5 +1,136 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_2__fuzz_25"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": "LowCardinality(Date)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": "Nullable(Int256)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias0",
+        "type": "Nullable(DateTime64(3))",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "col"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias3",
+        "type": "Nullable(Int32)",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "col3"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias0"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias1",
+        "type": "LowCardinality(UInt16)",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias0"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "col2"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias2",
+        "type": "LowCardinality(Int32)",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias0"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias1"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col3",
+        "type": "Nullable(UInt8)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dt"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

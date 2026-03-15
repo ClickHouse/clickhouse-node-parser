@@ -1,3 +1,11 @@
+SET custom_a = 'value_a';
+
+SET custom_b = 'value_b';
+
+SET custom_c = NULL;
+
+SET custom_d = 5;
+
 SELECT getSettingOrDefault('custom_a', 'default_a');
 
 SELECT getSettingOrDefault('custom_b', 'default_b');
@@ -23,5 +31,7 @@ SELECT getSettingOrDefault(115, 'name should be string'); -- { serverError ILLEG
 SELECT count(*)
 FROM numbers(10)
 WHERE number = getSettingOrDefault('custom_e', 5);
+
+SET custom_e_backup = 'backup';
 
 SELECT getSettingOrDefault('custom_e', getSetting('custom_e_backup'));

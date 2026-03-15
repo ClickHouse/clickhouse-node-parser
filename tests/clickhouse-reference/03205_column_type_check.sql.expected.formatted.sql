@@ -10,6 +10,10 @@ CROSS JOIN (
             materialize(2)
     ) AS u;
 
+SET join_algorithm = 'hash';
+
+SET allow_experimental_join_condition = 1;
+
 SELECT *
 FROM
     (

@@ -1,5 +1,36 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "arrays_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": "Array(UInt8)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -330,6 +361,75 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hourly"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "hour",
+        "type": "datetime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "metric.names",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "metric.values",
+        "type": "Array(Int64)"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-01-01"
+        },
+        {
+          "kind": "array",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "a"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "b"
+            }
+          ],
+          "source": "['a', 'b']"
+        },
+        {
+          "kind": "array",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ],
+          "source": "[1,2]"
+        }
+      ]
+    }
   },
   {
     "kind": "select",

@@ -1,5 +1,97 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_3",
+        "type": "String"
+      },
+      {
+        "kind": "indexDef",
+        "name": "value_1_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_1"
+          ],
+          "parenthesized": true
+        },
+        "indexType": "bloom_filter",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "value_2_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_2"
+          ],
+          "parenthesized": true
+        },
+        "indexType": "ngrambf_v1(3, 512, 2, 0)",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "value_3_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_3"
+          ],
+          "parenthesized": true
+        },
+        "indexType": "tokenbf_v1(512, 3, 0)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

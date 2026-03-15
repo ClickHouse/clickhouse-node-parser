@@ -1,5 +1,68 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "order_by_const"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echo }",
+      "-- Another test for window functions because the other one is too long.",
+      "-- some craziness with a mix of materialized and unmaterialized const columns",
+      "-- after merging sorted transform, that used to break the peer group detection in",
+      "-- the window transform."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

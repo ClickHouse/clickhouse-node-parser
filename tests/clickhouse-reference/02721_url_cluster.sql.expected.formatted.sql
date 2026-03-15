@@ -69,5 +69,13 @@ ORDER BY
     c2 ASC,
     c3 ASC;
 
+CREATE TABLE test
+(
+    x UInt32,
+    y UInt32,
+    z UInt32
+)
+ENGINE = Memory();
+
 SELECT *
 FROM test;

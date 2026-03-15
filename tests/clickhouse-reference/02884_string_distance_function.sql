@@ -13,6 +13,11 @@ SELECT editDistance(randomString(power(2, 17)), 'abc'); -- { serverError TOO_LAR
 SELECT damerauLevenshteinDistance(randomString(power(2, 17)), 'abc'); -- { serverError TOO_LARGE_STRING_SIZE}
 SELECT jaroSimilarity(randomString(power(2, 17)), 'abc'); -- { serverError TOO_LARGE_STRING_SIZE}
 SELECT jaroWinklerSimilarity(randomString(power(2, 17)), 'abc'); -- { serverError TOO_LARGE_STRING_SIZE}
+CREATE TABLE t
+(
+    s1 String,
+    s2 String
+) ENGINE = MergeTree ORDER BY s1;
 SELECT 'byteHammingDistance', s1, s2, byteHammingDistance(s1, s2) FROM t ORDER BY ALL;
 SELECT 'editDistance', s1, s2, editDistance(s1, s2) FROM t ORDER BY ALL;
 SELECT 'editDistanceUTF8', s1, s2, editDistanceUTF8(s1, s2) FROM t ORDER BY ALL;

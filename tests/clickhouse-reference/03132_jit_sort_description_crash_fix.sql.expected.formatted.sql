@@ -1,3 +1,23 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+SET compile_sort_description = 1;
+
+SET min_count_to_compile_sort_description = 0;
+
+CREATE TABLE test1_00395
+(
+    col1 UInt64,
+    col2 Nullable(UInt64),
+    col3 String,
+    col4 Nullable(String),
+    col5 Array(UInt64),
+    col6 Array(Nullable(UInt64)),
+    col7 Array(String),
+    col8 Array(Nullable(String)),
+    d Date
+)
+ENGINE = MergeTree(d, (col1, d), 8192);
+
 SELECT count(greatest(multiIf(1, 2, toNullable(NULL), 3, 4)))
 FROM test1_00395
 WHERE toNullable(27)

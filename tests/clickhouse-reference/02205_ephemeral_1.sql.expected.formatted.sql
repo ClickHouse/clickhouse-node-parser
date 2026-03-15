@@ -1,2 +1,12 @@
+SET mutations_sync = 2;
+
+CREATE TABLE t_ephemeral_02205_1
+(
+    x UInt32 DEFAULT y,
+    y UInt32 EPHEMERAL 17,
+    z UInt32 DEFAULT 5
+)
+ENGINE = Memory;
+
 SELECT *
 FROM t_ephemeral_02205_1;

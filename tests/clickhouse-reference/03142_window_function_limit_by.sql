@@ -1,3 +1,15 @@
+SET enable_analyzer = 1;
+-- https://github.com/ClickHouse/ClickHouse/issues/55965
+
+CREATE TABLE error_win_func
+(
+    `k` String,
+    `in` UInt64,
+    `out` UInt64
+)
+ENGINE = MergeTree
+ORDER BY k AS
+SELECT * from VALUES (('a', 2, 4), ('a', 4, 2), ('a', 6, 3), ('a', 8, 4));
 SELECT
     k,
     in / out AS ratio,
@@ -8,6 +20,10 @@ WINDOW
 ORDER BY ALL
 LIMIT 1 BY
     k;
+-- https://github.com/ClickHouse/ClickHouse/issues/47217
+
+CREATE TABLE t(n String, st String) ENGINE = Memory as
+select * from values(('a', 'x'), ('b', 'y'), ('c', 'z'));
 SELECT
   n as m,
   count() OVER (PARTITION BY m) cnt

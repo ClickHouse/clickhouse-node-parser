@@ -1,3 +1,8 @@
+CREATE TEMPORARY TABLE b
+(
+    key UInt32
+);
+
 SELECT *
 FROM
     b

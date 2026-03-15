@@ -1,3 +1,6 @@
+-- Tags: shard
+
+CREATE TABLE dummy(foo Int64) ENGINE = Memory();
 SELECT avgWeighted(100., .1) FROM remote('127.0.0.{2,3}', currentDatabase(), dummy);
 SELECT avgWeighted(10, 100) FROM remote('127.0.0.{2,3}', currentDatabase(), dummy);
 SELECT avgWeighted(0, 1) FROM remote('127.0.0.{2,3}', currentDatabase(), dummy);

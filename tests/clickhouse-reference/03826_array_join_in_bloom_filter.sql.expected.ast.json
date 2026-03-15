@@ -1,5 +1,65 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_array_bloom"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "test_bloom",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "data"
+          ]
+        },
+        "indexType": "bloom_filter",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

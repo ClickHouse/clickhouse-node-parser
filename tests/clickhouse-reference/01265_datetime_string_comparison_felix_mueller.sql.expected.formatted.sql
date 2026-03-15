@@ -1,3 +1,10 @@
+CREATE TABLE tztest
+(
+    timeBerlin DateTime('Europe/Berlin'),
+    timeLA DateTime('America/Los_Angeles')
+)
+ENGINE = Memory;
+
 SELECT
     toUnixTimestamp(timeBerlin),
     toUnixTimestamp(timeLA)

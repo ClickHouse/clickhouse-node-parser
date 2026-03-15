@@ -1,3 +1,8 @@
+create table order_test1
+(
+    timestamp DateTime64(3),
+    color     LowCardinality(String)
+) engine = MergeTree() ORDER BY tuple();
 SELECT color, toDateTime(timestamp) AS second
 FROM order_test1
 GROUP BY color, second

@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- no-fasttest: upper/lowerUTF8 use ICU
+
+SET send_logs_level = 'fatal';
 select 1 = position('', '');
 select 1 = position('abc', '');
 select 0 = position('', 'abc');

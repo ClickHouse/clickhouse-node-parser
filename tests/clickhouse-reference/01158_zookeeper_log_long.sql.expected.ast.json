@@ -1,5 +1,94 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, zookeeper, no-replicated-database, no-polymorphic-parts, no-random-merge-tree-settings, no-shared-merge-tree, no-async-insert",
+      "-- Tag no-replicated-database: Fails due to additional replicas or shards",
+      "-- no-shared-merge-tree: depends on structure in zookeeper of replicated merge tree",
+      "-- no-async-insert: Test expects new part for each insert"
+    ],
+    "trailingComments": [
+      "-- disable fault injection; part ids are non-deterministic in case of insert retries"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": "int"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/01158/{database}/rmt"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "cleanup_delay_period",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "86400"
+        }
+      },
+      {
+        "name": "max_cleanup_delay_period",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "86400"
+        }
+      },
+      {
+        "name": "replicated_can_become_leader",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- cleanup code will perform extra Exists",
+      "-- (so the .reference will not match)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

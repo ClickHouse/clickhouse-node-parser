@@ -1,3 +1,9 @@
+-- Tags: no-parallel
+
+set use_hive_partitioning=0; -- required because of "?query=select"
+create table file_delim(a int, b int) engine File(CSV, '01545_url_file_format_settings.csv') settings format_csv_delimiter = '|';
+-- select 1, 2 format CSV settings format_csv_delimiter='/';
+create table url_delim(a int, b int) engine URL('http://127.0.0.1:8123/?query=select%201%2C%202%20format%20CSV%20settings%20format_csv_delimiter%3D%27/%27%3B%0A', CSV) settings format_csv_delimiter = '/';
 select * from file_delim;
 select * from url_delim;
 select * from file('01545_url_file_format_settings.csv', CSV, 'a int, b int') settings format_csv_delimiter = '|';

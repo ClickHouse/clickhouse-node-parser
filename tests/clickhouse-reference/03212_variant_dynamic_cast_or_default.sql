@@ -1,7 +1,13 @@
+set allow_experimental_variant_type = 1;
+set use_variant_as_common_type = 1;
+set allow_experimental_dynamic_type = 1;
+set allow_suspicious_low_cardinality_types = 1;
+set session_timezone = 'UTC';
 select accurateCastOrDefault(variant, 'UInt32'), multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, 'str_' || toString(number), range(number)) as variant from numbers(8);
 select accurateCastOrNull(variant, 'UInt32'), multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, 'str_' || toString(number), range(number)) as variant from numbers(8);
 select accurateCastOrDefault(dynamic, 'UInt32'), multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, 'str_' || toString(number), range(number))::Dynamic as dynamic from numbers(8);
 select accurateCastOrNull(dynamic, 'UInt32'), multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, 'str_' || toString(number), range(number))::Dynamic as dynamic from numbers(8);
+create table t (id UInt64 DEFAULT generateSerialID('03212_variant_seq'), d Dynamic) engine=MergeTree order by id;
 select distinct toInt8OrDefault(d) as res from t order by res;
 select distinct toUInt8OrDefault(d) as res from t order by res;
 select distinct toInt16OrDefault(d) as res from t order by res;

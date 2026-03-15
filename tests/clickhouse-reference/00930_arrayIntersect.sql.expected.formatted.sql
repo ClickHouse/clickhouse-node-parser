@@ -1,3 +1,12 @@
+CREATE TABLE array_intersect
+(
+    date Date,
+    arr Array(UInt8)
+)
+ENGINE = MergeTree
+ORDER BY date
+PARTITION BY date;
+
 SELECT arraySort(arrayIntersect(arr, [1,2]))
 FROM array_intersect
 ORDER BY arr ASC;

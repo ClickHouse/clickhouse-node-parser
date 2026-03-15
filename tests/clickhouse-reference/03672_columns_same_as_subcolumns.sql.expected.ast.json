@@ -1,0 +1,237 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "opentelemetry_span_log_9997438610282160742"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pull_request_number",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "commit_sha",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_start_time",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_name",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "instance_type",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "trace_id",
+        "type": "UUID"
+      },
+      {
+        "kind": "columnDef",
+        "name": "span_id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "parent_span_id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "operation_name",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "kind",
+        "type": "Enum8('INTERNAL' = 0, 'SERVER' = 1, 'CLIENT' = 2, 'PRODUCER' = 3, 'CONSUMER' = 4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "start_time_us",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "finish_time_us",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "finish_date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute",
+        "type": "Map(LowCardinality(String), String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute.names",
+        "type": "Array(LowCardinality(String))",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attribute"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute.values",
+        "type": "Array(String)",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "mapValues",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attribute"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "finish_date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "check_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "finish_date"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "finish_time_us"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "trace_id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "old_parts_lifetime",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "60"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "opentelemetry_span_log_compact"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "attribute.names",
+        "type": "Array(LowCardinality(String))",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attribute"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute.values",
+        "type": "Array(String)",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "mapValues",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attribute"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute",
+        "type": "Map(LowCardinality(String), String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  }
+]

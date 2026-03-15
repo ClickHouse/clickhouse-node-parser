@@ -1,3 +1,4 @@
+CREATE TABLE tags (dev_tag String) ENGINE = Memory AS SELECT '1';
 SELECT *
 FROM
 (
@@ -28,4 +29,11 @@ FROM
     GROUP BY dev_tag
     ) AS t
 ) SETTINGS optimize_uniq_to_count=1;
+CREATE TABLE users
+(
+    `id` Int64,
+    `name` String
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (id, name);
 SELECT uniqExact(id) FROM ( SELECT id FROM users WHERE id = 1 GROUP BY id, name );

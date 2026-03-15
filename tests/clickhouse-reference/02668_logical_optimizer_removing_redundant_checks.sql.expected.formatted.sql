@@ -1,3 +1,15 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE `02668_logical_optimizer`
+(
+    a Int32,
+    b LowCardinality(String)
+)
+ENGINE = Memory;
+
+-- Chain of OR equals
+SET optimize_min_equality_disjunction_chain_length = 2;
+
 SELECT *
 FROM `02668_logical_optimizer`
 WHERE a = 1
@@ -25,6 +37,9 @@ SELECT *
 FROM `02668_logical_optimizer`
 WHERE a = 2
     AND 2 = a;
+
+-- Chain of AND notEquals
+SET optimize_min_inequality_conjunction_chain_length = 2;
 
 SELECT *
 FROM `02668_logical_optimizer`

@@ -1,7 +1,1 @@
-SELECT *
-FROM {CLICKHOUSE_DATABASE:Identifier}.t_00751
-ORDER BY date ASC;
-
-SELECT *
-FROM {CLICKHOUSE_DATABASE:Identifier}.t_mv_00751
-ORDER BY date ASC;
+<Parse Error>

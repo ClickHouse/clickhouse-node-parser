@@ -1,3 +1,8 @@
+-- Tags: long, no-azure-blob-storage
+
+set output_format_json_quote_64bit_integers=0;
+create table source (json JSON(max_dynamic_paths=8)) engine=Memory;
+create table test_wide_advanced (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings index_granularity=2, min_bytes_for_wide_part=1, min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='advanced', object_shared_data_serialization_version_for_zero_level_parts='advanced', object_shared_data_buckets_for_wide_part=2;
 select json from test_wide_advanced settings max_block_size=3;
 select json.b from test_wide_advanced settings max_block_size=3;
 select json.b, json.c from test_wide_advanced settings max_block_size=3;

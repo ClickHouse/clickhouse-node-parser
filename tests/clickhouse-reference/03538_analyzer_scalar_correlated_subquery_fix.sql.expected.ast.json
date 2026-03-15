@@ -1,5 +1,100 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_correlated_subqueries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "partsupp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ps_partkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_suppkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_availqty",
+        "type": "Int32"
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ps_partkey"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ps_suppkey"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "lineitem"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "l_partkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_suppkey",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_quantity",
+        "type": "Decimal(15,2)"
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

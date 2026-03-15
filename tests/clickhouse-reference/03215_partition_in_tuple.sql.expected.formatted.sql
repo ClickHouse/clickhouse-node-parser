@@ -1,3 +1,26 @@
+CREATE TABLE t
+(
+    a DateTime64(3),
+    b FixedString(6)
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+PARTITION BY toStartOfDay(a) AS
+SELECT *
+FROM values(('2023-01-01 00:00:00.000', 'fd4c03'), ('2023-01-01 00:00:00.000', '123456'));
+
+CREATE TABLE t1
+(
+    a DateTime64(3),
+    b FixedString(6)
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+PARTITION BY toStartOfDay(a) AS
+SELECT
+    '2023-01-01 00:00:00.000',
+    'fd4c03';
+
 SELECT *
 FROM t
 WHERE tuple(a, b) IN (
@@ -29,3 +52,26 @@ WHERE (a, b) NOT IN (
             b
         FROM t1
     );
+
+CREATE TABLE t
+(
+    a DateTime,
+    b FixedString(6)
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+PARTITION BY toStartOfDay(a) AS
+SELECT *
+FROM values(('2023-01-01 00:00:00', 'fd4c03'), ('2023-01-01 00:00:00', '123456'));
+
+CREATE TABLE t1
+(
+    a DateTime64,
+    b FixedString(6)
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+PARTITION BY toStartOfDay(a) AS
+SELECT
+    '2023-01-01 00:00:00',
+    'fd4c03';

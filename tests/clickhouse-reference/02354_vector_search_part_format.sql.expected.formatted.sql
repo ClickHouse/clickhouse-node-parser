@@ -1,3 +1,28 @@
+-- Tags: no-fasttest, no-ordinary-database, no-asan
+-- no-asan: runs too long
+-- Basic tests for vector similarity index stored in compact vs. wide format, respectively full vs. packed parts
+SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to have local plan for parallel replicas
+
+CREATE TABLE tab_compact_full
+(
+    id Int32,
+    vec Array(Float32),
+    INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 2) GRANULARITY 2
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_bytes_for_wide_part = 1e9, min_rows_for_wide_part = 1e9, min_bytes_for_full_part_storage = 0, index_granularity = 3;
+
+CREATE TABLE tab_wide_full
+(
+    id Int32,
+    vec Array(Float32),
+    INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 2) GRANULARITY 2
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_bytes_for_wide_part = 0, min_rows_for_wide_part = 0, min_bytes_for_full_part_storage = 0, index_granularity = 3;
+
 SELECT
     table,
     part_type

@@ -1,3 +1,7 @@
+SET allow_deprecated_snowflake_conversion_functions = 1; -- Force-enable deprecated snowflake conversion functions (in case this is randomized in CI)
+
+SET session_timezone = 'Africa/Juba';
+
 -- Error cases
 SELECT dateTimeToSnowflake(); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 

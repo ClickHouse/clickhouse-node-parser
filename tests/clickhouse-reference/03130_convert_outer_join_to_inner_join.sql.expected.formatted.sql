@@ -1,3 +1,25 @@
+SET enable_analyzer = 1;
+
+SET join_algorithm = 'hash';
+
+CREATE TABLE test_table_1
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 16; # We have number of granules in the `EXPLAIN` output in reference file
+
+CREATE TABLE test_table_2
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 16;
+
 SELECT '--';
 
 SELECT *

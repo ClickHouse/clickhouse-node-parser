@@ -1,5 +1,80 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sample_prewhere"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "date"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "time"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "intHash64",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          }
+        ]
+      }
+    ],
+    "sampleBy": {
+      "kind": "functionCall",
+      "name": "intHash64",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Tags: distributed"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

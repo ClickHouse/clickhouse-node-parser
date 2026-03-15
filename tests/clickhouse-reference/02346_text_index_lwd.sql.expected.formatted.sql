@@ -1,3 +1,1 @@
-SELECT count()
-FROM tab
-WHERE hasAllTokens(s, 'was');
+<Parse Error>

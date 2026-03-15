@@ -1,3 +1,29 @@
+CREATE TABLE m
+(
+    a String,
+    f UInt8 DEFAULT 0
+)
+ENGINE = Merge(currentDatabase(), '^(t1|t2)$');
+
+CREATE TABLE t1
+(
+    a String,
+    f UInt8 DEFAULT 1
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 8192;
+
+CREATE TABLE t2
+(
+    a String,
+    f UInt8 DEFAULT 2
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 8192;
+
+-- { echoOn }
 SELECT *
 FROM m
 PREWHERE a = 'OK'

@@ -1,3 +1,6 @@
+
+SET join_algorithm = 'partial_merge';
+
 SELECT NULL
 FROM
 (

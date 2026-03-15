@@ -1,3 +1,10 @@
+CREATE TABLE `03402_data`
+(
+    id UInt32
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT avg(id)
 FROM `03402_data`
 SETTINGS

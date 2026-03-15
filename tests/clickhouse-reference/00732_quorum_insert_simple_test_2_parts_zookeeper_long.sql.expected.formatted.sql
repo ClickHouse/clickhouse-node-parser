@@ -1,7 +1,1 @@
-SELECT x
-FROM quorum1
-ORDER BY x ASC;
-
-SELECT x
-FROM quorum2
-ORDER BY x ASC;
+<Parse Error>

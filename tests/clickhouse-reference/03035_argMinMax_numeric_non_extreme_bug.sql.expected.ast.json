@@ -1,5 +1,44 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "Float64",
+        "codec": "CODEC(Delta, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "uuid",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": "DateTime64(3, 'UTC')",
+        "codec": "CODEC(DoubleDelta, LZ4)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uuid"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

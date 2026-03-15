@@ -1,3 +1,10 @@
+CREATE TABLE Dates
+(
+    date DateTime('UTC')
+)
+ENGINE = MergeTree()
+ORDER BY date;
+
 SELECT formatDateTime((
         SELECT date
         FROM Dates

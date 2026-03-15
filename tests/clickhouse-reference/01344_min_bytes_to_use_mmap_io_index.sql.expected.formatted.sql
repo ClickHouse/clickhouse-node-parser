@@ -1,3 +1,14 @@
+CREATE TABLE test_01344
+(
+    x String,
+    INDEX idx (x) TYPE set(10) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0, prewarm_mark_cache = 0, serialization_info_version = 'basic';
+
+SET local_filesystem_read_method = 'mmap', min_bytes_to_use_mmap_io = 1;
+
 SELECT *
 FROM test_01344
 WHERE x = 'Hello, world';

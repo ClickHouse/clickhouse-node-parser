@@ -87,3 +87,7 @@ FROM (
 ORDER BY
     x DESC,
     y ASC;
+
+SET max_block_size = 5;
+
+SET max_block_size = 3;

@@ -1,3 +1,12 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE group_by_null_key
+(
+    c1 Nullable(Int32),
+    c2 LowCardinality(Nullable(Int32))
+)
+ENGINE = Memory();
+
 SELECT
     c1,
     count(*)

@@ -1,3 +1,11 @@
+CREATE TABLE bad_date_time
+(
+    time Datetime('Asia/Istanbul'),
+    count UInt16
+)
+ENGINE = MergeTree()
+ORDER BY time;
+
 -- primary key analysis was wrong in previous versions and did not take the timezone argument into account, so empty result was given.
 SELECT
     toDate(time, 'UTC') AS dt,

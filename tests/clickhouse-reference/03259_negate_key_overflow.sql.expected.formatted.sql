@@ -1,3 +1,1 @@
-SELECT *
-FROM a
-WHERE negate(x) = -42;
+<Parse Error>

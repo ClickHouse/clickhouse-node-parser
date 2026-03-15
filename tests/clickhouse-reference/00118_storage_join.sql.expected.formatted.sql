@@ -1,3 +1,10 @@
+CREATE TABLE t2
+(
+    k UInt64,
+    s String
+)
+ENGINE = Join(`ANY`, `LEFT`, k);
+
 SELECT
     k,
     s

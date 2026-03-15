@@ -1,3 +1,12 @@
+CREATE TABLE map_extractKeyLike_test
+(
+    id UInt32,
+    map Map(String, String)
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS index_granularity = 2;
+
 SELECT *
 FROM map_extractKeyLike_test
 ORDER BY id ASC;

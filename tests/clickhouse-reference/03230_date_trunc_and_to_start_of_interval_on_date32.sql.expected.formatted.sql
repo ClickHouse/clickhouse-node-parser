@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT toStartOfInterval(toDate32('2022-09-16'), toIntervalYear(1));
 
 SELECT toStartOfInterval(toDate32('2022-09-16'), toIntervalQuarter(1));

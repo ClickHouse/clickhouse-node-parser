@@ -1,5 +1,9 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/23194
+SET enable_analyzer = 1;
+CREATE TEMPORARY TABLE test1 (a String, nest Nested(x String, y String));
 SELECT a, nest.* FROM test1 ARRAY JOIN nest;
 SELECT a, n.* FROM test1 ARRAY JOIN nest AS n;
+CREATE TEMPORARY TABLE test2 (a String, nest Array(Tuple(x String, y String)));
 SELECT a, nest.* FROM test2 ARRAY JOIN nest;
 SELECT a, n.* FROM test2 ARRAY JOIN nest AS n;
 SELECT 1 AS x, x, x + 1;

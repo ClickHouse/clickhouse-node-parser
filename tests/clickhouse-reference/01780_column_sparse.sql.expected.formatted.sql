@@ -1,3 +1,15 @@
+CREATE TABLE t_sparse
+(
+    id UInt64,
+    u UInt64,
+    s String,
+    arr1 Array(String),
+    arr2 Array(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0.1;
+
 SELECT
     column,
     serialization_kind
@@ -40,6 +52,15 @@ SELECT arrayFilter(x -> x % 2 = 1, arr2)
 FROM t_sparse
 WHERE arr2 != []
 LIMIT 5;
+
+CREATE TABLE t_sparse_1
+(
+    id UInt64,
+    v Int64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0;
 
 SELECT *
 FROM t_sparse_1

@@ -1,3 +1,10 @@
+CREATE TABLE test_parts_files
+(
+    x UInt64
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT files > 0
 FROM `system`.parts
 WHERE database = currentDatabase()

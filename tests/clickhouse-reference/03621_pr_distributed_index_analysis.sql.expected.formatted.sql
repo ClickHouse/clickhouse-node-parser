@@ -1,3 +1,21 @@
+CREATE TABLE test_10m
+(
+    key Int,
+    value Int
+)
+ENGINE = MergeTree()
+ORDER BY key
+SETTINGS distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 0;
+
+SET parallel_replicas_for_non_replicated_merge_tree = 1;
+
+SET parallel_replicas_index_analysis_only_on_coordinator = 1;
+
+SET parallel_replicas_local_plan = 1;
+
+--- Ignore warnings when replica does not respond, and analysis is done on initiator
+SET send_logs_level = 'error';
+
 -- { echo }
 SELECT sum(key)
 FROM test_10m

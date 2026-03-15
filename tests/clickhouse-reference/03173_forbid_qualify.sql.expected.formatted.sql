@@ -1,3 +1,10 @@
+CREATE TABLE test_qualify
+(
+    number Int64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
 SELECT count()
 FROM test_qualify; -- 100
 

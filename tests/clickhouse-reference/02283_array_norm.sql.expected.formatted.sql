@@ -8,6 +8,27 @@ SELECT LpNorm([3., 4., 5.], 1.1);
 
 SELECT LinfNorm([0, 0, 2]);
 
+CREATE TABLE vec1
+(
+    id UInt64,
+    v Array(UInt8)
+)
+ENGINE = Memory;
+
+CREATE TABLE vec1f
+(
+    id UInt64,
+    v Array(Float32)
+)
+ENGINE = Memory;
+
+CREATE TABLE vec1d
+(
+    id UInt64,
+    v Array(Float64)
+)
+ENGINE = Memory;
+
 SELECT
     id,
     L1Norm(v),

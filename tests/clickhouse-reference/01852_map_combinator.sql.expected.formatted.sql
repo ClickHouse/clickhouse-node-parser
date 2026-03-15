@@ -1,3 +1,12 @@
+SET send_logs_level = 'fatal';
+
+CREATE TABLE map_comb
+(
+    a int,
+    statusMap Map(UInt16, UInt32)
+)
+ENGINE = Log;
+
 SELECT *
 FROM map_comb
 ORDER BY
@@ -96,6 +105,12 @@ SELECT minMap([1,1,1], 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT minMap([1,1,1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT minMap(([1,1,1])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+CREATE TABLE sum_map_decimal
+(
+    statusMap Map(UInt16,Decimal32(5))
+)
+ENGINE = Log;
 
 SELECT sumMap(statusMap)
 FROM sum_map_decimal;

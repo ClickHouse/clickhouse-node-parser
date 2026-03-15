@@ -1,3 +1,11 @@
+CREATE TABLE test_lazy
+(
+    id UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 1, min_rows_for_wide_part = 1;
+
 SELECT
     id,
     `array`

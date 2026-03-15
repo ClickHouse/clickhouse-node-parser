@@ -1,3 +1,12 @@
+CREATE TABLE data
+(
+    key Int,
+    value Int
+)
+ENGINE = MergeTree()
+ORDER BY key
+SETTINGS add_minmax_index_for_numeric_columns = 0;
+
 -- { echo }
 SELECT *
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data);

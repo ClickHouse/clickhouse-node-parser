@@ -1,3 +1,13 @@
+CREATE TABLE bloom_filter
+(
+    id UInt64,
+    s String,
+    INDEX tok_bf (s, lower(s)) TYPE tokenbf_v1(512, 3, 0) GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS index_granularity = 8, index_granularity_bytes = '10Mi';
+
 SELECT max(id)
 FROM bloom_filter
 WHERE hasToken(s, 'abc,def,zzz'); -- { serverError BAD_ARGUMENTS }
@@ -13,6 +23,18 @@ WHERE hasTokenOrNull(s, 'abc,def,zzz');
 SELECT max(id)
 FROM bloom_filter
 WHERE hasTokenCaseInsensitiveOrNull(s, 'abc,def,zzz');
+
+CREATE TABLE bloom_filter2
+(
+    id UInt64,
+    s String,
+    INDEX tok_bf3 (s, lower(s)) TYPE tokenbf_v1(512, 3, 0) GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS index_granularity = 8;
+
+SET max_rows_to_read = 16;
 
 SELECT max(id)
 FROM bloom_filter
@@ -62,6 +84,16 @@ WHERE hasToken(s, 'yyy'); -- { serverError TOO_MANY_ROWS }
 SELECT max(id)
 FROM bloom_filter
 WHERE hasToken(s, 'zzz') == 1; -- { serverError TOO_MANY_ROWS }
+
+-- AST fuzzer crash, issue #54541
+CREATE TABLE tab
+(
+    row_id UInt32,
+    str String,
+    INDEX idx str TYPE tokenbf_v1(256, 2, 0)
+)
+ENGINE = MergeTree
+ORDER BY row_id;
 
 SELECT *
 FROM tab

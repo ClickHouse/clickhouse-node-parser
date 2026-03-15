@@ -1,3 +1,4 @@
+CREATE TABLE test_enum_string_functions(e Enum('a'=1, 'b'=2)) ENGINE=TinyLog;
 SELECT * from test_enum_string_functions WHERE e LIKE '%abc%';
 SELECT * from test_enum_string_functions WHERE e NOT LIKE '%abc%';
 SELECT * from test_enum_string_functions WHERE e iLike '%a%';
@@ -9,6 +10,11 @@ SELECT countSubstringsCaseInsensitive(e, 'a') FROM test_enum_string_functions;
 SELECT countSubstringsCaseInsensitiveUTF8(e, 'a') FROM test_enum_string_functions;
 SELECT hasToken(e, 'a') FROM test_enum_string_functions;
 SELECT hasTokenOrNull(e, 'a') FROM test_enum_string_functions;
+CREATE TABLE jsons
+(
+    `json` Enum('a', '{"a":1}')
+)
+ENGINE = Memory;
 SELECT simpleJSONHas(json, 'foo') as res FROM jsons order by res;
 SELECT simpleJSONHas(json, 'a') as res FROM jsons order by res;
 SELECT simpleJSONExtractUInt(json, 'a') as res FROM jsons order by res;

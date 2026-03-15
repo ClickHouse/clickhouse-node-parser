@@ -1,3 +1,1 @@
-SELECT *
-FROM dist_test_01040
-ORDER BY key ASC;
+<Parse Error>

@@ -1,3 +1,4 @@
+CREATE TABLE t_uuid (x UUID) ENGINE=MergeTree ORDER BY x;
 SELECT reinterpretAsUUID(x) FROM t_uuid;
 SELECT reinterpretAsFloat32(x), reinterpretAsFloat64(x) FROM t_uuid;
 SELECT reinterpretAsInt8(x), reinterpretAsInt16(x), reinterpretAsInt32(x), reinterpretAsInt64(x), reinterpretAsInt128(x), reinterpretAsInt256(x) FROM t_uuid;

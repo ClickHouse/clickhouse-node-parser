@@ -1,3 +1,5 @@
+SET session_timezone = 'Europe/Amsterdam'; -- disable time zone randomization in CI
+
 SELECT toDaysSinceYearZero(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT toDaysSinceYearZero(toDate('2023-09-08'), 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

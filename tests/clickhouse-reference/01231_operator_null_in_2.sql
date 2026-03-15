@@ -1,3 +1,5 @@
+CREATE TABLE null_in_subquery (dt DateTime, idx int, i Nullable(UInt64)) ENGINE = MergeTree() PARTITION BY dt ORDER BY idx SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+SET transform_null_in = 1;
 SELECT count() == 33333 FROM null_in_subquery WHERE i in (SELECT i FROM null_in_subquery WHERE dt = 0);
 SELECT count() == 66666 FROM null_in_subquery WHERE i not in (SELECT i FROM null_in_subquery WHERE dt = 1);
 SELECT count() == 33333 FROM null_in_subquery WHERE i global in (SELECT i FROM null_in_subquery WHERE dt = 2);
@@ -13,6 +15,8 @@ SELECT count() == 66668 FROM null_in_subquery WHERE i not in (SELECT i FROM null
 SELECT count() == 33335 FROM null_in_subquery WHERE i global in (SELECT i FROM null_in_subquery WHERE dt = 0);
 SELECT count() == 66666 FROM null_in_subquery WHERE i global not in (SELECT i FROM null_in_subquery WHERE dt = 1);
 SELECT count() == 66668 FROM null_in_subquery WHERE i global not in (SELECT i FROM null_in_subquery WHERE dt = 2);
+CREATE TABLE null_in_tuple (dt DateTime, idx int, t Tuple(Nullable(UInt64), Nullable(String))) ENGINE = MergeTree() PARTITION BY dt ORDER BY idx SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+SET transform_null_in = 0;
 SELECT arraySort(x -> (x.1, x.2), groupArray(t)) == [(1, '1')] FROM null_in_tuple WHERE t in ((1, '1'), (NULL, NULL));
 SELECT arraySort(x -> (x.1, x.2), groupArray(t)) == [(2, NULL), (NULL, '3'), (NULL, NULL)] FROM null_in_tuple WHERE t not in ((1, '1'), (NULL, NULL));
 SELECT arraySort(x -> (x.1, x.2), groupArray(t)) == [(1, '1')] FROM null_in_tuple WHERE t global in ((1, '1'), (NULL, NULL));

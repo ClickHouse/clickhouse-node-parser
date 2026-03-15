@@ -1,3 +1,37 @@
+-- Tags: no-fasttest
+SET allow_experimental_statistics = 1;
+
+SET use_statistics = 1;
+
+SET log_queries = 1;
+
+SET log_query_settings = 1;
+
+SET mutations_sync = 2;
+
+SET max_execution_time = 60;
+
+-- test rely on local execution, - force parallel replicas to genearate local plan
+SET parallel_replicas_local_plan = 1;
+
+CREATE TABLE sc_core
+(
+    k UInt32,
+    v Nullable(Float64)
+)
+ENGINE = MergeTree
+ORDER BY k
+SETTINGS refresh_statistics_interval = 0;
+
+CREATE TABLE sc_unused
+(
+    k UInt64,
+    val UInt64
+)
+ENGINE = MergeTree
+ORDER BY k
+SETTINGS refresh_statistics_interval = 0;
+
 SELECT sum(val)
 FROM sc_unused
 SETTINGS
@@ -12,6 +46,15 @@ WHERE type = 'QueryFinish'
     AND log_comment = 'nouse-agg'
 ORDER BY event_time_microseconds DESC
 LIMIT 1;
+
+CREATE TABLE st_cm_lc
+(
+    k UInt32,
+    cat LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY k
+SETTINGS refresh_statistics_interval = 0;
 
 SELECT count()
 FROM st_cm_lc
@@ -28,6 +71,24 @@ WHERE type = 'QueryFinish'
     AND log_comment = 'cm-lc-load'
 ORDER BY event_time_microseconds DESC
 LIMIT 1;
+
+CREATE TABLE sj_a
+(
+    id UInt32,
+    p UInt8
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS refresh_statistics_interval = 0;
+
+CREATE TABLE sj_b
+(
+    id UInt32,
+    t LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS refresh_statistics_interval = 0;
 
 SELECT count()
 FROM

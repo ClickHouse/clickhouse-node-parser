@@ -1,3 +1,12 @@
+CREATE TABLE data
+(
+    key Int,
+    val1 SimpleAggregateFunction(max, Nullable(Int)),
+    val2 SimpleAggregateFunction(min, Int)
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY key;
+
 SELECT
     key,
     val1,

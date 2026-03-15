@@ -1,3 +1,12 @@
+CREATE TABLE table_00609
+(
+    key UInt64,
+    val UInt64
+)
+ENGINE = MergeTree
+ORDER BY key
+SETTINGS index_granularity = 8192;
+
 SELECT *
 FROM table_00609
 PREWHERE val > 2

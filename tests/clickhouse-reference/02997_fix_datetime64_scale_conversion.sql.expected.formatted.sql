@@ -1,18 +1,53 @@
+CREATE TABLE IF NOT EXISTS test_0
+(
+    a DateTime64(0)
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT *
 FROM test_0
 ORDER BY a ASC;
+
+CREATE TABLE IF NOT EXISTS test_2
+(
+    a DateTime64(2)
+)
+ENGINE = MergeTree
+ORDER BY a;
 
 SELECT *
 FROM test_2
 ORDER BY a ASC;
 
+CREATE TABLE IF NOT EXISTS test_3
+(
+    a DateTime64(3)
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT *
 FROM test_3
 ORDER BY a ASC;
 
+CREATE TABLE IF NOT EXISTS test_6
+(
+    a DateTime64(6)
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT *
 FROM test_6
 ORDER BY a ASC;
+
+CREATE TABLE IF NOT EXISTS test_9
+(
+    a DateTime64(6)
+)
+ENGINE = MergeTree
+ORDER BY a;
 
 SELECT *
 FROM test_9

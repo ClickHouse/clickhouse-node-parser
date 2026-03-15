@@ -38,6 +38,13 @@ SELECT
     [[1,2], [3,5]] AS arr2,
     round(arrayJaccardIndex(arr1, arr2), 2);
 
+CREATE TABLE array_jaccard_index
+(
+    arr Array(UInt8)
+)
+ENGINE = MergeTree
+ORDER BY arr;
+
 SELECT
     arr,
     [1,2] AS other,

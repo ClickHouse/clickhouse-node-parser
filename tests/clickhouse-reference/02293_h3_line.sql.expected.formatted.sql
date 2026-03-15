@@ -1,3 +1,11 @@
+CREATE TABLE h3_indexes
+(
+    id int,
+    start String,
+    `end` String
+)
+ENGINE = Memory;
+
 /*
 Given two H3 indexes, return the line of indexes between them (inclusive).
 This function may fail to find the line between two indexes, for example if they are very far apart.

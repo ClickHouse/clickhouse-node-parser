@@ -1,4 +1,1 @@
-SELECT *
-FROM tbl
-PREWHERE s = '123'
-WHERE i = 123;
+<Parse Error>

@@ -1,3 +1,9 @@
+CREATE TABLE test_zk_connection_table (
+    key UInt64
+)
+ENGINE ReplicatedMergeTree('zookeeper2:/clickhouse/{database}/02731_zk_connection/{shard}', '{replica}')
+ORDER BY tuple();
+SET session_timezone = 'UTC';
 -- NOTE: Durind the query execution, now() can be evaluated a bit earlier than connected_time
 select name, host, port, index, is_expired, keeper_api_version, (connected_time between yesterday() and now() + interval 3 seconds),
        (abs(session_uptime_elapsed_seconds  - zookeeperSessionUptime()) < 10), enabled_feature_flags

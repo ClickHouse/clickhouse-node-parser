@@ -68,3 +68,15 @@ SELECT ilike('Щущпандер', '%щп%е%');
 SELECT ilike('ощщЁё', '%щ%');
 
 SELECT ilike('ощЩЁё', '%ё%');
+
+CREATE TABLE test1
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+CREATE TABLE test2
+(
+    x UInt8
+)
+ENGINE = Memory;

@@ -1,3 +1,17 @@
+CREATE TABLE data2013
+(
+    name String,
+    value UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE data2014
+(
+    name String,
+    value UInt32
+)
+ENGINE = Memory;
+
 SELECT
     nn,
     vv

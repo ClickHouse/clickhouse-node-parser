@@ -1,4 +1,5 @@
-
+SET enable_analyzer = 1;
+-- { echoOn }
 
 SELECT
     cutURLParameter('http://bigmir.net/?a=b&c=d', []),

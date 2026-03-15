@@ -1,3 +1,5 @@
+SET max_rows_to_read = 0, max_bytes_to_read = 0;
+
 SELECT nowInBlock64(3, 'America/Sao_Paulo', 3); --{ serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT nowInBlock64(10); --{ serverError ARGUMENT_OUT_OF_BOUND}

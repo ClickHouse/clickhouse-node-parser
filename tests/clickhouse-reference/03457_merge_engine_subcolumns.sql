@@ -1,3 +1,7 @@
+create table test1 (x UInt64, t Tuple(a UInt32, b UInt32), y String) engine=Memory;
+create table test2 (x UInt64, t Tuple(a UInt32, b UInt32), y String) engine=Memory;
+create table test_merge (x UInt64, t Tuple(a UInt32, b UInt32), y String) engine=Merge(currentDatabase(), 'test');
+set allow_suspicious_types_in_order_by=1;
 select * from test_merge order by all;
 select t.a from test_merge order by all;
 select t.b from test_merge order by all;
@@ -7,4 +11,6 @@ select t.a, t.b from test_merge order by all;
 select x, t.a, t.b from test_merge order by all;
 select y, t.a, t.b from test_merge order by all;
 select x, t.a, t.b, y from test_merge order by all;
+create table test (json JSON) engine=Memory;
+create table test_merge (json JSON) engine=Merge(currentDatabase(), 'test');
 select json.a.b, json.a.g, json.c, json.d from test_merge;

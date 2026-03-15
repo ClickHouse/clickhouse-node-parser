@@ -1,3 +1,4 @@
+create table test_materialize (part Int, key Int, value String) engine=MergeTree() partition by part order by key settings index_granularity=100, use_const_adaptive_granularity=false, enable_index_granularity_compression=false, min_bytes_for_wide_part=0;
 -- { echo }
 -- 25 is the size of marks in case constant index granularity
 select count() from test_materialize;

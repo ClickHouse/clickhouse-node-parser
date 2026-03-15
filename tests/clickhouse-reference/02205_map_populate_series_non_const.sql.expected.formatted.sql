@@ -1,3 +1,9 @@
+CREATE TABLE `02005_test_table`
+(
+    value Map(Int64, Int64)
+)
+ENGINE = TinyLog;
+
 SELECT mapPopulateSeries(value)
 FROM `02005_test_table`;
 
@@ -11,6 +17,13 @@ SELECT mapPopulateSeries(map(toUInt64(18446744073709551615), toUInt64(5)), 18446
 SELECT mapPopulateSeries(map(1, 4, 1, 5, 5, 6));
 
 SELECT mapPopulateSeries(map(1, 4, 1, 5, 5, 6), materialize(10));
+
+CREATE TABLE `02005_test_table`
+(
+    key Array(Int64),
+    value Array(Int64)
+)
+ENGINE = TinyLog;
 
 SELECT mapPopulateSeries(key, value)
 FROM `02005_test_table`;

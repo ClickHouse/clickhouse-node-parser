@@ -1,5 +1,79 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "columns_with_multiple_streams"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field0",
+        "type": "Nullable(Int64)",
+        "codec": "CODEC(Delta(2), LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field1",
+        "type": "Nullable(Int64)",
+        "codec": "CODEC(Delta, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field2",
+        "type": "Array(Array(Int64))",
+        "codec": "CODEC(Delta, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field3",
+        "type": "Tuple(UInt32, Array(UInt64))",
+        "codec": "CODEC(T64, Default)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,6 +110,67 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "columns_with_multiple_streams_compact"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field0",
+        "type": "Nullable(Int64)",
+        "codec": "CODEC(Delta(2), LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field1",
+        "type": "Nullable(Int64)",
+        "codec": "CODEC(Delta, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field2",
+        "type": "Array(Array(Int64))",
+        "codec": "CODEC(Delta, LZ4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "field3",
+        "type": "Tuple(UInt32, Array(UInt64))",
+        "codec": "CODEC(Delta, Default)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -68,6 +203,103 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "columns_with_multiple_streams_bad_case"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field0",
+        "type": "Nullable(String)",
+        "codec": "CODEC(Delta, LZ4)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "leadingComments": [
+      "-- validation still works, non-sense codecs checked"
+    ],
+    "trailingComments": [
+      "--{serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "columns_with_multiple_streams_bad_case"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field0",
+        "type": "Tuple(Array(UInt64), String)",
+        "codec": "CODEC(T64, LZ4)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "trailingComments": [
+      "--{serverError ILLEGAL_SYNTAX_FOR_CODEC_TYPE}"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_codecs",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "columns_with_multiple_streams_bad_case"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field0",
+        "type": "Nullable(UInt64)",
+        "codec": "CODEC(Delta)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
       }
     ]
   },

@@ -1,3 +1,11 @@
+CREATE TABLE mytable
+(
+    operand Float64,
+    low     Float64,
+    high     Float64,
+    count   UInt64,
+    PRIMARY KEY (operand, low, high, count)
+) ENGINE = MergeTree();
 SELECT operand, low, high, count, WIDTH_BUCKET(operand, low, high, count) FROM mytable WHERE count != 0;
 SELECT '----------';
 -- zero is not valid for count

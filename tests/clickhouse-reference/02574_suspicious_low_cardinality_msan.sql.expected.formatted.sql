@@ -1,3 +1,14 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE table1__fuzz_19
+(
+    id LowCardinality(UInt16),
+    v DateTime64(3, 'UTC')
+)
+ENGINE = ReplacingMergeTree(v)
+ORDER BY id
+PARTITION BY id % 200;
+
 SELECT
     1023,
     ((((id % -9223372036854775807) = NULL)

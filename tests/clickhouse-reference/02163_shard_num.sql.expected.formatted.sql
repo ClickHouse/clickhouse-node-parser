@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT
     shardNum() AS shard_num,
     sum(1) AS `rows`

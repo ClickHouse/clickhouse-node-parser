@@ -34,6 +34,14 @@ FROM (
     )
 GROUP BY x;
 
+CREATE TABLE IF NOT EXISTS decimal
+(
+    A UInt64,
+    B Decimal128(18),
+    C Decimal128(18)
+)
+ENGINE = Memory;
+
 SELECT
     A,
     toString(B) AS B_str,

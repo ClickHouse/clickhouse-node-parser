@@ -1,3 +1,11 @@
+-- .null subcolumn
+CREATE TABLE t_missed_subcolumns
+(
+    x UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT x
 FROM t_missed_subcolumns
 WHERE isNotNull(y)
@@ -7,6 +15,15 @@ SELECT x
 FROM t_missed_subcolumns
 WHERE isNotNull(y)
 SETTINGS optimize_functions_to_subcolumns = 0;
+
+-- .null and .size0 subcolumn in array
+CREATE TABLE t_missed_subcolumns
+(
+    id UInt64,
+    `n.a` Array(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT
     id,
@@ -32,6 +49,14 @@ ORDER BY id ASC;
 SELECT n.b.size0
 FROM t_missed_subcolumns
 ORDER BY id ASC;
+
+-- subcolumns and custom defaults
+CREATE TABLE t_missed_subcolumns
+(
+    id UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT
     id,

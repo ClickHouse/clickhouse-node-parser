@@ -1,3 +1,14 @@
+CREATE TEMPORARY TABLE test_01602a
+(
+    x UInt32
+);
+
+CREATE TEMPORARY TABLE test_01602b
+(
+    y Float64,
+    z String
+);
+
 SELECT
     database,
     name,

@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT arrayEnumerateUniq(anyHeavy([]), []);
 
 SELECT arrayEnumerateDense([], [sequenceCount(NULL)]); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }

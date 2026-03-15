@@ -1,3 +1,11 @@
+-- this queries does not have to pass, but they works historically
+-- let's support this while can, see #31687
+CREATE TABLE test
+(
+    x String
+)
+ENGINE = StripeLog;
+
 SELECT if(0, y, 42)
 FROM test;
 

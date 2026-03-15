@@ -1,3 +1,35 @@
+CREATE TABLE video_log
+(
+    `datetime` DateTime,
+    `user_id` UInt64,
+    `device_id` UInt64,
+    `domain` LowCardinality(String),
+    `bytes` UInt64,
+    `duration` UInt64
+)
+ENGINE = MergeTree
+PARTITION BY toDate(datetime)
+ORDER BY (user_id, device_id)
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+CREATE TABLE rng
+(
+    `user_id_raw` UInt64,
+    `device_id_raw` UInt64,
+    `domain_raw` UInt64,
+    `bytes_raw` UInt64,
+    `duration_raw` UInt64
+)
+ENGINE = GenerateRandom(1024);
+CREATE TABLE video_log_result
+(
+    `hour` DateTime,
+    `sum_bytes` UInt64,
+    `avg_duration` Float64
+)
+ENGINE = MergeTree
+PARTITION BY toDate(hour)
+ORDER BY sum_bytes
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 SELECT
     equals(sum_bytes1, sum_bytes2),
     equals(avg_duration1, avg_duration2)

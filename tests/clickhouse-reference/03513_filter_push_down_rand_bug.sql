@@ -1,3 +1,4 @@
+CREATE TABLE users_items (user_id UInt64) ENGINE = Log;
 SELECT sum(in_sample)
 FROM
 (

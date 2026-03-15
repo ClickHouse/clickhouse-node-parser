@@ -1,4 +1,10 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/72459
 
+CREATE TABLE t1 (c1 UInt64, c2 UInt64) ORDER BY c1;
+CREATE TABLE t2 (c1 UInt64) ORDER BY c1;
+set enable_analyzer = 1;
+set allow_experimental_correlated_subqueries = 1;
+-- { echoOn }
 
 SELECT count(t1.c1) FROM t1
 WHERE

@@ -1,3 +1,9 @@
+SET join_algorithm = 'parallel_hash';
+
+SET enable_analyzer = 1;
+
+SET join_use_nulls = 1;
+
 SELECT
     ty.number,
     sipHash64(ty.number + 1) % 100 AS a,

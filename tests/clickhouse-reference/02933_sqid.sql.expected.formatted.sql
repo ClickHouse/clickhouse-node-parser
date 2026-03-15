@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SET allow_suspicious_low_cardinality_types = 1;
+
 SELECT '-- negative tests';
 
 SELECT sqidEncode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
@@ -47,6 +50,13 @@ SELECT
 SELECT sqidEncode(toNullable(materialize(1)), toLowCardinality(materialize(2)));
 
 SELECT sqidDecode('invalid sqid');
+
+CREATE TABLE tab
+(
+    id String
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT sqidDecode(id)
 FROM tab

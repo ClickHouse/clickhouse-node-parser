@@ -103,6 +103,14 @@ FROM (
             )
     );
 
+CREATE TABLE test1
+(
+    year String,
+    uv AggregateFunction(uniqTheta, Int64)
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY year;
+
 SELECT
     finalizeAggregation(uniqThetaIntersect(uv2021, uv2022)) / finalizeAggregation(uv2021),
     finalizeAggregation(uniqThetaIntersect(uv2021, uv2022)),
@@ -113,6 +121,14 @@ FROM (
             uniqThetaMergeStateIf(uv, year = '2022') AS uv2022
         FROM test1
     );
+
+CREATE TABLE test2
+(
+    year String,
+    uv Int64
+)
+ENGINE = MergeTree()
+ORDER BY year;
 
 SELECT
     finalizeAggregation(uniqThetaIntersect(uv2021, uv2022)) / finalizeAggregation(uv2021),

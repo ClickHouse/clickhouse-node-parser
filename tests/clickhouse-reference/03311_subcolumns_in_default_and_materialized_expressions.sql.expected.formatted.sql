@@ -1,5 +1,27 @@
+SET enable_json_type = 1;
+
+CREATE TABLE test
+(
+    t Tuple(a UInt32),
+    json JSON(b UInt32),
+    a UInt32 DEFAULT t.a,
+    b UInt32 DEFAULT json.b,
+    c UInt32 DEFAULT json.c
+)
+ENGINE = Memory;
+
 SELECT *
 FROM test;
+
+CREATE TABLE test
+(
+    t Tuple(a UInt32),
+    json JSON(b UInt32),
+    a UInt32 MATERIALIZED t.a,
+    b UInt32 MATERIALIZED json.b,
+    c UInt32 MATERIALIZED json.c
+)
+ENGINE = Memory;
 
 SELECT
     *,

@@ -1,3 +1,14 @@
+SET allow_experimental_dynamic_type = 1;
+
+SET allow_suspicious_types_in_order_by = 1;
+
+CREATE TABLE test
+(
+    d1 Dynamic(max_types=2),
+    d2 Dynamic(max_types=2)
+)
+ENGINE = Memory;
+
 SELECT
     d1,
     dynamicType(d1),

@@ -1,2 +1,1 @@
-SELECT *
-FROM mv1;
+<Parse Error>

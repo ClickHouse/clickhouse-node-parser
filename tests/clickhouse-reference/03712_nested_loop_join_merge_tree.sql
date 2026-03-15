@@ -1,3 +1,26 @@
+SET allow_suspicious_low_cardinality_types = 1;
+CREATE TABLE events
+(
+    `Id` UInt64,
+    `Idu32` UInt32 MATERIALIZED toUInt32(Id),
+    `Idu32n` Nullable(UInt32) MATERIALIZED if(Id == 111, NULL, toUInt32(Id)),
+    `Idlcn` LowCardinality(Nullable(UInt64)) MATERIALIZED if(Id == 111, NULL, Id),
+    `Idlc` LowCardinality(UInt64) MATERIALIZED Id,
+    `Payload` String,
+    `Time` DateTime
+) ENGINE = Memory;
+CREATE TABLE attributes
+(
+    `EventId` UInt64,
+    `OtherId` Nullable(UInt32),
+    `Attribute` String
+)
+ENGINE = MergeTree
+ORDER BY EventId;
+SET query_plan_join_swap_table = 0;
+SET enable_analyzer = 1;
+SET join_algorithm = 'direct';
+SET min_joined_block_size_rows = 0, min_joined_block_size_bytes = 0;
 SELECT count(), countIf(t1.Attribute != ''), sum(sipHash64(t1.Attribute))
 FROM events AS t0 INNER JOIN attributes AS t1 ON t1.EventId = t0.Id
 SETTINGS log_comment = '03712_nested_loop_join_merge_tree_indexed';

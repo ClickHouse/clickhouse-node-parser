@@ -1,3 +1,13 @@
+SET allow_deprecated_error_prone_window_functions = 1;
+
+CREATE TABLE largestTriangleThreeBucketsTestFloat64Float64
+(
+    x Float64,
+    y Float64
+)
+ENGINE = MergeTree
+ORDER BY (y, x);
+
 SELECT largestTriangleThreeBuckets(0)(x, y)
 FROM largestTriangleThreeBucketsTestFloat64Float64;
 
@@ -10,14 +20,38 @@ FROM largestTriangleThreeBucketsTestFloat64Float64;
 SELECT largestTriangleThreeBuckets(4)(x, y) AS downsampled_data
 FROM largestTriangleThreeBucketsTestFloat64Float64;
 
+CREATE TABLE largestTriangleThreeBucketsTestDecimal64Decimal64
+(
+    x Decimal64(2),
+    y Decimal64(2)
+)
+ENGINE = MergeTree
+ORDER BY (y, x);
+
 SELECT largestTriangleThreeBuckets(20)(x, y)
 FROM largestTriangleThreeBucketsTestDecimal64Decimal64;
+
+CREATE TABLE largestTriangleThreeBucketsTestDateTime64Float64
+(
+    x DateTime64(3),
+    y Float64
+)
+ENGINE = MergeTree
+ORDER BY (y, x);
 
 SELECT largestTriangleThreeBuckets(5)(x, y)
 FROM largestTriangleThreeBucketsTestDateTime64Float64;
 
 SELECT lttb(5)(x, y)
 FROM largestTriangleThreeBucketsTestDateTime64Float64;
+
+CREATE TABLE largestTriangleTreeBucketsBucketSizeTest
+(
+    x UInt32,
+    y UInt32
+)
+ENGINE = MergeTree
+ORDER BY x;
 
 SELECT
     arrayJoin(lttb(1000)(x, y)) AS point,

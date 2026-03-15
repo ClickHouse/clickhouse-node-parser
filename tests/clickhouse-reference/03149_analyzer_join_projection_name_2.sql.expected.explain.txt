@@ -1,3 +1,107 @@
+CreateQuery users (children 3)
+ Identifier users
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration uid (children 1)
+    DataType Int16
+   ColumnDeclaration name (children 1)
+    DataType String
+   ColumnDeclaration gid (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration gname (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery groups (children 3)
+ Identifier groups
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration gid (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration gname (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery target (children 3)
+ Identifier target
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration uid (children 1)
+    DataType Int16
+   ColumnDeclaration name (children 1)
+    DataType String
+   ColumnDeclaration gid (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration gname (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery groups_dict (children 3)
+ Identifier groups_dict
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration gid (children 1)
+   DataType String
+  DictionaryAttributeDeclaration gname (children 1)
+   DataType String
+ Dictionary definition (children 4)
+  ExpressionList (children 2)
+   Identifier gid
+   Identifier gname
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 2)
+    pair (children 1)
+     Literal 'groups'
+    pair (children 1)
+     Function currentDatabase (children 1)
+      ExpressionList
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
+CreateQuery mv (children 3)
+ Identifier mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Identifier u.uid
+     Identifier u.name
+     Identifier u.gid
+     Identifier u.gname
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier users (alias u)
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier groups_dict (alias g)
+      TableJoin (children 1)
+       ExpressionList (children 2)
+        Identifier gid
+        Identifier gname
+ ViewTargets
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 3)

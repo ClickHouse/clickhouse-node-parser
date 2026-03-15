@@ -1,3 +1,13 @@
+CREATE TABLE test
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY (a, b);
+
+SET enable_analyzer = 1;
+
 SELECT trimBoth(replaceRegexpAll(`explain`, '__table1.', ''))
 FROM (
         EXPLAIN actions = 1

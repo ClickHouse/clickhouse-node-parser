@@ -1,9 +1,11 @@
 SELECT 1 IN (SELECT 1);
 SELECT -1 IN (SELECT 1);
+CREATE TABLE select_in_test(value UInt8) ENGINE=TinyLog;
 SELECT value FROM select_in_test WHERE value IN (-1);
 SELECT value FROM select_in_test WHERE value IN (SELECT -1);
 SELECT value FROM select_in_test WHERE value IN (1);
 SELECT value FROM select_in_test WHERE value IN (SELECT 1);
+CREATE TABLE select_in_test(value Int8) ENGINE=TinyLog;
 SELECT value FROM select_in_test WHERE value IN (2);
 SELECT value FROM select_in_test WHERE value IN (SELECT 2);
 SELECT 1 IN (1);

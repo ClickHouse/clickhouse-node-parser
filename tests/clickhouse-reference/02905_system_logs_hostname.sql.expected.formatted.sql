@@ -1,6 +1,16 @@
+SET log_query_threads = 1;
+
+SET log_queries_min_type = 'QUERY_FINISH';
+
+SET log_queries = 1;
+
 SELECT '02095_system_logs_hostname'
 FROM `system`.one
 FORMAT Null;
+
+SET log_queries = 0;
+
+SET log_query_threads = 0;
 
 SELECT hostname
 FROM `system`.query_log

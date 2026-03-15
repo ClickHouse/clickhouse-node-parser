@@ -1,3 +1,143 @@
+Set
+
+CreateQuery dict_in_01023  (children 1)
+ Identifier dict_in_01023
+
+CreateQuery dict_in_01023 input (children 4)
+ Identifier dict_in_01023
+ Identifier input
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Memory (children 1)
+   ExpressionList
+
+CreateQuery dict_in_01023 dict (children 4)
+ Identifier dict_in_01023
+ Identifier dict
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration key (children 2)
+   DataType UInt64
+   Literal UInt64_0
+  DictionaryAttributeDeclaration val (children 2)
+   DataType UInt64
+   Literal UInt64_1
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier key
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 6)
+    pair (children 1)
+     Literal 'localhost'
+    pair (children 1)
+     Function tcpPort (children 1)
+      ExpressionList
+    pair (children 1)
+     Literal 'default'
+    pair (children 1)
+     Literal 'input'
+    pair (children 1)
+     Literal ''
+    pair (children 1)
+     Literal 'dict_in_01023'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
+CreateQuery input (children 3)
+ Identifier input
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier buffer_
+    Identifier key
+
+CreateQuery null_ (children 3)
+ Identifier null_
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Null (children 1)
+   ExpressionList
+
+CreateQuery buffer_ (children 3)
+ Identifier buffer_
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Buffer (children 1)
+   ExpressionList (children 9)
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier dist_out
+    Literal UInt64_1
+    Literal UInt64_0
+    Literal UInt64_0
+    Literal UInt64_0
+    Literal UInt64_0
+    Literal UInt64_0
+    Literal UInt64_0
+
+CreateQuery dist_out (children 3)
+ Identifier dist_out
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier null_
+    Identifier key
+
+CreateQuery output (children 3)
+ Identifier output
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Memory (children 1)
+   ExpressionList
+
+CreateQuery mv (children 3)
+ Identifier mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier key
+     Function dictGetUInt64 (alias val) (children 1)
+      ExpressionList (children 3)
+       Literal 'dict_in_01023.dict'
+       Literal 'val'
+       Identifier key
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier dist_out
+ ViewTargets
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)

@@ -1,3 +1,12 @@
+CREATE TABLE t0
+(
+    c0 String,
+    c1 Int32 CODEC(NONE),
+    c2 Int32
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT
     t0.c2,
     t0.c1,

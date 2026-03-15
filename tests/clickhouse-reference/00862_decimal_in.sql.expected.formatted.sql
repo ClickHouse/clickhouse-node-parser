@@ -1,3 +1,10 @@
+CREATE TABLE temp
+(
+    x Decimal(38, 2),
+    y Nullable(Decimal(38, 2))
+)
+ENGINE = Memory;
+
 SELECT *
 FROM temp
 WHERE x IN (toDecimal128(128, 1));

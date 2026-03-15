@@ -1,3 +1,11 @@
+CREATE TABLE t1
+(
+    c0 Int32
+)
+ENGINE = MergeTree()
+ORDER BY c0
+PARTITION BY (negate((c0)));
+
 SELECT
     (negate(((tan(t1.c0)) + (t1.c0)))),
     (cos((sin(pow(t1.c0, t1.c0))))),

@@ -1,4 +1,6 @@
-
+create table local_02175 engine=Memory() as select * from system.one;
+create table dist_02175 as local_02175 engine=Distributed(test_cluster_two_shards, currentDatabase(), local_02175);
+-- { echoOn }
 select * from dist_02175 l join local_02175 r using dummy;
 select * from dist_02175 l global join local_02175 r using dummy;
 -- explicit database for distributed table

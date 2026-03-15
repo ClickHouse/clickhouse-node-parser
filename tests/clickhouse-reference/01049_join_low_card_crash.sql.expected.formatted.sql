@@ -1,3 +1,19 @@
+CREATE TABLE Alpha
+(
+    foo String,
+    bar UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE Beta
+(
+    foo LowCardinality(String),
+    baz UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT *
 FROM
     Alpha
@@ -34,3 +50,5 @@ FULL JOIN (
     ) AS js2
     USING (k)
 ORDER BY js2.k ASC;
+
+SET join_use_nulls = 1;

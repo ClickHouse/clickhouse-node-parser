@@ -110,6 +110,16 @@ SELECT 1 % CAST(materialize(1), 'Nullable(Float32)');
 
 SELECT materialize(1) % CAST(materialize(1), 'Nullable(Float32)');
 
+CREATE TABLE nullable_division
+(
+    x UInt32,
+    y Nullable(UInt32),
+    a Decimal(7, 2),
+    b Nullable(Decimal(7, 2))
+)
+ENGINE = MergeTree()
+ORDER BY x;
+
 SELECT if(y = 0, 0, intDiv(x, y))
 FROM nullable_division;
 

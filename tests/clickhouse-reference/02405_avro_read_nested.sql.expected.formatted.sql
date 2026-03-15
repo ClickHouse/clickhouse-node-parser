@@ -1,3 +1,6 @@
+-- Tags: no-fasttest, no-parallel
+SET flatten_nested = 1;
+
 SELECT *
 FROM file(`02405_data`.avro, auto, 'nested Nested(x UInt32, y String)');
 

@@ -15,5 +15,6 @@ SELECT map(11::UInt64, 'v1', 22::UInt64, 'v2') AS m FORMAT JSONEachRow;
 SELECT map(11::UInt64, 'v1', 22::UInt64, 'v2') AS m, toJSONString(m) AS s, isValidJSON(s);
 SELECT map(11::Int128, 'v1', 22::Int128, 'v2') AS m FORMAT JSONEachRow;
 SELECT map(11::Int128, 'v1', 22::Int128, 'v2') AS m, toJSONString(m) AS s, isValidJSON(s);
+CREATE TEMPORARY TABLE map_json (m1 Map(String, UInt64), m2 Map(UInt32, UInt32), m3 Map(Date, String));
 SELECT m1, m2, m3 FROM map_json FORMAT JSONEachRow;
 SELECT m1, m2, m3 FROM map_json FORMAT JSONEachRow SETTINGS output_format_json_quote_64bit_integers = 0;

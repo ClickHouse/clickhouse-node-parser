@@ -222,6 +222,13 @@ SELECT
     idnaDecode(ascii_try) AS original_try
 FORMAT Vertical;
 
+CREATE TABLE tab
+(
+    idna String
+)
+ENGINE = MergeTree
+ORDER BY idna;
+
 SELECT
     idna,
     idnaEncode(idna) AS ascii,

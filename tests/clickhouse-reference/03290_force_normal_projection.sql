@@ -1,3 +1,19 @@
+CREATE TABLE users
+(
+    `uid` Int16,
+    `name` String,
+    `age` Int16,
+    PROJECTION p1
+    (
+        SELECT 
+            name,
+            uid
+        ORDER BY age
+    )
+)
+ENGINE = MergeTree
+ORDER BY uid;
+set parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 SELECT
     name,
     uid

@@ -1,3 +1,9 @@
+CREATE TABLE datetime
+(
+    d DateTime('UTC')
+)
+ENGINE = Memory;
+
 SELECT quantile(0.2)(d)
 FROM datetime;
 

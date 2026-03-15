@@ -1,3 +1,5 @@
+SET session_timezone = 'UTC';
+
 SELECT '-- Negative tests';
 
 -- time and origin arguments must have the same type

@@ -1,3 +1,5 @@
+-- Only valid values for IPv4
+CREATE TABLE ipv4_test (ipv4_ IPv4) ENGINE = Memory;
 SELECT ipv4_, hex(ipv4_) FROM ipv4_test ORDER BY ipv4_;
 SELECT '< 127.0.0.1', ipv4_ FROM ipv4_test
     WHERE ipv4_ < toIPv4('127.0.0.1')
@@ -9,6 +11,8 @@ SELECT '= 127.0.0.1', ipv4_ FROM ipv4_test
     WHERE ipv4_ = toIPv4('127.0.0.1')
     ORDER BY ipv4_;
 select 'euqality of IPv4-mapped IPv6 value and IPv4 promoted to IPv6 with function:', toIPv6('::ffff:127.0.0.1') = IPv4ToIPv6(toIPv4('127.0.0.1'));
+-- Only valid values for IPv6
+CREATE TABLE ipv6_test (ipv6_ IPv6) ENGINE = Memory;
 SELECT ipv6_, hex(ipv6_) FROM ipv6_test ORDER BY ipv6_;
 SELECT '< 127.0.0.1', ipv6_ FROM ipv6_test
     WHERE ipv6_ < IPv4ToIPv6(toIPv4('127.0.0.1'))

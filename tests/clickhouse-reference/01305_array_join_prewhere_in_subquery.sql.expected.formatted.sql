@@ -1,3 +1,12 @@
+CREATE TABLE h
+(
+    EventDate Date,
+    CounterID UInt64,
+    WatchID UInt64
+)
+ENGINE = MergeTree
+ORDER BY (CounterID, EventDate);
+
 SELECT count()
 FROM
     h

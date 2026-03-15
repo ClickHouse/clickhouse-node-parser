@@ -1,3 +1,4 @@
+SET prefer_localhost_replica = 0;
 SELECT '-- IN subquery';
 SELECT shardNum(), number
 FROM remote('127.0.0.{1..3}', numbers(100))

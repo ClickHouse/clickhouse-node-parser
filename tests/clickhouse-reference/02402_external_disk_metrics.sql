@@ -1,9 +1,22 @@
+-- Tags: no-parallel, no-fasttest, long, no-random-settings
+
+SET max_bytes_before_external_sort = 33554432;
+SET max_bytes_ratio_before_external_sort = 0;
+SET max_block_size = 1048576;
 SELECT number FROM (SELECT number FROM numbers(2097152)) ORDER BY number * 1234567890123456789 LIMIT 2097142, 10
 SETTINGS log_comment='02402_external_disk_mertrics/sort'
 FORMAT Null;
+SET max_bytes_before_external_group_by = '100M';
+SET max_bytes_ratio_before_external_group_by = 0;
+SET max_memory_usage = '410M';
+SET group_by_two_level_threshold = '100K';
+SET group_by_two_level_threshold_bytes = '50M';
 SELECT sum(k), sum(c) FROM (SELECT number AS k, sum(number) AS c FROM (SELECT * FROM system.numbers LIMIT 2097152) GROUP BY k)
 SETTINGS log_comment='02402_external_disk_mertrics/aggregation'
 FORMAT Null;
+SET join_algorithm = 'partial_merge';
+SET default_max_bytes_in_join = 0;
+SET max_bytes_in_join = '10M';
 SELECT n, j * 2097152 FROM
 (SELECT number * 200000 as n FROM numbers(5)) nums
 ANY LEFT JOIN ( SELECT number * 2 AS n, number AS j FROM numbers(1000000) ) js2
@@ -11,6 +24,7 @@ USING n
 ORDER BY n
 SETTINGS log_comment='02402_external_disk_mertrics/partial_merge_join'
 FORMAT Null;
+SET join_algorithm = 'grace_hash', grace_hash_join_initial_buckets=32, grace_hash_join_max_buckets=32;
 SELECT n, j * 2097152 FROM
 (SELECT number * 200000 as n FROM numbers(5)) nums
 ANY LEFT JOIN ( SELECT number * 2 AS n, number AS j FROM numbers(1000000) ) js2

@@ -11,6 +11,7 @@ select (date '2001-09-29' - interval 1 hour) x, toTypeName(x);
 select (date '2001-10-01' - date '2001-09-28') x, toTypeName(x);
 select timestamp '2001-09-28 01:00:00' + interval 23 hour;
 select timestamp '2001-09-28 23:00:00' - interval 23 hour;
+SET session_timezone = 'Europe/Amsterdam';
 select (date '2001-09-29' + interval 12345 second) x, toTypeName(x);
 select (date '2001-09-29' + interval 12345 millisecond) x, toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 select (date '2001-09-29' + interval 12345 microsecond) x, toTypeName(x); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

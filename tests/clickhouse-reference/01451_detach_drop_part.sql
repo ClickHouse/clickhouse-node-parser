@@ -1,3 +1,4 @@
+CREATE TABLE mt_01451 (v UInt8) ENGINE = MergeTree() order by tuple() SETTINGS old_parts_lifetime=0;
 SELECT v FROM mt_01451 ORDER BY v;
 SELECT name FROM system.detached_parts WHERE table = 'mt_01451' AND database = currentDatabase();
 SELECT '-- drop part --';

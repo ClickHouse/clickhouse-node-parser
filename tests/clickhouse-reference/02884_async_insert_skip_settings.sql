@@ -1,3 +1,19 @@
+CREATE TABLE t_async_insert_skip_settings (id UInt64)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/tables/t_async_insert_skip_settings', '1')
+ORDER BY id;
+SET async_insert = 1;
+SET async_insert_deduplicate = 1;
+SET wait_for_async_insert = 0;
+-- Disable adaptive timeout to prevent immediate push of the first message (if the queue last push was old)
+SET async_insert_use_adaptive_busy_timeout=0;
+SET async_insert_busy_timeout_max_ms = 1000000;
+SET insert_deduplication_token = '1';
+SET log_comment = 'async_insert_skip_settings_1';
+SET insert_deduplication_token = '2';
+SET log_comment = 'async_insert_skip_settings_2';
+SET log_comment = 'async_insert_skip_settings_3';
+SET insert_deduplication_token = '3';
+SET log_comment = 'async_insert_skip_settings_4';
 SELECT 'pending to flush', length(entries.bytes) FROM system.asynchronous_inserts
 WHERE database = currentDatabase() AND table = 't_async_insert_skip_settings'
 ORDER BY first_update;

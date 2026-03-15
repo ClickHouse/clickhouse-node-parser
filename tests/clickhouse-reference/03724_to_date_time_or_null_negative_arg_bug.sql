@@ -1,3 +1,4 @@
+set session_timezone='UTC';
 select '1960-01-01' as input, toDateOrNull('1960-01-01') as result;
 select '1800-01-01' as input, toDateOrNull('1800-01-01') as result;
 select '3000-01-01' as input, toDateOrNull('3000-01-01') as result;

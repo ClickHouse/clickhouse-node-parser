@@ -1,3 +1,22 @@
+CREATE TABLE md
+(
+    key UInt32,
+    t DateTime,
+    bid Float64,
+    ask Float64
+)
+ENGINE = MergeTree()
+ORDER BY (key, t);
+
+CREATE TABLE tv
+(
+    key UInt32,
+    t DateTime,
+    tv Float64
+)
+ENGINE = MergeTree()
+ORDER BY (key, t);
+
 SELECT
     tv.key,
     toString(tv.t, 'UTC'),

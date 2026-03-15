@@ -1,3 +1,31 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/4567
+SET enable_analyzer = 1;
+
+CREATE TABLE fact
+(
+    id Int64,
+    animal_key Int64,
+    color_key Int64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE animals
+(
+    animal_key UInt64,
+    animal_name String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE colors
+(
+    color_key UInt64,
+    color_name String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     id,
     animal_name,

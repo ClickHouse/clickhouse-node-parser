@@ -1,9 +1,23 @@
 SELECT bitHammingDistance(1, 5);
 SELECT bitHammingDistance(100, 100000);
 SELECT bitHammingDistance(-1, 1);
+CREATE TABLE defaults
+(
+	n1 UInt8,
+	n2 UInt16,
+	n3 UInt32,
+	n4 UInt64
+)ENGINE = Memory();
 SELECT bitHammingDistance(4, n1) FROM defaults;
 SELECT bitHammingDistance(n2, 100) FROM defaults;
 SELECT bitHammingDistance(n3, n4) FROM defaults;
+CREATE TABLE test_string
+(
+	s1 String,
+	s2 String,
+	s3 FixedString(10),
+	s4 FixedString(10),
+) ENGINE = Memory;
 SELECT bitHammingDistance('hello', 'hello');
 SELECT bitHammingDistance('hello', 'hellow');
 SELECT bitHammingDistance(toFixedString('hello', 6), toFixedString('hellow', 6));

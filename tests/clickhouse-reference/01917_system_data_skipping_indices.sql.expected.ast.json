@@ -1,5 +1,211 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01917"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d1",
+        "type": "Int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d1_null",
+        "type": "Nullable(Int)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "d1_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d1"
+          ]
+        },
+        "indexType": "minmax",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "d1_null_idx",
+        "expr": {
+          "kind": "functionCall",
+          "name": "assumeNotNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d1_null"
+              ]
+            }
+          ]
+        },
+        "indexType": "minmax",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01917_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "frequency",
+        "type": "UInt64"
+      },
+      {
+        "kind": "indexDef",
+        "name": "memory",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "frequency"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "length",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              }
+            ]
+          },
+          "parenthesized": true
+        },
+        "indexType": "set(1000)",
+        "granularity": 5
+      },
+      {
+        "kind": "indexDef",
+        "name": "sample_index1",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "length",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "source": "(length(name), name)"
+        },
+        "indexType": "minmax",
+        "granularity": 4
+      },
+      {
+        "kind": "indexDef",
+        "name": "sample_index2",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "lower",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "source": "(lower(name), name)"
+        },
+        "indexType": "ngrambf_v1(3, 256, 2, 0)",
+        "granularity": 4
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

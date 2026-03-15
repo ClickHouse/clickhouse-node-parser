@@ -11,4 +11,5 @@ SELECT fromModifiedJulianDayOrNull(59154);
 SELECT fromModifiedJulianDayOrNull(NULL);
 SELECT fromModifiedJulianDayOrNull(-678942);
 SELECT fromModifiedJulianDayOrNull(2973484);
+CREATE TABLE fromModifiedJulianDay_test (d Int32) ENGINE = Memory;
 SELECT fromModifiedJulianDay(d) FROM fromModifiedJulianDay_test;

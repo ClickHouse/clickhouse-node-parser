@@ -1,3 +1,18 @@
+-- Tags: no-fasttest
+SET allow_experimental_parallel_reading_from_replicas = 0;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE dist_vec
+(
+    id UInt32,
+    vec Array(Float32),
+    INDEX idx_vec vec TYPE vector_similarity('hnsw', 'L2Distance', 2)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8, distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 10;
+
 SELECT *
 FROM dist_vec
 ORDER BY L2Distance(vec, [0.3, 0.3]) ASC

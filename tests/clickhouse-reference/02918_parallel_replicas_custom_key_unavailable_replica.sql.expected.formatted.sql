@@ -1,3 +1,18 @@
+CREATE TABLE `02918_parallel_replicas`
+(
+    x String,
+    y Int32
+)
+ENGINE = MergeTree
+ORDER BY cityHash64(x);
+
+SET prefer_localhost_replica = 0;
+
+--- if we try to query unavaialble replica, connection will be retried
+--- but a warning log message will be printed out
+SET send_logs_level = 'error';
+
+-- { echoOn }
 SELECT
     y,
     count()
@@ -21,3 +36,8 @@ SETTINGS
     enable_parallel_replicas = 1,
     parallel_replicas_custom_key = 'cityHash64(y)',
     parallel_replicas_mode = 'custom_key_range';
+
+SET use_hedged_requests = 0;
+
+-- { echoOff }
+SET send_logs_level = 'warning';

@@ -1,3 +1,13 @@
+CREATE TABLE bftest
+(
+    k Int64,
+    y Array(Int64) DEFAULT x,
+    x Array(Int64),
+    INDEX ix1 (x) TYPE bloom_filter GRANULARITY 3
+)
+ENGINE = MergeTree
+ORDER BY k;
+
 -- index is not used, but query should still work
 SELECT count()
 FROM bftest
@@ -24,6 +34,8 @@ SELECT count()
 FROM bftest
 WHERE hasAny(y, [toDecimal32(123, 3), 2])
 FORMAT Null; -- different, doesn't fail
+
+SET force_data_skipping_indices = 'ix1';
 
 SELECT count()
 FROM bftest

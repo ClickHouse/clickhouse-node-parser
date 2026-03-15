@@ -1,3 +1,5 @@
+SET parallel_replicas_local_plan=1;
+CREATE TABLE foo (id UInt8, path String) engine = MergeTree ORDER BY (path) SETTINGS index_granularity=1;
 -- check if also escaped sequence are properly extracted
 SELECT trimLeft(explain) FROM (EXPLAIN PLAN indexes=1 SELECT id FROM foo WHERE match(path, '^xxx\\(zzz')) WHERE explain like '%Condition%';
 SELECT count() FROM foo WHERE match(path, '^xxx\\(zzz') SETTINGS force_primary_key = 1;

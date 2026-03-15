@@ -1,4 +1,8 @@
+CREATE TABLE ttl_03519_1 (date Date32, date_key Int) ENGINE=MergeTree TTL date + INTERVAL 1 MONTH ORDER BY date;
 SELECT * FROM ttl_03519_1 ORDER BY date FORMAT CSV;
+CREATE TABLE ttl_03519_2 (date DateTime64(5, 'UTC'), date_key Int) ENGINE=MergeTree TTL date + INTERVAL 1 MONTH ORDER BY date;
 SELECT * FROM ttl_03519_2 ORDER BY date FORMAT CSV;
+CREATE TABLE ttl_03519_3 (date Date32, str String TTL date + INTERVAL 1 MONTH) ENGINE=MergeTree ORDER BY date;
 SELECT * FROM ttl_03519_3 ORDER BY date FORMAT CSV;
+CREATE TABLE ttl_03519_4 (date DateTime64(5, 'UTC'), str String TTL date + INTERVAL 1 MONTH) ENGINE=MergeTree ORDER BY date;
 SELECT * FROM ttl_03519_4 ORDER BY date FORMAT CSV;

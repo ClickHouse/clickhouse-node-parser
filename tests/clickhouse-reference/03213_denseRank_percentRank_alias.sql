@@ -13,6 +13,16 @@ from (select number, intDiv(number, 5) p, mod(number, 3) o
 window w as (partition by p order by o, number)
 order by p, o, number
 settings max_block_size = 2;
+CREATE TABLE product_groups (
+	group_id Int64,
+	group_name String
+) Engine = Memory;
+CREATE TABLE products (
+	product_id Int64,
+	product_name String,
+	price DECIMAL(11, 2),
+	group_id Int64
+) Engine = Memory;
 SELECT *
 FROM
 (

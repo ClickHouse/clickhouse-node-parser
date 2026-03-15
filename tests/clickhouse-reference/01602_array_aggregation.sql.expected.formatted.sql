@@ -18,6 +18,12 @@ SELECT arrayMin([[3], [1], [2]]);
 
 SELECT arrayMax([[3], [1], [2]]);
 
+CREATE TABLE test_aggregation
+(
+    x Array(Int)
+)
+ENGINE = TinyLog;
+
 SELECT arrayMin(x)
 FROM test_aggregation;
 
@@ -29,6 +35,12 @@ FROM test_aggregation;
 
 SELECT arrayAvg(x)
 FROM test_aggregation;
+
+CREATE TABLE test_aggregation
+(
+    x Array(Decimal64(8))
+)
+ENGINE = TinyLog;
 
 SELECT
     toTypeName(arrayMin([toInt8(0)])),

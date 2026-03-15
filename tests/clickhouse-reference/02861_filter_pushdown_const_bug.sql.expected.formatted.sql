@@ -1,3 +1,14 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    key UInt8
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET join_algorithm = 'full_sorting_merge';
+
 SELECT key
 FROM
     (
@@ -34,6 +45,10 @@ INNER JOIN (
     ON t1.key = t2.key
 WHERE t1.key
 ORDER BY key ASC;
+
+SET max_rows_in_set_to_optimize_join = 0;
+
+SET join_algorithm = 'grace_hash';
 
 SELECT *
 FROM

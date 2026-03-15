@@ -1,3 +1,11 @@
+CREATE TABLE test_groupConcat
+(
+    id UInt64,
+    p_int Int32 NULL,
+    p_string String,
+    p_array Array(Int32)
+) ENGINE = MergeTree ORDER BY id;
+SET max_insert_threads = 1, max_threads = 1, min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0;
 SELECT * FROM test_groupConcat;
 SELECT groupConcat(p_int) FROM test_groupConcat;
 SELECT groupConcat(p_string) FROM test_groupConcat;
@@ -22,4 +30,9 @@ SELECT groupConcat(p_array, '/') FROM test_groupConcat SETTINGS enable_analyzer=
 SELECT group_concat(p_array, '/') FROM test_groupConcat SETTINGS enable_analyzer=1;
 SELECT grouP_CONcat(',')(p_array, '/') FROM test_groupConcat SETTINGS enable_analyzer=1; -- overrides current parameter
 SELECT grouP_CONcat(',', 2)(p_array, '/') FROM test_groupConcat SETTINGS enable_analyzer=1; -- works fine with both arguments
+CREATE TABLE test_groupConcat
+(
+    id UInt64,
+    p_int Int32,
+) ENGINE = MergeTree ORDER BY id;
 SELECT length(groupConcat(p_int)) FROM test_groupConcat;

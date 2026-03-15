@@ -1,3 +1,15 @@
+CREATE TABLE test_indexHint_prewhere
+(
+    id UInt32,
+    colA String,
+    colB String,
+    INDEX colA_tokens_idx tokens(colA) TYPE bloom_filter GRANULARITY 1,
+    INDEX colB_tokens_idx tokens(colB) TYPE bloom_filter GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 1;
+
 SELECT count()
 FROM (
         EXPLAIN actions = 1

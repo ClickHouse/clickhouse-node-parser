@@ -1,3 +1,9 @@
+CREATE TABLE map_lc
+(
+    kv Map(LowCardinality(String), LowCardinality(String))
+)
+ENGINE = Memory;
+
 SELECT kv['a']
 FROM map_lc;
 

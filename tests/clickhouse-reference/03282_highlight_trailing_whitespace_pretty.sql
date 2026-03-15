@@ -1,3 +1,8 @@
+SET output_format_pretty_display_footer_column_names = 0;
+SET output_format_pretty_color = 1;
+SET output_format_pretty_highlight_trailing_spaces = 1;
+SET output_format_pretty_fallback_to_vertical = 0;
+CREATE TABLE strings_whitespace (str String) ENGINE = Memory;
 SELECT * FROM strings_whitespace FORMAT Pretty;
 SELECT * FROM strings_whitespace FORMAT PrettyCompact;
 SELECT * FROM strings_whitespace FORMAT PrettyMonoBlock;

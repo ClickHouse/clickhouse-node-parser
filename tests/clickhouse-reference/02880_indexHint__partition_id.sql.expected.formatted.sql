@@ -1,3 +1,12 @@
+CREATE TABLE data
+(
+    part Int
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+PARTITION BY part;
+
+-- { echoOn }
 SELECT *
 FROM data
 PREWHERE indexHint(_partition_id = '1');

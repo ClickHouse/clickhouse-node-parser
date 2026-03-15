@@ -29,15 +29,70 @@ SELECT arrayExcept(materialize(['premium', 'active', 'new']::Array(LowCardinalit
 SELECT arrayExcept(['premium', 'active', 'new']::Array(LowCardinality(String)), materialize(['active']::Array(LowCardinality(String)))) AS result;
 SELECT arrayExcept(materialize(['premium', 'active', 'new']::Array(LowCardinality(String))), materialize(['active']::Array(LowCardinality(String)))) AS result;
 SELECT arrayExcept(['a','b','c']::Array(LowCardinality(String)), ['b','d']::Array(String)) AS result;
+CREATE TABLE 3538_array_except1
+(
+    id UInt32,
+    source Array(UInt32),
+    except Array(UInt32),
+    except_null Array(Nullable(UInt32)),
+    expected Array(UInt32)
+)
+ENGINE = Memory;
 SELECT id, source, except, arrayExcept(source, except) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except1 ORDER BY id;
 SELECT id, source, except_null, arrayExcept(source, except_null) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except1 ORDER BY id;
+CREATE TABLE 3538_array_except2
+(
+    id UInt32,
+    source_null Array(Nullable(UInt32)),
+    except Array(UInt32),
+    expected Array(Nullable(UInt32)),
+    except_null Array(Nullable(UInt32)),
+    expected_null Array(Nullable(UInt32))
+)
+ENGINE = Memory;
 SELECT id, source_null, except, arrayExcept(source_null, except) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except2 ORDER BY id;
 SELECT id, source_null, except_null, arrayExcept(source_null, except_null) AS result, expected_null, if(result = expected_null, 'OK', 'NOK') AS status FROM 3538_array_except2 ORDER BY id;
+CREATE TABLE 3538_array_except3
+(
+    id UInt32,
+    source Array(String),
+    except Array(String),
+    except_null Array(Nullable(String)),
+    expected Array(String)
+)
+ENGINE = Memory;
 SELECT id, source, except, arrayExcept(source, except) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except3 ORDER BY id;
 SELECT id, source, except_null, arrayExcept(source, except_null) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except3 ORDER BY id;
+CREATE TABLE 3538_array_except4
+(
+    id UInt32,
+    source_null Array(Nullable(String)),
+    except Array(String),
+    expected Array(Nullable(String)),
+    except_null Array(Nullable(String)),
+    expected_null Array(Nullable(String))
+)
+ENGINE = Memory;
 SELECT id, source_null, except, arrayExcept(source_null, except) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except4 ORDER BY id;
 SELECT id, source_null, except_null, arrayExcept(source_null, except_null) AS result, expected_null, if(result = expected_null, 'OK', 'NOK') AS status FROM 3538_array_except4 ORDER BY id;
+CREATE TABLE 3538_array_except5 (
+    id UInt32,
+    source Array(FixedString(5)),
+    except Array(FixedString(5)),
+    except_null Array(Nullable(FixedString(5))),
+    expected Array(FixedString(5))
+) ENGINE = Memory;
 SELECT id, source, except, arrayExcept(source, except) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except5 ORDER BY id;
 SELECT id, source, except_null, arrayExcept(source, except_null) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except5 ORDER BY id;
+CREATE TABLE 3538_array_except6
+(
+    id UInt32,
+    source_null Array(Nullable(FixedString(5))),
+    except Array(FixedString(5)),
+    expected Array(Nullable(FixedString(5))),
+    except_null Array(Nullable(FixedString(5))),
+    expected_null Array(Nullable(FixedString(5)))
+)
+ENGINE = Memory;
 SELECT id, source_null, except, arrayExcept(source_null, except) AS result, expected, if(result = expected, 'OK', 'NOK') AS status FROM 3538_array_except6 ORDER BY id;
 SELECT id, source_null, except_null, arrayExcept(source_null, except_null) AS result, expected_null, if(result = expected_null, 'OK', 'NOK') AS status FROM 3538_array_except6 ORDER BY id;

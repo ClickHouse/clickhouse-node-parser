@@ -41,6 +41,16 @@ FROM (
         LIMIT 1001
     );
 
+CREATE TABLE numbers_1001
+(
+    number UInt64
+)
+ENGINE = Memory;
+
+SET min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0;
+
+SET max_block_size = 10;
+
 SELECT quantileExactWeighted(0.5)(number, 1)
 FROM remote('127.0.0.{2,3}', currentDatabase(), numbers_1001);
 

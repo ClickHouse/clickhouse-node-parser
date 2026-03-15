@@ -20,6 +20,8 @@ FROM (
         ORDER BY k ASC
     ); -- { serverError DEPRECATED_FUNCTION }
 
+SET allow_deprecated_error_prone_window_functions = 1;
+
 SELECT
     number,
     neighbor(number, 2)

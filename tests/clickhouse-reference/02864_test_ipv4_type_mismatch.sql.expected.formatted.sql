@@ -1,15 +1,1 @@
-SELECT *
-FROM test
-ORDER BY ip ASC;
-
-SELECT ip IN (IPv4StringToNum('1.1.1.1'))
-FROM test
-ORDER BY ip ASC;
-
-SELECT ip IN ('1.1.1.1')
-FROM test
-ORDER BY ip ASC;
-
-SELECT ip IN (IPv4StringToNum('8.8.8.8'))
-FROM test
-ORDER BY ip ASC;
+<Parse Error>

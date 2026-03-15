@@ -1,2 +1,1 @@
-SELECT COUNT()
-FROM default_table;
+<Parse Error>

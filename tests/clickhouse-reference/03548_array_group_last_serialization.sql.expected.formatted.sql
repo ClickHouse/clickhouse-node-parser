@@ -1,9 +1,1 @@
-SELECT v00
-FROM t1
-ORDER BY k0 ASC
-FORMAT JSONEachRow;
-
-SELECT v
-FROM t_memory
-ORDER BY k ASC
-FORMAT JSONEachRow;
+<Parse Error>

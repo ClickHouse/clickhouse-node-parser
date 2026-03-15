@@ -1,3 +1,12 @@
+CREATE TABLE `02861_interpolate`
+(
+    date Date,
+    id String,
+    f Int16
+)
+ENGINE = MergeTree()
+ORDER BY date;
+
 SELECT
     date AS d,
     toNullable(f) AS f

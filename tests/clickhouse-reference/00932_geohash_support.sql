@@ -1,3 +1,8 @@
+create table geohash_test_data (
+	latitude  Float64,
+	longitude Float64,
+	encoded   String
+) engine = MergeTree order by (latitude, longitude, encoded);
 select geohashEncode(181.0, 91.0);
 select geohashEncode(-181.0, -91.0);
 select count(geohashDecode('abcdefghijklmnopqrstuvwxyz'));

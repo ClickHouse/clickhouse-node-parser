@@ -1,3 +1,4 @@
+create table map_test engine=TinyLog() as (select (number + 1) as n, ([1, number], [1,2]) as map from numbers(1, 5));
 select mapPopulateSeries(map.1, map.2) from map_test;
 select mapPopulateSeries(map.1, map.2, toUInt64(3)) from map_test;
 select mapPopulateSeries(map.1, map.2, toUInt64(10)) from map_test;

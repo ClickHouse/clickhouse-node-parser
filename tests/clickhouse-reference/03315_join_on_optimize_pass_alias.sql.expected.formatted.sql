@@ -1,3 +1,19 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    x Nullable(Int32),
+    y Nullable(Int32)
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    x Nullable(Int32),
+    y Nullable(Int32)
+)
+ENGINE = Memory;
+
 SELECT e2
 FROM
     t1

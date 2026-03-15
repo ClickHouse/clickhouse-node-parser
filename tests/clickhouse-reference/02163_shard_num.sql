@@ -1,4 +1,4 @@
-
+-- { echoOn }
 
 SELECT shardNum() AS shard_num, sum(1) as rows FROM remote('127.{1,2}', system, one) GROUP BY _shard_num ORDER BY _shard_num;
 SELECT shardNum() AS shard_num, sum(1) as rows FROM remote('127.{1,2}', system, one) GROUP BY shard_num ORDER BY shard_num;

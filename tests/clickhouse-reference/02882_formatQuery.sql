@@ -1,3 +1,5 @@
+CREATE TABLE all_valid (id UInt64, query String) ENGINE=MergeTree ORDER BY id;
+CREATE TABLE some_invalid (id UInt64, query String) ENGINE=MergeTree ORDER BY id;
 SELECT '-- formatQuery';
 SELECT formatQuery('SELECT 1;');
 SELECT formatQuery('SELECT 1');

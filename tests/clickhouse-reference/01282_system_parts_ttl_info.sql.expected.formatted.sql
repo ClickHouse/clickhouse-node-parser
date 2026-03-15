@@ -1,3 +1,12 @@
+CREATE TABLE ttl
+(
+    d DateTime
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+TTL d + toIntervalDay(10)
+SETTINGS remove_empty_parts = 0;
+
 SELECT
     `rows`,
     delete_ttl_info_min,

@@ -1,3 +1,11 @@
+CREATE TABLE t_transform_or
+(
+    B AggregateFunction(uniq, String),
+    A String
+)
+ENGINE = MergeTree
+ORDER BY A;
+
 SELECT uniqMergeIf(B, (A = '1')
     OR (A = '2')
     OR (A = '3'))

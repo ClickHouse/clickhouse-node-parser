@@ -1,3 +1,11 @@
+CREATE TABLE `fill`
+(
+    date Date,
+    val Int,
+    str String
+)
+ENGINE = Memory;
+
 -- *** table without fill to compare ***
 SELECT *
 FROM `fill`
@@ -36,6 +44,13 @@ FROM `fill`
 ORDER BY
     date ASC WITH FILL TO toDate('2019-06-23') STEP 3,
     val ASC WITH FILL FROM -10 STEP 2;
+
+CREATE TABLE `fill`
+(
+    a UInt32,
+    b Int32
+)
+ENGINE = Memory;
 
 -- *** table without fill to compare ***
 SELECT *

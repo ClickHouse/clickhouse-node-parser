@@ -1,3 +1,4 @@
+set enable_analyzer = 1;
 select quantilesGK(10000, 0.25, 0.5, 0.75, 0.0, 1.0, 0, 1)(number + 1) from numbers(1000);
 select quantilesGK(10000, 0.01, 0.1, 0.11)(number + 1) from numbers(10);
 select quantilesGK(1, 100/1000, 200/1000, 250/1000, 314/1000, 777/1000)(number + 1) from numbers(1000);

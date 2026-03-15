@@ -1,5 +1,103 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_partitions_per_insert_block",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "99999999"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "compatibility",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "23.3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c3",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c2",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c2"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c1"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c4",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c4"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

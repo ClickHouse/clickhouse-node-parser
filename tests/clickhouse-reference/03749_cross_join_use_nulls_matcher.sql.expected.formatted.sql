@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT concat(*) AS x
 FROM
     numbers(2) AS n1

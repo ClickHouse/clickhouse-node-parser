@@ -1,3 +1,15 @@
+-- Tests that text indexes can be created and used on subcolumns
+SET enable_full_text_index = 1;
+
+CREATE TABLE tab
+(
+    data JSON(a String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET mutations_sync = 2;
+
 SELECT sum(secondary_indices_compressed_bytes) > 0
 FROM `system`.parts
 WHERE database = currentDatabase()
@@ -13,6 +25,15 @@ SELECT count()
 FROM tab
 WHERE data.b::String = 'bbb'
 SETTINGS force_data_skipping_indices = 'b_idx';
+
+-- Test the same, but for compact parts
+CREATE TABLE tab
+(
+    id UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 100000000;
 
 SELECT column
 FROM `system`.parts_columns

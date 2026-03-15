@@ -12,4 +12,5 @@ select * from urlCluster('test_cluster_one_shard_three_replicas_localhost', 'htt
 select * from urlCluster('test_cluster_one_shard_three_replicas_localhost', 'http://localhost:11111/test/{a,b}.tsv', 'auto') order by c1, c2, c3;
 select * from urlCluster('test_cluster_one_shard_three_replicas_localhost', 'http://localhost:11111/test/{a,b}.tsv', 'TSV', 'auto') order by c1, c2, c3;
 select * from urlCluster('test_cluster_one_shard_three_replicas_localhost', 'http://localhost:11111/test/{a,b}.tsv', 'TSV', 'auto', 'auto') order by c1, c2, c3;
+create table test (x UInt32, y UInt32, z UInt32) engine=Memory();
 select * from test;

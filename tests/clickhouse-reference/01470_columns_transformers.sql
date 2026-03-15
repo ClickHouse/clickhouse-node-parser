@@ -1,3 +1,4 @@
+CREATE TABLE columns_transformers (i Int64, j Int16, k Int64) Engine=TinyLog;
 SELECT * APPLY(sum) from columns_transformers;
 SELECT * APPLY sum from columns_transformers;
 SELECT columns_transformers.* APPLY(avg) from columns_transformers;

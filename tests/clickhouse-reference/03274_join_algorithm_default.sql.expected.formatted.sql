@@ -1,8 +1,26 @@
+SET query_plan_join_swap_table = false;
+
+SET allow_experimental_analyzer = 1;
+
+SET enable_parallel_replicas = 0;
+
+SET query_plan_optimize_join_order_limit = 0;
+
+SET enable_join_runtime_filters = 0;
+
 -- Test that with default join_algorithm setting, we are doing a parallel hash join
 SELECT value == 'direct,parallel_hash,hash'
 FROM `system`.`settings`
 WHERE name = 'join_algorithm';
 
+-- Test that join_algorithm = default does a hash join
+SET join_algorithm = 'default';
+
 SELECT value == 'default'
 FROM `system`.`settings`
 WHERE name = 'join_algorithm';
+
+SET join_algorithm = DEFAULT; -- reset
+
+-- Check that compat setting also achieves a hash join
+SET compatibility = '24.11';

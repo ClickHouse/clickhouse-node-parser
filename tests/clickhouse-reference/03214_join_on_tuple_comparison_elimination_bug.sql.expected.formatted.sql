@@ -1,3 +1,17 @@
+CREATE TABLE a
+(
+    key Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE b
+(
+    key Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT a.key
 FROM
     a

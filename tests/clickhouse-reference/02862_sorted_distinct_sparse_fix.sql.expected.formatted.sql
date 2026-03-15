@@ -1,3 +1,15 @@
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+
+CREATE TABLE t_sparse_distinct
+(
+    id UInt32,
+    v String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0.9;
+
+-- { echoOn }
 SELECT
     name,
     column,
@@ -7,6 +19,10 @@ WHERE table = 't_sparse_distinct'
     AND database = currentDatabase()
     AND column = 'v'
 ORDER BY name ASC;
+
+SET optimize_distinct_in_order = 1;
+
+SET max_threads = 1;
 
 SELECT splitByString(' ', trimLeft(`explain`))[1]
 FROM (

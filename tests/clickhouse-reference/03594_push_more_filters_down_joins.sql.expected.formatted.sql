@@ -1,3 +1,33 @@
+CREATE TABLE t1
+(
+    id Int32,
+    fid Int32,
+    tid Int32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t2
+(
+    id Int32,
+    status Nullable(String),
+    resource_id Nullable(Int32)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t3
+(
+    id Int32,
+    status String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET enable_parallel_replicas = 0;
+
+SET enable_analyzer = 1;
+
 SELECT 1
 FROM
     t2

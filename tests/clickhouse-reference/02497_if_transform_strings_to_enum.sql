@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+SET optimize_if_transform_strings_to_enum = 1;
 SELECT transform(number, [2, 4, 6], ['google', 'censor.net', 'yahoo'], 'other') FROM system.numbers LIMIT 10;
 SELECT number > 5 ? 'censor.net' : 'google' FROM system.numbers LIMIT 10;
 SELECT CONCAT(transform(number, [2, 4, 6], ['google', 'censor.net', 'yahoo'], 'other'), '1') FROM system.numbers LIMIT 10;
@@ -8,3 +10,4 @@ SELECT number > 5 ? 'censor.net' : 'google' as value, value FROM system.numbers 
 SELECT transform(number, [2, 4, 6], ['google', 'censor.net', 'yahoo'], 'other') as value, value FROM system.numbers LIMIT 10;
 SELECT transform(number, [NULL], ['google', 'censor.net', 'yahoo'], 'other') FROM (SELECT NULL as number FROM system.numbers LIMIT 10);
 SELECT transform(number, NULL, ['google', 'censor.net', 'yahoo'], 'other') FROM system.numbers LIMIT 10; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+SET optimize_if_transform_strings_to_enum = 0;

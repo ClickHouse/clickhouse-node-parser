@@ -1,3 +1,39 @@
+CREATE TABLE `interval`
+(
+    id String,
+    start Int64,
+    `end` Int64
+)
+ENGINE = MergeTree
+ORDER BY start;
+
+CREATE TABLE fl_interval
+(
+    id String,
+    start Float,
+    `end` Float
+)
+ENGINE = MergeTree
+ORDER BY start;
+
+CREATE TABLE dt_interval
+(
+    id String,
+    start DateTime,
+    `end` DateTime
+)
+ENGINE = MergeTree
+ORDER BY start;
+
+CREATE TABLE date_interval
+(
+    id String,
+    start Date,
+    `end` Date
+)
+ENGINE = MergeTree
+ORDER BY start;
+
 SELECT
     id,
     intervalLengthSum(start, `end`),

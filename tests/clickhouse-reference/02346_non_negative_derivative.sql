@@ -1,3 +1,9 @@
+CREATE TABLE nnd
+(
+    id Int8, ts DateTime64(3, 'UTC'), metric Float64
+)
+ENGINE=MergeTree()
+ORDER BY id;
 -- shall work for precise intervals
 -- INTERVAL 1 SECOND shall be default
 SELECT (

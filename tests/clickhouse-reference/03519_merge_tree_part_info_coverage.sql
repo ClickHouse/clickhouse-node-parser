@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+create table mt (names Array(String)) engine = MergeTree order by names;
 select
     tag1 as part_name
 from (

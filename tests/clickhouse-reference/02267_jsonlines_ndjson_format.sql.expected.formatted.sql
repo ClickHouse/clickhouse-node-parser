@@ -6,6 +6,13 @@ SELECT *
 FROM numbers(10)
 FORMAT NDJSON;
 
+CREATE TABLE `02267_t`
+(
+    n1 UInt32,
+    n2 UInt32
+)
+ENGINE = Memory;
+
 SELECT *
 FROM `02267_t`
 ORDER BY

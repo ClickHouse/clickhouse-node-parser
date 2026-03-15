@@ -1,3 +1,7 @@
+-- Tags: distributed
+
+SET log_queries=1;
+CREATE TEMPORARY TABLE times (t DateTime);
 SELECT count('special query for 01290_max_execution_speed_distributed')
 FROM
 (

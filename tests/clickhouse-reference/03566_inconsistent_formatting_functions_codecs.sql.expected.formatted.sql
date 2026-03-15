@@ -1,3 +1,10 @@
+CREATE TEMPORARY TABLE a
+(
+    b UInt8
+)
+ENGINE = MergeTree
+ORDER BY b;
+
 SELECT f(`@`); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT `@`(1); -- { serverError UNKNOWN_FUNCTION }

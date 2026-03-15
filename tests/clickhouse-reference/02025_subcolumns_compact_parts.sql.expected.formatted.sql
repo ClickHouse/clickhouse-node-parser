@@ -1,3 +1,12 @@
+CREATE TABLE t_comp_subcolumns
+(
+    id UInt32,
+    n Nullable(String),
+    arr Array(Array(UInt32))
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT sum(n.`null`)
 FROM t_comp_subcolumns;
 

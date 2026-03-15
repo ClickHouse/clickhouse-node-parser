@@ -1,3 +1,14 @@
+CREATE TABLE pk_block_union
+(
+    d Date DEFAULT '2000-01-01',
+    x DateTime,
+    y UInt64,
+    z UInt64
+)
+ENGINE = MergeTree()
+ORDER BY (toStartOfMinute(x), y, z)
+PARTITION BY d;
+
 SELECT
     cityHash64(1, (x = 3)
     AND (y = 44), '0', 1, 1, 1, 1, 1, 1, 1, toLowCardinality(1), 1, 1, 1, 1, 1, toNullable(toUInt256(1)), 1, 1, 1, toUInt128(1), 1, toLowCardinality(toUInt128(1)), 1, 1),

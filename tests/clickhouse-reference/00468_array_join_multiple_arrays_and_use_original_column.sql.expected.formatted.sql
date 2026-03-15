@@ -1,3 +1,9 @@
+CREATE TABLE nested
+(
+    nest Nested(x UInt8, y UInt8)
+)
+ENGINE = Memory;
+
 SELECT nx
 FROM
     nested

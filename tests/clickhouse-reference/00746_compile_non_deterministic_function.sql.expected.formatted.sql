@@ -1,3 +1,15 @@
+SET compile_expressions = 1;
+
+SET min_count_to_compile_expression = 1;
+
+CREATE TABLE time_table
+(
+    timecol DateTime,
+    value Int32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT COUNT()
 FROM time_table
 WHERE value < now() - 1

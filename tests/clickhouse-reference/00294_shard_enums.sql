@@ -1,5 +1,15 @@
+-- Tags: shard
+
+set max_threads = 1;
+set allow_deprecated_syntax_for_merge_tree=1;
+create table enums (
+    d Date default '2015-12-29', k default 0,
+    e Enum8('world' = 2, 'hello' = 1), sign Enum8('minus' = -1, 'plus' = 1),
+    letter Enum16('a' = 0, 'b' = 1, 'c' = 2, '*' = -256)
+) engine = MergeTree(d, k, 1);
 select * from enums;
 select * from enums ORDER BY _part;
+create table enums (e Enum8('a' = 0, 'b' = 1, 'c' = 2, 'd' = 3)) engine = TinyLog;
 -- ORDER BY
 select * from enums order by e;
 select * from enums order by e desc;
@@ -19,5 +29,7 @@ select *, e < 'b' from enums;
 select *, e > 'b' from enums;
 -- Conversion
 select toInt8(e), toInt16(e), toUInt64(e), toString(e), e from enums;
+create table enums_copy engine = TinyLog as select * from enums;
 select * from enums_copy;
+create table enums_copy engine = TinyLog as select * from remote('127.0.0.2', currentDatabase(), enums);
 select * from remote('127.0.0.2', currentDatabase(), enums_copy);

@@ -20,3 +20,8 @@ SELECT
     tag
 FROM `system`.query_cache
 ORDER BY `ALL` ASC;
+
+-- Like before but the tag is set standalone.
+SET query_cache_tag = 'abc';
+
+SET query_cache_tag = 'def';

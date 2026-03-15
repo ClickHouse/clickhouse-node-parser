@@ -1,3 +1,11 @@
+CREATE TABLE table_map
+(
+    id UInt32,
+    col Map(String, UInt64)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT mapFilter((k, v) -> like(k, '%3')
     AND v > 102, col)
 FROM table_map

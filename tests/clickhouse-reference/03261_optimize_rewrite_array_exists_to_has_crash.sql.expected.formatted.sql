@@ -1,3 +1,9 @@
+CREATE TABLE rewrite
+(
+    c0 Int
+)
+ENGINE = Memory();
+
 SELECT 1
 FROM
     rewrite

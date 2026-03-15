@@ -1,3 +1,17 @@
+CREATE TEMPORARY TABLE sessions
+(
+    date DateTime,
+    visitorId String,
+    sessionId String
+);
+
+CREATE TEMPORARY TABLE orders
+(
+    date DateTime,
+    visitorId String,
+    orderId String
+);
+
 SELECT
     visitorId,
     orderId,

@@ -1,3 +1,6 @@
+set allow_experimental_dynamic_type = 1;
+set allow_suspicious_types_in_order_by=1;
+create table test (d1 Dynamic(max_types=2), d2 Dynamic(max_types=2)) engine=Memory;
 select d1, dynamicType(d1), isDynamicElementInSharedData(d1) from test order by d1 nulls first;
 select d1, dynamicType(d1), isDynamicElementInSharedData(d1) from test order by d1 nulls last;
 select d2, dynamicType(d2), isDynamicElementInSharedData(d2) from test order by d2 nulls first;

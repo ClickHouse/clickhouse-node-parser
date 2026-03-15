@@ -1,5 +1,61 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "full_sorting_merge"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "events0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "begin",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "begin"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -194,6 +250,148 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "events"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "begin",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "begin"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- SETTINGS join_use_nulls = 1"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "probes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": "Float64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ts"
+        ]
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key",
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ts",
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ],
+          "alias": "key"
+        },
+        "kind": "join",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "tableFunction",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ],
+          "alias": "ts"
+        }
+      },
+      "settings": [
+        {
+          "name": "join_algorithm",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "hash"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -300,9 +498,6 @@
         },
         "direction": "ASC"
       }
-    ],
-    "leadingComments": [
-      "-- SETTINGS join_use_nulls = 1"
     ]
   },
   {

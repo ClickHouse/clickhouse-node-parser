@@ -1,3 +1,14 @@
+CREATE TABLE adaptive_table(
+    key UInt64,
+    value String
+) ENGINE MergeTree()
+ORDER BY key
+SETTINGS
+    index_granularity_bytes=1048576,
+    min_bytes_for_wide_part=0,
+    old_parts_lifetime=0,
+    index_granularity=8192
+;
 SELECT 'marks', marks FROM system.parts WHERE table = 'adaptive_table' AND database = currentDatabase() AND active FORMAT CSV;
 -- This works correctly, since it does not read any marks
 SELECT 'optimize_trivial_count_query', count() FROM adaptive_table SETTINGS

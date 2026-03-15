@@ -1,3 +1,12 @@
+CREATE TABLE foo
+(
+    open_time Int64,
+    open_price Int8,
+    close_price Int8
+)
+ENGINE = MergeTree
+ORDER BY open_time;
+
 -- Both interpolate expression are removed
 SELECT group_id
 FROM (

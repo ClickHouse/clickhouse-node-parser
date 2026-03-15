@@ -1,3 +1,19 @@
+-- Tags: no-parallel, no-random-settings, no-object-storage
+-- add_minmax_index_for_numeric_columns=0: More opened files
+-- Does additional index analysis round that the test doesn't expect
+SET automatic_parallel_replicas_mode = 0;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE t_index_hint
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY a
+SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, serialization_info_version = 'basic', add_minmax_index_for_numeric_columns = 0;
+
 SELECT sum(b)
 FROM t_index_hint
 WHERE b >= 100
@@ -33,6 +49,17 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND like(query, '%SELECT sum(b) FROM t_index_hint%')
 ORDER BY event_time_microseconds ASC;
+
+CREATE TABLE t_index_hint
+(
+    a UInt64,
+    s String,
+    s_tokens Array(String) MATERIALIZED arrayDistinct(splitByWhitespace(s)),
+    INDEX idx_tokens s_tokens TYPE bloom_filter(0.01) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY a
+SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, serialization_info_version = 'basic';
 
 SELECT count()
 FROM t_index_hint

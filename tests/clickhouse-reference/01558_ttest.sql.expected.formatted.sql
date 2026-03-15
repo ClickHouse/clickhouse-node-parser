@@ -1,5 +1,19 @@
+CREATE TABLE welch_ttest
+(
+    `left` Float64,
+    `right` UInt8
+)
+ENGINE = Memory;
+
 SELECT roundBankers(welchTTest(`left`, `right`).2, 6)
 FROM welch_ttest;
+
+CREATE TABLE welch_ttest
+(
+    `left` Float64,
+    `right` Float64
+)
+ENGINE = Memory;
 
 SELECT
     '-0.5028215369186904',
@@ -19,6 +33,16 @@ SELECT
     roundBankers(welchTTest(0.95)(`left`, `right`).4, 6) AS p_value
 FROM welch_ttest;
 
+/*Check t-stat and p-value and compare it with scipy.stat implementation
+  First: a=1, sigma (not sigma^2)=5, size=500
+  Second: a=1, sigma = 5, size = 500 */
+CREATE TABLE student_ttest
+(
+    `left` Float64,
+    `right` Float64
+)
+ENGINE = Memory;
+
 SELECT
     '-2.610898982580138',
     '0.00916587538237954';
@@ -36,6 +60,12 @@ SELECT
     roundBankers(studentTTest(0.95)(`left`, `right`).3, 6) AS t_stat,
     roundBankers(studentTTest(0.95)(`left`, `right`).4, 6) AS p_value
 FROM student_ttest;
+
+CREATE TABLE onesample_ttest
+(
+    value Float64
+)
+ENGINE = Memory;
 
 SELECT
     '0.376423',

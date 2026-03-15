@@ -1,3 +1,17 @@
+-- Tags: no-fasttest
+SET send_logs_level = 'fatal'; -- failed connection tries are ok, if it succeeded after retry.
+
+CREATE TABLE foo
+(
+    key UInt32,
+    a String,
+    b Int64,
+    c String
+)
+ENGINE = TinyLog;
+
+SET enable_analyzer = 1;
+
 SELECT '---';
 
 SELECT *

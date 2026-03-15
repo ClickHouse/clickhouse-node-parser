@@ -1,7 +1,18 @@
+CREATE TABLE test_02559
+(
+    x UInt8,
+    s String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT *
 FROM test_02559
 ORDER BY x ASC;
 
+SET enable_multiple_prewhere_read_steps = true, move_all_conditions_to_prewhere = true;
+
+-- { echoOn }
 SELECT s
 FROM test_02559
 PREWHERE x

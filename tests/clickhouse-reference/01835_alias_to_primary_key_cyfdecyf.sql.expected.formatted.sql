@@ -1,3 +1,16 @@
+CREATE TABLE tb
+(
+    date Date,
+    index Int32,
+    value Int32,
+    idx Int32 ALIAS index
+)
+ENGINE = MergeTree
+ORDER BY (date, index)
+PARTITION BY date;
+
+SET force_primary_key = 1;
+
 SELECT *
 FROM tb
 WHERE index >= 0

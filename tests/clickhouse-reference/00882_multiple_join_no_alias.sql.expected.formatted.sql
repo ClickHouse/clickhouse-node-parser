@@ -1,3 +1,24 @@
+CREATE TABLE t
+(
+    a Int64,
+    b Int64
+)
+ENGINE = Memory;
+
+CREATE TABLE s
+(
+    a Int64,
+    b Int64
+)
+ENGINE = Memory;
+
+CREATE TABLE y
+(
+    a Int64,
+    b Int64
+)
+ENGINE = Memory;
+
 SELECT
     s.a,
     s.a,

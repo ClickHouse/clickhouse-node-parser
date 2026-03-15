@@ -1,3 +1,18 @@
+CREATE TABLE t_00725_3
+(
+    a Int64,
+    b Int64
+)
+ENGINE = TinyLog;
+
+CREATE TABLE z_00725_3
+(
+    c Int64,
+    d Int64,
+    e Int64
+)
+ENGINE = TinyLog;
+
 SELECT *
 FROM
     t_00725_3

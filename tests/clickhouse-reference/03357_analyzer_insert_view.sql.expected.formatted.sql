@@ -1,3 +1,1 @@
-SELECT *
-FROM deduplicate_mv
-FORMAT Null;
+<Parse Error>

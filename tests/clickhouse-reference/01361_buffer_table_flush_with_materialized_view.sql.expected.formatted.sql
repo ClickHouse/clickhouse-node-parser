@@ -1,8 +1,1 @@
-SELECT count()
-FROM b1_01361;
-
-SELECT count()
-FROM t1_01361;
-
-SELECT count()
-FROM t2_01361;
+<Parse Error>

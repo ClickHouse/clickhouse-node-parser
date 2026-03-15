@@ -1,3 +1,11 @@
+CREATE TABLE bitmap_test(pickup_date Date, city_id UInt32, uid UInt64)ENGINE = Memory;
+CREATE TABLE bitmap_state_test
+(
+	pickup_date Date,
+	city_id UInt32,
+    uv AggregateFunction( groupBitmap, UInt64 )
+)
+ENGINE = AggregatingMergeTree() PARTITION BY toYYYYMM(pickup_date) ORDER BY (pickup_date, city_id);
 SELECT pickup_date, groupBitmapMerge(uv) AS users from bitmap_state_test group by pickup_date order by pickup_date;
 SELECT groupBitmap( uid ) AS user_num FROM bitmap_test;
 SELECT pickup_date, groupBitmap( uid ) AS user_num, bitmapToArray(groupBitmapState( uid )) AS users FROM bitmap_test GROUP BY pickup_date order by pickup_date;

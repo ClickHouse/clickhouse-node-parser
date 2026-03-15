@@ -1,3 +1,6 @@
+CREATE TABLE t (x String) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE nt (x Nullable(String)) ENGINE = MergeTree ORDER BY tuple();
+SET join_use_nulls = 1;
 SELECT 'n rj n', t1.x, t2.x FROM nt AS t1 RIGHT JOIN nt AS t2 ON t1.x = t2.x ORDER BY t1.x;
 SELECT 'n fj n', t1.x, t2.x FROM nt AS t1 FULL JOIN nt AS t2 ON t1.x = t2.x ORDER BY t1.x;
 SELECT 't rj n', t1.x, t2.x FROM t AS t1 RIGHT JOIN nt AS t2 ON t1.x = t2.x ORDER BY t1.x;

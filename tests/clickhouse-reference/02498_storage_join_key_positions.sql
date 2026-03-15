@@ -1,3 +1,10 @@
+-- Tags: no-parallel-replicas
+-- It generates plan with _reading_ from storage join, but reading from storage join with complex keys is currently not supported.
+
+SET enable_parallel_replicas = 0;
+CREATE TABLE t1 (key1 UInt64, key2 UInt64, key3 UInt64) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE tj (key2 UInt64, key1 UInt64, key3 UInt64, attr UInt64) ENGINE = Join(ALL, INNER, key3, key2, key1);
+CREATE TABLE tjj (key2 UInt64, key1 UInt64, key3 UInt64, attr UInt64) ENGINE = Join(ALL, INNER, key3, key2, key1);
 SELECT '--- using ---';
 SELECT * FROM t1 ALL INNER JOIN tj USING (key1, key2, key3) ORDER BY key1;
 SELECT key1, key2, key3, attr FROM t1 ALL INNER JOIN tj USING (key1, key2, key3) ORDER BY key1;

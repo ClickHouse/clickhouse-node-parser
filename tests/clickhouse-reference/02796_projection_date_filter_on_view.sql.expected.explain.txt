@@ -1,3 +1,103 @@
+CreateQuery fx_1m (children 3)
+ Identifier fx_1m
+ Columns definition (children 1)
+  ExpressionList (children 7)
+   ColumnDeclaration symbol (children 2)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function ZSTD
+   ColumnDeclaration dt_close (children 2)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 2)
+      Literal UInt64_3
+      Literal 'UTC'
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function DoubleDelta
+      Function ZSTD
+   ColumnDeclaration open (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+   ColumnDeclaration high (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+   ColumnDeclaration low (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+   ColumnDeclaration close (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+   ColumnDeclaration volume (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+ Storage definition (children 4)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function toYear (children 1)
+   ExpressionList (children 1)
+    Identifier dt_close
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier symbol
+    Identifier dt_close
+  Set
+
+CreateQuery fx_5m (children 2)
+ Identifier fx_5m
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 7)
+     Identifier symbol
+     Function toStartOfInterval (alias dt_close) (children 1)
+      ExpressionList (children 2)
+       Identifier dt_close
+       Function toIntervalSecond (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_300
+     Function argMin (alias open) (children 1)
+      ExpressionList (children 2)
+       Identifier open
+       Identifier dt_close
+     Function max (alias high) (children 1)
+      ExpressionList (children 1)
+       Identifier high
+     Function min (alias low) (children 1)
+      ExpressionList (children 1)
+       Identifier low
+     Function argMax (alias close) (children 1)
+      ExpressionList (children 2)
+       Identifier close
+       Identifier dt_close
+     Function sum (alias volume) (children 1)
+      ExpressionList (children 1)
+       Identifier volume
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier fx_1m
+    ExpressionList (children 2)
+     Identifier symbol
+     Identifier dt_close
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 4)

@@ -1,3 +1,8 @@
+set input_format_try_infer_datetimes = 1;
+set input_format_try_infer_dates = 1;
+set schema_inference_make_columns_nullable = 0;
+set input_format_json_try_infer_numbers_from_strings = 0;
+set session_timezone = 'UTC';
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2020:01:01"}');
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2020:1:01"}');
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2020:01:1"}');
@@ -35,6 +40,7 @@ select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2020a01a01 42:42:42.42
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2020-01-01 42.42.42.4242"}');
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2020-01-01 42 42 42.4242"}');
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2020-01-01 42a42a42.4242"}');
+set date_time_input_format='best_effort';
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2000-01-01 00:00:00"}');
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2000-01-01 01:00:00"}');
 select x, toTypeName(x) from format(JSONEachRow, '{"x" : "2000-01-01 01:00:00.000"}');

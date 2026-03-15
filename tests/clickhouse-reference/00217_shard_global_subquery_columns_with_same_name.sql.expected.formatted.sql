@@ -1,3 +1,6 @@
+-- Tags: shard
+SET joined_subquery_requires_alias = 0;
+
 SELECT
     k,
     a

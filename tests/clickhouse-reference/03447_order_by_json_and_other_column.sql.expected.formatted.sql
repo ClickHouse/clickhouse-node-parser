@@ -1,3 +1,9 @@
+CREATE TABLE test
+(
+    json JSON
+)
+ENGINE = Memory;
+
 SELECT
     json,
     materialize('')

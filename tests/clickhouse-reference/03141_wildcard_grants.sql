@@ -1,1 +1,2 @@
+CREATE USER user_03141;
 SELECT '---';

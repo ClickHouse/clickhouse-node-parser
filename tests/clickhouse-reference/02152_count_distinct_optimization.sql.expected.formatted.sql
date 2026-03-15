@@ -1,3 +1,13 @@
+CREATE TABLE table_02152
+(
+    a String,
+    b LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+SET count_distinct_optimization = true;
+
 SELECT countDistinct(a)
 FROM table_02152;
 
@@ -15,3 +25,5 @@ FROM (
 SELECT uniqExact(x)
 FROM numbers(10)
 GROUP BY number % 2 AS x;
+
+SET count_distinct_optimization = false;

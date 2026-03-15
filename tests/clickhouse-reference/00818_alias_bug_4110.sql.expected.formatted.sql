@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     s.a AS a,
     s.a + 1 AS b
@@ -98,6 +100,13 @@ FROM (
         SELECT 1 AS value
     ) AS data
 WHERE data.value > 0;
+
+CREATE TABLE test_00818
+(
+    field String,
+    not_field String
+)
+ENGINE = Memory;
 
 SELECT
     test_00818.field AS other_field,

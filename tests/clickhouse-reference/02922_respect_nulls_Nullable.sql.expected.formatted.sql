@@ -31,6 +31,7 @@ WHERE any_ignore != any_respect
     OR last_nullable_ignore != last_nullable_respect
     OR toTypeName(last_nullable_ignore) != toTypeName(last_nullable_respect);
 
+-- { echoOn }
 SELECT anyOrNull(tp)
 FROM (
         SELECT (number, number) AS tp

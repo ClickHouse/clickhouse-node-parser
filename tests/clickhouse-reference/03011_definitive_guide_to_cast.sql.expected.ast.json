@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Europe/Amsterdam"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -49,6 +62,22 @@
     ],
     "leadingComments": [
       "-- and composite data types:"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cast_keep_nullable",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Its return type depends on the setting `cast_keep_nullable`. If it is enabled, if the source argument type is Nullable, the resulting data type will be also Nullable, even if it is not written explicitly:"
     ]
   },
   {
@@ -106,6 +135,19 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cast_keep_nullable",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -158,6 +200,47 @@
     "kind": "select",
     "select": [
       {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "['Hello', 'wo\\\\'rld\\\\\\\\']"
+              },
+              "type": "Array(String)"
+            }
+          ]
+        },
+        "alias": "x"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "wo\\\\'rld\\\\\\\\"
+          },
+          "type": "FixedString(9)"
+        },
+        "alias": "y"
+      }
+    ],
+    "leadingComments": [
+      "-- '",
+      "-- While for simple data types, it does not interpret escape sequences:"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
         "kind": "castExpr",
         "expr": {
           "kind": "literal",
@@ -177,8 +260,8 @@
       }
     ],
     "leadingComments": [
-      "-- '",
-      "-- While for simple data types, it does not interpret escape sequences:"
+      "-- As conversion from String is similar to direct parsing rather than conversion from other types,",
+      "-- it can be stricter for numbers by not tolerating overflows in some cases:"
     ]
   },
   {

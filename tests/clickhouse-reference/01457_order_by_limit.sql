@@ -1,3 +1,4 @@
+create table order_by_another (a Nullable(UInt64), b UInt64) Engine = MergeTree order by tuple();
 select a, b from order_by_another order by a asc nulls last, b asc limit 4;
 select a, b from order_by_another order by a asc nulls first, b asc limit 4;
 select a, b from order_by_another order by a desc nulls last, b asc limit 4;

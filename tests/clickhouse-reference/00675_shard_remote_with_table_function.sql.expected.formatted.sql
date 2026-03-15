@@ -1,3 +1,9 @@
+CREATE TABLE remote_test
+(
+    a1 UInt8
+)
+ENGINE = Memory;
+
 SELECT COUNT(*)
 FROM remote('127.0.0.1', currentDatabase(), remote_test);
 

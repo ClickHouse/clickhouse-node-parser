@@ -1,3 +1,4 @@
+CREATE TABLE datetime (d DateTime('UTC')) ENGINE = Memory;
 SELECT quantile(0.2)(d) FROM datetime;
 SELECT quantiles(0.2)(d) FROM datetime;
 SELECT quantileDeterministic(0.2)(d, 1) FROM datetime;

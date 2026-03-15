@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+SET optimize_extract_common_expressions = 1;
+CREATE TABLE x (x Int64, A UInt8, B UInt8, C UInt8, D UInt8, E UInt8, F UInt8) ENGINE = MergeTree ORDER BY x;
 -- Test multiple cases
 SELECT * FROM x WHERE A AND ((B AND C) OR (B AND C AND F)) ORDER BY x LIMIT 10 SETTINGS optimize_extract_common_expressions = 0;
 SELECT * FROM x WHERE A AND ((B AND C) OR (B AND C AND F)) ORDER BY x LIMIT 10;
@@ -33,6 +36,7 @@ SELECT * FROM x WHERE (A AND B AND C) OR ((A AND A AND A AND B AND B AND E AND E
 SELECT * FROM x WHERE (A AND B AND C) OR ((A AND A AND A AND B AND B AND E AND E) OR (A AND B AND B AND F AND F)) ORDER BY x LIMIT 10;
 SELECT * FROM x WHERE ((A AND B AND C) OR (A AND B AND D)) AND ((B AND A AND E) OR (B AND A AND F)) ORDER BY x LIMIT 10 SETTINGS optimize_extract_common_expressions = 0;
 SELECT * FROM x WHERE ((A AND B AND C) OR (A AND B AND D)) AND ((B AND A AND E) OR (B AND A AND F)) ORDER BY x LIMIT 10;
+CREATE TABLE y (x Int64, A UInt8, B UInt8, C UInt8, D UInt8, E UInt8, F UInt8) ENGINE = MergeTree ORDER BY x;
 -- JOIN expressions
 -- As the optimization code is shared between ON and WHERE, it is enough to test that the optimization is done also in ON
 SELECT * FROM x INNER JOIN y ON ((x.A = y.A ) AND x.B = 1) OR ((x.A = y.A) AND y.C = 1) ORDER BY ALL LIMIT 10 SETTINGS optimize_extract_common_expressions = 0;

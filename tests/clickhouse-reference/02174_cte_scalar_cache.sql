@@ -1,3 +1,4 @@
+SET enable_analyzer = 1;
 SELECT
        '02177_CTE_GLOBAL_ON',
        ProfileEvents['SleepFunctionCalls'] as sleep_calls,

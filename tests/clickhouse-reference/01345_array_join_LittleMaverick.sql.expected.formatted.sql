@@ -1,3 +1,15 @@
+CREATE TABLE test
+(
+    id Nullable(String),
+    status Nullable(Enum8('NEW' = 0, 'CANCEL' = 1)),
+    `nested.nestedType` Array(Nullable(String)),
+    `partition` Date
+)
+ENGINE = MergeTree()
+ORDER BY `partition`
+PARTITION BY `partition`
+SETTINGS index_granularity = 8192;
+
 SELECT
     status,
     count() AS `all`

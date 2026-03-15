@@ -1,3 +1,10 @@
+CREATE TABLE t_uuid
+(
+    x UUID
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT *
 FROM t_uuid
 ORDER BY x ASC

@@ -3,10 +3,26 @@ SELECT now() + CAST(toFixedString(materialize(toNullable('1')), 1), 'IPv6'); -- 
 
 SELECT CAST('2000-01-01', 'Date32') - CAST(0, 'IPv4'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
+CREATE TABLE t0
+(
+    c0 IPv4
+)
+ENGINE = Memory;
+
 SELECT (t0.c0, t0.c0) * t0.c0
 FROM t0; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT materialize('1')::IPv6 + '2000-01-01 00:00:00'::DateTime; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+
+-- https://github.com/ClickHouse/ClickHouse/issues/83963
+CREATE TABLE `02763_alias__fuzz_25`
+(
+    x DateTime64(3),
+    y IPv4,
+    z Float32 ALIAS x + y
+)
+ENGINE = MergeTree
+ORDER BY x; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 -- Other non sensical operations
 SELECT toIPv4('127.0.0.1') + 0.1; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}

@@ -1,3 +1,5 @@
+SET optimize_arithmetic_operations_in_aggregate_functions = 1;
+
 SELECT max(multiply(1)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT min(multiply(2)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

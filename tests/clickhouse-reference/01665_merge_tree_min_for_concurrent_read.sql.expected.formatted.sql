@@ -1,3 +1,10 @@
+CREATE TABLE data_01655
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
 SELECT *
 FROM data_01655
 SETTINGS

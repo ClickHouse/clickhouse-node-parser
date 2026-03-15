@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     grouping(num1),
     num1,
@@ -20,6 +22,16 @@ FROM (
     )
 GROUP BY GROUPING SETS ((num1), ())
 ORDER BY grouping(num1) DESC;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16,
+    ts DateTime
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT arrayStringConcat(groupArray('-'))
 FROM numbers(67);

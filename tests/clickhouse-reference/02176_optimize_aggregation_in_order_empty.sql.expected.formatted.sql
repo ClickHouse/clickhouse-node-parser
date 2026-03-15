@@ -1,3 +1,13 @@
+CREATE TABLE data_02176
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+SET optimize_aggregation_in_order = 1;
+
+-- { echoOn }
 -- regression for optimize_aggregation_in_order with empty result set
 -- that cause at first
 --   "Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform"

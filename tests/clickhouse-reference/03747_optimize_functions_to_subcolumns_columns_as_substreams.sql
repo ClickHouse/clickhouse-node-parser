@@ -1,36 +1,52 @@
+create table test_empty_array (id UInt64, `a.size0` UInt64, a Array(UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select id from test_empty_array where empty(a) settings optimize_functions_to_subcolumns=1;
 select id from test_empty_array where empty(a) settings optimize_functions_to_subcolumns=0;
+create table test_notempty_array (id UInt64, `a.size0` UInt64, a Array(UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select id from test_notempty_array where notEmpty(a) settings optimize_functions_to_subcolumns=1;
 select id from test_notempty_array where notEmpty(a) settings optimize_functions_to_subcolumns=0;
+create table test_length_array (id UInt64, `a.size0` UInt64, a Array(UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select id, length(a) from test_length_array settings optimize_functions_to_subcolumns=1;
 select id, length(a) from test_length_array settings optimize_functions_to_subcolumns=0;
+create table test_empty_string (id UInt64, `s.size` UInt64, s String) engine=MergeTree order by tuple();
 -- { echo }
 select id from test_empty_string where empty(s) settings optimize_functions_to_subcolumns=1;
 select id from test_empty_string where empty(s) settings optimize_functions_to_subcolumns=0;
+create table test_notempty_string (id UInt64, `s.size` UInt64, s String) engine=MergeTree order by tuple();
 -- { echo }
 select id from test_notempty_string where notEmpty(s) settings optimize_functions_to_subcolumns=1;
 select id from test_notempty_string where notEmpty(s) settings optimize_functions_to_subcolumns=0;
+create table test_length_string (id UInt64, `s.size` UInt64, s String) engine=MergeTree order by tuple();
 -- { echo }
 select id, length(s) from test_length_string settings optimize_functions_to_subcolumns=1;
 select id, length(s) from test_length_string settings optimize_functions_to_subcolumns=0;
+create table test_empty_map (id UInt64, `m.size0` UInt64, m Map(String, UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select id from test_empty_map where empty(m) settings optimize_functions_to_subcolumns=1;
 select id from test_empty_map where empty(m) settings optimize_functions_to_subcolumns=0;
+create table test_notempty_map (id UInt64, `m.size0` UInt64, m Map(String, UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select id from test_notempty_map where notEmpty(m) settings optimize_functions_to_subcolumns=1;
 select id from test_notempty_map where notEmpty(m) settings optimize_functions_to_subcolumns=0;
+create table test_length_map (id UInt64, `m.size0` UInt64, m Map(String, UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select id, length(m) from test_length_map settings optimize_functions_to_subcolumns=1;
 select id, length(m) from test_length_map settings optimize_functions_to_subcolumns=0;
+create table test_mapkeys (id UInt64, `m.keys` Array(String), m Map(String, UInt64)) engine=MergeTree order by tuple(); -- { serverError BAD_ARGUMENTS }
+create table test_mapvalues (id UInt64, `m.values` Array(UInt64), m Map(String, UInt64)) engine=MergeTree order by tuple(); -- { serverError BAD_ARGUMENTS }
+create table test_mapcontainskey (id UInt64, `m.keys` Array(String), m Map(String, UInt64)) engine=MergeTree order by tuple(); -- { serverError BAD_ARGUMENTS }
+create table test_isnull (id UInt64, `n.null` UInt8, n Nullable(UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select id from test_isnull where isNull(n) settings optimize_functions_to_subcolumns=1;
 select id from test_isnull where isNull(n) settings optimize_functions_to_subcolumns=0;
+create table test_isnotnull (id UInt64, `n.null` UInt8, n Nullable(UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select id from test_isnotnull where isNotNull(n) settings optimize_functions_to_subcolumns=1;
 select id from test_isnotnull where isNotNull(n) settings optimize_functions_to_subcolumns=0;
+create table test_count_nullable (id UInt64, `n.null` UInt8, n Nullable(UInt64)) engine=MergeTree order by tuple();
 -- { echo }
 select count(n) from test_count_nullable settings optimize_functions_to_subcolumns=1;
 select count(n) from test_count_nullable settings optimize_functions_to_subcolumns=0;
+create table test_tupleelement (id UInt64, `t.a` UInt64, t Tuple(a UInt64, b String)) engine=MergeTree order by tuple(); -- { serverError BAD_ARGUMENTS }

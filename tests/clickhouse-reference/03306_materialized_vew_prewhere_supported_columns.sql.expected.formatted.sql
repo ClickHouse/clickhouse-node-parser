@@ -1,11 +1,1 @@
-SELECT *
-FROM v
-PREWHERE c0 = 1; -- {serverError ILLEGAL_PREWHERE}
-
-SELECT *
-FROM v
-PREWHERE c1 = 1;
-
-SELECT *
-FROM v
-PREWHERE c0 = c1; -- {serverError ILLEGAL_PREWHERE}
+<Parse Error>

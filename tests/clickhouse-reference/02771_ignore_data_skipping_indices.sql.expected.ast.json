@@ -1,5 +1,89 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02771"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "Int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": "Int"
+      },
+      {
+        "kind": "indexDef",
+        "name": "x_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "indexType": "minmax",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "y_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        },
+        "indexType": "minmax",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "xy_idx",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          ],
+          "source": "(x,y)"
+        },
+        "indexType": "minmax",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -203,6 +287,19 @@
           "kind": "literal",
           "type": "String",
           "value": "xy_idx"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
         }
       }
     ]
@@ -440,5 +537,18 @@
         }
       ]
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
   }
 ]

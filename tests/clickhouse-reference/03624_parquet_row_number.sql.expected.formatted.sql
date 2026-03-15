@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SET engine_file_truncate_on_insert = 1;
+
 SELECT
     _row_number,
     x

@@ -1,3 +1,4 @@
+CREATE TABLE t2 (k UInt64, s String) ENGINE = Join(ANY, LEFT, k);
 SELECT k, s FROM (SELECT number AS k FROM system.numbers LIMIT 10) js1 ANY LEFT JOIN t2 USING k ORDER BY k;
 SELECT k, js1.s, t2.s FROM (SELECT number AS k, number as s FROM system.numbers LIMIT 10) js1 ANY LEFT JOIN t2 USING k ORDER BY k;
 SELECT k, t2.k, js1.s, t2.s FROM (SELECT number AS k, number as s FROM system.numbers LIMIT 10) js1 ANY LEFT JOIN t2 USING k ORDER BY k;

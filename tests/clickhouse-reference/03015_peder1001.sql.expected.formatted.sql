@@ -1,3 +1,9 @@
+CREATE TABLE test_data
+(
+    ShipmentDate Date
+)
+ENGINE = Memory;
+
 SELECT toDayOfWeek(ShipmentDate) AS c
 FROM test_data
 WHERE isNotNull(c)

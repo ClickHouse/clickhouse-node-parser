@@ -1,3 +1,7 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/17319
+SET enable_analyzer=1;
+CREATE TABLE hits (date Date, data Float64) engine=Memory();
+
 SELECT
     subquery1.period AS period,
     if(1=1, 0, subquery1.data1) AS data,

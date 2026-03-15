@@ -1,3 +1,27 @@
+-- Test that lazy materialization works together with read-in-order optimization
+-- Tags: no-random-settings
+SET query_plan_optimize_lazy_materialization = 1;
+
+SET query_plan_max_limit_for_lazy_materialization = 10;
+
+SET optimize_read_in_order = 1;
+
+SET enable_analyzer = 1;
+
+SET parallel_replicas_local_plan = 1;
+
+-- Create a table with sorting key on column 'a'
+CREATE TABLE test_lazy_read_in_order
+(
+    a UInt64,
+    b String,
+    c String,
+    d String,
+    e UInt64
+)
+ENGINE = MergeTree()
+ORDER BY a;
+
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN PLAN actions = 1
@@ -150,6 +174,16 @@ ORDER BY
     a ASC,
     a + 1 ASC
 LIMIT 5;
+
+CREATE TABLE test_correctness
+(
+    id UInt64,
+    value String,
+    score UInt64,
+    data String
+)
+ENGINE = MergeTree()
+ORDER BY id;
 
 -- With both optimizations enabled
 SELECT

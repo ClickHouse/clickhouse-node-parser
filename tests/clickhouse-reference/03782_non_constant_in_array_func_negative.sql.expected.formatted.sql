@@ -1,5 +1,8 @@
+SET allow_experimental_analyzer = 1;
+
 SELECT '-- Basic arrayMap tests --';
 
+-- { echoOn }
 -- Simple arrayMap identity
 SELECT 1 IN (arrayMap(x -> x, [1]));
 
@@ -78,6 +81,8 @@ SELECT
     number IN (arrayMap(x -> x + 1, arrayFilter(y -> y < number, [0, 1, 2, 3, 4])))
 FROM numbers(5);
 
+SET transform_null_in = 0;
+
 -- NULL in arrayMap result
 SELECT NULL IN (arrayMap(x -> x, [1, 2, 3]));
 
@@ -100,6 +105,8 @@ SELECT
     number,
     toNullable(number) IN (arrayMap(x -> x, [0, 1, 2]))
 FROM numbers(3);
+
+SET transform_null_in = 1;
 
 -- Int vs UInt
 SELECT 1::Int32 IN (arrayMap(x -> x, [1::UInt64, 2::UInt64]));

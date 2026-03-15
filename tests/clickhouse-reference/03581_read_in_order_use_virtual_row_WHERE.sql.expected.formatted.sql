@@ -1,3 +1,12 @@
+-- Tags: no-random-merge-tree-settings, no-random-settings
+CREATE TABLE tab
+(
+    x UInt64,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT
     _part,
     min(x),

@@ -1,3 +1,10 @@
+-- Tags: shard
+SET any_join_distinct_right_table_keys = 1;
+
+SET joined_subquery_requires_alias = 0;
+
+SET join_algorithm = 'hash';
+
 SELECT *
 FROM (
         SELECT

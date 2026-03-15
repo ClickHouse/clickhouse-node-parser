@@ -1,3 +1,34 @@
+CreateQuery src_table (children 2)
+ Identifier src_table
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery dst_mv_1 (children 3)
+ Identifier dst_mv_1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Asterisk
+     Subquery (alias cnt) (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 2)
+         ExpressionList (children 1)
+          Function count (children 1)
+           ExpressionList
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier src_table
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier src_table
+ ViewTargets (children 1)
+  Storage definition (children 1)
+   Function Memory
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -10,6 +41,81 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier number
+
+CreateQuery dest_table (children 3)
+ Identifier dest_table
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration Date (children 1)
+    DataType Date
+   ColumnDeclaration Id (children 1)
+    DataType UInt64
+   ColumnDeclaration Units (children 1)
+    DataType Float32
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery left_table (children 1)
+ Identifier left_table
+
+CreateQuery right_table (children 1)
+ Identifier right_table
+
+CreateQuery dest_table_mv (children 3)
+ Identifier dest_table_mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Identifier Date
+     Identifier Id
+     Identifier Units
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (alias t1) (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 2)
+           ExpressionList (children 1)
+            Asterisk
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier left_table
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       Subquery (alias t2) (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 4)
+           ExpressionList (children 1)
+            Subquery (alias dt) (children 1)
+             SelectWithUnionQuery (children 1)
+              ExpressionList (children 1)
+               SelectQuery (children 3)
+                ExpressionList (children 1)
+                 Identifier Date
+                TablesInSelectQuery (children 1)
+                 TablesInSelectQueryElement (children 1)
+                  TableExpression (children 1)
+                   TableIdentifier left_table
+                Literal UInt64_1
+           ExpressionList (children 1)
+            Asterisk
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier right_table
+           Function equals (children 1)
+            ExpressionList (children 2)
+             Identifier Date
+             Identifier dt
+      TableJoin (children 1)
+       ExpressionList (children 2)
+        Identifier Date
+        Identifier Id
+ ViewTargets
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

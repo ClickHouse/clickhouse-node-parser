@@ -1,3 +1,16 @@
+SET enable_analyzer = 1;
+CREATE TABLE test_table_join_1
+(
+    id UInt8,
+    value String
+)
+ENGINE = TinyLog;
+CREATE TABLE test_table_join_2
+(
+    id UInt16,
+    value String
+)
+ENGINE = TinyLog;
 SELECT
     toTypeName(t2_value),
     t2.value AS t2_value

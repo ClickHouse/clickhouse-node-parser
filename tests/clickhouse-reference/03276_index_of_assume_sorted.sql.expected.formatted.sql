@@ -1,3 +1,11 @@
+CREATE TABLE test
+(
+    id UInt64,
+    numbers Array(Int64)
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
 SELECT indexOfAssumeSorted(numbers, 4)
 FROM test
 WHERE id = 1;

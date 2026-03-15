@@ -1,3 +1,4 @@
+set enable_json_type=1;
 select '{}'::JSON as j1, '{}'::JSON as j2, j1 < j2, j1 = j2, j1 > j2;
 select '{"a" : 1}'::JSON as j1, '{}'::JSON as j2, j1 < j2, j1 = j2, j1 > j2;
 select '{"a" : 1}'::JSON as j1, '{"a" : 1}'::JSON as j2, j1 < j2, j1 = j2, j1 > j2;
@@ -74,4 +75,5 @@ select '{"a" : 1, "b" : 1, "c" : 1, "d" : 1, "e" : 1, "f" : 1}'::JSON(a UInt32, 
 select '{"a" : 1, "b" : 1, "c" : 1, "d" : 1, "e" : 1, "f" : 1}'::JSON(a UInt32, b UInt32, max_dynamic_paths=2) as j1, '{"a" : 1, "b" : 1, "c" : 1, "d" : 1, "e" : 1}'::JSON(a UInt32, b UInt32, max_dynamic_paths=2) as j2, j1 < j2, j1 = j2, j1 > j2;
 select '{"a" : 1, "b" : 1, "c" : 1, "d" : 1, "e" : 1, "f" : 1}'::JSON(a UInt32, b UInt32, max_dynamic_paths=2) as j1, '{"a" : 1, "b" : 1, "c" : 1, "d" : 1, "e" : 0}'::JSON(a UInt32, b UInt32, max_dynamic_paths=2) as j2, j1 < j2, j1 = j2, j1 > j2;
 select '{"a" : 1, "b" : 1, "c" : 1, "d" : 1, "e" : 1, "f" : 1}'::JSON(a UInt32, b UInt32, max_dynamic_paths=2) as j1, '{"a" : 1, "b" : 1, "c" : 1, "d" : 1, "e" : 2}'::JSON(a UInt32, b UInt32, max_dynamic_paths=2) as j2, j1 < j2, j1 = j2, j1 > j2;
+create table test (json1 JSON(max_dynamic_paths=2, a UInt32), json2 JSON(max_dynamic_paths=2, a UInt32)) engine=Memory;
 select json1, json2, json1 == json2, json1 != json2, json1 < json2, json1 > json2 from test;

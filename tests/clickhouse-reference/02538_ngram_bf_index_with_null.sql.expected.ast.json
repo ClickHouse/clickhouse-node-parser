@@ -1,5 +1,86 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02538_bf_ngrambf_map_values_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "row_id",
+        "type": "Int128"
+      },
+      {
+        "kind": "columnDef",
+        "name": "map",
+        "type": "Map(String, String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "map_fixed",
+        "type": "Map(FixedString(2), String)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "map_values_ngrambf",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "map"
+              ]
+            }
+          ]
+        },
+        "indexType": "ngrambf_v1(4, 256, 2, 0)",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "map_fixed_values_ngrambf",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "map_fixed"
+              ]
+            }
+          ]
+        },
+        "indexType": "ngrambf_v1(4, 256, 2, 0)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "row_id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

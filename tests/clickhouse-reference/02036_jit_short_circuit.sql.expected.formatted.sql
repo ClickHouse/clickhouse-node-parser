@@ -1,3 +1,15 @@
+SET compile_expressions = 1;
+
+SET min_count_to_compile_expression = 0;
+
+SET short_circuit_function_evaluation = 'enable';
+
+CREATE TABLE test_table
+(
+    message String
+)
+ENGINE = TinyLog;
+
 SELECT if(action = 'bonus', sport_amount, 0) * 100
 FROM (
         SELECT

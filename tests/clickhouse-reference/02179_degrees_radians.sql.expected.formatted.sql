@@ -1,3 +1,9 @@
+CREATE TABLE test_degs_to_rads
+(
+    degrees Float64
+)
+ENGINE = Memory;
+
 -- test that converting degrees to radians and back preserves the original value
 SELECT DEGREES(RADIANS(degrees))
 FROM test_degs_to_rads
@@ -7,6 +13,12 @@ ORDER BY degrees ASC;
 SELECT RADIANS(degrees)
 FROM test_degs_to_rads
 ORDER BY degrees ASC;
+
+CREATE TABLE test_rads_to_degs
+(
+    radians Float64
+)
+ENGINE = Memory;
 
 -- test that converting radians to degrees and back preserves the original value
 SELECT RADIANS(DEGREES(radians))

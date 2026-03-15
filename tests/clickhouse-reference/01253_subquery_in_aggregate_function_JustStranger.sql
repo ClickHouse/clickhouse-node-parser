@@ -1,3 +1,15 @@
+set allow_deprecated_syntax_for_merge_tree=1;
+create table
+  test_table_sharded(
+    date Date,
+    text String,
+    hash UInt64
+  )
+engine=MergeTree(date, (hash, date), 8192);
+create table test_table as test_table_sharded
+engine=Distributed(test_cluster_two_shards, currentDatabase(), test_table_sharded, hash);
+SET distributed_product_mode = 'local';
+SET distributed_foreground_insert = 1;
 SELECT
   text,
   uniqExactIf(hash, hash IN (

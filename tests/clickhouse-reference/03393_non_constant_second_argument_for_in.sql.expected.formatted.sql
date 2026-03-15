@@ -1,3 +1,5 @@
+SET allow_experimental_analyzer = 1;
+
 SELECT number
 FROM numbers(10)
 WHERE has([number % 3, number % 5], number % 2)
@@ -17,6 +19,7 @@ WHERE number % 2 IN ([number % 3, number % 5])
 ORDER BY number ASC
 SETTINGS allow_experimental_analyzer = 0; -- { serverError UNKNOWN_IDENTIFIER }
 
+-- { echoOn }
 SELECT (1, 2) IN ([number % 3, number % 5])
 FROM numbers(2); -- { serverError NO_COMMON_TYPE }
 
@@ -73,6 +76,8 @@ SELECT
         UNION ALL
         SELECT (1, null)
     );
+
+SET transform_null_in = 1;
 
 --- with tuple rewritten into array
 SELECT *

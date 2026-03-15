@@ -1,3 +1,4 @@
+-- { echoOn }
 -- https://github.com/ClickHouse/ClickHouse/issues/68895
 SELECT arrayMax(x -> toFixedString('.', 1), []);
 
@@ -10,6 +11,13 @@ SELECT arrayMax(x -> toUInt16(negate(x)), [1, 2, 4]) AS res;
 SELECT arrayMin(x1 -> (x1 * toNullable(-1)), materialize([1, 2, 3]));
 
 SELECT arrayMin(x1 -> x1 * -1, [1,2,3]);
+
+CREATE TABLE test_aggregation_array
+(
+    x Array(Int)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
 
 SELECT
     [arrayMin(x1 -> (x1 * materialize(-1)), [toNullable(toUInt256(0)), materialize(4)])],

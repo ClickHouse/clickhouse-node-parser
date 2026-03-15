@@ -1,3 +1,12 @@
+CREATE TABLE empsalary
+(
+    depname LowCardinality(String),
+    empno UInt64,
+    salary Int32,
+    enroll_date Date
+)
+ENGINE = Memory;
+
 -- 1 window function
 SELECT
     depname,

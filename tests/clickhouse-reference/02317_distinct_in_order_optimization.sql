@@ -1,6 +1,9 @@
 select '-- enable distinct in order optimization';
+set optimize_distinct_in_order=1;
+create table distinct_in_order (a int) engine=MergeTree() order by a settings index_granularity=10;
 select distinct * from distinct_in_order settings max_block_size=10, max_threads=1;
 select distinct a from distinct_in_order settings max_block_size=10, max_threads=1;
+create table distinct_in_order (a int, b int, c int) engine=MergeTree() order by (a, b) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select distinct a from distinct_in_order;
 select distinct a from distinct_in_order order by a;
 select distinct a from distinct_in_order order by a desc;
@@ -10,7 +13,7 @@ select distinct a,c from distinct_in_order order by c;
 select distinct a,c from distinct_in_order order by c desc;
 select distinct b,c from distinct_in_order order by c;
 select distinct b,c from distinct_in_order order by c desc;
-
+-- { echoOn }
 select distinct 1 as x, 2 as y from distinct_in_order;
 select distinct 1 as x, 2 as y from distinct_in_order order by x;
 select distinct 1 as x, 2 as y from distinct_in_order order by x, y;
@@ -19,7 +22,12 @@ select distinct a, 1 as x, 2 as y from distinct_in_order order by a;
 select a, b, x, y from(select distinct a, b, 1 as x, 2 as y from distinct_in_order order by a) order by a, b;
 select distinct x, y from (select 1 as x, 2 as y from distinct_in_order order by x) order by y;
 select distinct a, b, x, y from (select a, b, 1 as x, 2 as y from distinct_in_order order by a) order by a, b;
+CREATE TABLE distinct_cardinality_low (low UInt64, medium UInt64, high UInt64) ENGINE MergeTree() ORDER BY (low, medium) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+create table distinct_in_order (low UInt64, medium UInt64, high UInt64) engine=MergeTree() order by (low, medium) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+create table ordinary_distinct (low UInt64, medium UInt64, high UInt64) engine=MergeTree() order by (low, medium) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select count() as diff from (select distinct * from distinct_in_order except select * from ordinary_distinct);
+create table sorting_key_empty_tuple (a int, b int) engine=MergeTree() order by tuple() SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select distinct a from sorting_key_empty_tuple;
+create table sorting_key_contain_function (datetime DateTime, a int) engine=MergeTree() order by (toDate(datetime)) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 select distinct datetime from sorting_key_contain_function;
 select distinct toDate(datetime) from sorting_key_contain_function;

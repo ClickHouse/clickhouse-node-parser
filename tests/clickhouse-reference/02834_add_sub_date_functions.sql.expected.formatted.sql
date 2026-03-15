@@ -1,3 +1,5 @@
+SET session_timezone = 'UTC';
+
 SELECT ADDDATE(materialize('2022-05-07'::Date), toIntervalMinute(5));
 
 SELECT addDate('2022-05-07'::Date, toIntervalMinute(5));

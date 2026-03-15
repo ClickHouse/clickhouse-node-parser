@@ -1,3 +1,15 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String,
+    value_array Array(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+-- { echoOn }
 SELECT *
 FROM
     test_table

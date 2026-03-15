@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/10276
+SET enable_analyzer = 1;
+
 SELECT
     sum(x.n) AS n,
     sum(z.n) AS n2

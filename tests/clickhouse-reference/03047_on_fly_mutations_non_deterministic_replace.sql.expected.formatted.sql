@@ -1,3 +1,18 @@
+SET apply_mutations_on_fly = 1;
+
+SET mutations_execute_subqueries_on_initiator = 1;
+
+SET mutations_execute_nondeterministic_on_initiator = 1;
+
+-- SELECT sum(...)
+CREATE TABLE t_lightweight_mut_5
+(
+    id UInt64,
+    v UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     id,
     v
@@ -11,17 +26,44 @@ WHERE database = currentDatabase()
     AND NOT is_done
 ORDER BY command ASC;
 
+-- SELECT groupArray(...)
+CREATE TABLE t_lightweight_mut_5
+(
+    id UInt64,
+    v Array(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     id,
     length(v)
 FROM t_lightweight_mut_5
 ORDER BY id ASC; -- { serverError BAD_ARGUMENTS }
 
+-- SELECT uniqExactState(...)
+CREATE TABLE t_lightweight_mut_5
+(
+    id UInt64,
+    v AggregateFunction(uniqExact, UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     id,
     finalizeAggregation(v)
 FROM t_lightweight_mut_5
 ORDER BY id ASC;
+
+-- now()
+CREATE TABLE t_lightweight_mut_5
+(
+    id UInt64,
+    v DateTime
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT
     id,
@@ -43,6 +85,15 @@ SELECT *
 FROM t_lightweight_mut_5
 ORDER BY id ASC
 SETTINGS apply_mutations_on_fly = 0;
+
+-- DELETE WHERE now()
+CREATE TABLE t_lightweight_mut_5
+(
+    id UInt64,
+    d DateTime
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT *
 FROM t_lightweight_mut_5

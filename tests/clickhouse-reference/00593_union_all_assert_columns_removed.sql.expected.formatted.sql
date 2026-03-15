@@ -1,3 +1,13 @@
+CREATE TABLE `columns`
+(
+    a UInt8,
+    b UInt8,
+    c UInt8
+)
+ENGINE = Memory;
+
+SET max_columns_to_read = 1;
+
 SELECT a
 FROM (
         SELECT *

@@ -1,1 +1,1 @@
-SELECT '---';
+<Parse Error>

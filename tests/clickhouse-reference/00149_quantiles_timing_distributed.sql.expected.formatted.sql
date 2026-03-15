@@ -1,3 +1,6 @@
+-- Tags: stateful, distributed
+SET max_rows_to_read = 100000000;
+
 SELECT sum(cityHash64(*))
 FROM (
         SELECT

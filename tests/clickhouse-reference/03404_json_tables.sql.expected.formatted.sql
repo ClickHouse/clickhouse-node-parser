@@ -1,4 +1,19 @@
+CREATE TABLE t0
+(
+    c0 JSON
+)
+ENGINE = MergeTree()
+ORDER BY c0; -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
+
 SELECT '---';
+
+CREATE TABLE t1
+(
+    c0 JSON
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+PARTITION BY (c0); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
 
 SELECT c0
 FROM t1

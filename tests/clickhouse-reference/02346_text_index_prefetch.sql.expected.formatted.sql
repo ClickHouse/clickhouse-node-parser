@@ -1,3 +1,27 @@
+-- Tags: no-fasttest, no-parallel-replicas
+SET enable_full_text_index = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET allow_prefetched_read_pool_for_remote_filesystem = 1;
+
+SET remote_filesystem_read_prefetch = 1;
+
+SET remote_filesystem_read_method = 'threadpool';
+
+SET max_rows_to_read = 0;
+
+CREATE TABLE tab
+(
+    id UInt64,
+    str String,
+    INDEX idx_str str TYPE text(tokenizer = splitByNonAlpha) GRANULARITY 8
+)
+ENGINE = MergeTree
+ORDER BY id
+PARTITION BY id
+SETTINGS storage_policy = 's3_cache';
+
 SELECT
     count(),
     sum(id)

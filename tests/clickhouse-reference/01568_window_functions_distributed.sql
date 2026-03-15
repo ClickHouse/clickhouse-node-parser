@@ -4,6 +4,9 @@
 select row_number() over (order by dummy) as x from (select * from remote('127.0.0.{1,2}', system, one)) order by x;
 select row_number() over (order by dummy) as x from remote('127.0.0.{1,2}', system, one) order by x;
 select max(identity(dummy + 1)) over () as x from remote('127.0.0.{1,2}', system, one) order by x;
+create table t_01568 engine Memory as
+select intDiv(number, 3) p, modulo(number, 3) o, number
+from numbers(9);
 select sum(number) over w as x, max(number) over w as y from t_01568 window w as (partition by p) order by x, y;
 select sum(number) over w, max(number) over w from t_01568 window w as (partition by p) order by p;
 select sum(number) over w as x, max(number) over w as y from remote('127.0.0.{1,2}', '', t_01568) window w as (partition by p) order by x, y;

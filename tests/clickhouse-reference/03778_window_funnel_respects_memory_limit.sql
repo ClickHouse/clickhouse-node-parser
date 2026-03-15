@@ -1,3 +1,5 @@
+CREATE TABLE test (ts Date, a String, b String, c String, d String) ENGINE= MergeTree() ORDER BY a;
+SET max_rows_to_read = 0, max_insert_threads = 4, max_threads = 4;
 SELECT
     ifNull(fun_res, 0),
     count(*)

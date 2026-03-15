@@ -450,6 +450,84 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sensor_value"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "received_at",
+        "type": "DateTime('Asia/Istanbul')"
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_id",
+        "type": "UUID"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sensor_id",
+        "type": "UUID"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "Nullable(Decimal(18, 4))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "low_warning",
+        "type": "Nullable(Decimal(18, 4))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "low_critical",
+        "type": "Nullable(Decimal(18, 4))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "high_warning",
+        "type": "Nullable(Decimal(18, 4))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "high_critical",
+        "type": "Nullable(Decimal(18, 4))"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "received_at"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "device_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sensor_id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

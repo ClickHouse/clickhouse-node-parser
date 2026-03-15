@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     number,
     lag(number, 1, 8472) OVER () AS lag,
@@ -25,6 +27,8 @@ SELECT
 FROM numbers(5)
 ORDER BY number ASC
 FORMAT Pretty; -- { serverError BAD_ARGUMENTS }
+
+SET enable_analyzer = 0;
 
 SELECT
     number,

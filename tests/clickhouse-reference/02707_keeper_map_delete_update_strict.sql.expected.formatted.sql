@@ -1,3 +1,14 @@
+SET keeper_map_strict_mode = 1;
+
+CREATE TABLE `02707_keepermap_delete_update`
+(
+    key UInt64,
+    value String,
+    value2 UInt64
+)
+ENGINE = KeeperMap(concat('/', currentDatabase(), '/test02707_keepermap_delete_update'))
+PRIMARY KEY key;
+
 SELECT
     *,
     _version,

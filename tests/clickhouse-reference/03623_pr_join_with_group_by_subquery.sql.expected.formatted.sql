@@ -1,3 +1,22 @@
+CREATE TABLE users
+(
+    id Int64,
+    name String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/tables/03623_users', 'r1')
+ORDER BY tuple();
+
+CREATE TABLE messages
+(
+    id Int64,
+    user_id Int64,
+    text String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/tables/03623_messages', 'r1')
+ORDER BY tuple();
+
+SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+
 SELECT '-- subquery INNER JOIN table';
 
 SELECT

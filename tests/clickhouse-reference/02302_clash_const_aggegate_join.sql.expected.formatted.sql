@@ -1,3 +1,13 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/36891
+CREATE TABLE e
+(
+    a UInt64,
+    t DateTime
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY toDate(t);
+
 SELECT sumIf(1, if(1, toDateTime('2020-01-01 00:00:00', 'UTC'), toDateTime('1970-01-01 00:00:00', 'UTC')) > t)
 FROM
     e

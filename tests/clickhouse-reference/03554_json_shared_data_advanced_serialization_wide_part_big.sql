@@ -1,3 +1,4 @@
+create table test_wide_advanced (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings min_bytes_for_wide_part=1, min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='advanced', object_shared_data_serialization_version_for_zero_level_parts='advanced', object_shared_data_buckets_for_wide_part=2;
 select json from test_wide_advanced format Null;
 select json.b from test_wide_advanced format Null;
 select json.b, json.c from test_wide_advanced format Null;

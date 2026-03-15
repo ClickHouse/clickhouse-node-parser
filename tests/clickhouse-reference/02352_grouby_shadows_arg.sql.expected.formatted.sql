@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT toString(dummy) AS dummy
 FROM remote('127.{1,1}', 'system.one')
 GROUP BY dummy;

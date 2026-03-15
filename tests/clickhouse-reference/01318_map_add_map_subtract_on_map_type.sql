@@ -1,3 +1,4 @@
+create table tab engine=Memory() as (select map(1, toInt32(2), number, 2) as m from numbers(1, 10));
 -- mapAdd
 select mapAdd(map(1, 1)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 select mapAdd(map(1, 1), m) from tab; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

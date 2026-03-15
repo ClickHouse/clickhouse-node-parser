@@ -1,3 +1,42 @@
+SET enable_analyzer = 1;
+CREATE TABLE 03611_nscmp_tbl
+(
+    `key` Int64,
+    `c_int8` Nullable(Int8),
+    `c_int16` Nullable(Int16),
+    `c_int32` Nullable(Int32),
+    `c_int64` Nullable(Int64),
+    `c_uint8` Nullable(UInt8),
+    `c_uint16` Nullable(UInt16),
+    `c_uint32` Nullable(UInt32),
+    `c_uint64` Nullable(UInt64),
+    `c_float32` Nullable(Float32),
+    `c_float64` Nullable(Float64),
+    `c_decimal` Nullable(Decimal(18, 4)),
+    `c_date` Nullable(Date),
+    `c_datetime` Nullable(DateTime),
+    `c_dt64` Nullable(DateTime64(3)),
+    `c_string` Nullable(String),
+    `c_fstring` Nullable(FixedString(4)),
+    `c_enum8` Nullable(Enum8('a' = 1, 'b' = 2, '' = 0)),
+    `c_enum16` Nullable(Enum16('x' = 100, 'y' = 200, '' = 0)),
+    `c_array` Array(Nullable(Int32)),
+    `c_tuple` Tuple(Nullable(Int32),Nullable(String)),
+    `c_map` Map(String, Nullable(Int32)),
+    `c_nullable` Nullable(Int32),
+    `c_uuid` Nullable(UUID),
+    `c_ipv4` Nullable(IPv4),
+    `c_ipv6` Nullable(IPv6),
+    `c_json` Nullable(JSON),
+    `c_nested` Nested(
+        id Nullable(Int32),
+        value Nullable(String)
+    ),
+    `c_variant` Variant(UInt64, String, Array(UInt64)),
+    `c_dynamic` Dynamic
+)
+ENGINE = MergeTree
+ORDER BY key;
 SELECT
     -- Integers
     c_int8 <=> c_int8 AS c_int8_self_eq,
@@ -370,6 +409,13 @@ SELECT
     c_map <=> c_tuple,
     c_map IS DISTINCT FROM c_tuple
 FROM 03611_nscmp_tbl;   -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+CREATE TABLE IF NOT EXISTS 03611_t_nullsafe
+(
+    id Int32,
+    a Nullable(Int32),
+    b Nullable(Int32),
+    txt Nullable(String)
+) ENGINE = Memory;
 SELECT id, a, b,
        (a <=> b) AS null_safe_equal,
        (a IS DISTINCT FROM b) AS null_safe_distinct

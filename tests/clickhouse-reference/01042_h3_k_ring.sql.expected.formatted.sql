@@ -11,6 +11,14 @@ SELECT arraySort(h3kRing(581276613233082367, 1));
 
 SELECT h3kRing(581276613233082367, 0);
 
+-- Test h3 indices and k selected from original test fixture: https://github.com/uber/h3/blob/master/src/apps/testapps
+CREATE TABLE h3_indexes
+(
+    h3_index UInt64,
+    k UInt16
+)
+ENGINE = Memory;
+
 SELECT arraySort(h3kRing(h3_index, k))
 FROM h3_indexes
 ORDER BY h3_index ASC;

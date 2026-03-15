@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT
     number,
     ip,

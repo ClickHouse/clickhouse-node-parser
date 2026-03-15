@@ -1363,6 +1363,7 @@ SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number
 SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number % 3) = 0 THEN [toFloat64(2), toFloat64(3)] ELSE [toUInt32(3), toUInt32(3)] END FROM system.numbers LIMIT 10;
 SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number % 3) = 0 THEN [toFloat64(2), toFloat64(3)] ELSE [toFloat32(3), toFloat32(3)] END FROM system.numbers LIMIT 10;
 SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number % 3) = 0 THEN [toFloat64(2), toFloat64(3)] ELSE [toFloat64(3), toFloat64(3)] END FROM system.numbers LIMIT 10;
+CREATE TABLE multi_if_check(col1 UInt64, col2 String, col3 String, col4 String) ENGINE=TinyLog;
 SELECT CASE WHEN (col1 % 2) = 0 THEN col2 WHEN (col1 % 3) = 0 THEN col3 ELSE col4 END FROM multi_if_check;
 SELECT CASE WHEN (col1 % 2) = 0 THEN col2 WHEN (col1 % 3) = 0 THEN col3 ELSE toFixedString(col4, 16) END FROM multi_if_check;
 SELECT CASE WHEN (col1 % 2) = 0 THEN col2 WHEN (col1 % 3) = 0 THEN col3 ELSE toFixedString('baz', 16) END FROM multi_if_check;
@@ -1619,6 +1620,9 @@ SELECT CASE WHEN 1 THEN 'foo' WHEN 1 THEN 'bar' ELSE col4 END FROM multi_if_chec
 SELECT CASE WHEN 1 THEN 'foo' WHEN 1 THEN 'bar' ELSE toFixedString(col4, 16) END FROM multi_if_check;
 SELECT CASE WHEN 1 THEN 'foo' WHEN 1 THEN 'bar' ELSE toFixedString('baz', 16) END FROM multi_if_check;
 SELECT CASE WHEN 1 THEN 'foo' WHEN 1 THEN 'bar' ELSE 'baz' END FROM multi_if_check;
+/* No CASE expression. String array clauses. */
+
+CREATE TABLE multi_if_check(col1 UInt64, col2 String, col3 String, col4 String, col5 String, col6 String, col7 String) ENGINE=TinyLog;
 SELECT CASE WHEN (col1 % 2) = 0 THEN [col2, col3] WHEN (col1 % 3) = 0 THEN [col4, col5] ELSE [col6, col7] END FROM multi_if_check;
 SELECT CASE WHEN (col1 % 2) = 0 THEN [col2, col3] WHEN (col1 % 3) = 0 THEN [col4, col5] ELSE [col6, 'bar'] END FROM multi_if_check;
 SELECT CASE WHEN (col1 % 2) = 0 THEN [col2, col3] WHEN (col1 % 3) = 0 THEN [col4, col5] ELSE ['foo', col7] END FROM multi_if_check;
@@ -1875,6 +1879,9 @@ SELECT CASE WHEN 1 THEN ['foo', 'bar'] WHEN 1 THEN ['foo', 'bar'] ELSE [col6, co
 SELECT CASE WHEN 1 THEN ['foo', 'bar'] WHEN 1 THEN ['foo', 'bar'] ELSE [col6, 'bar'] END FROM multi_if_check;
 SELECT CASE WHEN 1 THEN ['foo', 'bar'] WHEN 1 THEN ['foo', 'bar'] ELSE ['foo', col7] END FROM multi_if_check;
 SELECT CASE WHEN 1 THEN ['foo', 'bar'] WHEN 1 THEN ['foo', 'bar'] ELSE ['foo', 'bar'] END FROM multi_if_check;
+/* CASE expression. Numeric clauses. */
+
+CREATE TABLE multi_if_check(col1 UInt64) ENGINE=TinyLog;
 SELECT CASE col1 WHEN 0 THEN 1 WHEN 1 THEN 2 ELSE 3 END FROM multi_if_check;
 /* CASE expression. String clauses. */
 

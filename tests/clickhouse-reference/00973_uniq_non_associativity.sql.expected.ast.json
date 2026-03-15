@@ -1,5 +1,1418 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "part_a"
+    },
+    "engine": {
+      "name": "TinyLog"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "with": [
+            {
+              "kind": "expr",
+              "name": "k1",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k2",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k1"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k1"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k3",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k2"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0xff51afd7ed558ccd"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k4",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k3"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k3"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k5",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k4"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0xc4ceb9fe1a85ec53"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k6",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k5"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k5"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "hash",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "k6"
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "place",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "bitShiftRight",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "hash"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "15"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0x20000"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "will_remain",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "hash"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              }
+            }
+          ],
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "hash"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "place"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "place"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "90000"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "place"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "131062"
+                }
+              },
+              {
+                "kind": "unaryExpr",
+                "op": "NOT",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "will_remain"
+                  ]
+                }
+              }
+            ]
+          },
+          "limitBy": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "by": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "place"
+                ]
+              }
+            ]
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "41062"
+            }
+          }
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "place"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    },
+    "leadingComments": [
+      "/* Create values that will resize hash table to the maximum (131072 cells) and fill it with less than max_fill (65536 cells)\n * and occupy cells near the end except last 10 cells:\n * [               -----------  ]\n * Pick values that will vanish if table will be rehashed.\n */"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "part_b"
+    },
+    "engine": {
+      "name": "TinyLog"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "with": [
+            {
+              "kind": "expr",
+              "name": "k1",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k2",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k1"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k1"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k3",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k2"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0xff51afd7ed558ccd"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k4",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k3"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k3"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k5",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k4"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0xc4ceb9fe1a85ec53"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k6",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k5"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k5"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "hash",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "k6"
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "place",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "bitShiftRight",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "hash"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "15"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0x20000"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "will_remain",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "hash"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              }
+            }
+          ],
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "hash"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "place"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "place"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "50000"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "place"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "90000"
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "will_remain"
+                ]
+              }
+            ]
+          },
+          "limitBy": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "by": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "place"
+                ]
+              }
+            ]
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "40000"
+            }
+          }
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "place"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    },
+    "leadingComments": [
+      "/* Create values that will resize hash table to the maximum (131072 cells) and fill it with less than max_fill (65536 cells),\n * but if we use both \"a\" and \"b\", it will force rehash.\n * [      -----------           ]\n * Pick values that will remain after rehash.\n */"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "part_c"
+    },
+    "engine": {
+      "name": "TinyLog"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "with": [
+            {
+              "kind": "expr",
+              "name": "k1",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k2",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k1"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k1"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k3",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k2"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0xff51afd7ed558ccd"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k4",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k3"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k3"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k5",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k4"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0xc4ceb9fe1a85ec53"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k6",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k5"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k5"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "hash",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "k6"
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "place",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "bitShiftRight",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "hash"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "15"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0x20000"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "will_remain",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "hash"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              }
+            }
+          ],
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "hash"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "place"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "place"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "131052"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "place"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "131062"
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "will_remain"
+                ]
+              },
+              {
+                "kind": "inExpr",
+                "negated": true,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "hash"
+                  ]
+                },
+                "values": {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "hash"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "part_a"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "limitBy": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "by": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "place"
+                ]
+              }
+            ]
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "place"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    },
+    "leadingComments": [
+      "/* Occupy 10 cells near the end of \"a\":\n * a:     [               -----------  ]\n * c:     [                        --  ]\n * If we insert \"a\" then \"c\", these values will be placed at the end of hash table due to collision resolution:\n * a + c: [               aaaaaaaaaaacc]\n */"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "part_d"
+    },
+    "engine": {
+      "name": "TinyLog"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "with": [
+            {
+              "kind": "expr",
+              "name": "k1",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k2",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k1"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k1"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k3",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k2"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0xff51afd7ed558ccd"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k4",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k3"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k3"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k5",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k4"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0xc4ceb9fe1a85ec53"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "k6",
+              "expr": {
+                "kind": "functionCall",
+                "name": "bitXor",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k5"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "bitShiftRight",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "k5"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "hash",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "k6"
+                ]
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "place",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "bitShiftRight",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "hash"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "15"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0x20000"
+                }
+              }
+            },
+            {
+              "kind": "expr",
+              "name": "will_remain",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "hash"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              }
+            }
+          ],
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "hash"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "place"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "place"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "131062"
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "will_remain"
+                ]
+              }
+            ]
+          },
+          "limitBy": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "by": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "place"
+                ]
+              }
+            ]
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "place"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    },
+    "leadingComments": [
+      "/* Occupy 10 cells at the end of hash table, after \"a\":\n * a:     [               -----------  ]\n * d:     [                          --]\n * a + d: [               aaaaaaaaaaadd]\n * But if we insert \"a\" then \"c\" then \"d\", these values will be placed at the beginning of the hash table due to collision resolution:\n * a+c+d: [dd             aaaaaaaaaaacc]\n  */"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/** What happens if we insert a then c then d then b?\n  * Insertion of b forces rehash.\n  * a will be removed, but c, d, b remain:\n  * [dd         bbbbbbbbbb     cc]\n  * Then we go through hash table and move elements to better places in collision resolution chain.\n  * c will be moved left to their right place:\n  * [dd         bbbbbbbbbb   cc  ]\n  *\n  * And d must be moved also:\n  * [           bbbbbbbbbb   ccdd]\n  * But our algorithm was incorrect and it doesn't happen.\n  *\n  * If we insert d again, it will be placed twice because original d will not found:\n  * [dd         bbbbbbbbbb   ccdd]\n  * This will lead to slightly higher return value of \"uniq\" aggregate function and it is dependent on insertion order.\n  */"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

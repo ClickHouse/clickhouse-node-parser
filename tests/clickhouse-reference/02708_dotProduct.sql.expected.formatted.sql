@@ -181,6 +181,14 @@ SELECT scalarProduct((1, 2, 3), (4, 5, 6));
 
 SELECT arrayDotProduct([1, 2, 3], [4, 5, 6]); -- actually no alias but the internal function for arrays
 
+CREATE TABLE tab
+(
+    id UInt64,
+    vec Array(Float32)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     id,
     arrayDotProduct(vec, vec)

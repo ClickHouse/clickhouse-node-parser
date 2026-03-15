@@ -1,3 +1,8 @@
+CREATE TEMPORARY TABLE t
+(
+    x UInt8
+);
+
 SELECT *
 FROM t
 ORDER BY `ALL` ASC;

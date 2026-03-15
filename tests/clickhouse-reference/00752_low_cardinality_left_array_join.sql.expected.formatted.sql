@@ -1,3 +1,14 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE lc_left_aj
+(
+    str Array(LowCardinality(String)),
+    null_str Array(LowCardinality(Nullable(String))),
+    val Array(LowCardinality(Float64)),
+    null_val Array(LowCardinality(Nullable(Float64)))
+)
+ENGINE = Memory;
+
 SELECT
     *,
     arr

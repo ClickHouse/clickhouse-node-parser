@@ -1,3 +1,13 @@
+SET allow_experimental_analyzer = 1;
+
+CREATE TABLE test_limit_by_validation
+(
+    c0 Int32,
+    c1 Int32,
+    c2 Int32
+)
+ENGINE = Memory;
+
 SELECT c0
 FROM test_limit_by_validation
 GROUP BY c0

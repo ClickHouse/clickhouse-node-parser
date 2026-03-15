@@ -1,3 +1,12 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_table
+(
+    id UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT *
 FROM test_table
 WHERE id = 1;

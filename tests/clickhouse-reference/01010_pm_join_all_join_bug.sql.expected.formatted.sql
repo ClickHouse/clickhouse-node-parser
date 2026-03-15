@@ -1,3 +1,12 @@
+CREATE TABLE ints
+(
+    i64 Int64,
+    i32 Int32
+)
+ENGINE = Memory;
+
+SET join_algorithm = 'partial_merge';
+
 SELECT *
 FROM
     ints AS l

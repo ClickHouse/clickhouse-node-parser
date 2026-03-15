@@ -1,3 +1,17 @@
+-- Reproducer for "Inconsistent KeyCondition behavior" with coalesce(const, key_column).
+-- When the first argument of coalesce is a non-null constant,
+-- matchesExactContinuousRange() incorrectly used types.front() (the constant's type)
+-- instead of the actual varying argument type to check monotonicity.
+SET session_timezone = 'UTC';
+
+CREATE TABLE test_coalesce_reversed
+(
+    ts Nullable(Date)
+)
+ENGINE = MergeTree
+ORDER BY ts
+SETTINGS index_granularity = 1, allow_nullable_key = 1;
+
 -- This query triggered "Inconsistent KeyCondition behavior" because
 -- coalesce(non_null_const, ts) was treated as monotonic w.r.t. ts
 -- due to using the wrong argument type in matchesExactContinuousRange().

@@ -1,0 +1,1 @@
+CREATE TABLE sales (DATE_SOLD DateTime64(3, 'UTC'), PRODUCT_ID Nullable(String)) Engine MergeTree() PARTITION BY toYYYYMM(DATE_SOLD) ORDER BY DATE_SOLD;

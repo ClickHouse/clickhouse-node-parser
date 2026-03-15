@@ -1,3 +1,5 @@
+SET enable_analyzer = 1, group_by_use_nulls = 1;
+
 SELECT tuple(tuple(number)) AS x
 FROM numbers(10)
 GROUP BY (number, tuple(number))

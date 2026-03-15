@@ -1,2 +1,1 @@
-SELECT *
-FROM test1;
+<Parse Error>

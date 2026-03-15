@@ -1,5 +1,64 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "map_test_index_map_keys"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "row_id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "map",
+        "type": "Map(String, String)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "map_bloom_filter_keys",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "map"
+              ]
+            }
+          ]
+        },
+        "indexType": "bloom_filter",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "row_id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -874,6 +933,65 @@
           "kind": "literal",
           "type": "String",
           "value": "map_bloom_filter_keys"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "map_test_index_map_values"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "row_id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "map",
+        "type": "Map(String, String)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "map_bloom_filter_values",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mapValues",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "map"
+              ]
+            }
+          ]
+        },
+        "indexType": "bloom_filter",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "row_id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
         }
       }
     ]

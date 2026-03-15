@@ -1,2 +1,6 @@
+CREATE TABLE a(`id1` UInt32, `id2` UInt32, `valA` UInt32) ENGINE = TinyLog;
+CREATE TABLE id1(`id1` UInt32, `val1` UInt8) ENGINE = Join(ANY, LEFT, id1);
+CREATE TABLE id2(`id2` UInt32, `val2` UInt8) ENGINE = Join(ANY, LEFT, id2);
 SELECT * from (SELECT * FROM a ANY LEFT OUTER JOIN id1 USING id1) js1 ANY LEFT OUTER JOIN id2 USING id2;
+create view b as (SELECT * from (SELECT * FROM a ANY LEFT OUTER JOIN id1 USING id1) js1 ANY LEFT OUTER JOIN id2 USING id2);
 SELECT * FROM b;

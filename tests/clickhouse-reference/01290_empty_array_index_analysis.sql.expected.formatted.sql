@@ -1,3 +1,12 @@
+CREATE TABLE count_lc_test
+(
+    s LowCardinality(String),
+    arr Array(LowCardinality(String)),
+    num UInt64
+)
+ENGINE = MergeTree
+ORDER BY (s, arr);
+
 SELECT '--- notEmpty';
 
 SELECT *
@@ -31,3 +40,12 @@ WHERE arr >= [];
 SELECT *
 FROM count_lc_test
 WHERE arr <= [];
+
+CREATE TABLE count_lc_test
+(
+    s LowCardinality(String),
+    arr Array(String),
+    num UInt64
+)
+ENGINE = MergeTree
+ORDER BY (s, arr);

@@ -64,6 +64,14 @@ SELECT countIfArray([NULL, NULL], [1, 0]) AS x FROM remote('127.0.0.{1,2}', numb
 SELECT countIfArray([1, NULL], [1, 0]) AS x FROM remote('127.0.0.{1,2}', numbers(3));
 SELECT countIfArrayIf([1, NULL], [1, 0], 1) AS x FROM remote('127.0.0.{1,2}', numbers(3));
 SELECT countIfArrayArray([[1, NULL]], [[1, 0]]) AS x FROM remote('127.0.0.{1,2}', numbers(3));
+CREATE TABLE t1 (`n` UInt64) ENGINE = MergeTree ORDER BY tuple();
+SET
+enable_parallel_replicas=1,
+    max_parallel_replicas=2,
+    use_hedged_requests=0,
+    cluster_for_parallel_replicas='test_cluster_one_shard_three_replicas_localhost',
+    parallel_replicas_for_non_replicated_merge_tree=1
+;
 SELECT count(NULL) FROM t1 WITH TOTALS;
 SELECT count(NULL as a), a FROM t1 WITH TOTALS;
 SELECT count(NULL as a), sum(a) FROM t1 WITH TOTALS;

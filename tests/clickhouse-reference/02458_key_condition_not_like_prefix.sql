@@ -1,3 +1,4 @@
+CREATE TABLE data (str String) ENGINE=MergeTree ORDER BY str;
 SELECT count() FROM data WHERE str NOT LIKE 'a%' SETTINGS force_primary_key=1;
 SELECT count() FROM data WHERE str NOT LIKE 'a%%' SETTINGS force_primary_key=1;
 SELECT count() FROM data WHERE str NOT LIKE 'a' SETTINGS force_primary_key=1; -- { serverError INDEX_NOT_USED }

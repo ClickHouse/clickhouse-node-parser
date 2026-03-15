@@ -1,3 +1,10 @@
+CREATE TABLE test_lc_pk
+(
+    s String
+)
+ENGINE = MergeTree
+ORDER BY s;
+
 SELECT trimLeft(`explain`)
 FROM (
         SELECT *

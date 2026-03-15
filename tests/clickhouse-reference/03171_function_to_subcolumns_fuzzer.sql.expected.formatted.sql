@@ -1,5 +1,29 @@
+SET optimize_functions_to_subcolumns = 1;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE t_func_to_subcolumns_map_2
+(
+    id UInt64,
+    m Map(String, UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT sum(mapContains(m, toNullable('aaa')))
 FROM t_func_to_subcolumns_map_2;
+
+CREATE TABLE t_func_to_subcolumns_join
+(
+    id UInt64,
+    arr Array(UInt64),
+    n Nullable(String),
+    m Map(String, UInt64)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET join_use_nulls = 1;
 
 SELECT
     id,
@@ -18,6 +42,14 @@ FULL JOIN (
     USING (id)
 WHERE empty(arr)
 ORDER BY id ASC;
+
+CREATE TABLE t_func_to_subcolumns_use_nulls
+(
+    arr Array(UInt64),
+    v UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT
     length(arr) AS n,

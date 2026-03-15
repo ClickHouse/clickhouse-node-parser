@@ -1,3 +1,23 @@
+CREATE TABLE ts_data
+(
+    id UInt64,
+    timestamps Array(DateTime),
+    values Array(Float64)
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE ts_data_nullable
+(
+    id UInt64,
+    timestamp UInt32,
+    value Nullable(Float64)
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+SET allow_experimental_time_series_aggregate_functions = 1;
+
 -- Fail because of rows with non-matching lengths of timestamps and values
 SELECT timeSeriesChangesToGrid(10, 120, 10, 10)(timestamps, values)
 FROM ts_data; -- {serverError BAD_ARGUMENTS}

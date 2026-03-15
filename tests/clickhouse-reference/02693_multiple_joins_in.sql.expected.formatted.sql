@@ -1,3 +1,9 @@
+CREATE TEMPORARY TABLE temp_table3
+(
+    val0 UInt64
+)
+ENGINE = Memory();
+
 SELECT *
 FROM
     (

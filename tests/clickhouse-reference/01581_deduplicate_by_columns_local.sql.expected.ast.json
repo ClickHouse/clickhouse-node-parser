@@ -1,5 +1,65 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sk",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "partition_key",
+        "type": "UInt32",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -19,6 +79,119 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sk",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "partition_key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "mat",
+        "type": "UInt32",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "12345"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "alias",
+        "type": "UInt32",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "+",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "partition_key"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "parenthesized": true
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toString",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "sk"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- table with duplicates on MATERIALIZED columns"
+    ],
+    "trailingComments": [
+      "-- silly order key to ensure that key column is checked even when it is a part of expression. See [1] below."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,6 +202,88 @@
       "kind": "tableRef",
       "table": "full_duplicates"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sk",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "partition_key",
+        "type": "UInt32",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "mat",
+        "type": "UInt32",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "rand",
+          "args": []
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "alias",
+        "type": "UInt32",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",

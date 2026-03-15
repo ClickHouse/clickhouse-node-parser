@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+SET optimize_syntax_fuse_functions = 1;
+CREATE TABLE fuse_tbl(a Nullable(Int8), b Int8) Engine = Log;
 SELECT avg(a), sum(a) FROM (SELECT a FROM fuse_tbl);
 SELECT avg(a), sum(a) FROM (SELECT a FROM fuse_tbl WHERE isNull(a));
 SELECT avg(a), sum(a) FROM (SELECT a FROM fuse_tbl WHERE isNotNull(a));

@@ -1,3 +1,4 @@
+CREATE TABLE count (x UInt64) ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 SELECT count() FROM count;
 SELECT count() * 2 FROM count;
 SELECT count() FROM (SELECT * FROM count UNION ALL SELECT * FROM count);

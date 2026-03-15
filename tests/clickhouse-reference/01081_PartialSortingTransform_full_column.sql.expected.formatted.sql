@@ -1,3 +1,10 @@
+CREATE TABLE test_01081
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
 SELECT 1
 FROM
     remote('127.{1,2}', currentDatabase(), test_01081) AS lhs

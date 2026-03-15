@@ -1,3 +1,19 @@
+-- { echo }
+-- Another test for window functions because the other one is too long.
+
+-- some craziness with a mix of materialized and unmaterialized const columns
+-- after merging sorted transform, that used to break the peer group detection in
+-- the window transform.
+CREATE TABLE order_by_const
+(
+    `a` UInt64,
+    `b` UInt64,
+    `c` UInt64,
+    `d` UInt64
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+SETTINGS index_granularity = 8192;
 -- output 1 sorted stream
 SELECT row_number() OVER (order by 1, a) FROM order_by_const SETTINGS query_plan_enable_multithreading_after_window_functions=0;
 -- expressions in window frame

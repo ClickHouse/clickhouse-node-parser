@@ -1,3 +1,65 @@
+CreateQuery test_table (children 3)
+ Identifier test_table
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration key_column (children 1)
+    DataType UInt64
+   ColumnDeclaration data_column_1 (children 1)
+    DataType UInt64
+   ColumnDeclaration data_column_2 (children 1)
+    DataType UInt8
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier key_column
+
+CreateQuery test_dictionary (children 3)
+ Identifier test_dictionary
+ ExpressionList (children 3)
+  DictionaryAttributeDeclaration key_column (children 2)
+   DataType UInt64
+   Literal UInt64_0
+  DictionaryAttributeDeclaration data_column_1 (children 2)
+   DataType UInt64
+   Literal UInt64_1
+  DictionaryAttributeDeclaration data_column_2 (children 2)
+   DataType UInt8
+   Literal UInt64_1
+ Dictionary definition (children 3)
+  ExpressionList (children 1)
+   Identifier key_column
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 2)
+    pair (children 1)
+     Function currentDatabase (children 1)
+      ExpressionList
+    pair (children 1)
+     Literal 'test_table'
+  Dictionary layout (children 1)
+   ExpressionList
+
+CreateQuery test_table_default (children 3)
+ Identifier test_table_default
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration data_1 (children 1)
+    Function dictGetUInt64 (children 1)
+     ExpressionList (children 3)
+      Literal 'test_dictionary'
+      Literal 'data_column_1'
+      Function toUInt64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_0
+   ColumnDeclaration data_2 (children 1)
+    Function dictGet (children 1)
+     ExpressionList (children 3)
+      Identifier test_dictionary
+      Literal 'data_column_2'
+      Function toUInt64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_0
+ Storage definition (children 1)
+  Function TinyLog
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)

@@ -1,3 +1,24 @@
+CREATE TABLE tableConversion
+(
+    conversionId String,
+    value Nullable(Double)
+)
+ENGINE = Log();
+
+CREATE TABLE tableClick
+(
+    clickId String,
+    conversionId String,
+    value Nullable(Double)
+)
+ENGINE = Log();
+
+CREATE TABLE leftjoin
+(
+    id String
+)
+ENGINE = Log();
+
 SELECT
     conversion.conversionId AS myConversionId,
     click.clickId AS myClickId,

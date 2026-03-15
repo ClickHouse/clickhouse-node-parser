@@ -1,3 +1,4 @@
+set session_timezone='UTC';
 select sipHash64('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON);
 select sipHash64('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}], "f" : null}'::JSON);
 select sipHash64('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(max_dynamic_paths=100));
@@ -16,4 +17,7 @@ select sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{
 select sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(max_dynamic_types=0))])));
 select sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(a Int64))])));
 select sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(a Dynamic))])));
+create table test (json JSON) engine=Memory;
 select json, sipHash64(json) from test;
+create table test (json JSON(max_dynamic_types=0)) engine=Memory;
+create table test (json JSON(max_dynamic_paths=0)) engine=Memory;

@@ -1,3 +1,13 @@
+CREATE TABLE test_grace_hash
+(
+    id UInt32,
+    value UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+SET join_algorithm = 'grace_hash';
+
 SELECT count()
 FROM (
         SELECT f.id

@@ -1,3 +1,4 @@
+-- { echoOn }
 -- Tuples with NaN
 SELECT
     min((c1, c2)),

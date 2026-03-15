@@ -1,5 +1,62 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Checks that no bad things happen when the table optimizes the row order to improve compressability during insert.",
+      "-- Below SELECTs intentionally only ORDER BY the table primary key and rely on read-in-order optimization"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "event",
+        "type": "Int8"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "optimize_row_order",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -34,6 +91,55 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "money",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "flag",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "settings": [
+      {
+        "name": "optimize_row_order",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -50,6 +156,70 @@
         "value": {
           "kind": "literal",
           "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "FixedString(2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": "Float32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "money",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "flag",
+        "type": "Nullable(Int32)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "flag"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "money"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "optimize_row_order",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      },
+      {
+        "name": "allow_nullable_key",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
           "value": "1"
         }
       }
@@ -96,6 +266,78 @@
         "value": {
           "kind": "literal",
           "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "fixed_str",
+        "type": "FixedString(6)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "event_date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "vector_array",
+        "type": "Array(Float32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "nullable_int",
+        "type": "Nullable(Int128)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "low_card_string",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "map_column",
+        "type": "Map(String, String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "tuple_column",
+        "type": "Tuple(UInt256)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "fixed_str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_date"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "optimize_row_order",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
           "value": "1"
         }
       }

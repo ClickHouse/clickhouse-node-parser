@@ -1,3 +1,13 @@
+SET enable_lightweight_update = 1;
+
+CREATE TABLE t_lwu_add_column
+(
+    a UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
+
 SELECT
     a % 6 AS n,
     sum(b),

@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+CREATE TABLE v1 ( id Int32 ) ENGINE = MergeTree() ORDER BY id;
+CREATE TABLE v2 ( value Int32 ) ENGINE = MergeTree() ORDER BY value;
 SELECT * FROM v1 AS t1
 JOIN v1 AS t2 USING (id)
 JOIN v2 AS n1 ON t1.id = n1.value

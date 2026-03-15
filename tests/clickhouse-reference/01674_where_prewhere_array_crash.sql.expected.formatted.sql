@@ -1,3 +1,12 @@
+CREATE TABLE tab
+(
+    x UInt64,
+    `arr.a` Array(UInt64),
+    `arr.b` Array(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT x
 FROM
     tab

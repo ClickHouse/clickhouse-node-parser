@@ -1,3 +1,35 @@
+CREATE TABLE t0
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+CREATE TABLE t1
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+CREATE TABLE t2
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+SET join_algorithm = 'prefer_partial_merge';
+
+SET partial_merge_join_rows_in_right_blocks = 1;
+
+SET any_join_distinct_right_table_keys = 1;
+
+SET join_use_nulls = 0;
+
 SELECT
     t1.*,
     t2.x
@@ -141,3 +173,5 @@ INNER JOIN t2
 ORDER BY
     x ASC,
     t2.y ASC;
+
+SET join_use_nulls = 1;

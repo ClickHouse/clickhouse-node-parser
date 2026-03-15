@@ -1,3 +1,4 @@
+CREATE TABLE test_generic_events_all (APIKey UInt8, SessionType UInt8) ENGINE = MergeTree() PARTITION BY APIKey ORDER BY tuple();
 SELECT OperatingSystem FROM test_generic_events_all PREWHERE APIKey = 42 WHERE SessionType = 42;
 SELECT * FROM test_generic_events_all PREWHERE APIKey = 42 WHERE SessionType = 42;
 SELECT * FROM test_generic_events_all WHERE APIKey = 42 AND SessionType = 42;

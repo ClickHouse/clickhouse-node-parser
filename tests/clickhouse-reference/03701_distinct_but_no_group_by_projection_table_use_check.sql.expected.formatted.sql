@@ -1,3 +1,17 @@
+CREATE TABLE tab
+(
+    n UInt32,
+    x UInt32,
+    y UInt32,
+    z UInt32,
+    PROJECTION p (    SELECT count()
+    GROUP BY
+        x,
+        z)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT DISTINCT
     x,
     z
@@ -17,6 +31,19 @@ SELECT DISTINCT
 FROM tab
 WHERE x IN (1, 2)
     AND z < 5;
+
+CREATE TABLE tab
+(
+    n UInt32,
+    x UInt32,
+    y UInt32,
+    PROJECTION p (    SELECT count()
+    GROUP BY
+        x / 2,
+        y % 10)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT DISTINCT
     x / 2,

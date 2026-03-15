@@ -1,3 +1,13 @@
+CREATE TABLE t
+(
+    a String,
+    b String,
+    c String,
+    d String
+)
+ORDER BY (a, b, c, d)
+SETTINGS index_granularity = 10;
+
 SELECT count()
 FROM t
 WHERE a = '0'

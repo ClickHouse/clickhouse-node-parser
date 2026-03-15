@@ -1,5 +1,200 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "video_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "datetime",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "user_id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "domain",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "bytes",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "duration",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "datetime"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "user_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "device_id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rng"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "user_id_raw",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_id_raw",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "domain_raw",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "bytes_raw",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "duration_raw",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "GenerateRandom",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1024"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "video_log_result"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "hour",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sum_bytes",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "avg_duration",
+        "type": "Float64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "hour"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sum_bytes"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

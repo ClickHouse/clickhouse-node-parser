@@ -1,3 +1,11 @@
+CREATE TABLE s2_indexes
+(
+    s2_index UInt64,
+    longitude Float64,
+    latitude Float64
+)
+ENGINE = Memory;
+
 SELECT
     s2ToGeo(s2_index),
     geoToS2(longitude, latitude)

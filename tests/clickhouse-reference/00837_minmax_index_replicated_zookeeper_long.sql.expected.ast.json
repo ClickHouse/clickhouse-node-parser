@@ -1,5 +1,403 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Decimal(10, 2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": "Enum8('a' = 1, 'b' = 2, 'c' = 3)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": "Date"
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_all",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "i32"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "i32"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "f64"
+                ]
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "e"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt"
+              ]
+            }
+          ],
+          "source": "(i32, i32 + f64, d, s, e, dt)"
+        },
+        "indexType": "minmax",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_2",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "u64"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "toYear",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dt"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "substring",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                }
+              ]
+            }
+          ],
+          "source": "(u64 + toYear(dt), substring(s, 2, 4))"
+        },
+        "indexType": "minmax",
+        "granularity": 3
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00837/minmax"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "u64"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Decimal(10, 2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": "Enum8('a' = 1, 'b' = 2, 'c' = 3)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": "Date"
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_all",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "i32"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "i32"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "f64"
+                ]
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "e"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt"
+              ]
+            }
+          ],
+          "source": "(i32, i32 + f64, d, s, e, dt)"
+        },
+        "indexType": "minmax",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_2",
+        "expr": {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "u64"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "toYear",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dt"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "substring",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                }
+              ]
+            }
+          ],
+          "source": "(u64 + toYear(dt), substring(s, 2, 4))"
+        },
+        "indexType": "minmax",
+        "granularity": 3
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00837/minmax"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "u64"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

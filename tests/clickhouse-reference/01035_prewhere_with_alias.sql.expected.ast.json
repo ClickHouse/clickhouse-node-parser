@@ -1,5 +1,57 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "UInt16",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -28,6 +80,236 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "audience_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "AudienceType",
+        "type": "Enum8('other' = 0, 'client' = 1, 'group' = 2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "UMA",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "APIKey",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "TrialNameID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "TrialGroupID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "AppVersion",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Arch",
+        "type": "Enum8('other' = 0, 'x32' = 1, 'x64' = 2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "GroupID",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "OSName",
+        "type": "Enum8('other' = 0, 'Android' = 1, 'iOS' = 2, 'macOS' = 3, 'Windows' = 4, 'Linux' = 5)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Channel",
+        "type": "Enum8('other' = 0, 'Canary' = 1, 'Dev' = 2, 'Beta' = 3, 'Stable' = 4)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Hits",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Sum",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Release",
+        "type": "String",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "splitByChar",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "-"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "AppVersion"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree"
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "toISOYear",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Date"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toISOWeek",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Date"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(toISOYear(Date), toISOWeek(Date))"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "AudienceType"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "UMA"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "APIKey"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Date"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "TrialNameID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "TrialGroupID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "AppVersion"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Arch"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "UserID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "GroupID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "OSName"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Channel"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ]
   },
   {
     "kind": "select",

@@ -1,3 +1,5 @@
+CREATE TABLE test_grouping_sets_predicate ( day_ Date, type_1 String ) ENGINE=MergeTree ORDER BY day_;
+SET group_by_use_nulls = true;
 SELECT *
 FROM ( SELECT day_, type_1 FROM test_grouping_sets_predicate GROUP BY GROUPING SETS ( (day_, type_1), (day_) ) )
 WHERE day_ = '2023-01-05'

@@ -1,3 +1,14 @@
+CREATE TABLE skip_table
+(
+    k UInt64,
+    v UInt64,
+    INDEX bf_big v TYPE bloom_filter(0.0000000001),
+    INDEX bf_small v TYPE bloom_filter(0.1)
+)
+ENGINE = MergeTree
+PRIMARY KEY k
+SETTINGS index_granularity = 8192, add_minmax_index_for_numeric_columns = 0;
+
 SELECT trim(`explain`)
 FROM (
         EXPLAIN indexes = 1

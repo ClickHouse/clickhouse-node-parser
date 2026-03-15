@@ -1,3 +1,21 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test
+(
+    id UInt32,
+    value LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE TABLE test2
+(
+    id UInt32,
+    value LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT *
 FROM
     test

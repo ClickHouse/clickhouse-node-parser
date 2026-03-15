@@ -1,3 +1,16 @@
+CREATE TABLE test_table
+(
+ `timestamp` DateTime,
+ `value` UInt64,
+ `day` Date ALIAS toDate(timestamp),
+ `day1` Date ALIAS day + 1,
+ `day2` Date ALIAS day1 + 1,
+ `time` DateTime ALIAS timestamp
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMMDD(timestamp)
+ORDER BY timestamp SETTINGS index_granularity = 1;
+set optimize_respect_aliases = 1;
 SELECT COUNT() = 10 FROM test_table WHERE day = '2020-01-01' SETTINGS max_rows_to_read = 10;
 SELECT t = '2020-01-03' FROM (SELECT day AS t FROM test_table WHERE t = '2020-01-03' GROUP BY t SETTINGS max_rows_to_read = 10);
 SELECT COUNT() = 10 FROM test_table WHERE day = '2020-01-01' UNION ALL SELECT 1 FROM numbers(1) SETTINGS max_rows_to_read = 11;
@@ -34,11 +47,28 @@ SELECT t = '2020-01-03' FROM (SELECT day2 AS t FROM test_table WHERE t = '2020-0
 SELECT COUNT() = 10 FROM test_table WHERE day1 = '2020-01-03' UNION ALL SELECT 1 FROM numbers(1) SETTINGS max_rows_to_read = 11;
 SELECT COUNT() = 0 FROM (SELECT  toDate('2019-01-01') AS  day1, day1 AS t   FROM test_table PREWHERE t = '2020-01-03'  WHERE t  = '2020-01-03' GROUP BY t );
 SELECT day1 = '2020-01-04' FROM test_table PREWHERE day1 = '2020-01-04'  WHERE day1 = '2020-01-04' GROUP BY day1 SETTINGS max_rows_to_read = 10;
+set max_rows_to_read = 10;
 SELECT count() == 10 FROM test_table WHERE day = '2020-01-01';
 SELECT sum(struct.key) == 30, sum(struct.value) == 30 FROM (SELECT struct.key, struct.value FROM test_table array join struct WHERE day = '2020-01-01');
 -- lambda parameters in filter should not be rewrite
 SELECT count() == 10 FROM test_table WHERE  arrayMap((day) -> day + 1, [1,2,3]) [1] = 2 AND day = '2020-01-03';
+set max_rows_to_read = 0;
+CREATE TABLE test_index
+(
+    `key_string` String,
+    `key_uint32` ALIAS toUInt32(key_string),
+    INDEX idx toUInt32(key_string) TYPE set(0) GRANULARITY 1
+)
+ENGINE = MergeTree
+PARTITION BY tuple()
+PRIMARY KEY tuple()
+ORDER BY key_string SETTINGS index_granularity = 1;
+set max_rows_to_read = 1;
 SELECT COUNT() == 1 FROM test_index WHERE key_uint32 = 1;
 SELECT COUNT() == 1 FROM test_index WHERE toUInt32(key_string) = 1;
+create table pd (dt DateTime, i int, dt_m DateTime alias toStartOfMinute(dt)) engine Distributed(test_shard_localhost, currentDatabase(), 'pl');
+create table pl (dt DateTime, i int, projection p (select sum(i) group by toStartOfMinute(dt))) engine MergeTree order by dt;
+set max_rows_to_read = 2;
 select sum(i) from pd group by dt_m settings optimize_use_projections = 1, force_optimize_projection = 1;
+create temporary table t (x UInt64, y alias x);
 select sum(x), sum(y) from t;

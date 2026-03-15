@@ -1,2 +1,7 @@
+-- Tags: no-fasttest
+
+SET enable_json_type = 1;
+CREATE TABLE t_json_local(data JSON) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE t_json_dist AS t_json_local ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), t_json_local);
 SELECT data, JSONAllPathsWithTypes(data) FROM t_json_dist;
 SELECT data.k1, data.k2.k3, data.k2.k4 FROM t_json_dist;

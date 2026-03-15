@@ -1,3 +1,5 @@
+CREATE TABLE table1 (number UInt64) ENGINE=MergeTree ORDER BY number SETTINGS index_granularity=1;
+CREATE VIEW view1 AS SELECT number FROM table1;
 SELECT *
 FROM
 (

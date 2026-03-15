@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_null_as_default",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,6 +20,40 @@
         "type": "UInt64",
         "value": "1"
       }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "/* Check JSONCompactStringsEachRow Output */"
     ]
   },
   {
@@ -206,6 +253,71 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "v2",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "v3",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "v2"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "16"
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v4",
+        "type": "UInt8",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "v2"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "/* Check JSONCompactStringsEachRow Input */"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -216,6 +328,22 @@
     ]
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_null_as_default",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Check input_format_null_as_default = 1 */"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -223,6 +351,40 @@
         "type": "UInt64",
         "value": "7"
       }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": "Nested(id UInt8, name String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "v1"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "/* Check Nested */"
     ]
   },
   {
@@ -265,6 +427,19 @@
         "kind": "literal",
         "type": "UInt64",
         "value": "10"
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_skip_unknown_fields",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
       }
     ]
   },

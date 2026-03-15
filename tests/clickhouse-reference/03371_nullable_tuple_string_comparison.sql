@@ -1,3 +1,5 @@
+CREATE TABLE t1 (id UInt64, s1 Nullable(String), s2 Nullable(String)) ORDER BY id;
+CREATE TABLE t2 (id UInt64, s1 String, s2 String) ORDER BY id;
 SELECT id FROM t1 WHERE (s1, s2) = ('a', 'b');
 SELECT id FROM t1 WHERE (s1, s2) = '(\'a\',\'b\')';
 SELECT id FROM t1 WHERE (s1, s2) = CAST((SELECT s1, s2 FROM t1 WHERE s1 = 'a') AS text);

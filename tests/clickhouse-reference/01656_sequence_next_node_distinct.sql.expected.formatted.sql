@@ -1,3 +1,14 @@
+SET allow_experimental_funnel_functions = 1;
+
+CREATE TABLE events_demo
+(
+    id UInt32,
+    dt DateTime,
+    action Nullable(String)
+)
+ENGINE = MergeTree()
+ORDER BY (id, dt);
+
 SELECT DISTINCT
     '(forward, head, A->B)',
     id,

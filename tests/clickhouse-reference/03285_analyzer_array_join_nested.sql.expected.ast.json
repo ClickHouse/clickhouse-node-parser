@@ -1,5 +1,124 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hourly"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "hour",
+        "type": "datetime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "metric.names",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "metric.values",
+        "type": "Array(Int64)"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-01-01"
+        },
+        {
+          "kind": "array",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "a"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "b"
+            }
+          ],
+          "source": "['a', 'b']"
+        },
+        {
+          "kind": "array",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ],
+          "source": "[1,2]"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x.a",
+        "type": "Array(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "x.b.first",
+        "type": "Array(Array(UInt32))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "x.b.second",
+        "type": "Array(Array(String))"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -60,7 +179,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
   },
   {
     "kind": "select",
@@ -210,6 +332,19 @@
     ]
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "analyzer_compatibility_allow_compound_identifiers_in_unflatten_nested",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -272,6 +407,19 @@
     },
     "trailingComments": [
       "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "analyzer_compatibility_allow_compound_identifiers_in_unflatten_nested",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
     ]
   }
 ]

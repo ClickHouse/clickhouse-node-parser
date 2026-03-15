@@ -10,6 +10,8 @@ FORMAT Values;
 SELECT '\noutput_format_values_escape_quote_with_quote=1'
 FORMAT LineAsString;
 
+SET output_format_values_escape_quote_with_quote = 1;
+
 -- Ensure no newline issues at end of file
 SELECT ''
 FORMAT LineAsString;

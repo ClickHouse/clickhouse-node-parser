@@ -1,3 +1,5 @@
+SET max_rows_to_read = 0, max_bytes_to_read = 0;
+
 SELECT count()
 FROM (
         SELECT DISTINCT

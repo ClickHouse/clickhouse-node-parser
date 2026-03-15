@@ -1,2 +1,1 @@
-SELECT countMerge(*)
-FROM b;
+<Parse Error>

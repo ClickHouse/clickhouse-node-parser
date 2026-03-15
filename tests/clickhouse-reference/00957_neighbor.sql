@@ -1,3 +1,4 @@
+SET allow_deprecated_error_prone_window_functions = 1;
 -- no arguments
 select neighbor(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 -- single argument

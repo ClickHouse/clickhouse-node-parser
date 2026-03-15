@@ -1,3 +1,15 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String,
+    value_array Array(UInt64),
+    value_array_array Array(Array(UInt64))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     id,
     value,

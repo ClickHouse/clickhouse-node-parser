@@ -53,3 +53,5 @@ INNER JOIN (
             toUInt256('340282366920938463463374607431768211456') AS v
     ) AS t2
     USING (k, v);
+
+SET join_algorithm = 'full_sorting_merge';

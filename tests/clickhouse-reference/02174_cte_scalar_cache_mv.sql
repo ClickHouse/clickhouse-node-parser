@@ -1,3 +1,17 @@
+-- TEST CACHE
+CREATE TABLE t1 (i Int64, j Int64) ENGINE = Memory;
+CREATE TABLE t2 (k Int64, l Int64, m Int64, n Int64) ENGINE = Memory;
+CREATE MATERIALIZED VIEW mv1 TO t2 AS
+    WITH
+    (SELECT max(i) FROM t1) AS t1
+    SELECT
+           t1 as k, -- Using local cache x 4
+           t1 as l,
+           t1 as m,
+           t1 as n
+    FROM t1
+    LIMIT 5;
+set enable_analyzer = 0;
 SELECT k, l, m, n, count()
 FROM t2
 GROUP BY k, l, m, n
@@ -23,6 +37,13 @@ WHERE
   AND type = 'QueryFinish'
   AND query LIKE '-- FIRST INSERT\nINSERT INTO t1\n%'
   AND event_date >= yesterday() AND event_time > now() - interval 10 minute;
+set enable_analyzer = 1;
+CREATE TABLE t3 (z Int64) ENGINE = Memory;
+CREATE MATERIALIZED VIEW mv2 TO t3 AS
+SELECT
+   -- This includes an unnecessarily complex query to verify that the local cache is used (since it uses t1)
+    sum(i) + sum(j) + (SELECT * FROM (SELECT min(i) + min(j) FROM (SELECT * FROM system.one _a, t1 _b))) AS z
+FROM t1;
 SELECT * FROM t3 ORDER BY z ASC;
 SELECT
     '02177_MV_2',
@@ -35,6 +56,12 @@ WHERE
   AND type = 'QueryFinish'
   AND query LIKE '-- SECOND INSERT\nINSERT INTO t1%'
   AND event_date >= yesterday() AND event_time > now() - interval 10 minute;
+CREATE TABLE t4 (z Int64) ENGINE = Memory;
+CREATE MATERIALIZED VIEW mv3 TO t4 AS
+SELECT
+    -- This includes an unnecessarily complex query but now it uses t2 so it can be cached
+    min(i) + min(j) + (SELECT * FROM (SELECT min(k) + min(l) FROM (SELECT * FROM system.one _a, t2 _b))) AS z
+FROM t1;
 SELECT * FROM t4 ORDER BY z ASC;
 SELECT
     '02177_MV_3',

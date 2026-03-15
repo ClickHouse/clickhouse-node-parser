@@ -1,3 +1,11 @@
+CREATE TABLE test_bitxor_if
+(
+    c_int32 Int32,
+    c_str String
+)
+ENGINE = MergeTree()
+ORDER BY c_int32;
+
 -- Simple case: bitXor with IF returning Int64 (from Int32 and Int64)
 SELECT bitXor(if(like(c_str, 'i5%v0%'), c_int32, toInt64(floor(7850539625197349647))), c_int32) AS result
 FROM test_bitxor_if

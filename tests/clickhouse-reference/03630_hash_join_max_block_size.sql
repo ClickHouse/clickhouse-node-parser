@@ -1,3 +1,7 @@
+CREATE TABLE b_customers (customer_id Int64, first_order_id Int64) ENGINE = MergeTree ORDER BY customer_id;
+CREATE TABLE b_orders (order_id Int64, address_id String) ENGINE = MergeTree ORDER BY order_id;
+CREATE TABLE b_addresses (address_id String) ENGINE = MergeTree ORDER BY address_id;
+set query_plan_join_swap_table = 0;
 select count() from
 (
   SELECT customers.customer_id AS dim_customers_id

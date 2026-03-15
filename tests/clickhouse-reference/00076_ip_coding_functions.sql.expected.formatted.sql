@@ -1,3 +1,5 @@
+SET cast_ipv4_ipv6_default_on_conversion_error = 1;
+
 SELECT IPv4StringToNum('') == 0;
 
 SELECT IPv4StringToNum(materialize('')) == 0;
@@ -44,6 +46,12 @@ SELECT IPv6StringToNum(materialize('not an ip string')) == toFixedString(materia
 
 /* IPv4ToIPv6 */
 SELECT hex(IPv4ToIPv6(1297626935));
+
+CREATE TABLE addresses
+(
+    addr UInt32
+)
+ENGINE = Memory;
 
 SELECT hex(IPv4ToIPv6(addr))
 FROM addresses
@@ -183,6 +191,12 @@ SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 0, 
 SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 0, 15);
 
 SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 0, 16);
+
+CREATE TABLE addresses
+(
+    addr String
+)
+ENGINE = Memory;
 
 SELECT cutIPv6(toFixedString(unhex(addr), 16), 3, 0)
 FROM addresses

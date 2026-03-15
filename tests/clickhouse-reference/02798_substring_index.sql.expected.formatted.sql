@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT substringIndex('www.clickhouse.com', '.', -4);
 
 SELECT substringIndex('www.clickhouse.com', '.', -3);

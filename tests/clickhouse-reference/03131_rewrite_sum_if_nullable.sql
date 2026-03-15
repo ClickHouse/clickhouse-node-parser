@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/62890
-
+-- { echoOn }
 SELECT sum(if(materialize(0), toNullable(1), 0));
 SELECT sum(if(materialize(0), toNullable(1), materialize(0)));
 SELECT sum(if(materialize(0), materialize(toNullable(1)), materialize(0)));

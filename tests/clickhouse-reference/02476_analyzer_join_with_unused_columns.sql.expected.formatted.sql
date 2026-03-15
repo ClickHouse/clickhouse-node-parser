@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     subquery_1.id,
     subquery_2.id

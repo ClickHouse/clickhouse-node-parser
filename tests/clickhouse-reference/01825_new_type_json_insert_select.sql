@@ -1,3 +1,15 @@
+-- Tags: no-fasttest
+
+SET enable_json_type = 1;
+SET allow_suspicious_types_in_order_by = 1;
+SET parallel_replicas_local_plan = 1;
+CREATE TABLE type_json_src (id UInt32, data JSON) ENGINE = MergeTree ORDER BY id;
+CREATE TABLE type_json_dst AS type_json_src;
 SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(data)) AS path FROM type_json_dst ORDER BY path;
 SELECT id, data FROM type_json_dst ORDER BY id;
+CREATE TABLE type_json_dst (data JSON) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE type_json_src (data String) ENGINE = MergeTree ORDER BY tuple();
+SET max_threads = 1;
+SET max_insert_threads = 1;
+SET output_format_json_named_tuples_as_objects = 1;
 SELECT * FROM type_json_dst ORDER BY data.k1 FORMAT JSONEachRow;

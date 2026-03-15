@@ -1,3 +1,34 @@
+CREATE TABLE combinator_argMin_table_r1
+(
+    id Int32,
+    value Int32,
+    agg_time DateTime,
+    PROJECTION first_items (    SELECT
+        id,
+        minArgMin(agg_time, value),
+        maxArgMax(agg_time, value)
+    GROUP BY id)
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03128/combinator_argMin_table', 'r1')
+ORDER BY id;
+
+-- We check replication by creating another replica
+CREATE TABLE combinator_argMin_table_r2
+(
+    id Int32,
+    value Int32,
+    agg_time DateTime,
+    PROJECTION first_items (    SELECT
+        id,
+        minArgMin(agg_time, value),
+        maxArgMax(agg_time, value)
+    GROUP BY id)
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03128/combinator_argMin_table', 'r2')
+ORDER BY id;
+
+SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
+
 SELECT
     id,
     minArgMin(agg_time, value),

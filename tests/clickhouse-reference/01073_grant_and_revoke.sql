@@ -1,0 +1,2 @@
+CREATE USER test_user_01073;
+CREATE ROLE test_role_01073;

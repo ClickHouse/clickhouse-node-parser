@@ -1,3 +1,13 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on S3
+
+SET s3_truncate_on_insert = 1,
+    s3_list_object_keys_size = 100;
+CREATE TABLE 03741_data ( number UInt64 )
+ENGINE = S3(s3_conn, url = 'http://localhost:11111/test/03741_data/**', format = Parquet);
+CREATE TABLE 03741_filter ( path String ) ENGINE = MergeTree ORDER BY tuple()
+AS
+SELECT 'test/03741_data/file1.parquet' UNION ALL SELECT 'test/03741_data/nested/file3.parquet';
 SELECT _path, count() FROM 03741_data GROUP BY 1 ORDER BY 1;
 SELECT count() FROM 03741_data WHERE _path = 'test/03741_data/file1.parquet';
 SELECT count() FROM 03741_data WHERE _path != 'test/03741_data/file1.parquet';

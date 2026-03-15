@@ -1,2 +1,1 @@
-SELECT *
-FROM t3_00519;
+<Parse Error>

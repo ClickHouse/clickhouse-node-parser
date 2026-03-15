@@ -1,2 +1,7 @@
+CREATE TEMPORARY TABLE test_00670
+(
+    id int
+);
+
 SELECT *
 FROM test_00670;

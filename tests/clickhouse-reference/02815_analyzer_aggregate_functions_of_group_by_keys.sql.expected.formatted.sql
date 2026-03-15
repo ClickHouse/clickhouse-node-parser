@@ -1,3 +1,9 @@
+SET enable_analyzer = 1;
+
+SET optimize_move_functions_out_of_any = 0;
+
+SET optimize_aggregators_of_group_by_keys = 1;
+
 SELECT
     min(number % 2) AS a,
     max(number % 3) AS b
@@ -37,3 +43,5 @@ FROM (
 SELECT anyLast(number)
 FROM numbers(1)
 GROUP BY number;
+
+SET optimize_aggregators_of_group_by_keys = 0;

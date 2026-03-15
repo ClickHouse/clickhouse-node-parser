@@ -8,6 +8,13 @@ FROM loop(numbers(3))
 LIMIT 10
 SETTINGS max_block_size = 1;
 
+CREATE TABLE t
+(
+    n Int8
+)
+ENGINE = MergeTree
+ORDER BY n;
+
 SELECT *
 FROM loop(t)
 LIMIT 15; -- { serverError TOO_MANY_RETRIES_TO_FETCH_PARTS }

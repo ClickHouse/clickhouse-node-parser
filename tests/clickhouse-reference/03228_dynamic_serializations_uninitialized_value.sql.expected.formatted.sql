@@ -1,3 +1,9 @@
+SET allow_experimental_dynamic_type = 1;
+
+SET allow_suspicious_types_in_group_by = 1;
+
+SET cast_keep_nullable = 1;
+
 SELECT
     toFixedString('str', 3),
     3,

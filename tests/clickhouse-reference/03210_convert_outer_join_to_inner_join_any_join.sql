@@ -1,3 +1,15 @@
+CREATE TABLE user_country (
+    user_id UInt64,
+    country String
+)
+ENGINE = ReplacingMergeTree
+ORDER BY user_id;
+CREATE TABLE user_transactions (
+    user_id UInt64,
+    transaction_id String
+)
+ENGINE = MergeTree
+ORDER BY user_id;
 -- Expected 3 rows, got only 1. Removing 'ANY' and adding 'FINAL' fixes
 -- the issue (but it is not always possible). Moving filter by 'country' to
 -- an outer query doesn't help. Query without filter by 'country' works

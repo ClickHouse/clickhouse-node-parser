@@ -1,3 +1,17 @@
+CREATE TABLE test_agg_proj_02302
+(
+    x Int32,
+    y Int32,
+    PROJECTION x_plus_y (    SELECT
+        sum(x - y),
+        argMax(x, y)
+    GROUP BY x + y)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 1;
+
+-- { echoOn }
 SELECT
     x + y,
     sum(x - y) AS s

@@ -4,6 +4,16 @@ SELECT sign(1);
 
 SELECT sign(-1);
 
+CREATE TABLE test
+(
+    n1 Int32,
+    n2 UInt32,
+    n3 Float32,
+    n4 Float64,
+    n5 Decimal32(5)
+)
+ENGINE = Memory;
+
 SELECT sign(n1)
 FROM test;
 

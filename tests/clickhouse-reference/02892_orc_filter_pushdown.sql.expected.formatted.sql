@@ -1,4 +1,28 @@
+-- Tags: no-fasttest, no-parallel
+SET output_format_orc_string_as_string = 1;
+
+SET output_format_orc_row_index_stride = 100;
+
+SET input_format_orc_row_batch_size = 100;
+
+SET input_format_orc_filter_push_down = 1;
+
+SET input_format_null_as_default = 1;
+
+SET engine_file_truncate_on_insert = 1;
+
+SET optimize_or_like_chain = 0;
+
+SET max_block_size = 100000;
+
+SET max_insert_threads = 1;
+
+SET max_execution_time = 300;
+
+SET session_timezone = 'UTC';
+
 -- Go over all types individually
+-- { echoOn }
 SELECT
     count(),
     sum(number)
@@ -344,6 +368,7 @@ SELECT
 FROM file('02892.orc')
 WHERE (i8 < 0);
 
+-- { echoOn }
 SELECT
     count(),
     sum(number)
@@ -500,6 +525,7 @@ SELECT
 FROM file('02892.orc')
 WHERE (sometimes_null_lc < 150);
 
+-- { echoOn }
 SELECT
     count(),
     sum(number)

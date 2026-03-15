@@ -1,3 +1,4 @@
+CREATE TABLE visits (str String) ENGINE = MergeTree ORDER BY (str);
 SELECT 1
 FROM visits
 ARRAY JOIN arrayFilter(t -> 1, arrayMap(x -> tuple(x), [42])) AS i

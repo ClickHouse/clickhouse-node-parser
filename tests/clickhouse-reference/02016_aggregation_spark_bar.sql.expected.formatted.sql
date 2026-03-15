@@ -1,3 +1,13 @@
+CREATE TABLE spark_bar_test
+(
+    cnt UInt64,
+    event_date Date
+)
+ENGINE = MergeTree
+ORDER BY event_date
+SETTINGS index_granularity = 8192;
+
+-- { echoOn }
 SELECT sparkbar(2)(event_date, cnt)
 FROM spark_bar_test;
 

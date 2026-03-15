@@ -1,3 +1,25 @@
+CREATE TABLE IF NOT EXISTS t0
+(
+    a Int32
+)
+ENGINE = Memory;
+
+CREATE TABLE IF NOT EXISTS t1
+(
+    b Int32
+)
+ENGINE = Memory;
+
+CREATE TABLE IF NOT EXISTS t2
+(
+    c Int32
+)
+ENGINE = Memory;
+
+SET query_plan_optimize_join_order_limit = 16;
+
+SET enable_analyzer = 1;
+
 SELECT t1.b
 FROM
     t0

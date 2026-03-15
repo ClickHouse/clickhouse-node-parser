@@ -1,3 +1,16 @@
+-- This tests will show the difference in data with use_skip_indexes_if_final and w/o
+-- EDIT: Correct result with be seen with use_skip_indexes_if_final=1 and use_skip_indexes_if_final_exact_mode=1
+CREATE TABLE data_02201
+(
+    key Int,
+    value_max SimpleAggregateFunction(max, Int),
+    INDEX idx value_max TYPE minmax GRANULARITY 1
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY key
+PARTITION BY key;
+
+-- { echoOn }
 SELECT *
 FROM data_02201 FINAL
 WHERE value_max = 1

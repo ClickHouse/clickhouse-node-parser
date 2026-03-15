@@ -1,7 +1,26 @@
+-- Sparse serialization for Nullable(Tuple) columns not supported yet
+SET enable_multiple_prewhere_read_steps = 0;
+
+SET allow_experimental_nullable_tuple_type = 1;
+
+CREATE TABLE nullable_tuple_sparse
+(
+    tup Nullable(Tuple(u UInt64, s String))
+)
+ENGINE = MergeTree
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0, nullable_serialization_version = 'allow_sparse', min_bytes_for_wide_part = 0;
+
 SELECT tup
 FROM nullable_tuple_sparse
 WHERE isNull(tup)
     AND tup.s = 'a';
+
+CREATE TABLE nullable_tuple_sparse_2
+(
+    tup Nullable(Tuple(u UInt64, s String))
+)
+ENGINE = MergeTree
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0, nullable_serialization_version = 'allow_sparse', min_bytes_for_wide_part = 0;
 
 SELECT sum(NOT isNull(tup))
 FROM nullable_tuple_sparse_2;
@@ -34,8 +53,24 @@ FROM nullable_tuple_sparse_2
 WHERE tup.u IN (0, 5, 10)
 ORDER BY tup.u ASC;
 
+CREATE TABLE test_structure
+(
+    t Nullable(Tuple(x UInt32, y UInt64)),
+    PRIMARY KEY(tuple())
+)
+ENGINE = MergeTree
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0, nullable_serialization_version = 'allow_sparse', min_bytes_for_wide_part = 0;
+
 SELECT DISTINCT dumpColumnStructure(*)
 FROM test_structure;
+
+CREATE TABLE test_structure_2
+(
+    t Nullable(Tuple(x UInt32, y UInt64)),
+    PRIMARY KEY(tuple())
+)
+ENGINE = MergeTree
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0, nullable_serialization_version = 'allow_sparse', min_bytes_for_wide_part = 0;
 
 SELECT DISTINCT dumpColumnStructure(*)
 FROM test_structure_2;

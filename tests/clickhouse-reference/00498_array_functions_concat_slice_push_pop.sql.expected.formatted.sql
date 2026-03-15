@@ -4,6 +4,8 @@ SELECT arrayConcat(emptyArrayUInt8(), emptyArrayUInt8());
 
 SELECT arrayConcat(emptyArrayUInt8(), emptyArrayUInt8(), emptyArrayUInt8());
 
+SELECT arrayConcat([Null], emptyArrayUInt8());
+
 SELECT arrayConcat([Null], emptyArrayUInt8(), [1]);
 
 SELECT arrayConcat([1, 2], [-1, -2], [0.3, 0.7], [Null]);
@@ -35,6 +37,26 @@ SELECT arraySlice([1, 2, 3, 4, 5, 6], NULL, -2);
 SELECT arraySlice([1, 2, 3, 4, 5, 6], -3, NULL);
 
 SELECT arraySlice([1, 2, 3, 4, 5, 6], 2, 3);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], 2, -2);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], -4, 2);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], -4, -2);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], 2, 0);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], -10, 15);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], -15, 10);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], -15, 9);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], 10, 0);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], 10, -1);
+
+SELECT arraySlice([1, 2, 3, 4, 5, 6], 10, 1);
 
 SELECT arraySlice([1, 2, Null, 4, 5, 6], 2, 4);
 
@@ -103,6 +125,17 @@ SELECT arrayPopFront([0.1, 0.2, 0.3]);
 
 SELECT arrayPopFront(['a', 'b', 'c']);
 
+CREATE TABLE array_functions
+(
+    arr1 Array(Int8),
+    arr2 Array(Int8),
+    o Int8,
+    no Nullable(Int8),
+    l Int8,
+    nl Nullable(Int8)
+)
+ENGINE = TinyLog;
+
 SELECT *
 FROM array_functions;
 
@@ -123,6 +156,90 @@ SELECT
     o,
     l,
     arraySlice(arr1, o, l)
+FROM array_functions;
+
+SELECT
+    arr1,
+    no,
+    nl,
+    arraySlice(arr1, no, nl)
+FROM array_functions;
+
+SELECT
+    arr1,
+    2,
+    l,
+    arraySlice(arr1, 2, l)
+FROM array_functions;
+
+SELECT
+    arr1,
+    o,
+    2,
+    arraySlice(arr1, o, 2)
+FROM array_functions;
+
+SELECT
+    arr1,
+    2,
+    nl,
+    arraySlice(arr1, 2, nl)
+FROM array_functions;
+
+SELECT
+    arr1,
+    no,
+    2,
+    arraySlice(arr1, no, 2)
+FROM array_functions;
+
+SELECT
+    arr1,
+    2,
+    l,
+    arraySlice(arr1, -4, l)
+FROM array_functions;
+
+SELECT
+    arr1,
+    o,
+    2,
+    arraySlice(arr1, o, -2)
+FROM array_functions;
+
+SELECT
+    arr1,
+    2,
+    nl,
+    arraySlice(arr1, -4, nl)
+FROM array_functions;
+
+SELECT
+    arr1,
+    no,
+    2,
+    arraySlice(arr1, no, -2)
+FROM array_functions;
+
+SELECT
+    arr1,
+    2,
+    4,
+    arraySlice(arr1, 2, 4)
+FROM array_functions;
+
+SELECT
+    arr1,
+    2,
+    4,
+    arraySlice(arr1, 2, -4)
+FROM array_functions;
+
+SELECT
+    arr1,
+    2,
+    4,
+    arraySlice(arr1, -4, 2)
 FROM array_functions;
 
 SELECT
@@ -197,12 +314,60 @@ SELECT
     arrayPopBack(arr1)
 FROM array_functions;
 
+CREATE TABLE array_functions
+(
+    arr1 Array(Nullable(Int8)),
+    arr2 Array(Nullable(Float32)),
+    o Int8,
+    no Nullable(Int8),
+    l Int8,
+    nl Nullable(Int8)
+)
+ENGINE = TinyLog;
+
+CREATE TABLE array_functions
+(
+    arr1 Array(Nullable(Int8)),
+    arr2 Array(UInt8),
+    o Int8,
+    no Nullable(Int8),
+    l Int8,
+    nl Nullable(Int8)
+)
+ENGINE = TinyLog;
+
+CREATE TABLE array_functions
+(
+    arr1 Array(Nullable(String)),
+    arr2 Array(String),
+    val String,
+    val2 Nullable(String),
+    o Int8,
+    no Nullable(Int8),
+    l Int8,
+    nl Nullable(Int8)
+)
+ENGINE = TinyLog;
+
 SELECT
     arr1,
     arrayPushFront(arr1, '1')
 FROM array_functions;
 
+SELECT
+    arr1,
+    arrayPushFront(arr1, val)
+FROM array_functions;
+
+SELECT
+    arr1,
+    arrayPushFront(arr1, val2)
+FROM array_functions;
+
 SELECT arrayPushFront(['a', 'b', 'c'], val)
+FROM array_functions;
+
+SELECT arrayPushFront(['a', 'b', 'c'], val2)
 FROM array_functions;
 
 SELECT
@@ -210,5 +375,18 @@ SELECT
     arrayPushBack(arr1, '1')
 FROM array_functions;
 
+SELECT
+    arr1,
+    arrayPushBack(arr1, val)
+FROM array_functions;
+
+SELECT
+    arr1,
+    arrayPushBack(arr1, val2)
+FROM array_functions;
+
 SELECT arrayPushBack(['a', 'b', 'c'], val)
+FROM array_functions;
+
+SELECT arrayPushBack(['a', 'b', 'c'], val2)
 FROM array_functions;

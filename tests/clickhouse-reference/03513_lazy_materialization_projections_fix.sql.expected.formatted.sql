@@ -1,3 +1,23 @@
+-- Tags: no-random-merge-tree-settings
+SET query_plan_optimize_lazy_materialization = 1;
+
+SET query_plan_max_limit_for_lazy_materialization = 10;
+
+SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE tt0
+(
+    k UInt64,
+    v String,
+    blob String,
+    PROJECTION proj_v (    SELECT *
+    ORDER BY v ASC)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT '-- no projection';
 
 SELECT trimLeft(`explain`) AS s
@@ -42,6 +62,16 @@ FROM tt0
 WHERE v = '3'
 ORDER BY v ASC
 LIMIT 10;
+
+CREATE TABLE tt1
+(
+    k UInt64,
+    v String,
+    blob String
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+SETTINGS index_granularity = 10;
 
 -- check that table has 2 parts without and with projection
 SELECT

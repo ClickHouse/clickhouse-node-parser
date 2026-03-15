@@ -1,5 +1,57 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "int"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "prewarm_mark_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel-replicas, no-parallel",
+      "-- Test depends on mark cache, don't run with others in parallel",
+      "-- Note: we need to have index_granularity==number or rows, to avoid processing",
+      "-- parts in parallel, since in this case marks can be requested from multiple",
+      "-- threads, which will lead to the query will have both MarksTasksFromCache and",
+      "-- BackgroundLoadingMarksTasks"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

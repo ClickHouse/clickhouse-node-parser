@@ -1,3 +1,19 @@
+CREATE TABLE clickhouse_alias_issue_1
+(
+    id bigint,
+    column_1 Nullable(Float32)
+)
+ENGINE = Memory;
+
+CREATE TABLE clickhouse_alias_issue_2
+(
+    id bigint,
+    column_2 Nullable(Float32)
+)
+ENGINE = Memory;
+
+SET enable_analyzer = 1;
+
 -- This query returns the expected result
 -- 300	\N	3
 -- 200	\N	2

@@ -1,3 +1,42 @@
+SET allow_experimental_analyzer = 1;
+SET query_plan_optimize_join_order_limit = 10;
+SET use_statistics = 1;
+SET query_plan_join_swap_table='auto';
+SET enable_join_runtime_filters = 0;
+-- R1: Small dimension table (Demo size: 10)
+CREATE TABLE R1 (
+    A_ID UInt32,
+    A_Description String
+) ENGINE = MergeTree()
+PRIMARY KEY (A_ID)
+SETTINGS auto_statistics_types = 'uniq';
+-- R2: Large fact table (Demo size: 1,000)
+-- Joins only with R1.
+CREATE TABLE R2 (
+    B_ID UInt32,
+    R1_A_ID UInt32,
+    B_Data Float64
+) ENGINE = MergeTree()
+PRIMARY KEY (B_ID)
+SETTINGS auto_statistics_types = 'uniq';
+-- R3: Another large fact table (Demo size: 1,000)
+-- Joins with R1 and R4.
+CREATE TABLE R3 (
+    C_ID UInt32,
+    R1_A_ID UInt32,
+    R4_D_ID UInt32,
+    C_Value Int32
+) ENGINE = MergeTree()
+PRIMARY KEY (C_ID)
+SETTINGS auto_statistics_types = 'uniq';
+-- R4: Small lookup table (Demo size: 10)
+-- Joins only with R3.
+CREATE TABLE R4 (
+    D_ID UInt32,
+    D_LookupCode String
+) ENGINE = MergeTree()
+PRIMARY KEY (D_ID)
+SETTINGS auto_statistics_types = 'uniq';
 SELECT sum(sipHash64(
     T1.A_Description,
     T2.B_Data,

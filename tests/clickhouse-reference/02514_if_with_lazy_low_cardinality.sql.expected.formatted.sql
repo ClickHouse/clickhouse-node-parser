@@ -1,3 +1,12 @@
+-- Tags: no-fasttest
+-- no-fasttest: upper/lowerUTF8 use ICU
+CREATE TABLE IF NOT EXISTS t
+(
+    `arr.key` Array(LowCardinality(String)),
+    `arr.value` Array(LowCardinality(String))
+)
+ENGINE = Memory;
+
 SELECT if(true, if(lowerUTF8(arr.key) = 'a', 1, 2), 3) AS x
 FROM
     t

@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET use_variant_as_common_type = 1;
+
 SELECT x
 FROM (
         SELECT

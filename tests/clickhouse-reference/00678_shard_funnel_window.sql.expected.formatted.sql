@@ -1,3 +1,14 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE remote_test
+(
+    uid String,
+    its UInt32,
+    action_code String,
+    day Date
+)
+ENGINE = MergeTree(day, (uid, its), 8192);
+
 SELECT
     level,
     COUNT()

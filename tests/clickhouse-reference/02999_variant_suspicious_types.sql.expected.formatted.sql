@@ -1,3 +1,5 @@
+SET allow_suspicious_variant_types = 0;
+
 SELECT 42::Variant(UInt32, Int64); -- {serverError ILLEGAL_COLUMN}
 
 SELECT [42]::Variant(Array(UInt32), Array(Int64)); -- {serverError ILLEGAL_COLUMN}

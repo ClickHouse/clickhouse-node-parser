@@ -11,6 +11,7 @@ SELECT arrayReduce('any', toNullable(3)); -- { serverError ILLEGAL_TYPE_OF_ARGUM
 
 SELECT arrayReduce(toLowCardinality('median'), [toLowCardinality(toNullable(8))]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- { echoOn }
 SELECT
     arrayReduce('sum', []::Array(UInt8)) AS a,
     toTypeName(a);

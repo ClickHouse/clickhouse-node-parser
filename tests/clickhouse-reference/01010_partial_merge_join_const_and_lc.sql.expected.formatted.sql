@@ -1,3 +1,5 @@
+SET join_algorithm = 'partial_merge';
+
 SELECT
     s1.x,
     s2.x
@@ -49,3 +51,7 @@ LEFT JOIN (
         SELECT toLowCardinality(5) AS x
     ) AS s2
     USING (x);
+
+SET join_algorithm = 'full_sorting_merge';
+
+SET join_algorithm = 'grace_hash';

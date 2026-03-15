@@ -1,3 +1,11 @@
+CREATE TABLE data
+(
+    key Int,
+    value Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
 -- { echo }
 SELECT part_name
 FROM mergeTreeAnalyzeIndexes(currentDatabase(), data, key >= 1000);

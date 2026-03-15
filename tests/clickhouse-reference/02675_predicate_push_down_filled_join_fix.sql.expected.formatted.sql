@@ -1,3 +1,26 @@
+SET enable_analyzer = 1;
+
+SET single_join_prefer_left_table = 0;
+
+SET optimize_move_to_prewhere = 0;
+
+SET query_plan_optimize_join_order_limit = 0;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE TABLE test_table_join
+(
+    id UInt64,
+    value String
+)
+ENGINE = Join(`All`, `inner`, id);
+
 SELECT
     t1.id,
     t1.value,

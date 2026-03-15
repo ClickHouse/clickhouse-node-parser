@@ -1,3 +1,6 @@
+create table test1(p DateTime, k int) engine MergeTree partition by toDate(p) order by k settings index_granularity = 1, add_minmax_index_for_numeric_columns=0;
+set max_rows_to_read = 1;
+set optimize_use_implicit_projections = 1;
 -- non-optimized
 select count() from test1 settings max_parallel_replicas = 3;
 -- optimized (toYear is monotonic and we provide the partition expr as is)
@@ -13,6 +16,7 @@ select count() FROM test1 where toDate(p) = '2020-09-01' and k = 2; -- { serverE
 select count() from test1 where toDate(p) > '2020-09-01';
 -- non-optimized
 select count() from test1 where toDate(p) >= '2020-09-01' and p <= '2020-09-01 00:00:00';
+create table test_tuple(p DateTime, i int, j int) engine MergeTree partition by (toDate(p), i) order by j settings index_granularity = 1, add_minmax_index_for_numeric_columns=0;
 -- optimized
 select count() from test_tuple where toDate(p) > '2020-09-01';
 -- optimized
@@ -27,6 +31,7 @@ select count() from test_tuple array join [1,2] as c where toDate(p) = '2020-09-
 -- non-optimized
 select count() from test_tuple array join [1,2,3] as c where toDate(p) = '2020-09-01'; -- { serverError TOO_MANY_ROWS }
 select count() from test_tuple array join [1,2,3] as c where toDate(p) = '2020-09-01' settings max_rows_to_read = 6;
+create table test_two_args(i int, j int, k int) engine MergeTree partition by i + j order by k settings index_granularity = 1, add_minmax_index_for_numeric_columns=0;
 -- optimized
 select count() from test_two_args where i + j = 3;
 -- non-optimized

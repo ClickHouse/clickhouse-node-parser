@@ -1,3 +1,11 @@
+CREATE TABLE mergetree_00609
+(
+    x UInt64,
+    s String
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT caseWithExpression(x, 1, 'hello', 2, 'world', 'unknow')
 FROM mergetree_00609;
 
@@ -6,6 +14,9 @@ FROM (
         SELECT caseWithExpression(x, 1, 'hello', 2, 'world', 'unknow')
         FROM mergetree_00609
     );
+
+CREATE TABLE distributed_00609 AS mergetree_00609
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), mergetree_00609);
 
 SELECT caseWithExpression(x, 1, 'hello', 2, 'world', 'unknow')
 FROM distributed_00609;

@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS `03578_rocksdb`
+(
+    key UInt16,
+    val String
+)
+ENGINE = EmbeddedRocksDB()
+PRIMARY KEY key;
+
 SELECT '-- RocksDB: set safe to cast';
 
 SELECT *
@@ -80,6 +88,14 @@ WHERE current_database = currentDatabase()
     AND is_initial_query
 ORDER BY event_time_microseconds ASC;
 
+CREATE TABLE IF NOT EXISTS `03578_rocksdb_nullable`
+(
+    key Nullable(UInt16),
+    val String
+)
+ENGINE = EmbeddedRocksDB()
+PRIMARY KEY key;
+
 SELECT *
 FROM `03578_rocksdb_nullable`
 WHERE key IN (0, 1)
@@ -125,6 +141,14 @@ WHERE current_database = currentDatabase()
     AND like(query, '%FROM 03578_rocksdb_nullable%')
     AND is_initial_query
 ORDER BY event_time_microseconds ASC;
+
+CREATE TABLE IF NOT EXISTS `03578_keepermap`
+(
+    key UInt16,
+    val String
+)
+ENGINE = KeeperMap(concat('/', currentDatabase(), '/test_03578_type_cast'))
+PRIMARY KEY key;
 
 SELECT *
 FROM `03578_keepermap`
@@ -205,6 +229,14 @@ WHERE current_database = currentDatabase()
     AND like(query, '%FROM 03578_keepermap%')
     AND is_initial_query
 ORDER BY event_time_microseconds ASC;
+
+CREATE TABLE IF NOT EXISTS `03578_keepermap_nullable`
+(
+    key Nullable(UInt16),
+    val String
+)
+ENGINE = KeeperMap(concat('/', currentDatabase(), '/test_03578_type_cast_null'))
+PRIMARY KEY key;
 
 SELECT *
 FROM `03578_keepermap_nullable`

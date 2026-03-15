@@ -1,3 +1,4 @@
+create table test_wide_map_with_buckets_tuple (json Tuple(data JSON(max_dynamic_paths=8))) engine=MergeTree order by tuple() settings min_bytes_for_wide_part=1, min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='map_with_buckets', object_shared_data_serialization_version_for_zero_level_parts='map_with_buckets', object_shared_data_buckets_for_wide_part=2;
 select json.data from test_wide_map_with_buckets_tuple format Null;
 select json.data, json.data.b from test_wide_map_with_buckets_tuple format Null;
 select json.data.b, json.data from test_wide_map_with_buckets_tuple format Null;

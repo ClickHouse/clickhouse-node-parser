@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+SET enable_parallel_replicas = 0;
+
 SELECT 1
 FROM
     (SELECT 1 c0) AS tx

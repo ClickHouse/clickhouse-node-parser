@@ -1,3 +1,19 @@
+CREATE TABLE data_02200
+(
+    key Int,
+    value Int,
+    INDEX idx value TYPE minmax GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY key
+PARTITION BY key;
+
+SET use_query_condition_cache = false;
+
+-- Prevent remote replicas from skipping index analysis in Parallel Replicas. Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
+SET parallel_replicas_index_analysis_only_on_coordinator = 0;
+
+-- { echoOn }
 SELECT *
 FROM data_02200
 WHERE value = 1

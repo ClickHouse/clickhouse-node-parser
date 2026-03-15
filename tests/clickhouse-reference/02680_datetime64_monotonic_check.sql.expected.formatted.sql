@@ -1,3 +1,13 @@
+CREATE TABLE `02680_datetime64_monotonic_check`
+(
+    t DateTime64(3),
+    x Nullable(Decimal(18, 14))
+)
+ENGINE = MergeTree
+ORDER BY x
+PARTITION BY toYYYYMMDD(t)
+SETTINGS allow_nullable_key = 1;
+
 SELECT
     toHour(toTimeZone(t, 'UTC')) AS toHour_UTC,
     toHour(toTimeZone(t, 'Asia/Jerusalem')) AS toHour_Israel,
@@ -7,6 +17,16 @@ WHERE toHour_Israel = 0
 GROUP BY
     toHour_UTC,
     toHour_Israel;
+
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE `02680_datetime_monotonic_check_lc`
+(
+    timestamp LowCardinality(UInt32)
+)
+ENGINE = MergeTree
+ORDER BY timestamp
+SETTINGS index_granularity = 1;
 
 SELECT toDateTime(timestamp, 'Asia/Jerusalem')
 FROM `02680_datetime_monotonic_check_lc`

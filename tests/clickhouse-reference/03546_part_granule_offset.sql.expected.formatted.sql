@@ -1,3 +1,11 @@
+CREATE TABLE test_part_granule_offset
+(
+    n UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 2;
+
 SELECT _part_granule_offset
 FROM test_part_granule_offset
 WHERE n < 10

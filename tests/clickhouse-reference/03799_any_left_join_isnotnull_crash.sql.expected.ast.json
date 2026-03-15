@@ -1,5 +1,114 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "Session"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "site",
+        "type": "Enum8('STORE_A' = 1, 'STORE_B' = 2)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "device",
+        "type": "Enum8('DESKTOP' = 1, 'MOBILE' = 2)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "AddedToCart"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "sessionId",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "order",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "top",
+        "type": "Nullable(Int32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "screenHeight",
+        "type": "Nullable(Int32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "screenWidth",
+        "type": "Nullable(Int32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "isPromotion",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "DateTime64(3)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sessionId"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "date"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

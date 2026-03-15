@@ -14,6 +14,16 @@ SELECT
     toFixedString('00000000-0000-04f8-9cb8-cb1b82fb3900', 36) AS str,
     CAST(str, 'UUID');
 
+CREATE TABLE IF NOT EXISTS uuid
+(
+    created_at DateTime,
+    id0 String,
+    id1 FixedString(36)
+)
+ENGINE = MergeTree
+ORDER BY created_at
+PARTITION BY toDate(created_at);
+
 SELECT
     id0,
     id1
@@ -23,3 +33,16 @@ SELECT
     toTypeName(id0),
     toTypeName(id1)
 FROM uuid;
+
+-- with UUID in key
+CREATE TABLE IF NOT EXISTS uuid
+(
+    created_at DateTime,
+    id0 String,
+    id1 FixedString(36)
+)
+ENGINE = MergeTree
+ORDER BY (created_at, id0, id1)
+PARTITION BY toDate(created_at);
+
+SET send_logs_level = 'fatal';

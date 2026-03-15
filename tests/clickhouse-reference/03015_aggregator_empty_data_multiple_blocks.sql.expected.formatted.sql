@@ -1,3 +1,9 @@
+CREATE TABLE `03015_aggregator_empty_data_multiple_blocks`
+(
+    c0 Int32
+)
+ENGINE = Memory();
+
 SELECT radians(t1.c0)
 FROM
     `03015_aggregator_empty_data_multiple_blocks` AS t1

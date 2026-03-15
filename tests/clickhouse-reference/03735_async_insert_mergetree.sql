@@ -1,5 +1,65 @@
+set async_insert = 1;
+set wait_for_async_insert = 0;
+set async_insert_deduplicate = 1;
+set deduplicate_blocks_in_dependent_materialized_views = 1;
+set async_insert_use_adaptive_busy_timeout=0, async_insert_busy_timeout_min_ms=1000, async_insert_busy_timeout_max_ms=5000;
+create table src_table
+(
+    id   UInt32,
+    name String
+)
+engine = MergeTree
+order by id
+SETTINGS non_replicated_deduplication_window = 10000;
 -- Expecting 2
 select 'src_table', count(*) from src_table;
+create table dst_1_0
+(
+    id      UInt32,
+    name    String
+)
+engine = MergeTree
+order by id
+SETTINGS non_replicated_deduplication_window = 10000;
+create materialized view mv_1_0
+TO dst_1_0
+as select * from src_table where id % 2 = 0;
+create table dst_1_1
+(
+    id      UInt32,
+    name    String
+)
+engine = MergeTree
+order by id
+SETTINGS non_replicated_deduplication_window = 10000;
+create materialized view mv_1_1
+TO dst_1_1
+as select * from src_table where id % 2 = 1;
+create table dst_1_2
+(
+    id      UInt32,
+    name    String
+)
+engine = MergeTree
+order by id
+SETTINGS non_replicated_deduplication_window = 10000;
+create materialized view mv_1_2
+TO dst_1_2
+as select * from src_table;
+create table dst_2_01
+(
+    id      UInt32,
+    name    String
+)
+engine = MergeTree
+order by id
+SETTINGS non_replicated_deduplication_window = 10000;
+create materialized view mv_2_00
+TO dst_2_01
+as select * from dst_1_0;
+create materialized view mv_2_01
+TO dst_2_01
+as select * from dst_1_1;
 select * from src_table order by all;
 -- Expecting 2
 select 'dst_1_0', count(*) from dst_1_0;

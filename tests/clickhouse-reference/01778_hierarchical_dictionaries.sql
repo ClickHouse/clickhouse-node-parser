@@ -1,14 +1,51 @@
+CREATE DATABASE 01778_db;
+CREATE TABLE 01778_db.hierarchy_source_table (id UInt64, parent_id UInt64) ENGINE = TinyLog;
+CREATE DICTIONARY 01778_db.hierarchy_flat_dictionary
+(
+    id UInt64,
+    parent_id UInt64 HIERARCHICAL
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'hierarchy_source_table' DB '01778_db'))
+LAYOUT(FLAT())
+LIFETIME(MIN 1 MAX 1000);
 SELECT dictGetHierarchy('01778_db.hierarchy_flat_dictionary', number) FROM system.numbers LIMIT 6;
 SELECT dictIsIn('01778_db.hierarchy_flat_dictionary', number, number) FROM system.numbers LIMIT 6;
 SELECT dictGetChildren('01778_db.hierarchy_flat_dictionary', number) FROM system.numbers LIMIT 6;
 SELECT dictGetDescendants('01778_db.hierarchy_flat_dictionary', number) FROM system.numbers LIMIT 6;
 SELECT dictGetDescendants('01778_db.hierarchy_flat_dictionary', number, 1) FROM system.numbers LIMIT 6;
+CREATE DICTIONARY 01778_db.hierarchy_hashed_dictionary
+(
+    id UInt64,
+    parent_id UInt64 HIERARCHICAL
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'hierarchy_source_table' DB '01778_db'))
+LAYOUT(HASHED())
+LIFETIME(MIN 1 MAX 1000);
 SELECT dictGetHierarchy('01778_db.hierarchy_hashed_dictionary', number) FROM system.numbers LIMIT 6;
 SELECT dictIsIn('01778_db.hierarchy_hashed_dictionary', number, number) FROM system.numbers LIMIT 6;
 SELECT dictGetChildren('01778_db.hierarchy_hashed_dictionary', number) FROM system.numbers LIMIT 6;
 SELECT dictGetDescendants('01778_db.hierarchy_hashed_dictionary', number) FROM system.numbers LIMIT 6;
 SELECT dictGetDescendants('01778_db.hierarchy_hashed_dictionary', number, 1) FROM system.numbers LIMIT 6;
+CREATE DICTIONARY 01778_db.hierarchy_cache_dictionary
+(
+    id UInt64,
+    parent_id UInt64 HIERARCHICAL
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'hierarchy_source_table' DB '01778_db'))
+LAYOUT(CACHE(SIZE_IN_CELLS 10))
+LIFETIME(MIN 1 MAX 1000);
 SELECT dictGetHierarchy('01778_db.hierarchy_cache_dictionary', number) FROM system.numbers LIMIT 6;
 SELECT dictIsIn('01778_db.hierarchy_cache_dictionary', number, number) FROM system.numbers LIMIT 6;
+CREATE DICTIONARY 01778_db.hierarchy_direct_dictionary
+(
+    id UInt64,
+    parent_id UInt64 HIERARCHICAL
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'hierarchy_source_table' DB '01778_db'))
+LAYOUT(DIRECT());
 SELECT dictGetHierarchy('01778_db.hierarchy_direct_dictionary', number) FROM system.numbers LIMIT 6;
 SELECT dictIsIn('01778_db.hierarchy_direct_dictionary', number, number) FROM system.numbers LIMIT 6;

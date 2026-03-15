@@ -1,3 +1,10 @@
+CREATE TABLE data
+(
+    str String
+)
+ENGINE = MergeTree
+ORDER BY str;
+
 SELECT count()
 FROM data
 WHERE notLike(str, 'a%')

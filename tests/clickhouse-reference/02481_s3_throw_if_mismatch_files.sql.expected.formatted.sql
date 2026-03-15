@@ -1,3 +1,13 @@
+CREATE TABLE test_02481_mismatch_files
+(
+    a UInt64,
+    b String
+)
+ENGINE = S3(s3_conn, filename = 'test_02481_mismatch_files_{_partition_id}', `format` = Parquet)
+PARTITION BY a;
+
+SET s3_truncate_on_insert = 1;
+
 SELECT
     a,
     b

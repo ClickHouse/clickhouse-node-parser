@@ -1,3 +1,42 @@
+-- This test compares two identical tables that differ only in the text index posting-list compression setting (posting_list_codec).
+-- The inserted data covers a range of posting-list shapes:
+-- - very large lists (aa/bb/cc),
+-- - a block-boundary case (129 hits = 128 + tail),
+-- - a medium non-aligned size (1003 hits),
+-- - a single-hit list, and
+-- - very sparse lists (2 and 5 hits).
+-- After OPTIMIZE FINAL to stabilize on-disk parts, each hasToken() query validates that the compressed
+-- and uncompressed tables return identical counts (and matches expected exact counts for key tokens),
+-- ensuring correctness across full blocks, tail blocks, and small-N cases.
+SET enable_full_text_index = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET use_query_condition_cache = 0;
+
+CREATE TABLE tab_bitpacking
+(
+    ts DateTime,
+    str String,
+    INDEX inv_idx str TYPE text(
+        tokenizer = 'splitByNonAlpha',
+        posting_list_codec = 'bitpacking'
+    )
+)
+ENGINE = MergeTree
+ORDER BY ts;
+
+CREATE TABLE tab_uncompressed
+(
+    ts DateTime,
+    str String,
+    INDEX inv_idx str TYPE text(
+        tokenizer = 'splitByNonAlpha'
+    )
+)
+ENGINE = MergeTree
+ORDER BY ts;
+
 -- Validates that a very large/high-frequency posting list is decoded correctly by checking the count in the compressed table matches the uncompressed baseline.
 SELECT
     (

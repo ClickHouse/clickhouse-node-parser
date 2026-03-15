@@ -11,6 +11,13 @@ ORDER BY
     number ASC,
     value ASC;
 
+CREATE TABLE wt
+(
+    a Int,
+    b Int
+)
+ENGINE = Memory;
+
 SELECT 1
 FROM wt
 ORDER BY a ASC

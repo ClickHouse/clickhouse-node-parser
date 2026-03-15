@@ -1,3 +1,16 @@
+CREATE TABLE t_lwu_delete
+(
+    id UInt64,
+    v UInt64
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
+
+SET enable_lightweight_update = 1;
+
+SET lightweight_delete_mode = 'lightweight_update_force';
+
 SELECT sum(v)
 FROM t_lwu_delete;
 

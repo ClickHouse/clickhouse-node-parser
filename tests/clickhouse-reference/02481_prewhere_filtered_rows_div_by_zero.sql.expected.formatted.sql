@@ -1,3 +1,14 @@
+-- { echoOn }
+CREATE TABLE test_filter
+(
+    a Int32,
+    b Int32,
+    c Int32
+)
+ENGINE = MergeTree()
+ORDER BY a
+SETTINGS index_granularity = 3, index_granularity_bytes = '10Mi';
+
 SELECT
     _part_offset,
     intDiv(_part_offset, 3) AS granule,
@@ -22,6 +33,8 @@ SELECT intDiv(b, c)
 FROM test_filter
 PREWHERE c != 0
 WHERE b % 2 != 0;
+
+SET mutations_sync = 2;
 
 SELECT *
 FROM test_filter

@@ -1,3 +1,11 @@
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT *
 FROM test_table
 SETTINGS

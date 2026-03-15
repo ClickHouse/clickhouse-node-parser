@@ -1,3 +1,16 @@
+SET replication_alter_partitions_sync = 2;
+
+CREATE TABLE clear_column
+(
+    d Date,
+    num Int64,
+    str String
+)
+ENGINE = MergeTree
+ORDER BY d
+PARTITION BY toYYYYMM(d)
+SETTINGS min_bytes_for_wide_part = 0;
+
 SELECT data_uncompressed_bytes
 FROM `system`.`columns`
 WHERE (database = currentDatabase())
@@ -21,6 +34,28 @@ WHERE (database = currentDatabase())
 SELECT sleep(1)
 FORMAT Null;
 
+CREATE TABLE clear_column1
+(
+    d Date,
+    i Int64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test_00446/tables/clear_column', '1')
+ORDER BY d
+PARTITION BY toYYYYMM(d)
+SETTINGS min_bytes_for_wide_part = 0;
+
+CREATE TABLE clear_column2
+(
+    d Date,
+    i Int64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test_00446/tables/clear_column', '2')
+ORDER BY d
+PARTITION BY toYYYYMM(d)
+SETTINGS min_bytes_for_wide_part = 0;
+
+SET replication_alter_partitions_sync = 2;
+
 SELECT *
 FROM clear_column2
 ORDER BY
@@ -42,3 +77,5 @@ WHERE database = currentDatabase()
     AND ((name = 'i'
     OR name = 's'))
 GROUP BY table;
+
+SET optimize_throw_if_noop = 1;

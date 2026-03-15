@@ -1,3 +1,9 @@
+SET enable_analyzer = 0;
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+) ENGINE=MergeTree ORDER BY tuple();
 SELECT 1 UNION ALL SELECT 1;
 SELECT '--';
 SELECT 1 UNION DISTINCT SELECT 1 UNION ALL SELECT 1;

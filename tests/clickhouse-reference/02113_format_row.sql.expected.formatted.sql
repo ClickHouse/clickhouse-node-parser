@@ -1,3 +1,5 @@
+SET output_format_write_statistics = 0;
+
 SELECT formatRow('TSVWithNamesAndTypes', number, toDate(number))
 FROM numbers(5);
 

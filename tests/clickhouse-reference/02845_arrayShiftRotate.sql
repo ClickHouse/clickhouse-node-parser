@@ -28,6 +28,7 @@ select arrayShiftRight([1, 2, 3, 4, 5], 3, 7);
 select arrayShiftRight(['a', 'b', 'c', 'd', 'e'], 3, 'foo');
 select arrayShiftRight([[1, 2], [3, 4], [5, 6]], 2, [7, 8]);
 select arrayShiftRight(CAST('[1, 2, 3, 4, 5, 6]', 'Array(UInt16)'), 1, 1000);
+create table t02845 (a Array(UInt8), s Int16, d UInt8) engine = MergeTree order by d;
 select '-- arrayRotateLeft';
 select arrayRotateLeft(a, 2) from t02845;
 select arrayRotateRight(a, 2) from t02845;

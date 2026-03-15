@@ -1,3 +1,4 @@
+CREATE TABLE 02898_parallel_replicas_final (x String, y Int32) ENGINE = ReplacingMergeTree ORDER BY cityHash64(x);
 SELECT y, count()
 FROM cluster(test_cluster_one_shard_three_replicas_localhost, currentDatabase(), 02898_parallel_replicas_final) FINAL
 GROUP BY y

@@ -1,4 +1,4 @@
-
+-- { echoOn }
 select startsWithUTF8('富强民主文明和谐', '富强');
 select startsWithUTF8('富强民主文明和谐', '\xe5');
 select startsWithUTF8('富强民主文明和谐', '');

@@ -1,3 +1,25 @@
+CREATE TABLE table1
+(
+    dt Date,
+    id Int32,
+    arr Array(LowCardinality(String))
+)
+ENGINE = MergeTree
+ORDER BY (dt, id)
+PARTITION BY toMonday(dt)
+SETTINGS index_granularity = 8192;
+
+CREATE TABLE table2
+(
+    dt Date,
+    id Int32,
+    arr Array(LowCardinality(String))
+)
+ENGINE = MergeTree
+ORDER BY (dt, id)
+PARTITION BY toMonday(dt)
+SETTINGS index_granularity = 8192;
+
 SELECT
     dt,
     id,

@@ -1,3 +1,13 @@
+CREATE TABLE test_03143
+(
+    timestamp DateTime,
+    x UInt32 TTL timestamp + toIntervalMonth(1),
+    y String TTL timestamp + toIntervalDay(1),
+    z String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     name,
     column,

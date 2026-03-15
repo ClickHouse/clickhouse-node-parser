@@ -1,3 +1,9 @@
+CREATE TABLE table1
+(
+    resolution UInt8
+)
+ENGINE = Memory;
+
 SELECT h3GetPentagonIndexes(resolution) AS indexes
 FROM table1
 ORDER BY indexes ASC;

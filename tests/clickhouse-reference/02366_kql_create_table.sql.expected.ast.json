@@ -1,5 +1,42 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "Customers"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "FirstName",
+        "type": "Nullable(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LastName",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Occupation",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Education",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Age",
+        "type": "Nullable(UInt8)"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,6 +73,44 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "kql_table1"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "now",
+            "args": []
+          },
+          "alias": "new_column"
+        }
+      ],
+      "from": {
+        "kind": "tableFunction",
+        "name": "kql",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Customers | project LastName | filter LastName=='Diaz'"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -55,6 +130,33 @@
         "type": "UInt64",
         "value": "1"
       }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "kql_table2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "FirstName",
+        "type": "Nullable(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "LastName",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Age",
+        "type": "Nullable(UInt8)"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
     }
   },
   {

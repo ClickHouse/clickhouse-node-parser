@@ -1,3 +1,22 @@
+-- Test for exception in PasteJoinTransform when FULL JOIN is combined with PASTE JOIN
+-- and query_plan_join_swap_table = 'true'. The join swap changes column ordering in the
+-- FULL JOIN output, which can cause wrong number of columns reaching the PASTE JOIN.
+--
+-- We need join_algorithm = 'hash' (not 'concurrent_hash_join') because optimizeJoinLegacy
+-- only swaps when the join is a HashJoin (typeid_cast<const HashJoin *> check).
+-- We need query_plan_use_new_logical_join_step = 0 because the new logical join step path
+-- marks JoinStep as optimized, causing optimizeJoinLegacy to skip it.
+--
+-- https://s3.amazonaws.com/clickhouse-test-reports/json.html?REF=master&sha=b373b658edd0a03cb8daacf2c6d77aedd250e7f1&name_0=MasterCI&name_1=Stress%20test%20%28arm_asan%29
+SET query_plan_join_swap_table = 'true', join_algorithm = 'hash', query_plan_use_new_logical_join_step = 0, enable_analyzer = 1;
+
+CREATE TABLE t0
+(
+    c0 Int32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 -- Original failing query from the stress test
 SELECT 1
 FROM

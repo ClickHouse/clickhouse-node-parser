@@ -1,3 +1,10 @@
+CREATE TABLE retention_test
+(
+    date Date,
+    uid Int32
+)
+ENGINE = Memory;
+
 SELECT
     uid,
     retention(date = '2018-08-06', date = '2018-08-07') AS r

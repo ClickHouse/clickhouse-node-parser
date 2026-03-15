@@ -1,3 +1,11 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE test
+(
+    x LowCardinality(Int32)
+)
+ENGINE = Memory;
+
 SELECT x + 1e10
 FROM test
 ORDER BY

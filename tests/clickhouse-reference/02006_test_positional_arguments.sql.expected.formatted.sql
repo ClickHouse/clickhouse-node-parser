@@ -1,3 +1,17 @@
+SET group_by_two_level_threshold = 100000;
+
+SET enable_positional_arguments = 1;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE test
+(
+    x1 Int,
+    x2 Int,
+    x3 Int
+)
+ENGINE = Memory();
+
 -- { echo }
 SELECT
     x3,
@@ -165,6 +179,14 @@ GROUP BY
     -2,
     -1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 
+CREATE TABLE test2
+(
+    x1 Int,
+    x2 Int,
+    x3 Int
+)
+ENGINE = Memory;
+
 SELECT
     x1,
     x1 * 2,
@@ -279,6 +301,14 @@ FROM (
         ORDER BY 1 ASC
     );
 
+CREATE TABLE tp2
+(
+    first_col String,
+    second_col Int32
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT count(*)
 FROM (
         SELECT
@@ -324,6 +354,16 @@ FROM (
         GROUP BY 2
     )
 ORDER BY 1 ASC;
+
+CREATE TABLE test
+(
+    id UInt32,
+    time UInt32,
+    INDEX id (id) TYPE set(0) GRANULARITY 3,
+    INDEX time (time) TYPE minmax GRANULARITY 3
+)
+ENGINE = MergeTree()
+ORDER BY time;
 
 SELECT
     count(*) AS value,

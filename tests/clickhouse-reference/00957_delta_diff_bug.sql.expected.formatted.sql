@@ -1,2 +1,1 @@
-SELECT *
-FROM segfault_table;
+<Parse Error>

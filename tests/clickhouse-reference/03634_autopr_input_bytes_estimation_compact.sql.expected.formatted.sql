@@ -1,3 +1,27 @@
+SET use_uncompressed_cache = 0;
+
+SET enable_parallel_replicas = 0, automatic_parallel_replicas_mode = 2, parallel_replicas_local_plan = 1, parallel_replicas_index_analysis_only_on_coordinator = 1, parallel_replicas_for_non_replicated_merge_tree = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'parallel_replicas';
+
+SET max_threads = 4, max_block_size = 8192;
+
+-- For runs with the old analyzer
+SET enable_analyzer = 1;
+
+-- Reading of aggregation states from disk will affect `ReadCompressedBytes`
+SET max_bytes_before_external_group_by = 0, max_bytes_ratio_before_external_group_by = 0;
+
+-- Statistics are disabled to avoid accounting for them in `ReadCompressedBytes`
+CREATE TABLE t
+(
+    a UInt64,
+    s String,
+    d Date
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY toYYYYMM(d)
+SETTINGS auto_statistics_types = '', index_granularity = 8192, min_bytes_for_wide_part = 1e18;
+
 SELECT a
 FROM t
 FORMAT Null
@@ -50,6 +74,8 @@ ORDER BY a DESC
 LIMIT 10
 FORMAT Null
 SETTINGS log_comment = 'query_8';
+
+SET enable_parallel_replicas = 0, automatic_parallel_replicas_mode = 0;
 
 -- Just checking that the estimation is not too far off
 SELECT format('{} {} {}', log_comment, compressed_bytes, statistics_input_bytes)

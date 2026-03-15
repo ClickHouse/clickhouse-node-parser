@@ -11,6 +11,21 @@ SELECT tupleElement((1, 2), negate(1e42)); -- { serverError ILLEGAL_TYPE_OF_ARGU
 
 SELECT tupleElement((1, 'hello'), -10, 2);
 
+CREATE TABLE a1
+(
+    i int,
+    hash_key int
+)
+PARTITION BY (i, hash_key);
+
+CREATE TABLE a2
+(
+    i int,
+    j int,
+    hash_key int
+)
+PARTITION BY (i, j, hash_key);
+
 SELECT *
 FROM (
         SELECT _partition_value.-1
@@ -20,3 +35,13 @@ FROM (
         FROM a2
     )
 ORDER BY `all` ASC;
+
+SET enable_analyzer = 1;
+
+SET optimize_functions_to_subcolumns = 1;
+
+CREATE TABLE test
+(
+    tuple Tuple(b UInt32, c Int32)
+)
+ENGINE = Memory;

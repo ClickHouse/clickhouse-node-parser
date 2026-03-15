@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT
     (
         SELECT (

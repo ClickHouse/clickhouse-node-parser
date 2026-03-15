@@ -1,0 +1,95 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/23053"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "repl_tbl"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val_1",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val_2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val_3",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val_4",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "val_5",
+        "type": "UUID"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_column_name_to_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

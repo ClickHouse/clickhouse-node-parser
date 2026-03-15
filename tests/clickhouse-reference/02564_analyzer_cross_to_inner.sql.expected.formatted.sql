@@ -1,3 +1,42 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+CREATE TABLE t2
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+CREATE TABLE t3
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+CREATE TABLE t4
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+CREATE TABLE t5
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+SET cross_to_inner_join_rewrite = 1;
+
 SELECT *
 FROM
     t1

@@ -1,3 +1,13 @@
+-- #29010
+CREATE TABLE test
+(
+    d DateTime,
+    a String,
+    b UInt64
+)
+ENGINE = MergeTree
+PARTITION BY toDate(d)
+ORDER BY d;
 SELECT *
 FROM (
     SELECT

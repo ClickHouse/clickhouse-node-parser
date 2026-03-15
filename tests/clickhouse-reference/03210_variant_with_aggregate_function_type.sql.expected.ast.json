@@ -1,5 +1,77 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_variant_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Value",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_agg_variant"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Value",
+        "type": "Variant(AggregateFunction(uniqExact, Int64), AggregateFunction(avg, Int64))"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Name"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

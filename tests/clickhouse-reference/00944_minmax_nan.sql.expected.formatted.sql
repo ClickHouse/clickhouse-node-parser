@@ -1,3 +1,14 @@
+SET parallel_replicas_local_plan = 1;
+
+CREATE TABLE tab
+(
+    id UInt64,
+    col Float,
+    INDEX col_idx col TYPE minmax
+)
+ENGINE = MergeTree()
+ORDER BY id; -- This is important. We want to have additional primary index that does not use the column `col`.
+
 SELECT count()
 FROM tab
 WHERE col = nan;

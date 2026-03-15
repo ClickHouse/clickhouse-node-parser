@@ -1,3 +1,17 @@
+CREATE TABLE t1
+(
+    id Int
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t2
+(
+    id Int
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT 70 = 10 * sum(t1.id) + sum(t2.id)
     AND count() == 4
 FROM
@@ -221,6 +235,8 @@ FULL JOIN t2
     ON NULL
 SETTINGS join_algorithm = 'partial_merge'; -- { serverError INVALID_JOIN_ON_EXPRESSION,NOT_IMPLEMENTED }
 
+SET query_plan_use_new_logical_join_step = 1;
+
 -- mixing of constant and non-constant expressions in ON is not allowed
 SELECT *
 FROM
@@ -315,6 +331,7 @@ INNER JOIN t2
     AND 1
 SETTINGS enable_analyzer = 1;
 
+-- { echoOn }
 SELECT *
 FROM
     t1
@@ -505,6 +522,19 @@ FULL JOIN (
 SETTINGS
     enable_analyzer = 1,
     join_use_nulls = 1;
+
+-- query_plan_use_new_logical_join_step disabled for parallel replicas
+SET enable_parallel_replicas = 0;
+
+SET join_use_nulls = 1;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE empty_table
+(
+    id Int
+)
+ENGINE = Memory;
 
 SELECT *
 FROM

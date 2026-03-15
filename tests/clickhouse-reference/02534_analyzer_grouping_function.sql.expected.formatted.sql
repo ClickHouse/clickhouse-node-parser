@@ -1,3 +1,13 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     grouping(id) AS grouping_id,
     grouping(value) AS grouping_value,

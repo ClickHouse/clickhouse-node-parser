@@ -1,3 +1,18 @@
+CREATE TABLE test
+(
+    id UInt64,
+    name String,
+    PROJECTION projection_name (    SELECT sum(id)
+    GROUP BY
+        id,
+        name)
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS index_granularity_bytes = 10000;
+
+SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
+
 SELECT name
 FROM test
 GROUP BY name

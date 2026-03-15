@@ -1,5 +1,36 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "uin_value_details"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uin",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "Float64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -496,6 +527,54 @@
     ],
     "leadingComments": [
       "-- https://github.com/ClickHouse/ClickHouse/issues/83591"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": "AggregateFunction(groupNumericIndexedVectorState, UInt32, Float64)"
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": "AggregateFunction(groupNumericIndexedVectorState, UInt32, UInt64)"
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
     ]
   }
 ]

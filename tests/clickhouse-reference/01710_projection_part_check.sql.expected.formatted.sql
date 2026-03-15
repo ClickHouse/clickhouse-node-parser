@@ -1,3 +1,43 @@
+CREATE TABLE tp
+(
+    x Int32,
+    y Int32,
+    PROJECTION p (    SELECT
+        x,
+        y
+    ORDER BY x ASC)
+)
+ENGINE = MergeTree
+ORDER BY y
+SETTINGS min_rows_for_wide_part = 4, min_bytes_for_wide_part = 32;
+
+CREATE TABLE tp
+(
+    p Date,
+    k UInt64,
+    v1 UInt64,
+    v2 Int64,
+    PROJECTION p1 (    SELECT
+        p,
+        sum(k),
+        sum(v1),
+        sum(v2)
+    GROUP BY p)
+)
+ENGINE = MergeTree
+ORDER BY k
+PARTITION BY toYYYYMM(p)
+SETTINGS min_bytes_for_wide_part = 0;
+
+CREATE TABLE tp
+(
+    x int,
+    PROJECTION p (    SELECT sum(x))
+)
+ENGINE = MergeTree
+ORDER BY x
+SETTINGS min_rows_for_wide_part = 2, min_bytes_for_wide_part = 0;
+
 SELECT part_type
 FROM `system`.parts
 WHERE database = currentDatabase()

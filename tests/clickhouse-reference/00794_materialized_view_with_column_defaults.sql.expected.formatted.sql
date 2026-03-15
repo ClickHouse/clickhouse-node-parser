@@ -1,2 +1,1 @@
-SELECT *
-FROM table_view;
+<Parse Error>

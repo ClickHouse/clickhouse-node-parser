@@ -1,3 +1,12 @@
+CREATE TABLE `01154_test`
+(
+    x Int128,
+    INDEX ix_x x TYPE bloom_filter(0.01) GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY x
+SETTINGS index_granularity = 8192;
+
 SELECT x
 FROM `01154_test`
 WHERE x = 1;
@@ -5,6 +14,33 @@ WHERE x = 1;
 SELECT x
 FROM `01154_test`
 WHERE x IN (1, 2);
+
+CREATE TABLE `01154_test`
+(
+    x Int256,
+    INDEX ix_x x TYPE bloom_filter(0.01) GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY x
+SETTINGS index_granularity = 8192;
+
+CREATE TABLE `01154_test`
+(
+    x UInt256,
+    INDEX ix_x x TYPE bloom_filter(0.01) GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY x
+SETTINGS index_granularity = 8192;
+
+CREATE TABLE `01154_test`
+(
+    x UUID,
+    INDEX ix_x x TYPE bloom_filter(0.01) GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY x
+SETTINGS index_granularity = 8192;
 
 SELECT x
 FROM `01154_test`

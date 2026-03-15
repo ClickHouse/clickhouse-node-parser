@@ -1,3 +1,34 @@
+-- add_minmax_index_for_numeric_columns=0: Would use the index and not the projection that we want to test (id2 = 3)
+set log_queries=1;
+set log_queries_min_type='QUERY_FINISH';
+set optimize_use_implicit_projections=1;
+CREATE TABLE t
+(
+    `id` UInt64,
+    `id2` UInt64,
+    `id3` UInt64,
+    PROJECTION t_normal
+    (
+        SELECT
+            id,
+            id2,
+            id3
+        ORDER BY
+            id2,
+            id,
+            id3
+    ),
+    PROJECTION t_agg
+    (
+        SELECT
+            sum(id3)
+        GROUP BY id2
+    )
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8, add_minmax_index_for_numeric_columns=0;
+set parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 SELECT * FROM t WHERE id2 = 3 FORMAT Null;
 SELECT sum(id3) FROM t GROUP BY id2 FORMAT Null;
 SELECT min(id) FROM t FORMAT Null;

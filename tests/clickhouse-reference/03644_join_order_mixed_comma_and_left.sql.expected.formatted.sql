@@ -1,3 +1,26 @@
+SET query_plan_optimize_join_order_limit = 16;
+
+CREATE TABLE n1
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
+CREATE TABLE n2
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
+CREATE TABLE n3
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
 SELECT *
 FROM
     n1

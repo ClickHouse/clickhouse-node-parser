@@ -1,3 +1,20 @@
+-- Tags: distributed
+-- TODO: correct testing with real unique shards
+SET optimize_distributed_group_by_sharding_key = 1;
+
+CREATE TABLE data_01247 AS `system`.numbers
+ENGINE = Memory();
+
+SET max_distributed_connections = 1;
+
+SET optimize_skip_unused_shards = 1;
+
+CREATE TABLE dist_layer_01247 AS data_01247
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01247, number);
+
+CREATE TABLE dist_01247 AS data_01247
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), dist_layer_01247, number);
+
 SELECT
     count(),
     *
@@ -20,6 +37,9 @@ SETTINGS
     serialize_query_plan = 1,
     enable_analyzer = 1;
 
+CREATE TABLE dist_01247 AS data_01247
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), dist_layer_01247, rand());
+
 SELECT
     count(),
     *
@@ -27,3 +47,6 @@ FROM dist_01247
 GROUP BY number
 ORDER BY number ASC
 LIMIT 1;
+
+CREATE TABLE dist_layer_01247 AS data_01247
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01247, rand());

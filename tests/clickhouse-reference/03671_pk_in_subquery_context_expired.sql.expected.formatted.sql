@@ -1,3 +1,20 @@
+CREATE TABLE tbl
+(
+    id1 LowCardinality(String),
+    id2 LowCardinality(String),
+    v Int64
+)
+ENGINE = MergeTree
+ORDER BY (id1, id2, v);
+
+CREATE TABLE join_engine
+(
+    id1 LowCardinality(String),
+    id2 LowCardinality(String),
+    v Int64
+)
+ENGINE = Join(`ANY`, `LEFT`, id1, id2);
+
 --
 -- The same as before, but without relying on enable_global_with_statement
 --

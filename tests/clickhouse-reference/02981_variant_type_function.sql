@@ -1,3 +1,5 @@
+SET allow_experimental_variant_type = 1;
+CREATE TABLE test (v Variant(UInt64, String, Array(UInt64))) ENGINE = Memory;
 SELECT variantType(v) as type FROM test;
 SELECT toTypeName(variantType(v)) from test limit 1;
 SELECT variantType() FROM test; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}

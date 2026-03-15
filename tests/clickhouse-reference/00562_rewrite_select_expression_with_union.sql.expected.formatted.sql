@@ -1,3 +1,10 @@
+CREATE TABLE test_00562
+(
+    s String,
+    i Int64
+)
+ENGINE = Memory;
+
 SELECT
     s,
     SUM(i * 2) AS i

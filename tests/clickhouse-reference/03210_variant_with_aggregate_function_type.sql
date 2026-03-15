@@ -1,3 +1,17 @@
+SET allow_experimental_variant_type = 1;
+CREATE TABLE source 
+(
+   Name String,
+   Value Int64
+
+) ENGINE = MergeTree ORDER BY ();
+CREATE TABLE test_agg_variant
+(
+   Name String,
+   Value Variant(AggregateFunction(uniqExact, Int64), AggregateFunction(avg, Int64))
+)
+ENGINE = MergeTree
+ORDER BY (Name);
 SELECT
     Name,
     uniqExactMerge(Value.`AggregateFunction(uniqExact, Int64)`) AS Value

@@ -40,6 +40,10 @@ SELECT
     x AND 1 AND x,
     0 AND x AND 1 AND x
 FROM (SELECT number % 2 ? number % 3 : NULL AS x FROM system.numbers LIMIT 10);
+CREATE TABLE test
+(
+    x Nullable(Int32)
+) ENGINE = Log;
 SELECT * FROM test;
 SELECT x FROM test WHERE x != 0;
 SELECT x FROM test WHERE x != 0 OR isNull(x);

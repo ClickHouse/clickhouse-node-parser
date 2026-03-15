@@ -1,3 +1,10 @@
+-- Tags: no-fasttest
+SET output_format_parquet_use_custom_encoder = 1;
+
+SET input_format_parquet_use_native_reader_v3 = 1;
+
+SET engine_file_truncate_on_insert = 1;
+
 SELECT n10
 FROM file(concat(current_database(), '03596_parquet_prewhere_page_skip_bug.parquet'))
 PREWHERE n IN (131, 174, 175, 176)

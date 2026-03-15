@@ -1,3 +1,21 @@
+CREATE TABLE data_01513
+(
+    key String
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+-- this is enough to trigger non-reusable Chunk in Arena.
+SET max_memory_usage = '500M';
+
+SET max_threads = 1;
+
+SET max_block_size = 500;
+
+SET max_bytes_before_external_group_by = 0;
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
 SELECT
     key,
     groupArray(repeat('a', 200)),

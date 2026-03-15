@@ -1,3 +1,13 @@
+-- Tags: no-random-merge-tree-settings, no-random-settings
+-- Because we compare part sizes, and they could be affected by index granularity and index compression settings.
+CREATE TABLE part_log_bytes_uncompressed
+(
+    key UInt8,
+    value UInt8
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
 SELECT
     event_type,
     table,

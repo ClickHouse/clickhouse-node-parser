@@ -1,3 +1,29 @@
+SET enable_lazy_columns_replication = 0;
+
+CREATE TABLE t1
+(
+    id UInt32,
+    key Int32,
+    payload String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE TABLE t2
+(
+    id UInt32,
+    key Int32,
+    payload String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+SET enable_analyzer = 1;
+
+SET query_plan_join_swap_table = 0;
+
+SET query_plan_optimize_join_order_limit = 1;
+
 SELECT
     -- blocks with much of data are small in rows:
     if(max(size) < 5000000

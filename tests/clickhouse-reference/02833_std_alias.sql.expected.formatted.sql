@@ -1,3 +1,11 @@
+CREATE TABLE series
+(
+    i UInt32,
+    x Float64,
+    y Float64
+)
+ENGINE = Memory;
+
 SELECT
     std(x),
     std(y)

@@ -1,3 +1,34 @@
+CREATE TABLE base
+(
+    id UInt64,
+    id2 UInt64,
+    d UInt64,
+    value UInt64
+)
+ENGINE = MergeTree()
+ORDER BY (id, id2, d)
+PARTITION BY d;
+
+CREATE TABLE derived1
+(
+    id1 UInt64,
+    d1 UInt64,
+    value1 UInt64
+)
+ENGINE = MergeTree()
+ORDER BY (id1, d1)
+PARTITION BY d1;
+
+CREATE TABLE derived2
+(
+    id2 UInt64,
+    d2 UInt64,
+    value2 UInt64
+)
+ENGINE = MergeTree()
+ORDER BY (id2, d2)
+PARTITION BY d2;
+
 SELECT
     base.id AS `base.id`,
     derived2.value2 AS `derived2.value2`,

@@ -1,4 +1,4 @@
-
+-- { echoOn }
 
 SELECT
     ntile(1) OVER (ORDER BY id ASC) AS a,
@@ -21,6 +21,11 @@ FROM
 (
     SELECT 1 AS id
 ) AS t;
+CREATE TABLE test_ntile
+(
+    id Int32
+)
+ENGINE = Memory;
 SELECT
     id,
     ntile(1) OVER (ORDER BY id ASC) AS a,

@@ -1,3 +1,4 @@
+create table test(`a` Nullable(Int32), `b` Nullable(Int32)) ENGINE = Memory;
 -- first value
 select first_value(b) from test;
 select first_value(b) ignore nulls from test;
@@ -6,3 +7,4 @@ select first_value(b) respect nulls from test;
 select last_value(b) from test;
 select last_value(b) ignore nulls from test;
 select last_value(b) respect nulls from test;
+SET enable_analyzer = 1;

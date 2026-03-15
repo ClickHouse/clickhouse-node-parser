@@ -1,3 +1,4 @@
+create table tab_00717 (a String, b LowCardinality(String)) engine = MergeTree order by a;
 select count() from tab_00717;
 select a from tab_00717 group by a order by a;
 select b from tab_00717 group by b order by b;

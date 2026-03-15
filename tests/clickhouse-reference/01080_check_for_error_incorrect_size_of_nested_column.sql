@@ -1,3 +1,8 @@
+CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.test_table_01080 (dim_key Int64, dim_id String) ENGINE = MergeTree Order by (dim_key);
+CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080 ( dim_key Int64, dim_id String )
+PRIMARY KEY dim_key
+source(clickhouse(host 'localhost' port tcpPort() user 'default' password '' db currentDatabase() table 'test_table_01080'))
+LIFETIME(MIN 0 MAX 0) LAYOUT(complex_key_hashed());
 SELECT dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', tuple(toInt64(1)));
 SELECT dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', tuple(toInt64(0)));
 select dictGetString({CLICKHOUSE_DATABASE:String} || '.test_dict_01080', 'dim_id', x)  from (select tuple(toInt64(0)) as x);

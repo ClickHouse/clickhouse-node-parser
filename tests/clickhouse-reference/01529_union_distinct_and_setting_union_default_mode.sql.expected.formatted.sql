@@ -1,5 +1,7 @@
 SELECT 1;
 
+SET union_default_mode = 'DISTINCT';
+
 SELECT 'a'
 UNION ALL
 SELECT 'a'
@@ -126,6 +128,8 @@ FROM (
         UNION ALL
         SELECT 1))
     );
+
+SET union_default_mode = 'ALL';
 
 SELECT 1
 UNION ALL

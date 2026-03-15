@@ -1,3 +1,29 @@
+CREATE TABLE t0
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+CREATE TABLE t1
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+CREATE TABLE t2
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+SET join_algorithm = 'partial_merge';
+
 SELECT *
 FROM
     t1
@@ -101,6 +127,10 @@ FROM
     t0
 FULL JOIN t1
     ON t1.x = t0.x;
+
+SET join_use_nulls = 1;
+
+SET join_use_nulls = 0;
 
 SELECT
     t1.*,

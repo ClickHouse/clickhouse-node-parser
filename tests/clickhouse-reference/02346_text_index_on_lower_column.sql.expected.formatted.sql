@@ -1,3 +1,19 @@
+SET enable_analyzer = 1;
+
+SET max_parallel_replicas = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET enable_full_text_index = 1;
+
+CREATE TABLE tab
+(
+    text String,
+    INDEX idx_text text TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT count()
 FROM tab
 WHERE hasToken(text, 'Hello');
@@ -42,6 +58,15 @@ FROM (
     )
 WHERE like(`explain`, '%Filter column%')
     OR like(`explain`, '%Name: idx_text%');
+
+-- --------------------------
+CREATE TABLE tab
+(
+    text String,
+    INDEX idx_text lower(text) TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT count()
 FROM tab

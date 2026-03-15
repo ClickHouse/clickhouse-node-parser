@@ -1,5 +1,21 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_cache_max_entries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Run SELECT with quota that current user may write only 1 entry in the query cache"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -59,6 +75,23 @@
     },
     "trailingComments": [
       "-- expect 1 entry"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_cache_max_entries",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "DEFAULT"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Run SELECTs again but w/o quota"
     ]
   },
   {

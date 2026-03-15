@@ -1,3 +1,12 @@
+CREATE TABLE tab
+(
+    id UInt32,
+    haystack String,
+    pattern String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
 SELECT countSubstrings('aaaxxxaa\0xxx', pattern)
 FROM tab
 WHERE id = 1;

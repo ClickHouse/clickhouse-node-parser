@@ -16,6 +16,14 @@ SELECT endsWith('123', '32');
 
 SELECT endsWith('123', '');
 
+CREATE TABLE endsWith_test
+(
+    S1 String,
+    S2 String,
+    S3 FixedString(2)
+)
+ENGINE = Memory;
+
 SELECT COUNT()
 FROM endsWith_test
 WHERE endsWith(S1, S1);

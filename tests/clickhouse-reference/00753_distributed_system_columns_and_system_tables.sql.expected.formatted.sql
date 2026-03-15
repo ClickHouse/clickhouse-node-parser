@@ -1,3 +1,12 @@
+CREATE TABLE check_system_tables_null
+(
+    key Int
+)
+ENGINE = Null();
+
+CREATE TABLE check_system_tables AS check_system_tables_null
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), check_system_tables_null);
+
 SELECT
     total_bytes,
     total_rows

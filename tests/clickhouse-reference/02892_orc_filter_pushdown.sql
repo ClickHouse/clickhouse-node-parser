@@ -1,5 +1,18 @@
--- Go over all types individually
+-- Tags: no-fasttest, no-parallel
 
+set output_format_orc_string_as_string = 1;
+set output_format_orc_row_index_stride = 100;
+set input_format_orc_row_batch_size = 100;
+set input_format_orc_filter_push_down = 1;
+set input_format_null_as_default = 1;
+set engine_file_truncate_on_insert = 1;
+set optimize_or_like_chain = 0;
+set max_block_size = 100000;
+set max_insert_threads = 1;
+set max_execution_time = 300;
+SET session_timezone = 'UTC';
+-- Go over all types individually
+-- { echoOn }
 select count(), sum(number) from file('02892.orc') where indexHint(i8 in (10, 15, -6));
 select count(1), min(i8), max(i8) from file('02892.orc') where i8 in (10, 15, -6);
 select count(), sum(number) from file('02892.orc') where indexHint(i8 between -3 and 2);
@@ -53,7 +66,7 @@ select count(), sum(number) from file('02892.orc') where indexHint(i8 == 10 or 1
 select count(), min(i8), max(i8) from file('02892.orc') where (i8 == 10 or 1 == 1);
 select count(), sum(number) from file('02892.orc') where indexHint(i8 < 0);
 select count(), min(i8), max(i8) from file('02892.orc') where (i8 < 0);
-
+-- { echoOn }
 select count(), sum(number) from file('02892.orc') where indexHint(sometimes_null is NULL);
 select count(), min(sometimes_null), max(sometimes_null) from file('02892.orc') where (sometimes_null is NULL);
 select count(), sum(number) from file('02892.orc') where indexHint(sometimes_null_lc is NULL);
@@ -78,7 +91,7 @@ select count(), sum(number) from file('02892.orc') where indexHint(sometimes_nul
 select count(), min(sometimes_null), max(sometimes_null) from file('02892.orc') where (sometimes_null < 150);
 select count(), sum(number) from file('02892.orc') where indexHint(sometimes_null_lc < 150);
 select count(), min(sometimes_null_lc), max(sometimes_null_lc) from file('02892.orc') where (sometimes_null_lc < 150);
-
+-- { echoOn }
 select count(), sum(number) from file('02892.orc') where indexHint(positive_or_null < 50); -- quirk with infinities
 select count(), min(positive_or_null), max(positive_or_null) from file('02892.orc') where (positive_or_null < 50);
 select count(), sum(number) from file('02892.orc', ORC, 'number UInt64, positive_or_null UInt64') where indexHint(positive_or_null < 50);

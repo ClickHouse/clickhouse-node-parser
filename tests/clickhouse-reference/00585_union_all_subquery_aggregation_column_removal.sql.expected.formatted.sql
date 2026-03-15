@@ -1,3 +1,15 @@
+CREATE TABLE clicks
+(
+    domain String
+)
+ENGINE = Memory;
+
+CREATE TABLE transactions
+(
+    domain String
+)
+ENGINE = Memory;
+
 SELECT
     sum(total_count) AS total,
     domain

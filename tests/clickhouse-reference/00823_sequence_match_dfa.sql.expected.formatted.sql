@@ -1,3 +1,11 @@
+CREATE TABLE sequence
+(
+    userID UInt64,
+    eventType Enum8('A' = 1, 'B' = 2, 'C' = 3, 'D' = 4),
+    EventTime UInt64
+)
+ENGINE = Memory;
+
 SELECT 'ABC'
 FROM sequence
 GROUP BY userID

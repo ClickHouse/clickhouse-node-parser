@@ -1,3 +1,35 @@
+CREATE FUNCTION IF NOT EXISTS unhexPrefixed AS value -> unhex(substring(value, 3));
+CREATE FUNCTION IF NOT EXISTS hex2bytes AS address -> CAST(unhexPrefixed(address), 'FixedString(20)');
+CREATE FUNCTION IF NOT EXISTS bytes2hex AS address -> concat('0x', lower(hex(address)));
+CREATE TABLE test
+(
+    `transfer_id` String,
+    `address` FixedString(20),
+    `value` UInt256,
+    `block_timestamp` DateTime('UTC'),
+    `token_address` FixedString(20)
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(block_timestamp)
+PRIMARY KEY (address, block_timestamp)
+ORDER BY (address, block_timestamp);
+CREATE TABLE token_data
+(
+    token_address_hex String,
+    chain String,
+    is_blacklisted Bool
+)
+ENGINE = TinyLog;
+CREATE DICTIONARY token_data_map
+(
+    token_address_hex String,
+    chain String,
+    is_blacklisted Bool
+)
+PRIMARY KEY token_address_hex, chain
+SOURCE(Clickhouse(table token_data))
+LIFETIME(MIN 200 MAX 300)
+LAYOUT(COMPLEX_KEY_HASHED_ARRAY());
 SELECT block_timestamp
 FROM
 (

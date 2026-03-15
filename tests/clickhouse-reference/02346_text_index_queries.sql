@@ -1,3 +1,14 @@
+-- Tags: no-fasttest
+-- no-fasttest: It can be slow
+
+SET enable_full_text_index = 1;
+SET log_queries = 1;
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+-- Affects the number of read rows.
+SET use_skip_indexes_on_data_read = 0;
+CREATE TABLE tab(k UInt64, s String, INDEX af(s) TYPE text(tokenizer = ngrams(2)) GRANULARITY 1)
+            ENGINE = MergeTree() ORDER BY k
+            SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';
 -- check text index was created
 SELECT name, type FROM system.data_skipping_indices WHERE table =='tab' AND database = currentDatabase() LIMIT 1;
 -- search text index with ==
@@ -27,6 +38,9 @@ SELECT read_rows==8 from system.query_log
             AND type='QueryFinish'
             AND result_rows==4
         LIMIT 1;
+CREATE TABLE tab_x(k UInt64, s String, INDEX af(s) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1)
+    ENGINE = MergeTree() ORDER BY k
+    SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';
 -- check text index was created
 SELECT name, type FROM system.data_skipping_indices WHERE table == 'tab_x' AND database = currentDatabase() LIMIT 1;
 -- search text index with hasToken
@@ -47,6 +61,9 @@ SELECT read_rows==4 from system.query_log
         AND type='QueryFinish'
         AND result_rows==2
     LIMIT 1;
+CREATE TABLE tab(k UInt64, s String)
+    ENGINE = MergeTree() ORDER BY k
+    SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';
 -- check text index was created
 SELECT name, type FROM system.data_skipping_indices WHERE table == 'tab' AND database = currentDatabase() LIMIT 1;
 SELECT read_rows==6 from system.query_log
@@ -65,5 +82,13 @@ SELECT read_rows==2 from system.query_log
         AND type='QueryFinish'
         AND result_rows==1
     LIMIT 1;
+CREATE TABLE tab(k UInt64, s String, INDEX af(s) TYPE text(tokenizer = sparseGrams(3, 100)) GRANULARITY 1)
+    ENGINE = MergeTree()
+    ORDER BY k
+    SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';
 -- search text index
 SELECT * FROM tab WHERE s LIKE '%house你好%' ORDER BY k;
+CREATE TABLE tab(k UInt64, s String, INDEX af(s) TYPE text(tokenizer = sparseGrams(3, 100, 4)) GRANULARITY 1)
+    ENGINE = MergeTree()
+    ORDER BY k
+    SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';

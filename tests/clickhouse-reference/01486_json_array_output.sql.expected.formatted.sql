@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SET output_format_json_array_of_rows = 1;
+
 SELECT
     number AS a,
     number * 2 AS b

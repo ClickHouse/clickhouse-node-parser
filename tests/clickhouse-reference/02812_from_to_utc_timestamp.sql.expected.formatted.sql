@@ -1,3 +1,12 @@
+CREATE TABLE test_tbl
+(
+    x UInt32,
+    y DateTime,
+    z DateTime64
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT
     x,
     to_utc_timestamp(toDateTime('2023-03-16 11:22:33'), 'Etc/GMT+1'),

@@ -1,3 +1,5 @@
+SET cast_keep_nullable = 0;
+
 SELECT
     CAST(toNullable(toInt32(0)) AS Int32) AS x,
     toTypeName(x);
@@ -5,6 +7,8 @@ SELECT
 SELECT
     CAST(toNullable(toInt8(0)) AS Int32) AS x,
     toTypeName(x);
+
+SET cast_keep_nullable = 1;
 
 SELECT
     CAST(toNullable(toInt32(1)) AS Int32) AS x,

@@ -1,3 +1,11 @@
+CREATE TABLE test_apply_deleted_mask
+(
+    id Int64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     *,
     _row_exists

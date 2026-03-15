@@ -1,3 +1,14 @@
+CREATE TABLE data_02233
+(
+    `partition` Int,
+    parent_key Int,
+    child_key Int,
+    value Int
+)
+ENGINE = MergeTree()
+ORDER BY parent_key
+PARTITION BY `partition`;
+
 -- fuzzer
 SELECT
     child_key,

@@ -1,3 +1,10 @@
+CREATE TABLE or_expr_bug
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Memory;
+
 SELECT count(*)
 FROM or_expr_bug
 WHERE ((a = 1

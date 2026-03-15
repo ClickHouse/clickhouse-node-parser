@@ -1,3 +1,17 @@
+CREATE TABLE local_table
+(
+    id Int32,
+    name String,
+    ts DateTime,
+    oth_id Int32
+) ENGINE = MergeTree() PARTITION BY toMonday(ts) ORDER BY (ts, id);
+CREATE TABLE other_table
+(
+    id Int32,
+    name String,
+    ts DateTime,
+    trd_id Int32
+) ENGINE = MergeTree() PARTITION BY toMonday(ts) ORDER BY (ts, id);
 select t2.name from remote('127.0.0.2', currentDatabase(), 'local_table') as t1
 left join {CLICKHOUSE_DATABASE:Identifier}.other_table as t2 -- FIXME: doesn't work properly on remote without explicit database prefix
 on t1.oth_id = t2.id

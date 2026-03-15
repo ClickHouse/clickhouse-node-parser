@@ -1,3 +1,11 @@
+CREATE TABLE t0
+(
+    vkey UInt32,
+    c0 Float32,
+    PRIMARY KEY(c0)
+)
+ENGINE = AggregatingMergeTree;
+
 SELECT
     NULL AS c_2_0,
     ref_2.c0 AS c_2_1,

@@ -1,3 +1,21 @@
+-- Tags: no-fasttest, no-ordinary-database, no-parallel-replicas
+-- no-parallel-replicas: The test really wants lower quality result to be returned from the index
+--                       with rescoring=OFF. That is required to confirm binary quantization works
+--                       as expected. In parallel replicas, rescoring is always ON.
+-- Test for vector similarity index with binary quantization.
+-- Also has good number of calls to reinterpret() to test conversion of native floats to Array(Float32)
+SET enable_analyzer = 1;
+
+CREATE TABLE dbpedia
+(
+    id String,
+    vec Array(Float32),
+    INDEX vec_idx vec TYPE vector_similarity('hnsw', 'cosineDistance', 1536, 'b1', 64, 128)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 2;
+
 SELECT '-- INSERT 20 rows using the reinterpret() technique';
 
 SELECT id
@@ -56,6 +74,16 @@ SELECT if(data_uncompressed_bytes < (20 * 1536 * 2), 'Good', toString(data_uncom
 FROM `system`.data_skipping_indices
 WHERE database = currentDatabase()
     AND name = 'vec_idx';
+
+CREATE TABLE tab
+(
+    id Int32,
+    vec Array(Float32),
+    INDEX vec_idx vec TYPE vector_similarity('hnsw', 'cosineDistance', 8, 'b1', 64, 128)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 1;
 
 -- Expect 1.
 SELECT id

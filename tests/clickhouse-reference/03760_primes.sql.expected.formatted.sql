@@ -1,3 +1,6 @@
+-- { echoOn }
+SET max_block_size = 16;
+
 SELECT
     database,
     name

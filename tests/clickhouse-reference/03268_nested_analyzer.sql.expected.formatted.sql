@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET output_format_pretty_named_tuples_as_json = 0;
+
 -- {echoOn }
 SELECT nested(['a', 'b'], [1, 2], [3, 4]);
 
@@ -26,6 +30,14 @@ FORMAT Pretty;
 SELECT nested(['a', 'b'], [[1, 2], [3, 4]], [[5], [6]]);
 
 SELECT nested([['a', 'b']], [[1, 2], [3, 4]], [[5], [6]]); -- {serverError SIZES_OF_ARRAYS_DONT_MATCH}
+
+CREATE TABLE test
+(
+    x UInt8,
+    `struct.x` DEFAULT [0],
+    `struct.y` ALIAS [1]
+)
+ENGINE = Memory;
 
 SELECT *
 FROM

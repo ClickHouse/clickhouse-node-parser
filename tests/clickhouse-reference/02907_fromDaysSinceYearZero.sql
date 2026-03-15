@@ -1,3 +1,4 @@
+SET session_timezone = 'Europe/Amsterdam'; -- disable time zone randomization in CI
 SELECT '-- negative tests';
 SELECT fromDaysSinceYearZero(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT fromDaysSinceYearZero32(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

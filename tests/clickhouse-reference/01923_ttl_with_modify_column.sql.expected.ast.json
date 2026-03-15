@@ -1,5 +1,96 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_ttl_modify_column"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "InsertionDateTime",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "TTLDays",
+        "type": "Int32",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "365"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Int32"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "ttl": {
+      "kind": "binaryExpr",
+      "op": "+",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "InsertionDateTime"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toIntervalDay",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "TTLDays"
+            ]
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -89,6 +180,61 @@
         }
       ]
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_ttl_modify_column"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "InsertionDateTime",
+        "type": "DateTime"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "ttl": {
+      "kind": "binaryExpr",
+      "op": "+",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "InsertionDateTime"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toIntervalDay",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",

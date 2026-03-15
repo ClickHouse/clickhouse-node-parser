@@ -1,3 +1,4 @@
+CREATE TABLE table1 (str1 String, str2 String) ENGINE = Memory;
 select CRC32('string');
 select CrC32('string'), crc32('test'); -- We want to test, that function name is case-insensitive
 select CRC32(str1) from table1 order by CRC32(str1);

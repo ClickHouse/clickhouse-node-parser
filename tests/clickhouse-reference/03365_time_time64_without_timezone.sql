@@ -1,3 +1,4 @@
+SET use_legacy_to_time=0;
 -- 1. Test toTime with various types of inputs and timezone parameter
 SELECT toTime('12:34:56', 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT toTime(toDateTime('2023-01-01 12:34:56'), 'UTC'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
@@ -24,3 +25,5 @@ SELECT toTime('12:34:56', 'Europe/Moscow'); -- { serverError NUMBER_OF_ARGUMENTS
 SELECT toTime64('12:34:56.789', 3, 'Europe/Moscow'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT toTime('12:34:56', '+03:00'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT toTime64('12:34:56.789', 3, '+03:00'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+CREATE TABLE test_time (t Time('UTC')) engine=MergeTree; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+CREATE TABLE test_time64 (t Time64(3, 'UTC')) engine=MergeTree; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

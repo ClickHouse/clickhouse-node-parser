@@ -1,1 +1,7 @@
+-- Tags: distributed
+
+set distributed_foreground_insert = 1;
+set allow_suspicious_low_cardinality_types = 1;
+CREATE TABLE test_low_null_float (a LowCardinality(Nullable(Float64))) ENGINE = Memory;
+CREATE TABLE dist_00717 (a LowCardinality(Nullable(Float64))) ENGINE = Distributed('test_cluster_two_shards_localhost', currentDatabase(), 'test_low_null_float', rand());
 SELECT a, count() FROM dist_00717 GROUP BY a ORDER BY a ASC, count() ASC LIMIT 10;

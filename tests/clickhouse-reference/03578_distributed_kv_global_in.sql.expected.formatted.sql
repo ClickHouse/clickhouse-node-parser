@@ -1,3 +1,21 @@
+-- Tags: no-fasttest, use-rocksdb
+SET prefer_localhost_replica = 0;
+
+CREATE TABLE IF NOT EXISTS `03578_rocksdb_local`
+(
+    key UInt64,
+    val String
+)
+ENGINE = EmbeddedRocksDB()
+PRIMARY KEY key;
+
+CREATE TABLE IF NOT EXISTS `03578_rocksdb_dist`
+(
+    key UInt64,
+    val String
+)
+ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), `03578_rocksdb_local`);
+
 SELECT '-- RocksDB: set';
 
 SELECT *
@@ -24,6 +42,21 @@ WHERE current_database = currentDatabase()
     AND like(query, '%FROM 03578_rocksdb_dist%')
     AND is_initial_query
 ORDER BY event_time_microseconds ASC;
+
+CREATE TABLE IF NOT EXISTS `03578_keepermap_local`
+(
+    key UInt64,
+    val String
+)
+ENGINE = KeeperMap(concat('/', currentDatabase(), '/test_03578_global_in'))
+PRIMARY KEY key;
+
+CREATE TABLE IF NOT EXISTS `03578_keepermap_dist`
+(
+    key UInt64,
+    val String
+)
+ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), `03578_keepermap_local`);
 
 SELECT *
 FROM `03578_keepermap_dist`

@@ -19,3 +19,5 @@ ORDER BY
     CounterID ASC
 LIMIT 10
 SETTINGS group_by_use_nulls = 1 FORMAT Null;
+-- { echoOn }
+set enable_analyzer = 1;

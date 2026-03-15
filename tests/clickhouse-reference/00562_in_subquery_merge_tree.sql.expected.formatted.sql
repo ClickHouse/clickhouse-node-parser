@@ -1,3 +1,15 @@
+CREATE TABLE merge_tree_in_subqueries
+(
+    id UInt64,
+    name String,
+    num UInt64
+)
+ENGINE = MergeTree
+ORDER BY (id, name);
+
+-- Index scans.
+SET force_primary_key = 1;
+
 SELECT *
 FROM merge_tree_in_subqueries
 WHERE id IN (
@@ -36,6 +48,9 @@ WHERE (value, id2) IN (
         LIMIT 2, 3
     )
 ORDER BY id ASC;
+
+-- Non-index scans.
+SET force_primary_key = 0;
 
 SELECT
     id AS id2,

@@ -1,3 +1,8 @@
+-- Disable query condition cache because it affects the `SelectedRanges` metric.
+SET use_query_condition_cache = 0;
+CREATE TABLE t_min_bytes_to_seek (id UInt64)
+ENGINE = MergeTree
+ORDER BY id SETTINGS index_granularity = 128, index_granularity_bytes = '1M';
 SELECT count() FROM t_min_bytes_to_seek WHERE id IN (10, 1000, 5000, 9000) SETTINGS merge_tree_min_bytes_for_seek = 0;
 SELECT count() FROM t_min_bytes_to_seek WHERE id IN (10, 1000, 5000, 9000) SETTINGS merge_tree_min_bytes_for_seek = 1000000000;
 SELECT count() FROM t_min_bytes_to_seek WHERE id IN (10, 1000, 5000, 9000) SETTINGS merge_tree_min_rows_for_seek = 0;

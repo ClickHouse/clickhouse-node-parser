@@ -1,4 +1,11 @@
-
+create table data_02295 (
+    -- the order of "a" and "b" is important here
+    -- (since finalizeChunk() accepts positions and they may be wrong)
+    b Int64,
+    a Int64,
+    grp_aggreg AggregateFunction(groupArrayArray, Array(UInt64))
+) engine = MergeTree() order by a;
+-- { echoOn }
 SELECT grp_aggreg FROM data_02295 GROUP BY a, grp_aggreg ORDER BY a SETTINGS optimize_aggregation_in_order = 0 FORMAT JSONEachRow;
 SELECT grp_aggreg FROM data_02295 GROUP BY a, grp_aggreg ORDER BY a SETTINGS optimize_aggregation_in_order = 1 FORMAT JSONEachRow;
 SELECT grp_aggreg FROM data_02295 GROUP BY a, grp_aggreg WITH TOTALS ORDER BY a SETTINGS optimize_aggregation_in_order = 0 FORMAT JSONEachRow;

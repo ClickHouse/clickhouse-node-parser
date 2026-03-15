@@ -1,3 +1,5 @@
+SET session_timezone = 'UTC';
+SET date_time_overflow_behavior = 'ignore';
 SELECT toDateTime(toDateTime64('1900-01-01 00:00:00.123', 3));
 SELECT toDateTime(toDateTime64('2299-12-31 23:59:59.999', 3));
 SELECT toDateTime(toDate32('1900-01-01'));
@@ -8,6 +10,8 @@ SELECT toDate(toDateTime64('2149-06-07 00:00:00.123', 3));
 SELECT toDate(toDateTime64('2299-12-31 23:59:59.999', 3));
 SELECT toDate(toDate32('1900-01-01'));
 SELECT toDate(toDate32('2299-12-31'));
+SET date_time_overflow_behavior = 'throw';
+SET date_time_overflow_behavior = 'saturate';
 -- Test with UTC
 SELECT toDate(toDateTime64('2245-12-31 23:59:59', 0, 'UTC'));
 SELECT toDate(toDateTime64('1900-01-01 00:00:00', 0, 'UTC'));

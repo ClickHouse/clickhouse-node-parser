@@ -1,3 +1,11 @@
+CREATE TABLE test
+(
+    foo String,
+    bar String
+)
+ENGINE = MergeTree()
+ORDER BY (foo, bar);
+
 SELECT COLUMNS(bar, foo) APPLY(length)
 FROM test;
 

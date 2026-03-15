@@ -1,3 +1,12 @@
+-- Tags: no-parallel-replicas
+SET enable_parallel_replicas = 0;
+
+SET query_plan_join_swap_table = false;
+
+SET enable_analyzer = 1;
+
+SET query_plan_filter_push_down = 1;
+
 SELECT *
 FROM
     (

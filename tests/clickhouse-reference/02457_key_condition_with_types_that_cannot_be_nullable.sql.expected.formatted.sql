@@ -1,3 +1,1 @@
-SELECT Printer
-FROM test
-WHERE Printer = 'printer1';
+<Parse Error>

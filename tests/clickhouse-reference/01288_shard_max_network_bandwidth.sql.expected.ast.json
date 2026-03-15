@@ -1,5 +1,53 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_network_bandwidth",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: shard",
+      "-- Limit to 100 KB/sec"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Lower max_block_size, so we can start throttling sooner. Otherwise query will be executed too quickly."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "times"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": "DateTime"
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

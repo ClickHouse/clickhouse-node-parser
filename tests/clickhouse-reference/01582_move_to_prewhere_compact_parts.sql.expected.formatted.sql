@@ -1,3 +1,16 @@
+-- Tags: no-random-merge-tree-settings
+SET optimize_move_to_prewhere = 1;
+
+SET convert_query_to_cnf = 0;
+
+CREATE TABLE prewhere_move
+(
+    x Int,
+    y String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT replaceRegexpAll(`explain`, '__table1\\.|_UInt8', '')
 FROM (
         EXPLAIN actions = 1
@@ -7,6 +20,19 @@ FROM (
     )
 WHERE like(`explain`, '%Prewhere%')
     OR like(`explain`, '%Filter%');
+
+CREATE TABLE prewhere_move
+(
+    x1 Int,
+    x2 Int,
+    x3 Int,
+    x4 String CODEC(NONE)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+-- Not all conditions moved
+SET move_all_conditions_to_prewhere = 0;
 
 SELECT replaceRegexpAll(`explain`, '__table1\\.|_UInt8|_String', '')
 FROM (

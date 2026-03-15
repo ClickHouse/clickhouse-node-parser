@@ -1,3 +1,9 @@
+SET allow_experimental_dynamic_type = 1;
+
+SET allow_experimental_variant_type = 1;
+
+SET use_variant_as_common_type = 1;
+
 SELECT
     number::Dynamic AS d,
     dynamicType(d)
@@ -65,6 +71,12 @@ SELECT
     multiIf(number % 4 == 0, number, number % 4 == 1, toDate(number), number % 4 == 2, range(number), NULL)::Dynamic(max_types=4)::Dynamic(max_types=3) AS d,
     dynamicType(d)
 FROM numbers(6);
+
+CREATE TABLE test
+(
+    d Dynamic
+)
+ENGINE = Memory;
 
 SELECT d::Float64
 FROM test;

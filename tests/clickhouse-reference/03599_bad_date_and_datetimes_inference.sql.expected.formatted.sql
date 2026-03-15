@@ -1,3 +1,7 @@
+SET date_time_input_format = 'basic';
+
+SET session_timezone = 'UTC';
+
 SELECT
     d,
     toTypeName(d)
@@ -119,3 +123,5 @@ SELECT
 FROM format(JSONEachRow, '{"d" : "2300-01-01 00:00:00.000000000", "s" : "some string"}');
 
 SELECT '----------------------------------------------';
+
+SET date_time_input_format = 'best_effort';

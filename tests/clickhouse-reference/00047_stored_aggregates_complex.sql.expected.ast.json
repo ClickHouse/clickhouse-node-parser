@@ -1,5 +1,130 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "stored_aggregates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "k1",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "k2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Sum",
+        "type": "AggregateFunction(sum, UInt64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Avg",
+        "type": "AggregateFunction(avg, UInt64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Uniq",
+        "type": "AggregateFunction(uniq, UInt64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Any",
+        "type": "AggregateFunction(any, String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "AnyIf",
+        "type": "AggregateFunction(anyIf, String, UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "Quantiles",
+        "type": "AggregateFunction(quantiles(0.5, 0.9), UInt64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "GroupArray",
+        "type": "AggregateFunction(groupArray, String)"
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k1"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k2"
+              ]
+            }
+          ],
+          "source": "(d, k1, k2)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

@@ -1,3 +1,10 @@
+CREATE TABLE numbers_10
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
 SELECT
     number,
     (number, toDate('2015-01-01') + number)

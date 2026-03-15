@@ -1,3 +1,7 @@
+Set
+
+Set
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -42,6 +46,59 @@ SelectWithUnionQuery (children 2)
                  Identifier nt
              Literal 'AggregateFunction(uniq, Map(Tuple(int, int), Tuple(int, int)))'
  Identifier JSONEachRow
+
+CreateQuery users (children 3)
+ Identifier users
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType UInt8
+   ColumnDeclaration city (children 1)
+    DataType String
+   ColumnDeclaration name (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery users2 (children 3)
+ Identifier users2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt8
+   ColumnDeclaration city_name_uniq (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier uniq
+      TupleDataType Tuple (children 1)
+       ExpressionList (children 2)
+        DataType String
+        DataType String
+ Storage definition (children 2)
+  Function AggregatingMergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery test_mv (children 3)
+ Identifier test_mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier id
+     Function uniqState (alias city_name_uniq) (children 1)
+      ExpressionList (children 1)
+       Function tuple (children 1)
+        ExpressionList (children 2)
+         Identifier city
+         Identifier name
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier users
+    ExpressionList (children 1)
+     Identifier id
+ ViewTargets
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

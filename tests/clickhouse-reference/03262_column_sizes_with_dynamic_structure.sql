@@ -1,3 +1,8 @@
+-- Tags: no-random-settings, no-fasttest
+
+set allow_experimental_dynamic_type = 1;
+SET enable_json_type = 1;
+create table test (d Dynamic, json JSON) engine=MergeTree order by tuple() settings min_rows_for_wide_part=0, min_bytes_for_wide_part=1, object_serialization_version='v2', dynamic_serialization_version='v2';
 SELECT
     `table`,
     sum(rows) AS rows,

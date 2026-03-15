@@ -1,5 +1,96 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_rename_pk"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key2",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key3",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value2",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_01213/table_for_rename_pk1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "date"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key1"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "pow",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key2"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key3"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -70,5 +161,112 @@
         }
       ]
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_rename_with_primary_key"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key2",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "key3",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value2",
+        "type": "String"
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value1"
+          ],
+          "parenthesized": true
+        },
+        "indexType": "set(1)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_01213/table_for_rename_pk2"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "date"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key3"
+        ]
+      }
+    ],
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key2"
+        ]
+      }
+    ]
   }
 ]

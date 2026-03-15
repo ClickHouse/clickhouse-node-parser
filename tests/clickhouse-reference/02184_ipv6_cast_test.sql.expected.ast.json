@@ -1,5 +1,120 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ipv6_test26473"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "ipv6",
+        "type": "IPv6",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toIPv6",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ip"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_ipv6",
+        "type": "Boolean",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "isIPv6String",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ip"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cblock",
+        "type": "IPv6",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "cutIPv6",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ipv6"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cblock1",
+        "type": "IPv6",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toIPv6",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "cutIPv6",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ipv6"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

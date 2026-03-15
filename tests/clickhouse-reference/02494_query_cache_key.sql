@@ -1,4 +1,10 @@
+CREATE DATABASE db1;
+CREATE DATABASE db2;
+CREATE TABLE db1.tab(a UInt64, PRIMARY KEY a);
+CREATE TABLE db2.tab(a UInt64, PRIMARY KEY a);
+USE db1;
 SELECT * FROM tab SETTINGS use_query_cache = 1;
+USE db2;
 -- test with query-level settings
 SELECT 1 SETTINGS use_query_cache = 1, limit = 1, use_skip_indexes = 0 Format Null;
 SELECT 1 SETTINGS use_query_cache = 1, use_skip_indexes = 0 Format Null;
@@ -6,6 +12,16 @@ SELECT 1 SETTINGS use_query_cache = 1, use_skip_indexes = 1 Format Null;
 SELECT 1 SETTINGS use_query_cache = 1, max_block_size = 1 Format Null;
 -- 4x the same query but with different settings each. There should yield four entries in the query cache.
 SELECT count(query) FROM system.query_cache;
+-- test with mixed session-level/query-level settings
+SET use_query_cache = 1;
+SET limit = 1;
 SELECT 1 SETTINGS use_skip_indexes = 0 Format Null;
+SET limit = default;
+SET use_skip_indexes = 0;
 SELECT 1 Format Null;
+SET use_skip_indexes = 1;
 SELECT 1 SETTINGS use_skip_indexes = 1 Format Null;
+SET use_skip_indexes = default;
+SET max_block_size = 1;
+SET max_block_size = default;
+SET use_query_cache = default;

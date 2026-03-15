@@ -1,3 +1,8 @@
+-- Tags: long
+
+set output_format_json_quote_64bit_integers=0;
+create table source (json JSON(max_dynamic_paths=8)) engine=Memory;
+create table test_compact_map_with_buckets (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings index_granularity=2, min_bytes_for_wide_part='200G', min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='map_with_buckets', object_shared_data_serialization_version_for_zero_level_parts='map_with_buckets', object_shared_data_buckets_for_compact_part=2;
 select json from test_compact_map_with_buckets;
 select json.b from test_compact_map_with_buckets;
 select json.arr from test_compact_map_with_buckets;
@@ -13,6 +18,7 @@ select json.^a, json.a.a1 from test_compact_map_with_buckets;
 select json.a.a1, json.^a from test_compact_map_with_buckets;
 select json.^a, json.a.a1, json.arr from test_compact_map_with_buckets;
 select json.a.a1, json.arr, json.^a from test_compact_map_with_buckets;
+create table test_compact_map_with_buckets_tuple (json Tuple(data JSON(max_dynamic_paths=8))) engine=MergeTree order by tuple() settings index_granularity=2, min_bytes_for_wide_part='200G', min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='map_with_buckets', object_shared_data_serialization_version_for_zero_level_parts='map_with_buckets', object_shared_data_buckets_for_compact_part=2;
 select json.data from test_compact_map_with_buckets_tuple;
 select json.data, json.data.b from test_compact_map_with_buckets_tuple;
 select json.data.b, json.data from test_compact_map_with_buckets_tuple;
@@ -23,6 +29,7 @@ select json.data, json.data.^a from test_compact_map_with_buckets_tuple;
 select json.data.^a, json.data from test_compact_map_with_buckets_tuple;
 select json.data, json.data.^a, json.data.b from test_compact_map_with_buckets_tuple;
 select json.data.b, json.data.^a, json.data from test_compact_map_with_buckets_tuple;
+create table test_wide_map_with_buckets (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings index_granularity=2, min_bytes_for_wide_part=1, min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='map_with_buckets', object_shared_data_serialization_version_for_zero_level_parts='map_with_buckets', object_shared_data_buckets_for_wide_part=2;
 select json from test_wide_map_with_buckets;
 select json.b from test_wide_map_with_buckets;
 select json.arr from test_wide_map_with_buckets;
@@ -69,6 +76,7 @@ select json.^a, json.a.a1 from test_wide_map_with_buckets settings max_block_siz
 select json.a.a1, json.^a from test_wide_map_with_buckets settings max_block_size=3;
 select json.^a, json.a.a1, json.arr from test_wide_map_with_buckets settings max_block_size=3;
 select json.a.a1, json.arr, json.^a from test_wide_map_with_buckets settings max_block_size=3;
+create table test_wide_map_with_buckets_tuple (json Tuple(data JSON(max_dynamic_paths=8))) engine=MergeTree order by tuple() settings index_granularity=2, min_bytes_for_wide_part=1, min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='map_with_buckets', object_shared_data_serialization_version_for_zero_level_parts='map_with_buckets', object_shared_data_buckets_for_wide_part=2;
 select json.data from test_wide_map_with_buckets_tuple;
 select json.data, json.data.b from test_wide_map_with_buckets_tuple;
 select json.data.b, json.data from test_wide_map_with_buckets_tuple;

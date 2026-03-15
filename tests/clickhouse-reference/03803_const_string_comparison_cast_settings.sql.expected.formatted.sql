@@ -1,3 +1,6 @@
+-- { echo }
+SET session_timezone = 'UTC';
+
 SELECT '2025-12-07T05:17:47.563383Z'::DateTime64 = '2025-12-07T05:17:47.563383Z'
 SETTINGS cast_string_to_date_time_mode = 'best_effort';
 

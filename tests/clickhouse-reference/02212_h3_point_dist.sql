@@ -1,3 +1,4 @@
+CREATE TABLE table1 (lat1 Float64, lon1 Float64, lat2 Float64, lon2 Float64) ENGINE = Memory;
 select '-- select h3PointDistM(lat1, lon1,lat2, lon2) AS k from table1 order by k;';
 select round(h3PointDistM(lat1, lon1,lat2, lon2), 2) AS k from table1 order by k;
 select round(h3PointDistKm(lat1, lon1,lat2, lon2), 2) AS k from table1 order by k;

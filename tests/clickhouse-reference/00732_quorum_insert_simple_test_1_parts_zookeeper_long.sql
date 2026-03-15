@@ -1,3 +1,13 @@
+-- Tags: long, zookeeper, no-replicated-database, no-shared-merge-tree, no-async-insert
+-- Tag no-replicated-database: Fails due to additional replicas or shards
+-- Tag no-shared-merge-tree: no-shared-merge-tree: No quorum
+-- Tag no-async-insert: async inserts with quorum inserts are only have sence with enabled quorum_parallel setting
+
+SET send_logs_level = 'fatal';
+CREATE TABLE quorum1(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_00732/quorum1', '1') ORDER BY x PARTITION BY y;
+CREATE TABLE quorum2(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_00732/quorum1', '2') ORDER BY x PARTITION BY y;
+SET insert_quorum=2, insert_quorum_parallel=0;
+SET select_sequential_consistency=1;
 SELECT x FROM quorum1 ORDER BY x;
 SELECT x FROM quorum2 ORDER BY x;
 SELECT count(*) FROM system.parts WHERE active AND database = currentDatabase() AND table='quorum1';

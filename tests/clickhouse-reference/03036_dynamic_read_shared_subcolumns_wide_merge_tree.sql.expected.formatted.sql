@@ -1,3 +1,21 @@
+-- Tags: long, no-tsan, no-msan, no-ubsan, no-asan
+SET allow_experimental_variant_type = 1;
+
+SET use_variant_as_common_type = 1;
+
+SET allow_experimental_dynamic_type = 1;
+
+SET min_bytes_to_use_direct_io = 0; -- min_bytes_to_use_direct_io > 0 is broken
+
+CREATE TABLE test
+(
+    id UInt64,
+    d Dynamic(max_types=2)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1;
+
 SELECT DISTINCT dynamicType(d) AS type
 FROM test
 ORDER BY type ASC;

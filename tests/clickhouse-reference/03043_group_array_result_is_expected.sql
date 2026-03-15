@@ -1,3 +1,12 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/27115
+SET enable_analyzer=1;
+create table fill_ex (
+  eventDate Date ,
+  storeId String
+)
+engine = ReplacingMergeTree()
+partition by toYYYYMM(eventDate)
+order by (storeId,eventDate);
 select
   groupArray(key) as keys,
   count() as c

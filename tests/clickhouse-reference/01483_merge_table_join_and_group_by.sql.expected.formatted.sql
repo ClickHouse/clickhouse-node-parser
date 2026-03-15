@@ -1,3 +1,24 @@
+CREATE TABLE a
+(
+    key UInt32
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+CREATE TABLE b
+(
+    key UInt32,
+    ID UInt32
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+CREATE TABLE m
+(
+    key UInt32
+)
+ENGINE = Merge(currentDatabase(), 'a');
+
 SELECT *
 FROM
     m

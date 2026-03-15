@@ -1,3 +1,27 @@
+SET allow_experimental_ts_to_grid_aggregate_function=1;
+SET cluster_for_parallel_replicas = 'test_shard_localhost';
+CREATE TABLE t_resampled_timeseries
+(
+    step UInt32,   -- Resampling step in seconds
+    metric_id UInt64,
+    grid_timestamp DateTime('UTC') CODEC(DoubleDelta, ZSTD),
+    samples Tuple(Array(DateTime('UTC')), Array(Float64)) -- Timeseries data resampled to the grid
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY (step, metric_id, grid_timestamp);
+-- Test with DateTime64
+
+CREATE TABLE t_resampled_timeseries_64
+(
+    step UInt32,   -- Resampling step in seconds
+    metric_id UInt64,
+    grid_timestamp DateTime('UTC') CODEC(DoubleDelta, ZSTD),
+    samples Tuple(Array(DateTime64(3, 'UTC')), Array(Float64)) -- Timeseries data resampled to the grid
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY (step, metric_id, grid_timestamp);
+-- Tests to validate block header compatibility in queries with parallel replicas
+SET serialize_query_plan=1, prefer_localhost_replica = false;
 SELECT
     metric_id,
     toTypeName(timeSeriesInstantRateToGridState('2024-12-12 12:00:10'::DateTime64(3,'UTC'), '2024-12-12 12:01:00'::DateTime64(3,'UTC'), 10, 60)(samples.1, samples.2)) as c1,

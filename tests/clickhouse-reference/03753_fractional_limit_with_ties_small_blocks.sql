@@ -1,6 +1,8 @@
+SET max_block_size = 10;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 0.5 WITH TIES;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 0.9 WITH TIES;
 SELECT number FROM numbers(10) ORDER BY number LIMIT 0.1 WITH TIES;
+SET max_block_size = 3;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 5, 0.5   WITH TIES;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 12, 0.25 WITH TIES;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 10, 0.5  WITH TIES;

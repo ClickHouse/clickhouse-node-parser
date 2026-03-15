@@ -1,3 +1,26 @@
+CREATE TABLE hits_text
+(
+    CounterID UInt32,
+    EventDate Date,
+    UserID UInt32,
+    SearchPhrase String,
+    URL String
+)
+ENGINE = MergeTree
+ORDER BY (CounterID, EventDate);
+
+SET enable_full_text_index = 1;
+
+SET use_query_condition_cache = 0;
+
+SET max_insert_threads = 4;
+
+SET use_skip_indexes = 0;
+
+SET use_skip_indexes_on_data_read = 0;
+
+SET force_data_skipping_indices = '';
+
 SELECT count()
 FROM hits_text
 WHERE hasToken(SearchPhrase, 'video');
@@ -71,6 +94,16 @@ SELECT count()
 FROM hits_text
 WHERE hasToken(URL, 'auto')
     AND hasToken(SearchPhrase, 'bmw');
+
+SET use_skip_indexes = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET force_data_skipping_indices = 'idx_search_phrase';
+
+SET force_data_skipping_indices = 'idx_url';
+
+SET force_data_skipping_indices = 'idx_search_phrase,idx_url';
 
 SELECT count()
 FROM hits_text

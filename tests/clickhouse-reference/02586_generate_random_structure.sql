@@ -11,4 +11,5 @@ select * from generateRandom(10000000) limit 1;
 select * from generateRandom(10000000, 2) limit 1;
 select * from generateRandom(10000000, 2, 2) limit 1;
 select * from generateRandom(10000000, 2, 2, 2) limit 1; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
+set allow_suspicious_low_cardinality_types=1;
 select generateRandomStructure(5, 4);

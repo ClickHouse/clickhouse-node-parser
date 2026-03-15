@@ -1,3 +1,31 @@
+SET query_plan_use_new_logical_join_step = 0;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    x Int8
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+CREATE TABLE t3
+(
+    x UInt16
+)
+ENGINE = Memory;
+
+CREATE TABLE t4
+(
+    x UInt32
+)
+ENGINE = Memory;
+
 SELECT coalesce(t1.x, t2.x, t3.x, t4.x) AS x
 FROM
     t1

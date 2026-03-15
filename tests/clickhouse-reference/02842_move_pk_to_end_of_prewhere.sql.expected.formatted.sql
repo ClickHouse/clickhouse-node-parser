@@ -1,3 +1,20 @@
+SET optimize_move_to_prewhere = 1;
+
+SET enable_multiple_prewhere_read_steps = 1;
+
+SET optimize_functions_to_subcolumns = 0;
+
+SET use_statistics = 0;
+
+CREATE TABLE t_02848_mt1
+(
+    k UInt32,
+    v String
+)
+ENGINE = MergeTree
+ORDER BY k
+SETTINGS min_bytes_for_wide_part = 0;
+
 SELECT replaceRegexpAll(`explain`, '__table1\\.|_UInt8', '')
 FROM (
         EXPLAIN actions = 1
@@ -14,6 +31,19 @@ FROM t_02848_mt1
 WHERE k = 3
     AND notEmpty(v);
 
+CREATE TABLE t_02848_mt2
+(
+    a UInt32,
+    b String,
+    c Int32,
+    d String
+)
+ENGINE = MergeTree
+ORDER BY (a, b, c)
+SETTINGS min_bytes_for_wide_part = 0;
+
+-- the estimated column sizes are: {a: 428, b: 318, c: 428, d: 73}
+-- it's not correct but let's fix it in the future.
 SELECT replaceRegexpAll(`explain`, '__table1\\.|_UInt8|_String', '')
 FROM (
         EXPLAIN actions = 1

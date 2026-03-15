@@ -1,3 +1,15 @@
+CREATE TABLE X
+(
+    id Int
+)
+ENGINE = Memory;
+
+CREATE TABLE Y
+(
+    id Int
+)
+ENGINE = Memory;
+
 SELECT Y.id - 1
 FROM
     X

@@ -1,3 +1,12 @@
+-- Tags: no-parallel
+SET enable_analyzer = 1;
+
+CREATE TABLE one
+(
+    dummy UInt8
+)
+ENGINE = Memory;
+
 SELECT
     database,
     t.name
@@ -103,6 +112,8 @@ WHERE x = 'system'
     AND t.name = 'one'
 SETTINGS join_default_strictness = 'ALL'
 FORMAT PrettyCompactNoEscapes;
+
+SET join_default_strictness = 'ALL';
 
 SELECT
     database,

@@ -5,3 +5,7 @@ SELECT '---';
 -- Store the result of the same query with two different tags. The cache should store two entries.
 SELECT 1 SETTINGS use_query_cache = true; -- default query_cache_tag = ''
 SELECT query, tag FROM system.query_cache ORDER BY ALL;
+-- Like before but the tag is set standalone.
+
+SET query_cache_tag = 'abc';
+SET query_cache_tag = 'def';

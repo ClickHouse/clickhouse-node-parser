@@ -1,3 +1,9 @@
+CREATE TABLE to_insert
+(
+    value UInt64
+)
+ENGINE = Memory();
+
 SELECT *
 FROM table_that_do_not_exists; -- { serverError UNKNOWN_TABLE }
 

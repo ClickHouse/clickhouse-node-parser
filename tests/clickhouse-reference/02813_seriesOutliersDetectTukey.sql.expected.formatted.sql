@@ -1,3 +1,10 @@
+CREATE TABLE tb1
+(
+    n UInt32,
+    a Array(Float64)
+)
+ENGINE = Memory;
+
 -- non-const inputs
 SELECT seriesOutliersDetectTukey(a)
 FROM tb1

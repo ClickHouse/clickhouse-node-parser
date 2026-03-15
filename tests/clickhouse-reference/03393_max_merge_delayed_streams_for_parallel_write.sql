@@ -1,2 +1,21 @@
+create table metric_log as system.metric_log
+engine = MergeTree
+partition by ()
+order by ()
+settings
+    -- cache has it's own problems (see filesystem_cache_prefer_bigger_buffer_size)
+    storage_policy = 's3_no_cache',
+    -- horizontal merges does opens all stream at once, so will still use huge amount of memory
+    min_rows_for_wide_part = 0,
+    min_bytes_for_wide_part = 0,
+    vertical_merge_algorithm_min_rows_to_activate = 0,
+    vertical_merge_algorithm_min_columns_to_activate = 1,
+    min_bytes_for_full_part_storage = 0,
+    --- avoid excessive memory usage (due to default buffer size of 1MiB that is created for each column)
+    max_merge_delayed_streams_for_parallel_write = 100,
+    -- avoid superfluous merges
+    merge_selector_base = 1000,
+    min_columns_to_activate_adaptive_write_buffer = 0,
+    auto_statistics_types = '';
 select 'max_merge_delayed_streams_for_parallel_write=100' as test, * from system.part_log where table = 'metric_log' and database = currentDatabase() and event_date >= yesterday() and event_type = 'MergeParts' and peak_memory_usage > 1_000_000_000 format Vertical;
 select 'max_merge_delayed_streams_for_parallel_write=1000' as test, count() as count from system.part_log where table = 'metric_log' and database = currentDatabase() and event_date >= yesterday() and event_type = 'MergeParts' and peak_memory_usage > 1_000_000_000;

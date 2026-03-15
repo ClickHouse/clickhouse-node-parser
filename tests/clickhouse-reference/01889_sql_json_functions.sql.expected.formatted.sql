@@ -149,6 +149,14 @@ SELECT JSON_EXISTS('{"a":[{"b":1},{"c":2}]}', '$.a[*].f');
 
 SELECT JSON_EXISTS('{"a":[[{"b":1}, {"g":1}],[{"h":1},{"y":1}]]}', '$.a[*][0].h');
 
+CREATE TABLE `01889_sql_json`
+(
+    id UInt8,
+    json String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT
     id,
     JSON_QUERY(json, '$.friends[0 to 2]')

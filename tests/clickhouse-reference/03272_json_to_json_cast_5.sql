@@ -1,3 +1,7 @@
+SET enable_json_type = 1;
+set enable_analyzer = 1;
+set output_format_native_write_json_as_string = 0;
+create table test (json JSON(max_dynamic_paths=4, k1 UInt32, k2 String)) engine=Memory;
 select json::JSON(max_dynamic_paths=5, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) as json2, JSONDynamicPaths(json2), JSONSharedDataPaths(json2), json2.k0, json2.k1, json2.k2, json2.k3, json2.k4, json2.k5, json2.k6, json2.k7, json2.k8, json2.k9 from test;
 select json::JSON(max_dynamic_paths=3, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) as json2, JSONDynamicPaths(json2), JSONSharedDataPaths(json2), json2.k0, json2.k1, json2.k2, json2.k3, json2.k4, json2.k5, json2.k6, json2.k7, json2.k8, json2.k9 from test;
 select json::JSON(max_dynamic_paths=2, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) as json2, JSONDynamicPaths(json2), JSONSharedDataPaths(json2), json2.k0, json2.k1, json2.k2, json2.k3, json2.k4, json2.k5, json2.k6, json2.k7, json2.k8, json2.k9 from test;

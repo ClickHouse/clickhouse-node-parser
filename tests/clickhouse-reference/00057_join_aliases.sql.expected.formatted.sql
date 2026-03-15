@@ -1,3 +1,5 @@
+SET query_plan_join_swap_table = 0;
+
 SELECT *
 FROM (
         SELECT

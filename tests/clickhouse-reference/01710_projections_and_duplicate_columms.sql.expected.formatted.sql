@@ -1,3 +1,53 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE projection_test__fuzz_0
+(
+    `sum(block_count)` UInt64,
+    domain_alias UInt64 ALIAS length(domain),
+    datetime DateTime,
+    domain LowCardinality(String),
+    x_id String,
+    y_id String,
+    block_count Int64,
+    retry_count Int64,
+    duration Decimal(76, 13),
+    kbytes LowCardinality(Int64),
+    buffer_time Int64,
+    first_time UInt256,
+    total_bytes LowCardinality(Nullable(UInt64)),
+    valid_bytes Nullable(UInt64),
+    completed_bytes Nullable(UInt64),
+    fixed_bytes LowCardinality(Nullable(UInt64)),
+    force_bytes Int256,
+    PROJECTION p (    SELECT
+        toStartOfMinute(datetime) AS dt_m,
+        countIf(first_time = 0) / count(),
+        avg((kbytes * 8) / duration),
+        count(),
+        sum(block_count) / sum(duration),
+        avg(block_count / duration),
+        sum(buffer_time) / sum(duration),
+        avg(buffer_time / duration),
+        sum(valid_bytes) / sum(total_bytes),
+        sum(completed_bytes) / sum(total_bytes),
+        sum(fixed_bytes) / sum(total_bytes),
+        sum(force_bytes) / sum(total_bytes),
+        sum(valid_bytes) / sum(total_bytes),
+        sum(retry_count) / sum(duration),
+        avg(retry_count / duration),
+        countIf(block_count > 0) / count(),
+        countIf(first_time = 0) / count(),
+        uniqHLL12(x_id),
+        uniqHLL12(y_id)
+    GROUP BY
+        dt_m,
+        domain)
+)
+ENGINE = MergeTree
+ORDER BY (toStartOfTenMinutes(datetime), domain)
+PARTITION BY toDate(datetime)
+SETTINGS index_granularity_bytes = 10000000;
+
 SELECT
     '-21474836.48',
     10000000000.,

@@ -1,3 +1,8 @@
+-- Tags: no-fasttest
+SET input_format_orc_use_fast_decoder = 1;
+
+SET input_format_orc_dictionary_as_low_cardinality = 1;
+
 SELECT
     c,
     count(1)
@@ -25,6 +30,8 @@ SELECT
 FROM file(concat(currentDatabase(), '_03241_data1_with_dict.orc'), ORC, 'c LowCardinality(String)')
 GROUP BY c
 ORDER BY c ASC;
+
+SET input_format_orc_dictionary_as_low_cardinality = 0;
 
 SELECT
     c,

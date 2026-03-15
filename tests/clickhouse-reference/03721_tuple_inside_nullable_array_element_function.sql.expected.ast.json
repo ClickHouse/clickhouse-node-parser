@@ -1,5 +1,21 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_nullable_tuple_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -4647,6 +4663,46 @@
     ],
     "trailingComments": [
       "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_array_tuple_mergetree"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt8"
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": "Array(Tuple(Int64, String))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr_null",
+        "type": "Array(Nullable(Tuple(Int64, String)))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "idx",
+        "type": "Int64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
     ]
   },
   {
@@ -10119,6 +10175,19 @@
             "value": "NULL"
           }
         ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_nullable_tuple_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
       }
     ]
   }

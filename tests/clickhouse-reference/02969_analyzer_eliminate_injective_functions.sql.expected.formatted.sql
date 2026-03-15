@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     toString(toString(number + 1)) AS val,
     count()

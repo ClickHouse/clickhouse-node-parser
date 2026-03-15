@@ -1,11 +1,1 @@
-SELECT *
-FROM original_mv
-ORDER BY x ASC;
-
-SELECT *
-FROM dst
-ORDER BY x ASC;
-
-SELECT *
-FROM new_mv
-ORDER BY x ASC;
+<Parse Error>

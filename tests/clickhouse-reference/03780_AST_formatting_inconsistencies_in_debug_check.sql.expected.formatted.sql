@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     ([1] AS foo),
     [1] IN ([1] AS foo);
@@ -5,6 +7,11 @@ SELECT
 SELECT
     ([isNaN(1)] AS foo),
     [1] IN ([isNaN(1)] AS foo);
+
+CREATE TABLE tab
+(
+    c1 int
+);
 
 SELECT
     (negate(((negate(c1)) AS a2))),
@@ -34,6 +41,16 @@ SELECT
     tuple(1, 'a') AS a1,
     tuple(1, 'a') IN (tuple(1, 'a') AS a1);
 
+CREATE TABLE t1
+(
+    x int
+);
+
+CREATE TABLE t2
+(
+    x int
+);
+
 SELECT *
 FROM
     t1
@@ -44,6 +61,20 @@ INNER JOIN t2
 SELECT
     tuple(1, 'a') AS a1,
     NOT(tuple(1, 'a') AS a1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+CREATE TABLE tab
+(
+    c1 int,
+    c2 int,
+    c3 int
+);
+
+CREATE TABLE tab2
+(
+    c1 int,
+    c2 int,
+    c3 int
+);
 
 SELECT
     1,

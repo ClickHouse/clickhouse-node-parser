@@ -98,6 +98,12 @@ FROM (
         LIMIT 10
     );
 
+CREATE TABLE test
+(
+    x Nullable(Int32)
+)
+ENGINE = Log;
+
 SELECT *
 FROM test;
 

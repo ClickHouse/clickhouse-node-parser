@@ -1,3 +1,8 @@
+-- Tags: no-fasttest
+-- no-fasttest: json type needs rapidjson library, geo types need s2 geometry
+
+SET enable_json_type = 1;
+SET allow_suspicious_low_cardinality_types=1;
 SELECT '-- Const string + non-const arbitrary type';
 SELECT concat('With ', materialize(42 :: Int8));
 SELECT concat('With ', materialize(43 :: Int16));
@@ -42,7 +47,9 @@ SELECT concat('With ', materialize((42, 43) :: Point));
 SELECT concat('With ', materialize([(0,0),(10,0),(10,10),(0,10)] :: Ring));
 SELECT concat('With ', materialize([[(20, 20), (50, 20), (50, 50), (20, 50)], [(30, 30), (50, 50), (50, 30)]] :: Polygon));
 SELECT concat('With ', materialize([[[(0, 0), (10, 0), (10, 10), (0, 10)]], [[(20, 20), (50, 20), (50, 50), (20, 50)],[(30, 30), (50, 50), (50, 30)]]] :: MultiPolygon));
+CREATE TABLE concat_saf_test(x SimpleAggregateFunction(max, Int32)) ENGINE=MergeTree ORDER BY tuple();
 SELECT concat('With ', x) FROM concat_saf_test ORDER BY x DESC;
+CREATE TABLE concat_nested_test(attrs Nested(k String, v String)) ENGINE = MergeTree ORDER BY tuple();
 SELECT concat('With ', attrs.k, attrs.v) FROM concat_nested_test;
 SELECT concat(NULL, NULL);
 SELECT concat(NULL, materialize(NULL :: Nullable(UInt64)));

@@ -1,3 +1,10 @@
+CREATE TABLE t0
+(
+    c0 Int
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT t0.c0
 FROM
     t0

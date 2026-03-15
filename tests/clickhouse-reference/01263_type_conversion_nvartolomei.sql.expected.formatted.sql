@@ -1,5 +1,33 @@
+CREATE TABLE m
+(
+    v UInt8
+)
+ENGINE = MergeTree()
+ORDER BY v
+PARTITION BY tuple();
+
+CREATE TABLE d
+(
+    v UInt16
+)
+ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), m, rand());
+
 SELECT *
 FROM d;
+
+CREATE TABLE m
+(
+    v Enum8('a' = 1, 'b' = 2)
+)
+ENGINE = MergeTree()
+ORDER BY v
+PARTITION BY tuple();
+
+CREATE TABLE d
+(
+    v Enum8('a' = 1)
+)
+ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), m, rand());
 
 SELECT '---';
 

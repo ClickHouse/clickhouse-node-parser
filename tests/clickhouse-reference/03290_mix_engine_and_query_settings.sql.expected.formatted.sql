@@ -1,0 +1,35 @@
+-- Tags: memory-engine
+SET enable_json_type = 0;
+
+CREATE TABLE example_mt
+(
+    id UInt32,
+    data LowCardinality(UInt8)
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS async_insert = 1, allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE example_memory
+(
+    id UInt64,
+    data LowCardinality(UInt8)
+)
+ENGINE = Memory
+SETTINGS max_rows_to_keep = 100, allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE example_set
+(
+    id UInt64,
+    data LowCardinality(UInt8)
+)
+ENGINE = Set
+SETTINGS persistent = 1, allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE example_join
+(
+    id UInt64,
+    data LowCardinality(UInt8)
+)
+ENGINE = Join(`ANY`, `LEFT`, id)
+SETTINGS persistent = 1, allow_suspicious_low_cardinality_types = 1;

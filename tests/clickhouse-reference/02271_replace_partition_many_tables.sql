@@ -1,3 +1,38 @@
+CREATE TABLE replace_partition_source
+(
+    key UInt64
+)
+ENGINE = ReplicatedMergeTree('/test/02271_replace_partition_many/{database}/source', '1')
+PARTITION BY key
+ORDER BY tuple();
+CREATE TABLE replace_partition_dest1
+(
+    key UInt64
+)
+ENGINE = ReplicatedMergeTree('/test/02271_replace_partition_many/{database}/dest1', '1')
+PARTITION BY key
+ORDER BY tuple();
+CREATE TABLE replace_partition_dest1_2
+(
+    key UInt64
+)
+ENGINE = ReplicatedMergeTree('/test/02271_replace_partition_many/{database}/dest1', '2')
+PARTITION BY key
+ORDER BY tuple();
+CREATE TABLE replace_partition_dest2
+(
+    key UInt64
+)
+ENGINE = ReplicatedMergeTree('/test/02271_replace_partition_many/{database}/dest2', '1')
+PARTITION BY key
+ORDER BY tuple();
+CREATE TABLE replace_partition_dest2_2
+(
+    key UInt64
+)
+ENGINE = ReplicatedMergeTree('/test/02271_replace_partition_many/{database}/dest2', '2')
+PARTITION BY key
+ORDER BY tuple();
 SELECT sleep(3) FORMAT Null;
 SELECT * FROM replace_partition_source;
 SELECT * FROM replace_partition_dest1;

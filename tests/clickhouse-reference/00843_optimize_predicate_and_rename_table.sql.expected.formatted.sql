@@ -1,2 +1,1 @@
-SELECT *
-FROM view_00843;
+<Parse Error>

@@ -1,3 +1,9 @@
+SET enable_analyzer = 1;
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+) ENGINE=TinyLog;
 SELECT (SELECT 1);
 SELECT (SELECT id FROM test_table);
 SELECT (SELECT value FROM test_table);

@@ -1,5 +1,15 @@
+CREATE TABLE enum_table (
+  id UInt64,
+  val Enum('first' = 1, 'second' = 2, 'third' = 3)
+) ENGINE = Memory;
 SELECT '-- treat NULL as default value';
 SELECT val FROM enum_table;
+SET check_conversion_from_numbers_to_enum = 0; -- legacy behavior
+SET check_conversion_from_numbers_to_enum = 1; -- default behavior
+CREATE TABLE nullable_enum_table (
+  id UInt64,
+  val Nullable(Enum('first' = 1, 'second' = 2, 'third' = 3))
+) ENGINE = Memory;
 SELECT val FROM nullable_enum_table;
 SELECT (('first'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64;
 SELECT (('second'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64;

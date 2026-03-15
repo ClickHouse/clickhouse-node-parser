@@ -1,3 +1,20 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test_tuple_filter
+(
+    id UInt32,
+    value String,
+    log_date Date
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY log_date
+SETTINGS index_granularity = 3, index_granularity_bytes = '10Mi';
+
+SET force_primary_key = 1;
+
+SET optimize_move_to_prewhere = 1;
+
 SELECT *
 FROM test_tuple_filter
 WHERE (id, value) = (1, 'A');
@@ -40,9 +57,15 @@ SELECT *
 FROM test_tuple_filter
 WHERE ((id, value), tuple(log_date)) = ((1, 'A'), tuple('2021-01-01'));
 
+SET force_index_by_date = 1;
+
+SET force_primary_key = 0;
+
 SELECT *
 FROM test_tuple_filter
 WHERE (log_date, value) = ('2021-01-01', 'A');
+
+SET force_index_by_date = 0;
 
 SELECT *
 FROM test_tuple_filter

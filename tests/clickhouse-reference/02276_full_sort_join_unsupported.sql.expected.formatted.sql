@@ -1,3 +1,19 @@
+CREATE TABLE t1
+(
+    key UInt32,
+    val UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    key UInt32,
+    val UInt32
+)
+ENGINE = Memory;
+
+SET join_algorithm = 'full_sorting_merge';
+
 SELECT *
 FROM
     t1

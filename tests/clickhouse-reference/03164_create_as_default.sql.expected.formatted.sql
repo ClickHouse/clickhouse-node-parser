@@ -1,3 +1,13 @@
+CREATE TABLE src_table
+(
+    time DateTime('UTC') DEFAULT fromUnixTimestamp(sipTimestamp),
+    sipTimestamp UInt64
+)
+ENGINE = MergeTree
+ORDER BY time;
+
+CREATE TABLE copied_table AS src_table;
+
 SELECT
     name,
     default_expression

@@ -1,3 +1,4 @@
+-- { echoOn }  
 SELECT fromUnixTimestampInJodaSyntax(1669804872, 'G', 'UTC');
 
 SELECT fromUnixTimestampInJodaSyntax(1669804872, 'GG', 'UTC');

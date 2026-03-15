@@ -1,3 +1,5 @@
+SET distributed_aggregation_memory_efficient = 1;
+
 SELECT
     number AS a,
     number + 1 AS b

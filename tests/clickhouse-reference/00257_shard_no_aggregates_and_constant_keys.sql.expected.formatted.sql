@@ -1,3 +1,8 @@
+-- Tags: shard
+SET enable_analyzer = 1;
+
+SET enable_positional_arguments = 0;
+
 SELECT 40 AS z
 FROM (
         SELECT *

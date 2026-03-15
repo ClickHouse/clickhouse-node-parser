@@ -1,3 +1,18 @@
+SET log_queries = 1;
+
+CREATE TABLE xp
+(
+    A Date,
+    B Int64,
+    S String
+)
+ENGINE = MergeTree
+ORDER BY B
+PARTITION BY toYYYYMM(A);
+
+CREATE TABLE xp_d AS xp
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), xp);
+
 SELECT count(7 = (
         SELECT number
         FROM numbers(0)
@@ -24,6 +39,28 @@ FROM xp_d
 WHERE A GLOBAL IN (
         SELECT NULL
     );
+
+CREATE TABLE trace_log
+(
+    event_date Date,
+    event_time DateTime,
+    event_time_microseconds DateTime64(6),
+    timestamp_ns UInt64,
+    revision UInt32,
+    trace_type Enum8('Real' = 0, 'CPU' = 1, 'Memory' = 2, 'MemorySample' = 3),
+    thread_id UInt64,
+    query_id String,
+    trace Array(UInt64),
+    size Int64
+)
+ENGINE = MergeTree
+ORDER BY (event_date, event_time)
+PARTITION BY toYYYYMM(event_date)
+SETTINGS index_granularity = 8192;
+
+SET allow_introspection_functions = 1;
+
+SET joined_subquery_requires_alias = 0, enable_analyzer = 0; -- the query is invalid with a new analyzer
 
 SELECT
     number,

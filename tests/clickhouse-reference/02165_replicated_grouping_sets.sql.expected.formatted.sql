@@ -30,6 +30,8 @@ ORDER BY
     sum_value ASC,
     count_value ASC;
 
+SET prefer_localhost_replica = 1;
+
 -- { echo On }
 SELECT
     count(),

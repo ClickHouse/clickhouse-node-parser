@@ -1,5 +1,72 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": "Array(UInt32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": "Nullable(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": "Tuple(s1 String, s2 String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_dist"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_local"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t_subcolumns_local"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -35,6 +102,36 @@
       "kind": "tableRef",
       "table": "t_subcolumns_dist"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": "Array(UInt32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": "Nullable(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": "Tuple(s1 String, s2 String)"
+      }
+    ],
+    "engine": {
+      "name": "StripeLog"
+    },
+    "leadingComments": [
+      "-- StripeLog doesn't support subcolumns."
+    ]
   },
   {
     "kind": "select",

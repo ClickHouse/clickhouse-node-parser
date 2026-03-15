@@ -1,3 +1,4 @@
+SET join_algorithm = 'hash';
 SELECT L1Distance([0, 0, 0], [1, 2, 3]);
 SELECT L2Distance([1, 2, 3], [0, 0, 0]);
 SELECT L2SquaredDistance([1, 2, 3], [0, 0, 0]);
@@ -7,6 +8,10 @@ SELECT cosineDistance([1, 2, 3], [3, 5, 7]);
 SELECT L2Distance([1, 2, 3], NULL);
 SELECT L2SquaredDistance([1, 2, 3], NULL);
 SELECT cosineDistance([1, 2, 3], [0, 0, 0]);
+CREATE TABLE vec1 (id UInt64, v Array(UInt8)) ENGINE = Memory;
+CREATE TABLE vec2 (id UInt64, v Array(Int64)) ENGINE = Memory;
+CREATE TABLE vec2f (id UInt64, v Array(Float32)) ENGINE = Memory;
+CREATE TABLE vec2d (id UInt64, v Array(Float64)) ENGINE = Memory;
 SELECT L1Distance(v, [0, 0, 0]) FROM vec1;
 SELECT L2Distance(v, [0, 0, 0]) FROM vec1;
 SELECT L2SquaredDistance(v, [0, 0, 0]) FROM vec1;

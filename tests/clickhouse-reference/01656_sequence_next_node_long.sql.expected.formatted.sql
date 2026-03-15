@@ -1,3 +1,16 @@
+-- Tags: long, no-azure-blob-storage
+SET allow_experimental_funnel_functions = 1;
+
+CREATE TABLE IF NOT EXISTS test_sequenceNextNode_Nullable
+(
+    dt DateTime,
+    id int,
+    action Nullable(String)
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY dt;
+
 SELECT
     '(forward, head, A)',
     id,
@@ -413,6 +426,16 @@ SELECT
 FROM test_sequenceNextNode_Nullable
 GROUP BY id
 ORDER BY id ASC;
+
+CREATE TABLE IF NOT EXISTS test_sequenceNextNode
+(
+    dt DateTime,
+    id int,
+    action String
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY dt;
 
 SELECT
     '(forward, head, A)',
@@ -844,6 +867,17 @@ SELECT
 FROM test_sequenceNextNode
 WHERE id = 12;
 
+CREATE TABLE IF NOT EXISTS test_base_condition
+(
+    dt DateTime,
+    id int,
+    action String,
+    referrer String
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY dt;
+
 SELECT
     '(forward, head, 1)',
     id,
@@ -923,3 +957,5 @@ SELECT
 FROM test_base_condition
 GROUP BY id
 ORDER BY id ASC;
+
+SET allow_experimental_funnel_functions = 0;

@@ -1,3 +1,14 @@
+SET convert_query_to_cnf = 0;
+
+CREATE TABLE t0
+(
+    c0 Int32,
+    c1 Int32 CODEC(NONE)
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+SETTINGS index_granularity = 8192;
+
 SELECT t0.c1
 FROM t0
 WHERE NOT(t0.c1

@@ -13,12 +13,26 @@ select (uniqThetaStateIf(number, number>0)) as a, (uniqThetaStateIf(number, numb
 from 
 (select  number  FROM system.numbers LIMIT 10)
 );
+CREATE TABLE test1
+(
+    `year` String ,
+    `uv` AggregateFunction(uniqTheta, Int64)
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY (year);
 select finalizeAggregation(uniqThetaIntersect(uv2021,uv2022))/finalizeAggregation(uv2021),finalizeAggregation(uniqThetaIntersect(uv2021,uv2022)),finalizeAggregation(uv2021)
 from
 (
 select uniqThetaMergeStateIf(uv,year='2021') as uv2021, uniqThetaMergeStateIf(uv,year='2022') as uv2022 
 from test1
 );
+CREATE TABLE test2
+(
+    `year` String ,
+    `uv`  Int64
+)
+ENGINE = MergeTree()
+ORDER BY (year);
 select finalizeAggregation(uniqThetaIntersect(uv2021,uv2022))/finalizeAggregation(uv2021),finalizeAggregation(uniqThetaIntersect(uv2021,uv2022)),finalizeAggregation(uv2021)
 from
 (

@@ -1,3 +1,9 @@
+CREATE TABLE test_map
+(
+    value Map(String, String)
+)
+ENGINE = TinyLog;
+
 SELECT has(value, 'K0')
 FROM test_map;
 

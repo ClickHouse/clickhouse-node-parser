@@ -1,3 +1,4 @@
+set allow_suspicious_low_cardinality_types=1;
 select JSONExtract('{"a" : "2020-01-01"}', 'a', 'Date');
 select JSONExtract('{"a" : "2020-01-01"}', 'a', 'Date32');
 select JSONExtract('{"a" : "2020-01-01 00:00:00"}', 'a', 'DateTime');

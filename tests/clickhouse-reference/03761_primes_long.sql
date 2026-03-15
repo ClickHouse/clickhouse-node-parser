@@ -1,3 +1,6 @@
+-- Tags: long
+
+SET max_rows_to_read = 150000000;
 SELECT prime
 FROM system.primes
 WHERE bitAnd(prime, prime + 1) = 0

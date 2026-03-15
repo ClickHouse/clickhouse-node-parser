@@ -1,3 +1,4 @@
+CREATE TABLE t_subcolumns_if (id Nullable(Int64)) ENGINE=MergeTree ORDER BY tuple();
 SELECT
     sum(multiIf(id IS NOT NULL, 1, 0))
 FROM t_subcolumns_if

@@ -1,3 +1,23 @@
+CREATE DATABASE 01681_database_for_cache_dictionary;
+CREATE TABLE 01681_database_for_cache_dictionary.simple_key_simple_attributes_source_table
+(
+   id UInt64,
+   value_first String,
+   value_second String
+)
+ENGINE = TinyLog;
+CREATE DICTIONARY 01681_database_for_cache_dictionary.cache_dictionary_simple_key_simple_attributes
+(
+   id UInt64,
+   value_first String DEFAULT 'value_first_default',
+   value_second String DEFAULT 'value_second_default'
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'simple_key_simple_attributes_source_table'))
+LIFETIME(MIN 1 MAX 1000)
+LAYOUT(CACHE(SIZE_IN_CELLS 10))
+SETTINGS(dictionary_use_async_executor=1, max_threads=8)
+;
 SELECT dictGet('01681_database_for_cache_dictionary.cache_dictionary_simple_key_simple_attributes', 'value_first', number) as value_first,
     dictGet('01681_database_for_cache_dictionary.cache_dictionary_simple_key_simple_attributes', 'value_second', number) as value_second FROM system.numbers LIMIT 3;
 SELECT dictGet('01681_database_for_cache_dictionary.cache_dictionary_simple_key_simple_attributes', 'value_first', number) as value_first,
@@ -8,6 +28,23 @@ SELECT dictGetOrDefault('01681_database_for_cache_dictionary.cache_dictionary_si
     dictGetOrDefault('01681_database_for_cache_dictionary.cache_dictionary_simple_key_simple_attributes', 'value_second', number, toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01681_database_for_cache_dictionary.cache_dictionary_simple_key_simple_attributes', number) FROM system.numbers LIMIT 4;
 SELECT * FROM 01681_database_for_cache_dictionary.cache_dictionary_simple_key_simple_attributes ORDER BY id;
+CREATE TABLE 01681_database_for_cache_dictionary.simple_key_complex_attributes_source_table
+(
+   id UInt64,
+   value_first String,
+   value_second Nullable(String)
+)
+ENGINE = TinyLog;
+CREATE DICTIONARY 01681_database_for_cache_dictionary.cache_dictionary_simple_key_complex_attributes
+(
+   id UInt64,
+   value_first String DEFAULT 'value_first_default',
+   value_second Nullable(String) DEFAULT 'value_second_default'
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'simple_key_complex_attributes_source_table'))
+LIFETIME(MIN 1 MAX 1000)
+LAYOUT(CACHE(SIZE_IN_CELLS 10));
 SELECT dictGet('01681_database_for_cache_dictionary.cache_dictionary_simple_key_complex_attributes', 'value_first', number) as value_first,
     dictGet('01681_database_for_cache_dictionary.cache_dictionary_simple_key_complex_attributes', 'value_second', number) as value_second FROM system.numbers LIMIT 3;
 SELECT dictGet('01681_database_for_cache_dictionary.cache_dictionary_simple_key_complex_attributes', 'value_first', number) as value_first,
@@ -18,6 +55,20 @@ SELECT dictGetOrDefault('01681_database_for_cache_dictionary.cache_dictionary_si
     dictGetOrDefault('01681_database_for_cache_dictionary.cache_dictionary_simple_key_complex_attributes', 'value_second', number, toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01681_database_for_cache_dictionary.cache_dictionary_simple_key_complex_attributes', number) FROM system.numbers LIMIT 4;
 SELECT * FROM 01681_database_for_cache_dictionary.cache_dictionary_simple_key_complex_attributes ORDER BY id;
+CREATE TABLE 01681_database_for_cache_dictionary.simple_key_hierarchy_table
+(
+    id UInt64,
+    parent_id UInt64
+) ENGINE = TinyLog();
+CREATE DICTIONARY 01681_database_for_cache_dictionary.cache_dictionary_simple_key_hierarchy
+(
+   id UInt64,
+   parent_id UInt64 HIERARCHICAL
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'simple_key_hierarchy_table'))
+LIFETIME(MIN 1 MAX 1000)
+LAYOUT(CACHE(SIZE_IN_CELLS 10));
 SELECT dictGet('01681_database_for_cache_dictionary.cache_dictionary_simple_key_hierarchy', 'parent_id', number) FROM system.numbers LIMIT 5;
 SELECT dictGetHierarchy('01681_database_for_cache_dictionary.cache_dictionary_simple_key_hierarchy', toUInt64(1));
 SELECT dictGetHierarchy('01681_database_for_cache_dictionary.cache_dictionary_simple_key_hierarchy', toUInt64(4));

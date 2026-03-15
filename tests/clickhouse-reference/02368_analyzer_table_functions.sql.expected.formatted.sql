@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     c1,
     c2,

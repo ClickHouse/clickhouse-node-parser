@@ -15,6 +15,13 @@ SELECT financialInternalRateOfReturnExtended([-10000], [toDate('2020-01-01')]);
 SELECT financialInternalRateOfReturnExtended([-0., 0.], [toDate('2020-01-01'), toDate('2020-01-02')]);
 SELECT round(financialInternalRateOfReturnExtended([-10000, 5750, 4250, 3250], [toDate('2025-01-01'), toDate('2020-03-01'), toDate('2020-10-30'), toDate('2021-02-15')]), 6) AS xirr_rate;
 SELECT financialInternalRateOfReturnExtended([-100, 10], [toDate('2020-01-01'), toDate('2020-01-01')]);
+CREATE TABLE IF NOT EXISTS 3533_xirr_test (
+    tag String,
+    date Date,
+    date32 Date32,
+    value Float64,
+    r Float64
+) ENGINE = Memory;
 SELECT
     tag,
     round( financialInternalRateOfReturnExtended(groupArray(value), groupArray(date)), 6) AS result_f64_date,

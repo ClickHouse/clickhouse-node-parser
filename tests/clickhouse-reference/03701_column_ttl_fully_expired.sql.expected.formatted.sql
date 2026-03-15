@@ -1,10 +1,1 @@
-SELECT i
-FROM x
-WHERE i = 1;
-
-SELECT i
-FROM x
-WHERE i = 42;
-
-SELECT i
-FROM x;
+<Parse Error>

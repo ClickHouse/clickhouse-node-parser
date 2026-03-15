@@ -1,3 +1,12 @@
+CREATE TABLE test1__fuzz_37
+(
+    i Date
+)
+ENGINE = MergeTree
+ORDER BY i;
+
+SET enable_analyzer = 0;
+
 SELECT count()
 FROM test1__fuzz_37
 GROUP BY
@@ -10,3 +19,5 @@ GROUP BY
 SELECT count()
 FROM test1__fuzz_37
 GROUP BY dictHas('non_existing_dictionary', materialize('a')); -- { serverError BAD_ARGUMENTS }
+
+SET enable_analyzer = 1;

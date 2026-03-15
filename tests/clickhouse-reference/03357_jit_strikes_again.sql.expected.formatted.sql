@@ -1,3 +1,19 @@
+SET compile_expressions = true, min_count_to_compile_expression = 1;
+
+CREATE TABLE data2013
+(
+    name String,
+    value UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE data2014
+(
+    name String,
+    value UInt32
+)
+ENGINE = Memory;
+
 SELECT
     arraySplit(x -> ((x % toNullable(2)) = 1), [2]),
     nn

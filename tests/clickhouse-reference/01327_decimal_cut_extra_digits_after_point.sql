@@ -16,4 +16,5 @@ SELECT CAST('12345678912345.1' AS Decimal(10, 5)); -- { serverError ARGUMENT_OUT
 SELECT CAST('1.123455' AS Decimal(10, 5));
 SELECT CAST('1.123456' AS Decimal(10, 5));
 SELECT CAST('1.123445' AS Decimal(10, 5)); -- Check if suddenly banker's rounding will be implemented.
+CREATE TEMPORARY TABLE test (x Decimal(10, 5));
 SELECT * FROM test;

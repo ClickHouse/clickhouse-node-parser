@@ -1,3 +1,10 @@
+CREATE TABLE test
+(
+    name String,
+    uuid UUID
+)
+ENGINE = Memory();
+
 -- { echo }
 SELECT count()
 FROM (

@@ -1,4 +1,8 @@
+-- Tags: no-fasttest
 
+set input_format_orc_filter_push_down = 1;
+set engine_file_truncate_on_insert = 1;
+-- { echoOn }
 select x from file(currentDatabase() || 'i8.orc') where indexHint(x = -128);
 select x from file(currentDatabase() || 'i8.orc') where indexHint(x = 128);
 select x from file(currentDatabase() || 'u8.orc') where indexHint(x = -128);

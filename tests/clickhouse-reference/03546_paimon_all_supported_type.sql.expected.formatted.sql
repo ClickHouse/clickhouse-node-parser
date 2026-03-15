@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on AWS
+SET enable_time_time64_type = 1, session_timezone = 'UTC';
+
 SELECT
     f_boolean,
     f_char,

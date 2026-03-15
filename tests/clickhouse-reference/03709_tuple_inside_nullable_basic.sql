@@ -1,3 +1,12 @@
+SET allow_experimental_nullable_tuple_type = 1;
+CREATE TABLE tuple_test
+(
+    id  UInt64,
+    tup Nullable(Tuple(u UInt64, s String)),
+    n   Nullable(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT id, tup, n, isNull(tup), isNull(n)
 FROM tuple_test
 ORDER BY id;
@@ -366,6 +375,12 @@ FROM (
 GROUP BY category
 ORDER BY category
 SETTINGS enable_analyzer = 1; -- Here, tup.u notation is not recognized in old analyzer
+CREATE TABLE test_nullable_tuple
+(
+    data Nullable(Tuple(String, UInt64))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 SELECT
     tupleElement(data, 1), tupleElement(data, 1), tupleElement(data, 2)
 FROM test_nullable_tuple;

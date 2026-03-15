@@ -1,3 +1,11 @@
+CREATE TABLE merge_tree
+(
+    d Date
+)
+ENGINE = MergeTree
+ORDER BY d
+PARTITION BY d;
+
 SELECT
     1,
     *

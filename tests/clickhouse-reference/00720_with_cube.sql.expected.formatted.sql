@@ -1,3 +1,11 @@
+CREATE TABLE `cube`
+(
+    a String,
+    b Int32,
+    s Int32
+)
+ENGINE = Memory;
+
 SELECT
     a,
     b,
@@ -49,3 +57,5 @@ WITH TOTALS
 ORDER BY
     a ASC,
     b ASC;
+
+SET group_by_two_level_threshold = 1;

@@ -1,0 +1,186 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_error_prone_window_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "session_events"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "clientId",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "sessionId",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "pageId",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "eventNumber",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "type",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "pageId"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "clientId"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sessionId"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pageId"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "event_types"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "type",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "active",
+        "type": "Int16"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "substring",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "type"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "active"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_sorting_by_input_stream_properties",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

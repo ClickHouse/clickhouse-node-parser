@@ -1,0 +1,1 @@
+SET input_format_csv_try_infer_numbers_from_strings = 1;

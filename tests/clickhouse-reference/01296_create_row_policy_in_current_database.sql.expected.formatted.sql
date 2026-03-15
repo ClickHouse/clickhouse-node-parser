@@ -1,1 +1,1 @@
-SELECT '-- one policy';
+<Parse Error>

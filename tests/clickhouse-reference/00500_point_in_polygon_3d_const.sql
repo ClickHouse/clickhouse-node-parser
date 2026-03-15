@@ -1,3 +1,10 @@
+CREATE TABLE points_test
+(
+    x  Float64,
+    y  Float64,
+    note String
+)
+ENGINE = TinyLog;
 SELECT x, y, note,
 pointInPolygon( (x, y),
 [

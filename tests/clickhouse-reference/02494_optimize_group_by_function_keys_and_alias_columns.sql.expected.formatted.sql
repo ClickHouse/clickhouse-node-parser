@@ -1,3 +1,11 @@
+CREATE TABLE t
+(
+    timestamp DateTime,
+    day ALIAS toYYYYMMDD(timestamp)
+)
+ENGINE = MergeTree
+ORDER BY timestamp;
+
 SELECT
     day,
     timestamp

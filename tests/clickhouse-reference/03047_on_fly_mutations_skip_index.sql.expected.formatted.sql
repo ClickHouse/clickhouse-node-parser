@@ -1,3 +1,19 @@
+-- Tags: no-shared-catalog, no-parallel-replicas
+-- no-shared-catalog: STOP MERGES will only stop them on the current replica, the second one will continue to merge
+-- no-parallel-replicas: the result of EXPLAIN differs with parallel replicas
+SET use_query_condition_cache = 0;
+
+SET mutations_sync = 0;
+
+CREATE TABLE t_lightweight_mut_3
+(
+    id UInt64,
+    v UInt64,
+    INDEX idx v TYPE minmax GRANULARITY 1
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_3', '1')
+ORDER BY id;
+
 SELECT
     id,
     v

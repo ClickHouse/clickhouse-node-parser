@@ -26,6 +26,7 @@ select round(1000 * ngramDistanceUTF8('абвгдеёжз', 'абвгдеёжз'
 select round(1000 * ngramDistanceUTF8('абвгдеёжз', 'абвгдеёж'));
 select round(1000 * ngramDistanceUTF8('абвгдеёжз', 'гдеёзд'));
 select round(1000 * ngramDistanceUTF8('абвгдеёжз', 'ёёёёёёёё'));
+create table test_distance (Title String) engine = Memory;
 SELECT Title, round(1000 * distance) FROM test_distance ORDER BY ngramDistanceUTF8(Title, Title) as distance, Title;
 SELECT Title, round(1000 * distance) FROM test_distance ORDER BY ngramDistanceUTF8(Title, extract(Title, 'как дела')) as distance, Title;
 SELECT Title, round(1000 * distance) FROM test_distance ORDER BY ngramDistanceUTF8(Title, extract(Title, 'metr')) as distance, Title;

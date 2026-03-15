@@ -1,3 +1,4 @@
+CREATE TABLE fh(a_value UInt32, b_value Float64, c_value Float64, d_value Float64) ENGINE = Memory;
 SELECT corrMatrix(a_value) FROM (select a_value from fh limit 0);
 SELECT corrMatrix(a_value) FROM (select a_value from fh limit 1);
 SELECT corrMatrix(a_value, b_value, c_value, d_value) FROM (select a_value, b_value, c_value, d_value from fh limit 0);

@@ -26,6 +26,13 @@ SELECT soundex('Smith');
 
 SELECT '---';
 
+CREATE TABLE tab
+(
+    col String
+)
+ENGINE = MergeTree
+ORDER BY col;
+
 SELECT soundex(col)
 FROM tab;
 

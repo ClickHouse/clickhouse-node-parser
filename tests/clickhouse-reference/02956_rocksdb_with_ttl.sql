@@ -1,3 +1,7 @@
+-- Tags: no-ordinary-database, use-rocksdb
+
+-- TTL = 2s
+CREATE TABLE dict_with_ttl (key UInt64, value String) ENGINE = EmbeddedRocksDB(2) PRIMARY KEY (key);
 -- Data inserted correctly
 SELECT * FROM dict_with_ttl;
 -- If possible, we should test that even we execute OPTIMIZE TABLE, the data is still there if TTL is not expired yet

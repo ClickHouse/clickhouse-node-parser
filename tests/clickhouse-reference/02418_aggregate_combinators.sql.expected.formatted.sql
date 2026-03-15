@@ -25,6 +25,12 @@ FROM (
             )
     );
 
+CREATE TABLE test
+(
+    x Map(UInt8, AggregateFunction(uniq, UInt64))
+)
+ENGINE = Memory;
+
 SELECT *
 FROM test
 FORMAT Null;
@@ -32,11 +38,29 @@ FORMAT Null;
 SELECT mapApply((k, v) -> (k, finalizeAggregation(v)), x)
 FROM test;
 
+CREATE TABLE test
+(
+    x Map(UInt8, Array(Map(UInt8, Array(AggregateFunction(uniq, UInt64)))))
+)
+ENGINE = Memory;
+
 SELECT mapApply((k, v) -> (k, arrayMap(x -> mapApply(k, v -> (k, arrayMap(x -> finalizeAggregation(x), v)), x), v)), x)
 FROM test;
 
+CREATE TABLE test
+(
+    x Array(Array(AggregateFunction(uniq, UInt64)))
+)
+ENGINE = Memory;
+
 SELECT arrayMap(x -> arrayMap(x -> finalizeAggregation(x), x), x)
 FROM test;
+
+CREATE TABLE test
+(
+    x Array(Array(Map(UInt8, AggregateFunction(uniq, UInt64))))
+)
+ENGINE = Memory;
 
 SELECT arrayMap(x -> arrayMap(x -> mapApply((k, v) -> (k, finalizeAggregation(v)), x), x), x)
 FROM test;

@@ -1,3 +1,4 @@
+create table tab (x DateTime) engine MergeTree order by x;
 SELECT toDateTime(65537, toDateTime(NULL), NULL)
 FROM tab
 WHERE ((x + CAST('1', 'Nullable(UInt8)')) <= 2) AND ((x + CAST('', 'Nullable(UInt8)')) <= 256)

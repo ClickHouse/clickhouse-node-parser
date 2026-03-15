@@ -1,3 +1,13 @@
+CREATE TABLE tab
+(
+    a Int32,
+    b Int32,
+    c Int32,
+    d Int32
+)
+ENGINE = MergeTree
+ORDER BY (a, b, c);
+
 SELECT
     a,
     any(b),

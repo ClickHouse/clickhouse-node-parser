@@ -1,3 +1,14 @@
+CREATE TABLE test
+(
+    x UInt8,
+    y UInt8,
+    z String DEFAULT toString(x)
+)
+ORDER BY x
+PARTITION BY x;
+
+SET mutations_sync = 1;
+
 SELECT *
 FROM test
 ORDER BY `ALL` ASC;

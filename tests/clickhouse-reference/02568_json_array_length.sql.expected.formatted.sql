@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT JSONArrayLength(NULL);
 
 SELECT JSONArrayLength('');

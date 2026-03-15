@@ -1,3 +1,13 @@
+-- Tags: no-tsan, no-asan, no-ubsan, no-msan, no-debug, no-fasttest, no-llvm-coverage
+CREATE TABLE t_03176
+(
+    k UInt64,
+    v UInt64
+)
+ENGINE = MergeTree()
+ORDER BY k
+PARTITION BY k;
+
 -- Table is partitioned by k to so it will have 5 partitions
 SELECT count()
 FROM `system`.parts

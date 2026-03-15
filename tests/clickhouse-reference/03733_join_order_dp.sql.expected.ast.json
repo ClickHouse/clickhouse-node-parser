@@ -1,5 +1,264 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_optimize_join_order_limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_join_swap_table",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "auto"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_join_runtime_filters",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "R1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A_ID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "A_Description",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "A_ID"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "uniq"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- R1: Small dimension table (Demo size: 10)"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "R2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "B_ID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "R1_A_ID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "B_Data",
+        "type": "Float64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "B_ID"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "uniq"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- R2: Large fact table (Demo size: 1,000)",
+      "-- Joins only with R1."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "R3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "C_ID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "R1_A_ID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "R4_D_ID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C_Value",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "C_ID"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "uniq"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- R3: Another large fact table (Demo size: 1,000)",
+      "-- Joins with R1 and R4."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "R4"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "D_ID",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "D_LookupCode",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "D_ID"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "uniq"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- R4: Small lookup table (Demo size: 10)",
+      "-- Joins only with R3."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

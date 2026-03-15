@@ -1,3 +1,97 @@
+Set
+
+Set
+
+Set
+
+Set
+
+CreateQuery db_01527_ranges  (children 1)
+ Identifier db_01527_ranges
+
+CreateQuery data_01527 (children 3)
+ Identifier data_01527
+ Storage definition (children 1)
+  Function Memory (children 1)
+   ExpressionList
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Function toUInt64 (alias key) (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_2
+
+CreateQuery dist_01527 (children 2)
+ Identifier dist_01527
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_cluster_two_shards'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier data_01527
+    Function dictGetUInt64 (children 1)
+     ExpressionList (children 3)
+      Literal 'db_01527_ranges.dict'
+      Literal 'shard'
+      Identifier key
+
+CreateQuery db_01527_ranges data (children 4)
+ Identifier db_01527_ranges
+ Identifier data
+ Storage definition (children 1)
+  Function Memory (children 1)
+   ExpressionList
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number (alias key)
+     Identifier number (alias shard)
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+
+CreateQuery db_01527_ranges dict (children 4)
+ Identifier db_01527_ranges
+ Identifier dict
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration key (children 1)
+   DataType UInt64
+  DictionaryAttributeDeclaration shard (children 1)
+   DataType UInt64
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier key
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 6)
+    pair (children 1)
+     Literal '127.0.0.1'
+    pair (children 1)
+     Function tcpPort (children 1)
+      ExpressionList
+    pair (children 1)
+     Literal 'data'
+    pair (children 1)
+     Literal 'db_01527_ranges'
+    pair (children 1)
+     Literal 'default'
+    pair (children 1)
+     Literal ''
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -25,3 +119,25 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 2)
      Identifier key
      Literal UInt64_1
+
+CreateQuery db_01527_ranges data (children 4)
+ Identifier db_01527_ranges
+ Identifier data
+ Storage definition (children 1)
+  Function Memory (children 1)
+   ExpressionList
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number (alias key)
+     Function plus (alias shard) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100

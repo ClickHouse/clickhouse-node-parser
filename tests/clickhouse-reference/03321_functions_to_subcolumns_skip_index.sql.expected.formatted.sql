@@ -1,3 +1,17 @@
+CREATE TABLE bloom_filter_test
+(
+    id UInt64,
+    m Map(String, String),
+    INDEX idx_mk mapKeys(m) TYPE bloom_filter GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 1;
+
+SET enable_analyzer = 1;
+
+SET optimize_functions_to_subcolumns = 1;
+
 SELECT trim(`explain`)
 FROM (
         EXPLAIN indexes = 1

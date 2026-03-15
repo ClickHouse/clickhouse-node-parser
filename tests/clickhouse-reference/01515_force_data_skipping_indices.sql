@@ -1,3 +1,13 @@
+CREATE TABLE data_01515
+(
+    key Int,
+    d1 Int,
+    d1_null Nullable(Int),
+    INDEX d1_idx d1 TYPE minmax GRANULARITY 1,
+    INDEX d1_null_idx assumeNotNull(d1_null) TYPE minmax GRANULARITY 1
+)
+Engine=MergeTree()
+ORDER BY key;
 SELECT * FROM data_01515;
 SELECT * FROM data_01515 SETTINGS force_data_skipping_indices=''; -- { serverError CANNOT_PARSE_TEXT }
 SELECT * FROM data_01515 SETTINGS force_data_skipping_indices='d1_idx'; -- { serverError INDEX_NOT_USED }

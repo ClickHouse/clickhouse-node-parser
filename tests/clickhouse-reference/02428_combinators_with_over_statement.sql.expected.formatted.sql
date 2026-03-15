@@ -1,3 +1,12 @@
+CREATE TABLE test
+(
+    x AggregateFunction(uniq, UInt64),
+    y Int64
+)
+ENGINE = Memory;
+
+SET max_insert_threads = 1;
+
 SELECT uniqStateMap(map(1, x)) OVER (PARTITION BY y)
 FROM test;
 

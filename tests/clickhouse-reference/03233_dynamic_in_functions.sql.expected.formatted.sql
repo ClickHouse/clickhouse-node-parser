@@ -1,3 +1,13 @@
+-- Tags: no-fasttest
+SET allow_experimental_dynamic_type = 1;
+
+CREATE TABLE test
+(
+    x UInt64,
+    d Dynamic
+)
+ENGINE = Memory;
+
 SELECT
     d + 1 AS res,
     toTypeName(res)
@@ -248,6 +258,20 @@ SELECT
     toTypeName(res)
 FROM test;
 
+CREATE TABLE test
+(
+    x Nullable(UInt64),
+    d Dynamic
+)
+ENGINE = Memory;
+
+CREATE TABLE test
+(
+    x String,
+    d Dynamic
+)
+ENGINE = Memory;
+
 SELECT
     d < 'str_2' AS res,
     toTypeName(res)
@@ -325,10 +349,24 @@ SELECT
     toTypeName(res)
 FROM test;
 
+CREATE TABLE test
+(
+    x Nullable(String),
+    d Dynamic
+)
+ENGINE = Memory;
+
 SELECT
     sipHash64(d, d) AS res,
     toTypeName(res)
 FROM test;
+
+CREATE TABLE test
+(
+    x UInt64,
+    d Dynamic(max_types=5)
+)
+ENGINE = Memory;
 
 SELECT
     d + 1 AS res,
@@ -404,6 +442,12 @@ WHERE d > 5;
 SELECT *
 FROM test
 WHERE d = 5;
+
+CREATE TABLE test
+(
+    d Dynamic
+)
+ENGINE = Memory;
 
 SELECT
     d[1] AS res,

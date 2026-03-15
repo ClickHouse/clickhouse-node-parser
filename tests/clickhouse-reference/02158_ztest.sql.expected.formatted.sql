@@ -1,3 +1,10 @@
+CREATE TABLE mean_ztest
+(
+    v int,
+    s UInt8
+)
+ENGINE = Memory;
+
 SELECT
     roundBankers(meanZTest(833.0, 800.0, 0.95)(v, s).1, 16) AS z_stat,
     roundBankers(meanZTest(833.0, 800.0, 0.95)(v, s).2, 16) AS p_value,

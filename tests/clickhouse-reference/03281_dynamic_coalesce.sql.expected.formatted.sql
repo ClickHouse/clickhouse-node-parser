@@ -1,3 +1,5 @@
+SET enable_dynamic_type = 1;
+
 SELECT coalesce(if(number % 2, NULL, number::Dynamic), 42) AS res
 FROM numbers(5);
 

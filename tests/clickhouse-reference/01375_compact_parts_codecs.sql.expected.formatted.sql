@@ -1,3 +1,13 @@
+CREATE TABLE codecs
+(
+    id UInt32,
+    val UInt32,
+    s String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_rows_for_wide_part = 10000, ratio_of_defaults_for_sparse_serialization = 1, serialization_info_version = 'basic';
+
 SELECT
     sum(data_compressed_bytes),
     sum(data_uncompressed_bytes)
@@ -10,3 +20,23 @@ SELECT
     sum(val),
     max(s)
 FROM codecs;
+
+CREATE TABLE codecs
+(
+    id UInt32 CODEC(NONE),
+    val UInt32 CODEC(NONE),
+    s String CODEC(NONE)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_rows_for_wide_part = 10000, ratio_of_defaults_for_sparse_serialization = 1, serialization_info_version = 'basic';
+
+CREATE TABLE codecs
+(
+    id UInt32,
+    val UInt32 CODEC(Delta, ZSTD),
+    s String CODEC(ZSTD)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_rows_for_wide_part = 10000, ratio_of_defaults_for_sparse_serialization = 1, serialization_info_version = 'basic';

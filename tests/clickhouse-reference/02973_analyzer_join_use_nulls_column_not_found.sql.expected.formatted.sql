@@ -1,3 +1,5 @@
+SET join_use_nulls = 1;
+
 SELECT '--';
 
 SELECT c

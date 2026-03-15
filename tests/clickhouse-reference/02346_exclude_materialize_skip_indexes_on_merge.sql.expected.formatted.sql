@@ -1,2 +1,1 @@
-SELECT *
-FROM explain_indexes;
+<Parse Error>

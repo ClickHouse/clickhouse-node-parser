@@ -1,3 +1,7 @@
+SET output_format_pretty_color = 1;
+
+SET enable_analyzer = 1;
+
 SELECT *
 FROM
     `system`.one
@@ -24,6 +28,8 @@ FROM
     `system`.one
 LEFT JOIN `system`.one
     USING (dummy);
+
+USE system;
 
 SELECT dummy
 FROM

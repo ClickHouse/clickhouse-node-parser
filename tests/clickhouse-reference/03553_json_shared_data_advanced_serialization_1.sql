@@ -1,4 +1,10 @@
+-- Tags: long, no-azure-blob-storage
+
+set output_format_json_quote_64bit_integers=0;
+create table source (json JSON(max_dynamic_paths=8)) engine=Memory;
+create table test_compact_without_substreams_advanced (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings index_granularity=2, min_bytes_for_wide_part='200G', min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=0, object_serialization_version='v3', object_shared_data_serialization_version='advanced', object_shared_data_serialization_version_for_zero_level_parts='advanced', object_shared_data_buckets_for_compact_part=2;
 select json from test_compact_without_substreams_advanced;
+create table test_compact_advanced (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings index_granularity=2, min_bytes_for_wide_part='200G', min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='advanced', object_shared_data_serialization_version_for_zero_level_parts='advanced', object_shared_data_buckets_for_compact_part=2;
 select json from test_compact_advanced;
 select json.b from test_compact_advanced;
 select json.b, json.c from test_compact_advanced;
@@ -32,6 +38,7 @@ select json.arr[].arr1, json.^a, json.a.a1, json.a.arr[].arr1, json.b, json.arr 
 select json.a.a1, json.a.arr[].arr1, json.b, json.arr, json.^a, json.arr[].arr1 from test_compact_advanced;
 select json, json.arr[].arr1, json.^a, json.a.a1, json.a.arr[].arr1, json.b, json.arr from test_compact_advanced;
 select json.a.a1, json.a.arr[].arr1, json.b, json.arr, json.^a, json.arr[].arr1, json from test_compact_advanced;
+create table test_compact_advanced_tuple (json Tuple(data JSON(max_dynamic_paths=8))) engine=MergeTree order by tuple() settings index_granularity=2, min_bytes_for_wide_part='200G', min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='advanced', object_shared_data_serialization_version_for_zero_level_parts='advanced', object_shared_data_buckets_for_compact_part=2;
 select json.data from test_compact_advanced_tuple;
 select json.data, json.data.b from test_compact_advanced_tuple;
 select json.data.b, json.data from test_compact_advanced_tuple;

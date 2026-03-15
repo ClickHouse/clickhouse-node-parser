@@ -1,3 +1,10 @@
+SET enable_lightweight_update = 1;
+CREATE TABLE t_shared (id UInt64, c1 UInt64, c2 String)
+ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_shared/', '1')
+ORDER BY id
+SETTINGS
+    enable_block_number_column = 1,
+    enable_block_offset_column = 1;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 0;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 1;
 SELECT * FROM t_shared PREWHERE c2 = 'aaa' AND c1 = 111;

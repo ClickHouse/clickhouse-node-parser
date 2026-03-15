@@ -1,3 +1,7 @@
+SET output_format_write_statistics = 0;
+
+SET output_format_json_validate_utf8 = 1;
+
 SELECT '� �' AS s
 FORMAT JSONCompact;
 
@@ -24,3 +28,5 @@ FORMAT JSONCompactColumns;
 
 SELECT '� �' AS s
 FORMAT JSONObjectEachRow;
+
+SET output_format_json_validate_utf8 = 0;

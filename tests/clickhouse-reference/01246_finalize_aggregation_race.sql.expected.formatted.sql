@@ -1,3 +1,9 @@
+CREATE TABLE test_quantile
+(
+    x AggregateFunction(quantileTiming(0.2), UInt64)
+)
+ENGINE = Memory;
+
 SELECT y
 FROM (
         SELECT finalizeAggregation(x) AS y

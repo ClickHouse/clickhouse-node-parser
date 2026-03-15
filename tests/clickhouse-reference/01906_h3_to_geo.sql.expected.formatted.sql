@@ -1,3 +1,18 @@
+CREATE TABLE h3_indexes
+(
+    h3_index UInt64
+)
+ENGINE = Memory;
+
+-- compare if the results of h3ToGeo and geoToH3 are the same
+CREATE TABLE h3_geo
+(
+    lat Float64,
+    lon Float64,
+    res UInt8
+)
+ENGINE = Memory;
+
 SELECT result
 FROM (
         SELECT

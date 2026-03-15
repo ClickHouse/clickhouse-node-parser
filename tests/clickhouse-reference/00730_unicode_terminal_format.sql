@@ -1,3 +1,6 @@
+SET output_format_pretty_squash_consecutive_ms = 0;
+SET output_format_pretty_max_column_name_width_cut_to = 0;
+CREATE TABLE unicode(c1 String, c2 String) ENGINE = Memory;
 SELECT * FROM unicode SETTINGS max_threads = 1 FORMAT PrettyNoEscapes;
 SELECT 'Tabs \t Tabs', 'Long\tTitle' FORMAT PrettyNoEscapes;
 SELECT '你好', '世界' FORMAT Vertical;

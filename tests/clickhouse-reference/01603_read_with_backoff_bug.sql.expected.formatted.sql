@@ -1,3 +1,20 @@
+-- Tags: long, no-tsan, no-msan, no-distributed-cache
+-- Too long for TSan and MSan
+SET enable_filesystem_cache = 0;
+
+SET enable_filesystem_cache_on_write_operations = 0;
+
+SET max_rows_to_read = '30M';
+
+CREATE TABLE t
+(
+    x UInt64,
+    s String
+)
+ENGINE = MergeTree
+ORDER BY x
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
 -- optimize table t final;
 SELECT
     count(),

@@ -1,3 +1,13 @@
+CREATE TABLE mytable_local
+(
+    created DateTime,
+    eventday Date,
+    user_id UInt32
+)
+ENGINE = MergeTree()
+ORDER BY (eventday, user_id)
+PARTITION BY toYYYYMM(eventday);
+
 SELECT
     eventday,
     count(*)
@@ -8,6 +18,14 @@ WHERE (toYYYYMM(eventday) = 202007)
     AND (eventday <= '2020-07-25')
 GROUP BY eventday
 ORDER BY eventday ASC;
+
+CREATE TABLE table_float
+(
+    f Float64,
+    u UInt32
+)
+ENGINE = MergeTree
+ORDER BY (f, u);
 
 SELECT count()
 FROM table_float

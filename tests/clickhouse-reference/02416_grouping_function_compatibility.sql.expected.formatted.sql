@@ -1,3 +1,12 @@
+CREATE TABLE test02416
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree()
+ORDER BY (a, b);
+
+-- { echoOn }
 SELECT
     count() AS amount,
     a,

@@ -1,6 +1,24 @@
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE index_for_like
+(
+    s String,
+    d Date DEFAULT today()
+)
+ENGINE = MergeTree(d, (s, d), 1);
+
+-- Prevent remote replicas from skipping index analysis in Parallel Replicas. Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
+SET parallel_replicas_index_analysis_only_on_coordinator = 0;
+
+SET max_rows_to_read = 3;
+
 SELECT s
 FROM index_for_like
 WHERE like(s, 'Hello, World%');
+
+SET max_rows_to_read = 2;
 
 SELECT s
 FROM index_for_like
@@ -9,6 +27,8 @@ WHERE like(s, 'Hello, World %');
 SELECT s
 FROM index_for_like
 WHERE like(s, 'Hello, World 1%');
+
+SET max_rows_to_read = 1;
 
 SELECT s
 FROM index_for_like
@@ -21,6 +41,8 @@ WHERE like(s, 'Hello, Worle%');
 SELECT s
 FROM index_for_like
 WHERE like(s, 'Hello, Wor%');
+
+SET max_rows_to_read = 5;
 
 SELECT s
 FROM index_for_like
@@ -42,9 +64,13 @@ SELECT s
 FROM index_for_like
 WHERE like(s, 'H%');
 
+SET max_rows_to_read = 4;
+
 SELECT s
 FROM index_for_like
 WHERE like(s, 'Good%');
+
+SET max_rows_to_read = 8;
 
 SELECT s
 FROM index_for_like

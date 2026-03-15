@@ -1,3 +1,12 @@
+CREATE TABLE t_index
+(
+    data JSON(a UInt64)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET mutations_sync = 2;
+
 SELECT sum(secondary_indices_compressed_bytes) > 0
 FROM `system`.parts
 WHERE database = currentDatabase()
@@ -13,6 +22,14 @@ SELECT count()
 FROM t_index
 WHERE data.b::UInt64 = 11
 SETTINGS force_data_skipping_indices = 'b_idx';
+
+CREATE TABLE t_index
+(
+    id UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 100000000;
 
 SELECT column
 FROM `system`.parts_columns

@@ -1,3 +1,9 @@
+CREATE TABLE low_card
+(
+    lc LowCardinality(String)
+)
+ENGINE = Join(`ANY`, `LEFT`, lc);
+
 SELECT *
 FROM low_card;
 

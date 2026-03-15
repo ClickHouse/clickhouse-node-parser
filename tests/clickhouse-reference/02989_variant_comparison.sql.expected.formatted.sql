@@ -1,3 +1,16 @@
+SET allow_experimental_variant_type = 1;
+
+SET allow_suspicious_types_in_order_by = 1;
+
+SET use_variant_default_implementation_for_comparisons = 0;
+
+CREATE TABLE test
+(
+    v1 Variant(String, UInt64, Array(UInt32)),
+    v2 Variant(String, UInt64, Array(UInt32))
+)
+ENGINE = Memory;
+
 SELECT v1
 FROM test
 ORDER BY v1 ASC;

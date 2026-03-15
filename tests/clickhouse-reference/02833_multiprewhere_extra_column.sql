@@ -1,3 +1,7 @@
+create table t_multi_prewhere (a UInt64, b UInt64, c UInt8)
+engine = MergeTree order by tuple()
+settings min_bytes_for_wide_part = 0, add_minmax_index_for_numeric_columns=0;
+create row policy policy_02834 on t_multi_prewhere using a > 2000 as permissive to all;
 select sum(b) from t_multi_prewhere prewhere a < 5000;
 select ProfileEvents['FileOpen'] from system.query_log
 where

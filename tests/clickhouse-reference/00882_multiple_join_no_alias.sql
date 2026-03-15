@@ -1,3 +1,6 @@
+create table t(a Int64, b Int64) engine = Memory;
+create table s(a Int64, b Int64) engine = Memory;
+create table y(a Int64, b Int64) engine = Memory;
 select s.a, s.a, s.b as s_b, s.b from t
 left join s on s.a = t.a
 left join y on s.b = y.b

@@ -1,3 +1,5 @@
+SET output_format_pretty_display_footer_column_names = 0;
+
 SELECT 123456789 AS x
 FORMAT PrettyCompact;
 
@@ -12,6 +14,14 @@ FORMAT PrettyCompact;
 
 SELECT toLowCardinality(123456789) AS x
 FORMAT PrettyCompact;
+
+CREATE TEMPORARY TABLE test
+(
+    x Nullable(UInt64),
+    PRIMARY KEY(tuple())
+)
+ENGINE = MergeTree
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0, serialization_info_version = 'with_types', nullable_serialization_version = 'allow_sparse';
 
 SELECT DISTINCT dumpColumnStructure(*)
 FROM test;
@@ -33,3 +43,11 @@ FROM test
 ORDER BY `ALL` ASC
 LIMIT 1
 FORMAT PrettySpace;
+
+CREATE TEMPORARY TABLE test
+(
+    x UInt64,
+    PRIMARY KEY(tuple())
+)
+ENGINE = MergeTree
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0, serialization_info_version = 'with_types', nullable_serialization_version = 'allow_sparse';

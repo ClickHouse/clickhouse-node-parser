@@ -1,3 +1,29 @@
+CREATE TABLE t1
+(
+    key String,
+    attr String,
+    a UInt64,
+    b UInt64,
+    c Nullable(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+CREATE TABLE t2
+(
+    key String,
+    attr String,
+    a UInt64,
+    b UInt64,
+    c Nullable(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+SET allow_experimental_join_condition = true;
+
+SET enable_analyzer = true;
+
 SELECT t1.*
 FROM
     t1

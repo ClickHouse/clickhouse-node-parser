@@ -10,6 +10,13 @@ SELECT arrayDistinct(['1212', 'sef', '343r4', '1212']);
 
 SELECT arrayDistinct(['1212', 'sef', '343r4', NULL, NULL, '232']);
 
+CREATE TABLE arrayDistinct_test
+(
+    arr_int Array(UInt8),
+    arr_string Array(String)
+)
+ENGINE = Memory;
+
 SELECT arrayDistinct(arr_int)
 FROM arrayDistinct_test;
 

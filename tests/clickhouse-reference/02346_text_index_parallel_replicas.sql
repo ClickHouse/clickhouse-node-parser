@@ -1,3 +1,21 @@
+SET max_parallel_replicas = 3;
+SET cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+SET enable_parallel_replicas = 1;
+SET parallel_replicas_for_non_replicated_merge_tree=1;
+SET enable_full_text_index = 1;
+SET use_skip_indexes_on_data_read = 1;
+SET query_plan_direct_read_from_text_index = 1;
+SET parallel_replicas_mark_segment_size = 128;
+SET enable_analyzer = 1;
+-- With small index granularity, the amount of rows left to read after the index analysis might be too small to utilize parallel replicas. So, we set it to 0.
+SET parallel_replicas_min_number_of_rows_per_replica = 0;
+CREATE TABLE tab
+(
+    id UInt64,
+    str String,
+    INDEX idx_str str TYPE text(tokenizer = splitByNonAlpha) GRANULARITY 8
+)
+ENGINE = MergeTree ORDER BY id PARTITION BY id;
 SELECT count(), sum(id) FROM tab WHERE hasAnyTokens(str, ['34567', '134567', '234567']);
 SELECT count(), sum(id) FROM tab WHERE str LIKE '% 34567 %';
 SELECT

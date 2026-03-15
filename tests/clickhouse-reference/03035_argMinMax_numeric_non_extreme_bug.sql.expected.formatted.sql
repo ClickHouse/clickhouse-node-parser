@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS test
+(
+    value Float64 CODEC(Delta, LZ4),
+    uuid LowCardinality(String),
+    time DateTime64(3, 'UTC') CODEC(DoubleDelta, LZ4)
+)
+ENGINE = MergeTree()
+ORDER BY uuid;
+
 SELECT
     max(time),
     max(toNullable(time)),

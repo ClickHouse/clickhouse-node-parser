@@ -37,6 +37,13 @@ FROM numbers(5);
 SELECT range(number) * 42
 FROM numbers(5);
 
+CREATE TABLE my_table
+(
+    values Array(Int32)
+)
+ENGINE = MergeTree()
+ORDER BY values;
+
 SELECT values * 5
 FROM my_table
 WHERE arrayExists(x -> x > 5, values);

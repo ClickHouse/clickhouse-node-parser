@@ -1,3 +1,8 @@
+CREATE TABLE landing (n Int64) engine=MergeTree order by n;
+CREATE TABLE target  (n Int64) engine=MergeTree order by n;
+CREATE MATERIALIZED VIEW landing_to_target TO target AS
+    SELECT n + throwIf(n == 3333) AS n
+    FROM landing;
 SELECT 'no_transaction_landing', count() = 10000 FROM landing;
 SELECT 'no_transaction_target', count() < 10000 FROM target;
 SELECT 'after_transaction_landing', count() FROM landing;
@@ -31,8 +36,10 @@ WHERE
     query LIKE '-- Verify that the transaction_id column is NOT populated without transaction%'
 GROUP BY transaction_id
 FORMAT JSONEachRow;
+SET throw_on_unsupported_query_inside_transaction=1;
 SELECT * FROM system.one;
 SELECT * FROM cluster('test_cluster_interserver_secret', system, one);  -- { serverError NOT_IMPLEMENTED }
 SELECT * FROM cluster('test_cluster_two_shards', system, one);  -- { serverError NOT_IMPLEMENTED }
+SET throw_on_unsupported_query_inside_transaction=0;
 -- there's not session in the interserver mode
 SELECT * FROM cluster('test_cluster_interserver_secret', system, one) FORMAT Null;  -- { serverError INVALID_TRANSACTION }

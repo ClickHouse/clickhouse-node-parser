@@ -1,3 +1,16 @@
+SET allow_experimental_dynamic_type = 1;
+
+SET allow_experimental_variant_type = 1;
+
+SET use_variant_as_common_type = 1;
+
+CREATE TABLE test
+(
+    x UInt64,
+    y UInt64
+)
+ENGINE = Memory;
+
 SELECT
     count(),
     dynamicType(d)

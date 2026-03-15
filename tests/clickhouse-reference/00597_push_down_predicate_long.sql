@@ -1,4 +1,14 @@
+-- Tags: long
+
+SET send_logs_level = 'fatal';
+SET any_join_distinct_right_table_keys = 1;
+SET joined_subquery_requires_alias = 0;
+SET enable_analyzer = 1;
+set allow_deprecated_syntax_for_merge_tree=1;
+CREATE TABLE test_00597(date Date, id Int8, name String, value Int64) ENGINE = MergeTree(date, (id, date), 8192);
+CREATE VIEW test_view_00597 AS SELECT * FROM test_00597;
 SELECT * FROM (SELECT floor(floor(1, floor(NULL), id = 257), floor(floor(floor(floor(NULL), '10485.76', '9223372036854775807', NULL), floor(10, floor(65535, NULL), 100.0000991821289), NULL)), '2.56'), b.* FROM (SELECT floor(floor(floor(floor(NULL), 1000.0001220703125))), * FROM test_00597) AS b) WHERE id = 257;
+SET enable_optimize_predicate_expression = 1;
 SELECT '-------No need for predicate optimization, but still works-------';
 SELECT 1;
 SELECT 1 AS id WHERE id = 1;

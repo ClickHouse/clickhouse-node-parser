@@ -1,3 +1,14 @@
+SET parallel_replicas_local_plan=1;
+CREATE TABLE bloom_filter_has_const_array
+(
+    `bf` String,
+    `abf` Array(String),
+    INDEX idx_bf bf TYPE bloom_filter(0.01) GRANULARITY 1,
+    INDEX idx_abf abf TYPE bloom_filter(0.01) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY ()
+SETTINGS index_granularity=1;
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes = 1
     SELECT bf

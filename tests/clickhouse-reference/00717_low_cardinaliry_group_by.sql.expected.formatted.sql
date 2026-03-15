@@ -1,3 +1,11 @@
+CREATE TABLE tab_00717
+(
+    a String,
+    b LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT count()
 FROM tab_00717;
 

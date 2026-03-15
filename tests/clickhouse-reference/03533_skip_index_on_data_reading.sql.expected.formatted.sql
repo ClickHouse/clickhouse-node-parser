@@ -1,3 +1,32 @@
+-- Tags: no-parallel-replicas
+-- no-parallel-replicas: use_skip_indexes_on_data_read is not supported with parallel replicas
+-- add_minmax_index_for_numeric_columns=0: Changes the plan and rows read
+-- { echo ON }
+SET use_skip_indexes_on_data_read = 1;
+
+SET max_rows_to_read = 0;
+
+SET use_query_condition_cache = 0;
+
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0;
+
+CREATE TABLE test
+(
+    id UInt64,
+    event_date Date,
+    user_id UInt32,
+    url String,
+    region String,
+    INDEX region_idx region TYPE minmax GRANULARITY 1,
+    INDEX user_id_idx user_id TYPE minmax GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY (event_date, id)
+SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, max_bytes_to_merge_at_max_space_in_pool = 1, add_minmax_index_for_numeric_columns = 0;
+
+-- disable move to PREWHERE to ensure RowsReadByPrewhereReaders and RowsReadByMainReader reflect actual filtering on read behavior for testing
+SET optimize_move_to_prewhere = 0;
+
 -- agree on one granule
 SELECT *
 FROM test
@@ -65,6 +94,18 @@ WHERE event_date >= yesterday()
     AND current_database = currentDatabase()
     AND type = 'QueryFinish'
     AND log_comment = 'test_4';
+
+CREATE TABLE test_partial_index
+(
+    id UInt64,
+    event_date Date,
+    user_id UInt32,
+    url String,
+    region String
+)
+ENGINE = MergeTree
+ORDER BY (event_date, id)
+SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, max_bytes_to_merge_at_max_space_in_pool = 1, add_minmax_index_for_numeric_columns = 0;
 
 -- agree on one granule
 SELECT *

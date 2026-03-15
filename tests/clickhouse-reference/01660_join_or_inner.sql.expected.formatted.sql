@@ -1,3 +1,25 @@
+SET joined_subquery_requires_alias = 0;
+
+CREATE TABLE tab2
+(
+    a2 Int32,
+    b2 Int32
+)
+ENGINE = MergeTree
+ORDER BY a2;
+
+CREATE TABLE tab3
+(
+    a3 Int32,
+    b3 Int32
+)
+ENGINE = MergeTree
+ORDER BY a3;
+
+SET max_threads = 1;
+
+SET any_join_distinct_right_table_keys = 0;
+
 SELECT
     tab2.*,
     tab3.*
@@ -17,6 +39,8 @@ INNER JOIN tab3
     ON b2 = b3
     OR a2 = a3
 ORDER BY `ALL` ASC;
+
+SET any_join_distinct_right_table_keys = 1;
 
 SELECT 1
 FROM

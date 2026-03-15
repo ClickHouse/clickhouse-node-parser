@@ -1,3 +1,11 @@
+CREATE TABLE normalize_test
+(
+    id int,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY value;
+
 SELECT
     'ё' AS norm,
     'ё' AS denorm,

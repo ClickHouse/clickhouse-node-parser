@@ -56,6 +56,13 @@ SELECT length(HMAC('sha256', 'message', '')) = 32;
 
 SELECT length(HMAC('sha256', '', '')) = 32;
 
+-- Test with table data
+CREATE TEMPORARY TABLE hmac_test
+(
+    message String,
+    key String
+);
+
 SELECT
     message,
     key,

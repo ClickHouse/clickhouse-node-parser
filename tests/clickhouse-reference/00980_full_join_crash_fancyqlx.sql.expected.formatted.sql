@@ -1,3 +1,13 @@
+CREATE TABLE test_join
+(
+    date Date,
+    id Int32,
+    name Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY id
+PARTITION BY date;
+
 SELECT
     id,
     date,

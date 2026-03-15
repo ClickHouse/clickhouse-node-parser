@@ -1,3 +1,15 @@
+CREATE TABLE tokenbf_v1_hasany_test
+(
+    id UInt32,
+    array Array(String),
+    INDEX idx_array_tokenbf_v1 array TYPE tokenbf_v1(512,3,0) GRANULARITY 1,
+) Engine=MergeTree() ORDER BY id SETTINGS index_granularity = 1;
+CREATE TABLE ngrambf_v1_hasany_test
+(
+    id UInt32,
+    array Array(String),
+    INDEX idx_array_ngrambf_v1 array TYPE ngrambf_v1(3,512,3,0) GRANULARITY 1,
+) Engine=MergeTree() ORDER BY id SETTINGS index_granularity = 1;
 SELECT * FROM tokenbf_v1_hasany_test WHERE hasAny(array, ['this is a test']) SETTINGS force_data_skipping_indices='idx_array_tokenbf_v1';
 SELECT '--';
 SELECT * FROM tokenbf_v1_hasany_test WHERE hasAny(array, ['example.com']) SETTINGS force_data_skipping_indices='idx_array_tokenbf_v1';

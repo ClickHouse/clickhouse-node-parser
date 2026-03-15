@@ -1,3 +1,12 @@
+CREATE TABLE distinct_lc_basic
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT (
         SELECT count()
         FROM (
@@ -26,6 +35,15 @@ SELECT (
             )
     );
 
+CREATE TABLE distinct_lc_low_cardinality
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT (
         SELECT count()
         FROM (
@@ -53,6 +71,15 @@ SELECT (
                 FROM distinct_lc_low_cardinality
             )
     );
+
+CREATE TABLE distinct_lc_nullable
+(
+    id UInt32,
+    s Nullable(String),
+    lc LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT (
         SELECT count()
@@ -174,6 +201,15 @@ SELECT (
             )
     );
 
+CREATE TABLE distinct_lc_mixed
+(
+    id UInt32,
+    k1 LowCardinality(String),
+    k2 UInt32
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT (
         SELECT count()
         FROM (
@@ -197,6 +233,15 @@ SELECT (
         SELECT uniqExact(k1)
         FROM distinct_lc_mixed
     );
+
+CREATE TABLE distinct_lc_all_same
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT (
         SELECT count()
@@ -225,6 +270,15 @@ SELECT (
                 FROM distinct_lc_all_same
             )
     );
+
+CREATE TABLE distinct_lc_sparse_nulls
+(
+    id UInt32,
+    s Nullable(String),
+    lc LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT (
         SELECT count()

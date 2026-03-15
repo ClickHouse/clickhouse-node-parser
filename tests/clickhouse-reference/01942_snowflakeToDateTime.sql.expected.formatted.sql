@@ -1,3 +1,5 @@
+SET allow_deprecated_snowflake_conversion_functions = 1; -- Force-enable deprecated snowflake conversion functions (in case this is randomized in CI)
+
 -- Error cases
 SELECT snowflakeToDateTime(); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
 
@@ -16,6 +18,13 @@ SETTINGS allow_deprecated_snowflake_conversion_functions = 0; -- { serverError D
 
 SELECT snowflakeToDateTime64(123::Int64)
 SETTINGS allow_deprecated_snowflake_conversion_functions = 0; -- { serverError DEPRECATED_FUNCTION }
+
+CREATE TABLE tab
+(
+    val Int64,
+    tz String
+)
+ENGINE = Log;
 
 SELECT 1
 FROM tab

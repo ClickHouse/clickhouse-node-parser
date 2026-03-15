@@ -1,3 +1,5 @@
+set allow_experimental_dynamic_type = 1;
+set input_format_json_infer_array_of_dynamic_from_array_of_different_types=0;
 select d, dynamicType(d) from format(JSONEachRow, 'd Dynamic', $$
 {"d" : 42}
 {"d" : 42.42}
@@ -51,5 +53,7 @@ select d, dynamicType(d) from format(Values, 'd Dynamic', $$
 (NULL)
 (true)
 $$) format Values;
+create table test (s String) engine=Memory;
+set cast_string_to_dynamic_use_inference=1;
 select s::Dynamic as d, dynamicType(d) from test;
 select s::Dynamic(max_types=3) as d, dynamicType(d), isDynamicElementInSharedData(d) from test;

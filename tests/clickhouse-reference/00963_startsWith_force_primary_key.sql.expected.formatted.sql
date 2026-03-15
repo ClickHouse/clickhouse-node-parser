@@ -1,3 +1,11 @@
+CREATE TABLE test_startsWith
+(
+    a String
+)
+ENGINE = MergeTree
+ORDER BY a
+PARTITION BY tuple();
+
 SELECT count()
 FROM test_startsWith
 WHERE startsWith(a, 'a')

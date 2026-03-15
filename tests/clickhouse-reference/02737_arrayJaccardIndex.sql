@@ -6,6 +6,7 @@ SELECT [1, 1.1, 2.2] AS arr1, [2.2, 3.3, 444] AS arr2, round(arrayJaccardIndex(a
 SELECT [toUInt16(1)] AS arr1, [toUInt32(1)] AS arr2, round(arrayJaccardIndex(arr1, arr2), 2);
 SELECT ['a'] AS arr1, ['a', 'aa', 'aaa'] AS arr2, round(arrayJaccardIndex(arr1, arr2), 2);
 SELECT [[1,2], [3,4]] AS arr1, [[1,2], [3,5]] AS arr2, round(arrayJaccardIndex(arr1, arr2), 2);
+CREATE TABLE array_jaccard_index (arr Array(UInt8)) engine = MergeTree ORDER BY arr;
 SELECT arr, [1,2] AS other, round(arrayJaccardIndex(arr, other), 2) FROM array_jaccard_index ORDER BY arr;
 SELECT arr, [] AS other, round(arrayJaccardIndex(arr, other), 2) FROM array_jaccard_index ORDER BY arr;
 SELECT [1,2] AS other, arr, round(arrayJaccardIndex(other, arr), 2) FROM array_jaccard_index ORDER BY arr;

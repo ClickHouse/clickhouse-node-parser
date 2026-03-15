@@ -1,3 +1,10 @@
+SET enable_analyzer = 1;
+CREATE TABLE t1 (a UInt64, b UInt64) ENGINE = Log;
+CREATE TABLE t2 (a UInt64, b UInt64) ENGINE = Log;
+CREATE TABLE t3 (a UInt64, b UInt64) ENGINE = Log;
+CREATE TABLE t4 (a UInt64, b UInt64) ENGINE = Log;
+CREATE TABLE t5 (a UInt64, b UInt64) ENGINE = Log;
+SET cross_to_inner_join_rewrite = 1;
 SELECT * FROM t1, t2, (SELECT a as x from t3 where a + 1 = b ) as t3
 WHERE t1.a = if(t2.b > 0, t2.a, 0) AND t2.a = t3.x AND 1
 ;

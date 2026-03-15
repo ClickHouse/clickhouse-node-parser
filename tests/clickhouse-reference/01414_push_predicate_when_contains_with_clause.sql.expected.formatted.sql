@@ -1,3 +1,1 @@
-SELECT *
-FROM squares
-WHERE number = 999;
+<Parse Error>

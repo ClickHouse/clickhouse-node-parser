@@ -4,6 +4,13 @@ ORDER BY number DESC
 LIMIT 3 WITH TIES
 OFFSET 2;
 
+CREATE TABLE test_fetch
+(
+    a Int32,
+    b Int32
+)
+ENGINE = Memory;
+
 SELECT *
 FROM (
         SELECT *

@@ -1,7 +1,11 @@
+SET session_timezone = 'Абырвалг'; -- { serverError BAD_ARGUMENTS}
+
 SELECT
     timezone(),
     timezoneOf(now())
 SETTINGS session_timezone = 'Pacific/Pitcairn';
+
+SET session_timezone = 'Asia/Novosibirsk';
 
 SELECT
     timezone(),
@@ -32,6 +36,14 @@ SELECT
     toDateTime64('2002-12-12 23:23:23.123', 3) AS dt64,
     toString(dt64)
 SETTINGS session_timezone = 'Asia/Phnom_Penh';
+
+-- Create a table and test that DateTimes are processed correctly on insert
+CREATE TABLE test_tz_setting
+(
+    d DateTime('UTC')
+)
+ENGINE = Memory AS
+SELECT toDateTime('2000-01-01 00:00:00');
 
 -- Test parsing in WHERE filter, shall have the same logic as insert
 SELECT d

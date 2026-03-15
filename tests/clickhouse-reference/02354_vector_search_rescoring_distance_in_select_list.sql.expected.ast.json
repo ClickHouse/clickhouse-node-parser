@@ -1,5 +1,144 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-ordinary-database, no-parallel-replicas",
+      "--- no-parallel-replicas: Because the test records and verifies",
+      "--- _distance values returned from the rescoring optimization.",
+      "-- Issue #85514",
+      "--",
+      "-- Tests that the rescoring optimization works when distance function is",
+      "-- present explicitly in the SELECT columns list, apart from ORDER BY.",
+      "-- The return type of the cosineDistance/L2Distance function will vary",
+      "-- based on the data type of the 2 input arguments."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "vector_search_with_rescoring",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_f32"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": "Array(Float32)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "vector_index",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": "vector_similarity('hnsw', 'L2Distance', 2)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_bf16"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": "Array(BFloat16)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "vector_index",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": "vector_similarity('hnsw', 'L2Distance', 2)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

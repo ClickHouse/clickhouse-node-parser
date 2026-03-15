@@ -1,3 +1,11 @@
+CREATE TABLE distinct_lc_basic
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_basic))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_basic));
@@ -5,6 +13,14 @@ SELECT
     (SELECT arraySort(groupArray(s)) FROM (SELECT DISTINCT s FROM distinct_lc_basic))
     =
     (SELECT arraySort(groupArray(CAST(lc AS String))) FROM (SELECT DISTINCT lc FROM distinct_lc_basic));
+CREATE TABLE distinct_lc_low_cardinality
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_low_cardinality))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_low_cardinality));
@@ -12,6 +28,14 @@ SELECT
     (SELECT arraySort(groupArray(s)) FROM (SELECT DISTINCT s FROM distinct_lc_low_cardinality))
     =
     (SELECT arraySort(groupArray(CAST(lc AS String))) FROM (SELECT DISTINCT lc FROM distinct_lc_low_cardinality));
+CREATE TABLE distinct_lc_nullable
+(
+    id UInt32,
+    s Nullable(String),
+    lc LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_nullable))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_nullable));
@@ -38,12 +62,28 @@ SELECT
     (SELECT arraySort(groupArray(x)) FROM (SELECT DISTINCT toString(intDiv(number, 7)) AS x FROM numbers(100000)))
     =
     (SELECT arraySort(groupArray(CAST(x AS String))) FROM (SELECT DISTINCT toLowCardinality(toString(intDiv(number, 7))) AS x FROM numbers(100000)));
+CREATE TABLE distinct_lc_mixed
+(
+    id UInt32,
+    k1 LowCardinality(String),
+    k2 UInt32
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT
     (SELECT count() FROM (SELECT DISTINCT k1, k2 FROM distinct_lc_mixed))
   - (SELECT uniqExact(k1, k2) FROM distinct_lc_mixed);
 SELECT
     (SELECT count() FROM (SELECT DISTINCT k1 FROM distinct_lc_mixed))
   - (SELECT uniqExact(k1) FROM distinct_lc_mixed);
+CREATE TABLE distinct_lc_all_same
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_all_same))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_all_same));
@@ -51,6 +91,14 @@ SELECT
     (SELECT arraySort(groupArray(s)) FROM (SELECT DISTINCT s FROM distinct_lc_all_same))
     =
     (SELECT arraySort(groupArray(CAST(lc AS String))) FROM (SELECT DISTINCT lc FROM distinct_lc_all_same));
+CREATE TABLE distinct_lc_sparse_nulls
+(
+    id UInt32,
+    s Nullable(String),
+    lc LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_sparse_nulls))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_sparse_nulls));

@@ -1,3 +1,10 @@
+CREATE TABLE dist_01757 AS `system`.one
+ENGINE = Distributed(test_cluster_two_shards, `system`, one, dummy);
+
+SET optimize_skip_unused_shards = 1;
+
+SET force_optimize_skip_unused_shards = 2;
+
 -- in
 SELECT *
 FROM dist_01757

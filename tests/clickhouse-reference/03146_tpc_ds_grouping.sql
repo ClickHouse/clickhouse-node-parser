@@ -1,3 +1,5 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/46335
+SET enable_analyzer = 1;
 SELECT
     key_a + key_b AS d,
     rank() OVER () AS f
@@ -15,6 +17,7 @@ GROUP BY
 WITH ROLLUP
 ORDER BY multiIf(d = 0, key_a, NULL) ASC
 FORMAT Null;
+
 SELECT
     key_a + key_b AS d,
     rank() OVER (PARTITION BY key_a + key_b) AS f
@@ -32,6 +35,8 @@ GROUP BY
 WITH ROLLUP
 ORDER BY multiIf(d = 0, key_a, NULL) ASC
 FORMAT Null;
+
+
 SELECT
     grouping(key_a) + grouping(key_b) AS d,
     rank() OVER (PARTITION BY grouping(key_a) + grouping(key_b), multiIf(grouping(key_b) = 0, key_a, NULL)) AS f
@@ -49,6 +54,7 @@ GROUP BY
 WITH ROLLUP
 ORDER BY multiIf(d = 0, key_a, NULL) ASC
 FORMAT Null;
+
 SELECT grouping(key_a) + grouping(key_b) AS d
 FROM
     (

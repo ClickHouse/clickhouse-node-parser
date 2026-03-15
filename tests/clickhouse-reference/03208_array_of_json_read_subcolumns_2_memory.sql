@@ -1,3 +1,10 @@
+-- Tags: no-asan, no-tsan, no-msan, no-flaky-check
+-- too slow for sanitizers and flaky check
+
+SET enable_json_type = 1;
+set allow_experimental_variant_type = 1;
+set use_variant_as_common_type = 1;
+create table test (id UInt64, json JSON(max_dynamic_paths=8, a.b Array(JSON))) engine=MergeTree order by id settings min_rows_for_wide_part=1000000000, min_bytes_for_wide_part=10000000000;
 select distinct arrayJoin(JSONAllPathsWithTypes(json)) as paths_with_types from test order by paths_with_types;
 select distinct arrayJoin(JSONAllPathsWithTypes(arrayJoin(json.a.b))) as paths_with_types from test order by paths_with_types;
 select distinct arrayJoin(JSONAllPathsWithTypes(arrayJoin(json.a.r[]))) as paths_with_types from test order by paths_with_types;

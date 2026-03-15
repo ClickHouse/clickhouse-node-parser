@@ -1,3 +1,21 @@
+CREATE TABLE table_02916
+(
+    ID UInt32,
+    Name String
+)
+ENGINE = MergeTree
+ORDER BY ID;
+
+CREATE TABLE table_02916_distributed
+(
+    ID UInt32,
+    Name String
+)
+ENGINE = Distributed(test_unavailable_shard, currentDatabase(), table_02916, rand())
+SETTINGS skip_unavailable_shards = 1;
+
+SET send_logs_level = 'fatal';
+
 SELECT
     *,
     _shard_num

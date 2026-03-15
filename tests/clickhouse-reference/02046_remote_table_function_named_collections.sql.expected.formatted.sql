@@ -1,3 +1,9 @@
+CREATE TABLE remote_test
+(
+    a1 UInt8
+)
+ENGINE = Memory;
+
 SELECT count()
 FROM remote(remote1, database = currentDatabase());
 

@@ -1,4 +1,25 @@
+-- { echoOn }
+SET enable_analyzer = 1;
+
+CREATE TABLE tree
+(
+    id UInt64,
+    link Nullable(UInt64),
+    data String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT '--';
+
+CREATE TABLE department
+(
+    id UInt64,
+    parent_department UInt64,
+    name String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 -- corner case in which sub-WITH gets initialized first
 SELECT *

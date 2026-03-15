@@ -1,3 +1,45 @@
+CREATE TABLE tab
+(
+    k Nullable(UInt32),
+    k1 Nullable(UInt32),
+    k2 Nullable(UInt32),
+    v String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE mem
+(
+    k UInt64,
+    v String
+)
+ENGINE = Join(`ANY`, `LEFT`, k);
+
+CREATE TABLE mem2
+(
+    k UInt64,
+    v String
+)
+ENGINE = Join(`ANY`, `RIGHT`, k);
+
+CREATE TABLE mem3
+(
+    k UInt64,
+    v String
+)
+ENGINE = Join(`ALL`, `FULL`, k)
+SETTINGS join_use_nulls = 1;
+
+CREATE TABLE mem4
+(
+    k1 UInt64,
+    k2 UInt64,
+    v String
+)
+ENGINE = Join(`ALL`, `FULL`, k1, k2);
+
+SET enable_analyzer = 1;
+
 SELECT '-----';
 
 SELECT *

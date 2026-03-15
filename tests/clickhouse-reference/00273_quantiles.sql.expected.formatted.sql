@@ -68,6 +68,11 @@ FROM (
         LIMIT 1001
     );
 
+-- The result slightly differs but it's ok since `quantilesDeterministic` is an approximate function.
+SET max_bytes_before_external_group_by = 0;
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
 SELECT
     round(1000000 / ((number + 1))) AS k,
     count() AS c,

@@ -1,3 +1,9 @@
+CREATE TABLE t0_03765
+(
+    c0 Int
+)
+ENGINE = Memory;
+
 -- Empty table: should get TOO_MANY_RETRIES_TO_FETCH_PARTS (same as loop() alone with empty tables)
 SELECT 1
 FROM remote('localhost', loop(currentDatabase(), 't0_03765')) AS tx; -- { serverError TOO_MANY_RETRIES_TO_FETCH_PARTS }

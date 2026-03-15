@@ -1,3 +1,16 @@
+CREATE TABLE test
+(
+   `id` UInt64,
+   `name` String,
+   PROJECTION projection_name
+   (
+       SELECT sum(id) GROUP BY id, name
+   )
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS index_granularity_bytes = 10000;
+set parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 SELECT name FROM test GROUP BY name SETTINGS force_optimize_projection_name='projection_name';
 SELECT name FROM test GROUP BY name SETTINGS force_optimize_projection_name='non_existing_projection'; -- { serverError INCORRECT_DATA }
 SELECT name FROM test SETTINGS force_optimize_projection_name='projection_name'; -- { serverError INCORRECT_DATA }

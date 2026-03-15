@@ -1,7 +1,21 @@
+CREATE TABLE t
+(
+    a String,
+    b Int
+)
+ENGINE = TinyLog;
+
 SELECT *
 FROM t;
 
 SELECT '---';
+
+CREATE TABLE d
+(
+    a String,
+    b Int
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), t);
 
 SELECT DISTINCT b
 FROM (
@@ -14,3 +28,10 @@ FROM (
             b
     )
 ORDER BY b ASC;
+
+CREATE TABLE d
+(
+    a String,
+    b Int
+)
+ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), t);

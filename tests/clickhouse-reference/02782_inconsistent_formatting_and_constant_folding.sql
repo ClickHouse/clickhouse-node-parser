@@ -1,4 +1,6 @@
 SELECT -0, toTypeName(-0), -1, toTypeName(-1), -0., toTypeName(-0.);
+create table t4 (c26 String) engine = Log;
+create view t7 as select max(ref_3.c26) as c_2_c46_1 from t4 as ref_3;
 select
         c_7_c4585_14 as c_4_c4593_5
       from

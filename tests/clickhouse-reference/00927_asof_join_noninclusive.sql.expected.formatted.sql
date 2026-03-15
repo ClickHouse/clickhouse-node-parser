@@ -1,3 +1,21 @@
+CREATE TABLE A
+(
+    k UInt32,
+    t DateTime,
+    a Float64
+)
+ENGINE = MergeTree()
+ORDER BY (k, t);
+
+CREATE TABLE B
+(
+    k UInt32,
+    t DateTime,
+    b Float64
+)
+ENGINE = MergeTree()
+ORDER BY (k, t);
+
 SELECT
     A.k,
     toString(A.t, 'UTC'),
@@ -37,3 +55,5 @@ FROM
 INNER JOIN B
     USING (k, t)
 ORDER BY (A.k, A.t) ASC;
+
+SET join_algorithm = 'full_sorting_merge';

@@ -6,6 +6,14 @@ SELECT toStartOfWeek(toDateTime('1970-01-01 00:00:00', 'Canada/Atlantic'));
 
 SELECT toStartOfWeek(toDateTime('1970-01-04 00:00:00'));
 
+CREATE TABLE t02176
+(
+    timestamp DateTime
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY toStartOfWeek(timestamp);
+
 SELECT count()
 FROM t02176
 WHERE timestamp >= toDateTime('1970-01-01 00:00:00');

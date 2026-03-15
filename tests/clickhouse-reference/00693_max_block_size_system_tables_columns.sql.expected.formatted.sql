@@ -29,6 +29,11 @@ SELECT (
         SETTINGS max_block_size = 1000
     );
 
+CREATE TEMPORARY TABLE t_00693
+(
+    x UInt8
+);
+
 SELECT
     database,
     name,

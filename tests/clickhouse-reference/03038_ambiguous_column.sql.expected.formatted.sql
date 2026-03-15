@@ -1,3 +1,13 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/48308
+SET enable_analyzer = 1;
+
+CREATE TABLE `03038_table`
+(
+    time DateTime
+)
+ENGINE = MergeTree
+ORDER BY time;
+
 SELECT *
 FROM (
         SELECT

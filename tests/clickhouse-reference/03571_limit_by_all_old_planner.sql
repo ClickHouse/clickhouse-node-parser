@@ -1,3 +1,13 @@
+SET max_threads = 1;
+SET max_insert_threads = 1;
+SET max_block_size = 65536;
+SET enable_analyzer = 0;
+CREATE TABLE test_limit_by_all_old_planner (
+    id Int32,
+    category String,
+    value Int32,
+    name String
+) ENGINE = Memory;
 -- Test 1: Test that LIMIT BY ALL throws an exception when using the old planner
 -- This tests the changes in TreeWriter.cpp
 SELECT id, category, value, name

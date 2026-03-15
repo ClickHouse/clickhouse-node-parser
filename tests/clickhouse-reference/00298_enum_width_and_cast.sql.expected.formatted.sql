@@ -1,3 +1,12 @@
+SET output_format_pretty_color = 1;
+
+CREATE TABLE enum
+(
+    x Enum8('Hello' = -100, '\\' = 0, '\t\\t' = 111),
+    y UInt8
+)
+ENGINE = TinyLog;
+
 SELECT *
 FROM enum
 ORDER BY

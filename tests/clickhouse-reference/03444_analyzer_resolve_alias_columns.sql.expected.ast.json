@@ -1,5 +1,68 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": "Int16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "age",
+        "type": "Int16"
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": "Array(Int16)",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "columnRef",
+                "parts": [
+                  "age"
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "array",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,6 +74,145 @@
       "table": "users"
     },
     "format": "Null"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "out1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": "JSON"
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "Array(UInt32)",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "toUInt32",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "JSONAllPaths",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "j"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "Array(Array(UInt32))",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "JSONExtract",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "CAST",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "j"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "String"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "indexOf",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "name"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Array(UInt32)"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",

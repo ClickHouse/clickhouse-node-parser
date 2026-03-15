@@ -1,3 +1,23 @@
+CREATE TABLE empty1
+(
+    key UInt32,
+    val UInt32,
+    date Datetime
+)
+ENGINE = ReplicatedSummingMergeTree('/clickhouse/tables/{database}/test_01560_optimize_on_insert', '1', val)
+ORDER BY key
+PARTITION BY date;
+
+CREATE TABLE empty2
+(
+    key UInt32,
+    val UInt32,
+    date Datetime
+)
+ENGINE = ReplicatedSummingMergeTree('/clickhouse/tables/{database}/test_01560_optimize_on_insert', '2', val)
+ORDER BY key
+PARTITION BY date;
+
 SELECT *
 FROM empty1
 ORDER BY key ASC;

@@ -1,3 +1,14 @@
+CREATE TABLE test_table
+(
+    eventType String,
+    timestamp UInt64,
+    key UInt64
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (eventType, timestamp, key)
+PRIMARY KEY (eventType, timestamp)
+SETTINGS index_granularity = 1;
+
 SELECT
     eventType,
     timestamp,

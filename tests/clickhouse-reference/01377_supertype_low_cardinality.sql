@@ -1,7 +1,13 @@
 SELECT 'hello' UNION ALL SELECT toLowCardinality('hello');
 SELECT toTypeName(x) FROM (SELECT 'hello' AS x UNION ALL SELECT toLowCardinality('hello'));
 SELECT '---';
+create temporary table t1(a String);
+create temporary table t2(a LowCardinality(String));
 select a from t1 union all select a from t2;
+CREATE TEMPORARY TABLE a (x String);
+CREATE TEMPORARY TABLE b (x LowCardinality(String));
+CREATE TEMPORARY TABLE c (x Nullable(String));
+CREATE TEMPORARY TABLE d (x LowCardinality(Nullable(String)));
 SELECT x FROM a;
 SELECT x FROM b;
 SELECT x FROM c;

@@ -1,7 +1,11 @@
+set force_primary_key=1;
+CREATE TABLE test_23634 (id Nullable(String), s Nullable(String), s1 Nullable(String))
+ENGINE = MergeTree() ORDER BY (id,s) SETTINGS allow_nullable_key = 1;
 select '---Q1---';
 select * from test_23634 where id !='';
 select * from test_23634 where id !='' and s != '';
 select * from test_23634 where id !='' and s != '' and s1 != '';
+set force_primary_key=0;
 select * from test_23634 where (id, s, s1) != ('', '', '') order by id, s1, s1;
 select * from test_23634 where (id, s, s1) = ('', '', '') order by id, s1, s1;
 select * from test_23634 where (id, s, s1) = ('', '', 's2') order by id, s1, s1;

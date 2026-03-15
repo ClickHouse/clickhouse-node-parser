@@ -1,5 +1,156 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_skip_unused_shards",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: shard"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_optimize_skip_unused_shards",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "expr",
+          "name": "values",
+          "expr": {
+            "kind": "array",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7f"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x80"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7fff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x8000"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xffff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7fffffff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x80000000"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xffffffff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7fffffffffffffff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x8000000000000000"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xffffffffffffffff"
+              }
+            ],
+            "source": "[\n    0,\n    1,\n    0x7f, 0x80, 0xff,\n    0x7fff, 0x8000, 0xffff,\n    0x7fffffff, 0x80000000, 0xffffffff,\n    0x7fffffffffffffff, 0x8000000000000000, 0xffffffffffffffff\n]"
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayJoin",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "values"
+                ]
+              }
+            ]
+          },
+          "alias": "id"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -119,6 +270,7 @@
       }
     ],
     "leadingComments": [
+      "-- { echoOn }",
       "-- Int8, Int8"
     ]
   },

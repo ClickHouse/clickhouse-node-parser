@@ -1,3 +1,10 @@
+-- Test case extracted from AST fuzzer failure
+-- https://s3.amazonaws.com/clickhouse-test-reports/json.html?PR=95226&sha=4092c976e68130b7d6993e747e14ed6645efd0fa&name_0=PR&name_1=AST%20fuzzer%20%28amd_msan%29
+-- MemorySanitizer: use-of-uninitialized-value in CRC32Hash during nullable_serialized aggregation
+-- The bug was in ColumnNullable::getSerializedValueSize which returned 1 + nested_size even for NULL values,
+-- but serializeValueIntoMemory only writes 1 byte for NULLs, leaving uninitialized memory.
+SET allow_experimental_nullable_tuple_type = 1;
+
 -- Minimal reproducer
 SELECT CAST(tuple(NULL, NULL), 'Nullable(Tuple(Nullable(UInt32), Nullable(UInt32)))')
 GROUP BY

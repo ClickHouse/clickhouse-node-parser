@@ -1,3 +1,14 @@
+CREATE TABLE data_02201
+(
+    key Int,
+    value Int,
+    INDEX idx value TYPE minmax GRANULARITY 1
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY key
+PARTITION BY key;
+
+-- { echoOn }
 SELECT *
 FROM data_02201 FINAL
 WHERE value = 1

@@ -6,6 +6,14 @@ SELECT firstLine('foo\r\nbar\r\nbaz');
 
 SELECT firstLine('foobarbaz');
 
+CREATE TABLE `02815_first_line_vector`
+(
+    n Int32,
+    text String
+)
+ENGINE = MergeTree
+ORDER BY n;
+
 SELECT
     n,
     firstLine(text)

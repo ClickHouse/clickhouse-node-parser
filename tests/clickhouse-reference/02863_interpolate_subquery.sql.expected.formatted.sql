@@ -1,3 +1,10 @@
+CREATE TABLE tab
+(
+    i UInt32,
+    a UInt32
+)
+ENGINE = Memory;
+
 SELECT
     i,
     col1

@@ -1,3 +1,16 @@
+SET enable_lightweight_update = 1;
+
+CREATE TABLE t_lwd_indexes
+(
+    key UInt64,
+    value String,
+    INDEX idx_key (key) TYPE minmax GRANULARITY 1,
+    INDEX idx_value (value) TYPE bloom_filter(0.001) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 128, index_granularity_bytes = '10M', min_bytes_for_wide_part = 0, enable_block_number_column = 1, enable_block_offset_column = 1;
+
 SELECT count()
 FROM t_lwd_indexes
 WHERE key = 1000

@@ -1,3 +1,13 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE test54378
+(
+    part_date Date,
+    pk_date Date,
+    date Date
+)
+ENGINE = MergeTree(part_date, pk_date, 8192);
+
 SELECT 232
 FROM test54378
 PREWHERE (part_date = (

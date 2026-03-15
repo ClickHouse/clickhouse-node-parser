@@ -1,3 +1,13 @@
+CREATE TABLE test02313
+(
+    a Enum('one' = 1, 'two' = 2),
+    b Enum('default' = 0, 'non-default' = 1),
+    c UInt8
+)
+ENGINE = MergeTree()
+ORDER BY (a, b, c);
+
+-- { echoOn }
 SELECT
     count() AS d,
     a,

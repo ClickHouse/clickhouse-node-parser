@@ -1,3 +1,12 @@
+CREATE TABLE t_primary_index_cache
+(
+    a LowCardinality(String),
+    b LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+SETTINGS use_primary_key_cache = 1, prewarm_primary_key_cache = 1, index_granularity = 8192, index_granularity_bytes = '10M', min_bytes_for_wide_part = 0;
+
 -- Check cache size
 SELECT
     metric,

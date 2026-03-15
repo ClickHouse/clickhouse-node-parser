@@ -1,3 +1,14 @@
+SET enable_json_type = 1;
+
+CREATE TABLE test_new_json_type
+(
+    id UInt32,
+    data JSON,
+    version UInt64
+)
+ENGINE = ReplacingMergeTree(version)
+ORDER BY id;
+
 SELECT
     a.data,
     b.data

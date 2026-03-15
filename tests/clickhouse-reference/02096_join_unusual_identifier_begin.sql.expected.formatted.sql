@@ -1,3 +1,24 @@
+CREATE TABLE t1
+(
+    a1 Int64,
+    `1a1` Int64
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    b1 Int64,
+    `1b1` Int64
+)
+ENGINE = Memory;
+
+CREATE TABLE t3
+(
+    c1 Int64,
+    `1c1` Int64
+)
+ENGINE = Memory;
+
 SELECT *
 FROM
     t1 AS t1

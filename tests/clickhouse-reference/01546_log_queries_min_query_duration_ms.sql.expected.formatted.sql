@@ -1,3 +1,9 @@
+SET log_queries_min_query_duration_ms = 300000;
+
+SET log_query_threads = 1;
+
+SET log_queries = 1;
+
 --
 -- fast -- no logging
 --
@@ -16,6 +22,11 @@ FROM `system`.query_thread_log
 WHERE like(query, 'select ''01546_log_queries_min_query_duration_ms-fast%')
     AND current_database = currentDatabase()
     AND event_date >= yesterday();
+
+--
+-- slow -- query logged
+--
+SET log_queries_min_query_duration_ms = 300;
 
 SELECT
     '01546_log_queries_min_query_duration_ms-slow',

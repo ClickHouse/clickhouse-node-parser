@@ -1,3 +1,20 @@
+CREATE TABLE t1
+(
+    a Int32,
+    b Int32 ALIAS 1
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t2
+(
+    a Int32,
+    b Int32 ALIAS 1
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+-- { echoOn }
 SELECT b
 FROM t1;
 

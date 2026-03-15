@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS bug
+(
+    k UInt64,
+    s UInt64
+)
+ENGINE = Memory;
+
+SET optimize_min_equality_disjunction_chain_length = 2;
+
 SELECT *
 FROM bug;
 
@@ -88,6 +97,8 @@ SELECT
     OR s = 23)
 FROM bug
 SETTINGS enable_analyzer = 1;
+
+SET optimize_min_equality_disjunction_chain_length = 3;
 
 SELECT
     s,

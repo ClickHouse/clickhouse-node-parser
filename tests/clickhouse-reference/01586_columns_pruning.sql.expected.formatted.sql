@@ -1,3 +1,5 @@
+SET max_memory_usage = 10000000000;
+
 -- Unneeded column is removed from subquery.
 SELECT count()
 FROM (

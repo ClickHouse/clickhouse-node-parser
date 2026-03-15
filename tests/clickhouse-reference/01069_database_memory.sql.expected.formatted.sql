@@ -1,7 +1,1 @@
-SELECT *
-FROM memory_01069.mt
-ORDER BY n ASC;
-
-SELECT *
-FROM memory_01069.file
-ORDER BY n ASC;
+<Parse Error>

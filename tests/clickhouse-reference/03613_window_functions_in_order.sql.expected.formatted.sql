@@ -1,3 +1,16 @@
+-- Tags: no-parallel-replicas
+-- Optimization doen't work with parallel replicas
+CREATE TABLE t
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree()
+ORDER BY a
+SETTINGS index_granularity = 8192;
+
+SET max_threads = 4, optimize_read_in_order = 1;
+
 SELECT countIf(like(`explain`, '%ScatterByPartitionTransform%'))
 FROM (
         EXPLAIN PIPELINE

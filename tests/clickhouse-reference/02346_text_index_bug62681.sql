@@ -1,3 +1,13 @@
+SET enable_full_text_index = 1;
+CREATE TABLE tab
+(
+    str String,
+    INDEX text_idx str TYPE text(tokenizer = ngrams(3)),
+    INDEX set_idx str TYPE set(10) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS compress_marks = 0;
 -- to double check: `ll -h $(find . -name "*text_idx*")` from build dir
 -- sum up .mrk* or .cmrk* files to get marks_bytes
 -- sum up .idx files for data_compressed_bytes

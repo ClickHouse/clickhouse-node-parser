@@ -27,4 +27,5 @@ SELECT toFloat32(number * -1) * number y, toInt128(y), toInt256(y), toUInt256(y)
 SELECT toFloat64(number * -1) * number y, toInt128(y), toInt256(y), toUInt256(y) FROM numbers_mt(10) ORDER BY number;
 SELECT number y, toInt128(number) - y, toInt256(number) - y, toUInt256(number) - y FROM numbers_mt(10) ORDER BY number;
 SELECT -number y, toInt128(number) + y, toInt256(number) + y, toUInt256(number) + y FROM numbers_mt(10) ORDER BY number;
+CREATE TABLE t (x UInt64, i256 Int256, u256 UInt256, d256 Decimal256(2)) ENGINE = Memory;
 SELECT sum(x), sum(i256), sum(u256), sum(d256) FROM t;

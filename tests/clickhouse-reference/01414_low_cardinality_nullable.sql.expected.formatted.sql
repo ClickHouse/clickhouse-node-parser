@@ -1,3 +1,27 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE lc_nullable
+(
+    order_key Array(LowCardinality(Nullable(UInt64))),
+    i8 Array(LowCardinality(Nullable(Int8))),
+    i16 Array(LowCardinality(Nullable(Int16))),
+    i32 Array(LowCardinality(Nullable(Int32))),
+    i64 Array(LowCardinality(Nullable(Int64))),
+    u8 Array(LowCardinality(Nullable(UInt8))),
+    u16 Array(LowCardinality(Nullable(UInt16))),
+    u32 Array(LowCardinality(Nullable(UInt32))),
+    u64 Array(LowCardinality(Nullable(UInt64))),
+    f32 Array(LowCardinality(Nullable(Float32))),
+    f64 Array(LowCardinality(Nullable(Float64))),
+    date Array(LowCardinality(Nullable(Date))),
+    date_time Array(LowCardinality(Nullable(DateTime('Asia/Istanbul')))),
+    str Array(LowCardinality(Nullable(String))),
+    fixed_string Array(LowCardinality(Nullable(FixedString(5))))
+)
+ENGINE = MergeTree()
+ORDER BY order_key
+SETTINGS allow_nullable_key = 1;
+
 SELECT count()
 FROM lc_nullable
 WHERE has(i8, 1);

@@ -1,3 +1,12 @@
+CREATE TABLE t1
+(
+    x Int32
+)
+ENGINE = MergeTree
+ORDER BY x;
+
+SET enable_analyzer = 1;
+
 SELECT t2.x
 FROM
     t1

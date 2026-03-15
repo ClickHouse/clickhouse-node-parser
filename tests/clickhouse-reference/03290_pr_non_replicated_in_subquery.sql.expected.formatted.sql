@@ -1,3 +1,10 @@
+CREATE TABLE table1
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
 SELECT count()
 FROM (
         SELECT *

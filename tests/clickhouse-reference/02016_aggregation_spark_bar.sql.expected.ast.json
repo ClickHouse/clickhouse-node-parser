@@ -1,5 +1,45 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "spark_bar_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "cnt",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "event_date",
+        "type": "Date"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_date"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,7 +71,10 @@
     "from": {
       "kind": "tableRef",
       "table": "spark_bar_test"
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
   },
   {
     "kind": "select",

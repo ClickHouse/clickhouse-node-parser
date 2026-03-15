@@ -1,3 +1,5 @@
+SET allow_deprecated_error_prone_window_functions = 1;
+
 SELECT runningDifference(x)
 FROM (
         SELECT arrayJoin([0, 1, 5, 10]) AS x

@@ -1,3 +1,7 @@
+SET joined_subquery_requires_alias = 0;
+create table tab1 (a1 Int32, b1 Int32) engine = MergeTree order by a1;
+create table tab2 (a2 Int32, b2 Int32) engine = MergeTree order by a2;
+create table tab3 (a3 Int32, b3 Int32) engine = MergeTree order by a3;
 select a2, b2 from tab2 all left join tab3 on a2 = a3 or b2 = b3 ORDER BY a2, b2;
 select a3, b3 from tab2 all left join tab3 on a2 = a3 or b2 = b3 ORDER BY a3, b3;
 select a2, b2, a3, b3 from tab2 all left join tab3 on a2 = a3 or b2 = b3 ORDER BY a2, b2, a3, b3;

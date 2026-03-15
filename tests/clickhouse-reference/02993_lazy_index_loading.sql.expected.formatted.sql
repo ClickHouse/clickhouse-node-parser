@@ -1,3 +1,13 @@
+CREATE TABLE test
+(
+    s String
+)
+ENGINE = MergeTree
+ORDER BY s
+SETTINGS index_granularity = 1, use_primary_key_cache = 0;
+
+SET optimize_trivial_insert_select = 1;
+
 SELECT
     round(primary_key_bytes_in_memory, -7),
     round(primary_key_bytes_in_memory_allocated, -7)
@@ -5,6 +15,8 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'test'
 FORMAT Vertical;
+
+SET max_memory_usage = '50M';
 
 SELECT
     primary_key_bytes_in_memory,
@@ -14,10 +26,15 @@ WHERE database = currentDatabase()
     AND table = 'test'
 FORMAT Vertical;
 
+SET max_memory_usage = '200M';
+
 -- Run a query that doesn use indexes
 SELECT s != ''
 FROM test
 LIMIT 1;
+
+-- Run a query that uses PK index
+SET max_execution_time = 300;
 
 SELECT s != ''
 FROM test

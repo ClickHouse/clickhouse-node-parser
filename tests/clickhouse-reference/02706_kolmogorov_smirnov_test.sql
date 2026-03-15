@@ -1,3 +1,4 @@
+CREATE TABLE kstest (left Float64, right Float64) ENGINE = Memory;
 SELECT 
 roundBankers(kolmogorovSmirnovTest(left, right).2, 6),
 roundBankers(kolmogorovSmirnovTest('two-sided')(left, right).2, 6),

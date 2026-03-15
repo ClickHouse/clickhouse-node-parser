@@ -1,3 +1,25 @@
+CREATE TABLE t1
+(
+    x UInt32,
+    s String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t2
+(
+    x UInt32,
+    s String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET join_algorithm = 'prefer_partial_merge';
+
+SET join_use_nulls = 0;
+
+SET any_join_distinct_right_table_keys = 0;
+
 SELECT
     t1.*,
     t2.*

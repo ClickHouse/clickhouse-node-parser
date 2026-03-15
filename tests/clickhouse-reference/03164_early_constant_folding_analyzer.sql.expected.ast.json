@@ -1,5 +1,173 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "checks"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pull_request_number",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "commit_sha",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_name",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_status",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_duration_ms",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_start_time",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_name",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_status",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_duration_ms",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "report_url",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "pull_request_url",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "commit_url",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "task_url",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "base_ref",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "base_repo",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "head_ref",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "head_repo",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_context_raw",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "instance_type",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "instance_id",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "check_start_time"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "date"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pull_request_number"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "commit_sha"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "check_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "test_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "check_start_time"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

@@ -1,3 +1,34 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE sales
+(
+    id Int32,
+    date Date,
+    amount Decimal(10, 2),
+    product_id Int32
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', auto_statistics_types = '';
+
+CREATE TABLE products
+(
+    id Int32,
+    name String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+SET query_plan_join_swap_table = 'auto';
+
+SET query_plan_optimize_join_order_limit = 2;
+
+SET use_statistics = 1;
+
+SET allow_experimental_statistics = 1;
+
+SET enable_join_runtime_filters = 0;
+
 SELECT *
 FROM
     products
@@ -15,6 +46,8 @@ WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_no_stats'
 FORMAT Null;
+
+SET mutations_sync = 2;
 
 SELECT *
 FROM

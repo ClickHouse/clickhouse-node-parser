@@ -1,3 +1,30 @@
+-- { echo ON }
+SET enable_analyzer = 1;
+
+-- enable projection for parallel replicas
+SET parallel_replicas_local_plan = 1;
+
+SET optimize_aggregation_in_order = 0;
+
+CREATE TABLE test_simple_projection
+(
+    id UInt64,
+    event_date Date,
+    user_id UInt32,
+    url String,
+    region String,
+    PROJECTION region_proj (    SELECT _part_offset
+    ORDER BY region ASC),
+    PROJECTION user_id_proj (    SELECT _part_offset
+    ORDER BY user_id ASC)
+)
+ENGINE = MergeTree
+ORDER BY (event_date, id)
+SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
+
+-- aggressively use projection index
+SET min_table_rows_to_use_projection_index = 0;
+
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -79,6 +106,18 @@ PREWHERE (101 = user_id) = ignore(255, isZeroOrNull(assumeNotNull(0)))
 WHERE (106 = user_id)
     AND (region = 'us_west');
 
+CREATE TABLE test_projection_granule_edge_cases
+(
+    id UInt64,
+    region String,
+    user_id UInt32,
+    PROJECTION region_proj (    SELECT _part_offset
+    ORDER BY region ASC)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 16, min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
+
 SELECT trimLeft(`explain`)
 FROM (
         EXPLAIN projections = 1
@@ -123,6 +162,15 @@ SELECT *
 FROM test_projection_granule_edge_cases
 WHERE region = 'bol_region'
 ORDER BY `ALL` ASC;
+
+CREATE TABLE test_partial_projection
+(
+    id UInt64,
+    region String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
 
 SELECT trimLeft(`explain`)
 FROM (

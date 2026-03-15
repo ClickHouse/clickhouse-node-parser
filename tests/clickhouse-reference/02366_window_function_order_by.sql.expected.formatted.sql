@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT groupArray(tuple(value)) OVER ()
 FROM (
         SELECT number AS value

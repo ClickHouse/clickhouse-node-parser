@@ -1,3 +1,9 @@
+SET enable_analyzer = 1;
+
+SET max_block_size = 65505;
+
+SET optimize_group_by_function_keys = 1;
+
 SELECT round(max(log(2) * number), 6) AS k
 FROM numbers(10000000)
 GROUP BY
@@ -34,3 +40,5 @@ GROUP BY
     (number % 2) % 3,
     number % 2
 ORDER BY k ASC;
+
+SET optimize_group_by_function_keys = 0;

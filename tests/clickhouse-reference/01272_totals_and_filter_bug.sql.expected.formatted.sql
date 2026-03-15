@@ -10,6 +10,26 @@ FROM (
 WHERE number > 0
 SETTINGS enable_optimize_predicate_expression = 0;
 
+CREATE TABLE foo
+(
+    server_date Date,
+    dimension_1 String,
+    metric_1 UInt32
+)
+ENGINE = MergeTree()
+ORDER BY server_date
+PARTITION BY toYYYYMM(server_date);
+
+CREATE TABLE bar
+(
+    server_date Date,
+    dimension_1 String,
+    metric_2 UInt32
+)
+ENGINE = MergeTree()
+ORDER BY server_date
+PARTITION BY toYYYYMM(server_date);
+
 SELECT
     dimension_1,
     sum_metric_1,

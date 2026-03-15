@@ -1,3 +1,21 @@
+CREATE TABLE t
+(
+    a Int64,
+    b Int64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE s
+(
+    a Int64,
+    b Int64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET join_use_nulls = 1;
+
 SELECT *
 FROM
     t
@@ -117,3 +135,5 @@ LEFT JOIN s
     ON (t.b = toInt64(2)
     AND s.a = t.a)
 WHERE t.b = 2;
+
+SET join_use_nulls = 0;

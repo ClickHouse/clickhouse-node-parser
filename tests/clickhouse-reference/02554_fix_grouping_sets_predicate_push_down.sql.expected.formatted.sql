@@ -1,3 +1,15 @@
+-- Tags: no-object-storage
+-- Specific value doesn't matter, we just need it to be fixed, because it is a part of `EXPLAIN PIPELINE` output.
+SET max_threads = 8;
+
+CREATE TABLE test_grouping_sets_predicate
+(
+    day_ Date,
+    type_1 String
+)
+ENGINE = MergeTree
+ORDER BY day_;
+
 SELECT '---Explain Syntax---';
 
 SELECT *

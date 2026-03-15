@@ -1,1 +1,2 @@
+create table z (pk Int64, d Date, id UInt64, c UInt64) Engine MergeTree partition by d order by pk settings ratio_of_defaults_for_sparse_serialization = 1.0;
 SELECT name, partition, formatReadableSize(sum(data_compressed_bytes) AS size) AS compressed, formatReadableSize(sum(data_uncompressed_bytes) AS usize) AS uncompressed, round(usize / size, 2) AS compr_rate, sum(rows) AS rows, count() AS part_count FROM system.projection_parts WHERE database = currentDatabase() and table = 'z' AND active GROUP BY name, partition ORDER BY size DESC;

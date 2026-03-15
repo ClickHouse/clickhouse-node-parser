@@ -1,3 +1,1 @@
-SELECT *
-FROM enum
-WHERE enum = 1;
+<Parse Error>

@@ -1,3 +1,10 @@
+CREATE TABLE defaults_on_defaults
+(
+    key UInt64
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT 1
 FROM defaults_on_defaults
 WHERE length(`Arr.C2`) = 0;

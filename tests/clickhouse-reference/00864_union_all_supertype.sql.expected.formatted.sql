@@ -1,3 +1,5 @@
+SET joined_subquery_requires_alias = 0;
+
 SELECT
     toTypeName(key),
     toTypeName(value)

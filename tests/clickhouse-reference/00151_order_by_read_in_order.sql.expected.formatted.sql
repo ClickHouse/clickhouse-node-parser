@@ -1,3 +1,6 @@
+-- Tags: stateful
+SET optimize_read_in_order = 1;
+
 SELECT CounterID
 FROM test.hits
 ORDER BY CounterID DESC

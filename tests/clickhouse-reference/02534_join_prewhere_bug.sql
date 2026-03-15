@@ -1,4 +1,7 @@
-
+CREATE TABLE test1 ( `col1` UInt64, `col2` Int8 ) ENGINE = MergeTree ORDER BY col1;
+CREATE TABLE test2 ( `col1` UInt64, `col3` Int16 ) ENGINE = MergeTree ORDER BY col1;
+SET join_use_nulls = 1;
+-- { echoOn }
 
 SELECT * FROM test1 LEFT JOIN test2 ON test1.col1 = test2.col1
 WHERE test2.col1 IS NULL

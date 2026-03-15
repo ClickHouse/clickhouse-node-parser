@@ -1,2 +1,1 @@
-SELECT c0::Int
-FROM v0;
+<Parse Error>

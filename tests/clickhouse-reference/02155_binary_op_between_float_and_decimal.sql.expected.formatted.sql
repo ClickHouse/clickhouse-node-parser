@@ -20,6 +20,17 @@ SELECT least(1.5, 1.0::Decimal32(5));
 
 SELECT greatest(1.5, 1.0::Decimal32(5));
 
+CREATE TABLE t
+(
+    d1 Decimal32(5),
+    d2 Decimal64(10),
+    d3 Decimal128(20),
+    d4 Decimal256(40),
+    f1 Float32,
+    f2 Float64
+)
+ENGINE = Memory;
+
 SELECT
     d1,
     f1,

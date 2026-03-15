@@ -1,3 +1,19 @@
+-- Tags: long, zookeeper, no-replicated-database, no-polymorphic-parts, no-random-merge-tree-settings, no-shared-merge-tree, no-async-insert
+-- Tag no-replicated-database: Fails due to additional replicas or shards
+-- no-shared-merge-tree: depends on structure in zookeeper of replicated merge tree
+-- no-async-insert: Test expects new part for each insert
+SET insert_keeper_fault_injection_probability = 0; -- disable fault injection; part ids are non-deterministic in case of insert retries
+
+-- cleanup code will perform extra Exists
+-- (so the .reference will not match)
+CREATE TABLE rmt
+(
+    n int
+)
+ENGINE = ReplicatedMergeTree('/test/01158/{database}/rmt', '1')
+ORDER BY n
+SETTINGS cleanup_delay_period = 86400, max_cleanup_delay_period = 86400, replicated_can_become_leader = 0;
+
 SELECT
     address,
     type,

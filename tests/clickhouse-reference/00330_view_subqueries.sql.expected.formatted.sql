@@ -1,5 +1,1 @@
-SELECT *
-FROM v1;
-
-SELECT *
-FROM v2;
+<Parse Error>

@@ -1,6 +1,16 @@
+CREATE TEMPORARY TABLE table
+(
+    x UInt8
+);
+
 SELECT *
 FROM table
 ORDER BY x ASC;
+
+CREATE TEMPORARY TABLE `FORMAT`
+(
+    x UInt8
+);
 
 SELECT *
 FROM `FORMAT`

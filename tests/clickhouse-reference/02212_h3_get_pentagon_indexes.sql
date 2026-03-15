@@ -1,3 +1,4 @@
+CREATE TABLE table1 (resolution UInt8) ENGINE = Memory;
 SELECT h3GetPentagonIndexes(resolution) AS indexes from table1 order by indexes;
 SELECT h3GetPentagonIndexes(20) AS indexes; -- { serverError ARGUMENT_OUT_OF_BOUND }
 -- tests for const cols

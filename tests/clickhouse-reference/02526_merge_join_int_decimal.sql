@@ -1,3 +1,7 @@
+CREATE TABLE foo(Id Int32, Val Int32) Engine=MergeTree PARTITION BY Val ORDER BY Id;
+CREATE TABLE foo1(Id Int32, Val Decimal32(9)) Engine=MergeTree PARTITION BY Val ORDER BY Id;
+CREATE TABLE foo_merge as foo ENGINE=Merge(currentDatabase(), '^foo');
+CREATE TABLE t2 (Id Int32, Val Int64, X UInt256) Engine=Memory;
 SELECT * FROM foo_merge WHERE Val = 3 AND Id = 3;
 SELECT count(), X FROM foo_merge JOIN t2 USING Val WHERE Val = 3 AND Id = 3 AND t2.X == 4 GROUP BY X;
 SELECT count(), X FROM foo_merge JOIN t2 USING Val WHERE Val = 3 AND (Id = 3 AND t2.X == 4) GROUP BY X;

@@ -1,3 +1,8 @@
+CREATE TEMPORARY TABLE decimal
+(
+    f dec(38, 38)
+);
+
 SELECT
     f + 1048575,
     f - 21,

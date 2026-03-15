@@ -1,4 +1,19 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+-- Tests that the query condition cache rejects conditions with non-deterministic functions
+SET allow_experimental_analyzer = 1;
+
+CREATE TABLE tab
+(
+    a Int64,
+    b Int64
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 SELECT '--- with move to PREWHERE';
+
+SET optimize_move_to_prewhere = true;
 
 SELECT count(*)
 FROM tab
@@ -8,3 +23,5 @@ FORMAT Null;
 
 SELECT count(*)
 FROM `system`.query_condition_cache;
+
+SET optimize_move_to_prewhere = false;

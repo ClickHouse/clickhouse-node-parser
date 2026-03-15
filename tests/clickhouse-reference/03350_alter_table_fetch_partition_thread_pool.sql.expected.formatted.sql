@@ -1,3 +1,17 @@
+CREATE TABLE data1
+(
+    key Int
+)
+ENGINE = ReplicatedMergeTree('/tables/{database}/{table}', 'r1')
+ORDER BY tuple();
+
+CREATE TABLE data2
+(
+    key Int
+)
+ENGINE = ReplicatedMergeTree('/tables/{database}/{table}', 'r1')
+ORDER BY tuple();
+
 SELECT
     'parts in data1',
     count()

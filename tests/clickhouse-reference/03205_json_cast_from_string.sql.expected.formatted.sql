@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SET enable_json_type = 1;
+
 SELECT materialize('{}')::JSON;
 
 SELECT materialize('{"a" : 42, "b" : "Hello"}')::JSON;

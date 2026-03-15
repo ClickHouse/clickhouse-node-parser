@@ -1,3 +1,10 @@
+CREATE TABLE test
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
 SELECT '-- count';
 
 SELECT

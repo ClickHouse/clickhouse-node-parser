@@ -1,2 +1,4 @@
+CREATE TABLE null_00481 (x UInt8) ENGINE = Null;
+CREATE VIEW null_view AS SELECT * FROM null_00481;
 SELECT * FROM null_00481;
 SELECT * FROM null_view;

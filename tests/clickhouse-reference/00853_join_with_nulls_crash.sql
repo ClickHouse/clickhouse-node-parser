@@ -1,3 +1,13 @@
+CREATE TABLE table_a (
+    event_id UInt64,
+    something String,
+    other Nullable(String)
+) ENGINE = MergeTree ORDER BY (event_id);
+CREATE TABLE table_b (
+    event_id UInt64,
+    something Nullable(String),
+    other String
+) ENGINE = MergeTree ORDER BY (event_id);
 SELECT s1.other, s2.other, count_a, count_b, toTypeName(s1.other), toTypeName(s2.other) FROM
     ( SELECT other, count() AS count_a FROM table_a GROUP BY other ) s1
 ALL FULL JOIN
@@ -16,6 +26,7 @@ ALL RIGHT JOIN
     ( SELECT something, count() AS count_b FROM table_b GROUP BY something ) s2
 ON s1.something = s2.something
 ORDER BY count_a DESC, s1.something, s2.something;
+SET joined_subquery_requires_alias = 0;
 SELECT something, count_a, count_b, toTypeName(something) FROM
     ( SELECT something, count() AS count_a FROM table_a GROUP BY something ) as s1
 ALL FULL JOIN

@@ -7,6 +7,15 @@ SELECT
     if(x = 0, 'x=0', 'x<>0')
 ORDER BY x ASC;
 
+CREATE TABLE mutation_delete_null_rows
+(
+    EventDate Date,
+    CounterID Nullable(String),
+    UserID Nullable(UInt32)
+)
+ENGINE = MergeTree()
+ORDER BY EventDate;
+
 SELECT
     *,
     UserID = 0 AS UserIDEquals0,

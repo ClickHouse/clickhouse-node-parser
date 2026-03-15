@@ -1,0 +1,2 @@
+create table data_r1 (key Int) engine=ReplicatedMergeTree('/tables/{database}', 'r1') order by tuple();
+create table data_r2 engine=ReplicatedMergeTree('/tables/{database}', 'r2') order by tuple();

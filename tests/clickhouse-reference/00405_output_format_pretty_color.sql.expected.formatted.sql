@@ -1,3 +1,9 @@
+SET output_format_pretty_display_footer_column_names = 0;
+
+SET output_format_pretty_color = 0;
+
+SET output_format_pretty_squash_consecutive_ms = 0;
+
 SELECT
     number AS hello,
     toString(number) AS world,
@@ -67,3 +73,7 @@ FROM `system`.numbers
 LIMIT 10
 SETTINGS max_block_size = 5
 FORMAT PrettySpaceNoEscapes;
+
+SET output_format_pretty_color = 1;
+
+SET output_format_pretty_color = 'auto';

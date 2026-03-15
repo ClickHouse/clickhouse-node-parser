@@ -1,3 +1,6 @@
+-- { echoOn }
+
+SET allow_experimental_nullable_tuple_type = 1;
 SELECT toTypeName(arrayElementOrNull([(1, 'a'), (2, 'b')], 1));
 SELECT toTypeName(arrayElementOrNull(CAST([(1, 'a'), NULL] AS Array(Nullable(Tuple(Int64, String)))), 1));
 SELECT toTypeName(arrayElementOrNull(CAST([(NULL, 'a'), (1, 'b')] AS Array(Tuple(Nullable(Int64), String))), 1));
@@ -157,6 +160,15 @@ FROM
     SELECT CAST([tuple(), tuple()] AS Array(Nullable(Tuple()))) AS arr, 3 AS idx
 ) ORDER BY tuple();
 SELECT arrayElementOrNull([(1, 'a'), (2, 'b')], 'x'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+CREATE TABLE test_array_tuple_mergetree
+(
+    id       UInt8,
+    arr      Array(Tuple(Int64, String)),
+    arr_null Array(Nullable(Tuple(Int64, String))),
+    idx      Int64
+)
+ENGINE = MergeTree
+ORDER BY id;
 SELECT
     id,
     arrayElementOrNull(arr, 1)        AS arr_1,
@@ -373,3 +385,4 @@ ORDER BY id;
 SELECT arrayElement([(1, 2)], NULL);
 SELECT arrayElementOrNull([(1, 2)], NULL);
 SELECT arrayElementOrNull([CAST(NULL AS Nullable(Tuple()))], NULL);
+SET allow_experimental_nullable_tuple_type = 0;

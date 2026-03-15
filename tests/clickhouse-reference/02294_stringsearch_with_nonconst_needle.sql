@@ -1,3 +1,7 @@
+create table non_const_needle
+  (id UInt32, haystack String, needle String)
+  engine = MergeTree()
+  order by id;
 select id, haystack, needle, like(haystack, needle)
   from non_const_needle
   order by id;

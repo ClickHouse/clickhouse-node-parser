@@ -1,5 +1,11 @@
 SELECT initializeAggregation('sumMap', [1, 2], [1, 2], [1, null]);
 
+CREATE TEMPORARY TABLE sum_map_overflow
+(
+    events Array(UInt8),
+    counts Array(UInt8)
+);
+
 SELECT
     [NULL],
     sumMapWithOverflow(events, [NULL], [[(NULL)]], counts)

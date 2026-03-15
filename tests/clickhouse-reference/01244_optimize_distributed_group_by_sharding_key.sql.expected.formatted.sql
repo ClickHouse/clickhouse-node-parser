@@ -1,5 +1,30 @@
+-- Tags: distributed
+-- TODO: correct testing with real unique shards
+SET optimize_distributed_group_by_sharding_key = 1;
+
+-- Some queries in this test require sorting after aggregation.
+SET max_bytes_before_external_group_by = 0;
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
+CREATE TABLE data_01247 AS `system`.numbers
+ENGINE = Memory();
+
+CREATE TABLE dist_01247 AS data_01247
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01247, number);
+
+-- since data is not inserted via distributed it will have duplicates
+-- (and this is how we ensure that this optimization will work)
+SET max_distributed_connections = 1;
+
+SET prefer_localhost_replica = 0;
+
+SET enable_positional_arguments = 0;
+
 SELECT *
 FROM dist_01247;
+
+SET optimize_skip_unused_shards = 1;
 
 SELECT
     count(),
@@ -199,6 +224,16 @@ FROM dist_01247
 GROUP BY number
 WITH TOTALS
 LIMIT 1;
+
+CREATE TABLE data_01247
+ENGINE = Memory() AS
+SELECT
+    number AS key,
+    0 AS value
+FROM numbers(2);
+
+CREATE TABLE dist_01247 AS data_01247
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01247, key);
 
 SELECT *
 FROM dist_01247

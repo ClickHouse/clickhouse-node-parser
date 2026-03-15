@@ -1,7 +1,10 @@
-
+set optimize_sorting_by_input_stream_properties=1;
+CREATE TABLE optimize_sorting (a UInt64, b UInt64) ENGINE MergeTree() ORDER BY tuple();
+-- { echoOn }
 -- order by for MergeTree w/o sorting key
 SELECT a, b from optimize_sorting order by a, b;
-
+CREATE TABLE optimize_sorting (a UInt64, b UInt64, c UInt64) ENGINE MergeTree() ORDER BY (a, b);
+-- { echoOn }
 SELECT a from optimize_sorting order by a;
 SELECT c from optimize_sorting order by c;
 -- queries with unary function in order by

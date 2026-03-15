@@ -1,3 +1,16 @@
+CREATE TABLE test
+(
+    t UInt8,
+    flag UInt8,
+    id UInt8
+)
+ENGINE = MergeTree
+ORDER BY (t, id)
+PARTITION BY t
+SETTINGS index_granularity = 8192;
+
+SET query_plan_filter_push_down = true;
+
 SELECT
     id,
     flag

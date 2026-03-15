@@ -1,3 +1,13 @@
+-- Tags: no-ordinary-database
+SET database_atomic_wait_for_drop_and_detach_synchronously = 0;
+
+CREATE TABLE `25400_dropped_tables`
+(
+    id Int32
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
 SELECT
     table,
     engine

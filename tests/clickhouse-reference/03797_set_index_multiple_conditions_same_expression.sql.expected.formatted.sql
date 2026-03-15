@@ -1,3 +1,12 @@
+CREATE TABLE test_set_index_multiple_conditions
+(
+    id Int64,
+    labels Map(String, String),
+    INDEX idx_labels mapKeys(labels) TYPE SET(0) GRANULARITY 1
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
 -- This query previously failed with:
 -- "Not found column mapKeys(labels) in block"
 SELECT id

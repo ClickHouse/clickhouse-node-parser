@@ -75,6 +75,12 @@ SELECT trimBoth('hello', 123); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT trimBoth('hello', materialize('a')); -- { serverError ILLEGAL_COLUMN }
 
+CREATE TABLE tab
+(
+    col FixedString(3)
+)
+ENGINE = Memory;
+
 SELECT trimRight(col, char(0))
 FROM tab;
 

@@ -1,3 +1,11 @@
+CREATE TABLE min_if
+(
+    arr Array(UInt8),
+    str String,
+    int Int32
+)
+ENGINE = Memory;
+
 SELECT minIf(arr, notEmpty(arr))
 FROM min_if;
 

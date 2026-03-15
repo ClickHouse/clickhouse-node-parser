@@ -1,3 +1,12 @@
+CREATE TABLE t_03203
+(
+    p UInt64,
+    v UInt64
+)
+ENGINE = MergeTree
+ORDER BY v
+PARTITION BY p;
+
 SELECT *
 FROM t_03203
 ORDER BY

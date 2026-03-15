@@ -1,3 +1,9 @@
+CREATE TEMPORARY TABLE t
+(
+    i UInt8,
+    x DateTime64(3, 'UTC')
+);
+
 SELECT *
 FROM t
 ORDER BY i ASC;

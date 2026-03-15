@@ -1,3 +1,24 @@
+CREATE TABLE test_table_join_1
+(
+    id UInt64,
+    value String
+)
+ENGINE = TinyLog;
+
+CREATE TABLE test_table_join_2
+(
+    id UInt64,
+    value String
+)
+ENGINE = TinyLog;
+
+CREATE TABLE test_table_join_3
+(
+    id UInt64,
+    value String
+)
+ENGINE = TinyLog;
+
 SELECT
     test_table_join_1.* APPLY(toString),
     test_table_join_2.* APPLY(toString),

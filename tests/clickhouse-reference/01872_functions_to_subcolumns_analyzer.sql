@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+SET optimize_functions_to_subcolumns = 1;
+CREATE TABLE t_func_to_subcolumns (id UInt64, arr Array(UInt64), n Nullable(String), m Map(String, UInt64))
+ENGINE = MergeTree ORDER BY tuple();
 SELECT id IS NULL, n IS NULL, n IS NOT NULL FROM t_func_to_subcolumns ORDER BY id;
 SELECT length(arr), empty(arr), notEmpty(arr), empty(n) FROM t_func_to_subcolumns ORDER BY id;
 SELECT mapKeys(m), mapValues(m) FROM t_func_to_subcolumns ORDER BY id;
@@ -6,4 +10,5 @@ SELECT count(id) FROM t_func_to_subcolumns;
 SELECT id, left.n IS NULL, right.n IS NULL FROM t_func_to_subcolumns AS left
 FULL JOIN (SELECT 1 AS id, 'qqq' AS n UNION ALL SELECT 3 AS id, 'www') AS right USING(id)
 ORDER BY id;
+CREATE TABLE t_tuple_null (t Tuple(null UInt32)) ENGINE = MergeTree ORDER BY tuple();
 SELECT t IS NULL, t.null FROM t_tuple_null;

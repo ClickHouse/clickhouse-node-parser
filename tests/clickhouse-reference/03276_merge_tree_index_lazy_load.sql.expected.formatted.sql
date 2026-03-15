@@ -1,3 +1,11 @@
+CREATE TABLE t_index_lazy_load
+(
+    a UInt64
+)
+ENGINE = MergeTree
+ORDER BY a
+SETTINGS index_granularity = 4, index_granularity_bytes = '10M', primary_key_lazy_load = 1, use_primary_key_cache = 0;
+
 SELECT
     name,
     primary_key_bytes_in_memory

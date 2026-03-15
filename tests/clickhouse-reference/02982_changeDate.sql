@@ -5,6 +5,8 @@ SELECT changeYear(toDate('2000-01-01'), 2000, 1); -- { serverError NUMBER_OF_ARG
 SELECT changeYear(1999, 2000); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT changeYear(toDate('2000-01-01'), 'abc'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT changeYear(toDate('2000-01-01'), 1.5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+-- Disable timezone randomization
+SET session_timezone='CET';
 SELECT '-- Date';
 SELECT changeYear(toDate('2000-01-01'), 2001);
 SELECT changeYear(toDate('2000-01-01'), 1800); -- out-of-bounds

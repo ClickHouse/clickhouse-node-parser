@@ -1,3 +1,9 @@
+CREATE TABLE t_lwu_lock_profile_events (id UInt64)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lwu_lock_profile_events', '1')
+ORDER BY id
+SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
+SET enable_lightweight_update = 1;
+SET lightweight_delete_mode = 'lightweight_update_force';
 SELECT count() FROM t_lwu_lock_profile_events;
 SELECT ProfileEvents['PatchesAcquireLockTries'], ProfileEvents['PatchesAcquireLockMicroseconds'] > 0
 FROM system.query_log

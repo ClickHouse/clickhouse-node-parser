@@ -1,5 +1,69 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_duplicate_partition_keys"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c1"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "sipHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c0"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(c1, c1, sipHash64(c0))"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 1: Duplicate column names in partition expression"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -83,6 +147,81 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_duplicate_partition_keys2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "sipHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(b, c, b, sipHash64(a))"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 2: More complex duplicate partition expression"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -112,6 +251,64 @@
     },
     "leadingComments": [
       "-- This should also work without crashing"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_triple_duplicate"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      ],
+      "source": "(x, x, x)"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 3: Simple table with duplicate keys in different positions"
     ]
   },
   {
@@ -147,6 +344,87 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_mixed_duplicates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "create_date",
+        "type": "Date"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toYYYYMM",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "create_date"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "sipHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(id, toYYYYMM(create_date), id, sipHash64(name))"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 4: Mixed expression duplicates with date functions"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -174,6 +452,81 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_type_duplicates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uint_col",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "int_col",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "str_col",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "uint_col"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "int_col"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "uint_col"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "str_col"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "uint_col"
+          ]
+        }
+      ],
+      "source": "(uint_col, int_col, uint_col, str_col, uint_col)"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str_col"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 5: Different data types with duplicates"
+    ]
   },
   {
     "kind": "select",
@@ -205,6 +558,82 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_hash_duplicates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "sipHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "data"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "data"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "sipHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "data"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(sipHash64(data), cityHash64(data), sipHash64(data))"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 6: Complex hash function duplicates"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -234,6 +663,77 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_extreme_repeats"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "UInt64"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      ],
+      "source": "(x, x, x, x, x, x)"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 7: Extreme case - single field repeated many times"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -261,6 +761,64 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_performance_duplicates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "tuple",
+      "elements": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        }
+      ],
+      "source": "(category, category, category)"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 8: Performance test with moderate data"
+    ]
   },
   {
     "kind": "select",

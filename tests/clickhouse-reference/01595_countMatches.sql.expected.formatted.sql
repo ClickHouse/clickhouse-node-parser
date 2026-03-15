@@ -1,3 +1,5 @@
+SET count_matches_stop_at_empty_match = 0;
+
 SELECT countMatches('', 'foo');
 
 SELECT countMatches('foo', '');
@@ -59,6 +61,8 @@ SELECT countMatches('  foo bar   ', '[a-zA-Z]*');
 SELECT countMatches(toFixedString('  foo bar   ', 12), '[a-zA-Z]*');
 
 SELECT countMatches(materialize(toFixedString('  foo bar   ', 12)), '[a-zA-Z]*');
+
+SET count_matches_stop_at_empty_match = 1;
 
 SELECT countMatches('foo bar   ', '[a-zA-Z]*');
 

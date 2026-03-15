@@ -1,3 +1,9 @@
+CREATE TABLE test_enum_string_functions
+(
+    e Enum('a'=1, 'b'=2)
+)
+ENGINE = TinyLog;
+
 SELECT *
 FROM test_enum_string_functions
 WHERE like(e, '%abc%');
@@ -33,6 +39,12 @@ FROM test_enum_string_functions;
 
 SELECT hasTokenOrNull(e, 'a')
 FROM test_enum_string_functions;
+
+CREATE TABLE jsons
+(
+    json Enum('a', '{"a":1}')
+)
+ENGINE = Memory;
 
 SELECT simpleJSONHas(json, 'foo') AS res
 FROM jsons

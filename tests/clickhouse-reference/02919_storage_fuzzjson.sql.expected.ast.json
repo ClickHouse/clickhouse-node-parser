@@ -1,5 +1,29 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02919_test_table_noarg"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "FuzzJSON",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{}"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,6 +53,35 @@
           }
         }
       }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02919_test_table_valid_args"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "FuzzJSON",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"pet\":\"rat\"}"
+        },
+        {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      ]
     }
   },
   {
@@ -64,6 +117,35 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02919_test_table_reuse_args"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "FuzzJSON",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\n      \"name\": \"Jane Doe\",\n      \"age\": 30,\n      \"city\": \"New York\",\n      \"contacts\": {\n        \"email\": \"jane@example.com\",\n        \"phone\": \"+1234567890\"\n      },\n      \"skills\": [\n        \"JavaScript\",\n        \"Python\",\n        {\n          \"frameworks\": [\"React\", \"Django\"]\n        }\n      ],\n      \"projects\": [\n        {\"name\": \"Project A\", \"status\": \"completed\"},\n        {\"name\": \"Project B\", \"status\": \"in-progress\"}\n      ]\n    }"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "12345"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -93,6 +175,72 @@
           }
         }
       }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02919_test_table_invalid_col_type"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": "Nullable(Int64)"
+      }
+    ],
+    "engine": {
+      "name": "FuzzJSON",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"pet\":\"rat\"}"
+        },
+        {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02919_test_multi_col"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "str2",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "FuzzJSON",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"pet\":\"rat\"}"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "999"
+        }
+      ]
     }
   },
   {

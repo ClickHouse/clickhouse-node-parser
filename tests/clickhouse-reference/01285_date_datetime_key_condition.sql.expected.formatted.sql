@@ -1,3 +1,10 @@
+CREATE TABLE date_datetime_key_condition
+(
+    dt DateTime
+)
+ENGINE = MergeTree()
+ORDER BY dt;
+
 -- partial
 SELECT groupArray(dt)
 FROM date_datetime_key_condition

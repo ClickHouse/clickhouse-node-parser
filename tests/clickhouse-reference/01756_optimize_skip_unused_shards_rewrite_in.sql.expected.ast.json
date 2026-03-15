@@ -1,5 +1,129 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- separate log entry for localhost queries"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_optimize_skip_unused_shards",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_skip_unused_shards",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_skip_unused_shards_rewrite_in",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_01756"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "one"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "intHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dummy"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- SELECT",
+      "--     intHash64(0) % 2,",
+      "--     intHash64(2) % 2",
+      "-- ┌─modulo(intHash64(0), 2)─┬─modulo(intHash64(2), 2)─┐",
+      "-- │                       0 │                       1 │",
+      "-- └─────────────────────────┴─────────────────────────┘"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -173,6 +297,24 @@
         },
         "direction": "ASC"
       }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_skip_unused_shards_rewrite_in",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "--",
+      "-- w/ optimize_skip_unused_shards_rewrite_in=1",
+      "--"
     ]
   },
   {
@@ -702,6 +844,23 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01756_signed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "Int"
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
   },
   {
     "kind": "select",
@@ -1390,6 +1549,78 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01756_str"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_01756_str"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "data_01756_str"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "data_01756_str"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "cityHash64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "key"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- SELECT",
+      "--     cityHash64(0) % 2,",
+      "--     cityHash64(2) % 2",
+      "--",
+      "-- ┌─modulo(cityHash64(0), 2)─┬─modulo(cityHash64(2), 2)─┐",
+      "-- │                        0 │                        1 │",
+      "-- └──────────────────────────┴──────────────────────────┘"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1506,6 +1737,47 @@
     "trailingComments": [
       "-- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }"
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_01756_column"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "one"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dummy"
+          ]
+        }
+      ]
+    }
   },
   {
     "kind": "select",

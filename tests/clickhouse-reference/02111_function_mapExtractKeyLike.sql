@@ -1,3 +1,4 @@
+CREATE TABLE map_extractKeyLike_test (id UInt32, map Map(String, String)) Engine=MergeTree() ORDER BY id settings index_granularity=2;
 SELECT * FROM map_extractKeyLike_test ORDER BY id;
 SELECT 'The results of query: SELECT id, mapExtractKeyLike(map, \'P1%\') FROM map_extractKeyLike_test ORDER BY id;';
 SELECT id, mapExtractKeyLike(map, 'P1%') FROM map_extractKeyLike_test ORDER BY id;

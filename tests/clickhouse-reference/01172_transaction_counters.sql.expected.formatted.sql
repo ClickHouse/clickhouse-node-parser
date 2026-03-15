@@ -1,4 +1,15 @@
+CREATE TABLE txn_counters
+(
+    n Int64,
+    creation_tid DEFAULT transactionID()
+)
+ENGINE = MergeTree
+ORDER BY n
+SETTINGS old_parts_lifetime = 3600;
+
 SELECT transactionID();
+
+SET throw_on_unsupported_query_inside_transaction = 0;
 
 SELECT
     1,

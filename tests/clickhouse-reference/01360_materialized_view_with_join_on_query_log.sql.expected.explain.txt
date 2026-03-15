@@ -1,8 +1,70 @@
+CreateQuery expected_times (children 3)
+ Identifier expected_times
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration QUERY_GROUP_ID (children 1)
+    DataType String
+   ColumnDeclaration max_query_duration_ms (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Memory
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
    ExpressionList (children 1)
     Literal UInt64_1
+
+CreateQuery slow_log (children 3)
+ Identifier slow_log
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (alias ql) (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 3)
+           ExpressionList (children 2)
+            Function extract (alias QUERY_GROUP_ID) (children 1)
+             ExpressionList (children 2)
+              Identifier query
+              Literal '/\\*\\s*QUERY_GROUP_ID:(.*?)\\s*\\*/'
+            Asterisk
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier system.query_log
+           Function and (children 1)
+            ExpressionList (children 2)
+             Function notEquals (children 1)
+              ExpressionList (children 2)
+               Identifier type
+               Literal UInt64_1
+             Function greaterOrEquals (children 1)
+              ExpressionList (children 2)
+               Identifier event_date
+               Function yesterday (children 1)
+                ExpressionList
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier expected_times
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier QUERY_GROUP_ID
+    Function greater (children 1)
+     ExpressionList (children 2)
+      Identifier query_duration_ms
+      Identifier max_query_duration_ms
+ ViewTargets (children 1)
+  Storage definition (children 1)
+   Function Memory
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -16,6 +78,8 @@ SelectWithUnionQuery (children 1)
        Function sleep (children 1)
         ExpressionList (children 1)
          Literal Float64_0.52
+
+Set
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

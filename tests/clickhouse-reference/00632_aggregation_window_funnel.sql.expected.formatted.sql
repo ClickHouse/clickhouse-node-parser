@@ -1,3 +1,10 @@
+CREATE TABLE funnel_test
+(
+    timestamp UInt32,
+    event UInt32
+)
+ENGINE = Memory;
+
 SELECT 1 = windowFunnel(10000)(timestamp, event = 1000)
 FROM funnel_test;
 
@@ -22,6 +29,14 @@ FROM funnel_test;
 SELECT 5 = windowFunnel(4)(timestamp, event = 1003, event = 1004, event = 1005, event = 1006, event = 1007)
 FROM funnel_test;
 
+CREATE TABLE funnel_test2
+(
+    uid UInt32 DEFAULT 1,
+    timestamp DateTime,
+    event UInt32
+)
+ENGINE = Memory;
+
 SELECT 5 = windowFunnel(4)(timestamp, event = 1003, event = 1004, event = 1005, event = 1006, event = 1007)
 FROM funnel_test2;
 
@@ -34,6 +49,14 @@ FROM funnel_test2;
 SELECT 4 = windowFunnel(4)(timestamp, event <= 1007, event >= 1002, event <= 1006, event >= 1004)
 FROM funnel_test2;
 
+CREATE TABLE funnel_test_u64
+(
+    uid UInt32 DEFAULT 1,
+    timestamp UInt64,
+    event UInt32
+)
+ENGINE = Memory;
+
 SELECT 5 = windowFunnel(4)(timestamp, event = 1003, event = 1004, event = 1005, event = 1006, event = 1007)
 FROM funnel_test_u64;
 
@@ -45,12 +68,29 @@ FROM funnel_test_u64;
 
 SELECT 4 = windowFunnel(4)(timestamp, event <= 1007, event >= 1002, event <= 1006, event >= 1004)
 FROM funnel_test_u64;
+
+CREATE TABLE funnel_test_strict
+(
+    timestamp UInt32,
+    event UInt32
+)
+ENGINE = Memory;
 
 SELECT 6 = windowFunnel(10000, 'strict_deduplication')(timestamp, event = 1000, event = 1001, event = 1002, event = 1003, event = 1004, event = 1005, event = 1006)
 FROM funnel_test_strict;
 
 SELECT 7 = windowFunnel(10000)(timestamp, event = 1000, event = 1001, event = 1002, event = 1003, event = 1004, event = 1005, event = 1006)
 FROM funnel_test_strict;
+
+CREATE TABLE funnel_test_strict_order
+(
+    dt DateTime,
+    user int,
+    event String
+)
+ENGINE = MergeTree()
+ORDER BY user
+PARTITION BY dt;
 
 SELECT
     user,
@@ -84,9 +124,27 @@ WHERE user = 7
 GROUP BY user
 FORMAT JSONCompactEachRow;
 
+CREATE TABLE strict_BiteTheDDDD
+(
+    ts UInt64,
+    event String
+)
+ENGINE = Log();
+
 SELECT 3 = windowFunnel(86400, 'strict_deduplication')(ts, event = 'a', event = 'b', event = 'c', event = 'd')
 FROM strict_BiteTheDDDD
 FORMAT JSONCompactEachRow;
+
+CREATE TABLE funnel_test_non_null
+(
+    dt DateTime,
+    u int,
+    a Nullable(String),
+    b Nullable(String)
+)
+ENGINE = MergeTree()
+ORDER BY u
+PARTITION BY dt;
 
 SELECT
     u,
@@ -129,6 +187,13 @@ GROUP BY u
 ORDER BY u ASC
 FORMAT JSONCompactEachRow;
 
+CREATE TABLE funnel_test_strict_increase
+(
+    timestamp UInt32,
+    event UInt32
+)
+ENGINE = Memory;
+
 SELECT 5 = windowFunnel(10000)(timestamp, event = 1000, event = 1001, event = 1002, event = 1003, event = 1004)
 FROM funnel_test_strict_increase;
 
@@ -143,6 +208,14 @@ FROM funnel_test_strict_increase;
 
 SELECT 1 = windowFunnel(10000, 'strict_increase')(timestamp, event = 1004, event = 1004, event = 1004)
 FROM funnel_test_strict_increase;
+
+CREATE TABLE funnel_test2
+(
+    event_ts UInt32,
+    result String,
+    uid UInt32
+)
+ENGINE = Memory;
 
 SELECT
     uid,
@@ -170,6 +243,14 @@ WHERE event_ts >= 0
     AND event_ts <= 300
 GROUP BY uid
 ORDER BY uid ASC;
+
+CREATE TABLE funnel_test_reentry
+(
+    uid Int32,
+    dt UInt32,
+    event String
+)
+ENGINE = Memory;
 
 SELECT
     uid,

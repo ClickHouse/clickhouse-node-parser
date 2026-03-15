@@ -1,3 +1,11 @@
+CREATE TABLE lc_perm
+(
+    val UInt32,
+    str LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY val;
+
 SELECT *
 FROM lc_perm
 ORDER BY val ASC;

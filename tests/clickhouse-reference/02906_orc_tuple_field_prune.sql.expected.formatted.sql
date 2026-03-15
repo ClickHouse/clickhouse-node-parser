@@ -1,3 +1,9 @@
+-- Tags: no-fasttest
+SET engine_file_truncate_on_insert = 1;
+
+SET flatten_nested = 0;
+
+-- { echoOn }
 -- Test primitive types
 SELECT
     int64_column,

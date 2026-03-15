@@ -1,3 +1,20 @@
+-- Tags: no-fasttest, no-parallel
+SET output_format_parquet_row_group_size = 100;
+
+SET input_format_null_as_default = 1;
+
+SET engine_file_truncate_on_insert = 1;
+
+SET optimize_or_like_chain = 0;
+
+SET max_block_size = 100000;
+
+SET max_insert_threads = 1;
+
+SET input_format_parquet_bloom_filter_push_down = 0;
+
+SET input_format_parquet_page_filter_push_down = 0;
+
 SELECT
     count(),
     sum(number)

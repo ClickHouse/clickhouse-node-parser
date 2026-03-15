@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+SET join_algorithm = 'hash';
+CREATE TABLE t1 (`id` Int32, key String, key2 String) ENGINE = MergeTree ORDER BY id SETTINGS index_granularity=8192;
+CREATE TABLE t2 (`id` Int32, key String, key2 String) ENGINE = MergeTree ORDER BY id SETTINGS index_granularity=8192;
 SELECT
     t1.key,
     t1.key2
@@ -24,6 +28,10 @@ INNER JOIN
     FROM system.one
 ) AS c USING (dummy)
 SETTINGS query_plan_use_new_logical_join_step = true, query_plan_convert_join_to_in = true;
+-- check type, modified from 02988_join_using_prewhere_pushdown
+SET allow_suspicious_low_cardinality_types = 1;
+CREATE TABLE t (`id` UInt16, `u` LowCardinality(Int32), `s` LowCardinality(String))
+ENGINE = MergeTree ORDER BY id;
 SELECT
     u,
     s
@@ -35,6 +43,8 @@ INNER JOIN
 ) AS t1 USING (u)
 FORMAT Null
 SETTINGS query_plan_use_new_logical_join_step = true, query_plan_convert_join_to_in = true;
+CREATE TABLE v1 ( id Int32 ) ENGINE = MergeTree() ORDER BY id;
+CREATE TABLE v2 ( value Int32 ) ENGINE = MergeTree() ORDER BY value;
 SELECT * FROM v1 AS t1
 JOIN v1 AS t2 USING (id)
 CROSS JOIN v2 AS n1;

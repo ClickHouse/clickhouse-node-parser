@@ -1,5 +1,10 @@
+CREATE TABLE IF NOT EXISTS test_0 (a DateTime64(0)) engine = MergeTree order by a;
 SELECT * FROM test_0 ORDER BY a;
+CREATE TABLE IF NOT EXISTS test_2 (a DateTime64(2)) engine = MergeTree order by a;
 SELECT * FROM test_2 ORDER BY a;
+CREATE TABLE IF NOT EXISTS test_3 (a DateTime64(3)) engine = MergeTree order by a;
 SELECT * FROM test_3 ORDER BY a;
+CREATE TABLE IF NOT EXISTS test_6 (a DateTime64(6)) engine = MergeTree order by a;
 SELECT * FROM test_6 ORDER BY a;
+CREATE TABLE IF NOT EXISTS test_9 (a DateTime64(6)) engine = MergeTree order by a;
 SELECT * FROM test_9 ORDER BY a;

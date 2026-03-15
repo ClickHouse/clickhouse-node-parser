@@ -1,6 +1,1 @@
-SELECT *
-FROM dst;
-
-SELECT *
-FROM dst
-ORDER BY `ALL` ASC;
+<Parse Error>

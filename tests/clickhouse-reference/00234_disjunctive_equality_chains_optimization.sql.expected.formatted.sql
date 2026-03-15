@@ -1,3 +1,10 @@
+CREATE TABLE IF NOT EXISTS foo_00234
+(
+    id UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT
     sum(id = 3
     OR id = 1

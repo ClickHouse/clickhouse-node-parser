@@ -1,2 +1,7 @@
+CREATE TABLE test_not_found_column_nothing
+(
+    col001 UInt8,
+    col002 UInt8
+) Engine=MergeTree ORDER BY tuple() PARTITION BY col001 % 3;
 SELECT _part, count() FROM test_not_found_column_nothing PREWHERE col001 % 3 != 0 GROUP BY _part ORDER BY _part;
 SELECT _part FROM test_not_found_column_nothing PREWHERE col001 = 0;

@@ -1,3 +1,14 @@
+CREATE TABLE rmt
+(
+    n int,
+    m int
+)
+ENGINE = ReplicatedMergeTree('/test/02439/{shard}/{database}', '{replica}')
+ORDER BY n
+PARTITION BY n;
+
+SET optimize_throw_if_noop = 1;
+
 SELECT sleepEachRow(3) AS higher_probability_of_reproducing_the_issue
 FORMAT Null;
 

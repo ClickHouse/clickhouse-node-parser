@@ -1,3 +1,36 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE test1
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE test2
+(
+    a UInt64,
+    c UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE test3
+(
+    a UInt64,
+    d UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE test_merge
+(
+    a UInt64,
+    b UInt64,
+    c UInt64,
+    d UInt64,
+    e UInt64
+)
+ENGINE = Merge(database(), 'test');
+
 SELECT a
 FROM test_merge
 ORDER BY `all` ASC;

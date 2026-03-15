@@ -1,3 +1,5 @@
+create table a (x Int8) engine Memory;
+create table b empty as a;
 SELECT '--';
 SELECT NOT (1);
 SELECT formatQuery('SELECT NOT 1');

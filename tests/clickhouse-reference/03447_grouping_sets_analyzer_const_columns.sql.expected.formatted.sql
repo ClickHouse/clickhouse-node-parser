@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     grouping(key_a),
     grouping(key_b),

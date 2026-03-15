@@ -1,3 +1,5 @@
+SET optimize_group_by_function_keys = 0;
+
 SELECT
     number,
     grouping(number, number % 2, number % 3) = 6
@@ -7,6 +9,7 @@ GROUP BY
     number % 2
 ORDER BY number ASC; -- { serverError BAD_ARGUMENTS }
 
+-- { echoOn }
 SELECT
     number,
     grouping(number, number % 2) = 3

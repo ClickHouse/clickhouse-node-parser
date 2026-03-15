@@ -1,3 +1,11 @@
+CREATE TABLE tbl_repr
+(
+    ts DateTime,
+    x String
+)
+ENGINE = MergeTree
+ORDER BY ts;
+
 SELECT *
 FROM (
         SELECT

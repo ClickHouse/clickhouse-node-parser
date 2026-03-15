@@ -1,0 +1,12 @@
+-- Tags: no-asan, no-tsan, no-msan, no-ubsan, no-sanitize-coverage, no-parallel-replicas, no-flaky-check
+
+SET max_threads=2;
+SET max_insert_threads=2;
+SET parallel_view_processing=1;
+CREATE TABLE 03633_mv_src (key Int) Engine=MergeTree ORDER BY ();
+CREATE TABLE 03633_mv_dst (key Int) Engine=MergeTree ORDER BY ();
+CREATE MATERIALIZED VIEW 03633_mv TO 03633_mv_dst AS SELECT * FROM 03633_mv_src;
+SET deduplicate_blocks_in_dependent_materialized_views=0;
+SET materialized_views_squash_parallel_inserts=1;
+SET materialized_views_squash_parallel_inserts=0;
+SET deduplicate_blocks_in_dependent_materialized_views=1;

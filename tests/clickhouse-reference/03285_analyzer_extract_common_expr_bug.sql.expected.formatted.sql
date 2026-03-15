@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT a
 FROM numbers(10)
 GROUP BY (number > 10)

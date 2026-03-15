@@ -1,3 +1,11 @@
+CREATE TABLE t2
+(
+    s String,
+    x Array(UInt8),
+    k UInt64
+)
+ENGINE = Join(`ANY`, `LEFT`, k);
+
 SELECT
     k,
     s

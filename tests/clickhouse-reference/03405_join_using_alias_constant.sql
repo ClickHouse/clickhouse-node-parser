@@ -1,3 +1,9 @@
+SET allow_suspicious_low_cardinality_types = 1;
+SET enable_analyzer = 1;
+CREATE TABLE t1 (`a`  UInt64, `b` Int32 ALIAS 1) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE t1lc (`a`  UInt64, `b` LowCardinality(Int32) ALIAS 1) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE t2 (`a` UInt64, `b` Nullable(Int64) ) ENGINE = MergeTree ORDER BY tuple();
+CREATE TABLE t2lc (`a` UInt64, `b` LowCardinality(Nullable(Int64)) ) ENGINE = MergeTree ORDER BY tuple();
 SELECT b FROM t1 JOIN t2 USING (b) ORDER BY ALL;
 SELECT b FROM t1lc JOIN t2lc USING (b) ORDER BY ALL;
 SELECT b FROM t1lc JOIN t2 USING (b) ORDER BY ALL;

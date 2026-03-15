@@ -1,3 +1,13 @@
+-- Tags: use-rocksdb
+CREATE TABLE dict
+(
+    key UInt64,
+    value String
+)
+ENGINE = EmbeddedRocksDB
+PRIMARY KEY key;
+
+-- { echoOn }
 SELECT count()
 FROM dict
 SETTINGS
@@ -9,6 +19,8 @@ FROM dict
 SETTINGS
     optimize_trivial_approximate_count_query = 1,
     max_rows_to_read = 1;
+
+SET optimize_trivial_approximate_count_query = 1;
 
 SELECT
     total_rows,

@@ -1,3 +1,5 @@
+SET session_timezone='Europe/Amsterdam';
+CREATE TABLE with_fill_staleness (a DateTime, b DateTime, c UInt64) ENGINE = MergeTree ORDER BY a;
 SELECT a, c, 'original' as original FROM with_fill_staleness ORDER BY a ASC WITH FILL INTERPOLATE (c);
 SELECT a, c, 'original' as original FROM with_fill_staleness ORDER BY a ASC WITH FILL STALENESS INTERVAL 1 SECOND INTERPOLATE (c);
 SELECT a, c, 'original' as original FROM with_fill_staleness ORDER BY a ASC WITH FILL STALENESS INTERVAL 3 SECOND INTERPOLATE (c);

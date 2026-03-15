@@ -1,3 +1,12 @@
+CREATE TABLE arrays_test
+(
+    s String,
+    arr1 Array(UInt8),
+    map1 Map(UInt8, String),
+    map2 Map(UInt8, String)
+)
+ENGINE = Memory;
+
 SELECT
     s,
     arr1,

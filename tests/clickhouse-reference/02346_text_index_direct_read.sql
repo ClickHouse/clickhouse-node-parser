@@ -1,3 +1,17 @@
+-- Tags: no-parallel, no-parallel-replicas
+-- Tag no-parallel -- due to access to the system.text_log
+-- Tag no-parallel-replicas -- direct read is not compatible with parallel replicas
+
+SET log_queries = 1;
+-- Affects the number of read rows.
+SET enable_full_text_index = 1;
+SET use_skip_indexes_on_data_read = 1;
+SET query_plan_direct_read_from_text_index = 1;
+SET max_rows_to_read = 0; -- system.text_log can be really big
+SET enable_analyzer = 0; -- To produce consistent explain outputs
+CREATE TABLE tab(k UInt64, text String, INDEX idx(text) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1)
+            ENGINE = MergeTree() ORDER BY k
+            SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';
 ----------------------------------------------------
 
 SELECT 'Test hasToken:', count() FROM tab WHERE hasToken(text, 'Alick');

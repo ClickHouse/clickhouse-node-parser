@@ -1,3 +1,10 @@
+CREATE TABLE t_subcolumns_join
+(
+    id UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT count()
 FROM
     (

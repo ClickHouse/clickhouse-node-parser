@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     number,
     COUNT() OVER (PARTITION BY number % 3) AS partition_count

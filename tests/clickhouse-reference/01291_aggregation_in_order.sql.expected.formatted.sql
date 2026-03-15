@@ -1,3 +1,15 @@
+SET optimize_aggregation_in_order = 1;
+
+CREATE TABLE pk_order
+(
+    a UInt64,
+    b UInt64,
+    c UInt64,
+    d UInt64
+)
+ENGINE = MergeTree()
+ORDER BY (a, b);
+
 -- Order after group by in order is determined
 SELECT
     a,
@@ -43,6 +55,19 @@ SELECT
 FROM pk_order
 GROUP BY negate(a)
 ORDER BY negate(a) ASC;
+
+CREATE TABLE pk_order
+(
+    d DateTime,
+    a Int32,
+    b Int32
+)
+ENGINE = MergeTree
+ORDER BY (d, a)
+PARTITION BY toDate(d)
+SETTINGS index_granularity = 1;
+
+SET max_block_size = 1;
 
 SELECT
     d,

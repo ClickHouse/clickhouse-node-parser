@@ -1,3 +1,38 @@
+-- Tags: shard
+-- make the order static
+SET max_threads = 1;
+
+-- data should be inserted into Distributed table synchronously
+SET distributed_foreground_insert = 1;
+
+CREATE TABLE mem1
+(
+    key Int
+)
+ENGINE = Memory();
+
+CREATE TABLE dist_1 AS mem1
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), mem1);
+
+CREATE TABLE mem2
+(
+    key Int
+)
+ENGINE = Memory();
+
+CREATE TABLE dist_2 AS mem2
+ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), mem2);
+
+CREATE TABLE mem3
+(
+    key Int,
+    _shard_num String
+)
+ENGINE = Memory();
+
+CREATE TABLE dist_3 AS mem3
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), mem3);
+
 SELECT *
 FROM remote('127.0.0.1', `system`.one);
 

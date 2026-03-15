@@ -51,6 +51,14 @@ FROM (
         SELECT bech32Decode(bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'))) AS tup
     );
 
+CREATE TABLE hex_data
+(
+    hrp String,
+    data String,
+    witver UInt8
+)
+ENGINE = Memory;
+
 -- test const hrp with column data
 SELECT bech32Encode('bc', unhex(data))
 FROM hex_data
@@ -65,6 +73,16 @@ LIMIT 1;
 SELECT bech32Encode(hrp, unhex(data), 1)
 FROM hex_data
 LIMIT 1;
+
+CREATE TABLE bech32_test
+(
+    hrp String,
+    data String,
+    hrp_fixed FixedString(4),
+    data_fixed FixedString(50),
+    witver UInt8
+)
+ENGINE = Memory;
 
 SELECT
     bech32Encode(hrp, unhex(data)) AS enc,
@@ -153,6 +171,19 @@ SELECT
 FROM (
         SELECT bech32Decode('b1w508dfqejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5xgqsaanm') AS tup
     );
+
+CREATE TABLE addresses
+(
+    address String
+)
+ENGINE = Memory;
+
+CREATE TABLE bech32_test
+(
+    address String,
+    address_fixed FixedString(45)
+)
+ENGINE = Memory;
 
 SELECT
     address,

@@ -1,3 +1,4 @@
+CREATE TABLE merge_tree (d Date) ENGINE = MergeTree ORDER BY d PARTITION BY d;
 SELECT 1, * FROM merge_tree ORDER BY d;
 SELECT 3, * FROM merge_tree ORDER BY d;
 SELECT 4, * FROM merge_tree ORDER BY d;

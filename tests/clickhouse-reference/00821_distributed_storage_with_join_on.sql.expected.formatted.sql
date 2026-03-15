@@ -1,3 +1,9 @@
+CREATE TABLE table1 AS `system`.`columns`
+ENGINE = Distributed('test_shard_localhost', `system`, `columns`);
+
+CREATE TABLE table2 AS `system`.tables
+ENGINE = Distributed('test_shard_localhost', `system`, tables);
+
 SELECT 1
 FROM
     table1 AS T1

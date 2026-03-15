@@ -1,3 +1,19 @@
+CREATE TABLE t
+(
+    x String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE nt
+(
+    x Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SET join_use_nulls = 1;
+
 SELECT
     'n rj n',
     t1.x,

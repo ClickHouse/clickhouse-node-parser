@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT count(*)
 FROM
 (
@@ -10,6 +12,7 @@ ARRAY JOIN
     a1
 SETTINGS enable_unaligned_array_join = 1
 ;
+
 SELECT count(*)
 FROM
 (

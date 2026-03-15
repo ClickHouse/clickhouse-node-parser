@@ -1,3 +1,4 @@
+CREATE TABLE to_insert (value UInt64) ENGINE = Memory();
 SELECT * FROM table_that_do_not_exists; -- { serverError UNKNOWN_TABLE }
 SELECT throwIf(1); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 SELECT normalizeQuery(query), type, ProfileEvents['FailedSelectQuery'], ProfileEvents['FailedInsertQuery']

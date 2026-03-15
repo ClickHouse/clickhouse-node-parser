@@ -1,3 +1,5 @@
+SET schema_inference_use_cache_for_file = 0;
+
 SELECT
     number AS x,
     number % 3 AS y,

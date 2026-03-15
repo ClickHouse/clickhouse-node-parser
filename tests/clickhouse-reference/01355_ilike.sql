@@ -35,3 +35,5 @@ SELECT 'ощЩЁё' ILIKE '%Щ%Ё';
 SELECT 'Щущпандер' ILIKE '%щп%е%';
 SELECT 'ощщЁё' ILIKE '%щ%';
 SELECT 'ощЩЁё' ILIKE '%ё%';
+CREATE TABLE test1 (x UInt8) ENGINE = Memory;
+CREATE TABLE test2 (x UInt8) ENGINE = Memory;

@@ -1,3 +1,12 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE testdata
+(
+    `1` String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT *
 FROM (
         SELECT

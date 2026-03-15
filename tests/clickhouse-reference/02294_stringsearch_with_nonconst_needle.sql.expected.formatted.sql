@@ -1,3 +1,12 @@
+CREATE TABLE non_const_needle
+(
+    id UInt32,
+    haystack String,
+    needle String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
 SELECT
     id,
     haystack,

@@ -1,5 +1,81 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03031_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_1",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_2",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_3",
+        "type": "String"
+      },
+      {
+        "kind": "indexDef",
+        "name": "value_1_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_1"
+          ]
+        },
+        "indexType": "bloom_filter",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "value_2_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_2"
+          ]
+        },
+        "indexType": "ngrambf_v1(3, 512, 2, 0)",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "value_3_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_3"
+          ]
+        },
+        "indexType": "tokenbf_v1(512, 3, 0)",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

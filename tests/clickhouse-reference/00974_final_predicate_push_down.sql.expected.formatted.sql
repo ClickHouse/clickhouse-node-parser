@@ -1,3 +1,13 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE test_00974
+(
+    date Date,
+    x Int32,
+    ver UInt64
+)
+ENGINE = ReplacingMergeTree(date, x, 1);
+
 SELECT COUNT()
 FROM (
         SELECT *

@@ -1,3 +1,23 @@
+CREATE TABLE t_local
+(
+    dummy UInt8
+)
+ENGINE = Memory;
+
+CREATE TABLE t1_00850
+(
+    dummy UInt8
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), 't_local');
+
+CREATE TABLE t2_00850
+(
+    dummy UInt8
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), 't_local');
+
+SET joined_subquery_requires_alias = 0;
+
 SELECT *
 FROM
     t1_00850

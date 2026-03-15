@@ -1,3 +1,14 @@
+-- Create table with composite primary key
+CREATE TABLE t_virtual_row_sparse_pk
+(
+    a UInt64,
+    b UInt64,
+    c String
+)
+ENGINE = MergeTree()
+ORDER BY (a, b)
+SETTINGS index_granularity = 8192;
+
 -- This query uses read_in_order_use_virtual_row optimization
 -- It should work even when the index doesn't have all primary key columns
 SELECT

@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+
+-- { echoOn }
 SELECT sum(number + 1)
 FROM numbers(10);
 
@@ -10,6 +13,16 @@ FROM numbers(10);
 SELECT sum(1 - number)
 FROM numbers(10);
 
+CREATE TABLE test_table
+(
+    uint64 UInt64,
+    float64 Float64,
+    decimal32 Decimal32(5)
+)
+ENGINE = MergeTree
+ORDER BY uint64;
+
+-- { echoOn }
 SELECT sum(uint64 + 1 AS i)
 FROM test_table
 WHERE i > 0;

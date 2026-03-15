@@ -1,3 +1,4 @@
+-- { echoOn }
 -- toDate
 SELECT
     toYYYYMMDD(toDate(recordTimestamp, 'Europe/Amsterdam')),

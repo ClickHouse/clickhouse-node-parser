@@ -1,3 +1,18 @@
+-- Test for JIT compilation of CAST to Bool/Nullable(Bool)
+-- Previously, nativeBoolCast returned i1 but Bool (UInt8) needs i8,
+-- causing LLVM assertion failure when inserting into Nullable struct.
+SET compile_expressions = 1;
+
+SET min_count_to_compile_expression = 0;
+
+CREATE TABLE test_jit_bool
+(
+    a Int64,
+    b Int64
+)
+ENGINE = MergeTree
+ORDER BY a;
+
 -- Test CAST to Bool with JIT
 SELECT CAST(a, 'Bool') AS result
 FROM test_jit_bool

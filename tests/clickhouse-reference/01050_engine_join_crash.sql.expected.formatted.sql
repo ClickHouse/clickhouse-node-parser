@@ -1,3 +1,15 @@
+SET any_join_distinct_right_table_keys = 1;
+
+SET enable_optimize_predicate_expression = 0;
+
+CREATE TABLE testJoinTable
+(
+    number UInt64,
+    data String
+)
+ENGINE = Join(`ANY`, `INNER`, number)
+SETTINGS any_join_distinct_right_table_keys = 1;
+
 SELECT *
 FROM
     (
@@ -34,6 +46,23 @@ SELECT *
 FROM testJoinTable
 ORDER BY number ASC;
 
+CREATE TABLE transaction
+(
+    id Int32,
+    value Float64,
+    master_id Int32
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE master
+(
+    id Int32,
+    name String
+)
+ENGINE = Join(`ANY`, `LEFT`, id)
+SETTINGS any_join_distinct_right_table_keys = 1;
+
 SELECT
     tx.id,
     tx.value,
@@ -43,6 +72,23 @@ FROM
 LEFT JOIN master AS m
     ON m.id = tx.master_id
 ORDER BY tx.id ASC;
+
+CREATE TABLE tbl
+(
+    eventDate Date,
+    id String
+)
+ENGINE = MergeTree()
+ORDER BY eventDate
+PARTITION BY tuple();
+
+CREATE TABLE some_join
+(
+    id String,
+    value String
+)
+ENGINE = Join(`ANY`, `LEFT`, id)
+SETTINGS any_join_distinct_right_table_keys = 1;
 
 SELECT *
 FROM

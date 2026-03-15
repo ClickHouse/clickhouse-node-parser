@@ -1,3 +1,18 @@
+CREATE TABLE IF NOT EXISTS defaults
+(
+    param1 Float64,
+    param2 Float64,
+    target Float64,
+    predict1 Float64,
+    predict2 Float64
+)
+ENGINE = Memory;
+
+CREATE TABLE model
+ENGINE = Memory AS
+SELECT stochasticLinearRegressionState(0.03, 0.00001, 2, 'Nesterov')(target, param1, param2) AS state
+FROM defaults;
+
 SELECT ans > -67.01
     AND ans < -66.9
 FROM (
@@ -32,6 +47,15 @@ FROM (
         SELECT stochasticLinearRegression(0.03, 0.00001, 2, 'Nesterov')(target, param1, param2)[3] AS ans
         FROM defaults
     );
+
+CREATE TABLE IF NOT EXISTS grouptest
+(
+    user_id UInt32,
+    p1 Float64,
+    p2 Float64,
+    target Float64
+)
+ENGINE = Memory;
 
 SELECT ANS[1] > -1.1
     AND ANS[1] < -0.9

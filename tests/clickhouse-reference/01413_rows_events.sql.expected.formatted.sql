@@ -1,3 +1,12 @@
+CREATE TABLE rows_events_test
+(
+    k UInt32,
+    v UInt32
+)
+ENGINE = MergeTree
+ORDER BY k
+SETTINGS add_minmax_index_for_numeric_columns = 0;
+
 SELECT written_rows
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

@@ -1,3 +1,12 @@
+CREATE TABLE prewhere_alias
+(
+    a Int32,
+    b Int32,
+    c ALIAS a + b
+)
+ENGINE = MergeTree
+ORDER BY b;
+
 SELECT
     a,
     c + toInt32(1),

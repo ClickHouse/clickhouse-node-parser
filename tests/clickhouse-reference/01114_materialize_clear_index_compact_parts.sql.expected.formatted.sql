@@ -1,3 +1,28 @@
+-- add_minmax_index_for_numeric_columns=0: It would add an index on i64, changing the amount of rows read and defeating the purpose of the test
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+
+-- Prevent remote replicas from skipping index analysis in Parallel Replicas. Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
+SET parallel_replicas_index_analysis_only_on_coordinator = 0;
+
+CREATE TABLE minmax_compact
+(
+    u64 UInt64,
+    i64 Int64,
+    i32 Int32
+)
+ENGINE = MergeTree()
+ORDER BY u64
+PARTITION BY i32
+SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi', min_rows_for_wide_part = 1000000, add_minmax_index_for_numeric_columns = 0;
+
+SET mutations_sync = 1;
+
+SET max_rows_to_read = 8;
+
 SELECT count()
 FROM minmax_compact
 WHERE i64 = 2;
+
+SET max_rows_to_read = 6;
+
+SET max_rows_to_read = 10;

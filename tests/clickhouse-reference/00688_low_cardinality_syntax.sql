@@ -1,3 +1,10 @@
+set allow_suspicious_low_cardinality_types = 1;
+create table lc_str_0 (str LowCardinality(String)) engine = Memory;
+create table lc_null_str_0 (str LowCardinality(Nullable(String))) engine = Memory;
+create table lc_int8_0 (val LowCardinality(Int8)) engine = Memory;
+create table lc_null_int8_0 (val LowCardinality(Nullable(Int8))) engine = Memory;
+create table lc_fix_str_0 (str LowCardinality(FixedString(2))) engine = Memory;
+create table lc_null_fix_str_0 (str LowCardinality(Nullable(FixedString(2)))) engine = Memory;
 select str from lc_str_0;
 select str from lc_null_str_0;
 select val from lc_int8_0;
@@ -9,5 +16,6 @@ select toLowCardinality('a') as val group by val order by val;
 select (toLowCardinality('a') as val) || 'b' group by val order by val;
 select toLowCardinality(z) as val from (select arrayJoin(['c', 'd']) as z) group by val order by val;
 select (toLowCardinality(z) as val) || 'b'  from (select arrayJoin(['c', 'd']) as z) group by val order by val;
+create table lc_str_uuid(str1 String, str2 LowCardinality(String), str3 LowCardinality(String)) ENGINE=Memory;
 select toUUID(str1), toUUID(str2), toUUID(str3) from lc_str_uuid;
 select toUUID(str1, '', NULL), toUUID(str2, '', NULL), toUUID(str3, '', NULL) from lc_str_uuid;

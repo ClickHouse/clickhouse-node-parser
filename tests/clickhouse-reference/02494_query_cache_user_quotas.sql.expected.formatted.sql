@@ -1,3 +1,5 @@
+SET query_cache_max_size_in_bytes = 1;
+
 SELECT
     'Run SELECT with quota that current user may use only 1 byte in the query cache',
     1
@@ -7,6 +9,8 @@ SELECT
     'Expect no entries in the query cache',
     count(*)
 FROM `system`.query_cache;
+
+SET query_cache_max_size_in_bytes = DEFAULT;
 
 SELECT
     'Run SELECT again but w/o quota',
@@ -25,10 +29,14 @@ SELECT
     1
 SETTINGS use_query_cache = true;
 
+SET query_cache_max_entries = 1;
+
 SELECT
     'Run another SELECT with quota that current user may write only 1 entry in the query cache',
     1
 SETTINGS use_query_cache = true;
+
+SET query_cache_max_entries = DEFAULT;
 
 SELECT
     'Run another SELECT w/o quota',

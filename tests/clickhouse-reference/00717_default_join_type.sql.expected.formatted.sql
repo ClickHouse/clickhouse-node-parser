@@ -1,3 +1,17 @@
+CREATE TABLE default_join1
+(
+    a Int64,
+    b Int64
+)
+ENGINE = Memory;
+
+CREATE TABLE default_join2
+(
+    a Int64,
+    b Int64
+)
+ENGINE = Memory;
+
 SELECT
     a,
     b

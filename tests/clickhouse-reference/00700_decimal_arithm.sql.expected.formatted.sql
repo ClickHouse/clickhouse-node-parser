@@ -1,3 +1,23 @@
+CREATE TABLE IF NOT EXISTS decimal
+(
+    a DECIMAL(9,0),
+    b DECIMAL(18,0),
+    c DECIMAL(38,0),
+    d DECIMAL(9, 9),
+    e DEC(18, 18),
+    f dec(38, 38),
+    g Decimal(9, 3),
+    h decimal(18, 9),
+    i deciMAL(38, 18),
+    j dec(4, 2),
+    k NumEriC(23, 4),
+    l numeric(9, 3),
+    m NUMEric(18, 9),
+    n FixED(12, 6),
+    o fixed(8, 6)
+)
+ENGINE = Memory;
+
 SELECT
     a + a,
     a - a,
@@ -360,6 +380,8 @@ SELECT
 FROM decimal
 ORDER BY a ASC;
 
+SET decimal_check_overflow = 0;
+
 SELECT
     (h * h) != 0,
     (h / h) != 1
@@ -421,6 +443,7 @@ SELECT
     multiIf(x = 0, NULL, intDivOrZero(1, x)),
     multiIf(x = 0, NULL, intDivOrZero(x, 0));
 
+-- { echoOn }
 SELECT toDecimal128(1, 38) / toDecimal128(1, 0)
 SETTINGS decimal_check_overflow = 1;
 

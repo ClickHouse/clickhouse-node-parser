@@ -1,5 +1,213 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_foreground_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: distributed",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/1059"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "union1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "tuple",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            }
+          ],
+          "source": "(a, date)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "union2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "union1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "union3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": "Int32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": "Int32"
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "union2"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

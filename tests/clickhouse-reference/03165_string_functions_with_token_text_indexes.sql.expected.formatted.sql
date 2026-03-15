@@ -1,5 +1,16 @@
 SELECT '-------- Bloom filter --------';
 
+SET enable_full_text_index = 1;
+
+CREATE TABLE `03165_token_bf`
+(
+    id Int64,
+    message String,
+    INDEX idx_message message TYPE tokenbf_v1(32768, 3, 2) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY id;
+
 SELECT trim(`explain`)
 FROM (
         EXPLAIN indexes = 1
@@ -116,6 +127,17 @@ WHERE like(`explain`, '%Parts:%');
 SELECT *
 FROM `03165_token_bf`
 WHERE multiSearchAny(message, [' wx ', 'yz']);
+
+SET enable_full_text_index = 1;
+
+CREATE TABLE `03165_token_ft`
+(
+    id Int64,
+    message String,
+    INDEX idx_message message TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY id;
 
 SELECT trim(`explain`)
 FROM (

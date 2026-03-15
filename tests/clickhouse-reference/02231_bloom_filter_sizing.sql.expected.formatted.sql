@@ -1,3 +1,13 @@
+CREATE TABLE bloom_filter_sizing_pk
+(
+    key UInt64,
+    value UInt64,
+    INDEX key_bf key TYPE bloom_filter(0.01) GRANULARITY 2147483648
+)
+ENGINE = MergeTree
+ORDER BY key
+SETTINGS add_minmax_index_for_numeric_columns = 0;
+
 SELECT COUNT()
 FROM bloom_filter_sizing_pk
 WHERE key = 1;
@@ -9,6 +19,17 @@ WHERE database = currentDatabase()
     AND table = 'bloom_filter_sizing_pk'
     AND secondary_indices_uncompressed_bytes > 200
     AND active;
+
+CREATE TABLE bloom_filter_sizing_sec
+(
+    key1 UInt64,
+    key2 UInt64,
+    value UInt64,
+    INDEX key_bf key2 TYPE bloom_filter(0.01) GRANULARITY 2147483648
+)
+ENGINE = MergeTree
+ORDER BY key1
+SETTINGS add_minmax_index_for_numeric_columns = 0;
 
 SELECT COUNT()
 FROM bloom_filter_sizing_sec

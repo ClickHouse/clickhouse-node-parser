@@ -1,3 +1,12 @@
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE mt
+(
+    d Date,
+    x String
+)
+ENGINE = MergeTree(d, x, 8192);
+
 SELECT
     'Q1',
     *

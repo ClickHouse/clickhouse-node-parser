@@ -1,3 +1,39 @@
+CREATE TABLE tt1
+(
+    a UInt32,
+    b UInt32 ALIAS a
+)
+ENGINE = Memory;
+
+CREATE TABLE tt2
+(
+    a UInt32,
+    b UInt32 ALIAS a * 2
+)
+ENGINE = Memory;
+
+CREATE TABLE tt3
+(
+    a UInt32,
+    b UInt32 ALIAS c,
+    c UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE tt4
+(
+    a UInt32,
+    b UInt32 ALIAS 12
+)
+ENGINE = Memory;
+
+CREATE TABLE tt_m
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Merge(currentDatabase(), 'tt1|tt2|tt3|tt4');
+
 -- { echo  }
 SELECT *
 FROM tt_m

@@ -1,3 +1,8 @@
+-- This functions should not be called directly, only for internal use.
+-- However, we cannot completely forbid it (becasue query can came from another server, for example)
+-- Check that usage of these functions does not lead to crash or logical error
+SET enable_analyzer = 1;
+
 SELECT __actionName(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT __actionName('aaa', 'aaa', 'aaa'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

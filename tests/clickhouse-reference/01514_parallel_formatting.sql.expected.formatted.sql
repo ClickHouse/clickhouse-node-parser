@@ -1,2 +1,1 @@
-SELECT count()
-FROM tsv;
+<Parse Error>

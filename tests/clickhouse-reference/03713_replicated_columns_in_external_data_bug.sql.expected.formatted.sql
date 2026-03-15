@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT *
 FROM remote('127.0.0.{1,2,3}', numbers(100))
 WHERE number GLOBAL IN (

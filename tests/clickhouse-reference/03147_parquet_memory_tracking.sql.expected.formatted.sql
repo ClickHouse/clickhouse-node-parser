@@ -1,3 +1,7 @@
+SET input_format_parquet_max_block_size = 10000000;
+
+SET input_format_parquet_prefer_block_bytes = 1000000000000;
+
 -- Try to read it with 60 MB memory limit. Should fail because we read the 80 MB column all at once.
 SELECT sum(ignore(*))
 FROM file('03147_parquet_memory_tracking.parquet')

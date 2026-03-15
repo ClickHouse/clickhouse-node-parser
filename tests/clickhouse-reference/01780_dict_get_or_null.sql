@@ -1,3 +1,18 @@
+CREATE TABLE simple_key_dictionary_source_table
+(
+    id UInt64,
+    value String,
+    value_nullable Nullable(String)
+) ENGINE = TinyLog;
+CREATE DICTIONARY simple_key_dictionary
+(
+    id UInt64,
+    value String,
+    value_nullable Nullable(String)
+)
+PRIMARY KEY id
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() TABLE 'simple_key_dictionary_source_table'))
+LAYOUT(DIRECT());
 SELECT
     number,
     dictHas('simple_key_dictionary', number),
@@ -5,6 +20,23 @@ SELECT
     dictGetOrNull('simple_key_dictionary', 'value_nullable', number),
     dictGetOrNull('simple_key_dictionary', ('value', 'value_nullable'), number)
 FROM system.numbers LIMIT 5;
+CREATE TABLE complex_key_dictionary_source_table
+(
+    id UInt64,
+    id_key String,
+    value String,
+    value_nullable Nullable(String)
+) ENGINE = TinyLog;
+CREATE DICTIONARY complex_key_dictionary
+(
+    id UInt64,
+    id_key String,
+    value String,
+    value_nullable Nullable(String)
+)
+PRIMARY KEY id, id_key
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() TABLE 'complex_key_dictionary_source_table'))
+LAYOUT(COMPLEX_KEY_DIRECT());
 SELECT
     (number, 'key'),
     dictHas('complex_key_dictionary', (number, 'key')),
@@ -12,6 +44,28 @@ SELECT
     dictGetOrNull('complex_key_dictionary', 'value_nullable', (number, 'key')),
     dictGetOrNull('complex_key_dictionary', ('value', 'value_nullable'), (number, 'key'))
 FROM system.numbers LIMIT 5;
+CREATE TABLE range_key_dictionary_source_table
+(
+    key UInt64,
+    start_date Date,
+    end_date Date,
+    value String,
+    value_nullable Nullable(String)
+)
+ENGINE = TinyLog();
+CREATE DICTIONARY range_key_dictionary
+(
+    key UInt64,
+    start_date Date,
+    end_date Date,
+    value String,
+    value_nullable Nullable(String)
+)
+PRIMARY KEY key
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() TABLE 'range_key_dictionary_source_table'))
+LIFETIME(MIN 1 MAX 1000)
+LAYOUT(RANGE_HASHED())
+RANGE(MIN start_date MAX end_date);
 SELECT
     (number, toDate('2019-05-20')),
     dictHas('range_key_dictionary', number, toDate('2019-05-20')),

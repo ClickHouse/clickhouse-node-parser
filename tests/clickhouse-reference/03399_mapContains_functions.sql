@@ -1,3 +1,4 @@
+CREATE TABLE map_containsValueLike_test (id UInt32, map Map(String, String)) Engine=MergeTree() ORDER BY id settings index_granularity=2;
 SELECT id, map FROM map_containsValueLike_test WHERE mapContainsValueLike(map, '1-%') = 1;
 SELECT id, map FROM map_containsValueLike_test WHERE mapContainsValueLike(map, '3-%') = 0 order by id;
 SELECT mapContainsValueLike(map('aa', '1', 'bb', '2'), '1%');

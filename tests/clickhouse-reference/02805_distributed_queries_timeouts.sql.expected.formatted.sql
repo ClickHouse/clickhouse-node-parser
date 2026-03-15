@@ -1,3 +1,8 @@
+-- Tags: no-fasttest
+-- no-fasttest: Timeouts are slow
+CREATE TABLE dist AS `system`.one
+ENGINE = Distributed(test_shard_localhost, `system`, one);
+
 SELECT sleep(8)
 FROM dist
 SETTINGS

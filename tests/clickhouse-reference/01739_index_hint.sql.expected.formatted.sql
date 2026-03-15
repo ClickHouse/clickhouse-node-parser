@@ -1,3 +1,14 @@
+CREATE TABLE tbl
+(
+    p Int64,
+    t Int64,
+    f Float64
+)
+ENGINE = MergeTree
+ORDER BY t
+PARTITION BY p
+SETTINGS index_granularity = 1, add_minmax_index_for_numeric_columns = 0;
+
 SELECT *
 FROM tbl
 WHERE indexHint(t = 1)
@@ -24,14 +35,42 @@ WHERE indexHint(p IN (
     ))
 ORDER BY t ASC;
 
+CREATE TABLE XXXX
+(
+    t Int64,
+    f Float64
+)
+ENGINE = MergeTree
+ORDER BY t
+SETTINGS index_granularity = 128, index_granularity_bytes = '10Mi';
+
 SELECT sum(t)
 FROM XXXX
 WHERE indexHint(t = 42);
+
+CREATE TABLE XXXX
+(
+    t Int64,
+    f Float64
+)
+ENGINE = MergeTree
+ORDER BY t
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 SELECT count()
 FROM XXXX
 WHERE indexHint(t = toDateTime(0))
 SETTINGS optimize_use_implicit_projections = 1;
+
+CREATE TABLE XXXX
+(
+    p Nullable(Int64),
+    k Decimal(76, 39)
+)
+ENGINE = MergeTree
+ORDER BY k
+PARTITION BY toDate(p)
+SETTINGS index_granularity = 1, allow_nullable_key = 1;
 
 SELECT count()
 FROM XXXX

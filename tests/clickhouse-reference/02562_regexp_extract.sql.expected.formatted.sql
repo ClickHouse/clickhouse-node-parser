@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', 1);
 
 SELECT regexpExtract('100-200', '(\\d+)-(\\d+)');

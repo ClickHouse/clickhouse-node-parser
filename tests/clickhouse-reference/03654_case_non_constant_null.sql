@@ -1,1 +1,2 @@
+CREATE TABLE test1 (a Int, b Int, c int,d int) ENGINE = MergeTree() PRIMARY KEY a;
 select case a+b when c then 'c' when d then 'd' end from test1;

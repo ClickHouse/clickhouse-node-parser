@@ -1,5 +1,41 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,6 +48,78 @@
       "kind": "tableRef",
       "table": "test_table"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": "String"
+      }
+    ],
+    "engine": {
+      "name": "CoalescingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": "Nullable(UInt32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": "Nullable(String)"
+      }
+    ],
+    "engine": {
+      "name": "CoalescingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",
@@ -35,6 +143,37 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "Nullable(UInt32)"
+      }
+    ],
+    "engine": {
+      "name": "CoalescingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
       }
     ]
   },
@@ -63,6 +202,47 @@
     "format": "TSVRaw"
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": "SimpleAggregateFunction(anyLast,Nullable(Int64))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": "SimpleAggregateFunction(anyLast,Nullable(DateTime))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C",
+        "type": "SimpleAggregateFunction(anyLast,Nullable(String))"
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -72,6 +252,113 @@
       }
     ],
     "format": "TSVRaw"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": "Nullable(Int64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": "Nullable(DateTime)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "C",
+        "type": "Nullable(String)"
+      }
+    ],
+    "engine": {
+      "name": "CoalescingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "electric_vehicle_state"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "vin",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "last_update",
+        "type": "DateTime64",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "now64",
+          "args": []
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "battery_level",
+        "type": "Nullable(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "lat",
+        "type": "Nullable(Float64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "lon",
+        "type": "Nullable(Float64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "firmware_version",
+        "type": "Nullable(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "cabin_temperature",
+        "type": "Nullable(Float32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "speed_kmh",
+        "type": "Nullable(Float32)"
+      }
+    ],
+    "engine": {
+      "name": "CoalescingMergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "vin"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",
@@ -158,6 +445,42 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": "Nullable(UInt32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "value_arr",
+        "type": "Variant(Array(UInt32), Nothing)"
+      }
+    ],
+    "engine": {
+      "name": "CoalescingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
       }
     ]
   }

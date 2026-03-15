@@ -1,3 +1,5 @@
+SET max_expanded_ast_elements = 10000;
+
 SELECT
     1 AS a,
     a + a AS b,

@@ -1,3 +1,12 @@
+CREATE TABLE test
+(
+    c1 String,
+    c2 String,
+    c3 String
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (c1, c3);
+
 SELECT
     c1,
     c2,

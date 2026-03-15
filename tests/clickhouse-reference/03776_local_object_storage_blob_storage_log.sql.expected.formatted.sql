@@ -1,3 +1,12 @@
+CREATE TABLE test_local_blob_log
+(
+    a Int32,
+    b String
+)
+ENGINE = MergeTree()
+ORDER BY a
+SETTINGS disk = disk(type = 'local_blob_storage', path = '03776_test_local_blob_log/');
+
 SELECT *
 FROM test_local_blob_log
 ORDER BY a ASC;

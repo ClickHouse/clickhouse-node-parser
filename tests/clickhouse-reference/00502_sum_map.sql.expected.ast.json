@@ -1,5 +1,52 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "timeslot",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "statusMap",
+        "type": "Nested(status UInt16, requests UInt64)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -413,6 +460,35 @@
       "kind": "tableRef",
       "table": "sum_map"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_overflow"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "events",
+        "type": "Array(UInt8)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "counts",
+        "type": "Array(UInt8)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
   },
   {
     "kind": "select",
@@ -1180,6 +1256,30 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "statusMap",
+        "type": "Nested(\n        goal_id UInt16,\n        revenue Decimal32(5)\n    )"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1236,6 +1336,30 @@
       "kind": "tableRef",
       "table": "sum_map_decimal"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal_nullable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "statusMap",
+        "type": "Nested(goal_id UInt16, revenue Nullable(Decimal(9, 5)))"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ]
   },
   {
     "kind": "select",

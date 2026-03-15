@@ -1,3 +1,11 @@
+CREATE TABLE test_parallel_index
+(
+    z UInt64,
+    INDEX i z TYPE set(8)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT sum(z)
 FROM test_parallel_index
 WHERE z = 2

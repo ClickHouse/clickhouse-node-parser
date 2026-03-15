@@ -1,3 +1,16 @@
+-- Tags: long, no-tsan, no-msan, no-ubsan, no-asan
+-- Random settings limits: index_granularity=(100, None); merge_max_block_size=(100, None)
+SET allow_experimental_dynamic_type = 1;
+
+CREATE TABLE test
+(
+    id UInt64,
+    d Dynamic
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1, lock_acquire_timeout_for_background_operations = 600;
+
 SELECT
     count(),
     dynamicType(d)

@@ -1,5 +1,112 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "defaults"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "param1",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "param2",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "target",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "predict1",
+        "type": "Float64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "predict2",
+        "type": "Float64"
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "model"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "stochasticLogisticRegressionState",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.1"
+              },
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.0"
+              },
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1.0"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "SGD"
+              }
+            ],
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "target"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "param1"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "param2"
+                ]
+              }
+            ]
+          },
+          "alias": "state"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "defaults"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

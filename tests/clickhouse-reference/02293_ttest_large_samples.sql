@@ -15,6 +15,10 @@ SELECT
     toFloat64(number) % 30 + 0.0022 AS sample,
     1 AS variant
 FROM system.numbers limit 500000));
+
+
+SET max_rows_to_read = 0;
+
 SELECT roundBankers(result.1, 5), roundBankers(result.2, 5 ) FROM (
 SELECT
      studentTTest(sample, variant) as result
@@ -30,6 +34,8 @@ SELECT
     toFloat64(number) % 30 + 0.0022 AS sample,
     1 AS variant
 FROM system.numbers limit 50000000));
+
+
 SELECT roundBankers(result.2, 1025)
 FROM
 (

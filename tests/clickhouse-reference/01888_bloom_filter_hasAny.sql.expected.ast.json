@@ -1,5 +1,60 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bftest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": "Int64"
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": "Array(Int64)",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "Array(Int64)"
+      },
+      {
+        "kind": "indexDef",
+        "name": "ix1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ],
+          "parenthesized": true
+        },
+        "indexType": "bloom_filter",
+        "granularity": 3
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -252,6 +307,19 @@
     "format": "Null",
     "trailingComments": [
       "-- different, doesn't fail"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_data_skipping_indices",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "ix1"
+        }
+      }
     ]
   },
   {

@@ -1,3 +1,5 @@
+-- Create test table with lot's of rows
+CREATE TABLE t(c String) ENGINE=MergeTree ORDER BY c;
 -- Run query which, store *compressed* result in query cache
 SELECT '-- insert with enabled compression';
 SELECT * FROM t ORDER BY c

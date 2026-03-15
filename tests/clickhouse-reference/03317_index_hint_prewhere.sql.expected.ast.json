@@ -1,5 +1,86 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_indexHint_prewhere"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": "UInt32"
+      },
+      {
+        "kind": "columnDef",
+        "name": "colA",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "colB",
+        "type": "String"
+      },
+      {
+        "kind": "indexDef",
+        "name": "colA_tokens_idx",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tokens",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "colA"
+              ]
+            }
+          ]
+        },
+        "indexType": "bloom_filter",
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "colB_tokens_idx",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tokens",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "colB"
+              ]
+            }
+          ]
+        },
+        "indexType": "bloom_filter",
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

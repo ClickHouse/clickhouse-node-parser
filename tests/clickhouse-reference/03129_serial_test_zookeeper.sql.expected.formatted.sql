@@ -42,4 +42,6 @@ SELECT
     generateSerialID(concat(currentDatabase(), 'z'))
 FROM numbers(5);
 
+SET max_autoincrement_series = 3;
+
 SELECT generateSerialID('a'); -- { serverError LIMIT_EXCEEDED }

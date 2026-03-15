@@ -1,3 +1,8 @@
+SET prefer_localhost_replica = 0,
+    use_query_condition_cache = 1;
+CREATE TABLE tab( `key` UInt64 ) ENGINE = MergeTree ORDER BY key SETTINGS index_granularity = 8192
+AS
+SELECT number FROM numbers(30000);
 SELECT '-- First query run to populate query condition cache';
 SELECT
     shardNum(),

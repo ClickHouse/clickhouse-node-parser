@@ -1,3 +1,11 @@
+CREATE TABLE limit_by
+(
+    id Int,
+    val Int
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
 SELECT *
 FROM limit_by
 ORDER BY

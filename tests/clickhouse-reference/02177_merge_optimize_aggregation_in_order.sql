@@ -1,4 +1,6 @@
-
+create table data_02177 (key Int) Engine=MergeTree() order by key;
+set optimize_aggregation_in_order=1;
+-- { echoOn }
 
 -- regression for optimize_aggregation_in_order
 -- that cause "Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform" error

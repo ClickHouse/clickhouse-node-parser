@@ -1,9 +1,13 @@
-
+create table test (stamp Date) engine MergeTree order by stamp;
+-- { echoOn }
 -- implicit toDateTime (always saturate)
 select count() from test where stamp >= parseDateTimeBestEffort('2024-11-01');
 select count() from test where toDateTime(stamp) >= parseDateTimeBestEffort('2024-11-01') settings date_time_overflow_behavior = 'saturate';
 select count() from test where toDateTime(stamp) >= parseDateTimeBestEffort('2024-11-01') settings date_time_overflow_behavior = 'ignore';
 select count() from test where toDateTime(stamp) >= parseDateTimeBestEffort('2024-11-01') settings date_time_overflow_behavior = 'throw'; -- { serverError VALUE_IS_OUT_OF_RANGE_OF_DATA_TYPE }
+create table test (stamp Date) engine MergeTree order by stamp settings index_granularity = 20;
+set session_timezone = 'UTC'; -- The following tests are timezone sensitive
+set optimize_use_implicit_projections = 0;
 -- Boundary at UNIX epoch
 SELECT count() FROM test WHERE stamp >= toDateTime(0) SETTINGS force_primary_key = 1;
 SELECT count() FROM test WHERE identity(stamp) >= toDateTime(0);

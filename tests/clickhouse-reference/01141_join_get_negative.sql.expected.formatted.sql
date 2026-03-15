@@ -1,3 +1,19 @@
+CREATE TABLE t1
+(
+    s String,
+    x Array(UInt8),
+    k UInt64
+)
+ENGINE = Join(`ANY`, `LEFT`, k);
+
+CREATE TABLE t2
+(
+    s String,
+    x Array(UInt8),
+    k UInt64
+)
+ENGINE = Join(`ANY`, `INNER`, k);
+
 SELECT joinGet('t1', '', number)
 FROM numbers(2); -- { serverError NO_SUCH_COLUMN_IN_TABLE }
 

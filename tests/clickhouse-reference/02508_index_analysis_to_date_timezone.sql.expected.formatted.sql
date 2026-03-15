@@ -1,3 +1,11 @@
+CREATE TABLE table
+(
+    uid UUID,
+    date DateTime('Asia/Kamchatka')
+)
+ENGINE = MergeTree
+ORDER BY date;
+
 SELECT
     uid,
     date,

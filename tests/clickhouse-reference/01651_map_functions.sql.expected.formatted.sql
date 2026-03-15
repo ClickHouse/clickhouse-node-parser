@@ -1,3 +1,14 @@
+SET use_variant_as_common_type = 0;
+
+CREATE TABLE table_map
+(
+    a Map(String, String),
+    b String,
+    c Array(String),
+    d Array(String)
+)
+ENGINE = Memory;
+
 SELECT mapContains(a, 'name')
 FROM table_map;
 
@@ -18,6 +29,18 @@ FROM table_map;
 
 SELECT mapFromArrays(c, d)
 FROM table_map;
+
+-- Map(UInt8, UInt8)
+CREATE TABLE table_map
+(
+    a Map(UInt8, Int),
+    b UInt8,
+    c UInt32,
+    d Array(String),
+    e Array(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT
     mapContains(a, b),
@@ -58,6 +81,9 @@ SELECT
     map(0.1::Float32, 4, 0.2::Float32, 5) AS m,
     mapContains(m, 0.1::Float32),
     mapContains(m, 0.3::Float32);
+
+-- Map(LowCardinality(UInt8), UInt8)
+SET allow_suspicious_low_cardinality_types = 1;
 
 SELECT
     map(1::LowCardinality(UInt8), 4, 2::LowCardinality(UInt8), 5) AS m,

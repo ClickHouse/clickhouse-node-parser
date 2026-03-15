@@ -1,3 +1,6 @@
+-- { echo }
+SET implicit_select = 1, implicit_table_at_top_level = 'test', enable_analyzer = 1;
+CREATE TABLE test (s String) ENGINE = Memory;
 SELECT *, (SELECT 1);
 SELECT * FROM (SELECT *);
 SELECT * UNION ALL SELECT *;

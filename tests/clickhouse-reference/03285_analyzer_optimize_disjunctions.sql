@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+SET optimize_extract_common_expressions = 1;
+CREATE TABLE x (x Int64, A UInt8, B UInt8, C UInt8, D UInt8, E UInt8, F UInt8) ENGINE = MergeTree ORDER BY x;
 SELECT count() FROM x WHERE A or B or (B and C) SETTINGS optimize_extract_common_expressions = 0;
 SELECT count() FROM x WHERE A or B or (B and C) SETTINGS optimize_extract_common_expressions = 1;
 SELECT count() FROM x WHERE (A and B) or (B and C) or (B and D and A) SETTINGS optimize_extract_common_expressions = 1;

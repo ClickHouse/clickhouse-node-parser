@@ -1,3 +1,21 @@
+CREATE TABLE t1
+(
+    x UInt32,
+    s String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/t1', 'r1')
+ORDER BY tuple();
+
+CREATE TABLE t2
+(
+    x UInt32,
+    s String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/t2', 'r1')
+ORDER BY tuple();
+
+SET enable_analyzer = 1, enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+
 SELECT
     t1.*,
     t2.*

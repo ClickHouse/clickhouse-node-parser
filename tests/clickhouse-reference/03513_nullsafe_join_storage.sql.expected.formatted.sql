@@ -1,3 +1,9 @@
+CREATE TABLE t0
+(
+    c0 Nullable(Int)
+)
+ENGINE = Join(`ALL`, `INNER`, c0);
+
 SELECT 1
 FROM
     t0

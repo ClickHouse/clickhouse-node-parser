@@ -1,5 +1,53 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel-replicas",
+      "-- Tag no-parallel-replicas: result of explain is different"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": "JSON(d Date)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": []
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "json",
+        "d"
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,6 +69,50 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": "Array(Nullable(Int))"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": "Int"
+      },
+      {
+        "kind": "columnDef",
+        "name": "c2",
+        "type": "Int"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "c0",
+        "null"
+      ],
+      "parenthesized": true
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c1"
+        ]
       }
     ]
   },

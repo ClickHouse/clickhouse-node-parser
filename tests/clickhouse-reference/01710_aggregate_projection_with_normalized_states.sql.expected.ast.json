@@ -55,6 +55,132 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "r"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": "String"
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": "LowCardinality(String)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "q",
+        "type": "AggregateFunction(quantilesTiming(0.5, 0.95, 0.99), Int64)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": "Int64"
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "quantilesTimingMerge",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.5"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.95"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.99"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "q"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s"
+                  ]
+                }
+              ]
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree"
+    },
+    "orderBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "deduplicate_merge_projection_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "drop"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- should set it to rebuild once projection is supported with SummingMergeTree"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

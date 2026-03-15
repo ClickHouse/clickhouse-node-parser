@@ -6,6 +6,14 @@ SELECT arrayDifference([1, 2, 3, 4]);
 
 SELECT arrayDifference([1, 7, 100, 5]);
 
+CREATE TABLE test
+(
+    a Array(Int64),
+    b Array(Float64),
+    c Array(UInt64)
+)
+ENGINE = Memory;
+
 SELECT arrayCumSumNonNegative(a)
 FROM test;
 

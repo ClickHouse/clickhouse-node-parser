@@ -1,3 +1,10 @@
+CREATE TABLE empty
+(
+    n UInt64
+)
+ENGINE = MergeTree()
+ORDER BY n;
+
 -- A query that reproduces the problem, it has a JOIN of two empty tables followed by some window functions.
 -- Before the fix max_threads limit was lost and the resulting pipeline was resized multiple times multiplying the number of streams by 20
 -- So the result of the EXPLAIN below looked like this:

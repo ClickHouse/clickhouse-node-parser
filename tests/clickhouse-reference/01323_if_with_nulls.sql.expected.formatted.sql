@@ -109,6 +109,8 @@ FROM (
         SELECT materialize(if(1 = 0, toNullable(toUInt8(0)), NULL)) AS x
     );
 
+SET join_use_nulls = 1;
+
 SELECT
     b_num,
     isNull(b_num),
@@ -127,6 +129,15 @@ LEFT JOIN (
             toInt8(1) AS b_num
     ) AS y
     USING (k);
+
+CREATE TABLE test_nullable_float_issue7347
+(
+    ne UInt64,
+    test Nullable(Float64)
+)
+ENGINE = MergeTree()
+ORDER BY ne
+PRIMARY KEY ne;
 
 SELECT
     test,

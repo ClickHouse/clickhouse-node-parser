@@ -1,3 +1,5 @@
+SET log_queries = 1;
+
 SELECT test_function(number, 0)
 FROM numbers(100)
 FORMAT Null

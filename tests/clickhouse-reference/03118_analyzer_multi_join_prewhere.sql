@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/4596
+SET enable_analyzer=1;
+CREATE TABLE a1 ( ANIMAL Nullable(String) ) engine = MergeTree order by tuple();
 select count()
      from a1 a
       join a1 b on (a.ANIMAL = b.ANIMAL)

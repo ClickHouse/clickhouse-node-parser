@@ -1,3 +1,14 @@
+CREATE TABLE decimal
+(
+    a Decimal32(4),
+    b Decimal64(8),
+    c Decimal128(8),
+    f Float64,
+    d Date,
+    w UInt64
+)
+ENGINE = Memory;
+
 SELECT
     medianExactWeightedInterpolated(a, 1),
     medianExactWeightedInterpolated(b, 2),

@@ -10,6 +10,13 @@ SELECT
     'a\0\0\0\0' < 'a\0\0\0',
     'a\0\0\0\0' > 'a\0\0\0';
 
+CREATE TABLE strings_00469
+(
+    x String,
+    y String
+)
+ENGINE = TinyLog;
+
 SELECT
     x < y,
     x > y

@@ -1,3 +1,8 @@
+SET max_threads = 2;
+
+-- { echoOn }
+SET parallelize_output_from_storages = 1;
+
 SELECT startsWith(trimLeft(`explain`), 'Resize') AS resize
 FROM (
         EXPLAIN PIPELINE
@@ -5,6 +10,9 @@ FROM (
         FROM file(data_02723.csv)
     )
 WHERE resize;
+
+-- no Resize in pipeline
+SET parallelize_output_from_storages = 0;
 
 SELECT match(arrayStringConcat(groupArray(`explain`), ''), '.*Resize 1 → 2 *URL 0 → 1 *$')
 FROM (

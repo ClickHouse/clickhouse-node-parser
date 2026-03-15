@@ -1,3 +1,4 @@
+SET send_logs_level = 'fatal';
 SELECT '-- negative tests';
 SELECT locate(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT locate(1, 'abc'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

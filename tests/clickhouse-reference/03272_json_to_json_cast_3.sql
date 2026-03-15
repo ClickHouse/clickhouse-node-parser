@@ -1,3 +1,7 @@
+SET enable_json_type = 1;
+set enable_analyzer = 1;
+set output_format_native_write_json_as_string = 0;
+create table test (json JSON(max_dynamic_paths=2)) engine=Memory;
 select json::JSON(SKIP a, max_dynamic_paths=2) from test;
 select json::JSON(SKIP a.b, max_dynamic_paths=2) from test;
 select json::JSON(SKIP b, max_dynamic_paths=2) from test;

@@ -44,12 +44,26 @@ SELECT arrayFold((acc, x) -> if(x % 2, arrayPushFront(acc, x), arrayPushBack(acc
 FROM `system`.numbers
 LIMIT 5;
 
+CREATE TABLE tab
+(
+    line String,
+    patterns Array(String)
+)
+ENGINE = MergeTree
+ORDER BY line;
+
 SELECT
     line,
     patterns,
     arrayFold((acc, pat) -> position(line, pat), patterns, 0::UInt64)
 FROM tab
 ORDER BY line ASC;
+
+CREATE TABLE tab
+(
+    line String
+)
+ENGINE = Memory();
 
 SELECT
     line,

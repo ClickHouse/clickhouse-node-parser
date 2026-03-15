@@ -1,3 +1,12 @@
+CREATE TABLE test
+(
+    x UInt32,
+    arr1 Array(UInt32),
+    arr2 Array(UInt32)
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT *
 FROM test
 WHERE x == 1

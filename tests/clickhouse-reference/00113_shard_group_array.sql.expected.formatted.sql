@@ -26,6 +26,12 @@ FROM (
         LIMIT 10
     );
 
+CREATE TABLE numbers_mt
+(
+    number UInt64
+)
+ENGINE = Log;
+
 SELECT
     count(),
     sum(ns),

@@ -1,4 +1,4 @@
-
+-- { echoOn }
 
 select xxHash32(null);
 select xxHash64(null);
@@ -24,6 +24,7 @@ select xxHash64(materialize(tuple(null)));
 select xxHash64(materialize(tuple(null, null)));
 select xxHash64(materialize(tuple(null::Nullable(Int64))));
 select xxHash64(materialize(tuple(null::Nullable(String))));
+create table test_hash_on_null (a Array(Nullable(Int64))) engine Memory;
 select xxHash32(a) from test_hash_on_null;
 select cityHash64([1]);
 select cityHash64([toNullable(1)]);
@@ -32,7 +33,9 @@ select cityHash64(tuple('hi'));
 select cityHash64(tuple(toNullable('hi')));
 select cityHash64(tuple(toLowCardinality(toNullable('hi'))));
 select cityHash64(materialize(tuple(toLowCardinality(toNullable('hi')))));
+create table test_mix_null (a Nullable(Int64)) engine Memory;
 select a, xxHash32(a), xxHash32(tuple(a)) from test_mix_null;
+create table t (a Array(Tuple(x Nullable(Int64), y Map(Int64, Nullable(String)), z LowCardinality(Nullable(FixedString(16)))))) engine Memory;
 select reinterpret(sipHash128(tuple(*)), 'UInt128') from t;
 select cityHash64(tuple(*)) from t;
 select cityHash64(*) from t;

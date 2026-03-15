@@ -1,3 +1,18 @@
+SET output_format_write_statistics = 0;
+
+CREATE TABLE `03408_unsorted`
+(
+    id Int32,
+    val String
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 1 AS
+SELECT
+    number % 10,
+    leftPad(toString(number), 2, '0')
+FROM numbers(50);
+
 SELECT '-- Assert total number of groups and records in unsorted';
 
 SELECT
@@ -44,6 +59,19 @@ LIMIT 1 BY id
 LIMIT 3
 FORMAT JsonCompact
 SETTINGS max_block_size = 1, exact_rows_before_limit = 1;
+
+CREATE TABLE `03408_sorted`
+(
+    id Int32,
+    val String
+)
+ENGINE = MergeTree
+ORDER BY (id, val)
+SETTINGS min_bytes_for_wide_part = 1 AS
+SELECT
+    number % 10,
+    leftPad(toString(number), 2, '0')
+FROM numbers(50);
 
 SELECT
     uniqExact(id),

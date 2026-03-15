@@ -1,5 +1,69 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_over_nullable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "partition",
+        "type": "Date"
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": "DateTime"
+      },
+      {
+        "kind": "columnDef",
+        "name": "user_id",
+        "type": "Nullable(UInt32)"
+      },
+      {
+        "kind": "columnDef",
+        "name": "description",
+        "type": "Nullable(String)"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "partition"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

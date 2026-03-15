@@ -46,6 +46,8 @@ SELECT toDateTime('2001-09-28 01:00:00') + toIntervalHour(23);
 
 SELECT toDateTime('2001-09-28 23:00:00') - toIntervalHour(23);
 
+SET session_timezone = 'Europe/Amsterdam';
+
 SELECT
     (toDate('2001-09-29') + toIntervalSecond(12345)) AS x,
     toTypeName(x);

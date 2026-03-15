@@ -1,3 +1,10 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/14739
+SET enable_analyzer = 1;
+
+CREATE TABLE test_subquery
+ENGINE = Memory AS
+SELECT 'base' AS my_field;
+
 -- query 1
 SELECT my_field
 FROM (

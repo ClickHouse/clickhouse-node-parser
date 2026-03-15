@@ -1,3 +1,17 @@
+CREATE TABLE tableFile_00968
+(
+    number UInt64
+)
+ENGINE = File('TSV');
+
+CREATE TABLE tableMergeTree_00968
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY id;
+
 SELECT id
 FROM tableMergeTree_00968
 WHERE id IN (

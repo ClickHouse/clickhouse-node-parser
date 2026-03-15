@@ -1,5 +1,11 @@
 -- If filtering is not done correctly on databases, then this query report to read 3 rows, which are: `system.tables`, `information_schema.tables` and `INFORMATION_SCHEMA.tables`
 SELECT database, table FROM system.tables WHERE database = 'information_schema' AND table = 'tables';
+CREATE TABLE test_03217_system_tables_replica_1(x UInt32)
+    ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_03217_system_tables_replica', 'r1')
+    ORDER BY x;
+CREATE TABLE test_03217_system_tables_replica_2(x UInt32)
+    ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_03217_system_tables_replica', 'r2')
+    ORDER BY x;
 -- Make sure we can read both replicas
 -- The replica name might be altered because of `_functional_tests_helper_database_replicated_replace_args_macros`,
 -- thus we need to use `left`
