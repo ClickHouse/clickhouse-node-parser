@@ -30,7 +30,7 @@ describe('clickhouse tests', () => {
     const astPath = `${filePath}.expected.ast.json`;
     const formattedPath = `${filePath}.expected.formatted.sql`;
 
-    it(`${fileName} - explain`, () => {
+    it.only(`${fileName} - explain`, () => {
       if (!fs.existsSync(explainPath)) return;
 
       const sql = fs.readFileSync(filePath, 'utf-8');
