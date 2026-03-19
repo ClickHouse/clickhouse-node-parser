@@ -103,10 +103,7 @@ export const TableRefSchema = z.object({
   alias: z.string().optional(),
   final: z.boolean().optional(),
   sample: SampleClauseSchema.optional(),
-  leadingComments: z.array(z.string()).optional(),
-  trailingComments: z.array(z.string()).optional(),
-  location: SourceLocationSchema.optional(),
-  parent: z.any().optional(),
+  ...ExprMetadataFields,
 });
 
 /**
@@ -268,11 +265,7 @@ export type Asterisk = {
   kind: 'asterisk';
   transformers?: ColumnTransformer[];
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * Qualified `table.*` or `db.table.*` wildcard, with optional column transformers.
@@ -288,11 +281,7 @@ export type QualifiedAsterisk = {
   parts: string[];
   /** Optional column transformers (EXCEPT, APPLY, REPLACE). */
   transformers?: ColumnTransformer[];
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A query parameter placeholder: `{name:Type}`.
@@ -321,11 +310,7 @@ export type TupleExpansion = {
   expr: Expression;
   /** Optional column transformers (EXCEPT, APPLY, REPLACE). */
   transformers?: ColumnTransformer[];
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * The type of JOIN operation.
@@ -386,6 +371,8 @@ export type WindowFrameBound =
  * @example `OVER (PARTITION BY a ORDER BY b ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)`
  */
 export type WindowSpec = {
+  /** Base window name for window inheritance, e.g. `w1` in `WINDOW w2 AS (w1 ORDER BY x)`. */
+  baseWindow?: string;
   /** Expressions to partition the window by. */
   partitionBy?: Expression[];
   /** Ordering within each partition. */
@@ -422,11 +409,7 @@ export type FunctionCall = {
   window?: WindowSpec;
   /** Whether the entire function call was wrapped in parentheses in the source. */
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A type cast expression: `CAST(expr AS Type)` or `expr::Type`.
@@ -444,11 +427,7 @@ export type CastExpr = {
   operator?: boolean;
   /** Whether the cast expression was wrapped in parentheses in the source. */
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A lambda expression: `(params) -> body`.
@@ -464,11 +443,7 @@ export type LambdaExpr = {
   body: Expression;
   /** Whether the lambda was wrapped in parentheses in the source. */
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A subquery used as an expression: `(SELECT ...)`.
@@ -479,11 +454,7 @@ export type SubqueryExpr = {
   kind: 'subqueryExpr';
   /** The query inside the subquery. */
   query: QueryStatement;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * An IN expression: `expr [NOT] IN (values)` or `expr [GLOBAL] [NOT] IN (subquery)`.
@@ -504,11 +475,7 @@ export type InExpr = {
   values: Expression[] | SubqueryExpr;
   /** Whether the IN expression was wrapped in parentheses in the source. */
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A unary NOT expression.
@@ -523,11 +490,7 @@ export type UnaryExpr = {
   expr: Expression;
   /** Whether the NOT expression was wrapped in parentheses in the source. */
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * Binary operators that produce {@link BinaryExpr} nodes.
@@ -569,11 +532,7 @@ export type BinaryExpr = {
   right: Expression;
   /** Whether the binary expression was wrapped in parentheses in the source. */
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * An n-ary AND/OR expression with a flat list of operands (always 2+).
@@ -592,11 +551,7 @@ export type NaryExpr = {
   operands: Expression[];
   /** Whether the expression was wrapped in parentheses in the source. */
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * An aliased expression: `expr AS name`.
@@ -611,29 +566,21 @@ export type Alias = {
   alias: string;
   /** `true` when the alias was wrapped in parentheses, e.g. `('abc' AS s)`. */
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * An array literal: `[a, b, c]`.
  *
- * @example `[1, 2, 3]` → `{ kind: 'array', elements: [...] }`
+ * @example `[1, 2, 3]` → `{ kind: 'arrayLiteral', elements: [...] }`
  */
 export type ArrayLiteral = {
-  kind: 'array';
+  kind: 'arrayLiteral';
   /** The array elements. */
   elements: Expression[];
   /** Original source text, used by the formatter for round-tripping when the elements can't be reconstructed. */
   source?: string;
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A tuple literal: `(a, b, c)`.
@@ -641,20 +588,16 @@ export type ArrayLiteral = {
  * Tuples with 2+ elements are represented here. Single-element parenthesized
  * expressions are represented by their inner expression with `parenthesized: true`.
  *
- * @example `(1, 'a', 3.14)` → `{ kind: 'tuple', elements: [...] }`
+ * @example `(1, 'a', 3.14)` → `{ kind: 'tupleLiteral', elements: [...] }`
  */
 export type TupleLiteral = {
-  kind: 'tuple';
+  kind: 'tupleLiteral';
   /** The tuple elements. */
   elements: Expression[];
   /** Original source text, used by the formatter for round-tripping when the elements can't be reconstructed. */
   source?: string;
   parenthesized?: boolean;
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A COLUMNS expression: `COLUMNS('pattern')` or `COLUMNS(col1, col2, ...)`.
@@ -673,11 +616,7 @@ export type ColumnsExpr = {
   args: Expression[];
   /** Optional column transformers (EXCEPT, APPLY, REPLACE). */
   transformers?: ColumnTransformer[];
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * ClickHouse JSON type annotation syntax: `expr.:Type` or `expr.:"ComplexType"`.
@@ -695,11 +634,7 @@ export type JsonSubcolumn = {
   type: string;
   /** Optional further field accesses after the type annotation, e.g. `['d']` in `col.:Array(JSON).d`. */
   path?: string[];
-  leadingComments?: string[];
-  trailingComments?: string[];
-  location?: SourceLocation;
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * Union of all expression node types in the AST.
@@ -789,6 +724,7 @@ const WindowFrameBoundSchema: z.ZodType<WindowFrameBound> = z.lazy(() =>
 /** Zod schema for {@link WindowSpec}. */
 const WindowSpecSchema: z.ZodType<WindowSpec> = z.lazy(() =>
   z.object({
+    baseWindow: z.string().optional(),
     partitionBy: z.array(ExpressionSchema).optional(),
     orderBy: z.array(OrderByItemSchema).optional(),
     frame: z
@@ -902,7 +838,7 @@ export const AliasSchema: z.ZodType<Alias> = z.object({
 
 /** Zod schema for {@link ArrayLiteral}. */
 export const ArrayLiteralSchema: z.ZodType<ArrayLiteral> = z.object({
-  kind: z.literal('array'),
+  kind: z.literal('arrayLiteral'),
   elements: z.array(ExpressionSchema),
   source: z.string().optional(),
   parenthesized: z.boolean().optional(),
@@ -911,7 +847,7 @@ export const ArrayLiteralSchema: z.ZodType<ArrayLiteral> = z.object({
 
 /** Zod schema for {@link TupleLiteral}. */
 export const TupleLiteralSchema: z.ZodType<TupleLiteral> = z.object({
-  kind: z.literal('tuple'),
+  kind: z.literal('tupleLiteral'),
   elements: z.array(ExpressionSchema),
   source: z.string().optional(),
   parenthesized: z.boolean().optional(),
@@ -978,11 +914,7 @@ export type OrderByItem = {
   fillStaleness?: Expression;
   /** INTERPOLATE clause items (attached to the last WITH FILL item in the ORDER BY). */
   interpolate?: InterpolateItem[];
-  /** Source location in the original SQL input. */
-  location?: SourceLocation;
-  /** Reference to the parent AST node. */
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /** Zod schema for {@link InterpolateItem}. */
 const InterpolateItemSchema: z.ZodType<InterpolateItem> = z.lazy(() =>
@@ -1003,8 +935,7 @@ export const OrderByItemSchema = z.object({
   fillStep: ExpressionSchema.optional(),
   fillStaleness: ExpressionSchema.optional(),
   interpolate: z.array(InterpolateItemSchema).optional(),
-  location: SourceLocationSchema.optional(),
-  parent: z.any().optional(),
+  ...ExprMetadataFields,
 });
 
 /** Zod schema for {@link SettingItem}. */
@@ -1193,24 +1124,16 @@ export type SubqueryFrom = {
   final?: boolean;
   /** Optional SAMPLE clause. */
   sample?: SampleClause;
-  /** Comments appearing before this node. */
-  leadingComments?: string[];
-  /** Comments appearing after this node on the same line. */
-  trailingComments?: string[];
-  /** Source location in the original SQL input. */
-  location?: SourceLocation;
-  /** Reference to the parent AST node. */
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A table function reference in a FROM clause.
  *
- * @example `FROM numbers(10)` → `{ kind: 'tableFunction', name: 'numbers', args: [...] }`
+ * @example `FROM numbers(10)` → `{ kind: 'tableFunctionRef', name: 'numbers', args: [...] }`
  * @example `FROM remote('host', db, table) AS r` → includes `alias: 'r'`
  */
 export type TableFunctionRef = {
-  kind: 'tableFunction';
+  kind: 'tableFunctionRef';
   /** The table function name. */
   name: string;
   /** Function arguments. */
@@ -1223,15 +1146,7 @@ export type TableFunctionRef = {
   sample?: SampleClause;
   /** Optional function-level SETTINGS. */
   settings?: SettingItem[];
-  /** Comments appearing before this node. */
-  leadingComments?: string[];
-  /** Comments appearing after this node on the same line. */
-  trailingComments?: string[];
-  /** Source location in the original SQL input. */
-  location?: SourceLocation;
-  /** Reference to the parent AST node. */
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * A JOIN expression combining two FROM sources.
@@ -1241,7 +1156,7 @@ export type TableFunctionRef = {
  * @example `t1 CROSS JOIN t2`
  */
 export type JoinExpr = {
-  kind: 'join';
+  kind: 'joinExpr';
   /** The type of join. */
   joinType: JoinType;
   /** The left side of the join. */
@@ -1250,11 +1165,7 @@ export type JoinExpr = {
   right: TableRef | SubqueryFrom | TableFunctionRef;
   /** The join condition (ON or USING). Absent for CROSS and PASTE joins. */
   constraint?: JoinConstraint;
-  /** Source location in the original SQL input. */
-  location?: SourceLocation;
-  /** Reference to the parent AST node. */
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * An ARRAY JOIN expression: unfolds array columns into individual rows.
@@ -1263,18 +1174,14 @@ export type JoinExpr = {
  * @example `t LEFT ARRAY JOIN arr` — keeps rows where `arr` is empty
  */
 export type ArrayJoinExpr = {
-  kind: 'arrayJoin';
+  kind: 'arrayJoinExpr';
   /** `'ARRAY'` or `'LEFT ARRAY'`. */
   joinType: ArrayJoinType;
   /** The left side (table or prior joins). */
   left: FromExpr;
   /** The array expressions to unfold. */
   expressions: Expression[];
-  /** Source location in the original SQL input. */
-  location?: SourceLocation;
-  /** Reference to the parent AST node. */
-  parent?: ASTNode;
-};
+} & NodeMetadata;
 
 /**
  * Union of all FROM clause source types.
@@ -1323,7 +1230,7 @@ export type SelectStatement = {
   /** Standalone OFFSET clause, or the offset from `LIMIT count, offset` comma syntax. */
   offset?: Expression;
   /** Named window definitions: `WINDOW name AS (spec)`. */
-  windows?: { name: string; body: string }[];
+  windows?: { name: string; spec: WindowSpec }[];
   /** QUALIFY filter expression (applied after window functions). */
   qualify?: Expression;
   /** `true` when this SELECT was wrapped in parentheses, e.g. `(SELECT 1)` inside a UNION. */
@@ -1370,16 +1277,25 @@ export type IntersectStatement = {
 /**
  * A Common Table Expression (CTE) in a WITH clause.
  *
- * - `'subquery'` — `WITH name AS (SELECT ...)` — names a subquery
- * - `'expr'` — `WITH expr AS name` — names an expression
+ * - `'cteSubquery'` — `WITH name AS (SELECT ...)` — names a subquery
+ * - `'cteExpr'` — `WITH expr AS name` — names an expression
  *
- * @example `WITH cte AS (SELECT 1)` → `{ kind: 'subquery', name: 'cte', query: ... }`
- * @example `WITH 42 AS answer` → `{ kind: 'expr', name: 'answer', expr: ... }`
+ * @example `WITH cte AS (SELECT 1)` → `{ kind: 'cteSubquery', name: 'cte', query: ... }`
+ * @example `WITH 42 AS answer` → `{ kind: 'cteExpr', name: 'answer', expr: ... }`
  */
-export type CTE = (
-  | { kind: 'subquery'; name: string; query: QueryStatement }
-  | { kind: 'expr'; name: string; expr: Expression }
-) & { leadingComments?: string[]; trailingComments?: string[] };
+export type CTESubquery = {
+  kind: 'cteSubquery';
+  name: string;
+  query: QueryStatement;
+} & NodeMetadata;
+
+export type CTEExpr = {
+  kind: 'cteExpr';
+  name: string;
+  expr: Expression;
+} & NodeMetadata;
+
+export type CTE = CTESubquery | CTEExpr;
 
 /**
  * Union of statement types that produce query results. These can appear in
@@ -1767,13 +1683,13 @@ export type CreateDictionaryStatement = {
     expression?: Expression;
   }[];
   dictDef: {
-    primaryKey: Expression[] | null;
-    source: { name: string; pairs: { name: string; value: Expression }[] } | null;
-    lifetime: { min?: number; max?: number; value?: number } | null;
-    layout: { name: string; pairs: { name: string; value: Expression }[] } | null;
-    range: { name: string; value: Expression }[] | null;
-    settings: SettingItem[] | null;
-    comment: string | null;
+    primaryKey?: Expression[];
+    source?: { name: string; pairs: { name: string; value: Expression }[] };
+    lifetime?: { min?: number; max?: number; value?: number };
+    layout?: { name: string; pairs: { name: string; value: Expression }[] };
+    range?: { name: string; value: Expression }[];
+    settings?: SettingItem[];
+    comment?: string;
   };
 } & CreateCommonFields;
 
@@ -1973,15 +1889,17 @@ export interface ASTNodeKindMap {
   binaryExpr: BinaryExpr;
   naryExpr: NaryExpr;
   alias: Alias;
-  array: ArrayLiteral;
-  tuple: TupleLiteral;
+  arrayLiteral: ArrayLiteral;
+  tupleLiteral: TupleLiteral;
   columnsExpr: ColumnsExpr;
   jsonSubcolumn: JsonSubcolumn;
   orderByItem: OrderByItem;
+  cteSubquery: CTESubquery;
+  cteExpr: CTEExpr;
   subqueryFrom: SubqueryFrom;
-  tableFunction: TableFunctionRef;
-  join: JoinExpr;
-  arrayJoin: ArrayJoinExpr;
+  tableFunctionRef: TableFunctionRef;
+  joinExpr: JoinExpr;
+  arrayJoinExpr: ArrayJoinExpr;
   select: SelectStatement;
   union: UnionStatement;
   intersect: IntersectStatement;
@@ -2028,13 +1946,6 @@ export type ASTNode = ASTNodeKindMap[ASTNodeKind];
 
 // ── Zod schemas for statement types ──────────────────────────────────────────
 
-const NodeMetadataSchema = {
-  leadingComments: z.array(z.string()).optional(),
-  trailingComments: z.array(z.string()).optional(),
-  location: SourceLocationSchema.optional(),
-  parent: z.any().optional(),
-};
-
 const TrailingClausesFields = {
   intoOutfile: LiteralSchema.optional(),
   preFormatSettings: z.array(SettingItemSchema).optional(),
@@ -2062,12 +1973,12 @@ export const SelectStatementSchema: z.ZodType<SelectStatement> = z.lazy(() =>
     limitBy: LimitByClauseSchema.optional(),
     limit: LimitClauseSchema.optional(),
     offset: ExpressionSchema.optional(),
-    windows: z.array(z.object({ name: z.string(), body: z.string() })).optional(),
+    windows: z.array(z.object({ name: z.string(), spec: WindowSpecSchema })).optional(),
     qualify: ExpressionSchema.optional(),
     parenthesized: z.boolean().optional(),
     settings: z.array(SettingItemSchema).optional(),
     ...TrailingClausesFields,
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2079,7 +1990,7 @@ export const UnionStatementSchema: z.ZodType<UnionStatement> = z.lazy(() =>
     unionMode: z.literal('DISTINCT').optional(),
     settings: z.array(SettingItemSchema).optional(),
     ...TrailingClausesFields,
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2091,7 +2002,7 @@ export const IntersectStatementSchema: z.ZodType<IntersectStatement> = z.lazy(()
     left: QueryStatementSchema,
     right: QueryStatementSchema,
     ...TrailingClausesFields,
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2099,13 +2010,13 @@ export const IntersectStatementSchema: z.ZodType<IntersectStatement> = z.lazy(()
 export const CTESchema: z.ZodType<CTE> = z.lazy(() =>
   z.union([
     z.object({
-      kind: z.literal('subquery'),
+      kind: z.literal('cteSubquery'),
       name: z.string(),
       query: QueryStatementSchema,
       ...ExprMetadataFields,
     }),
     z.object({
-      kind: z.literal('expr'),
+      kind: z.literal('cteExpr'),
       name: z.string(),
       expr: ExpressionSchema,
       ...ExprMetadataFields,
@@ -2122,27 +2033,21 @@ export const SubqueryFromSchema: z.ZodType<SubqueryFrom> = z.lazy(() =>
     columnAliases: z.array(z.string()).optional(),
     final: z.boolean().optional(),
     sample: SampleClauseSchema.optional(),
-    leadingComments: z.array(z.string()).optional(),
-    trailingComments: z.array(z.string()).optional(),
-    location: SourceLocationSchema.optional(),
-    parent: z.any().optional(),
+    ...ExprMetadataFields,
   }),
 );
 
 /** Zod schema for {@link TableFunctionRef}. */
 export const TableFunctionRefSchema: z.ZodType<TableFunctionRef> = z.lazy(() =>
   z.object({
-    kind: z.literal('tableFunction'),
+    kind: z.literal('tableFunctionRef'),
     name: z.string(),
     args: z.array(ExpressionSchema),
     final: z.boolean().optional(),
     alias: z.string().optional(),
     sample: SampleClauseSchema.optional(),
     settings: z.array(SettingItemSchema).optional(),
-    leadingComments: z.array(z.string()).optional(),
-    trailingComments: z.array(z.string()).optional(),
-    location: SourceLocationSchema.optional(),
-    parent: z.any().optional(),
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2187,25 +2092,23 @@ export const FromExprSchema: z.ZodType<FromExpr> = z.lazy(() =>
 /** Zod schema for {@link JoinExpr}. */
 export const JoinExprSchema: z.ZodType<JoinExpr> = z.lazy(() =>
   z.object({
-    kind: z.literal('join'),
+    kind: z.literal('joinExpr'),
     joinType: JoinTypeSchema,
     left: FromExprSchema,
     right: z.union([TableRefSchema, SubqueryFromSchema, TableFunctionRefSchema]),
     constraint: JoinConstraintSchema.optional(),
-    location: SourceLocationSchema.optional(),
-    parent: z.any().optional(),
+    ...ExprMetadataFields,
   }),
 );
 
 /** Zod schema for {@link ArrayJoinExpr}. */
 export const ArrayJoinExprSchema: z.ZodType<ArrayJoinExpr> = z.lazy(() =>
   z.object({
-    kind: z.literal('arrayJoin'),
+    kind: z.literal('arrayJoinExpr'),
     joinType: ArrayJoinTypeSchema,
     left: FromExprSchema,
     expressions: z.array(ExpressionSchema),
-    location: SourceLocationSchema.optional(),
-    parent: z.any().optional(),
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2217,7 +2120,7 @@ export const ExplainStatementSchema: z.ZodType<ExplainStatement> = z.lazy(() =>
     settings: z.array(SettingItemSchema).optional(),
     query: StatementSchema.optional(),
     ...TrailingClausesFields,
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2226,7 +2129,7 @@ export const SetStatementSchema: z.ZodType<SetStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('set'),
     settings: z.array(SettingItemSchema).optional(),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2243,7 +2146,7 @@ export const TransactionControlStatementSchema: z.ZodType<TransactionControlStat
     z.object({
       kind: z.literal('transactionControl'),
       snapshot: z.string(),
-      ...NodeMetadataSchema,
+      ...ExprMetadataFields,
     }),
 );
 
@@ -2253,7 +2156,7 @@ export const SetRoleStatementSchema: z.ZodType<SetRoleStatement> = z.lazy(() =>
     kind: z.literal('setRole'),
     roles: RoleTargetSchema,
     users: z.array(z.string()),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2297,7 +2200,7 @@ export const UseStatementSchema: z.ZodType<UseStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('use'),
     database: z.string(),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2306,7 +2209,7 @@ export const SystemStatementSchema: z.ZodType<SystemStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('system'),
     body: z.string(),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2365,7 +2268,7 @@ export const ColumnDefSchema: z.ZodType<ColumnDef> = z.lazy(() =>
     collate: z.string().optional(),
     primaryKey: z.boolean().optional(),
     columnSettings: z.array(SettingItemSchema).optional(),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2376,7 +2279,7 @@ export const ConstraintDefSchema: z.ZodType<ConstraintDef> = z.lazy(() =>
     name: z.string(),
     constraintType: z.union([z.literal('CHECK'), z.literal('ASSUME')]),
     expr: ExpressionSchema,
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2388,7 +2291,7 @@ export const IndexDefSchema: z.ZodType<IndexDef> = z.lazy(() =>
     expr: ExpressionSchema,
     indexType: IndexTypeSchema,
     granularity: z.number().optional(),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2399,7 +2302,7 @@ export const ProjectionDefSchema: z.ZodType<ProjectionDef> = z.lazy(() =>
     name: z.string(),
     query: SelectStatementSchema.optional(),
     projectionIndex: z.object({ column: z.string(), typeName: z.string() }).optional(),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2409,7 +2312,7 @@ export const ForeignKeyDefSchema: z.ZodType<ForeignKeyDef> = z.lazy(() =>
     columns: z.array(ExpressionSchema),
     refTable: TableRefSchema,
     refColumns: z.array(ExpressionSchema),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 
@@ -2450,7 +2353,7 @@ const CreateCommonFields = {
   orReplace: z.boolean().optional(),
   ifNotExists: z.boolean().optional(),
   onCluster: z.string().optional(),
-  ...NodeMetadataSchema,
+  ...ExprMetadataFields,
 };
 
 export const CreateTableStatementSchema: z.ZodType<CreateTableStatement> = z.lazy(() =>
@@ -2660,7 +2563,7 @@ export const CreateResourceStatementSchema: z.ZodType<CreateResourceStatement> =
     ...CreateCommonFields,
   }),
 );
-const rawBodyFields = { rawBody: z.string(), ...NodeMetadataSchema };
+const rawBodyFields = { rawBody: z.string(), ...ExprMetadataFields };
 export const CreateWindowViewStatementSchema: z.ZodType<CreateWindowViewStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('createWindowView'),
@@ -2711,7 +2614,7 @@ export const ParallelWithStatementSchema: z.ZodType<ParallelWithStatement> = z.l
   z.object({
     kind: z.literal('parallelWith'),
     queries: z.array(CreateStatementSchema),
-    ...NodeMetadataSchema,
+    ...ExprMetadataFields,
   }),
 );
 

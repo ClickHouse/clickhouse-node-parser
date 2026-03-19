@@ -30,14 +30,14 @@ FROM t_01568
 ORDER BY
     x ASC,
     y ASC
-WINDOW w AS (partition by p);
+WINDOW w AS (PARTITION BY p);
 
 SELECT
     sum(number),
     max(number)
 FROM t_01568
 ORDER BY p ASC
-WINDOW w AS (partition by p);
+WINDOW w AS (PARTITION BY p);
 
 SELECT
     sum(number) AS x,
@@ -46,7 +46,7 @@ FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,
     y ASC
-WINDOW w AS (partition by p);
+WINDOW w AS (PARTITION BY p);
 
 SELECT
     sum(number) AS x,
@@ -55,7 +55,7 @@ FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,
     y ASC
-WINDOW w AS (partition by p)
+WINDOW w AS (PARTITION BY p)
 SETTINGS max_threads = 1;
 
 SELECT DISTINCT
@@ -65,7 +65,7 @@ FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,
     y ASC
-WINDOW w AS (partition by p);
+WINDOW w AS (PARTITION BY p);
 
 -- window functions + aggregation w/shards
 SELECT groupArray(groupArray(number)) OVER (ROWS UNBOUNDED PRECEDING) AS x

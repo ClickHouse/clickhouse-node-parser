@@ -6,7 +6,7 @@ describe('findNodes', () => {
       const stmts = parse('SELECT 1;');
       expect(findNodes(stmts, 'queryParam')).toEqual([]);
       expect(findNodes(stmts, 'tableRef')).toEqual([]);
-      expect(findNodes(stmts, 'join')).toEqual([]);
+      expect(findNodes(stmts, 'joinExpr')).toEqual([]);
     });
   });
 
@@ -96,14 +96,14 @@ describe('findNodes', () => {
 
     it('finds array literals', () => {
       const stmts = parse('SELECT [1, 2, 3];');
-      const arrays = findNodes(stmts, 'array');
+      const arrays = findNodes(stmts, 'arrayLiteral');
       expect(arrays).toHaveLength(1);
       expect(arrays[0].elements).toHaveLength(3);
     });
 
     it('finds tuple literals', () => {
       const stmts = parse("SELECT (1, 'a', 3.14);");
-      const tuples = findNodes(stmts, 'tuple');
+      const tuples = findNodes(stmts, 'tupleLiteral');
       expect(tuples).toHaveLength(1);
       expect(tuples[0].elements).toHaveLength(3);
     });
@@ -166,7 +166,7 @@ describe('findNodes', () => {
 
     it('finds table function refs', () => {
       const stmts = parse('SELECT * FROM numbers(10);');
-      const tableFuncs = findNodes(stmts, 'tableFunction');
+      const tableFuncs = findNodes(stmts, 'tableFunctionRef');
       expect(tableFuncs).toHaveLength(1);
       expect(tableFuncs[0].name).toBe('numbers');
     });
@@ -175,13 +175,13 @@ describe('findNodes', () => {
       const stmts = parse(
         'SELECT * FROM t1 INNER JOIN t2 ON t1.id = t2.id LEFT JOIN t3 ON t2.id = t3.id;',
       );
-      const joins = findNodes(stmts, 'join');
+      const joins = findNodes(stmts, 'joinExpr');
       expect(joins).toHaveLength(2);
     });
 
     it('finds array join nodes', () => {
       const stmts = parse('SELECT * FROM t ARRAY JOIN arr AS a;');
-      const arrayJoins = findNodes(stmts, 'arrayJoin');
+      const arrayJoins = findNodes(stmts, 'arrayJoinExpr');
       expect(arrayJoins).toHaveLength(1);
       expect(arrayJoins[0].joinType).toBe('ARRAY');
     });

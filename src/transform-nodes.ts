@@ -3,6 +3,7 @@ import type {
   Expression,
   FromExpr,
   OrderByItem,
+  CTE,
   ASTNodeKind,
   ASTNodeKindMap,
 } from './ast';
@@ -27,8 +28,8 @@ export interface NodePositionMap {
   tupleExpansion: Expression;
   queryParam: Expression;
   alias: Expression;
-  array: Expression;
-  tuple: Expression;
+  arrayLiteral: Expression;
+  tupleLiteral: Expression;
   subqueryExpr: Expression;
   inExpr: Expression;
   columnsExpr: Expression;
@@ -37,9 +38,13 @@ export interface NodePositionMap {
   // FROM clause nodes
   tableRef: FromExpr;
   subqueryFrom: FromExpr;
-  tableFunction: FromExpr;
-  join: FromExpr;
-  arrayJoin: FromExpr;
+  tableFunctionRef: FromExpr;
+  joinExpr: FromExpr;
+  arrayJoinExpr: FromExpr;
+
+  // CTE nodes
+  cteSubquery: CTE;
+  cteExpr: CTE;
 
   // ORDER BY nodes
   orderByItem: OrderByItem;

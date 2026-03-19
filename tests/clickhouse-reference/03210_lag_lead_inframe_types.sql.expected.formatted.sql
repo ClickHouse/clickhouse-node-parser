@@ -1,18 +1,18 @@
 SELECT lagInFrame(2::UInt128, 2, number)
 FROM numbers(10)
-WINDOW w AS (ORDER BY number);
+WINDOW w AS (ORDER BY number ASC);
 
 SELECT leadInFrame(2::UInt128, 2, number)
 FROM numbers(10)
-WINDOW w AS (ORDER BY number);
+WINDOW w AS (ORDER BY number ASC);
 
 SELECT lagInFrame(2::UInt64, 2, number)
 FROM numbers(10)
-WINDOW w AS (ORDER BY number);
+WINDOW w AS (ORDER BY number ASC);
 
 SELECT leadInFrame(2::UInt64, 2, number)
 FROM numbers(10)
-WINDOW w AS (ORDER BY number);
+WINDOW w AS (ORDER BY number ASC);
 
 SELECT
     number,
@@ -31,4 +31,4 @@ FROM (
     )
 WHERE toLowCardinality(1)
 ORDER BY number DESC
-WINDOW w AS (PARTITION BY p ORDER BY number ASC NULLS FIRST ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING);
+WINDOW w AS (PARTITION BY p ORDER BY number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING);

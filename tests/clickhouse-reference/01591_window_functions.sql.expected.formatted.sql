@@ -172,8 +172,8 @@ SELECT
     sum(number)
 FROM numbers(10)
 WINDOW
-    w1 AS (rows unbounded preceding),
-    w2 AS (partition by intDiv(number, 3) as value order by number rows unbounded preceding);
+    w1 AS (ROWS UNBOUNDED PRECEDING),
+    w2 AS (PARTITION BY intDiv(number, 3) AS value ORDER BY number ASC ROWS UNBOUNDED PRECEDING);
 
 -- FIXME both functions should use the same window, but they don't. Add an
 -- EXPLAIN test for this.
@@ -181,7 +181,7 @@ SELECT
     sum(number),
     sum(number) OVER (PARTITION BY intDiv(number, 3) AS value ORDER BY number ASC ROWS UNBOUNDED PRECEDING)
 FROM numbers(10)
-WINDOW w1 AS (partition by intDiv(number, 3) rows unbounded preceding);
+WINDOW w1 AS (PARTITION BY intDiv(number, 3) ROWS UNBOUNDED PRECEDING);
 
 -- RANGE frame
 -- It's the default
@@ -198,7 +198,7 @@ SELECT
     count(number) AS c
 FROM numbers(31)
 ORDER BY number ASC
-WINDOW w AS (partition by p order by o, number range unbounded preceding)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 5;
 
 SELECT
@@ -208,7 +208,7 @@ SELECT
     count(number) AS c
 FROM numbers(31)
 ORDER BY number ASC
-WINDOW w AS (partition by p order by o, number range unbounded preceding)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 2;
 
 SELECT
@@ -218,7 +218,7 @@ SELECT
     count(number) AS c
 FROM numbers(31)
 ORDER BY number ASC
-WINDOW w AS (partition by p order by o, number range unbounded preceding)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 3;
 
 SELECT
@@ -228,7 +228,7 @@ SELECT
     count(number) AS c
 FROM numbers(31)
 ORDER BY number ASC
-WINDOW w AS (partition by p order by o, number range unbounded preceding)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 2;
 
 SELECT
@@ -238,7 +238,7 @@ SELECT
     count(number) AS c
 FROM numbers(31)
 ORDER BY number ASC
-WINDOW w AS (partition by p order by o, number range unbounded preceding)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 3;
 
 SELECT
@@ -248,7 +248,7 @@ SELECT
     count(number) AS c
 FROM numbers(31)
 ORDER BY number ASC
-WINDOW w AS (partition by p order by o range unbounded preceding)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC RANGE UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 5;
 
 -- A case where the partition end is in the current block, and the frame end
@@ -275,10 +275,8 @@ FROM (
         FROM numbers(31)
     )
 WINDOW
-    wa AS (partition by p order by o
-        range between unbounded preceding and unbounded following),
-    wo AS (partition by p order by o
-        rows between unbounded preceding and unbounded following)
+    wa AS (PARTITION BY p ORDER BY o ASC RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING),
+    wo AS (PARTITION BY p ORDER BY o ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 2;
 
 -- ROWS offset frame start
@@ -371,7 +369,7 @@ FROM (
         FROM numbers(11)
     )
 ORDER BY x ASC
-WINDOW w AS (order by x asc range between 1 preceding and 2 following);
+WINDOW w AS (ORDER BY x ASC RANGE BETWEEN 1 PRECEDING AND 2 FOLLOWING);
 
 -- overflow conditions
 SELECT
@@ -384,7 +382,7 @@ FROM (
         FROM numbers(10)
     )
 ORDER BY x ASC
-WINDOW w AS (order by x range between 1 preceding and 2 following);
+WINDOW w AS (ORDER BY x ASC RANGE BETWEEN 1 PRECEDING AND 2 FOLLOWING);
 
 SELECT
     x,
@@ -396,7 +394,7 @@ FROM (
         FROM numbers(15)
     )
 ORDER BY x ASC
-WINDOW w AS (order by x range between 1 preceding and 2 following);
+WINDOW w AS (ORDER BY x ASC RANGE BETWEEN 1 PRECEDING AND 2 FOLLOWING);
 
 -- We need large offsets to trigger overflow to positive direction, or
 -- else the frame end runs into partition end w/o overflow and doesn't move
@@ -411,7 +409,7 @@ FROM (
         FROM numbers(10)
     )
 ORDER BY x ASC
-WINDOW w AS (order by x range between 255 preceding and 255 following);
+WINDOW w AS (ORDER BY x ASC RANGE BETWEEN 255 PRECEDING AND 255 FOLLOWING);
 
 -- RANGE OFFSET ORDER BY DESC
 SELECT
@@ -424,7 +422,7 @@ FROM (
         FROM numbers(11)
     ) AS t
 ORDER BY x ASC
-WINDOW w AS (order by x desc range between 1 preceding and 2 following)
+WINDOW w AS (ORDER BY x DESC RANGE BETWEEN 1 PRECEDING AND 2 FOLLOWING)
 SETTINGS max_block_size = 1;
 
 SELECT
@@ -437,7 +435,7 @@ FROM (
         FROM numbers(11)
     ) AS t
 ORDER BY x ASC
-WINDOW w AS (order by x desc range between 1 preceding and unbounded following)
+WINDOW w AS (ORDER BY x DESC RANGE BETWEEN 1 PRECEDING AND UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 2;
 
 SELECT
@@ -450,7 +448,7 @@ FROM (
         FROM numbers(11)
     ) AS t
 ORDER BY x ASC
-WINDOW w AS (order by x desc range between unbounded preceding and 2 following)
+WINDOW w AS (ORDER BY x DESC RANGE BETWEEN UNBOUNDED PRECEDING AND 2 FOLLOWING)
 SETTINGS max_block_size = 3;
 
 SELECT
@@ -463,7 +461,7 @@ FROM (
         FROM numbers(11)
     ) AS t
 ORDER BY x ASC
-WINDOW w AS (order by x desc range between unbounded preceding and 2 preceding)
+WINDOW w AS (ORDER BY x DESC RANGE BETWEEN UNBOUNDED PRECEDING AND 2 PRECEDING)
 SETTINGS max_block_size = 4;
 
 -- Check that we put windows in such an order that we can reuse the sort.
@@ -544,7 +542,7 @@ ORDER BY
     p ASC,
     o ASC,
     number ASC
-WINDOW w AS (partition by p order by o, number)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC)
 SETTINGS max_block_size = 2;
 
 -- our replacement for lag/lead
@@ -570,8 +568,7 @@ FROM (
         FROM numbers(16)
     )
 ORDER BY number ASC
-WINDOW w AS (partition by p order by number
-    rows between unbounded preceding and unbounded following)
+WINDOW w AS (PARTITION BY p ORDER BY number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 3;
 
 -- careful with auto-application of Null combinator
@@ -603,7 +600,7 @@ SELECT
     lAsT_vAlUe(number)
 FROM numbers(10)
 ORDER BY number ASC
-WINDOW w AS (order by number range between 1 preceding and 1 following);
+WINDOW w AS (ORDER BY number ASC RANGE BETWEEN 1 PRECEDING AND 1 FOLLOWING);
 
 -- nth_value without specific frame range given
 SELECT
@@ -614,7 +611,7 @@ SELECT
     nth_value(number, 4) AS fourthValue
 FROM numbers(10)
 ORDER BY number ASC
-WINDOW w AS (order by number);
+WINDOW w AS (ORDER BY number ASC);
 
 -- nth_value with frame range specified
 SELECT
@@ -625,7 +622,7 @@ SELECT
     nth_value(number, 4) AS fourthValue
 FROM numbers(10)
 ORDER BY number ASC
-WINDOW w AS (order by number range between 1 preceding and 1 following);
+WINDOW w AS (ORDER BY number ASC RANGE BETWEEN 1 PRECEDING AND 1 FOLLOWING);
 
 -- to make nth_value return null for out-of-frame rows, cast the argument to
 -- Nullable; otherwise, it returns default values.
@@ -780,23 +777,23 @@ ORDER BY
     o ASC,
     number ASC
 WINDOW
-    w0 AS (partition by intDiv(number, 5) as p),
-    w1 AS (w0 order by mod(number, 3) as o, number);
+    w0 AS (PARTITION BY intDiv(number, 5) AS p),
+    w1 AS (w0 ORDER BY mod(number, 3) AS o ASC, number ASC);
 
 -- can't redefine PARTITION BY
 SELECT count() OVER (PARTITION BY number)
 FROM numbers(1)
-WINDOW w AS (partition by intDiv(number, 5)); -- { serverError BAD_ARGUMENTS }
+WINDOW w AS (PARTITION BY intDiv(number, 5)); -- { serverError BAD_ARGUMENTS }
 
 -- can't redefine existing ORDER BY
 SELECT count() OVER (ORDER BY number ASC)
 FROM numbers(1)
-WINDOW w AS (partition by intDiv(number, 5) order by mod(number, 3)); -- { serverError BAD_ARGUMENTS }
+WINDOW w AS (PARTITION BY intDiv(number, 5) ORDER BY mod(number, 3) ASC); -- { serverError BAD_ARGUMENTS }
 
 -- parent window can't have frame
 SELECT count() OVER (RANGE UNBOUNDED PRECEDING)
 FROM numbers(1)
-WINDOW w AS (partition by intDiv(number, 5) order by mod(number, 3) rows unbounded preceding); -- { serverError BAD_ARGUMENTS }
+WINDOW w AS (PARTITION BY intDiv(number, 5) ORDER BY mod(number, 3) ASC ROWS UNBOUNDED PRECEDING); -- { serverError BAD_ARGUMENTS }
 
 -- looks weird but probably should work -- this is a window that inherits and changes nothing
 SELECT count() OVER ()

@@ -345,7 +345,7 @@ DictAttr
 
 DictDefinition
   = clauses:( _ DictClause )+ {
-      const result = { primaryKey: null, source: null, lifetime: null, layout: null, range: null, settings: null, comment: null };
+      const result = {};
       for (const c of clauses) {
         const clause = c[1];
         if (clause.primaryKey) result.primaryKey = clause.primaryKey;
@@ -1561,11 +1561,11 @@ CTEItemList
 CTEItem
 // Subquery CTE: name AS (SELECT ...)
   = name:Identifier _ KW_AS _ "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
-      return { kind: 'subquery', name, query: addSurroundingWs(query, beforeQuery, afterQuery) };
+      return { kind: 'cteSubquery', name, query: addSurroundingWs(query, beforeQuery, afterQuery) };
     }
   // Expression CTE: expr AS name (ClickHouse extension)
   / expr:TernaryExpr afterExpr:_ KW_AS _ name:Identifier {
-      return { kind: 'expr', name, expr: addTrailing(expr, flattenWs(afterExpr)) };
+      return { kind: 'cteExpr', name, expr: addTrailing(expr, flattenWs(afterExpr)) };
     }
 
 // SelectItemList: supports optional trailing comma (ClickHouse extension).
@@ -1684,7 +1684,7 @@ FromAtomAlias
 
 TableFunctionRef
   = name:FunctionName _ "(" _ args:TableFunctionArgList? settings:( ( _ "," )? _ KW_SETTINGS _ SettingsList )? _ ")" {
-      const result = loc({ kind: 'tableFunction', name, args: args !== null ? args : [] });
+      const result = loc({ kind: 'tableFunctionRef', name, args: args !== null ? args : [] });
       if (settings !== null) result.settings = settings[4];
       return result;
     }
@@ -1697,17 +1697,17 @@ TableFunctionArgList
 
 JoinPart
   = join_type:ArrayJoinKeyword exprs:( _ ExpressionList )? {
-      return loc({ kind: 'arrayJoin', joinType: join_type, expressions: exprs ? exprs[1] : [] });
+      return loc({ kind: 'arrayJoinExpr', joinType: join_type, expressions: exprs ? exprs[1] : [] });
     }
   / join_type:JoinKeyword _ right:FromAtom _ constraint:JoinConstraint {
-      return loc({ kind: 'join', joinType: join_type, right, constraint });
+      return loc({ kind: 'joinExpr', joinType: join_type, right, constraint });
     }
   / join_type:JoinKeyword _ right:FromAtom {
-      return loc({ kind: 'join', joinType: join_type, right });
+      return loc({ kind: 'joinExpr', joinType: join_type, right });
     }
   // Comma-separated tables: implicit CROSS JOIN without constraint
   / "," _ right:FromAtom {
-      return loc({ kind: 'join', joinType: 'CROSS', right });
+      return loc({ kind: 'joinExpr', joinType: 'CROSS', right });
     }
 
 // JoinKeyword: [GLOBAL] [strictness] [direction] [OUTER] JOIN — returns direction string.
@@ -1880,10 +1880,14 @@ WindowItemList
     }
 
 // WindowItem: name AS (window_spec) - single named window definition
-// The window spec body is captured as raw text for re-emission in formatting
+// The spec may optionally start with a base window identifier (window inheritance).
 WindowItem
-  = name:Identifier _ KW_AS _ "(" body:$OverBody* ")" {
-      return { name, body };
+  = name:Identifier _ KW_AS _ "(" _ baseWindow:Identifier _ spec:WindowSpec _ ")" {
+      spec.baseWindow = baseWindow;
+      return { name, spec };
+    }
+  / name:Identifier _ KW_AS _ "(" _ spec:WindowSpec _ ")" {
+      return { name, spec };
     }
 
 SettingsList
@@ -2630,7 +2634,7 @@ ParenGroup
       } else {
         // (expr, expr, ...) — multi-element tuple
         const elems = [first, ...rest.map((r) => r[3])];
-        return loc({ kind: 'tuple', elements: elems, source: text() });
+        return loc({ kind: 'tupleLiteral', elements: elems, source: text() });
       }
     }
 
@@ -2642,12 +2646,12 @@ TupleLiteral
     }
   // Multi-element tuple (optionally with trailing comma)
   / "(" _ first:Expression _ "," _ rest:ExpressionList _ ","? _ ")" {
-      return loc({ kind: 'tuple', elements: [first, ...rest], source: text() });
+      return loc({ kind: 'tupleLiteral', elements: [first, ...rest], source: text() });
     }
 
 ArrayLiteral
   = "[" _ "]" {
-      return loc({ kind: 'array', elements: [], source: text() });
+      return loc({ kind: 'arrayLiteral', elements: [], source: text() });
     }
   / "[" beforeItems:_ items:ExpressionList afterItems:_ "]" {
       const bi = flattenWs(beforeItems);
@@ -2657,7 +2661,7 @@ ArrayLiteral
         items[0] = addLeading(items[0], bi);
         items[items.length - 1] = addTrailing(items[items.length - 1], ai);
       }
-      return loc({ kind: 'array', elements: items, source: text() });
+      return loc({ kind: 'arrayLiteral', elements: items, source: text() });
     }
 
 QueryParam

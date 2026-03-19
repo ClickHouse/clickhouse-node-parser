@@ -25,7 +25,7 @@ ORDER BY
     p ASC,
     o ASC,
     number ASC
-WINDOW w AS (partition by p order by o, number)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC)
 SETTINGS max_block_size = 2;
 
 CREATE TABLE product_groups

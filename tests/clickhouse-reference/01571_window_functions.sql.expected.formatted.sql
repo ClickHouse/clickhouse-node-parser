@@ -33,7 +33,7 @@ SELECT
     lagInFrame(toNullable(number), 2, NULL),
     lagInFrame(number, 2, 1)
 FROM numbers(10)
-WINDOW w AS (order by number);
+WINDOW w AS (ORDER BY number ASC);
 
 -- the case when current_row goes past the partition end at the block end
 SELECT

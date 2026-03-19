@@ -10,5 +10,5 @@ ORDER BY tuple();
 SELECT count(*)
 FROM users
 WINDOW
-    w AS (ORDER BY uid),
-    w AS (ORDER BY name); -- { serverError BAD_ARGUMENTS }
+    w AS (ORDER BY uid ASC),
+    w AS (ORDER BY name ASC); -- { serverError BAD_ARGUMENTS }

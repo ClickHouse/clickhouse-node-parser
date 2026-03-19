@@ -261,17 +261,22 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
     // From-clause types
     case 'tableRef':
       return formatTableRef(node);
-    case 'tableFunction':
+    case 'tableFunctionRef':
       return formatTableFunction(node, indent);
     case 'subqueryFrom':
       return formatSubqueryFrom(node, indent);
-    case 'join':
+    case 'joinExpr':
       return formatFromExpr(node, indent).join('\n');
-    case 'arrayJoin':
+    case 'arrayJoinExpr':
       return formatFromExpr(node, indent).join('\n');
     // Non-expression node types without dedicated formatters
     case 'orderByItem':
       return formatOrderByItem(node, indent);
+    // CTE nodes — format inline
+    case 'cteSubquery':
+      return `${quoteIdent(node.name)} AS (\n${formatStatement(node.query, indent + '  ')}\n${indent})`;
+    case 'cteExpr':
+      return `${formatExprCore(node.expr, indent)} AS ${quoteIdent(node.name)}`;
     // Expression types — use formatExpr (with comments)
     default:
       return formatExpr(node, indent);
@@ -1436,7 +1441,7 @@ function formatAlias(expr: Extract<Expression, { kind: 'alias' }>, indent: strin
   return result;
 }
 
-function formatArray(expr: Extract<Expression, { kind: 'array' }>, indent: string): string {
+function formatArray(expr: Extract<Expression, { kind: 'arrayLiteral' }>, indent: string): string {
   let result =
     expr.source !== undefined
       ? expr.source
@@ -1445,7 +1450,7 @@ function formatArray(expr: Extract<Expression, { kind: 'array' }>, indent: strin
   return result;
 }
 
-function formatTuple(expr: Extract<Expression, { kind: 'tuple' }>, indent: string): string {
+function formatTuple(expr: Extract<Expression, { kind: 'tupleLiteral' }>, indent: string): string {
   let result =
     expr.source !== undefined
       ? expr.source
@@ -1511,7 +1516,7 @@ function formatUnaryExpr(expr: Extract<Expression, { kind: 'unaryExpr' }>, inden
   let result: string;
   if (
     innerPrec <= 2 ||
-    expr.expr.kind === 'tuple' ||
+    expr.expr.kind === 'tupleLiteral' ||
     expr.expr.kind === 'alias' ||
     expr.expr.kind === 'subqueryExpr'
   ) {
@@ -1640,9 +1645,9 @@ function formatExprCore(expr: Expression, indent: string): string {
       return formatQueryParam(expr);
     case 'alias':
       return formatAlias(expr, indent);
-    case 'array':
+    case 'arrayLiteral':
       return formatArray(expr, indent);
-    case 'tuple':
+    case 'tupleLiteral':
       return formatTuple(expr, indent);
     case 'functionCall': {
       let result = formatFunctionCall(expr, indent);
@@ -1674,7 +1679,7 @@ function formatFunctionCall(expr: FunctionCall, indent: string): string {
     ? expr.name
     : `\`${expr.name.replace(/`/g, '``')}\``;
   // NOT(tuple) — from PrimaryBase KW_NOT TupleLiteral rule
-  if (expr.name === 'not' && expr.args.length === 1 && expr.args[0].kind === 'tuple') {
+  if (expr.name === 'not' && expr.args.length === 1 && expr.args[0].kind === 'tupleLiteral') {
     const tuple = expr.args[0];
     if (tuple.source !== undefined) return `NOT${tuple.source}`;
     return `NOT(${tuple.elements.map((e) => formatExpr(e, indent)).join(', ')})`;
@@ -1734,6 +1739,9 @@ function formatTupleElement(base: Expression, index: Expression, indent: string)
 
 function formatWindowSpec(spec: WindowSpec, indent: string): string {
   const parts: string[] = [];
+  if (spec.baseWindow) {
+    parts.push(quoteIdent(spec.baseWindow));
+  }
   if (spec.partitionBy && spec.partitionBy.length > 0) {
     parts.push(`PARTITION BY ${spec.partitionBy.map((e) => formatExpr(e, indent)).join(', ')}`);
   }
@@ -1882,7 +1890,7 @@ function formatJoinConstraint(constraint: JoinConstraint, indent: string): strin
 
 function formatFromAtom(from: TableRef | SubqueryFrom | TableFunctionRef, indent: string): string {
   if (from.kind === 'subqueryFrom') return formatSubqueryFrom(from, indent);
-  if (from.kind === 'tableFunction') return formatTableFunction(from, indent);
+  if (from.kind === 'tableFunctionRef') return formatTableFunction(from, indent);
   return formatTableRef(from);
 }
 
@@ -1907,13 +1915,13 @@ function formatFromExpr(from: FromExpr, outerIndent: string): string[] {
       `${innerIndent}${formatSubqueryFrom(from, innerIndent)}`,
     ];
   }
-  if (from.kind === 'tableFunction') {
+  if (from.kind === 'tableFunctionRef') {
     return [
       ...formatFromLeadingComments(from, innerIndent),
       `${innerIndent}${formatTableFunction(from, innerIndent)}`,
     ];
   }
-  if (from.kind === 'join') {
+  if (from.kind === 'joinExpr') {
     const leftLines = formatFromExpr(from.left, outerIndent);
     const rightStr = formatFromAtom(from.right, innerIndent);
     const lines = [...leftLines, `${outerIndent}${from.joinType} JOIN ${rightStr}`];
@@ -1975,7 +1983,7 @@ function formatCTEBlock(ctes: CTE[], indent: string): string {
     for (let i = 0; i < ctes.length; i++) {
       const cte = ctes[i];
       const prefix = i === 0 ? `${indent}WITH ` : `${indent}`;
-      if (cte.kind === 'expr') {
+      if (cte.kind === 'cteExpr') {
         const suffix = i < ctes.length - 1 ? ',' : '';
         parts.push(
           `${prefix}${formatExprCore(cte.expr, innerIndent)} AS ${quoteIdent(cte.name)}${suffix}`,
@@ -2012,7 +2020,7 @@ function formatCTEBlock(ctes: CTE[], indent: string): string {
         ? ' ' + cte.trailingComments.join(' ')
         : '';
 
-    if (cte.kind === 'subquery') {
+    if (cte.kind === 'cteSubquery') {
       const suffix = isLast ? ')' : '),';
       const namePrefix = isFirst ? `${indent}WITH ` : `${cteIndent}`;
       lines.push(`${namePrefix}${quoteIdent(cte.name)} AS (`);
@@ -2232,11 +2240,16 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
     flushEndComments(lines);
     if (stmt.windows.length === 1) {
       const w = stmt.windows[0];
-      lines.push(`${indent}WINDOW ${quoteIdent(w.name)} AS (${w.body})`);
+      lines.push(`${indent}WINDOW ${quoteIdent(w.name)} AS (${formatWindowSpec(w.spec, indent)})`);
     } else {
       lines.push(`${indent}WINDOW`);
       lines.push(
-        stmt.windows.map((w) => `${innerIndent}${quoteIdent(w.name)} AS (${w.body})`).join(',\n'),
+        stmt.windows
+          .map(
+            (w) =>
+              `${innerIndent}${quoteIdent(w.name)} AS (${formatWindowSpec(w.spec, innerIndent)})`,
+          )
+          .join(',\n'),
       );
     }
   }

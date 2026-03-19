@@ -268,7 +268,7 @@ function inlineExpr(expr: Expression): string | null {
       if (expr.type === 'Float64') return `Float64_${normalizeFloat(expr.value)}`;
       if (expr.type === 'Int64') return expr.value === '0' ? 'UInt64_0' : `Int64_${expr.value}`;
       return `UInt64_${normalizeUInt(expr.value)}`;
-    case 'array': {
+    case 'arrayLiteral': {
       // Empty arrays use Function array form, not literal
       if (expr.elements.length === 0) return null;
       const inlines = expr.elements.map(inlineExpr);
@@ -286,7 +286,7 @@ function inlineExpr(expr: Expression): string | null {
 function inlineTupleLiteral(expr: Expression): string | null {
   if ((expr as Record<string, unknown>).parenthesized) return null;
   if (expr.kind === 'literal') return inlineExpr(expr);
-  if (expr.kind === 'tuple') {
+  if (expr.kind === 'tupleLiteral') {
     const inlines = expr.elements.map(inlineTupleLiteral);
     if (inlines.some((i) => i === null)) return null;
     return `Tuple_(${inlines.join(', ')})`;
@@ -299,10 +299,10 @@ function inlineTupleLiteral(expr: Expression): string | null {
 // Arrays inside tuples are NOT inlined (ClickHouse renders them as Function tuple).
 function inlineInValue(expr: Expression): string | null {
   // Arrays as IN values are not inlined when they appear inside tuples
-  if (expr.kind === 'array') return null;
+  if (expr.kind === 'arrayLiteral') return null;
   const inline = inlineExpr(expr);
   if (inline !== null) return inline;
-  if (expr.kind === 'tuple') {
+  if (expr.kind === 'tupleLiteral') {
     const inlines = expr.elements.map(inlineInValue);
     if (inlines.some((i) => i === null)) return null;
     return `Tuple_(${inlines.join(', ')})`;
@@ -465,7 +465,7 @@ function exprNode(expr: Expression): ExplainNode {
       const inner = exprNode(innerExpr);
       return { label: `${inner.label} (alias ${expr.alias})`, children: inner.children };
     }
-    case 'array': {
+    case 'arrayLiteral': {
       if (expr.elements.length === 0) {
         return n('Function array', [n('ExpressionList')]);
       }
@@ -475,7 +475,7 @@ function exprNode(expr: Expression): ExplainNode {
       }
       return n(`Literal Array_[${inlines.join(', ')}]`);
     }
-    case 'tuple': {
+    case 'tupleLiteral': {
       const inline = inlineTupleLiteral(expr);
       if (inline !== null) return n(`Literal ${inline}`);
       return n('Function tuple', [n('ExpressionList', expr.elements.map(exprNode))]);
@@ -496,7 +496,7 @@ function exprNode(expr: Expression): ExplainNode {
       };
       const funcName = FUNC_ALIASES[expr.name.toLowerCase()] ?? expr.name;
       // not(tuple(a,b,c)) — NOT applied directly to a tuple literal: expand the tuple
-      if (funcName === 'not' && expr.args.length === 1 && expr.args[0].kind === 'tuple') {
+      if (funcName === 'not' && expr.args.length === 1 && expr.args[0].kind === 'tupleLiteral') {
         const tupleArg = expr.args[0];
         const tupleNode = n('Function tuple', [
           n('ExpressionList', tupleArg.elements.map(exprNode)),
@@ -537,8 +537,8 @@ function exprNode(expr: Expression): ExplainNode {
       // are shown as string literals. Source text is used to preserve original formatting.
       function isPureLiteral(e: Expression): boolean {
         if (e.kind === 'literal') return e.type !== 'NULL' && e.type !== 'Bool';
-        if (e.kind === 'array') return e.elements.every(isPureLiteral);
-        if (e.kind === 'tuple') return e.elements.every(isPureLiteral);
+        if (e.kind === 'arrayLiteral') return e.elements.every(isPureLiteral);
+        if (e.kind === 'tupleLiteral') return e.elements.every(isPureLiteral);
         return false;
       }
       function castElemStr(e: Expression): string {
@@ -546,12 +546,12 @@ function exprNode(expr: Expression): ExplainNode {
           if (e.type === 'String') return `'${escapeStringValue(e.value)}'`;
           return e.value;
         }
-        if (e.kind === 'array') {
+        if (e.kind === 'arrayLiteral') {
           if (e.source !== undefined) return e.source;
           return `[${e.elements.map(castElemStr).join(', ')}]`;
         }
         // tuple
-        if (e.kind === 'tuple') {
+        if (e.kind === 'tupleLiteral') {
           if (e.source !== undefined) return e.source;
           return `(${e.elements.map(castElemStr).join(', ')})`;
         }
@@ -563,12 +563,12 @@ function exprNode(expr: Expression): ExplainNode {
           if (e.type === 'String') return escapeStringValue(e.value);
           return e.value;
         }
-        if (e.kind === 'array') {
+        if (e.kind === 'arrayLiteral') {
           // Escape single quotes in source text so they appear as \' in the Literal label
           const src = e.source !== undefined ? e.source.replace(/'/g, "\\'") : null;
           return src ?? `[${e.elements.map(castElemStr).join(', ')}]`;
         }
-        if (e.kind === 'tuple') {
+        if (e.kind === 'tupleLiteral') {
           const src = e.source !== undefined ? e.source.replace(/'/g, "\\'") : null;
           return src ?? `(${e.elements.map(castElemStr).join(', ')})`;
         }
@@ -638,7 +638,7 @@ function exprNode(expr: Expression): ExplainNode {
           const single = expr.values[0];
           // Single tuple value in IN: wrap in Function tuple if inlineable,
           // otherwise render directly (e.g. parenthesized elements)
-          if (single.kind === 'tuple') {
+          if (single.kind === 'tupleLiteral') {
             const inlineResult = inlineInValue(single);
             if (inlineResult !== null) {
               valuesNode = n('Function tuple', [
@@ -797,7 +797,7 @@ function tableFunctionExprNode(from: TableFunctionRef): ExplainNode {
 
 function fromAtomExplainNode(from: TableRef | SubqueryFrom | TableFunctionRef): ExplainNode {
   if (from.kind === 'subqueryFrom') return subqueryTableExprNode(from);
-  if (from.kind === 'tableFunction') return tableFunctionExprNode(from);
+  if (from.kind === 'tableFunctionRef') return tableFunctionExprNode(from);
   return tableExpressionNode(from);
 }
 
@@ -823,10 +823,14 @@ type JoinElement =
   | { tag: 'arrayJoin'; expressions: Expression[] };
 
 function flattenFromExpr(from: FromExpr): JoinElement[] {
-  if (from.kind === 'tableRef' || from.kind === 'subqueryFrom' || from.kind === 'tableFunction') {
+  if (
+    from.kind === 'tableRef' ||
+    from.kind === 'subqueryFrom' ||
+    from.kind === 'tableFunctionRef'
+  ) {
     return [{ tag: 'base', from }];
   }
-  if (from.kind === 'join') {
+  if (from.kind === 'joinExpr') {
     return [
       ...flattenFromExpr(from.left),
       { tag: 'join', from: from.right, constraint: from.constraint },
@@ -870,7 +874,7 @@ function orderByNode(item: OrderByItem): ExplainNode {
 }
 
 function cteNode(cte: CTE): ExplainNode {
-  if (cte.kind === 'expr') {
+  if (cte.kind === 'cteExpr') {
     return exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name });
   }
   return n('WithElement', [n('Subquery', [stmtNode(cte.query)])]);
@@ -1501,7 +1505,7 @@ function createDictionaryQueryNode(stmt: CreateDictionaryStatement): ExplainNode
     if (dd.primaryKey) {
       const pkExprs: Expression[] = [];
       for (const pk of dd.primaryKey) {
-        if (pk.kind === 'tuple') {
+        if (pk.kind === 'tupleLiteral') {
           pkExprs.push(...pk.elements);
         } else {
           pkExprs.push(pk);
@@ -1835,7 +1839,7 @@ function createTableQueryNode(stmt: CreateTableStatement): ExplainNode {
           // WITH CTEs as aliased expressions (separate ExpressionList)
           if (projQuery.with && projQuery.with.length > 0) {
             const cteItems = projQuery.with
-              .filter((cte): cte is typeof cte & { kind: 'expr' } => cte.kind === 'expr')
+              .filter((cte): cte is typeof cte & { kind: 'cteExpr' } => cte.kind === 'cteExpr')
               .map((cte) => exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name }));
             if (cteItems.length > 0) {
               pqChildren.push(n('ExpressionList', cteItems));

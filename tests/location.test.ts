@@ -149,7 +149,7 @@ describe('location', () => {
     it('has location on array literals', () => {
       const sql = 'SELECT [1, 2, 3];';
       const stmts = parse(sql);
-      const arrays = findNodes(stmts, 'array');
+      const arrays = findNodes(stmts, 'arrayLiteral');
       expect(arrays[0].location).toEqual(loc(1, 8, 7, 1, 17, 16));
       expect(slice(sql, arrays[0].location!)).toBe('[1, 2, 3]');
     });
@@ -207,7 +207,7 @@ describe('location', () => {
     it('has location on table function refs', () => {
       const sql = 'SELECT * FROM numbers(10);';
       const stmts = parse(sql);
-      const funcs = findNodes(stmts, 'tableFunction');
+      const funcs = findNodes(stmts, 'tableFunctionRef');
       expect(funcs[0].location).toEqual(loc(1, 15, 14, 1, 26, 25));
       expect(slice(sql, funcs[0].location!)).toBe('numbers(10)');
     });
@@ -215,7 +215,7 @@ describe('location', () => {
     it('has location on join expressions', () => {
       const sql = 'SELECT * FROM a INNER JOIN b ON a.id = b.id;';
       const stmts = parse(sql);
-      const joins = findNodes(stmts, 'join');
+      const joins = findNodes(stmts, 'joinExpr');
       expect(joins).toHaveLength(1);
       expect(slice(sql, joins[0].location!)).toBe('INNER JOIN b ON a.id = b.id');
     });
@@ -223,7 +223,7 @@ describe('location', () => {
     it('has location on array join expressions', () => {
       const sql = 'SELECT * FROM t ARRAY JOIN arr AS a;';
       const stmts = parse(sql);
-      const arrayJoins = findNodes(stmts, 'arrayJoin');
+      const arrayJoins = findNodes(stmts, 'arrayJoinExpr');
       expect(arrayJoins).toHaveLength(1);
       expect(slice(sql, arrayJoins[0].location!)).toBe('ARRAY JOIN arr AS a');
     });
@@ -303,7 +303,7 @@ describe('location', () => {
     it('extracts tuple source text', () => {
       const sql = "SELECT (1, 'a', 3.14);";
       const stmts = parse(sql);
-      const tuples = findNodes(stmts, 'tuple');
+      const tuples = findNodes(stmts, 'tupleLiteral');
       expect(slice(sql, tuples[0].location!)).toBe("(1, 'a', 3.14)");
     });
   });
