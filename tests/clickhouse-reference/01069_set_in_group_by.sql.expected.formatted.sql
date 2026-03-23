@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS testmt;
+
 CREATE TABLE testmt
 (
     CounterID UInt64,
@@ -12,3 +14,5 @@ SELECT arrayJoin([CounterID NOT IN (2)]) AS counter
 FROM testmt
 WHERE CounterID IN (2)
 GROUP BY counter;
+
+SYSTEM DROP  TABLE testmt;

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS 03400_users;
+
+SYSTEM DROP  TABLE IF EXISTS 03400_dist_users;
+
 CREATE TABLE `03400_users`
 (
     uid Int16,

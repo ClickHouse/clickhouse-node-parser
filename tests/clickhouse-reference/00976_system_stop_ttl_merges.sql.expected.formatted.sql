@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists ttl;
+
 CREATE TABLE ttl
 (
     d Date,

@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t_00818;
+
+SYSTEM drop  table if exists s_00818;
+
 CREATE TABLE t_00818
 (
     a Nullable(Int64),
@@ -56,3 +60,7 @@ LEFT JOIN s_00818
     ON t_00818.a = s_00818.a
     AND t_00818.b = s_00818.a
 ORDER BY t_00818.a ASC;
+
+SYSTEM drop  table t_00818;
+
+SYSTEM drop  table s_00818;

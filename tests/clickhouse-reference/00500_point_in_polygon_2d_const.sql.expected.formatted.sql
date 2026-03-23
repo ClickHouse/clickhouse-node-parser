@@ -1,5 +1,7 @@
 SELECT pointInPolygon((0, 0), [[(0, 0), (10, 0), (10, 10), (0, 10)]]);
 
+SYSTEM DROP  TABLE IF EXISTS s;
+
 CREATE TABLE s
 (
     id String,
@@ -7,6 +9,8 @@ CREATE TABLE s
     lat Int64
 )
 ENGINE = Memory();
+
+SYSTEM DROP  TABLE IF EXISTS p;
 
 CREATE TABLE p
 (
@@ -28,3 +32,7 @@ WHERE pointInPolygon((lng,lat), (
         FROM p
         WHERE polygon_id = 8
     ));
+
+SYSTEM DROP  TABLE s;
+
+SYSTEM DROP  TABLE p;

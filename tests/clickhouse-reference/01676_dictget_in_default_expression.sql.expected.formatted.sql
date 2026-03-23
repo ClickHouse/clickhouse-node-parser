@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS test_01676 SYNC;
+
 CREATE DATABASE test_01676;
 
 CREATE TABLE test_01676.dict_data
@@ -50,3 +53,5 @@ SELECT COALESCE((
     )::Nullable(String), 'NOT_LOADED');
 
 INSERT INTO test_01676.table (x);
+
+SYSTEM DROP  DATABASE test_01676;

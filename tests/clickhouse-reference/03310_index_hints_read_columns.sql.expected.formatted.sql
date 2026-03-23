@@ -5,6 +5,8 @@ SET automatic_parallel_replicas_mode = 0;
 
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_index_hint;
+
 CREATE TABLE t_index_hint
 (
     a UInt64,
@@ -98,3 +100,5 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND like(query, '%SELECT count() FROM t_index_hint%')
 ORDER BY event_time_microseconds ASC;
+
+SYSTEM DROP  TABLE t_index_hint;

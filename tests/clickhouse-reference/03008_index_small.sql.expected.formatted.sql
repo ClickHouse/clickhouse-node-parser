@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a UInt8,
@@ -17,3 +19,5 @@ FROM numbers(3);
 SELECT count()
 FROM test
 WHERE b >= 0;
+
+SYSTEM DROP  TABLE test;

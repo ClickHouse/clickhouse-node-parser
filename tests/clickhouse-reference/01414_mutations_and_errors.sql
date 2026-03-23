@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS mutation_table;
 CREATE TABLE mutation_table
 (
     date Date,

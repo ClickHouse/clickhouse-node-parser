@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS local_table;
+
+SYSTEM DROP  TABLE IF EXISTS other_table;
+
 CREATE TABLE local_table
 (
     id Int32,
@@ -62,3 +66,7 @@ FROM
 LEFT JOIN other_table AS t2
     ON t1.oth_id = other_table.id
 ORDER BY other_table.name ASC;
+
+SYSTEM DROP  TABLE local_table;
+
+SYSTEM DROP  TABLE other_table;

@@ -5,6 +5,8 @@ SET read_in_order_use_virtual_row = 1;
 
 SET use_query_condition_cache = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x UInt64,
@@ -116,6 +118,11 @@ WHERE current_database = currentDatabase()
 ORDER BY query_start_time DESC
 LIMIT 1;
 
+SYSTEM DROP  TABLE t;
+
+-- from 02149_read_in_order_fixed_prefix
+SYSTEM DROP  TABLE IF EXISTS fixed_prefix;
+
 CREATE TABLE fixed_prefix
 (
     a UInt32,
@@ -149,6 +156,10 @@ SETTINGS
     optimize_read_in_order = 1,
     read_in_order_two_level_merge_threshold = 5; --avoid preliminary merge
 
+SYSTEM DROP  TABLE fixed_prefix;
+
+SYSTEM DROP  TABLE IF EXISTS function_pk;
+
 CREATE TABLE function_pk
 (
     A Int64,
@@ -173,8 +184,12 @@ SETTINGS
     optimize_read_in_order = 1,
     read_in_order_two_level_merge_threshold = 5; --avoid preliminary merge
 
+SYSTEM DROP  TABLE function_pk;
+
 -- modified from 02317_distinct_in_order_optimization
 SELECT '-- test distinct ----';
+
+SYSTEM DROP  TABLE IF EXISTS distinct_in_order SYNC;
 
 CREATE TABLE distinct_in_order
 (
@@ -199,3 +214,5 @@ SETTINGS
     read_in_order_two_level_merge_threshold = 0,
     optimize_read_in_order = 1,
     max_threads = 2;
+
+SYSTEM DROP  TABLE distinct_in_order;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS map_extractKeyLike_test;
+
 CREATE TABLE map_extractKeyLike_test
 (
     id UInt32,
@@ -32,6 +34,8 @@ SELECT
     mapExtractKeyLike(map, '5-K1')
 FROM map_extractKeyLike_test
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE map_extractKeyLike_test;
 
 SELECT mapExtractKeyLike(map('aa', 1, 'bb', 2), 'a%');
 

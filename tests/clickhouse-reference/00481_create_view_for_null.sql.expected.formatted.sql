@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS null_00481;
+
+SYSTEM DROP  TABLE IF EXISTS null_view;
+
 CREATE TABLE null_00481
 (
     x UInt8
@@ -16,3 +20,7 @@ FROM null_00481;
 
 SELECT *
 FROM null_view;
+
+SYSTEM DROP  TABLE null_00481;
+
+SYSTEM DROP  TABLE null_view;

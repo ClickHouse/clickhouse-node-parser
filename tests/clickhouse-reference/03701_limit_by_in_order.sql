@@ -1,5 +1,6 @@
 -- In order version of LIMIT BY works only if analyzer enabled
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS 03701_unsorted, 03701_sorted;
 CREATE TABLE 03701_unsorted (key UInt32, val UInt32, dt Date) engine=MergeTree ORDER BY tuple();
 INSERT INTO 03701_unsorted SELECT intDiv(number, 2), number, '2025-05-05' FROM numbers(10);
 INSERT INTO 03701_unsorted SELECT intDiv(number, 3) + 10, number, '2025-05-06' FROM numbers(9);
@@ -34,6 +35,7 @@ WHERE explain LIKE '%LimitByTransform%';
 SELECT '-- Unsorted with LIMIT 1 BY';
 SELECT key FROM 03701_unsorted ORDER BY key LIMIT 1 BY key LIMIT 10;
 SELECT key FROM 03701_unsorted ORDER BY key LIMIT 2 BY key LIMIT 16;
+DROP TABLE 03701_unsorted;
 CREATE TABLE 03701_sorted (key UInt32, val UInt32, dt Date) engine=MergeTree ORDER BY key;
 INSERT INTO 03701_sorted SELECT intDiv(number, 2), number, '2025-05-05' FROM numbers(10);
 INSERT INTO 03701_sorted SELECT intDiv(number, 3) + 10, number, '2025-05-06' FROM numbers(9);
@@ -64,3 +66,4 @@ FROM (EXPLAIN PIPELINE SELECT key FROM 03701_sorted LIMIT 1 BY key LIMIT 10)
 WHERE explain LIKE '%LimitByTransform%';
 SELECT key FROM 03701_sorted ORDER BY key LIMIT 1 BY key LIMIT 10;
 SELECT key FROM 03701_sorted ORDER BY key LIMIT 2 BY key LIMIT 16;
+DROP TABLE 03701_sorted;

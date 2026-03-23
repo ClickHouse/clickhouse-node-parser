@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  DATABASE IF EXISTS test_01249;
+
 SET allow_deprecated_database_ordinary = 1;
 
 -- Creation of a database with Ordinary engine emits a warning.
@@ -53,3 +55,7 @@ CREATE TABLE bloom_filter_idx_good
 ENGINE = MergeTree()
 ORDER BY u64
 SETTINGS index_granularity = 8192; -- { serverError BAD_ARGUMENTS }
+
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_idx_good;
+
+SYSTEM DROP  DATABASE test_01249;

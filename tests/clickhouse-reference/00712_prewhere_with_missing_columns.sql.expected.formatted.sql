@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mergetree_00712;
+
 CREATE TABLE mergetree_00712
 (
     x UInt8,
@@ -30,3 +32,5 @@ FROM mergetree_00712
 PREWHERE x
     AND y
 ORDER BY s ASC;
+
+SYSTEM DROP  TABLE mergetree_00712;

@@ -16,6 +16,8 @@ SELECT toMonth(toDateTime('2017-12-31 18:59:58'));
 
 SELECT toYear(toDateTime('2017-12-31 18:59:58'));
 
+SYSTEM DROP  TABLE IF EXISTS Orders;
+
 CREATE TABLE Orders
 (
     OrderId UInt64,
@@ -35,3 +37,5 @@ SELECT
     toSecond(OrderDate)
 FROM Orders
 WHERE OrderId = 1;
+
+SYSTEM DROP  TABLE Orders;

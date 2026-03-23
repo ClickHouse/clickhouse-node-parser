@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS numbers1;
+
+SYSTEM DROP  TABLE IF EXISTS numbers2;
+
 CREATE TABLE numbers1
 ENGINE = Memory AS
 SELECT number
@@ -10,6 +14,10 @@ FROM numbers(1000);
 
 SELECT *
 FROM merge(currentDatabase(), '^numbers\\d+$') SAMPLE 0.1; -- { serverError SAMPLING_NOT_SUPPORTED }
+
+SYSTEM DROP  TABLE numbers1;
+
+SYSTEM DROP  TABLE numbers2;
 
 CREATE TABLE numbers1
 ENGINE = MergeTree

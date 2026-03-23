@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     tid UInt64,
@@ -25,3 +27,5 @@ SELECT sum(amount)
 FROM t FINAL
 WHERE (processed_at >= '2023-09-19 00:00:00')
     AND (processed_at <= '2023-09-20 01:00:00');
+
+SYSTEM DROP  TABLE t;

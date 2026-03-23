@@ -56,9 +56,11 @@ SELECT tryIdnaEncode('xn--');
 SELECT idnaEncode('ﻱa'); -- { serverError BAD_ARGUMENTS }
 SELECT tryIdnaEncode('ﻱa');
 SELECT 'Wenn Sie ... vom Hauptbahnhof in München ... mit zehn Minuten, ohne, dass Sie am Flughafen noch einchecken müssen, dann starten Sie im Grunde genommen am Flughafen ... am ... am Hauptbahnhof in München starten Sie Ihren Flug. Zehn Minuten. Schauen Sie sich mal die großen Flughäfen an, wenn Sie in Heathrow in London oder sonst wo, meine se ... Charles de Gaulle äh in Frankreich oder in ...äh... in ... in...äh...in Rom. Wenn Sie sich mal die Entfernungen ansehen, wenn Sie Frankfurt sich ansehen, dann werden Sie feststellen, dass zehn Minuten... Sie jederzeit locker in Frankfurt brauchen, um ihr Gate zu finden. Wenn Sie vom Flug ... vom ... vom Hauptbahnhof starten - Sie steigen in den Hauptbahnhof ein, Sie fahren mit dem Transrapid in zehn Minuten an den Flughafen in ... an den Flughafen Franz Josef Strauß. Dann starten Sie praktisch hier am Hauptbahnhof in München. Das bedeutet natürlich, dass der Hauptbahnhof im Grunde genommen näher an Bayern ... an die bayerischen Städte heranwächst, weil das ja klar ist, weil auf dem Hauptbahnhof viele Linien aus Bayern zusammenlaufen.' AS idna, idnaEncode(idna) AS ascii, tryIdnaEncode(ascii) AS ascii_try, idnaDecode(ascii) AS original, idnaDecode(ascii_try) AS original_try FORMAT Vertical;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (idna String) ENGINE=MergeTree ORDER BY idna;
 INSERT INTO tab VALUES ('straße.münchen.de') ('') ('münchen');
 SELECT idna, idnaEncode(idna) AS ascii, tryIdnaEncode(ascii) AS ascii_try, idnaDecode(ascii) AS original, idnaDecode(ascii_try) AS original_try FROM tab;
+DROP TABLE tab;
 INSERT INTO tab VALUES ('xn--') ('london.co.uk') ('ytraße.münchen.de') ('xn--tešla') ('microsoft.com') ('xn--');
 SELECT idna, idnaEncode(idna) AS ascii FROM tab; -- { serverError BAD_ARGUMENTS }
 SELECT idna, tryIdnaEncode(idna) AS ascii, idnaDecode(ascii) AS original FROM tab;

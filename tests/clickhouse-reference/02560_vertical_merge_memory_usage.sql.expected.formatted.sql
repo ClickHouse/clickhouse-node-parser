@@ -1,3 +1,6 @@
+-- Tags: no-object-storage
+SYSTEM drop  table if exists tvm;
+
 CREATE TABLE tvm
 (
     c0 UInt64,
@@ -619,3 +622,5 @@ WHERE table = 'tvm'
     AND event_type = 'MergeParts'
     AND peak_memory_usage > 100000000
 FORMAT Vertical;
+
+SYSTEM drop  table tvm;

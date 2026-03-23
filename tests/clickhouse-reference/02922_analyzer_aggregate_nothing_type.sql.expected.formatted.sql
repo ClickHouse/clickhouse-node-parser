@@ -210,6 +210,8 @@ FROM remote('127.0.0.{1,2}', numbers(3));
 SELECT countIfArrayArray([[1, NULL]], [[1, 0]]) AS x
 FROM remote('127.0.0.{1,2}', numbers(3));
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t1
 (
     n UInt64

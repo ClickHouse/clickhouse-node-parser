@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS eligible_test;
+DROP TABLE IF EXISTS eligible_test2;
 -- enable query cache session-wide but also force it individually in each of below statements
 SET use_query_cache = true;
 SET query_cache_system_table_handling = 'save';
@@ -11,3 +13,4 @@ CREATE TABLE eligible_test (a String) ENGINE=MergeTree ORDER BY a; --  SETTINGS 
 -- INSERT
 INSERT INTO eligible_test VALUES('a', 'b'); -- SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown
 INSERT INTO eligible_test SELECT * FROM eligible_test SETTINGS use_query_cache = true;
+DROP TABLE eligible_test2;

@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS nullable_key;
+DROP TABLE IF EXISTS nullable_key_without_final_mark;
+DROP TABLE IF EXISTS nullable_minmax_index;
 SET max_threads = 1;
 SET optimize_read_in_order = 0;
 CREATE TABLE nullable_key (k Nullable(int), v int) ENGINE MergeTree ORDER BY k SETTINGS allow_nullable_key = 1, index_granularity = 1;
@@ -32,9 +35,14 @@ SET max_rows_to_read = 8;
 SELECT * FROM nullable_minmax_index WHERE v IS NOT NULL;
 SELECT * FROM nullable_minmax_index WHERE v > 2;
 SELECT * FROM nullable_minmax_index WHERE v <= 2;
+DROP TABLE nullable_key;
+DROP TABLE nullable_key_without_final_mark;
+DROP TABLE nullable_minmax_index;
+DROP TABLE IF EXISTS xxxx_null;
 CREATE TABLE xxxx_null (`ts` Nullable(DateTime)) ENGINE = MergeTree ORDER BY toStartOfHour(ts) SETTINGS allow_nullable_key = 1;
 INSERT INTO xxxx_null SELECT '2021-11-11 00:00:00';
 SELECT * FROM xxxx_null WHERE ts > '2021-10-11 00:00:00';
+DROP TABLE xxxx_null;
 -- nullable keys are forbidden when `allow_nullable_key = 0`
 CREATE TABLE invalid_null (id Nullable(String)) ENGINE = MergeTree ORDER BY id; -- { serverError ILLEGAL_COLUMN }
 CREATE TABLE invalid_lc_null (id LowCardinality(Nullable(String))) ENGINE = MergeTree ORDER BY id; -- { serverError ILLEGAL_COLUMN }

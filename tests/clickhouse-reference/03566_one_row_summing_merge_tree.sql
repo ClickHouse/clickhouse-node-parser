@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     key UInt32,
@@ -63,6 +64,7 @@ INSERT INTO test_table(key, B) values(1, Null);
 --SELECT * FROM test_table final format PrettyCompact; 
 INSERT INTO test_table(key, A, C) values(1, Null, Null);
 select '\n\n -- CoalescingMergeTree --\n' format TSVRaw;
+drop table test_table;
 CREATE TABLE test_table
 (
     key UInt32,

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists src;
+
 CREATE TABLE src
 (
     A Int64,

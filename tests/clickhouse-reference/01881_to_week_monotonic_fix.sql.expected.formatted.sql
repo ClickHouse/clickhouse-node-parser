@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_tbl;
+
 CREATE TABLE test_tbl
 (
     vend_nm String,
@@ -20,3 +22,5 @@ FROM test_tbl
 WHERE ship_dt >= toDate('2020-01-01')
     AND ship_dt <= toDate('2021-05-05')
 ORDER BY ship_dt ASC;
+
+SYSTEM drop  table test_tbl;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS replaceall;
+
 CREATE TABLE replaceall
 (
     str FixedString(3)
@@ -17,6 +19,8 @@ SELECT
     replaceAll(str, 'o', '*') AS replaced
 FROM replaceall
 ORDER BY str ASC;
+
+SYSTEM DROP  TABLE replaceall;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

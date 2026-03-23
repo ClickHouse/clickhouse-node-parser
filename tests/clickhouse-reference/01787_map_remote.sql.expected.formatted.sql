@@ -7,6 +7,8 @@ FROM remote('127.0.0.{1,2}');
 SELECT map()
 FROM remote('127.0.0.{1,2}', `system`, one);
 
+SYSTEM drop  table if exists bug_repro_local;
+
 CREATE TABLE bug_repro_local
 (
     attributes Map(LowCardinality(String), String)

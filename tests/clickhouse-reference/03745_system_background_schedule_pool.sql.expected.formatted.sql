@@ -1,6 +1,11 @@
 SELECT count() >= 0 AS has_tasks
 FROM `system`.background_schedule_pool;
 
+-- Test 1: Buffer table (buffer_flush pool)
+SYSTEM DROP  TABLE IF EXISTS test_table_03745;
+
+SYSTEM DROP  TABLE IF EXISTS test_buffer_03745;
+
 CREATE TABLE test_table_03745
 (
     x UInt64
@@ -24,6 +29,13 @@ SELECT
 FROM `system`.background_schedule_pool
 WHERE database = currentDatabase();
 
+SYSTEM DROP  TABLE test_buffer_03745;
+
+SYSTEM DROP  TABLE test_table_03745;
+
+-- Test 2: MergeTree table (schedule pool)
+SYSTEM DROP  TABLE IF EXISTS test_merge_tree_03745;
+
 CREATE TABLE test_merge_tree_03745
 (
     x UInt64,
@@ -34,6 +46,13 @@ ORDER BY x
 SETTINGS refresh_statistics_interval = '0';
 
 INSERT INTO test_merge_tree_03745;
+
+SYSTEM DROP  TABLE test_merge_tree_03745;
+
+-- Test 3: Distributed table (distributed pool)
+SYSTEM DROP  TABLE IF EXISTS test_local_03745;
+
+SYSTEM DROP  TABLE IF EXISTS test_distributed_03745;
 
 CREATE TABLE test_local_03745
 (
@@ -49,3 +68,7 @@ ENGINE = Distributed(test_shard_localhost, currentDatabase(), test_local_03745);
 
 -- Pool is created only for async INSERTs
 INSERT INTO test_distributed_03745 SETTINGS prefer_localhost_replica = 0, distributed_foreground_insert = 0;
+
+SYSTEM DROP  TABLE test_distributed_03745;
+
+SYSTEM DROP  TABLE test_local_03745;

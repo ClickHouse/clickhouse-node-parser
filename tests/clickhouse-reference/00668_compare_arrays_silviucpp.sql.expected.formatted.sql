@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS array;
+
 CREATE TABLE `array`
 (
     arr Array(Nullable(Float64))
@@ -17,3 +19,5 @@ WHERE arr > [null, 12.2];
 SELECT *
 FROM `array`
 WHERE arr > [null, 12];
+
+SYSTEM DROP  TABLE array;

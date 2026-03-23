@@ -4,6 +4,7 @@
 SET optimize_read_in_order = 1;
 -- Ensure plan stabiliity with parallel replicas
 SET parallel_replicas_local_plan = 1;
+DROP TABLE IF EXISTS test_03789;
 CREATE TABLE test_03789 (
     tenant String,
     event_time DateTime,
@@ -17,3 +18,4 @@ SELECT count() > 0 FROM (
 SELECT count() > 0 FROM (
     EXPLAIN actions=1 SELECT * FROM test_03789 WHERE tenant='5' ORDER BY tenant, event_time DESC LIMIT 5
 ) WHERE explain LIKE '%InReverseOrder%';
+DROP TABLE test_03789;

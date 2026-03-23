@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     v Variant(Array(Nullable(String)))
@@ -9,3 +11,5 @@ INSERT INTO test SELECT ['hello', null, 'world'];
 
 SELECT v.`Array(Nullable(String))`.`null`
 FROM test;
+
+SYSTEM drop  table test;

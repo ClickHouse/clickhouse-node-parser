@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS users_03236_zero;
+
 CREATE TABLE users_03236_zero
 (
     uid Int16,

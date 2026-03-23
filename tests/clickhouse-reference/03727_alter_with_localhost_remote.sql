@@ -1,3 +1,6 @@
+-- Tags: no-replicated-database, no-parallel
+
+DROP USER IF EXISTS test_03727;
 CREATE USER test_03727;
 CREATE TABLE normal
 (

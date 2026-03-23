@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS mutate_and_zero_copy_replication1;
+
+SYSTEM DROP  TABLE IF EXISTS mutate_and_zero_copy_replication2;
+
 CREATE TABLE mutate_and_zero_copy_replication1
 (
     a UInt64,
@@ -21,6 +25,8 @@ SETTINGS old_parts_lifetime = 0, cleanup_delay_period = 300, max_cleanup_delay_p
 INSERT INTO mutate_and_zero_copy_replication1;
 
 SET mutations_sync = 2;
+
+SYSTEM DROP  TABLE mutate_and_zero_copy_replication1 SYNC;
 
 SELECT *
 FROM mutate_and_zero_copy_replication2

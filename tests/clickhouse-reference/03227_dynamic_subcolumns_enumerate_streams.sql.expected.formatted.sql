@@ -1,5 +1,7 @@
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON
@@ -17,3 +19,5 @@ FROM test;
 
 SELECT json.a.UInt64
 FROM test;
+
+SYSTEM drop  table test;

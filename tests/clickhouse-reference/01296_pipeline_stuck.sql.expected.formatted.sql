@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_01295;
+
 CREATE TABLE data_01295
 (
     key Int
@@ -18,3 +20,5 @@ FROM data_01295 FINAL
 SETTINGS max_threads = 2; -- stuck with multiple threads
 
 SET max_insert_threads = 2;
+
+SYSTEM drop  table data_01295;

@@ -3,6 +3,10 @@ SET max_block_size = 10;
 
 SET min_insert_block_size_rows = 10;
 
+SYSTEM drop  table if exists testX;
+
+SYSTEM drop  table if exists testXA;
+
 CREATE TABLE testX
 (
     A Int64
@@ -32,3 +36,8 @@ FROM testXA;
 INSERT INTO testX SELECT number
 FROM numbers(20)
 SETTINGS materialized_views_ignore_errors = 1; -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
+
+-- { echoOff }
+SYSTEM drop  table testX;
+
+SYSTEM drop  view testXA;

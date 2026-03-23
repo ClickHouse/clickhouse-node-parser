@@ -1,3 +1,6 @@
+-- Tags: no-random-settings
+
+drop table if exists tab_00484;
 create table tab_00484 (date Date, x UInt64, s FixedString(128)) engine = MergeTree PARTITION BY date ORDER BY (date, x) SETTINGS min_bytes_for_wide_part = 0, ratio_of_defaults_for_sparse_serialization = 1;
 insert into tab_00484 select today(), number, toFixedString('', 128) from system.numbers limit 8192;
 set preferred_block_size_bytes = 2000000;
@@ -17,3 +20,4 @@ insert into tab_00484 select today(), number, 'abc' from system.numbers limit 81
 set preferred_block_size_bytes = 0;
 select count(*) from tab_00484 prewhere s != 'abc' format Null;
 select count(*) from tab_00484 prewhere s = 'abc' format Null;
+drop table tab_00484;

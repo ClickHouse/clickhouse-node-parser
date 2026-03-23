@@ -1,5 +1,7 @@
 SET allow_experimental_funnel_functions = 1;
 
+SYSTEM DROP  TABLE IF EXISTS events_demo;
+
 CREATE TABLE events_demo
 (
     id UInt32,

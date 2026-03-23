@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS atable;
+
 CREATE TABLE atable
 (
     cdu_date Int16,
@@ -26,3 +28,5 @@ GROUP BY
     loanx_id,
     rating_sp
 SETTINGS query_plan_remove_redundant_distinct = 1;
+
+SYSTEM DROP  TABLE atable;

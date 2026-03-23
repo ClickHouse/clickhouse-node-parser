@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a Int8
@@ -14,3 +16,5 @@ FROM
     ) AS x
 INNER JOIN input('a UInt64') AS y
     ON x.number = y.a;
+
+SYSTEM drop  table test;

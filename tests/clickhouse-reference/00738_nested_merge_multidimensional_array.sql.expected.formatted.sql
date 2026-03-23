@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS sites;
+
 CREATE TABLE sites
 (
     Domain UInt8,
@@ -17,3 +19,5 @@ SELECT
     countArray(Users.Dates),
     countArrayArray(Users.Dates)
 FROM sites;
+
+SYSTEM DROP  TABLE sites;

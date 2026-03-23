@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS file;
+
 CREATE TABLE file
 (
     s String,
@@ -17,3 +19,5 @@ FROM file;
 
 SELECT *
 FROM file2;
+
+SYSTEM DROP  TABLE file;

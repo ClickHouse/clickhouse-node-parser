@@ -3,6 +3,8 @@ SET enable_json_type = 1;
 
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(a Dynamic)
@@ -18,6 +20,8 @@ INSERT INTO test SELECT '{"a" : [1, 2, 3]}';
 SELECT *
 FROM test
 ORDER BY toString(json) ASC;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

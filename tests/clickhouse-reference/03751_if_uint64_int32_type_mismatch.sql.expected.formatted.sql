@@ -1,3 +1,9 @@
+-- Test for issue #70017: if function type mismatch between UInt64 and Int32
+-- The issue was: Unexpected return type from if. Expected Int64. Got Int128.
+-- This happened when the canUnsignedBeSigned flag on UInt64 type was lost during
+-- query plan transformations in distributed queries.
+SYSTEM DROP  TABLE IF EXISTS test_if_type_mismatch;
+
 CREATE TABLE test_if_type_mismatch
 (
     c_f7nvvq Int32,
@@ -42,3 +48,5 @@ WHERE (CAST((negate(multiIf((CAST((subq_0.c_j59 = subq_0.c_pfnd1iaw) AS Nullable
 SELECT
     if(1, floor(4373163444658715090), toInt32(0)) AS when_true,
     if(0, floor(4373163444658715090), toInt32(42)) AS when_false;
+
+SYSTEM DROP  TABLE test_if_type_mismatch;

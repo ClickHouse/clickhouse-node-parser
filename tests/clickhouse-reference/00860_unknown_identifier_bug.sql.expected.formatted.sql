@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS appointment_events;
+
 CREATE TABLE appointment_events
 (
     _appointment_id UInt32,
@@ -41,3 +43,5 @@ LEFT JOIN (
     USING (_appointment_id)
 WHERE A._set_at = B.max_set_at
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE appointment_events;

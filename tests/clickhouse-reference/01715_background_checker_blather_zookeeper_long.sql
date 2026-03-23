@@ -1,3 +1,8 @@
+-- Tags: long, zookeeper, no-shared-merge-tree, no-msan, no-asan, no-tsan, no-ubsan
+-- no-shared-merge-tree: no replication queue
+
+DROP TABLE IF EXISTS i20203_1 SYNC;
+DROP TABLE IF EXISTS i20203_2 SYNC;
 CREATE TABLE i20203_1 (a Int8)
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/01715_background_checker_i20203', 'r1')
 ORDER BY tuple();
@@ -11,3 +16,5 @@ SELECT number from numbers(10) where sleepEachRow(1) Format Null;
 SELECT num_tries < 200
 FROM system.replication_queue
 WHERE table = 'i20203_2' AND database = currentDatabase();
+DROP TABLE i20203_1 SYNC;
+DROP TABLE i20203_2 SYNC;

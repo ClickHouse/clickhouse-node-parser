@@ -4,6 +4,8 @@
 -- instead of the actual varying argument type to check monotonicity.
 SET session_timezone = 'UTC';
 
+SYSTEM DROP  TABLE IF EXISTS test_coalesce_reversed;
+
 CREATE TABLE test_coalesce_reversed
 (
     ts Nullable(Date)
@@ -30,3 +32,5 @@ WHERE toDateTime64('2025-01-01 00:00:00', 3) >= coalesce(toDateTime64('1970-01-0
 SELECT count()
 FROM test_coalesce_reversed
 WHERE coalesce(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3);
+
+SYSTEM DROP  TABLE test_coalesce_reversed;

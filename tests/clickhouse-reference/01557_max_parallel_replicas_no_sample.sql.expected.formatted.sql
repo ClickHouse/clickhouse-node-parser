@@ -7,6 +7,8 @@ SET parallel_replicas_mode = 'sampling_key';
 
 SET parallel_replicas_for_non_replicated_merge_tree = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x String
@@ -20,6 +22,8 @@ SET max_parallel_replicas = 3;
 
 SELECT *
 FROM remote('127.0.0.{2|3|4}', currentDatabase(), t);
+
+SYSTEM DROP  TABLE t;
 
 CREATE TABLE t
 (

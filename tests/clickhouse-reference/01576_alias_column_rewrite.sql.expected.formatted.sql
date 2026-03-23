@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     timestamp DateTime,
@@ -168,6 +170,10 @@ WHERE arrayMap(day -> day + 1, [1,2,3])[1] = 2
 
 SET max_rows_to_read = 0;
 
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_index;
+
 CREATE TABLE test_index
 (
     key_string String,
@@ -192,6 +198,11 @@ WHERE key_uint32 = 1;
 SELECT COUNT() == 1
 FROM test_index
 WHERE toUInt32(key_string) = 1;
+
+-- check alias column can be used to match projections
+SYSTEM drop  table if exists pd;
+
+SYSTEM drop  table if exists pl;
 
 CREATE TABLE pd
 (
@@ -222,6 +233,12 @@ SETTINGS
     optimize_use_projections = 1,
     force_optimize_projection = 1;
 
+SYSTEM drop  table pd;
+
+SYSTEM drop  table pl;
+
+SYSTEM drop  table if exists t;
+
 CREATE TEMPORARY TABLE t
 (
     x UInt64,
@@ -234,3 +251,5 @@ SELECT
     sum(x),
     sum(y)
 FROM t;
+
+SYSTEM drop  table t;

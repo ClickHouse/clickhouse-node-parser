@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mutations_and_escaping_1648;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE mutations_and_escaping_1648
@@ -14,3 +16,5 @@ INSERT INTO mutations_and_escaping_1648 (d, e);
 SELECT e
 FROM mutations_and_escaping_1648
 ORDER BY d ASC;
+
+SYSTEM DROP  TABLE mutations_and_escaping_1648;

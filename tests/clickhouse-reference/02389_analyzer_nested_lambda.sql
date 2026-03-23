@@ -12,6 +12,7 @@ SELECT arrayMap(x -> x + arrayMap(x -> (SELECT 5), [1])[1], [1,2,3]);
 SELECT (SELECT 5) AS subquery, arrayMap(x -> x + arrayMap(x -> subquery, [1])[1], [1,2,3]);
 SELECT arrayMap(x -> x + arrayMap(x -> (SELECT 5 UNION DISTINCT SELECT 5), [1])[1], [1,2,3]);
 SELECT (SELECT 5 UNION DISTINCT SELECT 5) AS subquery, arrayMap(x -> x + arrayMap(x -> subquery, [1])[1], [1,2,3]);
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -35,6 +36,7 @@ SELECT arrayMap(x -> concat(concat(concat(concat(concat(toString(id), '___\0____
     concat(toString(id), NULL), toString(id)), toString(id))) AS lambda, [NULL, NULL, 2147483647])
 FROM test_table WHERE concat(concat(concat(toString(id), '___\0_______\0____'), toString(id)), concat(toString(id), NULL), toString(id));
 SELECT arrayMap(x -> splitByChar(toString(id), arrayMap(x -> toString(1), [NULL])), [NULL]) FROM test_table; -- { serverError ILLEGAL_COLUMN };
+DROP TABLE test_table;
 -- { echoOff }
 
 SELECT

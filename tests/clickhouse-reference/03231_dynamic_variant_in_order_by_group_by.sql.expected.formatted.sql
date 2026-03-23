@@ -2,6 +2,8 @@ SET allow_experimental_variant_type = 1;
 
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     d Dynamic
@@ -219,6 +221,8 @@ GROUP BY GROUPING SETS ((d), ('str'))
 ORDER BY `all` ASC;
 
 SET enable_analyzer = 0;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

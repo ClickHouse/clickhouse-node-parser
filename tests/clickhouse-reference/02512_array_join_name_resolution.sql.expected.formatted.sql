@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS x;
+
 CREATE TABLE x
 (
     `arr.key` Array(String),
@@ -21,3 +23,5 @@ FROM (
     )
 GROUP BY key
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE x;

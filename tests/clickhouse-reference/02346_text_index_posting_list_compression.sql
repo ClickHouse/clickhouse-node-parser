@@ -12,6 +12,8 @@
 SET enable_full_text_index = 1;
 SET use_skip_indexes_on_data_read = 1;
 SET use_query_condition_cache = 0;
+DROP TABLE IF EXISTS tab_bitpacking;
+DROP TABLE IF EXISTS tab_uncompressed;
 CREATE TABLE tab_bitpacking
 (
     ts DateTime,
@@ -127,3 +129,5 @@ SELECT
     (SELECT count() FROM tab_uncompressed WHERE hasToken(str, 'rare5')) AS count_uncompressec,
     (count_bitpacking = 5) AS ok_rare5,
     (count_bitpacking = count_uncompressec) AS ok_rare5_eq;
+DROP TABLE tab_bitpacking;
+DROP TABLE tab_uncompressed;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     uid Int64,
@@ -7,6 +9,8 @@ CREATE TABLE test_table
 )
 ENGINE = MergeTree
 ORDER BY (uid, start);
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary;
 
 CREATE DICTIONARY test_dictionary
 (
@@ -32,3 +36,7 @@ SELECT sleep(3)
 FORMAT Null;
 
 SELECT '--';
+
+SYSTEM DROP  DICTIONARY test_dictionary;
+
+SYSTEM DROP  TABLE test_table;

@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on OpenSSL
+SYSTEM DROP  TABLE IF EXISTS encryption_test;
+
 CREATE TABLE encryption_test
 (
     i Int,
@@ -10,6 +14,8 @@ INSERT INTO encryption_test;
 
 SELECT *
 FROM encryption_test;
+
+SYSTEM DROP  TABLE encryption_test;
 
 CREATE TABLE encryption_test
 (

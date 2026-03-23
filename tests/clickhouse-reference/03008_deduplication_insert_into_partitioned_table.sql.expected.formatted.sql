@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS partitioned_table;
+
+SYSTEM DROP  TABLE IF EXISTS mv_table;
+
 SET deduplicate_blocks_in_dependent_materialized_views = 1;
 
 CREATE TABLE partitioned_table
@@ -35,6 +39,10 @@ ORDER BY `ALL` ASC;
 SELECT *
 FROM mv_table
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE partitioned_table;
+
+SYSTEM DROP  TABLE mv_table;
 
 INSERT INTO partitioned_table SETTINGS insert_deduplication_token = 'token_1';
 

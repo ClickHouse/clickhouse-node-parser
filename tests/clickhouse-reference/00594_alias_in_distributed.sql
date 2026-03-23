@@ -1,3 +1,7 @@
+-- Tags: distributed
+
+DROP TABLE IF EXISTS alias_local10;
+DROP TABLE IF EXISTS alias10;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE alias_local10 (
   Id Int8,
@@ -21,6 +25,7 @@ SELECT field3 FROM alias10;
 SELECT field1 FROM alias10 WHERE field3 = '12345';
 SELECT field2 FROM alias10 WHERE field3 = '12345';
 SELECT field3 FROM alias10 WHERE field3 = '12345';
+DROP TABLE alias10;
 CREATE TABLE alias10 (
   Id Int8,
   EventDate Date,
@@ -28,3 +33,4 @@ CREATE TABLE alias10 (
   field2 String,
   field3 String
 ) ENGINE = Distributed(test_shard_localhost, currentDatabase(), alias_local10);
+DROP TABLE alias_local10;

@@ -1,4 +1,5 @@
 SET mutations_sync=2;
+DROP TABLE IF EXISTS rep_data;
 CREATE TABLE rep_data
 (
     p Int,
@@ -10,6 +11,7 @@ PARTITION BY p
 ORDER BY t
 SETTINGS number_of_free_entries_in_pool_to_execute_mutation=0;
 INSERT INTO rep_data VALUES (1, now());
+DROP TABLE IF EXISTS data;
 CREATE TABLE data
 (
     p Int,

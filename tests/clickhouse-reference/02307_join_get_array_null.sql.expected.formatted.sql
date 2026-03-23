@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists id_val;
+
 CREATE TABLE id_val
 (
     id Int32,
@@ -8,3 +10,5 @@ SETTINGS join_use_nulls = 1;
 
 SELECT joinGet(id_val, 'val', toInt32(number))
 FROM numbers(1);
+
+SYSTEM drop  table id_val;

@@ -6,6 +6,8 @@
 -- and the actual issue was already fixed a long time ago.
 SET compile_expressions = 0; -- Disable JIT to avoid unrelated issues
 
+SYSTEM DROP  TABLE IF EXISTS t_70015;
+
 CREATE TABLE t_70015
 (
     c_izfnu Int64,
@@ -31,3 +33,5 @@ SELECT toInt64(10) - toInt16(5);
 SELECT toInt64(10) - toInt8(5);
 
 SELECT toInt32(10) - toInt64(5);
+
+SYSTEM DROP  TABLE t_70015;

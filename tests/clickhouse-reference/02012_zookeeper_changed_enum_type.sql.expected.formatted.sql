@@ -15,3 +15,5 @@ INSERT INTO enum_alter_issue;
 SELECT *
 FROM enum_alter_issue
 ORDER BY b ASC;
+
+SYSTEM drop  table enum_alter_issue;

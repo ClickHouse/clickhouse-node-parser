@@ -1,7 +1,10 @@
+DROP TABLE IF EXISTS t_mem;
+DROP TABLE IF EXISTS t_mt;
 CREATE TABLE t_mem (a Int32, b Int32) ENGINE = Memory;
 CREATE TABLE t_mt (a Int32, b Int32) ENGINE = MergeTree ORDER BY a SETTINGS index_granularity = 1024, index_granularity_bytes = '10Mi';
 INSERT INTO t_mem SELECT number, sipHash64(number, 1) FROM numbers(5_000);
 INSERT INTO t_mt SELECT number, sipHash64(number, 2) FROM numbers(5_000);
+DROP VIEW IF EXISTS t_view;
 CREATE VIEW t_view AS SELECT a, b, 'aaa_' || toString(a) FROM t_mt;
 CREATE TEMPORARY TABLE start_ts AS ( SELECT now() AS ts );
 SET enable_parallel_replicas = 0;
@@ -23,6 +26,7 @@ WHERE t2.a < 2000
 SETTINGS log_comment = 'right_join'
 FORMAT Null
 ;
+DROP VIEW IF EXISTS left_joined_view;
 CREATE VIEW left_joined_view AS
 SELECT t1.a as t1_a, t2.a as t2_a
 FROM t_mt AS t1
@@ -32,6 +36,7 @@ SELECT * FROM left_joined_view
 WHERE t1_a < 2000
 SETTINGS log_comment = 'left_join_view'
 FORMAT Null;
+DROP VIEW IF EXISTS right_joined_view;
 CREATE VIEW right_joined_view AS
 SELECT t1.a as t1_a, t2.a as t2_a
 FROM t_mem AS t1

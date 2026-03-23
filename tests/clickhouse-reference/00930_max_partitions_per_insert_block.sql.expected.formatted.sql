@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS partitions;
+
 CREATE TABLE partitions
 (
     x UInt64
@@ -24,3 +26,5 @@ LIMIT 1;
 INSERT INTO partitions SELECT *
 FROM `system`.numbers
 LIMIT 2; -- { serverError TOO_MANY_PARTS }
+
+SYSTEM DROP  TABLE partitions;

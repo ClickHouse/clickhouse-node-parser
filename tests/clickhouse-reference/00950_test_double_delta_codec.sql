@@ -1,3 +1,6 @@
+-- Tags: no-random-merge-tree-settings
+
+DROP TABLE IF EXISTS codecTest;
 CREATE TABLE codecTest (
     key      UInt64,
     ref_valueU64 UInt64,

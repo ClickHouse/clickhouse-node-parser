@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     id Int
@@ -643,3 +647,5 @@ FROM
     empty_table
 LEFT JOIN t1
     ON 1 = 2;
+
+SYSTEM DROP  TABLE IF EXISTS empty_table;

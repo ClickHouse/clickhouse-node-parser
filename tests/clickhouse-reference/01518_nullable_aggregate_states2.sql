@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS testNullableStates;
+DROP TABLE IF EXISTS testNullableStatesAgg;
 CREATE TABLE testNullableStates (
    ts DateTime,
    id String,
@@ -372,3 +374,5 @@ SELECT count(),
     sumMerge(int8Sum)
 FROM testNullableStatesAgg
 WHERE id = '-22';
+DROP TABLE testNullableStates;
+DROP TABLE testNullableStatesAgg;

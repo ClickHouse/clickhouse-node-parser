@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists replacing;
+
 CREATE TABLE replacing
 (
     A Int64,
@@ -23,3 +25,5 @@ INSERT INTO replacing;
 
 SELECT *
 FROM replacing;
+
+SYSTEM drop  table replacing;

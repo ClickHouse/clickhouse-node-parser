@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 03593_t;
+
 CREATE TABLE `03593_t`
 (
     s String,

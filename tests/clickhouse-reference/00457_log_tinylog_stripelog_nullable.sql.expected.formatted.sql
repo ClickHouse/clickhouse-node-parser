@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nullable_00457;
+
 CREATE TABLE nullable_00457
 (
     s String,
@@ -57,3 +59,5 @@ CREATE TABLE nullable_00457
     narr Array(Nullable(UInt64))
 )
 ENGINE = StripeLog;
+
+SYSTEM DROP  TABLE nullable_00457;

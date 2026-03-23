@@ -1,3 +1,7 @@
+-- Tags: no-replicated-database
+-- no-replicated-database: test relies on system.part_log but mutation can be executed on the second replica
+
+DROP TABLE IF EXISTS t_delete_empty_part_rmt;
 CREATE TABLE t_delete_empty_part_rmt (a UInt64, b UInt64)
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_delete_empty_part_rmt', '1')
 ORDER BY b PARTITION BY a;
@@ -15,3 +19,4 @@ SELECT
 FROM system.part_log
 WHERE database = currentDatabase() AND table = 't_delete_empty_part_rmt' AND event_type = 'MutatePart'
 ORDER BY part_name;
+DROP TABLE t_delete_empty_part_rmt;

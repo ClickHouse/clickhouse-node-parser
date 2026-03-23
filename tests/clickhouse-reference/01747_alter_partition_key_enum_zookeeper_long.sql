@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+
+DROP TABLE IF EXISTS report;
 CREATE TABLE report
 (
     `product` Enum8('IU' = 1, 'WS' = 2),
@@ -12,6 +15,7 @@ INSERT INTO report VALUES ('IU', 'lada', '2101', toDateTime('1970-04-19 15:00:00
 SELECT * FROM report  WHERE product = 'IU';
 SELECT * FROM report WHERE product = 'PS';
 INSERT INTO report VALUES ('PS', 'jeep', 'Grand Cherokee', toDateTime('2005-10-03 15:00:00'));
+DROP TABLE IF EXISTS replicated_report;
 CREATE TABLE replicated_report
 (
     `product` Enum8('IU' = 1, 'WS' = 2),

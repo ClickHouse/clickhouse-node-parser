@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS im;
+
 CREATE TABLE im
 (
     id Int32,
@@ -6,6 +8,8 @@ CREATE TABLE im
 ENGINE = Memory();
 
 INSERT INTO im;
+
+SYSTEM DROP  TABLE IF EXISTS ts;
 
 CREATE TABLE ts
 (

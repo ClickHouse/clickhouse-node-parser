@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists dt_overflow;
+
 CREATE TABLE dt_overflow
 (
     d Date,

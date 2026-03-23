@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS BannerDict;
+
 CREATE TABLE BannerDict
 (
     BannerID UInt64,

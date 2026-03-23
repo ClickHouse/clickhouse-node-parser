@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS test_distributed;
+
+SYSTEM DROP  TABLE IF EXISTS test_local;
+
 SET prefer_localhost_replica = 1;
 
 -- https://github.com/ClickHouse/ClickHouse/issues/36279
@@ -36,6 +41,12 @@ INNER JOIN (
     USING (text)
 WHERE (ilike(text, '%text-for-search%'))
     AND (ilike(text2, '%text-for-search%'));
+
+SYSTEM DROP  TABLE IF EXISTS user_local;
+
+SYSTEM DROP  TABLE IF EXISTS user_all;
+
+SYSTEM DROP  TABLE IF EXISTS event;
 
 -- https://github.com/ClickHouse/ClickHouse/issues/36300
 CREATE TABLE user_local

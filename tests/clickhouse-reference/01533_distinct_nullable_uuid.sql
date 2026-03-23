@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS bug_14144;
 CREATE TABLE bug_14144
 ( meta_source_req_uuid Nullable(UUID),
   a Int64,
@@ -20,3 +21,4 @@ SELECT COUNT() FROM (
    ORDER BY meta_source_req_uuid ASC
    LIMIT 100000
 );
+DROP TABLE bug_14144;

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS test_xy;
+DROP TABLE IF EXISTS updates;
 CREATE TABLE test_xy
 (
     `x` Int32,
@@ -23,3 +25,5 @@ FROM test_xy
 WHERE 1 ORDER BY x, y;
 SET mutations_sync = 1;
 SELECT * FROM test_xy ORDER BY x, y;
+DROP TABLE test_xy;
+DROP TABLE updates;

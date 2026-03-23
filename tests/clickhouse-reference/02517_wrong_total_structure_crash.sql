@@ -13,3 +13,7 @@ SELECT field1 FROM alias10__fuzz_13 WHERE arrayEnumerateDense(NULL, tuple('0.214
 CREATE OR REPLACE TABLE local (x Int8) ENGINE = Memory;
 CREATE OR REPLACE TABLE distributed (x Array(Int8)) ENGINE = Distributed(test_shard_localhost, currentDatabase(), local);
 SELECT x FROM distributed GROUP BY x WITH TOTALS; -- { serverError TYPE_MISMATCH }
+DROP TABLE distributed;
+DROP TABLE local;
+DROP TABLE alias_local10;
+DROP TABLE alias10__fuzz_13;

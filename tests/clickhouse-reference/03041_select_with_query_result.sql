@@ -1,5 +1,8 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/44153
 SET enable_analyzer=1;
+DROP TABLE IF EXISTS parent;
+DROP TABLE IF EXISTS join_table_1;
+DROP TABLE IF EXISTS join_table_2;
 CREATE TABLE parent(
     a_id Int64,
     b_id Int64,

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS fx_1m;
+DROP TABLE IF EXISTS fx_5m;
 -- create source table
 CREATE TABLE fx_1m (
     `symbol` LowCardinality(String) CODEC(ZSTD),
@@ -42,3 +44,5 @@ FROM fx_5m
 where symbol = 'EURUSD' and dt_close between '2022-12-11' and '2022-12-13'
 order by dt_close
 format Null;
+DROP TABLE fx_5m;
+DROP TABLE fx_1m;

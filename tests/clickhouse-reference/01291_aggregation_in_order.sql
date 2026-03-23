@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS pk_order;
 SET optimize_aggregation_in_order = 1;
 CREATE TABLE pk_order(a UInt64, b UInt64, c UInt64, d UInt64) ENGINE=MergeTree() ORDER BY (a, b);
 INSERT INTO pk_order(a, b, c, d) VALUES (1, 1, 101, 1), (1, 2, 102, 1), (1, 3, 103, 1), (1, 4, 104, 1);
@@ -18,3 +19,4 @@ set max_block_size = 1;
 SELECT d, max(b) FROM pk_order GROUP BY d, a ORDER BY d, a LIMIT 5;
 SELECT toString(d), avg(a) FROM pk_order GROUP BY toString(d) ORDER BY toString(d) LIMIT 5;
 SELECT toStartOfHour(d) as d1, min(a), max(b) FROM pk_order GROUP BY d1 ORDER BY d1 LIMIT 5;
+DROP TABLE pk_order;

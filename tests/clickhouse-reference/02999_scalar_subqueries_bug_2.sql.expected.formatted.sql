@@ -1,3 +1,11 @@
+SYSTEM drop  table if exists source;
+
+SYSTEM drop  table if exists target1;
+
+SYSTEM drop  table if exists target2;
+
+SYSTEM drop  table if exists v_heavy;
+
 CREATE TABLE source
 (
     type String

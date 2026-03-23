@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_flatten_nested_crash;
 CREATE TABLE test_flatten_nested_crash
 (
     `id` UInt64,
@@ -18,3 +19,4 @@ SELECT * FROM generateRandom(
     `arr.nested` Array(Tuple(a String, b Float64))', 1, 10
 ) LIMIT 1;
 SELECT arr.nested FROM test_flatten_nested_crash ORDER BY arr.nested LIMIT 1;
+DROP TABLE test_flatten_nested_crash;

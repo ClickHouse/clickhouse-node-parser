@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS constraint_constant_number_expression;
+
 CREATE TABLE constraint_constant_number_expression
 (
     id UInt64,
@@ -12,6 +14,10 @@ INSERT INTO constraint_constant_number_expression;
 SELECT *
 FROM constraint_constant_number_expression;
 
+SYSTEM DROP  TABLE constraint_constant_number_expression;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_constant_number_expression_non_uint8;
+
 CREATE TABLE constraint_constant_number_expression_non_uint8
 (
     id UInt64,
@@ -24,6 +30,10 @@ INSERT INTO constraint_constant_number_expression_non_uint8; -- {serverError UNS
 SELECT *
 FROM constraint_constant_number_expression_non_uint8;
 
+SYSTEM DROP  TABLE constraint_constant_number_expression_non_uint8;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_constant_nullable_expression_that_contains_null;
+
 CREATE TABLE constraint_constant_nullable_expression_that_contains_null
 (
     id UInt64,
@@ -35,3 +45,5 @@ INSERT INTO constraint_constant_nullable_expression_that_contains_null; -- {serv
 
 SELECT *
 FROM constraint_constant_nullable_expression_that_contains_null;
+
+SYSTEM DROP  TABLE constraint_constant_nullable_expression_that_contains_null;

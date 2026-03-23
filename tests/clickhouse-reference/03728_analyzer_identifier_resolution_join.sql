@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS fact_click;
 CREATE TABLE address
 (
     `email_address` String,
@@ -23,3 +25,5 @@ ENGINE = ReplacingMergeTree
 ORDER BY (campaign_sid, campaign_batch_sid, sid)
 SETTINGS index_granularity = 8192;
 SET enable_analyzer=1;
+DROP TABLE address;
+DROP TABLE fact_click;

@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists s;
+
 CREATE TABLE t
 (
     a Int64,
@@ -65,6 +69,10 @@ RIGHT JOIN s
     ON (s.a = t.a
     AND s.b = t.b)
 SETTINGS join_use_nulls = 1;
+
+SYSTEM drop  table t;
+
+SYSTEM drop  table s;
 
 CREATE TABLE t
 (

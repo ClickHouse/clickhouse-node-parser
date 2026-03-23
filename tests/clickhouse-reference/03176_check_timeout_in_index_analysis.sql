@@ -9,3 +9,4 @@ SELECT log_comment, type = 'QueryFinish', intDiv(query_duration_ms, 2000), excep
 FROM system.query_log
 WHERE current_database = currentDatabase() AND log_comment LIKE '03176_q_' AND type IN ('QueryFinish', 'ExceptionBeforeStart')
 ORDER BY log_comment;
+DROP TABLE t_03176;

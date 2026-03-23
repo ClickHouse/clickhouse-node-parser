@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table_join;
+
 CREATE TABLE test_table_join
 (
     id UInt64,

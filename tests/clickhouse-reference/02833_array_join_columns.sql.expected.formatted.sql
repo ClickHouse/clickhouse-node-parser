@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists test_array_joins;
+
+SYSTEM drop  table if exists v4test_array_joins;
+
 CREATE TABLE test_array_joins
 (
     id UInt64 DEFAULT rowNumberInAllBlocks() + 1,

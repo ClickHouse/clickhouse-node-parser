@@ -1,6 +1,26 @@
 -- Tags: no-parallel, no-fasttest
 SET prefer_localhost_replica = 1;
 
+SYSTEM DROP  TABLE IF EXISTS file;
+
+SYSTEM DROP  TABLE IF EXISTS url;
+
+SYSTEM DROP  TABLE IF EXISTS view;
+
+SYSTEM DROP  TABLE IF EXISTS buffer;
+
+SYSTEM DROP  TABLE IF EXISTS merge;
+
+SYSTEM DROP  TABLE IF EXISTS merge_tf;
+
+SYSTEM DROP  TABLE IF EXISTS distributed;
+
+SYSTEM DROP  TABLE IF EXISTS distributed_tf;
+
+SYSTEM DROP  TABLE IF EXISTS rich_syntax;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dict;
+
 CREATE TABLE file
 (
     n Int8
@@ -80,3 +100,23 @@ SETTINGS enable_parallel_replicas = 0;
 SELECT sum(n)
 FROM rich_syntax
 SETTINGS serialize_query_plan = 0;
+
+SYSTEM DROP  TABLE file;
+
+SYSTEM DROP  DICTIONARY dict;
+
+SYSTEM DROP  TABLE url;
+
+SYSTEM DROP  TABLE view;
+
+SYSTEM DROP  TABLE buffer;
+
+SYSTEM DROP  TABLE merge;
+
+SYSTEM DROP  TABLE merge_tf;
+
+SYSTEM DROP  TABLE distributed;
+
+SYSTEM DROP  TABLE distributed_tf;
+
+SYSTEM DROP  TABLE rich_syntax;

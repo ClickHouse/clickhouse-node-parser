@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-fasttest, use-rocksdb
+SYSTEM DROP  TABLE IF EXISTS 02416_rocksdb;
+
 CREATE TABLE `02416_rocksdb`
 (
     key UInt64,

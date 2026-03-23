@@ -37,3 +37,4 @@ select v1, v2, v1 < v2 from test order by v1, v2;
 select v1, v2, v1 <= v2 from test order by v1, v2;
 select v1, v2, v1 > v2 from test order by v1, v2;
 select v1, v2, v2 >= v2 from test order by v1, v2;
+drop table test;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x AggregateFunction(uniq, UInt64),
@@ -28,3 +30,5 @@ FROM test;
 
 SELECT uniqStateDistinctMap(map(1, x)) OVER (PARTITION BY y)
 FROM test;
+
+SYSTEM drop  table test;

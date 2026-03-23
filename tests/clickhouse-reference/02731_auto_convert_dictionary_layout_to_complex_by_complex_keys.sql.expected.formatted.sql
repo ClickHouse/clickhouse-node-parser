@@ -1,3 +1,15 @@
+SYSTEM DROP  DICTIONARY IF EXISTS dict_flat_simple;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dict_hashed_simple_Decimal128;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dict_hashed_simple_Float32;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dict_hashed_simple_String;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dict_hashed_simple_auto_convert;
+
+SYSTEM DROP  TABLE IF EXISTS dict_data;
+
 CREATE TABLE dict_data
 (
     v0 UInt16,
@@ -33,6 +45,8 @@ FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_flat_simple';
 
+SYSTEM DROP  DICTIONARY dict_flat_simple;
+
 CREATE DICTIONARY dict_hashed_simple_Decimal128
 (
     v3 Decimal128(10),
@@ -50,6 +64,8 @@ SELECT
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_hashed_simple_Decimal128';
+
+SYSTEM DROP  DICTIONARY dict_hashed_simple_Decimal128;
 
 CREATE DICTIONARY dict_hashed_simple_Float32
 (
@@ -69,6 +85,8 @@ FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_hashed_simple_Float32';
 
+SYSTEM DROP  DICTIONARY dict_hashed_simple_Float32;
+
 CREATE DICTIONARY dict_hashed_simple_String
 (
     v4 String,
@@ -87,6 +105,8 @@ FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_hashed_simple_String';
 
+SYSTEM DROP  DICTIONARY dict_hashed_simple_String;
+
 CREATE DICTIONARY dict_hashed_simple_auto_convert
 (
     v0 UInt16,
@@ -104,3 +124,7 @@ SELECT
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_hashed_simple_auto_convert';
+
+SYSTEM DROP  DICTIONARY dict_hashed_simple_auto_convert;
+
+SYSTEM DROP  TABLE dict_data;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_index;
 CREATE TABLE t_index (data JSON(a UInt64)) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO t_index (data) VALUES ('{"a": 1, "b": 11}');
 SET mutations_sync = 2;

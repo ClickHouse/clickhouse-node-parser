@@ -1,5 +1,13 @@
 SET output_format_pretty_single_large_number_tip_threshold = 0;
 
+SYSTEM drop  table if exists src;
+
+SYSTEM drop  table if exists dst;
+
+SYSTEM drop  table if exists mv1;
+
+SYSTEM drop  table if exists mv2;
+
 CREATE TABLE src
 (
     key Int

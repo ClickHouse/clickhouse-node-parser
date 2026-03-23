@@ -1,4 +1,9 @@
+-- Tags: no-fasttest
+
+DROP TABLE IF EXISTS h3_indexes;
+
 CREATE TABLE h3_indexes (id int, start String, end String) ENGINE = Memory;
+
 -- test values taken from h3 library test suite
 
 INSERT INTO h3_indexes VALUES (1, '830631fffffffff','830780fffffffff');
@@ -29,4 +34,10 @@ INSERT INTO h3_indexes VALUES (25, '8301a5fffffffff','830b43fffffffff');
 INSERT INTO h3_indexes VALUES (26, '8301a5fffffffff','830b4efffffffff');
 INSERT INTO h3_indexes VALUES (27, '8301a5fffffffff','830b48fffffffff');
 INSERT INTO h3_indexes VALUES (28, '8301a5fffffffff','830b49fffffffff');
+
+
 SELECT h3Distance(stringToH3(start), stringToH3(end)) FROM h3_indexes ORDER BY id;
+
+
+DROP TABLE h3_indexes;
+

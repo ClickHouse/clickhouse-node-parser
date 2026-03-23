@@ -76,3 +76,7 @@ FULL JOIN table_key
 ORDER BY keycol ASC;
 
 SET join_algorithm = 'partial_merge';
+
+SYSTEM DROP  TABLE table_key;
+
+SYSTEM DROP  TABLE table_with_enum;

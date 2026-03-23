@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lightweight_mut_2;
+
 SET apply_mutations_on_fly = 1;
 
 CREATE TABLE t_lightweight_mut_2
@@ -23,3 +25,5 @@ WHERE database = currentDatabase()
     AND table = 't_lightweight_mut_2'
     AND NOT is_done
     AND NOT is_killed;
+
+SYSTEM DROP  TABLE t_lightweight_mut_2;

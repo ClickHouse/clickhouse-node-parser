@@ -1,6 +1,8 @@
 -- { echoOn }
 SET allow_experimental_nullable_tuple_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_empty;
+
 CREATE TABLE test_empty
 (
     x Nullable(Tuple())
@@ -15,6 +17,8 @@ SETTINGS enable_analyzer = 1; -- { serverError EMPTY_LIST_OF_COLUMNS_QUERIED }
 
 SELECT untuple(CAST(tuple() AS Nullable(Tuple())))
 SETTINGS enable_analyzer = 1; -- { serverError EMPTY_LIST_OF_COLUMNS_QUERIED }
+
+SYSTEM DROP  TABLE IF EXISTS test_untuple_nullable_tuple;
 
 CREATE TABLE test_untuple_nullable_tuple
 (

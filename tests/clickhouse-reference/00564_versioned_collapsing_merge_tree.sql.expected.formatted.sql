@@ -5,6 +5,8 @@ SET optimize_on_insert = 0;
 
 SET optimize_trivial_insert_select = 1;
 
+SYSTEM drop  table if exists mult_tab;
+
 CREATE TABLE mult_tab
 (
     date Date,
@@ -187,3 +189,5 @@ CREATE TABLE mult_tab
 ENGINE = VersionedCollapsingMergeTree(sign, version)
 ORDER BY (date)
 SETTINGS enable_vertical_merge_algorithm = 1, vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 0;
+
+SYSTEM DROP  TABLE mult_tab;

@@ -1,3 +1,6 @@
+-- tests of "(not) (i)like" functions
+SYSTEM drop  table if exists non_const_needle;
+
 CREATE TABLE non_const_needle
 (
     id UInt32,

@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+SYSTEM DROP  TABLE IF EXISTS table_for_rename1;
+
 CREATE TABLE table_for_rename1
 (
     date Date,

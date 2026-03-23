@@ -37,6 +37,8 @@ SELECT * FROM range_dictionary ORDER BY CountryID, StartDate, EndDate;
 SELECT 1 FROM range_dictionary ORDER BY CountryID, StartDate, EndDate;
 SELECT CountryID, StartDate, Tax FROM range_dictionary ORDER BY CountryID, StartDate, EndDate;
 SELECT Tax FROM range_dictionary ORDER BY CountryID, StartDate, EndDate;
+DROP DICTIONARY range_dictionary;
+DROP TABLE date_table;
 CREATE TABLE date_table
 (
   CountryID UInt64,
@@ -72,3 +74,4 @@ SELECT * FROM range_dictionary_nullable ORDER BY CountryID, StartDate, EndDate;
 SELECT 1 FROM range_dictionary_nullable ORDER BY CountryID, StartDate, EndDate;
 SELECT CountryID, StartDate, Tax FROM range_dictionary_nullable ORDER BY CountryID, StartDate, EndDate;
 SELECT Tax FROM range_dictionary_nullable ORDER BY CountryID, StartDate, EndDate;
+DROP DICTIONARY range_dictionary_nullable;

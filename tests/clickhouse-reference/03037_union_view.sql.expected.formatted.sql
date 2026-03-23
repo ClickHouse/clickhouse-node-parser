@@ -1,6 +1,10 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/55803
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS broken_table;
+
+SYSTEM DROP  TABLE IF EXISTS broken_view;
+
 CREATE TABLE broken_table
 (
     start DateTime64(6),

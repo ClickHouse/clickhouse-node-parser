@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS events0;
+
+SYSTEM DROP  TABLE IF EXISTS probe0;
+
 SET session_timezone = 'UTC';
 
 SET enable_analyzer = 1;

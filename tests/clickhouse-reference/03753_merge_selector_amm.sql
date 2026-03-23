@@ -1,3 +1,6 @@
+-- Tags: long
+
+drop table if exists mt sync;
 create table mt (a UInt64, b UInt64) engine=MergeTree order by a
 settings
     merge_selector_enable_heuristic_to_lower_max_parts_to_merge_at_once=1,

@@ -3,6 +3,8 @@
 -- no-replicated-database because test may fail due to adding additional shard
 SET enable_lightweight_update = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_lwu_memory SYNC;
+
 CREATE TABLE t_lwu_memory
 (
     id UInt64,
@@ -30,3 +32,5 @@ FROM t_lwu_memory
 SETTINGS
     max_memory_usage = '150M',
     max_threads = 4;
+
+SYSTEM DROP  TABLE t_lwu_memory SYNC;

@@ -10,6 +10,8 @@ SELECT
     arrayPushBack([], 1),
     arrayPushFront([[]], []);
 
+SYSTEM DROP  TABLE IF EXISTS arr;
+
 CREATE TABLE arr
 (
     x Array(String),
@@ -25,3 +27,5 @@ INSERT INTO arr SELECT
 
 SELECT *
 FROM arr;
+
+SYSTEM DROP  TABLE arr;

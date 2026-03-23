@@ -1,5 +1,7 @@
 SET mutations_sync = 2;
 
+SYSTEM drop  table if exists t_delete_skip_index;
+
 CREATE TABLE t_delete_skip_index
 (
     x UInt32,
@@ -18,6 +20,8 @@ FROM numbers(8192 * 10);
 SELECT count()
 FROM t_delete_skip_index
 WHERE y IN (4, 5);
+
+SYSTEM drop  table if exists t_delete_projection;
 
 CREATE TABLE t_delete_projection
 (

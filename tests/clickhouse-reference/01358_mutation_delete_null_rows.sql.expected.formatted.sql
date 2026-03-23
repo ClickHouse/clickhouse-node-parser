@@ -7,6 +7,8 @@ SELECT
     if(x = 0, 'x=0', 'x<>0')
 ORDER BY x ASC;
 
+SYSTEM drop  table if exists mutation_delete_null_rows;
+
 CREATE TABLE mutation_delete_null_rows
 (
     EventDate Date,
@@ -30,3 +32,5 @@ ORDER BY EventDate ASC;
 SELECT *
 FROM mutation_delete_null_rows
 ORDER BY EventDate ASC;
+
+SYSTEM drop  table mutation_delete_null_rows;

@@ -1,3 +1,9 @@
+SYSTEM drop  dictionary if exists {CLICKHOUSE_DATABASE:Identifier}.test_dict_01051_d;
+
+SYSTEM drop  table if exists {CLICKHOUSE_DATABASE:Identifier}.test_01051_d;
+
+SYSTEM drop  table if exists {CLICKHOUSE_DATABASE:Identifier}.test_view_01051_d;
+
 CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.test_01051_d
 (
     key UInt64,

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_delete_empty_part;
 CREATE TABLE t_delete_empty_part (a UInt64, b UInt64)
 ENGINE = MergeTree ORDER BY b PARTITION BY a;
 INSERT INTO t_delete_empty_part SELECT 1, number FROM numbers(1000);
@@ -13,3 +14,4 @@ SELECT
 FROM system.part_log
 WHERE database = currentDatabase() AND table = 't_delete_empty_part' AND event_type = 'MutatePart'
 ORDER BY part_name;
+DROP TABLE t_delete_empty_part;

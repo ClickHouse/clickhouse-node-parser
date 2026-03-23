@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_datetime;
+
 CREATE TABLE test_datetime
 (
     time DateTime
@@ -11,3 +13,5 @@ INSERT INTO test_datetime (time);
 SELECT *
 FROM test_datetime
 WHERE time = toDate(18012);
+
+SYSTEM DROP  TABLE test_datetime;

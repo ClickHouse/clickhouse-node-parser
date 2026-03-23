@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t1;
 CREATE TABLE t1 (a UInt8) ENGINE = MergeTree ORDER BY a SETTINGS index_granularity=1;
 INSERT INTO t1 SELECT number % 100 from numbers(10000);
 SET enable_analyzer = 1;
@@ -12,3 +13,4 @@ FROM t1
 GROUP BY a
 HAVING materialize(0)
 SETTINGS parallel_replicas_local_plan = 1;
+DROP TABLE t1;

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS m;
+DROP TABLE IF EXISTS d;
 CREATE TABLE m
 (
     `v` UInt8
@@ -12,6 +14,8 @@ CREATE TABLE d
 ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), m, rand());
 INSERT INTO m VALUES (123);
 SELECT * FROM d;
+DROP TABLE m;
+DROP TABLE d;
 CREATE TABLE m
 (
     `v` Enum8('a' = 1, 'b' = 2)

@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS table_with_materialized;
+
 CREATE TABLE table_with_materialized
 (
     col String MATERIALIZED 'A',
@@ -11,3 +13,5 @@ SELECT number
 FROM
     numbers(1) AS n
 CROSS JOIN table_with_materialized;
+
+SYSTEM DROP  TABLE table_with_materialized;

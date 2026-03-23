@@ -1,3 +1,9 @@
+-- Tags: no-parallel, no-replicated-database, no-shared-merge-tree
+-- Tag: no-parallel - to avoid polluting FETCH PARTITION thread pool with other fetches
+-- Tag: no-replicated-database - replica_path is different
+
+drop table if exists data1;
+drop table if exists data2;
 create table data1 (key Int) engine=ReplicatedMergeTree('/tables/{database}/{table}', 'r1') order by ();
 create table data2 (key Int) engine=ReplicatedMergeTree('/tables/{database}/{table}', 'r1') order by ();
 insert into data1 select * from numbers(100) settings max_block_size=1, min_insert_block_size_rows=1;

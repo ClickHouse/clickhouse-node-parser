@@ -3,6 +3,7 @@ SELECT NULL;
 SELECT 1 + NULL;
 SELECT abs(NULL);
 SELECT NULL + NULL;
+DROP TABLE IF EXISTS test1_00395;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE test1_00395(
 col1 UInt64, col2 Nullable(UInt64),
@@ -44,6 +45,7 @@ CREATE TABLE test1_00395(col1 Array(Nullable(UInt64))) Engine=Memory;
 INSERT INTO test1_00395(col1) VALUES ([1+1]);
 SELECT col1 FROM test1_00395 ORDER BY col1 ASC;
 CREATE TABLE test1_00395(col1 Nullable(UInt64), col2 UInt64) Engine=Memory;
+DROP TABLE IF EXISTS test2;
 CREATE TABLE test2(col1 UInt64, col2 Nullable(UInt64)) Engine=Memory;
 INSERT INTO test1_00395(col1,col2) VALUES (2,7)(6,9)(5,1)(4,3)(8,2);
 INSERT INTO test2(col1,col2) SELECT col1,col2 FROM test1_00395;
@@ -282,3 +284,4 @@ INSERT INTO test1_00395(col1,col2) VALUES([0], 'ABCDEFGH'),
                                          ([NULL], 'ACDBEFGH'),
                                          ([NULL], 'ACDEBFGH'),
                                          ([NULL], 'ACDEFBGH');
+DROP TABLE test2;

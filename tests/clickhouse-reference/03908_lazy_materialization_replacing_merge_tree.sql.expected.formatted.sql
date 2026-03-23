@@ -5,6 +5,8 @@ SET query_plan_optimize_lazy_materialization = 1;
 
 SET query_plan_max_limit_for_lazy_materialization = 10;
 
+SYSTEM DROP  TABLE IF EXISTS t_lm_replacing;
+
 CREATE TABLE t_lm_replacing
 (
     timestamp DateTime,
@@ -31,3 +33,5 @@ FROM (
         ORDER BY timestamp DESC
         LIMIT 10
     );
+
+SYSTEM DROP  TABLE t_lm_replacing;

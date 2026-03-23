@@ -1,3 +1,7 @@
+-- In previous ClickHouse versions, parts were not 100% immutable and FREEZE may prevent subsequent ALTERs.
+-- It's not longer the case. Let's prove it.
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     k UInt64,
@@ -22,3 +26,5 @@ WHERE database = currentDatabase()
 SELECT '---';
 
 SET mutations_sync = 1;
+
+SYSTEM DROP  TABLE t;

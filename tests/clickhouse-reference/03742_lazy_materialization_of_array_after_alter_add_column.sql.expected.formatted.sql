@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_lazy;
+
 CREATE TABLE test_lazy
 (
     id UInt64
@@ -17,3 +19,5 @@ WHERE id = 42
 ORDER BY id ASC
 LIMIT 10
 SETTINGS query_plan_optimize_lazy_materialization = 1;
+
+SYSTEM drop  table test_lazy;

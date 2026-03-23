@@ -1,5 +1,7 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     i int,
@@ -37,6 +39,10 @@ WHERE _partition_id IN (
         FROM numbers(1)
     );
 
+SYSTEM drop  table x;
+
+SYSTEM drop  table if exists mt;
+
 CREATE TABLE mt
 (
     n UInt64
@@ -53,3 +59,5 @@ FROM numbers(100);
 SELECT *
 FROM mt
 WHERE toUInt64(substr(_part, 1, position(_part, '_') - 1)) = 1;
+
+SYSTEM drop  table mt;

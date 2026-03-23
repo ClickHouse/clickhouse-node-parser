@@ -5,6 +5,8 @@ SET mutations_sync = 1;
 
 SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a UInt32,
@@ -68,6 +70,8 @@ WHERE like(`explain`, '%ReadFromMergeTree%');
 SELECT json
 FROM test
 WHERE json.`c[]`.d.:Int64 = [1];
+
+SYSTEM drop  table test;
 
 SELECT '------------------------------------------------------------------';
 

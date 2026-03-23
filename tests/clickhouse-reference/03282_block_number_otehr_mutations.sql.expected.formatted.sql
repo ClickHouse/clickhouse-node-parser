@@ -1,5 +1,7 @@
 SET mutations_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS t_block_number_proj;
+
 CREATE TABLE t_block_number_proj
 (
     a UInt64,
@@ -23,6 +25,10 @@ FROM t_block_number_proj
 WHERE b = 5
 SETTINGS force_optimize_projection = 1;
 
+SYSTEM DROP  TABLE t_block_number_proj;
+
+SYSTEM DROP  TABLE IF EXISTS t_block_number_ttl;
+
 CREATE TABLE t_block_number_ttl
 (
     d Date,
@@ -38,3 +44,5 @@ INSERT INTO t_block_number_ttl;
 SELECT *
 FROM t_block_number_ttl
 ORDER BY a ASC;
+
+SYSTEM DROP  TABLE t_block_number_ttl;

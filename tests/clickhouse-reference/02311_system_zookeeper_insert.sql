@@ -1,6 +1,7 @@
 -- Tags: zookeeper
 
 set allow_unrestricted_reads_from_keeper = 'true';
+drop table if exists test_zkinsert;
 create table test_zkinsert (
 	name String,
 	path String,

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS view1;
+
+SYSTEM DROP  TABLE IF EXISTS table1;
+
 CREATE TABLE table1
 (
     number UInt64
@@ -27,3 +31,7 @@ SETTINGS
     max_parallel_replicas = 3,
     parallel_replicas_for_non_replicated_merge_tree = 1,
     parallel_replicas_local_plan = 1;
+
+SYSTEM DROP  TABLE view1;
+
+SYSTEM DROP  TABLE table1;

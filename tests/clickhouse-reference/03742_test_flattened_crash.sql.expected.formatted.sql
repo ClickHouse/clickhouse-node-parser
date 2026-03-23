@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_flatten_nested_crash;
+
 CREATE TABLE test_flatten_nested_crash
 (
     id UInt64,
@@ -22,3 +24,5 @@ SELECT arr.nested
 FROM test_flatten_nested_crash
 ORDER BY arr.nested ASC
 LIMIT 1;
+
+SYSTEM DROP  TABLE test_flatten_nested_crash;

@@ -14,6 +14,8 @@ SET max_rows_to_read = 0; -- system.text_log can be really big
 
 SET enable_analyzer = 0; -- To produce consistent explain outputs
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     k UInt64,
@@ -189,3 +191,5 @@ FROM (
         SETTINGS use_skip_indexes_on_data_read = 1
     )
 WHERE like(`explain`, '%Filter column:%');
+
+SYSTEM DROP  TABLE tab;

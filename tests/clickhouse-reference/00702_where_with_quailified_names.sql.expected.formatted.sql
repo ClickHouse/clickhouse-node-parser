@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS where_qualified;
+
 CREATE TABLE where_qualified
 (
     a UInt32,
@@ -12,3 +14,5 @@ INSERT INTO where_qualified;
 SELECT a
 FROM where_qualified
 WHERE where_qualified.b;
+
+SYSTEM DROP  TABLE where_qualified;

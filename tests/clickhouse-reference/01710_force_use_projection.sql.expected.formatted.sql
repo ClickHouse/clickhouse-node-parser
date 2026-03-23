@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tp;
+
 CREATE TABLE tp
 (
     d1 Int32,
@@ -26,3 +28,5 @@ FROM tp
 GROUP BY d1;
 
 INSERT INTO tp;
+
+SYSTEM drop  table tp;

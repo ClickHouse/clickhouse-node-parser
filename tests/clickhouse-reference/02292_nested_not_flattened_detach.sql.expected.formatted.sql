@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_nested_detach;
+
 SET flatten_nested = 0;
 
 CREATE TABLE t_nested_detach

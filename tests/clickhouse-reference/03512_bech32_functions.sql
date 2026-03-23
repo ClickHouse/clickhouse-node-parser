@@ -35,6 +35,7 @@ FROM
 );
 -- roundtrip
 SELECT tup.1 AS hrp, hex(tup.2) AS data FROM (SELECT bech32Decode(bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'))) AS tup);
+DROP TABLE IF EXISTS hex_data;
 CREATE TABLE hex_data
 (
     hrp String,
@@ -54,6 +55,9 @@ SELECT bech32Encode('bc', unhex(data)) FROM hex_data limit 1;
 SELECT bech32Encode(hrp, unhex('6687112a6eadb4d88d29c7a45da56eff0c23b0e14e757d408e')) FROM hex_data limit 1;
 -- test column hrp and data with const witver
 SELECT bech32Encode(hrp, unhex(data), 1) FROM hex_data limit 1;
+-- for encoding, if using a FixedString column for the data it is crucial that there is no padding
+-- since the input is binary, there is no way to check for it
+DROP TABLE IF EXISTS bech32_test;
 CREATE TABLE bech32_test
 (
     hrp String,
@@ -88,6 +92,8 @@ FROM
         bech32Decode(bech32Encode(hrp, unhex(data), witver)) AS tup
     FROM bech32_test
 ) AS round_trip;
+DROP TABLE hex_data;
+DROP TABLE bech32_test;
 -- negative tests
 SELECT bech32Decode('');
 SELECT bech32Decode('foo');
@@ -107,6 +113,8 @@ SELECT t1.1 != '', t1.1 == t2.1, t1.2 == t2.2 FROM (
 SELECT tup.1 AS hrp, hex(tup.2) AS data FROM (SELECT bech32Decode('b1pw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y565gdg8') AS tup);
 -- testing max length, this should return nothing
 SELECT tup.1 AS hrp, hex(tup.2) AS data FROM (SELECT bech32Decode('b1w508dfqejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5xgqsaanm') AS tup);
+-- test decode from table
+DROP TABLE IF EXISTS addresses;
 CREATE TABLE addresses
 (
     address String
@@ -133,3 +141,4 @@ SELECT
     hex(bech32Decode(address_fixed).2) AS decoded_fixed,
     hex(bech32Decode(address).2) = hex(bech32Decode(address_fixed).2) AS match
 FROM bech32_test;
+DROP TABLE addresses;

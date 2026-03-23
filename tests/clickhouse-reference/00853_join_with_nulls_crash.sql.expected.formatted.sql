@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS table_a;
+
+SYSTEM DROP  TABLE IF EXISTS table_b;
+
 CREATE TABLE table_a
 (
     event_id UInt64,
@@ -130,3 +134,7 @@ FULL JOIN (
 ORDER BY
     count_a DESC,
     something DESC;
+
+SYSTEM DROP  TABLE table_a;
+
+SYSTEM DROP  TABLE table_b;

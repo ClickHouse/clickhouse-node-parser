@@ -1,5 +1,9 @@
 SET joined_subquery_requires_alias = 0;
 
+SYSTEM drop  table if exists t_00725_2;
+
+SYSTEM drop  table if exists s_00725_2;
+
 CREATE TABLE t_00725_2
 (
     a Int64,

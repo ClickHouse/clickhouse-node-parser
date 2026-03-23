@@ -1,3 +1,6 @@
+-- Tags: no-shared-merge-tree
+-- Predicate works in a different way
+drop table if exists rmt;
 create table rmt (n int, m int) engine=ReplicatedMergeTree('/test/02439/{shard}/{database}', '{replica}') partition by n order by n;
 insert into rmt select number, number from numbers(50);
 insert into rmt values (1, 2);
@@ -20,3 +23,4 @@ select * from system.zookeeper_log where path like '/test/02439/' || getMacro('s
             (select query_id from system.query_log
              where event_time >= now() - interval 1 minute and current_database=currentDatabase())
         );
+drop table rmt;

@@ -35,6 +35,8 @@ FROM (
         GROUP BY a
     );
 
+SYSTEM drop  table t1;
+
 CREATE TABLE t2
 (
     a UInt32
@@ -54,6 +56,8 @@ FROM (
         FROM t2
         GROUP BY a
     );
+
+SYSTEM drop  table t2;
 
 CREATE TABLE t3
 (
@@ -91,6 +95,8 @@ SETTINGS
     max_bytes_before_external_group_by = '1Ki',
     max_bytes_ratio_before_external_group_by = 0;
 
+SYSTEM drop  table t3;
+
 -- aggregation in order --
 SET optimize_aggregation_in_order = 1;
 
@@ -114,6 +120,8 @@ FROM (
         GROUP BY a
     );
 
+SYSTEM drop  table t4;
+
 CREATE TABLE t5
 (
     a UInt32
@@ -134,6 +142,8 @@ FROM (
         GROUP BY a
     );
 
+SYSTEM drop  table t5;
+
 CREATE TABLE t6
 (
     a UInt32
@@ -153,6 +163,8 @@ FROM (
         FROM t6
         GROUP BY a
     );
+
+SYSTEM drop  table t6;
 
 SET optimize_aggregation_in_order = 0;
 
@@ -177,6 +189,8 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+SYSTEM drop  table t7;
+
 CREATE TABLE t8
 (
     a UInt32
@@ -198,6 +212,8 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+SYSTEM drop  table t8;
+
 CREATE TABLE t9
 (
     a UInt32
@@ -218,6 +234,8 @@ FROM (
         GROUP BY a1
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+SYSTEM drop  table t9;
 
 CREATE TABLE t10
 (
@@ -247,6 +265,8 @@ FROM (
             pi()
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+SYSTEM drop  table t10;
 
 -- multiplication by 2 is not injective, so optimization is not applicable
 CREATE TABLE t11
@@ -278,6 +298,8 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+SYSTEM drop  table t11;
+
 CREATE TABLE t12
 (
     a UInt32,
@@ -306,6 +328,8 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+SYSTEM drop  table t12;
+
 CREATE TABLE t13
 (
     a UInt32,
@@ -331,6 +355,8 @@ FROM (
             pi()
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+SYSTEM drop  table t13;
 
 CREATE TABLE t14
 (
@@ -361,6 +387,8 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+SYSTEM drop  table t14;
+
 -- to few partitions --
 CREATE TABLE t15
 (
@@ -386,6 +414,8 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %')
 SETTINGS force_aggregate_partitions_independently = 0;
+
+SYSTEM drop  table t15;
 
 -- to many partitions --
 CREATE TABLE t16
@@ -415,6 +445,8 @@ SETTINGS
     force_aggregate_partitions_independently = 0,
     max_number_of_partitions_for_independent_aggregation = 4;
 
+SYSTEM drop  table t16;
+
 -- to big skew --
 CREATE TABLE t17
 (
@@ -443,6 +475,8 @@ SETTINGS
     force_aggregate_partitions_independently = 0,
     max_threads = 4;
 
+SYSTEM drop  table t17;
+
 CREATE TABLE t18
 (
     a UInt32,
@@ -466,6 +500,8 @@ FROM (
         GROUP BY intDiv(a, 2) AS a1
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+SYSTEM drop  table t18;
 
 CREATE TABLE t19
 (
@@ -491,6 +527,8 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+SYSTEM drop  table t19;
+
 CREATE TABLE t20
 (
     a UInt32,
@@ -515,6 +553,8 @@ FROM (
     )
 WHERE like(`explain`, '%Skip merging: %');
 
+SYSTEM drop  table t20;
+
 CREATE TABLE t21
 (
     a UInt64,
@@ -535,6 +575,8 @@ FROM t21
 GROUP BY a
 LIMIT 10
 FORMAT Null;
+
+SYSTEM drop  table t21;
 
 CREATE TABLE t22
 (
@@ -559,3 +601,5 @@ FROM (
         GROUP BY a
     )
 WHERE like(`explain`, '%Skip merging: %');
+
+SYSTEM drop  table t22;

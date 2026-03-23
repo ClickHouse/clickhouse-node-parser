@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     start_s UInt32 EPHEMERAL COMMENT 'start UNIX time',

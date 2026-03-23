@@ -1,5 +1,7 @@
 SET joined_subquery_requires_alias = 0;
 
+SYSTEM DROP  TABLE IF EXISTS ANIMAL;
+
 CREATE TABLE ANIMAL
 (
     ANIMAL Nullable(String)
@@ -46,3 +48,5 @@ FROM (
         HAVING ANIMAL >= 0
     ) AS ANIMAL
 WHERE ANIMAL.ANIMAL >= 0;
+
+SYSTEM DROP  TABLE ANIMAL;

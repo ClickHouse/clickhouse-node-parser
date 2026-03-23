@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mann_whitney_test;
+
 CREATE TABLE mann_whitney_test
 (
     `left` Float64,

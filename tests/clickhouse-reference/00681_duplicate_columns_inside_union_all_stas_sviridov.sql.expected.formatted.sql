@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_00681;
+
 CREATE TABLE test_00681
 (
     x Int32
@@ -18,3 +20,5 @@ FROM (
             x
         FROM test_00681
     );
+
+SYSTEM DROP  TABLE test_00681;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table_3 SYNC;
+
 CREATE TABLE table_3
 (
     uid UUID,
@@ -22,3 +24,5 @@ SETTINGS
     max_parallel_replicas = 3,
     cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
     parallel_replicas_local_plan = 1;
+
+SYSTEM DROP  TABLE table_3 SYNC;

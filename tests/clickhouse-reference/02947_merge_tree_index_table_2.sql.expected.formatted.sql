@@ -1,3 +1,6 @@
+-- Tags: no-random-settings
+SYSTEM DROP  TABLE IF EXISTS t_merge_tree_index;
+
 SET output_format_pretty_row_numbers = 0;
 
 SET print_pretty_type_names = 0;
@@ -68,3 +71,5 @@ ORDER BY
 FORMAT PrettyCompactNoEscapesMonoBlock;
 
 SET describe_compact_output = 1;
+
+SYSTEM DROP  TABLE t_merge_tree_index;

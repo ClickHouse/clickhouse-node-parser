@@ -1,3 +1,6 @@
+-- Tags: shard
+SYSTEM DROP  TABLE IF EXISTS storage;
+
 CREATE TABLE storage
 (
     UserID UInt64
@@ -18,3 +21,5 @@ SELECT sum(UserID GLOBAL IN (
         FROM storage
     ))
 FROM remote('127.0.0.{2,3}', currentDatabase(), storage);
+
+SYSTEM DROP  TABLE storage;

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     s String
@@ -27,3 +31,7 @@ INNER JOIN t2
     ON t1.s = t2.s;
 
 SET join_algorithm = 'full_sorting_merge', max_rows_in_set_to_optimize_join = 100000;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;

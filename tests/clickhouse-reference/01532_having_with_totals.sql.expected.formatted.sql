@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists local_t;
+
 CREATE TABLE local_t
 ENGINE = Log AS
 SELECT 1 AS a;

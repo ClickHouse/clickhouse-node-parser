@@ -1,3 +1,7 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/47552
+
+DROP TABLE IF EXISTS clickhouse_alias_issue_1;
+DROP TABLE IF EXISTS clickhouse_alias_issue_2;
 CREATE TABLE clickhouse_alias_issue_1 (
     id bigint,
     column_1 Nullable(Float32)

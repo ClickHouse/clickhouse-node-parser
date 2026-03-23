@@ -45,6 +45,7 @@ WHERE query like '%DESCRIBE ( SELECT ''1947 #3 QUERY - TRUE'',%'
   AND current_database = currentDatabase()
   AND event_date >= yesterday()
     FORMAT JSONEachRow;
+DROP TABLE src2dst_true;
 -- Retry the same but using use_index_for_in_with_subqueries = 0
 
 SET use_index_for_in_with_subqueries = 0;
@@ -89,3 +90,6 @@ WHERE query like '%DESCRIBE ( SELECT ''1947 #3 QUERY - FALSE'',%'
   AND current_database = currentDatabase()
   AND event_date >= yesterday()
     FORMAT JSONEachRow;
+DROP TABLE src2dst_false;
+DROP TABLE src;
+DROP TABLE dst;

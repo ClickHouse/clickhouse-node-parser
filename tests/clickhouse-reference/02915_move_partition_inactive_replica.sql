@@ -2,6 +2,12 @@
 
 create database if not exists shard_0;
 create database if not exists shard_1;
+drop table if exists shard_0.from_0;
+drop table if exists shard_1.from_0;
+drop table if exists shard_0.from_1;
+drop table if exists shard_1.from_1;
+drop table if exists shard_0.to;
+drop table if exists shard_1.to;
 create table shard_0.from_0 (x UInt32) engine = ReplicatedMergeTree('/clickhouse/tables/from_0_' || currentDatabase(), '0') order by x settings old_parts_lifetime=1, max_cleanup_delay_period=1, cleanup_delay_period=1;
 create table shard_1.from_0 (x UInt32) engine = ReplicatedMergeTree('/clickhouse/tables/from_0_' || currentDatabase(), '1') order by x settings old_parts_lifetime=1, max_cleanup_delay_period=1, cleanup_delay_period=1;
 create table shard_0.from_1 (x UInt32) engine = ReplicatedMergeTree('/clickhouse/tables/from_1_' || currentDatabase(), '0') order by x settings old_parts_lifetime=1, max_cleanup_delay_period=1, cleanup_delay_period=1;

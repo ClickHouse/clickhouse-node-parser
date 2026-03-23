@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS table_for_alter;
 CREATE TABLE table_for_alter (
   id UInt64,
   Data String

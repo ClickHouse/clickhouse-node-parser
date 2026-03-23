@@ -1,3 +1,9 @@
+-- Tags: no-fasttest
+-- Reproducer for https://github.com/ClickHouse/ClickHouse/issues/92994
+-- ALTER UPDATE on non-MergeTree engines that support prewhere (like S3 with Parquet)
+-- used to crash with a null pointer dereference in the PREWHERE optimization code.
+SYSTEM DROP  TABLE IF EXISTS t_object_storage_update;
+
 CREATE TABLE t_object_storage_update
 (
     c0 Int32

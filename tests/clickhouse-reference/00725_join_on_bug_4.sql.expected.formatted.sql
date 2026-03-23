@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t_00725_4;
+
+SYSTEM drop  table if exists s_00725_4;
+
 CREATE TABLE t_00725_4
 (
     a Int64,

@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS 01902_db_params;
+
 CREATE DATABASE `01902_db_params`;
 
 CREATE TABLE `01902_db_params`.t
@@ -41,3 +44,5 @@ ORDER BY
     n ASC; -- {serverError CANNOT_EXTRACT_TABLE_STRUCTURE}
 
 USE 01902_db_params;
+
+SYSTEM DROP  DATABASE 01902_db_params;

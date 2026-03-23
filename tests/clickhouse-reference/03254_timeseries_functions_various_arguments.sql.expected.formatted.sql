@@ -211,3 +211,7 @@ FROM numbers(5);
 
 SELECT timeSeriesInstantDeltaToGridMerge(100, 200, 20, 60)(initializeAggregation('timeSeriesInstantDeltaToGridState(100, 200, 20, 60)', ((100 + number * 10))::DateTime32, number::Float64))
 FROM numbers(5);
+
+SYSTEM DROP  TABLE ts_data;
+
+SYSTEM DROP  TABLE ts_data_nullable;

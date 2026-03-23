@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_map_contains_values;
+
 CREATE TABLE test_map_contains_values
 (
     ResourceAttributes Map(LowCardinality(String), String),
@@ -6,6 +8,8 @@ CREATE TABLE test_map_contains_values
 ORDER BY tuple();
 
 INSERT INTO test_map_contains_values;
+
+SYSTEM DROP  TABLE IF EXISTS test_map_contains_keys;
 
 CREATE TABLE test_map_contains_keys
 (

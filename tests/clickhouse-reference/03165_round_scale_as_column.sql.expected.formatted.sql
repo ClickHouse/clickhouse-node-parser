@@ -342,6 +342,8 @@ LIMIT 20;
 
 SELECT toString('CHECKPOINT1');
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id Int32,
@@ -638,6 +640,8 @@ SELECT
     trunc(x, scale)
 FROM tab
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE tab;
 
 --
 SELECT toString('CHECKPOINT2');

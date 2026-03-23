@@ -184,6 +184,8 @@ SELECT
     tryPunycodeDecode(puny) AS original_try
 FORMAT Vertical;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     str String
@@ -199,6 +201,8 @@ SELECT
     punycodeDecode(puny) AS original,
     tryPunycodeDecode(puny) AS original_try
 FROM tab;
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

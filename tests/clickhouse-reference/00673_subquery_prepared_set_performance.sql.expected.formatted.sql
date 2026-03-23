@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mergetree_00673;
+
 CREATE TABLE mergetree_00673
 (
     x UInt64
@@ -75,3 +77,5 @@ FROM (
     );
 
 SET force_primary_key = 1;
+
+SYSTEM DROP  TABLE mergetree_00673;

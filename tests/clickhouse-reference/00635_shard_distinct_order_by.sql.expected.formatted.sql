@@ -1,3 +1,6 @@
+-- Tags: shard
+SYSTEM DROP  TABLE IF EXISTS data;
+
 CREATE TABLE data
 (
     s String,
@@ -14,3 +17,5 @@ FROM remote('127.0.0.{1,2}', currentDatabase(), data)
 ORDER BY
     x + y ASC,
     s ASC;
+
+SYSTEM DROP  TABLE data;

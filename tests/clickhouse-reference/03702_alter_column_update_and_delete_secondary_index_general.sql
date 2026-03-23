@@ -4,6 +4,8 @@
 SET apply_mutations_on_fly = 0;
 SET mutations_sync = 1;
 SET alter_sync = 1;
+DROP TABLE IF EXISTS test_compact;
+DROP TABLE IF EXISTS test_wide;
 CREATE TABLE test_compact (
     a Int32,
     b Int32,

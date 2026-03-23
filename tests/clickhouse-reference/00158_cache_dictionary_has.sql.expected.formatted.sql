@@ -1,3 +1,6 @@
+-- Tags: stateful
+SYSTEM DROP  DICTIONARY IF EXISTS cache_hits;
+
 CREATE DICTIONARY cache_hits
 (
     WatchID UInt64,

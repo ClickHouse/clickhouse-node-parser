@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS mytable_local;
 CREATE TABLE mytable_local
 (
     created          DateTime,
@@ -37,3 +38,4 @@ CREATE TABLE mytable_local
 ENGINE = MergeTree()
 PARTITION BY toYYYYMM(eventday)
 ORDER BY (eventday, user_id);
+DROP TABLE mytable_local;

@@ -11,3 +11,5 @@ CREATE TABLE test2
     x UInt8
 )
 ENGINE = Memory;
+
+SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};

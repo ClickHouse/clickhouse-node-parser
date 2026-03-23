@@ -1,6 +1,10 @@
 -- Tags: no-fasttest
 SET log_queries = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tabl_1;
+
+SYSTEM DROP  TABLE IF EXISTS tabl_2;
+
 CREATE TABLE tabl_1
 (
     key String
@@ -30,3 +34,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
 GROUP BY normalizeQuery(query)
 ORDER BY normalizeQuery(query) ASC;
+
+SYSTEM DROP  TABLE tabl_1;
+
+SYSTEM DROP  TABLE tabl_2;

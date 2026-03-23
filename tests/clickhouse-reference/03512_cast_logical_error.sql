@@ -1,3 +1,10 @@
+-- Tags: distributed
+
+-- https://github.com/ClickHouse/ClickHouse/issues/77468
+
+DROP TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS v0;
 CREATE TABLE t0 (c0 Array(String)) ENGINE = Memory;
 CREATE TABLE t1 (c0 Array(String)) ENGINE = Distributed('test_shard_localhost', currentDatabase(), t0);
 CREATE MATERIALIZED VIEW v0 TO t1 (c0 String) AS (SELECT 1::Array(Int) AS c0); -- { serverError CANNOT_READ_ARRAY_FROM_TEXT }

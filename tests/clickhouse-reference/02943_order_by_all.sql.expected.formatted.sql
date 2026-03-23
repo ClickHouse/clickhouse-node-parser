@@ -1,3 +1,6 @@
+-- Tests that sort expression ORDER BY ALL
+SYSTEM DROP  TABLE IF EXISTS order_by_all;
+
 CREATE TABLE order_by_all
 (
     a String,
@@ -52,6 +55,8 @@ ORDER BY `ALL` ASC;
 SELECT *
 FROM order_by_all
 ORDER BY `all` ASC;
+
+SYSTEM DROP  TABLE order_by_all;
 
 CREATE TABLE order_by_all
 (

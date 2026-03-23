@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  DATABASE IF EXISTS test_01109;
+
 CREATE DATABASE test_01109
 ENGINE = Atomic;
 
@@ -38,11 +40,17 @@ FROM (
         SELECT arrayJoin(['hello', 'world'])
     );
 
+SYSTEM DROP  TABLE t1;
+
 SELECT *
 FROM t1;
 
 SELECT *
 FROM t2;
+
+SYSTEM DROP  DATABASE IF EXISTS test_01109_other_atomic;
+
+SYSTEM DROP  DATABASE IF EXISTS test_01109_ordinary;
 
 CREATE DATABASE test_01109_other_atomic;
 
@@ -79,6 +87,8 @@ FROM test_01109_other_atomic.t3;
 SELECT *
 FROM test_01109_ordinary.t4;
 
+SYSTEM DROP  DATABASE IF EXISTS test_01109_rename_exists;
+
 CREATE DATABASE test_01109_rename_exists
 ENGINE = Atomic;
 
@@ -89,3 +99,11 @@ ENGINE = Log() AS
 SELECT *
 FROM `system`.numbers
 LIMIT 2;
+
+SYSTEM DROP  DATABASE test_01109;
+
+SYSTEM DROP  DATABASE test_01109_other_atomic;
+
+SYSTEM DROP  DATABASE test_01109_ordinary;
+
+SYSTEM DROP  DATABASE test_01109_rename_exists;

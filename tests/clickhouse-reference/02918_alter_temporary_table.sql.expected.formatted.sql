@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS alter_test;
+
 CREATE TEMPORARY TABLE alter_test
 (
     CounterID UInt32,
@@ -12,3 +14,5 @@ INSERT INTO alter_test;
 
 SELECT *
 FROM alter_test;
+
+SYSTEM DROP  TABLE alter_test;

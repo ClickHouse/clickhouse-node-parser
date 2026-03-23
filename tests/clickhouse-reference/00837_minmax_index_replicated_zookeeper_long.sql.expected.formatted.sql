@@ -1,3 +1,8 @@
+-- Tags: long, replica
+SYSTEM DROP  TABLE IF EXISTS minmax_idx1;
+
+SYSTEM DROP  TABLE IF EXISTS minmax_idx2;
+
 CREATE TABLE minmax_idx1
 (
     u64 UInt64,
@@ -90,3 +95,7 @@ WHERE ((u64 < 2
     OR u64 > 10))
     AND e != 'b'
 ORDER BY dt ASC;
+
+SYSTEM DROP  TABLE minmax_idx1;
+
+SYSTEM DROP  TABLE minmax_idx2;

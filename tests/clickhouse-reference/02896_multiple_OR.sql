@@ -1,9 +1,15 @@
+-- https://github.com/ClickHouse/ClickHouse/pull/52653
+DROP TABLE IF EXISTS or_bug;
 CREATE TABLE or_bug (key UInt8) ENGINE=MergeTree ORDER BY key;
 INSERT INTO TABLE or_bug VALUES (0), (1);
 -- { echoOn }
 SELECT * FROM or_bug WHERE (key = 1) OR false OR false;
 SELECT * FROM or_bug WHERE (key = 1) OR false;
 SELECT * FROM or_bug WHERE (key = 1);
+-- { echoOff }
+
+-- https://github.com/ClickHouse/ClickHouse/issues/55288
+DROP TABLE IF EXISTS forms;
 CREATE TABLE forms
 (
    `form_id` FixedString(24),

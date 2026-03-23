@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     d1 Dynamic(max_types = 2),

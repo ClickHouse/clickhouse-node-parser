@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+SYSTEM DROP  TABLE IF EXISTS test_02559;
+
 CREATE TABLE test_02559
 (
     id1 UInt64,
@@ -11,6 +14,10 @@ INSERT INTO test_02559 SELECT
     number,
     number
 FROM numbers(10);
+
+SYSTEM DROP  ROW POLICY IF EXISTS 02559_filter_1 ON test_02559;
+
+SYSTEM DROP  ROW POLICY IF EXISTS 02559_filter_2 ON test_02559;
 
 SET enable_multiple_prewhere_read_steps = true, move_all_conditions_to_prewhere = true;
 
@@ -141,3 +148,5 @@ SELECT *
 FROM test_02559;
 
 CREATE ROW POLICY 02559_filter_2 ON test_02559 USING id2 <= 2 AS restrictive TO ALL;
+
+SYSTEM DROP  TABLE test_02559;

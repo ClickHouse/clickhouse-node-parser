@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists final_bug;
+
 CREATE TABLE final_bug
 (
     x UInt64,

@@ -1,5 +1,7 @@
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     t Tuple(a UInt32),
@@ -16,6 +18,8 @@ INSERT INTO test (t, json) SELECT
 
 SELECT *
 FROM test;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

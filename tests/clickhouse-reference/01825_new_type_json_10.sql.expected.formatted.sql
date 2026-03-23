@@ -3,6 +3,8 @@ SET enable_json_type = 1;
 
 SET allow_suspicious_types_in_order_by = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_json_10;
+
 CREATE TABLE t_json_10
 (
     o JSON
@@ -27,3 +29,5 @@ SELECT
     o.a.c.:`Array(JSON)`.f
 FROM t_json_10
 ORDER BY o.a.b ASC;
+
+SYSTEM DROP  TABLE t_json_10;

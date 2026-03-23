@@ -1,3 +1,11 @@
+SYSTEM DROP  TABLE IF EXISTS test_00687;
+
+SYSTEM DROP  TABLE IF EXISTS mv_bad;
+
+SYSTEM DROP  TABLE IF EXISTS mv_good;
+
+SYSTEM DROP  TABLE IF EXISTS mv_group;
+
 CREATE TABLE test_00687
 (
     x String
@@ -50,3 +58,11 @@ FROM mv_good;
 
 SELECT *
 FROM mv_group;
+
+SYSTEM DROP  TABLE mv_bad;
+
+SYSTEM DROP  TABLE mv_good;
+
+SYSTEM DROP  TABLE mv_group;
+
+SYSTEM DROP  TABLE test_00687;

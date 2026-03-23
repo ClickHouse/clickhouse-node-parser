@@ -6,6 +6,7 @@ set allow_deprecated_database_ordinary=1;
 set send_logs_level='error';
 create database {CLICKHOUSE_DATABASE_1:Identifier} engine=Ordinary;
 select engine, is_external from system.databases where name = {CLICKHOUSE_DATABASE_1:String};
+drop database {CLICKHOUSE_DATABASE_1:Identifier} sync;
 create database {CLICKHOUSE_DATABASE_1:Identifier} engine=Atomic;
 create database {CLICKHOUSE_DATABASE_1:Identifier} engine=Memory;
 create database {CLICKHOUSE_DATABASE_1:Identifier} engine=Replicated('/test/{database}/rdb', 's1', 'r1');

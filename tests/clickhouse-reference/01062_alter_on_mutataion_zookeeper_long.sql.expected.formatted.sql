@@ -1,3 +1,8 @@
+-- Tags: long, zookeeper, no-replicated-database, no-shared-merge-tree
+-- Tag no-replicated-database: Old syntax is not allowed
+-- no-shared-merge-tree: old syntax not allowed
+SYSTEM DROP  TABLE IF EXISTS test_alter_on_mutation;
+
 CREATE TABLE test_alter_on_mutation
 (
     date Date,
@@ -59,6 +64,8 @@ LIMIT 100, 100;
 SELECT sum(value1)
 FROM test_alter_on_mutation;
 
+SYSTEM DROP  TABLE IF EXISTS nested_alter;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE nested_alter
@@ -78,3 +85,5 @@ INSERT INTO nested_alter;
 
 SELECT *
 FROM nested_alter;
+
+SYSTEM DROP  TABLE nested_alter;

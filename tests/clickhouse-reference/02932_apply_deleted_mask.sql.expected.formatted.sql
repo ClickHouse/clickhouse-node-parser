@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_materialize_delete;
+
 CREATE TABLE t_materialize_delete
 (
     id UInt64,
@@ -27,3 +29,5 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 't_materialize_delete'
     AND active;
+
+SYSTEM DROP  TABLE t_materialize_delete;

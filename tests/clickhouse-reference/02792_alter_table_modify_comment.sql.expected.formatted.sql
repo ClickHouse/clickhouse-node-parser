@@ -1,7 +1,13 @@
+-- Tags: no-replicated-database
+-- Tag no-replicated-database: Unsupported type of ALTER query
+SYSTEM DROP  TABLE IF EXISTS t;
+
 SELECT comment
 FROM `system`.tables
 WHERE database = currentDatabase()
     AND table = 't';
+
+SYSTEM DROP  TABLE t;
 
 CREATE TABLE t
 (
@@ -10,6 +16,8 @@ CREATE TABLE t
 ENGINE = MergeTree
 ORDER BY tuple()
 COMMENT 'Hello';
+
+SYSTEM DROP  TABLE t SYNC;
 
 CREATE TABLE t
 (

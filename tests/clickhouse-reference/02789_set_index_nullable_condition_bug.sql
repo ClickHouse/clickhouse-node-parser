@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     col1 String,
@@ -9,6 +10,7 @@ AS SELECT 'v1', 'v2';
 SELECT * FROM tab
 WHERE 1 == 1 AND col1 == col1 OR
        0 AND col2 == NULL;
+DROP TABLE tab;
 set secondary_indices_enable_bulk_filtering = 1;
 CREATE TABLE tab
 (

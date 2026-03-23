@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x UInt64
@@ -14,3 +16,5 @@ FROM t;
 SET mutations_sync = 1;
 
 SELECT '---';
+
+SYSTEM DROP  TABLE t;

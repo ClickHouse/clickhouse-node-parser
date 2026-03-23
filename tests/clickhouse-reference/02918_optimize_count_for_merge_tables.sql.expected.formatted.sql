@@ -1,3 +1,11 @@
+-- Tests that Merge-engine (not: MergeTree!) tables support the trivial count
+-- optimization if all underlying tables support it
+SYSTEM DROP  TABLE IF EXISTS mt1;
+
+SYSTEM DROP  TABLE IF EXISTS mt2;
+
+SYSTEM DROP  TABLE IF EXISTS merge;
+
 CREATE TABLE mt1
 (
     id UInt64
@@ -36,3 +44,5 @@ CREATE TABLE mt3
 ENGINE = TinyLog;
 
 INSERT INTO mt2;
+
+SYSTEM DROP  TABLE IF EXISTS mt3;

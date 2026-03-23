@@ -1,3 +1,6 @@
+-- Tags: no-parallel, no-fasttest
+SYSTEM DROP  TABLE IF EXISTS t_s3_filter_02495;
+
 CREATE TABLE t_s3_filter_02495
 (
     a UInt64
@@ -16,3 +19,5 @@ SELECT
     _file
 FROM s3(s3_conn, filename = 'test_02495_1', `format` = Parquet)
 WHERE _file = 'test_02495_1';
+
+SYSTEM DROP  TABLE t_s3_filter_02495;

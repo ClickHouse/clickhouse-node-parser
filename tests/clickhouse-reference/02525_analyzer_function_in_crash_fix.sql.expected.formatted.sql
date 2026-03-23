@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt8,
@@ -12,3 +14,5 @@ INSERT INTO test_table;
 
 SELECT id IN (toDecimal64(257, NULL))
 FROM test_table;
+
+SYSTEM DROP  TABLE test_table;

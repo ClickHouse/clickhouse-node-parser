@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 03161_table;
+
 CREATE TABLE `03161_table`
 (
     id UInt32,
@@ -28,6 +30,10 @@ SETTINGS
     convert_query_to_cnf = 1,
     optimize_using_constraints = 1,
     enable_analyzer = 0;
+
+-- Checking reproducer from GitHub issue
+-- https://github.com/ClickHouse/ClickHouse/issues/57400
+SYSTEM DROP  TABLE IF EXISTS 03161_reproducer;
 
 CREATE TABLE `03161_reproducer`
 (

@@ -17,3 +17,9 @@ ENGINE = Distributed(test_shard_localhost, currentDatabase(), 'foo'); -- { serve
 
 CREATE TABLE dist_as_foo AS foo
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), 'foo');
+
+SYSTEM DROP  TABLE foo;
+
+SYSTEM DROP  TABLE as_foo;
+
+SYSTEM DROP  TABLE dist_as_foo;

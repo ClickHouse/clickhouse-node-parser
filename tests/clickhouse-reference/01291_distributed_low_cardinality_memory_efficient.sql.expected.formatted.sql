@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS data;
+
+SYSTEM DROP  TABLE IF EXISTS dist;
+
 CREATE TABLE data
 (
     key String
@@ -22,3 +27,7 @@ SET max_bytes_ratio_before_external_group_by = 0;
 SELECT *
 FROM dist
 GROUP BY key;
+
+SYSTEM DROP  TABLE data;
+
+SYSTEM DROP  TABLE dist;

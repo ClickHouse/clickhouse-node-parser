@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists m3;
+
+SYSTEM drop  table if exists replacing_m3;
+
 -- { echoOn }
 SET enable_analyzer = 1;
 
@@ -37,6 +41,8 @@ FROM m3;
 
 SELECT count() + 1
 FROM m3;
+
+SYSTEM drop  table m3;
 
 -- checking queries with FINAL
 CREATE TABLE replacing_m3
@@ -81,3 +87,5 @@ FROM replacing_m3 FINAL;
 
 SELECT count(b)
 FROM replacing_m3 FINAL;
+
+SYSTEM drop  table replacing_m3;

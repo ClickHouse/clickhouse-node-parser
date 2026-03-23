@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS tab SYNC;
+
 SET allow_experimental_statistics = 1;
 
 SET use_statistics = 1;

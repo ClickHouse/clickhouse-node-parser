@@ -31,6 +31,9 @@ SELECT nested(['a', 'b'], [[1, 2], [3, 4]], [[5], [6]]);
 
 SELECT nested([['a', 'b']], [[1, 2], [3, 4]], [[5], [6]]); -- {serverError SIZES_OF_ARRAYS_DONT_MATCH}
 
+-- {echoOff}
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x UInt8,
@@ -53,3 +56,5 @@ SELECT
 FROM
     test
 ARRAY JOIN struct;
+
+SYSTEM DROP  TABLE test;

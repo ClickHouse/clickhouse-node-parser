@@ -4,6 +4,8 @@ SET allow_experimental_dynamic_type = 1;
 
 SET max_block_size = 1000;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     d Dynamic
@@ -19,6 +21,8 @@ SELECT DISTINCT
     isDynamicElementInSharedData(d) AS flag
 FROM test
 ORDER BY type ASC;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

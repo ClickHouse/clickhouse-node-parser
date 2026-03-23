@@ -1,3 +1,6 @@
+-- tests of "(not) (i)like" functions
+
+drop table if exists non_const_needle;
 create table non_const_needle
   (id UInt32, haystack String, needle String)
   engine = MergeTree()

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_sparse_02235;
+
 CREATE TABLE t_sparse_02235
 (
     a UInt8
@@ -22,3 +24,5 @@ WHERE database = currentDatabase()
 ORDER BY
     name ASC,
     column ASC;
+
+SYSTEM DROP  TABLE t_sparse_02235;

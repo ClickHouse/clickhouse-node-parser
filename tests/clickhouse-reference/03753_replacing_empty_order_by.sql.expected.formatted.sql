@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_empty_order_key;
+
 SET allow_suspicious_primary_key = 0;
 
 -- CREATE TABLE t_empty_order_key(c0 String, c1 String) ENGINE = ReplacingMergeTree() ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
@@ -16,6 +18,8 @@ INSERT INTO t_empty_order_key (c0, c1);
 SELECT *
 FROM t_empty_order_key
 ORDER BY c0 ASC;
+
+SYSTEM DROP  TABLE t_empty_order_key;
 
 -- Check with forced vertical merge
 CREATE TABLE t_empty_order_key

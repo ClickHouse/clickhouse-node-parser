@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS lwd_test_02521;
 CREATE TABLE lwd_test_02521 (id UInt64, value String, event_time DateTime)
 ENGINE MergeTree()
 ORDER BY id
@@ -8,3 +9,6 @@ SET mutations_sync=1;
 -- { echoOn }
 SELECT 'Rows in parts', SUM(rows) FROM system.parts WHERE database = currentDatabase() AND table = 'lwd_test_02521' AND active;
 SELECT 'Count', count() FROM lwd_test_02521;
+-- { echoOff }
+
+DROP TABLE lwd_test_02521;

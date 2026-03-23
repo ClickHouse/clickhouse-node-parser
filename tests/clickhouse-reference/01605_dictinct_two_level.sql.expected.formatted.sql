@@ -11,6 +11,8 @@ SETTINGS
     max_threads = 2,
     max_block_size = 2000;
 
+SYSTEM DROP  TABLE IF EXISTS distinct_two_level;
+
 CREATE TABLE distinct_two_level
 (
     time DateTime64(3),

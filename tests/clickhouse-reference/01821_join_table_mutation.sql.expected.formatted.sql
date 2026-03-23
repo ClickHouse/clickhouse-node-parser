@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS join_table_mutation;
+
 CREATE TABLE join_table_mutation
 (
     id Int32,
@@ -18,3 +20,5 @@ FROM join_table_mutation
 WHERE id = 10;
 
 INSERT INTO join_table_mutation;
+
+SYSTEM DROP  TABLE join_table_mutation;

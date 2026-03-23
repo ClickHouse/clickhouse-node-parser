@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS src;
+
 CREATE TABLE src
 (
     a UInt64,
@@ -34,12 +36,17 @@ ORDER BY a ASC;
 SELECT count()
 FROM remote('127.0.0.{1..2}', currentDatabase(), src);
 
+-- { echoOff }
+SYSTEM DROP  TABLE IF EXISTS dst_null;
+
 CREATE TABLE dst_null
 (
     a UInt64,
     b UInt64
 )
 ENGINE = Null;
+
+SYSTEM DROP  TABLE IF EXISTS mv_dst;
 
 CREATE MATERIALIZED VIEW mv_dst
 ENGINE = AggregatingMergeTree()
@@ -65,3 +72,10 @@ SELECT
 FROM mv_dst
 GROUP BY a
 ORDER BY a ASC;
+
+-- { echoOff }
+SYSTEM DROP  TABLE src;
+
+SYSTEM DROP  TABLE mv_dst;
+
+SYSTEM DROP  TABLE dst_null;

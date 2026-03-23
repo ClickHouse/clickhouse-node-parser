@@ -9,6 +9,7 @@ SELECT arrayMap(x -> arrayJoin([1, 2, 3]), [1, 2, 3]);
 SELECT arrayMap(x -> arrayJoin(x), [[1, 2, 3]]); -- { serverError BAD_ARGUMENTS }
 SELECT arrayMap(x -> arrayJoin(cast(x, 'Array(UInt8)')), [[1, 2, 3]]); -- { serverError BAD_ARGUMENTS }
 SELECT arrayMap(x -> x + a, [1, 2, 3]), arrayJoin([1,2,3]) as a;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -18,3 +19,12 @@ CREATE TABLE test_table
 INSERT INTO test_table VALUES (0, [1, 2, 3], [1, 2, 3, 4]);
 SELECT id, arrayJoin(value_1) FROM test_table;
 SELECT id, arrayJoin(value_1) AS a, a FROM test_table;
+-- SELECT '--';
+
+-- SELECT id, arrayJoin(value_1), arrayJoin(value_2) FROM test_table;
+
+-- SELECT '--';
+
+-- SELECT id, arrayJoin(value_1), arrayJoin(value_2), arrayJoin([5, 6]) FROM test_table;
+
+DROP TABLE test_table;

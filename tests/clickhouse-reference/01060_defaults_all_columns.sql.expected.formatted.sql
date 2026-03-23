@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS defaults_all_columns;
+
 CREATE TABLE defaults_all_columns
 (
     n UInt8 DEFAULT 42,
@@ -14,3 +16,5 @@ FROM defaults_all_columns
 ORDER BY
     n ASC,
     s ASC;
+
+SYSTEM DROP  TABLE defaults_all_columns;

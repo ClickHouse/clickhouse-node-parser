@@ -1,3 +1,6 @@
+-- Tags: stateful
+SYSTEM DROP  TABLE IF EXISTS hits_none;
+
 CREATE TABLE hits_none
 (
     Title String CODEC(NONE)
@@ -16,3 +19,5 @@ SET min_bytes_to_use_mmap_io = 1;
 
 SELECT sum(length(Title))
 FROM hits_none;
+
+SYSTEM DROP  TABLE hits_none;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_vertical_merge;
+
 CREATE TABLE test_vertical_merge
 (
     k UInt64,

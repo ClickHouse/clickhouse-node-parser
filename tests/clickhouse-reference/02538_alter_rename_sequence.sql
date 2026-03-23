@@ -1,3 +1,6 @@
+-- Tags: no-shared-merge-tree
+-- Stop replication queues
+DROP TABLE IF EXISTS wrong_metadata;
 CREATE TABLE wrong_metadata(
     column1 UInt64,
     column2 UInt64,
@@ -21,3 +24,4 @@ INSERT INTO wrong_metadata_wide VALUES (1, 2, 3);
 INSERT INTO wrong_metadata_wide VALUES (4, 5, 6);
 SELECT * FROM wrong_metadata_wide ORDER by column1;
 SELECT * FROM wrong_metadata_wide ORDER BY column1_renamed FORMAT JSONEachRow;
+DROP TABLE IF EXISTS wrong_metadata_wide;

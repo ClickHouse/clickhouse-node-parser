@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists lc_prewhere;
+
 CREATE TABLE lc_prewhere
 (
     key UInt64,

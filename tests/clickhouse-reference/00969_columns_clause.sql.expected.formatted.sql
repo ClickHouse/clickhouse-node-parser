@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ColumnsClauseTest;
+
 CREATE TABLE ColumnsClauseTest
 (
     product_price Int64,
@@ -11,6 +13,8 @@ INSERT INTO ColumnsClauseTest;
 SELECT COLUMNS('product.*')
 FROM ColumnsClauseTest
 ORDER BY product_price ASC;
+
+SYSTEM DROP  TABLE ColumnsClauseTest;
 
 SELECT
     number,

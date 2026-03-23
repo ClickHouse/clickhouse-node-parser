@@ -1,3 +1,6 @@
+-- add_minmax_index_for_numeric_columns=0: Adds more output to system.data_skipping_indices
+SYSTEM DROP  TABLE IF EXISTS alter_index_test;
+
 CREATE TABLE alter_index_test
 (
     a UInt32,

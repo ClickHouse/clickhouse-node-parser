@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS points_test;
 CREATE TABLE points_test
 (
     x  Float64,

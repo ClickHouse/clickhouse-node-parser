@@ -9,6 +9,8 @@ SET mutations_sync = 1;
 
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     a Float64 STATISTICS(tdigest),

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS or_expr_bug;
+
 CREATE TABLE or_expr_bug
 (
     a UInt64,
@@ -15,3 +17,5 @@ WHERE ((a = 1
     AND ((b = 21
     OR b = 22
     OR b = 23));
+
+SYSTEM DROP  TABLE or_expr_bug;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS clear_column;
+
 CREATE TABLE clear_column
 (
     x UInt32,
@@ -12,3 +14,5 @@ INSERT INTO clear_column;
 SELECT *
 FROM clear_column
 ORDER BY x ASC;
+
+SYSTEM DROP  TABLE clear_column;

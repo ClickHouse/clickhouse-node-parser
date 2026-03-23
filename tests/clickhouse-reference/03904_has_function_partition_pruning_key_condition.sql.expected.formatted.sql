@@ -1,3 +1,8 @@
+-- Tags: no-replicated-database, no-parallel-replicas, no-parallel, no-random-merge-tree-settings
+-- EXPLAIN output may differ
+-- { echo }
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     dt DateTime

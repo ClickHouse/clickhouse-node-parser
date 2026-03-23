@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test1__fuzz_37;
+
 CREATE TABLE test1__fuzz_37
 (
     i Date
@@ -23,3 +25,5 @@ FROM test1__fuzz_37
 GROUP BY dictHas('non_existing_dictionary', materialize('a')); -- { serverError BAD_ARGUMENTS }
 
 SET enable_analyzer = 1;
+
+SYSTEM DROP  TABLE test1__fuzz_37;

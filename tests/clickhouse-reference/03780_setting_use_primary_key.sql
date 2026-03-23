@@ -1,3 +1,11 @@
+-- Tags: no-replicated-database, no-parallel-replicas
+-- no-replicated-database: EXPLAIN output differs for replicated database.
+-- no-parallel-replicas: EXPLAIN output differs for parallel replicas.
+-- add_minmax_index_for_numeric_columns=0: Different plan
+
+-- { echo }
+
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (
   id UInt64
 )

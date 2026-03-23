@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS 02947_table_1;
+
+SYSTEM DROP  TABLE IF EXISTS 02947_table_2;
+
 CREATE TABLE `02947_table_1`
 (
     id Int32
@@ -27,3 +31,7 @@ WHERE database = currentDatabase()
 SELECT *
 FROM `system`.dropped_tables_parts
 FORMAT Null;
+
+SYSTEM DROP  TABLE 02947_table_1;
+
+SYSTEM DROP  TABLE 02947_table_2;

@@ -29,6 +29,7 @@ INSERT INTO test_01035_avg (u64) SELECT number FROM system.numbers LIMIT 1000000
 SELECT avg(i8 * i16) FROM test_01035_avg;
 SELECT avg(f32 + f64) FROM test_01035_avg;
 SELECT avg(d128 - d64) FROM test_01035_avg;
+DROP TABLE IF EXISTS test_01035_avg;
 -- Checks that the internal SUM does not overflow Int8
 SELECT avg(key), avgIf(key, key > 0), avg(key2), avgIf(key2, key2 > 0), avg(key3), avgIf(key3, key3 > 0)
 FROM

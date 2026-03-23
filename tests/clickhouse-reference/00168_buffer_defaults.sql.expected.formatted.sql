@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS mt_00168;
+
+SYSTEM DROP  TABLE IF EXISTS mt_00168_buffer;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE mt_00168
@@ -17,3 +21,7 @@ SELECT *
 FROM mt_00168_buffer;
 
 INSERT INTO mt_00168_buffer (EventDate, UTCEventTime);
+
+SYSTEM DROP  TABLE mt_00168_buffer;
+
+SYSTEM DROP  TABLE mt_00168;

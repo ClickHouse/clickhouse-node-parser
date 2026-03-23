@@ -1,3 +1,6 @@
+-- Tags: stateful
+SYSTEM DROP  TABLE IF EXISTS join;
+
 CREATE TABLE `join`
 (
     UserID UInt64,
@@ -23,3 +26,5 @@ LEFT JOIN `join`
     USING (UserID)
 GROUP BY loyalty
 ORDER BY loyalty ASC;
+
+SYSTEM DROP  TABLE join;

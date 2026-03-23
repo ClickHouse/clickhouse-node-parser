@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS t_json;
+
 SET enable_json_type = 1;
 
 CREATE TABLE t_json

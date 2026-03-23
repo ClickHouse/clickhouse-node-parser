@@ -13,4 +13,5 @@ LIFETIME(MIN 0 MAX 0)
 LAYOUT(FLAT());
 SELECT query_count FROM system.dictionaries WHERE database = currentDatabase() AND name = 'dict';
 SELECT dictGetUInt64('dict', 'val', toUInt64(0));
+DROP DATABASE IF EXISTS empty_db_01036;
 CREATE DATABASE IF NOT EXISTS empty_db_01036;

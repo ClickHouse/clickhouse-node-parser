@@ -14,6 +14,8 @@ SELECT * FROM t WHERE tuple(a, b) IN (SELECT tuple(a, b) FROM t1);
 SELECT * FROM t WHERE tuple(a, b) NOT IN (SELECT tuple(a, b) FROM t1);
 SELECT * FROM t WHERE (a, b) IN (SELECT a, b FROM t1);
 SELECT * FROM t WHERE (a, b) NOT IN (SELECT a, b FROM t1);
+DROP TABLE t;
+DROP TABLE t1;
 CREATE TABLE t(a DateTime, b FixedString(6))
 ENGINE = MergeTree
 PARTITION BY toStartOfDay(a)

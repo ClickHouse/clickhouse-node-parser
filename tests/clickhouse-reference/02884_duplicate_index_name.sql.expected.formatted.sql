@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_dup_index;
+
 CREATE TABLE test_dup_index
 (
     a Int64,

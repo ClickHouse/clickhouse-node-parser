@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists nested_map;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE nested_map
@@ -18,6 +20,8 @@ SELECT
     `SomeMap.Num`
 FROM nested_map;
 
+SYSTEM drop  table nested_map;
+
 CREATE TABLE nested_map
 (
     d DEFAULT today(),
@@ -30,6 +34,8 @@ ENGINE = SummingMergeTree(d, k, 8192);
 INSERT INTO nested_map (k, `SomeMap.ID`, `SomeMap.Num`);
 
 INSERT INTO nested_map (k, `SomeMap.ID`, `SomeMap.Num`);
+
+SYSTEM drop  table if exists nested_map_explicit;
 
 CREATE TABLE nested_map_explicit
 (
@@ -49,3 +55,5 @@ SELECT
     `SomeMap.ID`,
     `SomeMap.Num`
 FROM nested_map_explicit;
+
+SYSTEM drop  table nested_map_explicit;

@@ -1,3 +1,5 @@
+drop table if exists t;
+drop table if exists t_buf;
 create table t (x UInt64) engine = MergeTree order by (x, intHash64(x)) sample by intHash64(x);
 insert into t select number from numbers(10000);
 create table t_buf as t engine = Buffer(currentDatabase(), 't', 16, 20, 100, 100000, 10000000, 50000000, 250000000);

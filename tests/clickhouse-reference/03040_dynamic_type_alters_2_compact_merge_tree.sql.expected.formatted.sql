@@ -4,6 +4,8 @@ SET allow_experimental_variant_type = 1;
 
 SET use_variant_as_common_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt64,
@@ -134,3 +136,5 @@ SELECT
     d2.`Array(Dynamic)`.Date
 FROM test
 ORDER BY x ASC;
+
+SYSTEM drop  table test;

@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS 01759_db;
+
 CREATE DATABASE `01759_db`;
 
 CREATE TABLE `01759_db`.dictionary_source_table
@@ -36,3 +39,5 @@ SELECT
     dictGet('01759_db.test_dictionary', 'value2', tuple(number)) AS value2
 FROM `system`.numbers
 LIMIT 3;
+
+SYSTEM DROP  DATABASE 01759_db;

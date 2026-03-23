@@ -1,6 +1,10 @@
 -- 1 shard
 SELECT '-- 1 shard, 3 replicas';
 
+SYSTEM DROP  TABLE IF EXISTS test_d;
+
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -27,6 +31,10 @@ SELECT
     max(id),
     avg(id)
 FROM test_d;
+
+SYSTEM DROP  TABLE IF EXISTS test2_d;
+
+SYSTEM DROP  TABLE IF EXISTS test2;
 
 CREATE TABLE test2
 (

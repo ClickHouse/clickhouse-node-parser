@@ -1,3 +1,16 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS db_1 SYNC;
+
+SYSTEM DROP  DATABASE IF EXISTS db_2 SYNC;
+
+SYSTEM DROP  DATABASE IF EXISTS db_3 SYNC;
+
+SYSTEM DROP  DATABASE IF EXISTS db_4 SYNC;
+
+SYSTEM DROP  DATABASE IF EXISTS db_5 SYNC;
+
+SYSTEM DROP  DATABASE IF EXISTS db_6 SYNC;
+
 SELECT '-----------------------';
 
 CREATE DATABASE db_1
@@ -82,6 +95,8 @@ SELECT *
 FROM `system`.database_replicas
 WHERE database = 'db_11'
 ORDER BY database ASC;
+
+SYSTEM DROP  DATABASE db_1;
 
 SET distributed_ddl_output_mode = 'throw';
 

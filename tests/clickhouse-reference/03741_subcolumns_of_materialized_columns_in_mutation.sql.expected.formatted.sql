@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     s String,
@@ -10,3 +12,5 @@ INSERT INTO test SELECT '{"a" : 42}';
 
 SELECT *
 FROM test;
+
+SYSTEM drop  table test;

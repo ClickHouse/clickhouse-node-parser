@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     key UInt32,
@@ -92,6 +94,8 @@ INSERT INTO test_table (key, A, C);
 
 SELECT '\n\n -- CoalescingMergeTree --\n'
 FORMAT TSVRaw;
+
+SYSTEM drop  table test_table;
 
 CREATE TABLE test_table
 (

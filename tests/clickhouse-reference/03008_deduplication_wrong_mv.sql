@@ -1,3 +1,7 @@
+-- Tags: memory-engine
+DROP TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS src;
+DROP TABLE IF EXISTS dst;
 -- { echo ON }
 CREATE TABLE src (x UInt8) ENGINE = Memory;
 CREATE TABLE dst (x UInt8) ENGINE = Memory;

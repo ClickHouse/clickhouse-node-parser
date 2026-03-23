@@ -1,3 +1,6 @@
+-- Tags: stateful
+
+DROP DICTIONARY IF EXISTS cache_hits;
 CREATE DICTIONARY cache_hits
 (WatchID UInt64, UserID UInt64, SearchPhrase String)
 PRIMARY KEY WatchID

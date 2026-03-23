@@ -11,6 +11,7 @@ create workload development in all settings priority = 1, weight = 1;
 -- Test that illegal actions are not allowed
 create workload another_root; -- {serverError BAD_ARGUMENTS}
 create workload self_ref in self_ref; -- {serverError BAD_ARGUMENTS}
+drop workload all; -- {serverError BAD_ARGUMENTS}
 create workload invalid in 03232_write; -- {serverError BAD_ARGUMENTS}
 create workload invalid in all settings priority = 0 for all; -- {serverError BAD_ARGUMENTS}
 create workload invalid in all settings priority = 'invalid_value'; -- {serverError BAD_GET}
@@ -52,3 +53,10 @@ create or replace workload development in all settings priority = 1, weight = 1;
 -- Test change parent with CREATE OR REPLACE WORKLOAD
 create or replace workload development in production settings priority = 1, weight = 1;
 create or replace workload development in admin settings priority = 1, weight = 1;
+-- Clean up
+drop workload if exists production;
+drop workload if exists development;
+drop workload if exists admin;
+drop workload if exists all;
+drop resource if exists 03232_write;
+drop resource if exists 03232_read;

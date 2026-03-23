@@ -1,3 +1,8 @@
+-- Tags: long, no-debug, no-tsan, no-asan, no-ubsan, no-msan, no-parallel, no-sanitize-coverage
+
+-- no-parallel because the sets use a lot of memory, which may interfere with other tests
+
+DROP TABLE IF EXISTS 02581_trips;
 CREATE TABLE 02581_trips(id UInt32, description String, id2 UInt32, PRIMARY KEY id) ENGINE=MergeTree ORDER BY id;
 -- Make multiple parts
 INSERT INTO 02581_trips SELECT number, '', number FROM numbers(10000);
@@ -10,3 +15,4 @@ SELECT name FROM system.parts WHERE database=currentDatabase() AND table = '0258
 SELECT count() FROM 02581_trips SETTINGS select_sequential_consistency = 1;
 SELECT count(), _part from 02581_trips WHERE description = '' GROUP BY _part ORDER BY _part SETTINGS select_sequential_consistency=1;
 SET max_rows_to_read = 0; -- system.text_log can be really big
+DROP TABLE 02581_trips;

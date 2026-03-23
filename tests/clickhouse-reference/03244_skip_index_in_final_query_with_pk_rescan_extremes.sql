@@ -3,6 +3,7 @@
 SET use_skip_indexes = 1;
 SET use_skip_indexes_if_final = 1;
 SET use_skip_indexes_if_final_exact_mode = 1;
+DROP TABLE IF EXISTS tab1;
 CREATE TABLE tab1 (id Int32, v Int32, INDEX secondaryidx v TYPE minmax) ENGINE=ReplacingMergeTree ORDER BY id SETTINGS index_granularity=2;
 INSERT INTO tab1 SELECT number, number FROM numbers(10);
 INSERT INTO tab1 SELECT number, 100 + number FROM numbers(10); -- 'v' column has changed
@@ -23,11 +24,18 @@ INSERT INTO tab1 VALUES (0, 8888), (9, 9999);
 -- Rows with id = 0 and id = 9 should be printed
 SELECT id FROM tab1 FINAL WHERE v = 8888;
 SELECT id FROM tab1 FINAL WHERE v = 9999;
+-- Test for repeated PK range. Rows will have PK like this -
+--    (1,1,1,<v>), (1,1,2,<v>), (1,1,3,<v>), ...
+-- Test for PR https://github.com/ClickHouse/ClickHouse/pull/82667
+
+DROP TABLE IF EXISTS tab2;
 CREATE TABLE tab2 (id1 Int32, id2 Int32, id3 Int32, v Int32, INDEX secondaryidx v TYPE minmax) ENGINE=ReplacingMergeTree ORDER BY (id1, id2, id3) SETTINGS index_granularity=64;
 INSERT INTO tab2 SELECT (number % 2500), (number % 500), number, number from numbers(10000);
 INSERT INTO tab2 SELECT (number % 2500), (number % 500), number, 100000 + number from numbers(10000); -- 'v' column has changed
 -- No rows should be selected by below queries as 'v' does not have value < 10000 due to updates in 2nd part
 SELECT id1, id2, id3 FROM tab2 FINAL WHERE v = rand() % 10000;
+-- Tests with single range parts (https://github.com/ClickHouse/ClickHouse/issues/82792)
+DROP TABLE IF EXISTS tab3;
 CREATE TABLE tab3(
     key Int,
     value Int,
@@ -50,3 +58,6 @@ SELECT key, value FROM tab3 FINAL WHERE value = 6 SETTINGS max_rows_to_read = 2;
 SELECT key, value FROM tab3 FINAL WHERE value = 7 SETTINGS max_rows_to_read = 2;
 SELECT key, value FROM tab3 FINAL WHERE value = 8 SETTINGS max_rows_to_read = 2;
 SELECT key, value FROM tab3 FINAL WHERE value = 9 SETTINGS max_rows_to_read = 2;
+DROP TABLE tab1;
+DROP TABLE tab2;
+DROP TABLE tab3;

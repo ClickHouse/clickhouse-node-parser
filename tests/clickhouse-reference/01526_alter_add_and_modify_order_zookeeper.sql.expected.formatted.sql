@@ -1,3 +1,6 @@
+-- Tags: zookeeper
+SYSTEM DROP  TABLE IF EXISTS table_for_alter;
+
 SET replication_alter_partitions_sync = 2;
 
 CREATE TABLE table_for_alter

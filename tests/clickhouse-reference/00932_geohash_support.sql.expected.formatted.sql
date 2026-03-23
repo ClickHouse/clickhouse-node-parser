@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists geohash_test_data;
+
 CREATE TABLE geohash_test_data
 (
     latitude Float64,

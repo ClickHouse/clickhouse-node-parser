@@ -2,6 +2,8 @@
 -- msan: too slow
 SELECT '-- Single partition by function';
 
+SYSTEM DROP  TABLE IF EXISTS 03173_single_function;
+
 CREATE TABLE `03173_single_function`
 (
     dt Date
@@ -26,6 +28,8 @@ FROM `system`.query_log
 WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_single_function';
+
+SYSTEM DROP  TABLE IF EXISTS 03173_nested_function;
 
 CREATE TABLE `03173_nested_function`
 (
@@ -62,6 +66,8 @@ WHERE type = 'QueryFinish'
 
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS 03173_nested_function_lc;
+
 CREATE TABLE `03173_nested_function_lc`
 (
     id LowCardinality(Int32)
@@ -94,6 +100,8 @@ FROM `system`.query_log
 WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nested_function_subexpr_lc';
+
+SYSTEM DROP  TABLE IF EXISTS 03173_nested_function_null;
 
 CREATE TABLE `03173_nested_function_null`
 (
@@ -129,6 +137,8 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nested_function_subexpr_null';
 
+SYSTEM DROP  TABLE IF EXISTS 03173_nested_function_lc_null;
+
 CREATE TABLE `03173_nested_function_lc_null`
 (
     id LowCardinality(Nullable(Int32))
@@ -163,6 +173,8 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nested_function_subexpr_lc_null';
 
+SYSTEM DROP  TABLE IF EXISTS 03173_nonsafe_cast;
+
 CREATE TABLE `03173_nonsafe_cast`
 (
     id Int64
@@ -188,6 +200,8 @@ FROM `system`.query_log
 WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nonsafe_cast';
+
+SYSTEM DROP  TABLE IF EXISTS 03173_multiple_partition_cols;
 
 CREATE TABLE `03173_multiple_partition_cols`
 (
@@ -227,6 +241,9 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_multiple_columns_subexpr';
 
+-- Preparing base table for filtering by LowCardinality/Nullable sets
+SYSTEM DROP  TABLE IF EXISTS 03173_base_data_source;
+
 CREATE TABLE `03173_base_data_source`
 (
     id Int32
@@ -237,6 +254,8 @@ PARTITION BY xxHash32(id) % 3;
 
 INSERT INTO `03173_base_data_source` SELECT number
 FROM numbers(100);
+
+SYSTEM DROP  TABLE IF EXISTS 03173_low_cardinality_set;
 
 CREATE TABLE `03173_low_cardinality_set`
 (
@@ -259,6 +278,8 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_low_cardinality_set';
 
+SYSTEM DROP  TABLE IF EXISTS 03173_nullable_set;
+
 CREATE TABLE `03173_nullable_set`
 (
     id Nullable(Int32)
@@ -279,6 +300,8 @@ FROM `system`.query_log
 WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nullable_set';
+
+SYSTEM DROP  TABLE IF EXISTS 03173_lc_nullable_set;
 
 CREATE TABLE `03173_lc_nullable_set`
 (
@@ -303,6 +326,8 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_lc_nullable_set';
 
+SYSTEM DROP  TABLE IF EXISTS 03173_date_parsing;
+
 CREATE TABLE `03173_date_parsing`
 (
     id String
@@ -321,6 +346,8 @@ WHERE id IN ('2023-04-02', '2023-05-02');
 SELECT count()
 FROM `03173_date_parsing`
 WHERE id IN ('not a date');
+
+SYSTEM DROP  TABLE IF EXISTS 03173_nested_date_parsing;
 
 CREATE TABLE `03173_nested_date_parsing`
 (
@@ -352,6 +379,8 @@ WHERE type = 'QueryFinish'
 SELECT count()
 FROM `03173_nested_date_parsing`
 WHERE id IN ('not a date');
+
+SYSTEM DROP  TABLE IF EXISTS 03173_empty_transform;
 
 CREATE TABLE `03173_empty_transform`
 (

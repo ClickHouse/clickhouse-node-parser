@@ -1,3 +1,5 @@
+-- Tags: zookeeper
+DROP TABLE IF EXISTS join_inner_table__fuzz_146_replicated SYNC;
 CREATE TABLE join_inner_table__fuzz_146_replicated
 (
     `id` UUID,
@@ -34,3 +36,4 @@ WHERE event_date >= yesterday()
             AND type = 'QueryFinish'
             AND query LIKE '-- Simple query with analyzer and pure parallel replicas%'
       );
+DROP TABLE join_inner_table__fuzz_146_replicated SYNC;

@@ -1,3 +1,7 @@
+-- Tags: use-vectorscan
+
+DROP DICTIONARY IF EXISTS regexp_dict1;
+DROP TABLE IF EXISTS regexp_dictionary_source_table;
 CREATE TABLE regexp_dictionary_source_table
 (
     id UInt64,
@@ -30,6 +34,9 @@ select dictGet('regexp_dict1', ('name', 'version', 'comment'), 'Linux/101.tlinux
 select dictGet('regexp_dict1', ('name', 'version', 'comment'), '33/tclwebkit11.10x');
 select dictGet('regexp_dict1', ('name', 'version', 'comment'), '30/tclwebkit');
 select dictGetOrDefault('regexp_dict1', ('name', 'version', 'comment'), '30/tclwebkit', ('', 0, 'default'));
+--test column input
+
+DROP table IF EXISTS needle_table;
 CREATE TABLE needle_table
 (
     key String

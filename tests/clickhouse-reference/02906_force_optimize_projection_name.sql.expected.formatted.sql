@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -47,3 +49,5 @@ WHERE current_database = currentDatabase()
     AND like(query, '%SELECT name FROM test%')
     AND `Settings`['force_optimize_projection_name'] = 'projection_name'
     AND type = 'ExceptionBeforeStart';
+
+SYSTEM DROP  TABLE test;

@@ -57,3 +57,6 @@ WHERE d == '2000-01-01 01:00:00'; -- 1 row expected
 SELECT d
 FROM test_tz_setting
 WHERE d == toDateTime('2000-01-01 02:00:00'); -- 0 rows expected
+
+-- Cleanup table
+SYSTEM DROP  TABLE test_tz_setting SYNC;

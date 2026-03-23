@@ -4,6 +4,8 @@ SET allow_experimental_variant_type = 1;
 
 SET use_variant_as_common_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 20, `a.b.c` UInt32)
@@ -17,3 +19,5 @@ SELECT json.`^a`
 FROM test
 GROUP BY json.`^a`
 ORDER BY toString(json.`^a`) ASC;
+
+SYSTEM drop  table test;

@@ -4,6 +4,10 @@
 -- Tag no-async-insert: async inserts with quorum inserts are only have sence with enabled quorum_parallel setting
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE IF EXISTS quorum1;
+
+SYSTEM DROP  TABLE IF EXISTS quorum2;
+
 CREATE TABLE quorum1
 (
     x UInt32,
@@ -54,3 +58,7 @@ FROM quorum1;
 
 SELECT sum(x)
 FROM quorum2;
+
+SYSTEM DROP  TABLE quorum1;
+
+SYSTEM DROP  TABLE quorum2;

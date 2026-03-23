@@ -1,3 +1,8 @@
+-- Tags: no-parallel
+SYSTEM drop  table if exists table_decimal_dict;
+
+SYSTEM drop  dictionary if exists decimal_dict;
+
 CREATE TABLE table_decimal_dict
 (
     KeyField UInt64,

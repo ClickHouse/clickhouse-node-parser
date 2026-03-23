@@ -2,6 +2,8 @@ SET allow_experimental_dynamic_type = 1;
 
 SET allow_suspicious_types_in_order_by = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     d1 Dynamic(max_types = 2),
@@ -86,3 +88,5 @@ FROM test
 ORDER BY
     d2 ASC,
     d1 ASC;
+
+SYSTEM drop  table test;

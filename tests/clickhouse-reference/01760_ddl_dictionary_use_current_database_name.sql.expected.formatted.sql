@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ddl_dictonary_test_source;
+
 CREATE TABLE ddl_dictonary_test_source
 (
     id UInt64,
@@ -8,6 +10,8 @@ ENGINE = TinyLog;
 INSERT INTO ddl_dictonary_test_source;
 
 INSERT INTO ddl_dictonary_test_source;
+
+SYSTEM DROP  DICTIONARY IF EXISTS ddl_dictionary_test;
 
 CREATE DICTIONARY ddl_dictionary_test
 (
@@ -25,3 +29,7 @@ LIMIT 3;
 SELECT dictHas('ddl_dictionary_test', number)
 FROM `system`.numbers
 LIMIT 3;
+
+SYSTEM DROP  DICTIONARY ddl_dictionary_test;
+
+SYSTEM DROP  TABLE ddl_dictonary_test_source;

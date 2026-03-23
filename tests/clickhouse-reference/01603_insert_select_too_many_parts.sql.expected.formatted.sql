@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS too_many_parts;
+
 CREATE TABLE too_many_parts
 (
     x UInt64
@@ -23,3 +25,5 @@ FROM too_many_parts;
 -- exception is thrown if threshold is exceeded on new INSERT.
 INSERT INTO too_many_parts SELECT *
 FROM numbers(10); -- { serverError TOO_MANY_PARTS }
+
+SYSTEM DROP  TABLE too_many_parts;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tesd_dedupl;
+
 CREATE TABLE tesd_dedupl
 (
     x UInt32,

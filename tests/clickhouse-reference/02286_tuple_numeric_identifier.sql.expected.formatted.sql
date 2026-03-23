@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_tuple_numeric;
+
 CREATE TABLE t_tuple_numeric
 (
     t Tuple(`1` Tuple(`2` Int, `3` Int), `4` Int)
@@ -36,6 +38,8 @@ SELECT
     t.`1`.`2`,
     t.`2`
 FROM t_tuple_numeric; -- {serverError UNKNOWN_IDENTIFIER, ARGUMENT_OUT_OF_BOUND}
+
+SYSTEM DROP  TABLE t_tuple_numeric;
 
 CREATE TABLE t_tuple_numeric
 (

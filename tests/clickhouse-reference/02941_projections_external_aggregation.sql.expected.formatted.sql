@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_proj_external;
+
 CREATE TABLE t_proj_external
 (
     k1 UInt32,

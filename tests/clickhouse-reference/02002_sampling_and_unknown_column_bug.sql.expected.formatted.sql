@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists sessions;
+
 CREATE TABLE sessions
 (
     user_id UInt64

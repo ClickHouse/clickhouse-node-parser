@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS random_mt;
 CREATE TABLE random_mt
 (
     key UInt64,

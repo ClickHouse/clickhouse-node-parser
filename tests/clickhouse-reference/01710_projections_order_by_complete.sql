@@ -1,3 +1,6 @@
+-- Test from https://github.com/ClickHouse/ClickHouse/issues/37673
+
+drop table if exists  data_proj_order_by_comp;
 create table data_proj_order_by_comp (t UInt64, projection tSort (select * order by t)) ENGINE MergeTree() order by tuple();
 insert into data_proj_order_by_comp values (5);
 insert into data_proj_order_by_comp values (6);

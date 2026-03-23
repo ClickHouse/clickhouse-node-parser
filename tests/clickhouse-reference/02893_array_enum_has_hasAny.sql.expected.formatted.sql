@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS v;
+
+SYSTEM DROP  TABLE IF EXISTS v2;
+
 CREATE TABLE IF NOT EXISTS v
 (
     value Array(Enum('foo' = 1, 'bar' = 2))
@@ -38,3 +42,7 @@ SELECT *
 FROM v2
 WHERE has(value, [NULL])
 ORDER BY value ASC;
+
+SYSTEM DROP  TABLE v;
+
+SYSTEM DROP  TABLE v2;

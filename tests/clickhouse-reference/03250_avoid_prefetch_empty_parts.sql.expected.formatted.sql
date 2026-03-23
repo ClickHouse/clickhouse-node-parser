@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS 03250_avoid_prefetch;
+
 CREATE TABLE `03250_avoid_prefetch`
 (
     id UInt64,

@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-encrypted-storage
+
+drop table if exists txn_counters;
 create table txn_counters (n Int64, creation_tid DEFAULT transactionID()) engine=MergeTree order by n SETTINGS old_parts_lifetime=3600;
 insert into txn_counters(n) values (1);
 select transactionID();
@@ -24,3 +27,4 @@ select indexOf((select arraySort(groupUniqArray(tid)) from system.transactions_i
 from system.transactions_info_log
 where tid in (select tid from system.transactions_info_log where database=currentDatabase() and table='txn_counters' and not (tid.1=1 and tid.2=1))
 or (database=currentDatabase() and table='txn_counters') order by event_time;
+drop table txn_counters;

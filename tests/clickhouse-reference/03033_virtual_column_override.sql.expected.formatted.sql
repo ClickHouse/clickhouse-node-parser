@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS override_test;
+
 CREATE TABLE override_test
 (
     _part UInt32

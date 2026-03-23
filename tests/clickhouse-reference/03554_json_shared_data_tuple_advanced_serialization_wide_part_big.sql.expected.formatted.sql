@@ -1,3 +1,7 @@
+-- Tags: long
+-- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
+SYSTEM drop  table if exists test_wide_advanced_tuple;
+
 CREATE TABLE test_wide_advanced_tuple
 (
     json Tuple(data JSON(max_dynamic_paths = 8))
@@ -71,3 +75,5 @@ SELECT
     json.data
 FROM test_wide_advanced_tuple
 FORMAT Null;
+
+SYSTEM drop  table test_wide_advanced_tuple;

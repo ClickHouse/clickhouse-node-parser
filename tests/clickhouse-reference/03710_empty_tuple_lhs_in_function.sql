@@ -10,6 +10,7 @@ SELECT [tuple()] IN [[tuple()], [tuple()]];
 SELECT [tuple()] IN [()];
 SELECT tuple() IN (((tuple())));
 SELECT tuple() IN [(((tuple())))];
+DROP TABLE IF EXISTS test_empty_tuple;
 CREATE TABLE test_empty_tuple (t Tuple()) ENGINE = Memory;
 INSERT INTO test_empty_tuple VALUES (tuple()), (tuple()), (tuple());
 SELECT t FROM test_empty_tuple WHERE t IN (tuple());

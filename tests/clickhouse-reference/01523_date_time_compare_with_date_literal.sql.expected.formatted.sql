@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     timestamp DateTime
@@ -70,6 +72,8 @@ SELECT *
 FROM test
 WHERE '2020-10-16' >= timestamp
 ORDER BY timestamp ASC;
+
+SYSTEM DROP  TABLE test;
 
 CREATE TABLE test
 (

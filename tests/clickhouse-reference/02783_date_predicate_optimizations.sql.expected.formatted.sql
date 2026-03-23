@@ -27,6 +27,8 @@ FROM source
 WHERE toYear(ts) = 2021
 SETTINGS enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS source;
+
 CREATE TABLE source
 (
     dt Date,
@@ -480,3 +482,5 @@ SELECT count(*)
 FROM source
 WHERE toYear(ts_64) >= 2023
 SETTINGS enable_analyzer = 1;
+
+SYSTEM DROP  TABLE source;

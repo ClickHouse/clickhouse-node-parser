@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02540_date;
+
 CREATE TABLE `02540_date`
 (
     txt String,

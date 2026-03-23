@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -8,6 +10,8 @@ CREATE TABLE test_table
 ENGINE = TinyLog;
 
 INSERT INTO test_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary;
 
 CREATE DICTIONARY test_dictionary
 (
@@ -26,6 +30,12 @@ SELECT dictGet('test_dictionary', 'value', toUInt64(0));
 
 SELECT dictGet(test_dictionary, 'value', toUInt64(0));
 
+SYSTEM DROP  DICTIONARY test_dictionary;
+
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_join;
+
 CREATE TABLE test_table_join
 (
     id UInt64,
@@ -41,3 +51,5 @@ FROM test_table_join;
 SELECT joinGet('test_table_join', 'value', toUInt64(0));
 
 SELECT joinGet(test_table_join, 'value', toUInt64(0));
+
+SYSTEM DROP  TABLE test_table_join;

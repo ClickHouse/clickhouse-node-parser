@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lwu_bytes_limits;
+
 CREATE TABLE t_lwu_bytes_limits
 (
     id UInt64,
@@ -18,6 +20,8 @@ SELECT id
 FROM t_lwu_bytes_limits
 WHERE s = 'foo'
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_lwu_bytes_limits;
 
 CREATE TABLE t_lwu_bytes_limits
 (

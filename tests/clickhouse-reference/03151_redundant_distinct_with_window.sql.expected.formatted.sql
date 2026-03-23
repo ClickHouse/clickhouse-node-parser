@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS tab;
+
+SYSTEM DROP  TABLE IF EXISTS tab_v;
+
 CREATE TABLE tab
 (
     id Int32,

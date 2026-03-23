@@ -10,6 +10,7 @@ SET query_plan_direct_read_from_text_index = 1;
 SET use_text_index_header_cache = 1;
 SET log_queries = 1;
 SET max_rows_to_read = 0;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt32,
@@ -25,6 +26,7 @@ SELECT
     number,
     concat('text_', leftPad(toString(number), 3, '0'))
 FROM numbers(512);
+DROP VIEW IF EXISTS text_index_cache_stats;
 CREATE VIEW text_index_cache_stats AS (
   SELECT
     concat('cache_hits = ', toString(ProfileEvents['TextIndexHeaderCacheHits']), ', cache_misses = ', toString(ProfileEvents['TextIndexHeaderCacheMisses']))
@@ -44,3 +46,5 @@ SELECT count() FROM tab WHERE hasAnyTokens(message, 'text_001');
 SELECT * FROM text_index_cache_stats(filter = 'text_001');
 SELECT count() FROM tab WHERE hasAnyTokens(message, 'text_510');
 SELECT * FROM text_index_cache_stats(filter = 'text_510');
+DROP VIEW text_index_cache_stats;
+DROP TABLE tab;

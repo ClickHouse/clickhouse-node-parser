@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_subcolumns_join;
+
 CREATE TABLE t_subcolumns_join
 (
     id UInt64
@@ -21,3 +23,5 @@ SETTINGS
     enable_analyzer = 1,
     optimize_functions_to_subcolumns = 1,
     join_use_nulls = 1;
+
+SYSTEM DROP  TABLE t_subcolumns_join;

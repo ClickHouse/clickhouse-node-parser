@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t_length_1;
+
+SYSTEM DROP  TABLE IF EXISTS t_length_2;
+
 SET optimize_functions_to_subcolumns = 1;
 
 SET enable_analyzer = 1;
@@ -44,3 +48,7 @@ WHERE length(arr) IN (
         SELECT arr_length
         FROM t_length_2 FINAL
     );
+
+SYSTEM DROP  TABLE t_length_1;
+
+SYSTEM DROP  TABLE t_length_2;

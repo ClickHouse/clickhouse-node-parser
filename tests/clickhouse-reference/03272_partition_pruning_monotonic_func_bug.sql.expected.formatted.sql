@@ -1,5 +1,7 @@
 SET session_timezone = 'Etc/UTC';
 
+SYSTEM DROP  TABLE IF EXISTS tt;
+
 CREATE TABLE tt
 (
     id Int64,
@@ -14,3 +16,5 @@ INSERT INTO tt;
 SELECT id
 FROM tt
 PREWHERE and(greaterOrEquals(ts, toDateTime(1731506400)), lessOrEquals(ts, toDateTime(1731594420)));
+
+SYSTEM DROP  TABLE tt;

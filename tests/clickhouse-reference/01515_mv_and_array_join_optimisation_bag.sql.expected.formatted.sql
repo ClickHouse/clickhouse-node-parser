@@ -50,3 +50,9 @@ ORDER BY
     GoalID ASC;
 
 INSERT INTO visits (CounterID, StartDate, StartTime, Sign, GoalsID);
+
+SYSTEM DROP  TABLE goal;
+
+SYSTEM DROP  TABLE goal_view;
+
+SYSTEM DROP  TABLE visits;

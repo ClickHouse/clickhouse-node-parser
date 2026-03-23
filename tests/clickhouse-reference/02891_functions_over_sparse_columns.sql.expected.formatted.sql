@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     key Int
@@ -11,3 +13,5 @@ FROM numbers(10);
 
 SELECT arrayMap(x -> (x <= key), [1])
 FROM test;
+
+SYSTEM drop  table test;

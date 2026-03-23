@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 SET mutations_sync = 1;
 
 CREATE TABLE t
@@ -13,3 +15,5 @@ INSERT INTO t;
 
 SELECT *
 FROM t;
+
+SYSTEM DROP  TABLE t;

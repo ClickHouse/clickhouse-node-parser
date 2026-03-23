@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS null_00117;
+
 CREATE TABLE null_00117
 (
     a Array(UInt64),
@@ -21,3 +23,5 @@ ORDER BY
     a ASC,
     b ASC,
     c ASC;
+
+SYSTEM DROP  TABLE null_00117;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a String,
@@ -7,3 +9,5 @@ ENGINE = MergeTree
 ORDER BY a;
 
 SELECT hasColumnInTable(currentDatabase(), 'test', 'alias_col_a');
+
+SYSTEM DROP  TABLE test;

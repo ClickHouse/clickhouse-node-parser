@@ -1,3 +1,5 @@
+DROP DICTIONARY IF EXISTS dict_neg;
+DROP TABLE IF EXISTS dict_src_neg;
 CREATE TABLE dict_src_neg
 (
     id   UInt64,
@@ -26,6 +28,8 @@ SELECT dictGetKeys('dict_neg', 'u64', toUInt64(7), 1); -- { serverError NUMBER_O
 SELECT dictGetKeys('dict_neg', 'i32n', tuple(number)) FROM numbers(3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT dictGetKeys('non_a_dict_name', 'i32n', tuple(number)) FROM numbers(3); -- { serverError BAD_ARGUMENTS }
 SELECT dictGetKeys('dict_neg', 'not_a_attr_col', tuple(number)) FROM numbers(3); -- { serverError ILLEGAL_COLUMN }
+DROP DICTIONARY IF EXISTS dict_simple_kv;
+DROP TABLE IF EXISTS dict_src_simple_kv;
 CREATE TABLE dict_src_simple_kv
 (
     id   UInt64,
@@ -46,6 +50,8 @@ LIFETIME(0)
 LAYOUT(HASHED());
 SELECT dictGetKeys('dict_simple_kv', 'attr', toUInt32(10));
 SELECT toTypeName(dictGetKeys('dict_simple_kv', 'attr', toUInt32(10)));
+DROP DICTIONARY IF EXISTS dict_complex2_kv;
+DROP TABLE IF EXISTS dict_src_complex2_kv;
 CREATE TABLE dict_src_complex2_kv
 (
     k1   UInt64,
@@ -68,6 +74,8 @@ LIFETIME(0)
 LAYOUT(COMPLEX_KEY_HASHED());
 SELECT dictGetKeys('dict_complex2_kv', 'attr', 10);
 SELECT toTypeName(dictGetKeys('dict_complex2_kv', 'attr', 10));
+DROP DICTIONARY IF EXISTS dict_complex1_kv;
+DROP TABLE IF EXISTS dict_src_complex1_kv;
 CREATE TABLE dict_src_complex1_kv
 (
     k1   UInt64,
@@ -87,6 +95,8 @@ LIFETIME(0)
 LAYOUT(COMPLEX_KEY_HASHED());
 SELECT dictGetKeys('dict_complex1_kv', 'attr', 1);
 SELECT toTypeName(dictGetKeys('dict_complex1_kv', 'attr', 1));
+DROP DICTIONARY IF EXISTS dict_complex_wide_kv;
+DROP TABLE IF EXISTS dict_src_complex_wide_kv;
 CREATE TABLE dict_src_complex_wide_kv
 (
     a1 UInt64,
@@ -123,6 +133,8 @@ LIFETIME(0)
 LAYOUT(COMPLEX_KEY_HASHED());
 SELECT dictGetKeys('dict_complex_wide_kv', 'attr', 10);
 SELECT toTypeName(dictGetKeys('dict_complex_wide_kv', 'attr', 10));
+DROP DICTIONARY IF EXISTS dict_types;
+DROP TABLE IF EXISTS dict_src_types;
 CREATE TABLE dict_src_types
 (
     id   UInt64,
@@ -229,6 +241,8 @@ SELECT dictGetKeys('dict_types', 'ip6', '2001:db8::1');
 SELECT dictGetKeys('dict_types', 's', '');
 SELECT dictGetKeys('dict_types', 'dec32', '1.234');
 SELECT dictGetKeys('dict_types', 'dec64', '42.500');
+DROP DICTIONARY IF EXISTS dict_valexpr;
+DROP TABLE IF EXISTS dict_src_valexpr;
 CREATE TABLE dict_src_valexpr
 (
     id    UInt64,
@@ -267,6 +281,8 @@ SELECT dictGetKeys('dict_valexpr', 'u64', CAST('42' AS Nullable(String)));
 SELECT dictGetKeys('dict_valexpr', 'i32n', x)
 FROM (SELECT arrayJoin([CAST(NULL AS Nullable(Int32)), CAST(10 AS Nullable(Int32)), CAST(NULL AS Nullable(Int32)), CAST(-5 AS Nullable(Int32))]) AS x);
 SELECT dictGetKeys('dict_valexpr', 'u64', '42');
+DROP DICTIONARY IF EXISTS dict_match;
+DROP TABLE IF EXISTS dict_src_match;
 CREATE TABLE dict_src_match
 (
     id  UInt64,

@@ -1,6 +1,8 @@
 -- Testing basic functionality with compact parts
 SET mutations_sync = 2;
 
+SYSTEM drop  table if exists mt_compact;
+
 CREATE TABLE mt_compact
 (
     a UInt64,

@@ -6,6 +6,10 @@ SET optimize_functions_to_subcolumns = 0;
 
 SET use_statistics = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t_02848_mt1;
+
+SYSTEM DROP  TABLE IF EXISTS t_02848_mt2;
+
 CREATE TABLE t_02848_mt1
 (
     k UInt32,
@@ -131,3 +135,7 @@ FROM t_02848_mt2
 WHERE a = 3
     AND b == '3'
     AND like(d, '%es%');
+
+SYSTEM DROP  TABLE t_02848_mt1;
+
+SYSTEM DROP  TABLE t_02848_mt2;

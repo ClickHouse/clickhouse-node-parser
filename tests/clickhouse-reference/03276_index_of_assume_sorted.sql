@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test(
     id UInt64,
     numbers Array(Int64)

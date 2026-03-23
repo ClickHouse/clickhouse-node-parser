@@ -1,5 +1,7 @@
 SET allow_experimental_variant_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS source;
+
 CREATE TABLE source
 (
     Name String,
@@ -12,6 +14,8 @@ INSERT INTO source SELECT
     ['fail', 'success'][(((number + 1)) % 2) + 1] AS Name,
     number AS Value
 FROM numbers(1000);
+
+SYSTEM DROP  TABLE IF EXISTS test_agg_variant;
 
 CREATE TABLE test_agg_variant
 (
@@ -56,3 +60,7 @@ SELECT
 FROM test_agg_variant
 GROUP BY Name
 ORDER BY Name ASC;
+
+SYSTEM DROP  TABLE test_agg_variant;
+
+SYSTEM DROP  TABLE source;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_mut_virtuals;
+
 CREATE TABLE t_mut_virtuals
 (
     id UInt64,
@@ -17,3 +19,5 @@ SET mutations_sync = 2;
 SELECT *
 FROM t_mut_virtuals
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_mut_virtuals;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_lwu_replacing;
 CREATE TABLE t_lwu_replacing (id UInt64, value String, timestamp DateTime)
 ENGINE = ReplacingMergeTree(timestamp)
 ORDER BY id SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;

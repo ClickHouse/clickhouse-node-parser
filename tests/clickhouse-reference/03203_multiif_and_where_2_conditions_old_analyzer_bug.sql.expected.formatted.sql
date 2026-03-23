@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bugcheck1;
+
 CREATE TABLE bugcheck1
 ENGINE = MergeTree
 ORDER BY tuple() AS
@@ -51,3 +53,5 @@ FROM (
 WHERE (condition_1 IN ('yes'))
     AND (condition_2 IN ('true'))
 SETTINGS enable_analyzer = 1;
+
+SYSTEM DROP  TABLE bugcheck1;

@@ -4,6 +4,11 @@ SET enable_analyzer = 1;
 SET parallel_replicas_local_plan = 1;
 SET optimize_aggregation_in_order = 0;
 SET min_table_rows_to_use_projection_index = 0;
+------------------------------------------------------------------------------
+-- 1. Basic projection index behavior (simple table)
+------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS t_proj;
 CREATE TABLE t_proj
 (
     id UInt64,
@@ -43,6 +48,12 @@ SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM t_proj WHERE region = 'asia' OR user_id = 101)
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');
 SELECT * FROM t_proj WHERE region = 'asia' OR user_id = 101 ORDER BY ALL;
+DROP TABLE t_proj;
+------------------------------------------------------------------------------
+-- 2. Granule edge cases (top/mid/bottom rows hit inside same granule)
+------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS t_gran;
 CREATE TABLE t_gran
 (
     id UInt64,
@@ -73,6 +84,12 @@ SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM t_gran WHERE region = 'bot')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');
 SELECT * FROM t_gran WHERE region = 'bot' ORDER BY ALL;
+DROP TABLE t_gran;
+------------------------------------------------------------------------------
+-- 3. Partial materialization (projection added after data exists)
+------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS t_partial;
 CREATE TABLE t_partial
 (
     id UInt64,
@@ -95,6 +112,13 @@ SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM t_partial WHERE region = 'cn')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');
 SELECT * FROM t_partial WHERE region = 'cn' ORDER BY ALL;
+DROP TABLE t_partial;
+------------------------------------------------------------------------------
+-- 4. (Replicated)MergeTree consistency test
+------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS t_repl SYNC;
+DROP TABLE IF EXISTS t_repl2 SYNC;
 CREATE TABLE t_repl
 (
     id UInt64,
@@ -117,6 +141,13 @@ SELECT table, name
 FROM system.projection_parts
 WHERE database = currentDatabase() AND table IN ('t_repl', 't_repl2')
 ORDER BY ALL;
+DROP TABLE t_repl SYNC;
+DROP TABLE t_repl2 SYNC;
+------------------------------------------------------------------------------
+-- 5. BAD CASES
+------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS t_bad SYNC;
 -- Unknown index type
 CREATE TABLE t_bad (id UInt64, PROJECTION bad INDEX id TYPE unknown_type) ENGINE = MergeTree ORDER BY (); -- { serverError INCORRECT_QUERY }
 -- Invalid expression inside index

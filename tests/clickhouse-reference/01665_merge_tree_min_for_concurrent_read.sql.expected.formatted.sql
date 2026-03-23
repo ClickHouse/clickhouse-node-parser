@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS data_01655;
+
 CREATE TABLE data_01655
 (
     key Int
@@ -19,3 +21,5 @@ FROM data_01655
 SETTINGS
     merge_tree_min_rows_for_concurrent_read = 18446744073709551615,
     merge_tree_min_bytes_for_concurrent_read = 18446744073709551615;
+
+SYSTEM DROP  TABLE data_01655;

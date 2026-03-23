@@ -60,6 +60,15 @@ INNER JOIN (
     USING (name)
 WHERE name = 'enable_optimize_predicate_expression';
 
+-- https://github.com/ClickHouse/ClickHouse/issues/6767
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
+SYSTEM DROP  TABLE IF EXISTS t3;
+
+SYSTEM DROP  TABLE IF EXISTS view1;
+
 CREATE TABLE t1
 (
     id UInt32,
@@ -125,6 +134,13 @@ FROM (
     )
 WHERE ccc > 1;
 
+-- https://github.com/ClickHouse/ClickHouse/issues/5674
+-- https://github.com/ClickHouse/ClickHouse/issues/4731
+-- https://github.com/ClickHouse/ClickHouse/issues/4904
+SYSTEM DROP  TABLE IF EXISTS A;
+
+SYSTEM DROP  TABLE IF EXISTS B;
+
 CREATE TABLE A
 (
     ts DateTime,
@@ -144,6 +160,9 @@ CREATE TABLE B
 ENGINE = MergeTree
 ORDER BY (ts, id)
 PARTITION BY toStartOfHour(ts);
+
+-- https://github.com/ClickHouse/ClickHouse/issues/7802
+SYSTEM DROP  TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

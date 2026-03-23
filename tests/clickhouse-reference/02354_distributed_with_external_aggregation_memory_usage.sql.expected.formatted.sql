@@ -1,6 +1,8 @@
 -- Tags: long, no-tsan, no-msan, no-asan, no-ubsan, no-debug, no-coverage, no-object-storage, no-random-merge-tree-settings, no-random-settings
 SET max_rows_to_read = '101M';
 
+SYSTEM DROP  TABLE IF EXISTS t_2354_dist_with_external_aggr;
+
 CREATE TABLE t_2354_dist_with_external_aggr
 (
     a UInt64,
@@ -35,3 +37,5 @@ GROUP BY
     c
 FORMAT Null
 SETTINGS max_memory_usage = '5Gi', max_result_rows = 0, max_result_bytes = 0;
+
+SYSTEM DROP  TABLE t_2354_dist_with_external_aggr;

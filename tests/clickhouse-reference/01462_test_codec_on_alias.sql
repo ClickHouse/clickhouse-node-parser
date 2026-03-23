@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS compression_codec_on_alias;
 CREATE TABLE compression_codec_on_alias (
     `c0` ALIAS c1 CODEC(ZSTD),
     c1 UInt64

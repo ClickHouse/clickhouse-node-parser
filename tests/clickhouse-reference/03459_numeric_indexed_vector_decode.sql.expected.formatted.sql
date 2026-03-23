@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS uin_value_details;
+
 CREATE TABLE uin_value_details
 (
     ds Date,
@@ -54,6 +56,8 @@ INSERT INTO uin_value_details (ds, uin, value) SELECT
     number * 3,
     number * 3
 FROM numbers(30000);
+
+SYSTEM DROP  TABLE IF EXISTS numeric_indexed_vector;
 
 CREATE TABLE numeric_indexed_vector
 (

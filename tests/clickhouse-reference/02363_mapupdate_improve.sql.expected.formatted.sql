@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS map_test;
+
 CREATE TABLE map_test
 (
     tags Map(String, String)
@@ -14,3 +16,5 @@ FROM map_test;
 
 SELECT mapUpdate(map('season', 'autumn'), mapFilter((k, v) -> (k IN ('fruit')), tags))
 FROM map_test;
+
+SYSTEM DROP  TABLE map_test;

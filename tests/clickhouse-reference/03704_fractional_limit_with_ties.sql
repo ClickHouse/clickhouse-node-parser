@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS ties;
 CREATE TABLE ties (id UInt8) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO ties VALUES (1), (1), (1), (1), (2), (2), (2), (2), (3), (3);
 SELECT id FROM ties ORDER BY id LIMIT 0.1 WITH TIES;
@@ -22,3 +23,4 @@ SELECT number FROM numbers(33) ORDER BY number LIMIT 0.33 WITH TIES;
 SELECT count() FROM (SELECT number > 100 AS n FROM numbers(2000) ORDER BY n LIMIT 1, 0.01 WITH TIES);
 SELECT count() FROM (SELECT number < 100 AS n FROM numbers(2000) ORDER BY n DESC LIMIT 0.03 WITH TIES);
 SELECT count() FROM (SELECT number div 10 AS n FROM numbers(20) ORDER BY n LIMIT 0.25 WITH TIES);
+DROP TABLE ties;

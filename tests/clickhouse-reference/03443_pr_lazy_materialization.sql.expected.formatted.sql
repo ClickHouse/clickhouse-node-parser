@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS pr_tt;
+
 CREATE TABLE pr_tt
 (
     k UInt64,
@@ -38,3 +40,5 @@ SELECT
 FROM pr_tt
 ORDER BY k ASC
 LIMIT 10;
+
+SYSTEM DROP  TABLE pr_tt;

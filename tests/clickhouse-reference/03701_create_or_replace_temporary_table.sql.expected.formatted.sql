@@ -17,3 +17,5 @@ SELECT
     number,
     'a'
 FROM numbers(10);
+
+SYSTEM DROP  TEMPORARY TABLE tmp;

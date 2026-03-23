@@ -1,4 +1,9 @@
+-- Tags: no-fasttest
+
+DROP TABLE IF EXISTS h3_indexes;
+
 CREATE TABLE h3_indexes (h3_index UInt64) ENGINE = Memory;
+
 -- Test h3 indices selected from original test fixture: https://github.com/uber/h3/blob/master/src/apps/testapps/testH3CellAreaExhaustive.c
 
 INSERT INTO h3_indexes VALUES (1298057039473278975);
@@ -17,4 +22,7 @@ INSERT INTO h3_indexes VALUES (1458182628678041599);
 INSERT INTO h3_indexes VALUES (1530240222715969535);
 INSERT INTO h3_indexes VALUES (1602297816753897471);
 INSERT INTO h3_indexes VALUES (1242009915283734527);
+
 SELECT round(h3ExactEdgeLengthKm(h3_index), 2) FROM h3_indexes ORDER BY h3_index;
+
+DROP TABLE h3_indexes;

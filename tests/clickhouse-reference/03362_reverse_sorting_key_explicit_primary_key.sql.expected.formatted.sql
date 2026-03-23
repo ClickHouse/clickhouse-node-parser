@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists x1;
+
 CREATE TABLE x1
 (
     i Nullable(int)
@@ -17,3 +19,5 @@ WHERE i = 3;
 SELECT count()
 FROM x1
 WHERE and(greaterOrEquals(i, 3), lessOrEquals(i, 10));
+
+SYSTEM drop  table x1;

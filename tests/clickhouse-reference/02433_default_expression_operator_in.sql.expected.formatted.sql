@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS dep;
+
+SYSTEM DROP  TABLE IF EXISTS dep2;
+
+SYSTEM DROP  TABLE IF EXISTS id_join;
+
 CREATE TABLE id_join
 (
     country String,
@@ -39,3 +45,9 @@ CREATE TABLE test
     m DEFAULT in(n, 'default.table_name')
 )
 ENGINE = Memory; -- { serverError TYPE_MISMATCH }
+
+SYSTEM DROP  TABLE dep;
+
+SYSTEM DROP  TABLE dep2;
+
+SYSTEM DROP  TABLE id_join;

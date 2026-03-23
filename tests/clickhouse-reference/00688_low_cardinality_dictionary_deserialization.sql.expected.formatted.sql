@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists lc_dict_reading;
+
 CREATE TABLE lc_dict_reading
 (
     val UInt64,

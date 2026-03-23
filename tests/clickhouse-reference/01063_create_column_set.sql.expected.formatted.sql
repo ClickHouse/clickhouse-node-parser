@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mt;
+
 CREATE TABLE mt
 (
     x UInt8,
@@ -15,3 +17,5 @@ LEFT JOIN (
     USING (x)
 PREWHERE x IN (1)
 WHERE y = today();
+
+SYSTEM DROP  TABLE mt;

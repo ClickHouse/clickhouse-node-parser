@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+SYSTEM DROP  TABLE IF EXISTS t_lwd_indexes;
+
 SET enable_lightweight_update = 1;
 
 CREATE TABLE t_lwd_indexes
@@ -75,3 +78,5 @@ FROM (
         SETTINGS force_data_skipping_indices = 'idx_value'
     )
 WHERE like(`explain`, '%Granules%');
+
+SYSTEM DROP  TABLE t_lwd_indexes;

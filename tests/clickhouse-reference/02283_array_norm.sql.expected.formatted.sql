@@ -8,6 +8,12 @@ SELECT LpNorm([3., 4., 5.], 1.1);
 
 SELECT LinfNorm([0, 0, 2]);
 
+SYSTEM DROP  TABLE IF EXISTS vec1;
+
+SYSTEM DROP  TABLE IF EXISTS vec1f;
+
+SYSTEM DROP  TABLE IF EXISTS vec1d;
+
 CREATE TABLE vec1
 (
     id UInt64,
@@ -88,3 +94,9 @@ SELECT LpNorm([1,2], 'aa'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT LpNorm([1,2], [1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT LpNorm([1,2], materialize(3.14)); -- { serverError ILLEGAL_COLUMN }
+
+SYSTEM DROP  TABLE vec1;
+
+SYSTEM DROP  TABLE vec1f;
+
+SYSTEM DROP  TABLE vec1d;

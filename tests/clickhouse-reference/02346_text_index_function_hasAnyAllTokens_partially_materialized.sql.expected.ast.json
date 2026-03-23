@@ -58,6 +58,18 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "DROP  TABLE IF EXISTS tab",
+    "leadingComments": [
+      "-- In this test we make sure that text search functions hasAny/AllTokens work correctly for",
+      "-- tables in which only some parts have a materialized index. The expected behavior is that",
+      "-- the search acts the same as if the whole column was indexed, but of course an inefficient",
+      "-- brute force search is used for the un-indexed rows. Furthermore we test that the same",
+      "-- tokenizer used to create the index is used for the un-indexed parts as is specified in",
+      "-- the index."
+    ]
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -103,6 +115,10 @@
       }
     ],
     "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "system",
+    "body": "DROP  VIEW IF EXISTS explain_indexes"
   },
   {
     "kind": "createView",
@@ -853,6 +869,13 @@
     }
   },
   {
+    "kind": "system",
+    "body": "DROP  TABLE tab",
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1067,5 +1090,9 @@
         }
       ]
     }
+  },
+  {
+    "kind": "system",
+    "body": "DROP  VIEW explain_indexes"
   }
 ]

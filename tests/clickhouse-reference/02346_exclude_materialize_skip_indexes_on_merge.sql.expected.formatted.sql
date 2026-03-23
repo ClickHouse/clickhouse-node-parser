@@ -7,6 +7,8 @@ SET materialize_skip_indexes_on_insert = 0;
 
 SET mutations_sync = 2; -- disable asynchronous mutations
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     a UInt64,
@@ -49,3 +51,7 @@ FROM numbers(100, 100);
 
 SELECT *
 FROM explain_indexes;
+
+SYSTEM DROP  TABLE tab;
+
+SYSTEM DROP  VIEW explain_indexes;

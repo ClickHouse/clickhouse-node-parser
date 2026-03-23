@@ -5,6 +5,8 @@ SET allow_suspicious_indices = 1;
 
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_set_index_dynamic;
+
 CREATE TABLE t_set_index_dynamic
 (
     k Float32,
@@ -32,3 +34,5 @@ SELECT count()
 FROM t_set_index_dynamic
 PREWHERE indexHint(indexHint(*))
 WHERE indexHint(indexHint(*));
+
+SYSTEM DROP  TABLE t_set_index_dynamic;

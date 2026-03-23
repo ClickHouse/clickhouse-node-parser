@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 SET max_insert_block_size = 1;
 
 SET min_insert_block_size_rows = 1;

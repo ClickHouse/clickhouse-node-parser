@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     s String
@@ -13,3 +15,5 @@ SELECT
     max(s),
     max(s1)
 FROM test;
+
+SYSTEM drop  table test;

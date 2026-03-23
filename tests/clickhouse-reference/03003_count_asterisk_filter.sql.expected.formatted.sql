@@ -23,3 +23,5 @@ FROM users;
 
 SELECT countIf(uid > 2000)
 FROM users;
+
+SYSTEM DROP  TABLE users;

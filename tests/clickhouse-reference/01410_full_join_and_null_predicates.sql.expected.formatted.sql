@@ -1,3 +1,7 @@
+SYSTEM drop  table if EXISTS l;
+
+SYSTEM drop  table if EXISTS r;
+
 CREATE TABLE l
 (
     luid Nullable(Int16),
@@ -50,6 +54,10 @@ FROM (
     )
 WHERE isNull(luid)
     AND isNotNull(ruid);
+
+SYSTEM drop  table l;
+
+SYSTEM drop  table r;
 
 CREATE TABLE l
 (

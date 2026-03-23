@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_column_names;
+
 CREATE TABLE t_column_names
 (
     arr Array(UInt64),
@@ -16,3 +18,5 @@ SELECT
     isNull(n)
 FROM t_column_names
 FORMAT JSONEachRow;
+
+SYSTEM DROP  TABLE t_column_names;

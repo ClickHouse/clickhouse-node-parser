@@ -5,6 +5,9 @@ SET enable_full_text_index = 1;
 SET use_skip_indexes_on_data_read = 1;
 SET query_plan_text_index_add_hint = 1;
 SET use_statistics = 0;
+-- Tests text search setting 'query_plan_text_index_add_hint' with different tokenizers
+
+DROP TABLE IF EXISTS tab;
 SELECT '-- splitByNonAlpha';
 CREATE TABLE tab
 (
@@ -22,6 +25,7 @@ SELECT trim(explain) FROM
 (
     EXPLAIN actions = 1 SELECT count() FROM tab WHERE s LIKE '%5555%' SETTINGS use_skip_indexes_on_data_read = 1
 ) WHERE explain ILIKE '%filter column%';
+DROP TABLE tab;
 CREATE TABLE tab
 (
     s String,

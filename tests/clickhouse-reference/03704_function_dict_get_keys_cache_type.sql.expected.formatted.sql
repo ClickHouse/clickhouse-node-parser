@@ -1,3 +1,7 @@
+SYSTEM DROP  DICTIONARY IF EXISTS colors;
+
+SYSTEM DROP  TABLE IF EXISTS dict_src;
+
 CREATE TABLE dict_src
 (
     id UInt64,
@@ -21,6 +25,12 @@ SELECT dictGetKeys('colors', 'grp', 'blue') AS keys
 FROM numbers(1);
 
 INSERT INTO dict_src;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dict_products;
+
+SYSTEM DROP  TABLE IF EXISTS src_products;
+
+SYSTEM DROP  TABLE IF EXISTS inputs;
 
 CREATE TABLE src_products
 (

@@ -1,5 +1,8 @@
 SET send_logs_level = 'fatal';
 
+-- { echoOn }
+SYSTEM DROP  TABLE IF EXISTS sum_map;
+
 CREATE TABLE sum_map
 (
     date Date,
@@ -51,6 +54,10 @@ FROM sum_map;
 SELECT sumMapFiltered([1, 4, 8])(statusMap.status, statusMap.requests)
 FROM sum_map;
 
+SYSTEM DROP  TABLE sum_map;
+
+SYSTEM DROP  TABLE IF EXISTS sum_map_overflow;
+
 CREATE TABLE sum_map_overflow
 (
     events Array(UInt8),
@@ -66,6 +73,8 @@ FROM sum_map_overflow;
 
 SELECT sumMapWithOverflow(events, counts)
 FROM sum_map_overflow;
+
+SYSTEM DROP  TABLE sum_map_overflow;
 
 SELECT sumMap(val, cnt)
 FROM (
@@ -130,6 +139,8 @@ FROM (
             [1, 2, 3] AS cnt
     );
 
+SYSTEM DROP  TABLE IF EXISTS sum_map_decimal;
+
 CREATE TABLE sum_map_decimal
 (
     statusMap Nested(goal_id UInt16, revenue Decimal32(5))
@@ -145,6 +156,8 @@ FROM sum_map_decimal;
 SELECT sumMapWithOverflow(statusMap.goal_id, statusMap.revenue)
 FROM sum_map_decimal;
 
+SYSTEM DROP  TABLE sum_map_decimal;
+
 CREATE TABLE sum_map_decimal_nullable
 (
     statusMap Nested(goal_id UInt16, revenue Nullable(Decimal(9, 5)))
@@ -156,3 +169,5 @@ INSERT INTO sum_map_decimal_nullable;
 
 SELECT sumMap(statusMap.goal_id, statusMap.revenue)
 FROM sum_map_decimal_nullable;
+
+SYSTEM DROP  TABLE sum_map_decimal_nullable;

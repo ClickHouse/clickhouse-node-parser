@@ -1,3 +1,4 @@
+drop table if exists simple_agg_groupArrayLastArray;
 -- { echo }
 -- BAD_ARGUMENTS
 select groupArrayLast(number+1) from numbers(5); -- { serverError BAD_ARGUMENTS }

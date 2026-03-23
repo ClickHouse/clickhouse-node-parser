@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table_for_estimate_compression_ratio;
+
 CREATE TABLE test_table_for_estimate_compression_ratio
 (
     some_column Int64,

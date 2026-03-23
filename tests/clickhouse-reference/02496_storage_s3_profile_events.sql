@@ -1,3 +1,6 @@
+-- Tags: no-parallel, no-fasttest, no-random-settings
+
+DROP TABLE IF EXISTS t_s3_events_02496;
 CREATE TABLE t_s3_events_02496 (a UInt64)
 ENGINE = S3(s3_conn, filename = 'test_02496_{_partition_id}', format = Parquet)
 PARTITION BY a;
@@ -12,3 +15,4 @@ SELECT
     ProfileEvents['IOBufferAllocBytes'] < 100000
 FROM system.query_log WHERE current_database = currentDatabase()
 AND type = 'QueryFinish' AND query ILIKE 'SELECT count() FROM s3%test_02496%';
+DROP TABLE t_s3_events_02496;

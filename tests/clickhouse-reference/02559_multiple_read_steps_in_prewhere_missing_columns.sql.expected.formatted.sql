@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_02559;
+
 CREATE TABLE test_02559
 (
     x UInt8,
@@ -89,3 +91,6 @@ FROM test_02559
 PREWHERE NOT y
     AND z
 ORDER BY s ASC;
+
+-- { echoOff }
+SYSTEM DROP  TABLE test_02559;

@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS table;
+DROP DICTIONARY IF EXISTS dict;
+DROP TABLE IF EXISTS view;
 CREATE TABLE view (id UInt32, value String) ENGINE=ReplicatedMergeTree('/test/2449/{database}', '1') ORDER BY id;
 INSERT INTO view VALUES (1, 'v');
 CREATE DICTIONARY dict (id UInt32, value String)
@@ -12,6 +15,9 @@ CREATE TABLE table
 ENGINE = MergeTree()
 ORDER BY tuple();
 SELECT * FROM dictionary('dict');
+DROP TABLE view; -- {serverError HAVE_DEPENDENT_OBJECTS}
 -- check that table is not readonly
 INSERT INTO view VALUES (2, 'a');
+DROP DICTIONARY dict; -- {serverError HAVE_DEPENDENT_OBJECTS}
 SELECT * FROM dictionary('dict') ORDER BY id;
+DROP TABLE table;

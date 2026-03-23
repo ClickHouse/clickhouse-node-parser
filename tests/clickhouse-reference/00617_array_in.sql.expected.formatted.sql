@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_array_ops;
+
 CREATE TABLE test_array_ops
 (
     arr Array(Nullable(Int64))
@@ -33,3 +35,5 @@ WHERE arr = CAST([10, -20] AS Array(Nullable(Int64)));
 SELECT count(*)
 FROM test_array_ops
 WHERE arr IN (CAST([10, -20] AS Array(Nullable(Int64))), CAST([null,10, -20] AS Array(Nullable(Int64))));
+
+SYSTEM DROP  TABLE test_array_ops;

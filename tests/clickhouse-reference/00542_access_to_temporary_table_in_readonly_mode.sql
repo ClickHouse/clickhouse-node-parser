@@ -8,3 +8,4 @@ SELECT ID FROM readonly00542 ORDER BY ID;
 INSERT INTO readonly00542 (ID)
     SELECT CAST(number * 10 AS Int) FROM system.numbers LIMIT 10;
 SELECT '---';
+DROP TEMPORARY TABLE readonly00542;

@@ -96,6 +96,8 @@ SELECT round(1000 * ngramSearchUTF8('абвгдеёжз', 'гдеёзд'));
 
 SELECT round(1000 * ngramSearchUTF8('абвгдеёжз', 'ёёёёёёёё'));
 
+SYSTEM drop  table if exists test_entry_distance;
+
 CREATE TABLE test_entry_distance
 (
     Title String

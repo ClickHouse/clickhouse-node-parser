@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS nullable_test;
 CREATE TABLE nullable_test(
     my_int_nullable Nullable(UInt32),
     my_int_nullable_with_default Nullable(UInt32) DEFAULT NULL,

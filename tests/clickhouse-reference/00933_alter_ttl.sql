@@ -1,4 +1,5 @@
 set send_logs_level = 'fatal';
+drop table if exists ttl;
 create table ttl (d Date, a Int) engine = MergeTree order by a partition by toDayOfMonth(d) settings remove_empty_parts = 0;
 insert into ttl values (toDateTime('2000-10-10 00:00:00'), 1);
 insert into ttl values (toDateTime('2000-10-10 00:00:00'), 2);

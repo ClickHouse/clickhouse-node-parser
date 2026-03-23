@@ -1,5 +1,9 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     a Int64,
@@ -48,3 +52,7 @@ GROUP BY '65537'
 WITH CUBE
 FORMAT Null
 SETTINGS max_block_size = 100, join_use_nulls = 1, max_execution_time = 1., max_result_rows = 0, max_result_bytes = 0; -- { serverError TIMEOUT_EXCEEDED, QUERY_WAS_CANCELLED }
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;

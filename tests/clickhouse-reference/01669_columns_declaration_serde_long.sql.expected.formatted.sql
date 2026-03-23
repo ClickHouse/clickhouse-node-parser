@@ -12,6 +12,10 @@ INSERT INTO test (`\\`);
 SELECT *
 FROM test;
 
+SYSTEM DROP  TEMPORARY TABLE test;
+
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x UInt64,
@@ -22,6 +26,12 @@ ENGINE = MergeTree
 ORDER BY x;
 
 INSERT INTO test (x);
+
+SYSTEM DROP  TABLE test;
+
+SYSTEM DROP  TABLE IF EXISTS test_r1;
+
+SYSTEM DROP  TABLE IF EXISTS test_r2;
 
 CREATE TABLE test_r1
 (
@@ -52,3 +62,7 @@ FROM test_r1;
 
 SELECT *
 FROM test_r2;
+
+SYSTEM DROP  TABLE test_r1;
+
+SYSTEM DROP  TABLE test_r2;

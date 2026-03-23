@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_01801;
+
 CREATE TABLE data_01801
 (
     key Int
@@ -38,3 +40,5 @@ WHERE key = 0
 ORDER BY key DESC
 SETTINGS max_rows_to_read = 10
 FORMAT Null;
+
+SYSTEM drop  table data_01801;

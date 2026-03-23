@@ -4,6 +4,8 @@ SET allow_suspicious_types_in_order_by = 1;
 
 SET optimize_read_in_order = 1;
 
+SYSTEM drop  table if exists to_table;
+
 CREATE TABLE to_table
 (
     n1 UInt8,

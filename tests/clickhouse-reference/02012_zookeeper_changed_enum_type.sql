@@ -7,3 +7,4 @@ ORDER BY a;
 insert into enum_alter_issue values ('one', 1), ('two', 2);
 insert into enum_alter_issue values ('one', 3), ('two', 4);
 select * from enum_alter_issue order by b;
+drop table enum_alter_issue;

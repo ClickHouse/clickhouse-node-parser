@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 -- Create test table with lot's of rows
 CREATE TABLE t
 (
@@ -33,3 +35,5 @@ ORDER BY c ASC
 SETTINGS
     use_query_cache = true,
     query_cache_compress_entries = false;
+
+SYSTEM DROP  TABLE t;

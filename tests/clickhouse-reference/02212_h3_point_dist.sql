@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+
+DROP TABLE IF EXISTS table1;
 CREATE TABLE table1 (lat1 Float64, lon1 Float64, lat2 Float64, lon2 Float64) ENGINE = Memory;
 INSERT INTO table1 VALUES(-10.0 ,0.0, 10.0, 0.0);
 INSERT INTO table1 VALUES(-1, -1, 2, 1);
@@ -14,5 +17,6 @@ select '-- select h3PointDistM(lat1, lon1,lat2, lon2) AS k from table1 order by 
 select round(h3PointDistM(lat1, lon1,lat2, lon2), 2) AS k from table1 order by k;
 select round(h3PointDistKm(lat1, lon1,lat2, lon2), 2) AS k from table1 order by k;
 select round(h3PointDistRads(lat1, lon1,lat2, lon2), 5) AS k from table1 order by k;
+DROP TABLE table1;
 select round(h3PointDistRads(-10.0 ,0.0, 10.0, arrayJoin([0.0])), 5) as h3PointDistRads;
 select round(h3PointDistRads(-10.0 ,0.0, 10.0, toFloat64(0)) , 5)as h3PointDistRads;

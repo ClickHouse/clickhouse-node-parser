@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS json_columns;
+
 CREATE TABLE json_columns
 (
     n UInt32,

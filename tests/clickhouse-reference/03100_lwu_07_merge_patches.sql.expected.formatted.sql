@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lightweight SYNC;
+
 SET enable_lightweight_update = 1;
 
 CREATE TABLE t_lightweight
@@ -31,3 +33,5 @@ ORDER BY min_block_number ASC;
 SELECT count()
 FROM t_lightweight
 WHERE c1 != id;
+
+SYSTEM DROP  TABLE t_lightweight SYNC;

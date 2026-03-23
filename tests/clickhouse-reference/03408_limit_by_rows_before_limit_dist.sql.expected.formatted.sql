@@ -1,6 +1,10 @@
 -- Tags: shard
 SET output_format_write_statistics = 0;
 
+SYSTEM DROP  TABLE IF EXISTS 03408_local;
+
+SYSTEM DROP  TABLE IF EXISTS 03408_dist;
+
 CREATE TABLE `03408_local`
 (
     id Int32,
@@ -78,3 +82,7 @@ LIMIT 1 BY id
 LIMIT 4
 FORMAT JSONCompact
 SETTINGS max_block_size = 1, exact_rows_before_limit = 1, distributed_group_by_no_merge = 2;
+
+SYSTEM DROP  TABLE 03408_local;
+
+SYSTEM DROP  TABLE 03408_dist;

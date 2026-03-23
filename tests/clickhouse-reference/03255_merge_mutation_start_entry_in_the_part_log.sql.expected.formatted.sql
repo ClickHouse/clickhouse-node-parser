@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x UInt8,
@@ -18,6 +20,8 @@ SET mutations_sync = 1;
 SELECT *
 FROM test
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE test SYNC;
 
 SELECT
     event_type,

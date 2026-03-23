@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS test_prewhere_default_column;
+
+SYSTEM DROP  TABLE IF EXISTS test_prewhere_column_type;
+
 CREATE TABLE test_prewhere_default_column
 (
     APIKey UInt8,
@@ -35,3 +39,7 @@ SELECT
     toTypeName(x)
 FROM test_prewhere_column_type
 WHERE (x = 2) AS y;
+
+SYSTEM DROP  TABLE test_prewhere_default_column;
+
+SYSTEM DROP  TABLE test_prewhere_column_type;

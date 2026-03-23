@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS testing;
 SET enable_lightweight_update = 1;
 CREATE TABLE testing
 (
@@ -13,3 +14,6 @@ INSERT INTO testing SELECT number, number, number, number, number % 2 FROM numbe
 SELECT c FROM testing ORDER BY d;
 SELECT c FROM testing ORDER BY e, d;
 SELECT * FROM system.mutations WHERE database = currentDatabase() AND table = 'testing' AND not is_done;
+-- { echoOff }
+
+DROP TABLE testing;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data;
+
 CREATE TABLE data
 (
     ts DateTime,

@@ -5,6 +5,8 @@
 
 SET allow_experimental_analyzer = 1;
 SET use_query_condition_cache = 1;
+DROP TABLE IF EXISTS tab1;
+DROP TABLE IF EXISTS tab2;
 CREATE TABLE tab1 (
     id UInt32 DEFAULT 0,
 )
@@ -25,3 +27,5 @@ WHERE id IN (
     FROM tab2
 );
 INSERT INTO tab2 VALUES(100001);
+DROP TABLE tab1;
+DROP TABLE tab2;

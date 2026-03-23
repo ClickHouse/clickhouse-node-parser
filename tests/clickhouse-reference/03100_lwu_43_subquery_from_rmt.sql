@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS lightweight_test SYNC;
+DROP TABLE IF EXISTS keys SYNC;
 CREATE TABLE lightweight_test
 (
     ts DateTime,

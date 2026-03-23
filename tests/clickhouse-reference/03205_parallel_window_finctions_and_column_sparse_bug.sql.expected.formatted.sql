@@ -35,6 +35,8 @@ ORDER BY
     c8 ASC
 SETTINGS max_threads = 2;
 
+SYSTEM drop  table t;
+
 CREATE TABLE t
 (
     c Int32 PRIMARY KEY,

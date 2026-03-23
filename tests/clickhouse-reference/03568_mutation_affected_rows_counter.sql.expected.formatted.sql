@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_mutation_rows_counter;
+
 CREATE TABLE t_mutation_rows_counter
 (
     x UInt64

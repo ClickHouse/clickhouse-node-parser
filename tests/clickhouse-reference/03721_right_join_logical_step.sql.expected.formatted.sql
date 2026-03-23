@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 UInt32,
@@ -17,3 +19,5 @@ CROSS JOIN t0 AS ty
 SETTINGS
     query_plan_join_swap_table = true,
     query_plan_use_new_logical_join_step = false;
+
+SYSTEM DROP  TABLE t0;

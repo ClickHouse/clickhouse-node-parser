@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 -- Create test table with "many" rows
 CREATE TABLE t
 (
@@ -33,3 +35,5 @@ SETTINGS
     max_block_size = 3,
     use_query_cache = true,
     query_cache_squash_partial_results = false;
+
+SYSTEM DROP  TABLE t;

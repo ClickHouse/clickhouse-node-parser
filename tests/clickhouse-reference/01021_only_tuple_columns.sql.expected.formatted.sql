@@ -10,3 +10,5 @@ FROM numbers(1000000);
 
 SELECT COUNT()
 FROM test;
+
+SYSTEM DROP  TABLE test;

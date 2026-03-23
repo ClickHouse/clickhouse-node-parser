@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS fx_1m;
+
+SYSTEM DROP  TABLE IF EXISTS fx_5m;
+
 -- create source table
 CREATE TABLE fx_1m
 (
@@ -50,3 +54,7 @@ WHERE symbol = 'EURUSD'
     AND and(greaterOrEquals(dt_close, '2022-12-11'), lessOrEquals(dt_close, '2022-12-13'))
 ORDER BY dt_close ASC
 FORMAT Null;
+
+SYSTEM DROP  TABLE fx_5m;
+
+SYSTEM DROP  TABLE fx_1m;

@@ -13,3 +13,5 @@ FROM test;
 
 SELECT toUInt32(d)
 FROM test;
+
+SYSTEM drop  table test;

@@ -4,6 +4,7 @@
 SET enable_analyzer = 1;
 SET rewrite_in_to_join = 0;
 SET prefer_localhost_replica = 1;
+DROP DICTIONARY IF EXISTS inverse_dict_lookup_remote_shards;
 CREATE DICTIONARY inverse_dict_lookup_remote_shards
 (
   id Int64,
@@ -18,6 +19,7 @@ SELECT dictGet('inverse_dict_lookup_remote_shards', 'f', dummy) = 12 AS limit_an
 FROM remote('localhost,localhost', system.one)
 LIMIT 1;
 SET optimize_inverse_dictionary_lookup = 1;
+DROP DICTIONARY IF EXISTS inverse_dict_lookup_remote_shards_composite_key;
 CREATE DICTIONARY inverse_dict_lookup_remote_shards_composite_key
 (
   k1 Int64,

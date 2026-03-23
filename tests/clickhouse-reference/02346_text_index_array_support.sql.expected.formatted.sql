@@ -4,6 +4,8 @@ SET enable_analyzer = 1;
 
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -86,6 +88,8 @@ SELECT count()
 FROM tab
 WHERE has(arr_fixed, toFixedString('def', 3));
 
+SYSTEM DROP  VIEW IF EXISTS explain_index_has;
+
 CREATE VIEW explain_index_has
 AS
 (SELECT trimLeft(`explain`) AS `explain`
@@ -152,6 +156,8 @@ WHERE hasAnyTokens(arr_fixed, 'bar');
 SELECT count()
 FROM tab
 WHERE hasAnyTokens(arr_fixed, 'foo bar');
+
+SYSTEM DROP  VIEW IF EXISTS explain_index_has_any_tokens;
 
 CREATE VIEW explain_index_has_any_tokens
 AS
@@ -220,6 +226,8 @@ SELECT count()
 FROM tab
 WHERE hasAllTokens(arr_fixed, 'foo bar');
 
+SYSTEM DROP  VIEW IF EXISTS explain_index_has_all_tokens;
+
 CREATE VIEW explain_index_has_all_tokens
 AS
 (SELECT trimLeft(`explain`) AS `explain`
@@ -262,3 +270,11 @@ FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'foo bar');
 
 SELECT *
 FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'def');
+
+SYSTEM DROP  VIEW explain_index_has;
+
+SYSTEM DROP  VIEW explain_index_has_any_tokens;
+
+SYSTEM DROP  VIEW explain_index_has_all_tokens;
+
+SYSTEM DROP  TABLE tab;

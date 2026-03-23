@@ -1,3 +1,6 @@
+-- TinyLog
+SYSTEM DROP  TABLE IF EXISTS nested_01800_tiny_log;
+
 CREATE TABLE nested_01800_tiny_log
 (
     column Nested(name String, names Array(String), types Array(Enum8('PU' = 1, 'US' = 2, 'OTHER' = 3)))
@@ -9,6 +12,11 @@ INSERT INTO nested_01800_tiny_log;
 SELECT 10
 FROM nested_01800_tiny_log
 FORMAT Null;
+
+SYSTEM DROP  TABLE nested_01800_tiny_log;
+
+-- StripeLog
+SYSTEM DROP  TABLE IF EXISTS nested_01800_stripe_log;
 
 CREATE TABLE nested_01800_stripe_log
 (
@@ -22,6 +30,11 @@ SELECT 10
 FROM nested_01800_stripe_log
 FORMAT Null;
 
+SYSTEM DROP  TABLE nested_01800_stripe_log;
+
+-- Log
+SYSTEM DROP  TABLE IF EXISTS nested_01800_log;
+
 CREATE TABLE nested_01800_log
 (
     column Nested(name String, names Array(String), types Array(Enum8('PU' = 1, 'US' = 2, 'OTHER' = 3)))
@@ -33,3 +46,5 @@ INSERT INTO nested_01800_log;
 SELECT 10
 FROM nested_01800_log
 FORMAT Null;
+
+SYSTEM DROP  TABLE nested_01800_log;

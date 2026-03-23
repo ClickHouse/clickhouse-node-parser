@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bftest;
+
 CREATE TABLE bftest
 (
     k Int64,

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1
 (
     id1 UInt64,
@@ -25,3 +29,7 @@ WHERE (id1, id2) IN (
         SELECT tuple(id1, id2)
         FROM table2
     );
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;

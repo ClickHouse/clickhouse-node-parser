@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     type Enum('x'),
@@ -17,3 +19,5 @@ GROUP BY type
 ORDER BY type ASC;
 
 INSERT INTO test;
+
+SYSTEM DROP  TABLE test;

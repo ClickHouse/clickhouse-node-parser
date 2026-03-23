@@ -7,6 +7,7 @@
 -- Also has good number of calls to reinterpret() to test conversion of native floats to Array(Float32)
 
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS dbpedia;
 CREATE TABLE dbpedia
 (
     id String,
@@ -62,6 +63,9 @@ LIMIT 4;
 SELECT if(data_uncompressed_bytes < (20 * 1536 * 2), 'Good', toString(data_uncompressed_bytes))
 FROM system.data_skipping_indices
 WHERE database = currentDatabase() AND name = 'vec_idx';
+DROP TABLE dbpedia;
+-- Now test that a rescoring multiplier > 1.0 helps with search accuracy
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id Int32,
@@ -88,3 +92,4 @@ ORDER by cosineDistance(vec, [-0.25, 0.25, 0.10, 0.10, 0.9, 0.9, 0.9, 0.9])
 LIMIT 1
 SETTINGS vector_search_with_rescoring = 1,
          vector_search_index_fetch_multiplier = 4;
+DROP TABLE tab;

@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS dict_db_02179;
+
 CREATE DATABASE dict_db_02179;
 
 CREATE TABLE dict_db_02179.dict_data
@@ -32,4 +35,14 @@ SET distributed_ddl_output_mode = 'none';
 
 SELECT dictGetUInt64('dict_db_02179.dict', 'val', toUInt64(1));
 
+SYSTEM DROP  DATABASE IF EXISTS empty_db_02179;
+
 CREATE DATABASE empty_db_02179;
+
+SYSTEM DROP  DICTIONARY dict_db_02179.dict;
+
+SYSTEM DROP  TABLE dict_db_02179.dict_data;
+
+SYSTEM DROP  DATABASE dict_db_02179;
+
+SYSTEM DROP  DATABASE empty_db_02179;

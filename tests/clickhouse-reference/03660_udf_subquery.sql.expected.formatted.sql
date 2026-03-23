@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS dict;
+
 CREATE TABLE dict
 ENGINE = MergeTree()
 ORDER BY id AS
@@ -44,3 +46,7 @@ SELECT
     OR id = 1)
 FROM numbers(5)
 ORDER BY number ASC;
+
+SYSTEM DROP  FUNCTION udf_type_of_int;
+
+SYSTEM DROP  TABLE dict;

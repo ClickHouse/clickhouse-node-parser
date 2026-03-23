@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS test_dict_db;
 CREATE DATABASE test_dict_db;
 set check_table_dependencies=0;
 CREATE TABLE test_dict_db.table1
@@ -59,6 +62,7 @@ SELECT
     dictGet('test_dict_db.table1_dict', 'col9', (col1, col2, col3, col4, col5))
 FROM test_dict_db.table1
 WHERE dictHas('test_dict_db.table1_dict', (col1, col2, col3, col4, col5)); -- { serverError CANNOT_INSERT_NULL_IN_ORDINARY_COLUMN }
+DROP TABLE test_dict_db.table1;
 CREATE TABLE test_dict_db.table1
 (
     `col1` String,

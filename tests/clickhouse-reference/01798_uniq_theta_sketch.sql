@@ -41,6 +41,7 @@ SELECT uniqTheta((x, x)) FROM (SELECT arrayJoin([[], ['a'], ['a', 'b'], []]) AS 
 SELECT uniqTheta((x, arrayMap(elem -> [elem, elem], x))) FROM (SELECT arrayJoin([[], ['a'], ['a', 'b'], []]) AS x);
 SELECT uniqTheta((x, toString(x))) FROM (SELECT arrayJoin([[], ['a'], ['a', 'b'], []]) AS x);
 SELECT uniqTheta(x) FROM (SELECT arrayJoin([[], ['a'], ['a', NULL, 'b'], []]) AS x);
+DROP TABLE IF EXISTS decimal;
 CREATE TABLE decimal
 (
     a Decimal32(4),
@@ -52,8 +53,10 @@ FROM (SELECT * FROM decimal ORDER BY a);
 INSERT INTO decimal (a, b, c)
 SELECT toDecimal32(number - 50, 4), toDecimal64(number - 50, 8) / 3, toDecimal128(number - 50, 8) / 5
 FROM system.numbers LIMIT 101;
+DROP TABLE decimal;
 set optimize_injective_functions_inside_uniq = 1;
 set optimize_injective_functions_inside_uniq = 0;
+DROP TABLE IF EXISTS stored_aggregates;
 -- simple
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE stored_aggregates
@@ -74,6 +77,7 @@ FROM
 );
 SELECT uniqMerge(Uniq), uniqThetaMerge(UniqThetaSketch) FROM stored_aggregates;
 SELECT d, uniqMerge(Uniq), uniqThetaMerge(UniqThetaSketch) FROM stored_aggregates GROUP BY d ORDER BY d;
+DROP TABLE stored_aggregates;
 -- complex
 CREATE TABLE stored_aggregates
 (
@@ -107,6 +111,9 @@ SELECT d, k1,
 FROM stored_aggregates
 GROUP BY d, k1
 ORDER BY d, k1;
+---- sum + uniq with more data
+drop table if exists summing_merge_tree_null;
+drop table if exists summing_merge_tree_aggregate_function;
 create table summing_merge_tree_null (
     d materialized today(),
     k UInt64,
@@ -126,3 +133,5 @@ group by d, k;
 -- prime number 53 to avoid resonanse between %3 and %53
 insert into summing_merge_tree_null select number % 3, 1, number % 53 from numbers(999999);
 select k, sum(c), uniqMerge(un), uniqThetaMerge(ut) from summing_merge_tree_aggregate_function group by k order by k;
+drop table summing_merge_tree_aggregate_function;
+drop table summing_merge_tree_null;

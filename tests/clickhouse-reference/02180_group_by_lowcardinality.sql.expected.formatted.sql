@@ -29,3 +29,5 @@ SETTINGS
     max_rows_to_group_by = 100,
     group_by_overflow_mode = 'any'
 FORMAT JSONEachRow;
+
+SYSTEM drop  table if exists t_group_by_lowcardinality;

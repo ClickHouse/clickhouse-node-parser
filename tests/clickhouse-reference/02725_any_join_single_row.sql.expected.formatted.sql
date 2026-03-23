@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS join_test;
+
+SYSTEM DROP  TABLE IF EXISTS join_test_right;
+
 CREATE TABLE join_test
 (
     key UInt64,

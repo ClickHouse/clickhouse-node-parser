@@ -4,6 +4,7 @@
 
 SET use_skip_indexes_if_final = 1;
 SET use_skip_indexes_if_final_exact_mode = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
      id1 UInt32,
@@ -25,6 +26,9 @@ SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes=1 SELECT count(*) FROM tab FINAL WHERE id2 = 222
 )
 WHERE explain ILIKE '%PrimaryKeyExpand%';
+DROP TABLE tab;
+-- Test from fuzzer : https://github.com/ClickHouse/ClickHouse/issues/89387
+DROP TABLE IF EXISTS t0;
 CREATE TABLE t0
 (
     c0 Int64,
@@ -32,3 +36,4 @@ CREATE TABLE t0
 ) ENGINE = SummingMergeTree() PARTITION BY (c0) ORDER BY (c0);
 INSERT INTO TABLE t0 (c0) SELECT number FROM numbers(10);
 SELECT rank() OVER () FROM t0 FINAL WHERE t0.c0 > 0.1 FORMAT null;
+DROP TABLE t0;

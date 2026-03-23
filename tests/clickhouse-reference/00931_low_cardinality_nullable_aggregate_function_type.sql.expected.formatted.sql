@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists lc;
+
 CREATE TABLE lc
 (
     date Date,

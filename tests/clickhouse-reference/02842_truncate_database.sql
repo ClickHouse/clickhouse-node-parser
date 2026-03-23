@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS test_truncate_database;
 -- test TRUNCATE DATABASE operation.
 -- create tables, views and dictionary and populate them. Then try truncating the database.
 -- all tables, views and dictionaries should be removed leaving an empty database
@@ -47,3 +50,4 @@ SELECT name, database, element_count FROM system.dictionaries WHERE database = '
 SELECT * FROM dest_dictionary;
 SELECT * FROM dest_view_set ORDER BY x LIMIT 1; -- {serverError UNKNOWN_TABLE}
 CREATE TABLE new_table (x UInt16) ENGINE = MergeTree ORDER BY x;
+DROP DATABASE test_truncate_database;

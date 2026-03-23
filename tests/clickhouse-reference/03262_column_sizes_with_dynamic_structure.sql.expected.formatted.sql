@@ -3,6 +3,8 @@ SET allow_experimental_dynamic_type = 1;
 
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     d Dynamic,
@@ -29,3 +31,5 @@ WHERE active
     AND (table = 'test')
 GROUP BY table
 ORDER BY table ASC;
+
+SYSTEM drop  table test;

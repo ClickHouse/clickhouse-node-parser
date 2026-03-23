@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists projection_test__fuzz_0;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE projection_test__fuzz_0
@@ -77,3 +79,5 @@ ORDER BY
     count(retry_count / duration) ASC,
     100000000000000000000. ASC
 FORMAT Null;
+
+SYSTEM drop  table projection_test__fuzz_0;

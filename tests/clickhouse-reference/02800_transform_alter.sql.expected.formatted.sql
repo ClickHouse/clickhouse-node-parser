@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS test_xy;
+
+SYSTEM DROP  TABLE IF EXISTS updates;
+
 CREATE TABLE test_xy
 (
     x Int32,
@@ -53,3 +57,7 @@ FROM test_xy
 ORDER BY
     x ASC,
     y ASC;
+
+SYSTEM DROP  TABLE test_xy;
+
+SYSTEM DROP  TABLE updates;

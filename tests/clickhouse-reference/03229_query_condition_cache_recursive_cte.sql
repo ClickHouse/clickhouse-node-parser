@@ -5,6 +5,7 @@
 
 SET allow_experimental_analyzer = 1; -- needed by recursive CTEs
 SELECT '-- Prepare data';
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id String,
@@ -19,3 +20,4 @@ INSERT INTO tab (id, parent) VALUES
   ('uuid2', 'empty'),
   ('uuid5', 'uuid2'),
   ('uuid6', 'uuid4');
+DROP TABLE tab;

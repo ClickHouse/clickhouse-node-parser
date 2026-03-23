@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS set_index_not;
+
 CREATE TABLE set_index_not
 (
     name String,
@@ -25,3 +27,5 @@ WHERE NOT status != 'rip';
 SELECT *
 FROM set_index_not
 WHERE NOT NOT status = 'rip';
+
+SYSTEM DROP  TABLE set_index_not;

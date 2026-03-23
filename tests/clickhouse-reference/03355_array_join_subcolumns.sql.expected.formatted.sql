@@ -1,6 +1,8 @@
 -- Tags: no-parallel-replicas
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     arr Array(UInt64),
@@ -21,3 +23,5 @@ SELECT t.a
 FROM
     test
 ARRAY JOIN t.b;
+
+SYSTEM drop  table test;

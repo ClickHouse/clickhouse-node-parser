@@ -5,6 +5,7 @@ SELECT 1 AS x, x, x + 1;
 SELECT x, x + 1, 1 AS x;
 SELECT x, 1 + (2 + (3 AS x));
 SELECT a AS b, b AS a; -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -20,3 +21,4 @@ SELECT (id + 1) AS id FROM test_table;
 SELECT (id + 1 + 1 + 1 + id) AS id FROM test_table;
 SET prefer_column_name_to_alias = 1;
 SET prefer_column_name_to_alias = 0;
+DROP TABLE test_table;

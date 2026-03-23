@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 03314_divide_decimal_short_circuit;
+
 CREATE TABLE `03314_divide_decimal_short_circuit`
 (
     n1 Decimal(38, 2),

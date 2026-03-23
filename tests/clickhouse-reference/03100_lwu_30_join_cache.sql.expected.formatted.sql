@@ -1,3 +1,6 @@
+-- Tags: no-tsan, no-asan, no-msan, no-parallel, no-debug
+SYSTEM DROP  TABLE IF EXISTS t_patch_join_cache;
+
 CREATE TABLE t_patch_join_cache
 (
     a UInt64,
@@ -20,3 +23,5 @@ WHERE s = 'foo'
 SETTINGS
     max_threads = 8,
     max_memory_usage = '1Gi';
+
+SYSTEM DROP  TABLE t_patch_join_cache;

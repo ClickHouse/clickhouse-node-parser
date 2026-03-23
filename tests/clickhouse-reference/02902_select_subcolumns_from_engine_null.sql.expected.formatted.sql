@@ -14,3 +14,5 @@ SELECT
     t.num,
     t.str
 FROM null_02902;
+
+SYSTEM DROP  TABLE null_02902;

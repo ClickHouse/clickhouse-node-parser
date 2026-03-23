@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE t1 (c0 Int NULL, c1 Int) ENGINE = MergeTree() ORDER BY tuple();
 CREATE TABLE t2 (c0 Int NULL, c1 Int) ENGINE = MergeTree() ORDER BY tuple();
 INSERT INTO TABLE t1 (c1, c0) VALUES (1, 1);
@@ -17,3 +19,5 @@ GLOBAL RIGHT JOIN t1 ON true;
 -- just check that simple GLOBAL JOIN works with parallel replicas
 SELECT *
 FROM t2 GLOBAL RIGHT JOIN t1 ON true;
+DROP TABLE t1;
+DROP TABLE t2;

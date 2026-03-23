@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS rename_table_multiple;
+
 CREATE TABLE rename_table_multiple
 (
     key Int32,
@@ -22,6 +24,8 @@ ORDER BY key ASC
 FORMAT TSVWithNames;
 
 INSERT INTO rename_table_multiple;
+
+SYSTEM DROP  TABLE IF EXISTS rename_table_multiple_compact;
 
 CREATE TABLE rename_table_multiple_compact
 (

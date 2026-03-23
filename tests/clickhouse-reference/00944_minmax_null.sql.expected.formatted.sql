@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS min_max_with_nullable_string;
+
 CREATE TABLE min_max_with_nullable_string
 (
     t DateTime,
@@ -20,3 +22,5 @@ INSERT INTO min_max_with_nullable_string (t, nullable_str);
 SELECT count()
 FROM min_max_with_nullable_string
 WHERE nullable_str = '';
+
+SYSTEM DROP  TABLE min_max_with_nullable_string;

@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM DROP  TABLE IF EXISTS desc_pk;
+
 CREATE TABLE desc_pk
 (
     a UInt32
@@ -13,3 +16,5 @@ SELECT
     min(a),
     max(a)
 FROM desc_pk;
+
+SYSTEM DROP  TABLE desc_pk;

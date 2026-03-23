@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS constrained;
+
 CREATE TABLE constrained
 (
     URL String,
@@ -11,6 +13,8 @@ INSERT INTO constrained; -- { serverError VIOLATED_CONSTRAINT }
 INSERT INTO constrained; -- { serverError VIOLATED_CONSTRAINT }
 
 INSERT INTO constrained;
+
+SYSTEM DROP  TABLE constrained;
 
 CREATE TABLE constrained
 (
@@ -47,6 +51,10 @@ CREATE TABLE constrained
 )
 ENGINE = Log;
 
+SYSTEM DROP  TABLE IF EXISTS constrained2;
+
 CREATE TABLE constrained2 AS constrained;
 
 INSERT INTO constrained2; -- { serverError VIOLATED_CONSTRAINT }
+
+SYSTEM DROP  TABLE constrained2;

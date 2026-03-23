@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1__fuzz_13;
+
+SYSTEM DROP  TABLE IF EXISTS t2__fuzz_47;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE t1__fuzz_13

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_constant_index;
+
 CREATE TABLE t_constant_index
 (
     id UInt64,
@@ -21,3 +23,5 @@ CREATE TABLE t_constant_index
 )
 ENGINE = MergeTree
 ORDER BY id;
+
+SYSTEM DROP  TABLE t_constant_index;

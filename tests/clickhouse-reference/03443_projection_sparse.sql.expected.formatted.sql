@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_projection_sparse;
+
 CREATE TABLE t_projection_sparse
 (
     id String,
@@ -18,3 +20,5 @@ INSERT INTO t_projection_sparse;
 SELECT count()
 FROM t_projection_sparse
 WHERE finalizeAggregation(val) = 0;
+
+SYSTEM DROP  TABLE t_projection_sparse;

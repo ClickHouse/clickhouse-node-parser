@@ -5,6 +5,8 @@ SET use_variant_as_common_type = 1;
 
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -163,3 +165,5 @@ SELECT
     d.`Array(Array(Dynamic))`.`Map(String, Tuple(a UInt64))`.values.a
 FROM test
 FORMAT Null;
+
+SYSTEM drop  table test;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     x UInt8,
@@ -73,3 +75,5 @@ INNER JOIN t AS r
     USING (id)
 WHERE l.x
     AND r.x;
+
+SYSTEM drop  table t;

@@ -1,3 +1,9 @@
+-- Tags: no-fasttest
+-- no-fasttest: 'MsgPack` format is not supported
+SYSTEM DROP  TABLE IF EXISTS t0;
+
+SYSTEM DROP  TABLE IF EXISTS random_filename;
+
 CREATE TABLE t0
 (
     c0 Int32,
@@ -33,3 +39,7 @@ FROM file((
 SELECT *
 FROM t0
 ORDER BY c0 ASC;
+
+SYSTEM DROP  TABLE t0;
+
+SYSTEM DROP  TABLE random_filename;

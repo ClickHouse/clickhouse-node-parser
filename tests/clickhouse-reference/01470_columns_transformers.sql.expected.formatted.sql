@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS columns_transformers;
+
 CREATE TABLE columns_transformers
 (
     i Int64,
@@ -84,3 +86,5 @@ FROM columns_transformers;
 -- APPLY with parameterized function
 SELECT COLUMNS(i, j, k) APPLY(quantiles(0.5))
 FROM columns_transformers;
+
+SYSTEM DROP  TABLE columns_transformers;

@@ -1,3 +1,8 @@
+-- Tags: long, no-shared-merge-tree
+SYSTEM DROP  TABLE IF EXISTS test_01640;
+
+SYSTEM DROP  TABLE IF EXISTS restore_01640;
+
 CREATE TABLE test_01640
 (
     i Int64,
@@ -29,3 +34,7 @@ SELECT
     _part,
     *
 FROM restore_01640;
+
+SYSTEM DROP  TABLE test_01640;
+
+SYSTEM DROP  TABLE restore_01640;

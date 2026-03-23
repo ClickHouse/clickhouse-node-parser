@@ -1,7 +1,10 @@
+DROP TABLE IF EXISTS tabc;
 CREATE TABLE tabc (a UInt32, b UInt32 ALIAS a + 1, c UInt32 ALIAS b + 1, s String) ENGINE = MergeTree ORDER BY a;
 INSERT INTO tabc (a, s) SELECT number, 'abc' || toString(number) FROM numbers(4);
+DROP TABLE IF EXISTS ta;
 CREATE TABLE ta (a Int32) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO ta SELECT number FROM numbers(4);
+DROP TABLE IF EXISTS tb;
 CREATE TABLE tb (b Int32) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO tb SELECT number FROM numbers(4);
 SET join_use_nulls = 1;
@@ -35,6 +38,9 @@ SETTINGS analyzer_compatibility_join_using_top_level_identifier = 1; -- { server
 -- In new analyzer with `analyzer_compatibility_join_using_top_level_identifier = 0` we get `b` from left table
 SELECT a + 2 AS b FROM tb JOIN tabc USING (b) ORDER BY ALL
 SETTINGS analyzer_compatibility_join_using_top_level_identifier = 0, enable_analyzer = 1;
+-- This is example where query may return different results with different `analyzer_compatibility_join_using_top_level_identifier`
+
+DROP TABLE IF EXISTS users;
 CREATE TABLE users (uid Int16, name String, spouse_name String) ENGINE=Memory;
 INSERT INTO users VALUES (1231, 'John', 'Ksenia');
 INSERT INTO users VALUES (6666, 'Ksenia', '');
@@ -53,3 +59,4 @@ FROM users u1 JOIN users u2 USING (name)
 ORDER BY u1.uid
 FORMAT TSVWithNamesAndTypes
 SETTINGS enable_analyzer = 0;
+DROP TABLE IF EXISTS tc;

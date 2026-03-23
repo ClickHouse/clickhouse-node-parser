@@ -106,3 +106,5 @@ SELECT dictIsIn(concat({CLICKHOUSE_DATABASE:String}, '.dictionary_with_hierarchy
 SELECT dictIsIn(concat({CLICKHOUSE_DATABASE:String}, '.dictionary_with_hierarchy'), toUInt64(7), toUInt64(10000));
 
 SELECT dictIsIn(concat({CLICKHOUSE_DATABASE:String}, '.dictionary_with_hierarchy'), toUInt64(1), toUInt64(5));
+
+SYSTEM DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};

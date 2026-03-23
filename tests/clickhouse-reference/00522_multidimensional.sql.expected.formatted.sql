@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS multidimensional;
+
 CREATE TABLE multidimensional
 ENGINE = MergeTree
 ORDER BY number
@@ -10,3 +12,5 @@ LIMIT 100000;
 
 SELECT sum(cityHash64(toString(value)))
 FROM multidimensional;
+
+SYSTEM DROP  TABLE multidimensional;

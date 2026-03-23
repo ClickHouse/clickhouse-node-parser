@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS has_column_in_table;
+
 CREATE TABLE has_column_in_table
 (
     i Int64,
@@ -48,3 +50,5 @@ SELECT hasColumnInTable(currentDatabase(), '', 'c'); -- { serverError UNKNOWN_TA
 SELECT hasColumnInTable('d', 't', 's'); -- { serverError UNKNOWN_DATABASE }
 
 SELECT hasColumnInTable(currentDatabase(), 't', 's'); -- { serverError UNKNOWN_TABLE }
+
+SYSTEM DROP  TABLE has_column_in_table;

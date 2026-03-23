@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t SYNC;
 CREATE TABLE t
 (
     `product` Enum8('IU' = 1, 'WS' = 2),
@@ -13,3 +14,4 @@ SELECT product
 FROM t
 GROUP BY product
 ORDER BY product;
+DROP TABLE t SYNC;

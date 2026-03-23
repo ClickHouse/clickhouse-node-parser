@@ -1,3 +1,5 @@
+drop table if exists test;
+drop table if exists test2;
 create table test (id UInt64, json JSON) engine=MergeTree order by id;
 insert into test select number, '{}' from numbers(100000);
 create table test2 (json JSON) engine=MergeTree order by tuple();

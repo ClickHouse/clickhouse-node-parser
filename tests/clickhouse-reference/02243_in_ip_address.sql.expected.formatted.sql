@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -22,3 +24,5 @@ WHERE value_ipv6 IN (
         SELECT value_ipv6
         FROM test_table
     );
+
+SYSTEM DROP  TABLE test_table;

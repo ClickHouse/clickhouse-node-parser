@@ -1,3 +1,6 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS big_array;
+
 CREATE TABLE big_array
 (
     x Array(UInt8)
@@ -25,3 +28,5 @@ FROM (
             remote('127.0.0.{2,3}', currentDatabase(), big_array)
         ARRAY JOIN x AS y
     );
+
+SYSTEM DROP  TABLE big_array;

@@ -2,6 +2,8 @@ SET enable_analyzer = 1;
 
 SET optimize_syntax_fuse_functions = 1;
 
+SYSTEM DROP  TABLE IF EXISTS fuse_tbl;
+
 CREATE TABLE fuse_tbl
 (
     a Nullable(Int8),
@@ -132,3 +134,7 @@ FROM (
         SELECT number::Decimal32(0) AS x
         FROM numbers(10)
     );
+
+-- TODO: uncomment after https://github.com/ClickHouse/ClickHouse/pull/43372
+-- SELECT avg(b), x - 2 AS b FROM (SELECT number as x FROM numbers(1)) GROUP BY x;
+SYSTEM DROP  TABLE fuse_tbl;

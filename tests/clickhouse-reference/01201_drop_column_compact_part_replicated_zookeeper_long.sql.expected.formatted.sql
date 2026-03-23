@@ -7,6 +7,8 @@ SET insert_keeper_retry_max_backoff_ms = 10;
 -- Testing basic functionality with compact parts
 SET replication_alter_partitions_sync = 2;
 
+SYSTEM drop  table if exists mt_compact;
+
 CREATE TABLE mt_compact
 (
     a UInt64,

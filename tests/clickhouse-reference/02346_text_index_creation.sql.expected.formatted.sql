@@ -1,5 +1,7 @@
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     str String,
@@ -15,6 +17,8 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

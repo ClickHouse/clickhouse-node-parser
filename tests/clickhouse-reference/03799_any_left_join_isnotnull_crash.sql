@@ -1,4 +1,8 @@
 SET allow_experimental_analyzer = 1;
+
+DROP TABLE IF EXISTS AddedToCart;
+DROP TABLE IF EXISTS Session;
+
 CREATE TABLE Session
 (
     id String,
@@ -7,6 +11,7 @@ CREATE TABLE Session
 )
 ENGINE = MergeTree
 ORDER BY id;
+
 CREATE TABLE AddedToCart
 (
     sessionId String,
@@ -19,12 +24,15 @@ CREATE TABLE AddedToCart
 )
 ENGINE = MergeTree
 ORDER BY (sessionId, date);
+
 INSERT INTO Session (id, site, device) VALUES
     ('s1', 'STORE_A', 'DESKTOP'),
     ('s2', 'STORE_B', 'MOBILE');
+
 INSERT INTO AddedToCart (sessionId, order, top, screenHeight, screenWidth, isPromotion, date) VALUES
     ('s1', 1, 100, 400, 1024, 1, parseDateTime64BestEffort('2026-01-19T12:00:00.000Z', 3)),
     ('s2', 2, 100, 400, 1024, 1, parseDateTime64BestEffort('2026-01-19T12:00:01.000Z', 3));
+
 SELECT
     s.site AS site,
     if((a.order IS NULL) OR (a.order <= 0) OR (a.order > 30), NULL, accurateCastOrNull(a.order, 'Int32')) AS page_level,
@@ -40,3 +48,6 @@ WHERE (a.top IS NOT NULL)
 GROUP BY site, page_level
 ORDER BY site ASC, page_level ASC
 FORMAT JSONEachRow;
+
+DROP TABLE AddedToCart;
+DROP TABLE Session;

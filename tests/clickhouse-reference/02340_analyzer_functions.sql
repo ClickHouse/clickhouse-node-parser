@@ -2,6 +2,7 @@ SET enable_analyzer = 1;
 SELECT 1 + 1;
 SELECT '--';
 SELECT dummy + dummy;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,

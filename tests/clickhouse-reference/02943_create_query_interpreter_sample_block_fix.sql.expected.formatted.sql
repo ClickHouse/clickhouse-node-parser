@@ -1,9 +1,13 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     number UInt64
 )
 ENGINE = MergeTree
 ORDER BY number;
+
+SYSTEM DROP  VIEW IF EXISTS test_mv;
 
 CREATE MATERIALIZED VIEW test_mv
 ENGINE = MergeTree
@@ -26,6 +30,8 @@ SELECT '--';
 
 INSERT INTO test_table;
 
+SYSTEM DROP  TABLE IF EXISTS regex_test_table;
+
 CREATE TABLE regex_test_table
 (
     regex String
@@ -34,6 +40,8 @@ ENGINE = MergeTree
 ORDER BY regex;
 
 INSERT INTO regex_test_table;
+
+SYSTEM DROP  VIEW test_mv;
 
 CREATE MATERIALIZED VIEW test_mv
 ENGINE = MergeTree
@@ -46,3 +54,5 @@ WITH (
 
 SELECT extractAll(concat(toString(number), 'a'), assumeNotNull(constant_value)) AS arr
 FROM test_table;
+
+SYSTEM DROP  TABLE test_table;

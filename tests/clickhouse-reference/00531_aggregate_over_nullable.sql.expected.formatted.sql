@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS agg_over_nullable;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE agg_over_nullable
@@ -20,3 +22,5 @@ FROM agg_over_nullable;
 
 SELECT arraySort(topK(3)(description))
 FROM agg_over_nullable;
+
+SYSTEM DROP  TABLE agg_over_nullable;

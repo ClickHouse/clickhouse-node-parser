@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS test_join_remote_l;
+
+SYSTEM DROP  TABLE IF EXISTS test_join_remote_r;
+
 CREATE TABLE test_join_remote_l
 (
     c Int
@@ -119,3 +123,7 @@ FROM
     remoteSecure(test_cluster_one_shard_three_replicas_localhost, currentDatabase(), test_join_remote_l) AS x
 RIGHT JOIN test_join_remote_r AS y
     ON true;
+
+SYSTEM DROP  TABLE test_join_remote_l;
+
+SYSTEM DROP  TABLE test_join_remote_r;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS const_node;
+
 CREATE TABLE const_node
 (
     v Nullable(UInt8)

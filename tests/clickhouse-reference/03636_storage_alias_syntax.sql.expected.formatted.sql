@@ -1,3 +1,10 @@
+-- { echo }
+SYSTEM DROP  TABLE IF EXISTS source_table;
+
+SYSTEM DROP  TABLE IF EXISTS alias_syntax_1;
+
+SYSTEM DROP  TABLE IF EXISTS alias_syntax_2;
+
 SET allow_experimental_alias_table_engine = 1;
 
 -- Create source table
@@ -46,6 +53,13 @@ CREATE TABLE alias_syntax_3
     value Float64
 )
 ENGINE = Alias('source_table'); -- { serverError BAD_ARGUMENTS }
+
+-- Test: Alias to alias
+SYSTEM DROP  TABLE IF EXISTS base_table;
+
+SYSTEM DROP  TABLE IF EXISTS alias_1;
+
+SYSTEM DROP  TABLE IF EXISTS alias_2;
 
 CREATE TABLE base_table
 (

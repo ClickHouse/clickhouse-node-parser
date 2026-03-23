@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_subcolumns_if;
+
 CREATE TABLE t_subcolumns_if
 (
     id Nullable(Int64)

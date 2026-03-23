@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nested_test;
+
 CREATE TABLE nested_test
 (
     s String,
@@ -71,3 +73,5 @@ SELECT
 FROM
     nested_test
 ARRAY JOIN nest AS n, arrayEnumerate(nest.x) AS num;
+
+SYSTEM DROP  TABLE nested_test;

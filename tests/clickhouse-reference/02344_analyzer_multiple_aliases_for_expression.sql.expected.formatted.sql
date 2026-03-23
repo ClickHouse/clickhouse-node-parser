@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -54,3 +56,5 @@ SELECT
     id AS value,
     (id + 1) AS value
 FROM test_table; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
+
+SYSTEM DROP  TABLE test_table;

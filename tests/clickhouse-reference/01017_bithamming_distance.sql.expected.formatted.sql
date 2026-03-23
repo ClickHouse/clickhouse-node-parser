@@ -4,6 +4,8 @@ SELECT bitHammingDistance(100, 100000);
 
 SELECT bitHammingDistance(-1, 1);
 
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     n1 UInt8,
@@ -23,6 +25,10 @@ FROM defaults;
 
 SELECT bitHammingDistance(n3, n4)
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;
+
+SYSTEM DROP  TABLE IF EXISTS test_string;
 
 CREATE TABLE test_string
 (
@@ -52,3 +58,5 @@ FROM test_string;
 
 SELECT bitHammingDistance(s4, toFixedString('hello', 10))
 FROM test_string;
+
+SYSTEM DROP  TABLE test_string;

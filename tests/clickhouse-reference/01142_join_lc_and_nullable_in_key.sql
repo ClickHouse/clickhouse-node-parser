@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t;
+DROP TABLE IF EXISTS nr;
 CREATE TABLE t (`x` UInt32, `lc` LowCardinality(String)) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE nr (`x` Nullable(UInt32), `lc` Nullable(String)) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO t VALUES (1, 'l');
@@ -30,3 +32,5 @@ SELECT x, lc, materialize(r.lc) y, toTypeName(y) FROM t AS l LEFT JOIN nr AS r U
 SELECT x, lc, materialize(r.lc) y, toTypeName(y) FROM t AS l RIGHT JOIN nr AS r USING (lc) ORDER BY x;
 SELECT x, lc, materialize(r.lc) y, toTypeName(y) FROM t AS l FULL JOIN nr AS r USING (lc) ORDER BY x;
 SELECT x, lc FROM t AS l RIGHT JOIN nr AS r USING (lc);
+DROP TABLE t;
+DROP TABLE nr;

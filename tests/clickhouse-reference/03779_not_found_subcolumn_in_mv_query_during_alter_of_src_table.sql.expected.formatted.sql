@@ -1,5 +1,11 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS src;
+
+SYSTEM DROP  TABLE IF EXISTS dst;
+
+SYSTEM DROP  VIEW IF EXISTS mv;
+
 CREATE TABLE src
 (
     data Array(Tuple(id UInt32)),
@@ -32,3 +38,9 @@ FROM src;
 
 SELECT *
 FROM dst;
+
+SYSTEM DROP  VIEW mv;
+
+SYSTEM DROP  TABLE dst;
+
+SYSTEM DROP  TABLE src;

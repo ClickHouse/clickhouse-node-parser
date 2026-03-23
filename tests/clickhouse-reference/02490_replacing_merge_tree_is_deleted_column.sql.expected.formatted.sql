@@ -2,6 +2,9 @@
 -- Settings allow_deprecated_syntax_for_merge_tree prevent to enable the is_deleted column
 SET allow_deprecated_syntax_for_merge_tree = 0;
 
+-- Test the bahaviour without the is_deleted column
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     uid String,
@@ -71,6 +74,8 @@ FROM test
 WHERE is_deleted = 0
 ORDER BY uid ASC;
 
+SYSTEM DROP  TABLE IF EXISTS testCleanupR1;
+
 CREATE TABLE testCleanupR1
 (
     uid String,
@@ -90,6 +95,9 @@ INSERT INTO testCleanupR1 (*);
 SELECT *
 FROM testCleanupR1
 ORDER BY uid ASC;
+
+------------------------------
+SYSTEM DROP  TABLE IF EXISTS testSettingsR1;
 
 CREATE TABLE testSettingsR1
 (
@@ -141,6 +149,8 @@ SELECT
     *
 FROM test
 ORDER BY uid ASC;
+
+SYSTEM DROP  TABLE test;
 
 CREATE TABLE test
 (

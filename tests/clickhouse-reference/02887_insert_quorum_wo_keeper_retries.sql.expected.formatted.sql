@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS quorum2;
+
 CREATE TABLE quorum1
 (
     x UInt32
@@ -24,3 +26,7 @@ INSERT INTO quorum1;
 
 SELECT count()
 FROM quorum1;
+
+SYSTEM DROP  TABLE quorum1 NO DELAY;
+
+SYSTEM DROP  TABLE quorum2 NO DELAY;

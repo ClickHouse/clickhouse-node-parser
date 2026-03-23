@@ -1,3 +1,7 @@
+-- Tags: long
+-- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
+SYSTEM drop  table if exists test_compact_map_with_buckets;
+
 CREATE TABLE test_compact_map_with_buckets
 (
     json JSON(max_dynamic_paths = 8)
@@ -99,3 +103,5 @@ SELECT
     json.`^a`
 FROM test_compact_map_with_buckets
 FORMAT Null;
+
+SYSTEM drop  table test_compact_map_with_buckets format Null;

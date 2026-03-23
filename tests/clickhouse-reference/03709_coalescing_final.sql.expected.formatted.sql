@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     key UInt32,
@@ -18,3 +20,5 @@ INSERT INTO test_table SELECT
 
 SELECT *
 FROM test_table FINAL;
+
+SYSTEM DROP  TABLE test_table;

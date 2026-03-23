@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS video_log;
 CREATE TABLE video_log
 (
     `datetime` DateTime,
@@ -11,6 +12,7 @@ ENGINE = MergeTree
 PARTITION BY toDate(datetime)
 ORDER BY (user_id, device_id)
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+DROP TABLE IF EXISTS rng;
 CREATE TABLE rng
 (
     `user_id_raw` UInt64,
@@ -40,6 +42,7 @@ INSERT INTO video_log SELECT
   (duration_raw % 300) + 100
 FROM rng
 LIMIT 10;
+DROP TABLE IF EXISTS video_log_result;
 CREATE TABLE video_log_result
 (
     `hour` DateTime,

@@ -1,3 +1,11 @@
+SYSTEM DROP  TABLE IF EXISTS auto_assign_enum;
+
+SYSTEM DROP  TABLE IF EXISTS auto_assign_enum1;
+
+SYSTEM DROP  TABLE IF EXISTS auto_assign_enum2;
+
+SYSTEM DROP  TABLE IF EXISTS auto_assign_enum3;
+
 CREATE TABLE auto_assign_enum
 (
     x enum('a', 'b')
@@ -61,3 +69,9 @@ CREATE TABLE auto_assign_enum3
 )
 ENGINE = MergeTree()
 ORDER BY x; -- { serverError UNEXPECTED_AST_STRUCTURE }
+
+SYSTEM DROP  TABLE auto_assign_enum;
+
+SYSTEM DROP  TABLE auto_assign_enum1;
+
+SYSTEM DROP  TABLE auto_assign_enum2;

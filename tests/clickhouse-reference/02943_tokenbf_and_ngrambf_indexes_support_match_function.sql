@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS tokenbf_tab;
+DROP TABLE IF EXISTS ngrambf_tab;
 CREATE TABLE tokenbf_tab
 (
     id UInt32,
@@ -160,3 +162,5 @@ WHERE
     explain LIKE '%Granules: %'
 SETTINGS
   enable_analyzer = 1;
+DROP TABLE tokenbf_tab;
+DROP TABLE ngrambf_tab;

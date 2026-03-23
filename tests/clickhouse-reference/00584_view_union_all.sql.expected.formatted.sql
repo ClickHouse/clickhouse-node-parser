@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS Test_00584;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE Test_00584
@@ -34,3 +36,7 @@ GROUP BY str;
 SELECT *
 FROM TestView
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE TestView;
+
+SYSTEM DROP  TABLE Test_00584;

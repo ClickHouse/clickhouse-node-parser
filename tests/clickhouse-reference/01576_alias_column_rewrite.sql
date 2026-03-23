@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
  `timestamp` DateTime,
@@ -56,6 +57,8 @@ SELECT sum(struct.key) == 30, sum(struct.value) == 30 FROM (SELECT struct.key, s
 -- lambda parameters in filter should not be rewrite
 SELECT count() == 10 FROM test_table WHERE  arrayMap((day) -> day + 1, [1,2,3]) [1] = 2 AND day = '2020-01-03';
 set max_rows_to_read = 0;
+DROP TABLE test_table;
+DROP TABLE IF EXISTS test_index;
 CREATE TABLE test_index
 (
     `key_string` String,
@@ -70,11 +73,18 @@ INSERT INTO test_index SELECT * FROM numbers(10);
 set max_rows_to_read = 1;
 SELECT COUNT() == 1 FROM test_index WHERE key_uint32 = 1;
 SELECT COUNT() == 1 FROM test_index WHERE toUInt32(key_string) = 1;
+-- check alias column can be used to match projections
+drop table if exists pd;
+drop table if exists pl;
 create table pd (dt DateTime, i int, dt_m DateTime alias toStartOfMinute(dt)) engine Distributed(test_shard_localhost, currentDatabase(), 'pl');
 create table pl (dt DateTime, i int, projection p (select sum(i) group by toStartOfMinute(dt))) engine MergeTree order by dt;
 insert into pl values ('2020-10-24', 1);
 set max_rows_to_read = 2;
 select sum(i) from pd group by dt_m settings optimize_use_projections = 1, force_optimize_projection = 1;
+drop table pd;
+drop table pl;
+drop table if exists t;
 create temporary table t (x UInt64, y alias x);
 insert into t values (1);
 select sum(x), sum(y) from t;
+drop table t;

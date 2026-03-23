@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- no-fasttest: upper/lowerUTF8 use ICU
+SYSTEM drop  table if exists utf8_overlap;
+
 CREATE TABLE utf8_overlap
 (
     str String

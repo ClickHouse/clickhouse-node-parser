@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lwu_merges SYNC;
+
 SET enable_lightweight_update = 1;
 
 CREATE TABLE t_lwu_merges
@@ -28,3 +30,5 @@ SELECT
     countIf(endsWith(s, '_foo'))
 FROM t_lwu_merges
 SETTINGS apply_patch_parts = 1;
+
+SYSTEM DROP  TABLE t_lwu_merges SYNC;

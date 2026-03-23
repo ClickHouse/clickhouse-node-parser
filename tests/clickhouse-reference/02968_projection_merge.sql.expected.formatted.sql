@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tp;
+
 CREATE TABLE tp
 (
     type Int32,

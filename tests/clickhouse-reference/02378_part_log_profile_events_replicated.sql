@@ -1,3 +1,8 @@
+-- Tags: long, replica, no-replicated-database, no-parallel, no-shared-merge-tree
+-- no-shared-merge-tree: depend on events for replicatied merge tree
+
+DROP TABLE IF EXISTS part_log_profile_events_r1 SYNC;
+DROP TABLE IF EXISTS part_log_profile_events_r2 SYNC;
 CREATE TABLE part_log_profile_events_r1 (x UInt64)
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_02378/part_log_profile_events', 'r1')
 ORDER BY x
@@ -21,3 +26,5 @@ WHERE event_time > now() - INTERVAL 10 MINUTE
     AND database == currentDatabase() AND table == 'part_log_profile_events_r2'
     AND event_type == 'DownloadPart'
 ;
+DROP TABLE part_log_profile_events_r1 SYNC;
+DROP TABLE part_log_profile_events_r2 SYNC;

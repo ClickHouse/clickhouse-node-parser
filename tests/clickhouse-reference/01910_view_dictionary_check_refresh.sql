@@ -1,3 +1,8 @@
+-- Tags: long
+
+DROP DICTIONARY IF EXISTS TestTblDict;
+DROP VIEW IF EXISTS TestTbl_view;
+DROP TABLE IF EXISTS TestTbl;
 CREATE TABLE TestTbl
 (
     `id` UInt16,

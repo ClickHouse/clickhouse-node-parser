@@ -15,3 +15,5 @@ WHERE lc = '1';
 
 SELECT CAST(lc AS String)
 FROM low_card;
+
+SYSTEM DROP  TABLE low_card;

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS partitioned_table;
+DROP TABLE IF EXISTS mv_table;
 SET deduplicate_blocks_in_dependent_materialized_views = 1;
 CREATE TABLE partitioned_table
     (key Int64, value String)
@@ -13,6 +15,8 @@ INSERT INTO partitioned_table VALUES (1, 'A'), (2, 'C');
 INSERT INTO partitioned_table VALUES (1, 'D'), (2, 'B');
 SELECT * FROM partitioned_table ORDER BY ALL;
 SELECT * FROM mv_table ORDER BY ALL;
+DROP TABLE partitioned_table;
+DROP TABLE mv_table;
 INSERT INTO partitioned_table SETTINGS insert_deduplication_token='token_1' VALUES (1, 'A'), (2, 'B');
 INSERT INTO partitioned_table SETTINGS insert_deduplication_token='token_2' VALUES (1, 'A'), (2, 'C');
 INSERT INTO partitioned_table SETTINGS insert_deduplication_token='token_3' VALUES (1, 'D'), (2, 'B');

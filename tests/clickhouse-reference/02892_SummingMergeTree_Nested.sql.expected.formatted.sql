@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists nested_smt;
+
 CREATE TABLE nested_smt
 (
     date date,
@@ -21,3 +23,5 @@ FROM nested_smt FINAL;
 
 SELECT *
 FROM nested_smt;
+
+SYSTEM drop  table nested_smt;

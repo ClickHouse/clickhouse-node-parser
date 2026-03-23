@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS tmp_02482;
+
+SYSTEM DROP  TABLE IF EXISTS dist_02482;
+
 -- This test produces warning
 SET send_logs_level = 'error';
 
@@ -29,3 +33,7 @@ FROM numbers(1000);
 SET distributed_foreground_insert = 0;
 
 INSERT INTO dist_02482;
+
+SYSTEM DROP  TABLE tmp_02482;
+
+SYSTEM DROP  TABLE dist_02482;

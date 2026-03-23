@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_lwu_lock_profile_events SYNC;
 CREATE TABLE t_lwu_lock_profile_events (id UInt64)
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lwu_lock_profile_events', '1')
 ORDER BY id
@@ -9,3 +10,4 @@ SELECT count() FROM t_lwu_lock_profile_events;
 SELECT ProfileEvents['PatchesAcquireLockTries'], ProfileEvents['PatchesAcquireLockMicroseconds'] > 0
 FROM system.query_log
 WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND query LIKE '%DELETE FROM t_lwu_lock_profile_events WHERE id < 10000%';
+DROP TABLE t_lwu_lock_profile_events SYNC;

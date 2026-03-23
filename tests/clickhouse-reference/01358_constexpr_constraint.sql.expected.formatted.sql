@@ -7,6 +7,8 @@ CREATE TEMPORARY TABLE constrained
 
 INSERT INTO constrained;
 
+SYSTEM DROP  TEMPORARY TABLE constrained;
+
 CREATE TEMPORARY TABLE constrained
 (
     x UInt8,

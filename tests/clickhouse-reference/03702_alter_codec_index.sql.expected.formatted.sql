@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_alter_codec_index;
+
 CREATE TABLE test_alter_codec_index
 (
     id UInt64,

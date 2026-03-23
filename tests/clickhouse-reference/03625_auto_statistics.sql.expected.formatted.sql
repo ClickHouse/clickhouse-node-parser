@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 SET allow_experimental_statistics = 1;
 
 CREATE TABLE test_table

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS unsorted;
+
 CREATE TABLE unsorted
 (
     x UInt32,
@@ -15,6 +17,10 @@ INSERT INTO unsorted;
 
 SELECT *
 FROM unsorted;
+
+SYSTEM DROP  TABLE unsorted;
+
+SYSTEM DROP  TABLE IF EXISTS unsorted_replacing;
 
 CREATE TABLE unsorted_replacing
 (
@@ -39,6 +45,10 @@ SELECT '---';
 SELECT *
 FROM unsorted_replacing;
 
+SYSTEM DROP  TABLE unsorted_replacing;
+
+SYSTEM DROP  TABLE IF EXISTS unsorted_collapsing;
+
 CREATE TABLE unsorted_collapsing
 (
     x UInt32,
@@ -59,3 +69,5 @@ FROM unsorted_collapsing FINAL;
 
 SELECT *
 FROM unsorted_collapsing;
+
+SYSTEM DROP  TABLE unsorted_collapsing;

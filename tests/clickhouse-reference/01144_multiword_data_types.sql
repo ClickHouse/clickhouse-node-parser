@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS multiword_types;
+DROP TABLE IF EXISTS unsigned_types;
 CREATE TABLE multiword_types (
     a DOUBLE,
     b DOUBLE PRECISION,
@@ -35,3 +37,5 @@ CREATE TABLE unsigned_types (
 INSERT INTO unsigned_types(a) VALUES (1);
 SELECT toTypeName((*,)) FROM unsigned_types SETTINGS enable_named_columns_in_function_tuple = 0;
 SELECT CAST('42' AS DOUBLE PRECISION), CAST(42, 'NATIONAL CHARACTER VARYING'), CAST(-1 AS tinyint  UnSiGnEd), CAST(65535, ' sMaLlInT  signed ');
+DROP TABLE multiword_types;
+DROP TABLE unsigned_types;

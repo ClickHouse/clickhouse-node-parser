@@ -1,5 +1,8 @@
 SET use_variant_as_common_type = 0;
 
+-- Map(String, String)
+SYSTEM drop  table if exists table_map;
+
 CREATE TABLE table_map
 (
     a Map(String, String),
@@ -31,6 +34,8 @@ FROM table_map;
 
 SELECT mapFromArrays(c, d)
 FROM table_map;
+
+SYSTEM drop  table table_map;
 
 -- Map(UInt8, UInt8)
 CREATE TABLE table_map

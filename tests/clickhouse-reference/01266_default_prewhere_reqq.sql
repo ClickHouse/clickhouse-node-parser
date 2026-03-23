@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t1;
 CREATE TABLE t1
 (
     date Date, 
@@ -8,3 +9,4 @@ SETTINGS index_granularity = 8192;
 insert into t1 (date, s1,s2) values(today()-1,'aaa','bbb');
 insert into t1 (date, s1,s2) values(today(),'aaa2','bbb2');
 select ignore(date), s3 from t1 where  s2='bbb';
+DROP TABLE t1;

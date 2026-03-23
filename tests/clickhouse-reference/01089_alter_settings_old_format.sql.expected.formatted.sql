@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS old_format_mt;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE old_format_mt

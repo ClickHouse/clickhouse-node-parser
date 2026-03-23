@@ -1,3 +1,9 @@
+-- Tags: no-parallel
+-- Case 1: RENAME DATABASE
+SYSTEM DROP  DATABASE IF EXISTS 02661_db;
+
+SYSTEM DROP  DATABASE IF EXISTS 02661_db1;
+
 SET param_old_db_name = `02661_db`;
 
 SET param_new_db_name = `02661_db1`;
@@ -7,6 +13,11 @@ CREATE DATABASE {old_db_name:Identifier};
 SELECT name
 FROM `system`.databases
 WHERE name = {new_db_name:String};
+
+-- Case 2: RENAME TABLE
+SYSTEM DROP  TABLE IF EXISTS 02661_t;
+
+SYSTEM DROP  TABLE IF EXISTS 02661_t1;
 
 SET param_old_tbl_name = `02661_t`;
 
@@ -23,6 +34,11 @@ ORDER BY tuple();
 SELECT name
 FROM `system`.tables
 WHERE name = {new_tbl_name:String};
+
+-- Case 3: RENAME DICTIONARY
+SYSTEM DROP  DICTIONARY IF EXISTS 02661_d;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02661_d1;
 
 SET param_old_dict_name = `02661_d`;
 
@@ -41,3 +57,5 @@ LAYOUT(FLAT());
 SELECT name
 FROM `system`.dictionaries
 WHERE name = {new_dict_name:String};
+
+SYSTEM DROP  DATABASE {new_db_name:Identifier};

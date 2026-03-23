@@ -16,6 +16,8 @@ FROM data;
 SELECT maxForEach(sketch)
 FROM data;
 
+SYSTEM DROP  TABLE data;
+
 SELECT
     k,
     sumForEach(arr)

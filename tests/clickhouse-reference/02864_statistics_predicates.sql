@@ -5,6 +5,7 @@
 
 SET allow_experimental_statistics = 1;
 SET use_statistics = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     u64                 UInt64,
@@ -190,3 +191,4 @@ SELECT count(*) FROM tab WHERE s = '7';
 -- SELECT count(*) FROM tab WHERE s_minmax = '7'; -- not supported
 SELECT count(*) FROM tab WHERE s_countmin = '7';
 SELECT count(*) FROM tab WHERE s_uniq = '7';
+DROP TABLE tab;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS decimal;
 CREATE TABLE decimal
 (
     a Decimal32(4),
@@ -93,3 +94,4 @@ SELECT covarPop(a, a), covarPop(b, b), covarPop(c, c) FROM decimal; -- { serverE
 SELECT covarSamp(a, a), covarSamp(b, b), covarSamp(c, c) FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT corr(a, a), corr(b, b), corr(c, c) FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT 1 LIMIT 0;
+DROP TABLE decimal;

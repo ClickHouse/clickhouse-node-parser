@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists array_intersect;
+
 CREATE TABLE array_intersect
 (
     date Date,

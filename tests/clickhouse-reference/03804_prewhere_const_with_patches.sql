@@ -1,3 +1,9 @@
+-- Tags: no-replicated-database
+-- Test for constant PREWHERE with patch parts (lightweight updates)
+-- This tests the fix for the exception "Can't adjust last granule" when using
+-- constant PREWHERE expressions with tables that have patch parts.
+
+DROP TABLE IF EXISTS t_prewhere_const_patches SYNC;
 SET enable_lightweight_update = 1;
 SET mutations_sync = 2;
 CREATE TABLE t_prewhere_const_patches (a UInt64, b UInt64, c UInt64, d UInt64)

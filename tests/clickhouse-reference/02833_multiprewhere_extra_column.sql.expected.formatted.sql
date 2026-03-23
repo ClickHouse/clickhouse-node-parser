@@ -1,3 +1,9 @@
+-- Tags: no-parallel, no-random-settings, no-random-merge-tree-settings, no-object-storage
+-- add_minmax_index_for_numeric_columns=0: More files opened
+SYSTEM drop  table if exists t_multi_prewhere;
+
+SYSTEM drop  row policy if exists policy_02834 on t_multi_prewhere;
+
 CREATE TABLE t_multi_prewhere
 (
     a UInt64,

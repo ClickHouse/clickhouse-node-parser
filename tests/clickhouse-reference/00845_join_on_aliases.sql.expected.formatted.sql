@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1
 (
     a UInt32,
@@ -96,3 +100,7 @@ INNER JOIN table2 AS t2
 WHERE ((t1.a AS t1_a)) > 2
     AND ((t2.a AS t2_a)) > 4
 ORDER BY `all` ASC;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;

@@ -10,4 +10,5 @@ SELECT DISTINCT dumpColumnStructure(*) FROM test;
 SELECT * FROM test ORDER BY ALL DESC NULLS LAST LIMIT 1 FORMAT PRETTY;
 SELECT * FROM test ORDER BY ALL ASC NULLS LAST LIMIT 1 FORMAT PRETTY;
 SELECT * FROM test ORDER BY ALL ASC NULLS FIRST LIMIT 1 FORMAT PrettySpace;
+DROP TEMPORARY TABLE test;
 CREATE TEMPORARY TABLE test (x UInt64, PRIMARY KEY ()) ENGINE = MergeTree SETTINGS ratio_of_defaults_for_sparse_serialization = 0, serialization_info_version = 'with_types', nullable_serialization_version = 'allow_sparse';

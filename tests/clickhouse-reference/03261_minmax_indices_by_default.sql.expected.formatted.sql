@@ -1,5 +1,15 @@
 SET mutations_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS tbl1;
+
+SYSTEM DROP  TABLE IF EXISTS tbl2;
+
+SYSTEM DROP  TABLE IF EXISTS tbl3;
+
+SYSTEM DROP  TABLE IF EXISTS tbl4;
+
+SYSTEM DROP  TABLE IF EXISTS tbl5;
+
 CREATE TABLE tbl1
 (
     key Int,
@@ -96,3 +106,15 @@ SELECT
 FROM `system`.data_skipping_indices
 WHERE table = 'tbl6'
     AND database = currentDatabase();
+
+SYSTEM DROP  TABLE tbl1;
+
+SYSTEM DROP  TABLE tbl2;
+
+SYSTEM DROP  TABLE tbl3;
+
+SYSTEM DROP  TABLE tbl4;
+
+SYSTEM DROP  TABLE tbl5;
+
+SYSTEM DROP  TABLE tbl6;

@@ -4,3 +4,5 @@ CREATE TABLE test_table
     example String
 )
 ENGINE = Memory;
+
+SYSTEM DROP  TABLE test_table;

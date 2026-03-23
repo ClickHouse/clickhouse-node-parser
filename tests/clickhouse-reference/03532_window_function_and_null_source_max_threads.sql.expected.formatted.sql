@@ -157,3 +157,5 @@ FROM (
     )
 WHERE like(`explain`, '%Resize%')
 LIMIT 1;
+
+SYSTEM DROP  TABLE empty;

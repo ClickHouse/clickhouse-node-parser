@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_sharded;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE test_table_sharded
@@ -28,3 +32,7 @@ GROUP BY text
 ORDER BY
     counter ASC,
     text ASC;
+
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE test_table_sharded;

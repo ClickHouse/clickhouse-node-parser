@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS lc_00931;
 CREATE TABLE lc_00931 (
     key UInt64,
     value Array(LowCardinality(String)))

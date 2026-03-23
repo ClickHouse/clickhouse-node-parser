@@ -6,6 +6,7 @@ SELECT h3kRing(581276613233082367, -1); -- { serverError ILLEGAL_TYPE_OF_ARGUMEN
 SELECT h3kRing(581276613233082367, toUInt16(-1)); -- { serverError PARAMETER_OUT_OF_BOUND }
 SELECT arraySort(h3kRing(581276613233082367, 1));
 SELECT h3kRing(581276613233082367, 0);
+DROP TABLE IF EXISTS h3_indexes;
 -- Test h3 indices and k selected from original test fixture: https://github.com/uber/h3/blob/master/src/apps/testapps
 
 CREATE TABLE h3_indexes (h3_index UInt64, k UInt16) ENGINE = Memory;
@@ -26,3 +27,4 @@ INSERT INTO h3_indexes VALUES (635544851677385791,14);
 INSERT INTO h3_indexes VALUES (639763125756281263,15);
 INSERT INTO h3_indexes VALUES (644178757620501158,16);
 SELECT arraySort(h3kRing(h3_index, k)) FROM h3_indexes ORDER BY h3_index;
+DROP TABLE h3_indexes;

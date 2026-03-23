@@ -1,6 +1,10 @@
 -- Tags: long, zookeeper
 SET prefer_warmed_unmerged_parts_seconds = 0;
 
+SYSTEM DROP  TABLE IF EXISTS byte_identical_r1;
+
+SYSTEM DROP  TABLE IF EXISTS byte_identical_r2;
+
 CREATE TABLE byte_identical_r1
 (
     x UInt32
@@ -27,3 +31,7 @@ FROM
 LEFT JOIN byte_identical_r2 AS t2
     USING (x)
 ORDER BY x ASC;
+
+SYSTEM DROP  TABLE byte_identical_r1;
+
+SYSTEM DROP  TABLE byte_identical_r2;

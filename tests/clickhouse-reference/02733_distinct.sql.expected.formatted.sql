@@ -1,3 +1,7 @@
+-- Tags: no-random-settings
+-- there is a bug if `optimize_distinct_in_order` is true
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     c1 String,
@@ -28,3 +32,5 @@ SELECT DISTINCT
     c2,
     c3
 FROM test;
+
+SYSTEM DROP  TABLE test;

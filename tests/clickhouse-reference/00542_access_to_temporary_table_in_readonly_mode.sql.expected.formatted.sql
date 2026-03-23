@@ -18,3 +18,5 @@ FROM `system`.numbers
 LIMIT 10;
 
 SELECT '---';
+
+SYSTEM DROP  TEMPORARY TABLE readonly00542;

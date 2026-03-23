@@ -44,6 +44,8 @@ SELECT arrayFold((acc, x) -> if(x % 2, arrayPushFront(acc, x), arrayPushBack(acc
 FROM `system`.numbers
 LIMIT 5;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     line String,
@@ -60,6 +62,8 @@ SELECT
     arrayFold((acc, pat) -> position(line, pat), patterns, 0::UInt64)
 FROM tab
 ORDER BY line ASC;
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

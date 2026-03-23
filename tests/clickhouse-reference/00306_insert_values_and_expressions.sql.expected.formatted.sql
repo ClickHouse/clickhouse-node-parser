@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS insert;
+
 CREATE TABLE insert
 (
     i UInt64,
@@ -15,6 +17,8 @@ SELECT *
 FROM insert
 ORDER BY i ASC;
 
+SYSTEM DROP  TABLE insert;
+
 -- Test the case where the VALUES are delimited by semicolon and a query follows
 -- w/o newline. With most formats the query in the same line would be ignored or
 -- lead to an error, but VALUES are an exception and support semicolon delimiter,
@@ -31,3 +35,5 @@ SELECT 11111;
 
 SELECT *
 FROM t_306;
+
+SYSTEM drop  table if exists t_306;

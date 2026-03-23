@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test SYNC;
+
 CREATE TABLE test
 (
     c1 LowCardinality(String),

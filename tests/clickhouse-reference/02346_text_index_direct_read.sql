@@ -9,6 +9,7 @@ SET use_skip_indexes_on_data_read = 1;
 SET query_plan_direct_read_from_text_index = 1;
 SET max_rows_to_read = 0; -- system.text_log can be really big
 SET enable_analyzer = 0; -- To produce consistent explain outputs
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab(k UInt64, text String, INDEX idx(text) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1)
             ENGINE = MergeTree() ORDER BY k
             SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';
@@ -63,3 +64,4 @@ SELECT trim(explain) FROM
 (
     EXPLAIN actions = 1 SELECT 'Test NOT hasAllTokens:', count() FROM tab WHERE NOT hasAllTokens(text, ['Blick']) SETTINGS use_skip_indexes_on_data_read = 1
 ) WHERE explain LIKE '%Filter column:%';
+DROP TABLE tab;

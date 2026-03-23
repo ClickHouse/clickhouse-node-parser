@@ -3,6 +3,8 @@
 -- Tag no-object-storage: this test relies on the number of opened files in MergeTree that can differ in object storages
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_dynamic;
+
 CREATE TABLE test_dynamic
 (
     id UInt64,
@@ -29,3 +31,5 @@ WHERE (type = 2)
     AND (current_database = currentDatabase())
 ORDER BY event_time_microseconds DESC
 LIMIT 2;
+
+SYSTEM DROP  TABLE test_dynamic;

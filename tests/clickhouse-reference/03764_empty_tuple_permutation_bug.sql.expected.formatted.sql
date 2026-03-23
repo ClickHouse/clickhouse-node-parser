@@ -1,5 +1,7 @@
 SET limit = 4;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Tuple(),
@@ -14,3 +16,5 @@ INSERT INTO t0 (c0, c1);
 SELECT c0
 FROM t0 FINAL
 ORDER BY c1 ASC;
+
+SYSTEM DROP  TABLE t0;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     s String
@@ -7,6 +9,10 @@ SELECT arrayJoin(['a','b','c']);
 
 SELECT round((sum(multiIf(s IN ('a', 'b'), 1, 0)) / count()) * 100) AS r
 FROM cluster('test_cluster_two_shards', currentDatabase(), t);
+
+SYSTEM DROP  TABLE t;
+
+SYSTEM DROP  TABLE IF EXISTS test_alias;
 
 CREATE TABLE test_alias
 (
@@ -24,3 +30,5 @@ SELECT
     '2022-01-01',
     0
 FROM zeros(10);
+
+SYSTEM DROP  TABLE test_alias;

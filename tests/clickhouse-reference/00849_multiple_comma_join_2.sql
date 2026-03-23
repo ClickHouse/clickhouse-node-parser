@@ -1,6 +1,10 @@
 SET enable_optimize_predicate_expression = 0;
 SET convert_query_to_cnf = 0;
 SET cross_to_inner_join_rewrite = 1;
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t3;
+DROP TABLE IF EXISTS t4;
 CREATE TABLE t1 (a UInt32, b Nullable(Int32)) ENGINE = Memory;
 CREATE TABLE t2 (a UInt32, b Nullable(Int32)) ENGINE = Memory;
 CREATE TABLE t3 (a UInt32, b Nullable(Int32)) ENGINE = Memory;
@@ -93,3 +97,7 @@ WHERE t1.b = t2.b AND t1.b = t3.b AND t1.b = t4.b;
 SELECT t1.a, t2.b, t3.b, t4.b FROM t1, t2, t3, t4
 WHERE t1.a = t2.a AND t2.a = t3.a AND t3.a = t4.a
 ORDER BY t2.b, t3.b, t4.b;
+DROP TABLE t1;
+DROP TABLE t2;
+DROP TABLE t3;
+DROP TABLE t4;

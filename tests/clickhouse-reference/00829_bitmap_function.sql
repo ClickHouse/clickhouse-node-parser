@@ -10,6 +10,7 @@ SELECT bitmapXorCardinality(bitmapBuild([1,2,3]),bitmapBuild([3,4,5]));
 SELECT bitmapAndnotCardinality(bitmapBuild([1,2,3]),bitmapBuild([3,4,5]));
 SELECT bitmapAndCardinality(bitmapBuild([100, 200, 500]), bitmapBuild(CAST([100, 200], 'Array(UInt16)')));
 SELECT bitmapToArray(bitmapAnd(bitmapBuild([100, 200, 500]), bitmapBuild(CAST([100, 200], 'Array(UInt16)'))));
+DROP TABLE IF EXISTS bitmap_test;
 CREATE TABLE bitmap_test(pickup_date Date, city_id UInt32, uid UInt32)ENGINE = Memory;
 INSERT INTO bitmap_test SELECT '2019-01-01', 1, number FROM numbers(1,50);
 INSERT INTO bitmap_test SELECT '2019-01-02', 1, number FROM numbers(11,60);
@@ -55,6 +56,8 @@ SELECT count(*) FROM bitmap_test WHERE bitmapContains((SELECT groupBitmapState(u
 SELECT count(*) FROM bitmap_test WHERE 0 = bitmapContains((SELECT groupBitmapState(uid) FROM bitmap_test WHERE pickup_date = '2019-01-01'), uid);
 -- PR#8082
 SELECT bitmapToArray(bitmapAnd(groupBitmapState(uid), bitmapBuild(CAST([1, 2, 3], 'Array(UInt32)')))) FROM bitmap_test GROUP BY city_id ORDER BY city_id;
+-- bitmap state test
+DROP TABLE IF EXISTS bitmap_state_test;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE bitmap_state_test
 (
@@ -70,6 +73,8 @@ INSERT INTO bitmap_state_test SELECT
 FROM bitmap_test
 GROUP BY pickup_date, city_id;
 SELECT pickup_date, groupBitmapMerge(uv) AS users from bitmap_state_test group by pickup_date order by pickup_date;
+-- between column and expression test
+DROP TABLE IF EXISTS bitmap_column_expr_test;
 CREATE TABLE bitmap_column_expr_test
 (
     t DateTime,
@@ -83,6 +88,7 @@ SELECT bitmapAndCardinality( bitmapBuild(cast([19,7] AS Array(UInt32))), z) FROM
 SELECT bitmapAndCardinality( z, bitmapBuild(cast([19,7] AS Array(UInt32))) ) FROM bitmap_column_expr_test;
 SELECT bitmapCardinality(bitmapAnd(bitmapBuild(cast([19,7] AS Array(UInt32))), z )) FROM bitmap_column_expr_test;
 SELECT bitmapCardinality(bitmapAnd(z, bitmapBuild(cast([19,7] AS Array(UInt32))))) FROM bitmap_column_expr_test;
+DROP TABLE IF EXISTS bitmap_column_expr_test2;
 CREATE TABLE bitmap_column_expr_test2
 (
     tag_id String,
@@ -101,6 +107,7 @@ SELECT groupBitmapAnd(z) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%'
 SELECT arraySort(bitmapToArray(groupBitmapAndState(z))) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
 SELECT groupBitmapXor(z) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
 SELECT arraySort(bitmapToArray(groupBitmapXorState(z))) FROM bitmap_column_expr_test2 WHERE like(tag_id, 'tag%');
+DROP TABLE IF EXISTS bitmap_column_expr_test3;
 CREATE TABLE bitmap_column_expr_test3
 (
     tag_id String,
@@ -112,6 +119,7 @@ CREATE TABLE bitmap_column_expr_test3
 )
 ENGINE = MergeTree
 ORDER BY tag_id;
+DROP TABLE IF EXISTS numbers10;
 CREATE VIEW numbers10 AS SELECT number FROM system.numbers LIMIT 10;
 INSERT INTO bitmap_column_expr_test3(tag_id, z, replace.from, replace.to) SELECT 'tag1', groupBitmapState(toUInt64(number)), cast([] as Array(UInt16)), cast([] as Array(UInt64)) FROM numbers10;
 INSERT INTO bitmap_column_expr_test3(tag_id, z, replace.from, replace.to) SELECT 'tag2', groupBitmapState(toUInt64(number)), cast([0] as Array(UInt16)), cast([2] as Array(UInt64)) FROM numbers10;
@@ -303,3 +311,4 @@ ALL LEFT JOIN
     WHERE pickup_date = '2019-01-01'
     GROUP BY city_id
 ) AS js2 USING (city_id) FORMAT Null;
+drop table bitmap_test;

@@ -1,9 +1,11 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/89909
 SET enable_analyzer=1;
+DROP TABLE IF EXISTS t0;
 CREATE TABLE t0 (c0 String) ENGINE = Log();
 INSERT INTO TABLE t0 (c0) VALUES ('.');
 SELECT c0, c0.size FROM t0;
 SELECT t0.c0.size FROM t0 WHERE t0.c0 IN (1);
+DROP TABLE IF EXISTS t1;
 CREATE TABLE t0 (c0 Int, c3 String) ENGINE = TinyLog();
 CREATE TABLE t1 (c0 Int) ENGINE = Memory;
 INSERT INTO TABLE t1 (c0) VALUES (1);

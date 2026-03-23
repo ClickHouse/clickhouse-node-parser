@@ -4,6 +4,8 @@ SET allow_experimental_variant_type = 1;
 
 SET use_variant_as_common_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt64,
@@ -102,3 +104,5 @@ INSERT INTO test SELECT
     multiIf(number % 3 == 0, number, number % 3 == 1, concat('str_', toString(number)), NULL),
     NULL
 FROM numbers(23, 3);
+
+SYSTEM drop  table test;

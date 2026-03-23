@@ -1,3 +1,8 @@
+drop table if exists ephemeral;
+drop table if exists dist_in;
+drop table if exists data;
+drop table if exists mv;
+drop table if exists dist_out;
 create table ephemeral (key Int, value Int) engine=Null();
 create table dist_in as ephemeral engine=Distributed(test_shard_localhost, currentDatabase(), ephemeral, key) settings background_insert_batch=1;
 create table data (key Int, uniq_values Int) engine=TinyLog();

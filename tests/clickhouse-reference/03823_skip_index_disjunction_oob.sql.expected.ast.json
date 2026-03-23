@@ -1,5 +1,17 @@
 [
   {
+    "kind": "system",
+    "body": "DROP  TABLE IF EXISTS t_skip_index_disj_oob",
+    "leadingComments": [
+      "-- Reproducer for out-of-bounds access in partial_disjunction_result bitset.",
+      "-- When use_primary_key = 0, the key_condition RPN has 1 element (skip_analysis_),",
+      "-- so the check key_condition.getRPN().size() <= 32 passes trivially.",
+      "-- But the key_condition_rpn_template and index conditions have the full RPN,",
+      "-- which can exceed 32 elements, leading to out-of-bounds writes in the callback.",
+      "-- The disjunction feature requires at least 2 useful skip indexes and OR conditions."
+    ]
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -508,5 +520,9 @@
       "-- 9 * 3 (leaf, leaf, AND) + 8 OR = 35, exceeding the limit of 32.",
       "-- optimize_min_equality_disjunction_chain_length = 100 prevents OR-to-IN conversion."
     ]
+  },
+  {
+    "kind": "system",
+    "body": "DROP  TABLE t_skip_index_disj_oob"
   }
 ]

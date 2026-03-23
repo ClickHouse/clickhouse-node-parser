@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ip_bloom;
+
 CREATE TABLE ip_bloom
 (
     a UInt32,
@@ -13,3 +15,5 @@ INSERT INTO ip_bloom;
 
 SELECT *
 FROM ip_bloom;
+
+SYSTEM DROP  TABLE ip_bloom;

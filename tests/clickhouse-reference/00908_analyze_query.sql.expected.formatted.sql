@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS a;
+
 CREATE TABLE a
 (
     a UInt8,
@@ -5,3 +7,5 @@ CREATE TABLE a
 )
 ENGINE = MergeTree
 ORDER BY a;
+
+SYSTEM DROP  TABLE a;

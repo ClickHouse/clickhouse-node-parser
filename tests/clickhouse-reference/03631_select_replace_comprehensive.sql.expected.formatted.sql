@@ -4,6 +4,11 @@
 -- See PR: https://github.com/ClickHouse/ClickHouse/pull/87630
 SET allow_experimental_analyzer = 1;
 
+-- Setup test tables
+SYSTEM DROP  TABLE IF EXISTS test_replace_main;
+
+SYSTEM DROP  TABLE IF EXISTS test_replace_merge;
+
 CREATE TABLE test_replace_main
 (
     id UInt32,
@@ -31,6 +36,8 @@ FROM test_replace_main
 WHERE b > 150
 ORDER BY id ASC;
 
+SYSTEM DROP  TABLE IF EXISTS test_arith;
+
 CREATE TABLE test_arith
 (
     a UInt32,
@@ -52,6 +59,9 @@ SELECT * REPLACE (a * 10 + a AS b)
 FROM test_arith
 WHERE b = 11;
 
+-- Test 1b: String replacement in WHERE
+SYSTEM DROP  TABLE IF EXISTS test_replace_str;
+
 CREATE TABLE test_replace_str
 (
     id UInt32,
@@ -64,6 +74,10 @@ INSERT INTO test_replace_str;
 SELECT * REPLACE (concat(s, '_suffix') AS s)
 FROM test_replace_str
 WHERE s = 'hello_suffix';
+
+SYSTEM DROP  TABLE test_arith;
+
+SYSTEM DROP  TABLE test_replace_str;
 
 SELECT * REPLACE (a AS b)
 FROM test_replace_main
@@ -80,6 +94,8 @@ FROM test_replace_merge
 PREWHERE b > 150
 ORDER BY id ASC;
 
+SYSTEM DROP  TABLE IF EXISTS test_limit_by;
+
 CREATE TABLE test_limit_by
 (
     id UInt32,
@@ -94,6 +110,8 @@ SELECT * REPLACE (a AS b)
 FROM test_limit_by
 ORDER BY id ASC
 LIMIT 1 BY b < 200;
+
+SYSTEM DROP  TABLE test_limit_by;
 
 SELECT
     * REPLACE (a AS b),
@@ -135,6 +153,8 @@ FROM test_replace_main
 WHERE b + 50 > 200
 ORDER BY b ASC;
 
+SYSTEM DROP  TABLE IF EXISTS test_group_by;
+
 CREATE TABLE test_group_by
 (
     id UInt32,
@@ -154,6 +174,10 @@ FROM (
     )
 GROUP BY category
 ORDER BY category ASC;
+
+SYSTEM DROP  TABLE test_group_by;
+
+SYSTEM DROP  TABLE IF EXISTS test_group_by_sub;
 
 CREATE TABLE test_group_by_sub
 (
@@ -176,6 +200,10 @@ FROM (
     )
 ORDER BY category ASC;
 
+SYSTEM DROP  TABLE test_group_by_sub;
+
+SYSTEM DROP  TABLE IF EXISTS test_group_by_direct;
+
 CREATE TABLE test_group_by_direct
 (
     category String,
@@ -191,6 +219,10 @@ SELECT
 FROM test_group_by_direct
 GROUP BY category
 ORDER BY category ASC;
+
+SYSTEM DROP  TABLE test_group_by_direct;
+
+SYSTEM DROP  TABLE IF EXISTS test_having;
 
 CREATE TABLE test_having
 (
@@ -212,6 +244,10 @@ FROM (
 GROUP BY category
 HAVING total > 200
 ORDER BY category ASC;
+
+SYSTEM DROP  TABLE test_having;
+
+SYSTEM DROP  TABLE IF EXISTS test_having_sub;
 
 CREATE TABLE test_having_sub
 (
@@ -235,6 +271,10 @@ FROM (
     )
 ORDER BY category ASC;
 
+SYSTEM DROP  TABLE test_having_sub;
+
+SYSTEM DROP  TABLE IF EXISTS test_having_direct;
+
 CREATE TABLE test_having_direct
 (
     category String,
@@ -251,3 +291,10 @@ FROM test_having_direct
 GROUP BY category
 HAVING total > 200
 ORDER BY category ASC;
+
+SYSTEM DROP  TABLE test_having_direct;
+
+-- Cleanup
+SYSTEM DROP  TABLE test_replace_main;
+
+SYSTEM DROP  TABLE test_replace_merge;

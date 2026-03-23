@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t7;
+
 CREATE TABLE t7
 (
     c57 UInt32
@@ -16,3 +18,5 @@ SELECT (
         FROM t7 AS ref_0
         WHERE ref_0.c57 <> nan
     );
+
+SYSTEM DROP  TABLE t7;

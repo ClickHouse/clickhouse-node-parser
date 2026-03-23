@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 03443_data;
+
 CREATE TABLE `03443_data`
 (
     id Int32,
@@ -102,3 +104,5 @@ FROM (
     )
 WHERE like(`explain`, '%Granules: %')
 SETTINGS use_skip_indexes = 1;
+
+SYSTEM DROP  TABLE 03443_data;

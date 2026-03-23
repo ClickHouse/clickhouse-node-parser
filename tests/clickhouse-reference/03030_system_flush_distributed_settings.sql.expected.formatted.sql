@@ -1,3 +1,13 @@
+SYSTEM drop  table if exists ephemeral;
+
+SYSTEM drop  table if exists dist_in;
+
+SYSTEM drop  table if exists data;
+
+SYSTEM drop  table if exists mv;
+
+SYSTEM drop  table if exists dist_out;
+
 CREATE TABLE ephemeral
 (
     key Int,

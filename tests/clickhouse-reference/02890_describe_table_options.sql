@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_describe_options;
 SET print_pretty_type_names = 0;
 CREATE TABLE t_describe_options (
     id UInt64 COMMENT 'index column',
@@ -15,3 +16,6 @@ SET describe_compact_output = 1, describe_include_virtual_columns = 0, describe_
 SET describe_compact_output = 1, describe_include_virtual_columns = 0, describe_include_subcolumns = 1;
 SET describe_compact_output = 1, describe_include_virtual_columns = 1, describe_include_subcolumns = 0;
 SET describe_compact_output = 1, describe_include_virtual_columns = 1, describe_include_subcolumns = 1;
+-- { echoOff }
+
+DROP TABLE t_describe_options;

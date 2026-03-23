@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/52019
+SYSTEM DROP  TABLE IF EXISTS set_index__fuzz_41;
+
 CREATE TABLE set_index__fuzz_41
 (
     a Date,
@@ -18,3 +21,5 @@ SETTINGS
     max_parallel_replicas = 2,
     parallel_replicas_for_non_replicated_merge_tree = 1,
     enable_parallel_replicas = 2; -- { serverError TOO_FEW_ARGUMENTS_FOR_FUNCTION }
+
+SYSTEM DROP  TABLE set_index__fuzz_41;

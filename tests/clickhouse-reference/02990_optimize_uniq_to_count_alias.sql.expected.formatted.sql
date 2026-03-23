@@ -1,3 +1,6 @@
+--https://github.com/ClickHouse/ClickHouse/issues/59999
+SYSTEM DROP  TABLE IF EXISTS tags;
+
 CREATE TABLE tags
 (
     dev_tag String
@@ -32,6 +35,9 @@ FROM (
             ) AS t
     )
 SETTINGS optimize_uniq_to_count = 1;
+
+-- https://github.com/ClickHouse/ClickHouse/issues/62298
+SYSTEM DROP  TABLE IF EXISTS users;
 
 CREATE TABLE users
 (

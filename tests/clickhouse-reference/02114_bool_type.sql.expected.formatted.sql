@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bool_test;
+
 CREATE TABLE bool_test
 (
     value Bool,

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS tableFile_00968;
+
+SYSTEM DROP  TABLE IF EXISTS tableMergeTree_00968;
+
 CREATE TABLE tableFile_00968
 (
     number UInt64
@@ -27,3 +31,7 @@ WHERE id IN (
         FROM tableFile_00968
     )
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE tableFile_00968;
+
+SYSTEM DROP  TABLE tableMergeTree_00968;

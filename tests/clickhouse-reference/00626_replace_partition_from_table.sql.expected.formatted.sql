@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS src;
+
+SYSTEM DROP  TABLE IF EXISTS dst;
+
 CREATE TABLE src
 (
     p UInt64,
@@ -57,6 +61,10 @@ WHERE database = currentDatabase()
 
 SELECT (max(m) - min(m) > 1) AS new_block_is_generated
 FROM test_block_numbers;
+
+SYSTEM DROP  TEMPORARY TABLE test_block_numbers;
+
+SYSTEM DROP  TABLE src;
 
 INSERT INTO src;
 

@@ -4,6 +4,9 @@ Select sum(number + 1) from numbers(10);
 Select sum(1 + number) from numbers(10);
 Select sum(number - 1) from numbers(10);
 Select sum(1 - number) from numbers(10);
+-- { echoOff }
+
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     uint64 UInt64,

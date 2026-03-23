@@ -2,6 +2,8 @@
 
 -- Settings allow_deprecated_syntax_for_merge_tree prevent to enable the is_deleted column
 set allow_deprecated_syntax_for_merge_tree=0;
+-- Test the bahaviour without the is_deleted column
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (uid String, version UInt32, is_deleted UInt8) ENGINE = ReplacingMergeTree(version) Order by (uid) settings allow_experimental_replacing_merge_with_cleanup=1;
 INSERT INTO test (*) VALUES ('d1', 1, 0), ('d2', 1, 0), ('d6', 1, 0), ('d4', 1, 0), ('d6', 2, 1), ('d3', 1, 0), ('d1', 2, 1), ('d5', 1, 0), ('d4', 2, 1), ('d1', 3, 0), ('d1', 4, 1), ('d4', 3, 0), ('d1', 5, 0);
 select * from test FINAL order by uid;
@@ -19,6 +21,7 @@ INSERT INTO test (*) VALUES ('d1', 1, 0), ('d1', 2, 1), ('d1', 3, 0), ('d1', 4, 
 CREATE TABLE test (uid String, version UInt32, is_deleted UInt8) ENGINE = ReplacingMergeTree(version, is_deleted) Order by (uid) SETTINGS clean_deleted_rows='Always', allow_experimental_replacing_merge_with_cleanup=1;
 -- d6 has to be removed since we set clean_deleted_rows as 'Always'
 select * from test where is_deleted=0 order by uid;
+DROP TABLE IF EXISTS testCleanupR1;
 CREATE TABLE testCleanupR1 (uid String, version UInt32, is_deleted UInt8)
     ENGINE = ReplicatedReplacingMergeTree('/clickhouse/{database}/tables/test_cleanup/', 'r1', version, is_deleted)
     ORDER BY uid settings allow_experimental_replacing_merge_with_cleanup=1;
@@ -26,6 +29,9 @@ INSERT INTO testCleanupR1 (*) VALUES ('d1', 1, 0),('d2', 1, 0),('d3', 1, 0),('d4
 INSERT INTO testCleanupR1 (*) VALUES ('d3', 2, 1);
 INSERT INTO testCleanupR1 (*) VALUES ('d1', 2, 1);
 SELECT * FROM testCleanupR1 order by uid;
+------------------------------
+
+DROP TABLE IF EXISTS testSettingsR1;
 CREATE TABLE testSettingsR1 (col1 String, version UInt32, is_deleted UInt8)
     ENGINE = ReplicatedReplacingMergeTree('/clickhouse/{database}/tables/test_setting/', 'r1', version, is_deleted)
     ORDER BY col1
@@ -39,6 +45,7 @@ CREATE TABLE test (uid String, version UInt32, is_deleted String) ENGINE = Repla
 CREATE TABLE test (uid String, version UInt32, is_deleted UInt8) ENGINE = ReplacingMergeTree(version, is_deleted) Order by (uid);
 select 'no cleanup 1', * from test FINAL order by uid;
 select 'no cleanup 2', * from test order by uid;
+DROP TABLE test;
 CREATE TABLE test (uid String, version UInt32, is_deleted UInt8) ENGINE = ReplicatedReplacingMergeTree('/clickhouse/{database}/tables/no_cleanup/', 'r1', version, is_deleted) Order by (uid);
 select 'no cleanup 3', * from test FINAL order by uid;
 select 'no cleanup 4', * from test order by uid;

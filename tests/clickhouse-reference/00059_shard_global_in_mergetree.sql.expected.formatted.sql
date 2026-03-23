@@ -1,3 +1,7 @@
+-- Tags: shard
+-- test for #56790
+SYSTEM DROP  TABLE IF EXISTS test_local;
+
 CREATE TABLE test_local
 (
     x Int64
@@ -31,3 +35,5 @@ WHERE * IN (
     );
 
 SET prefer_localhost_replica = 0;
+
+SYSTEM DROP  TABLE test_local;

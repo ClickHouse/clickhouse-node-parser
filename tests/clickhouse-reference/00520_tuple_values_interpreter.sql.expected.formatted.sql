@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tuple;
+
 CREATE TABLE tuple
 (
     t Tuple(Date, UInt32, UInt64)
@@ -13,3 +15,5 @@ INSERT INTO tuple;
 SELECT *
 FROM tuple
 ORDER BY t ASC;
+
+SYSTEM DROP  TABLE tuple;

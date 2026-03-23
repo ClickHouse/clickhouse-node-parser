@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS users;
+
+SYSTEM DROP  TABLE IF EXISTS users_ext;
+
 CREATE TABLE users
 (
     uid Int16,

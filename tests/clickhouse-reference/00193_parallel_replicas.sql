@@ -1,3 +1,7 @@
+-- Tags: replica
+
+DROP TABLE IF EXISTS parallel_replicas;
+DROP TABLE IF EXISTS parallel_replicas_backup;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE parallel_replicas (d Date DEFAULT today(), x UInt32, u UInt64, s String) ENGINE = MergeTree(d, cityHash64(u, s), (x, d, cityHash64(u, s)), 8192);
 INSERT INTO parallel_replicas (x, u, s) VALUES (1, 2, 'A'),(3, 4, 'B'),(5, 6, 'C'),(7, 8, 'D'),(9,10,'E');
@@ -23,7 +27,9 @@ SELECT count() > 0 FROM parallel_replicas;
 SET parallel_replica_offset = 1;
 SET parallel_replicas_count = 0;
 SELECT x, u, s FROM parallel_replicas_backup ORDER BY x, u, s ASC;
+DROP TABLE parallel_replicas_backup;
 /* Three replicas */
 
 SET parallel_replicas_count = 3;
 SET parallel_replica_offset = 2;
+DROP TABLE parallel_replicas;

@@ -1,6 +1,8 @@
 -- Random settings limits: index_granularity=(100, None)
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     d Dynamic
@@ -21,3 +23,5 @@ GROUP BY
     dynamicType(d),
     isDynamicElementInSharedData(d)
 ORDER BY count() ASC;
+
+SYSTEM drop  table test;

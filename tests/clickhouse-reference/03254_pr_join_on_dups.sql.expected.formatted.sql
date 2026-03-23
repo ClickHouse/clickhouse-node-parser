@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists X sync;
+
+SYSTEM drop  table if exists Y sync;
+
 SET min_bytes_to_use_direct_io = 0; -- min_bytes_to_use_direct_io > 0 is broken and leads to unexpected results, https://github.com/ClickHouse/ClickHouse/issues/65690
 
 CREATE TABLE X
@@ -453,3 +457,7 @@ ORDER BY
     s.id ASC,
     s.x_a ASC,
     s.x_b ASC;
+
+SYSTEM drop  table X sync;
+
+SYSTEM drop  table Y sync;

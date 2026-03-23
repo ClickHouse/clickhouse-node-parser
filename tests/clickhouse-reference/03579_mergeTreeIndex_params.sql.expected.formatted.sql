@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_mt_params;
+
 CREATE TABLE t_mt_params
 (
     s String,
@@ -44,3 +46,5 @@ SELECT *
 FROM mergeTreeIndex(currentDatabase(), 't_mt_params', with_marks = 1, with_minmax = 1)
 ORDER BY `ALL` ASC
 FORMAT TSVWithNames;
+
+SYSTEM DROP  TABLE t_mt_params;

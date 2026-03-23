@@ -8,6 +8,7 @@ select mortonDecode(tuple(1), 4294967286);
 select mortonEncode(tuple(4), 128);
 select mortonDecode(tuple(4), 2147483648);
 select mortonEncode((4,4,4,4), 128, 128, 128, 128);
+drop table if exists morton_numbers_mask_02457;
 create table morton_numbers_mask_02457(
     n1 UInt8,
     n2 UInt8,
@@ -23,6 +24,7 @@ from           numbers(256-16, 16) n1
     cross join numbers(256-16, 16) n3
     cross join numbers(256-16, 16) n4
 ;
+drop table if exists morton_numbers_mask_1_02457;
 create table morton_numbers_mask_1_02457(
     n1 UInt64,
     n2 UInt64,
@@ -45,6 +47,7 @@ select n1.number, n2.number
 from           numbers(pow(2, 32)-64, 64) n1
     cross join numbers(pow(2, 8)-64, 64) n2
 ;
+drop table if exists morton_numbers_mask_2_02457;
 create table morton_numbers_mask_2_02457(
     n1 UInt64,
     n2 UInt64
@@ -67,6 +70,7 @@ from           numbers(pow(2, 16)-64, 64) n1
                    cross join numbers(pow(2, 16)-64, 64) n2
     cross join numbers(pow(2, 8)-64, 64) n3
 ;
+drop table if exists morton_numbers_mask_3_02457;
 create table morton_numbers_mask_3_02457(
     n1 UInt64,
     n2 UInt64,

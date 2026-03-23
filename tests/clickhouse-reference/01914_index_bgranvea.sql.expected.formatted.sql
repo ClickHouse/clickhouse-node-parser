@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -20,3 +22,5 @@ SELECT *
 FROM test
 WHERE insid IN (1)
     AND insidvalue IN (1);
+
+SYSTEM DROP  TABLE test;

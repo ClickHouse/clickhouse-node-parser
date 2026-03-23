@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS tdm;
+
+SYSTEM DROP  TABLE IF EXISTS tdm2;
+
 CREATE TABLE tdm
 (
     x DateTime('Asia/Istanbul')
@@ -43,3 +47,7 @@ SET parallel_replicas_index_analysis_only_on_coordinator = 0;
 SELECT toDateTime(timestamp)
 FROM tdm2
 WHERE toHour(toDateTime(timestamp)) = 13;
+
+SYSTEM DROP  TABLE tdm;
+
+SYSTEM DROP  TABLE tdm2;

@@ -1,3 +1,6 @@
+-- Tags: long, no-random-merge-tree-settings
+SYSTEM DROP  TABLE IF EXISTS t_vertical_merge_memory;
+
 CREATE TABLE t_vertical_merge_memory
 (
     id UInt64,

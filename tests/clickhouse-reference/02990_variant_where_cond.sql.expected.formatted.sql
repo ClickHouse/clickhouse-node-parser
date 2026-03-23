@@ -26,6 +26,8 @@ SELECT *
 FROM test
 WHERE v = 42::UInt64::Variant(String, UInt64); -- {serverError NO_COMMON_TYPE}
 
+SYSTEM drop  table test;
+
 -- Test with compatible types works fine
 CREATE TABLE test_compat
 (
@@ -43,3 +45,5 @@ WHERE v = 42;
 SELECT *
 FROM test_compat
 WHERE v = 10;
+
+SYSTEM drop  table test_compat;

@@ -1,3 +1,6 @@
+-- Tags: log-engine
+
+DROP TABLE IF EXISTS numbers_squashed;
 CREATE TABLE numbers_squashed (number UInt8) ENGINE = StripeLog;
 SET min_insert_block_size_rows = 100;
 SET min_insert_block_size_bytes = 0;
@@ -34,3 +37,4 @@ SELECT arrayJoin(range(100))
 UNION ALL
 SELECT arrayJoin(range(10));
 SET min_insert_block_size_rows = 10;
+DROP TABLE numbers_squashed;

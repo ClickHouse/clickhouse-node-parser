@@ -13,6 +13,8 @@ SELECT
     notEmpty(json)
 FROM test;
 
+SYSTEM drop  table test;
+
 CREATE TABLE test
 (
     json JSON(a UInt32)

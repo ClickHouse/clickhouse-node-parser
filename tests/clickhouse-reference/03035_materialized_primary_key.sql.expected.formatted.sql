@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -7,6 +9,8 @@ ENGINE = MergeTree
 ORDER BY id;
 
 INSERT INTO test;
+
+SYSTEM DROP  VIEW IF EXISTS test_mv;
 
 CREATE MATERIALIZED VIEW test_mv
 (
@@ -20,6 +24,8 @@ SELECT
     id,
     value
 FROM test;
+
+SYSTEM DROP  VIEW IF EXISTS test_mv_pk;
 
 CREATE MATERIALIZED VIEW test_mv_pk
 (

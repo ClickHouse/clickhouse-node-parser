@@ -1363,6 +1363,9 @@ SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number
 SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number % 3) = 0 THEN [toFloat64(2), toFloat64(3)] ELSE [toUInt32(3), toUInt32(3)] END FROM system.numbers LIMIT 10;
 SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number % 3) = 0 THEN [toFloat64(2), toFloat64(3)] ELSE [toFloat32(3), toFloat32(3)] END FROM system.numbers LIMIT 10;
 SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number % 3) = 0 THEN [toFloat64(2), toFloat64(3)] ELSE [toFloat64(3), toFloat64(3)] END FROM system.numbers LIMIT 10;
+/* No CASE expression. String clauses. */
+
+DROP TABLE IF EXISTS multi_if_check;
 CREATE TABLE multi_if_check(col1 UInt64, col2 String, col3 String, col4 String) ENGINE=TinyLog;
 INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(1, 'A', 'AB', 'ABC');
 INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(2, 'B', 'BC', 'BCD');

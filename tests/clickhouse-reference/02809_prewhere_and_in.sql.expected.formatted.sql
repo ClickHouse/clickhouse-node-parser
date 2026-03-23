@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_02809;
+
 CREATE TABLE t_02809
 (
     a Int64,
@@ -109,3 +111,9 @@ FROM (
         WHERE a NOT IN (t_02809_aux)
     )
 WHERE like(`explain`, '%Prewhere filter');
+
+SYSTEM DROP  TABLE t_02809;
+
+SYSTEM DROP  TABLE t_02809_set;
+
+SYSTEM DROP  TABLE t_02809_aux;

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS minmax_idx;
+
+SYSTEM DROP  TABLE IF EXISTS minmax_idx2;
+
 CREATE TABLE minmax_idx
 (
     u64 UInt64,
@@ -27,3 +31,7 @@ INSERT INTO minmax_idx2;
 SELECT *
 FROM minmax_idx2
 WHERE u64 * i32 = 2;
+
+SYSTEM DROP  TABLE minmax_idx;
+
+SYSTEM DROP  TABLE minmax_idx2;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lwu_sequence;
+
 SET enable_lightweight_update = 1;
 
 CREATE TABLE t_lwu_sequence
@@ -32,3 +34,5 @@ WHERE database = currentDatabase()
     AND table = 't_lwu_sequence'
     AND startsWith(name, 'patch')
     AND active;
+
+SYSTEM DROP  TABLE t_lwu_sequence;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_block_number_delete sync;
+
 SET mutations_sync = 2;
 
 CREATE TABLE t_block_number_delete
@@ -36,6 +38,8 @@ WHERE database = currentDatabase()
     AND active
 GROUP BY column
 ORDER BY column ASC;
+
+SYSTEM DROP  TABLE t_block_number_delete;
 
 CREATE TABLE t_block_number_delete
 (

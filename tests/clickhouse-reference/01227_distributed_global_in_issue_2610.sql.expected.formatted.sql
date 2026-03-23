@@ -1,3 +1,7 @@
+-- Tags: distributed
+-- Test from the issue https://github.com/ClickHouse/ClickHouse/issues/2610
+SYSTEM drop  table if exists data_01227;
+
 CREATE TABLE data_01227
 (
     key Int
@@ -23,3 +27,5 @@ PREWHERE key GLOBAL IN (
         FROM data_01227
         PREWHERE key = 2
     );
+
+SYSTEM drop  table data_01227;

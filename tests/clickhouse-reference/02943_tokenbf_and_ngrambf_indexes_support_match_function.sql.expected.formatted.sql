@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS tokenbf_tab;
+
+SYSTEM DROP  TABLE IF EXISTS ngrambf_tab;
+
 CREATE TABLE tokenbf_tab
 (
     id UInt32,
@@ -197,3 +201,7 @@ FROM (
     )
 WHERE like(`explain`, '%Granules: %')
 SETTINGS enable_analyzer = 1;
+
+SYSTEM DROP  TABLE tokenbf_tab;
+
+SYSTEM DROP  TABLE ngrambf_tab;

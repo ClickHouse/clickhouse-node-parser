@@ -6,6 +6,8 @@ SET output_format_pretty_highlight_trailing_spaces = 1;
 
 SET output_format_pretty_fallback_to_vertical = 0;
 
+SYSTEM DROP  TABLE IF EXISTS strings_whitespace;
+
 CREATE TABLE strings_whitespace
 (
     str String
@@ -41,3 +43,5 @@ FORMAT PrettySpaceMonoBlock;
 SELECT *
 FROM strings_whitespace
 FORMAT Vertical;
+
+SYSTEM DROP  TABLE strings_whitespace;

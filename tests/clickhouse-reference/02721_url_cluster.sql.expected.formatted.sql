@@ -69,6 +69,8 @@ ORDER BY
     c2 ASC,
     c3 ASC;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt32,
@@ -82,3 +84,5 @@ FROM urlCluster('test_cluster_one_shard_three_replicas_localhost', 'http://local
 
 SELECT *
 FROM test;
+
+SYSTEM drop  table test;

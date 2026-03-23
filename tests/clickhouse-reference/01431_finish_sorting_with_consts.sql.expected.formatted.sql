@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS pk_func;
+
 CREATE TABLE pk_func
 (
     d DateTime,

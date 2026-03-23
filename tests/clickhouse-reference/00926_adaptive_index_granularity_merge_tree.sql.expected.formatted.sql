@@ -2,6 +2,8 @@
 ----- Group of very similar simple tests ------
 SELECT '----HORIZONTAL MERGE TESTS----';
 
+SYSTEM DROP  TABLE IF EXISTS zero_rows_per_granule;
+
 CREATE TABLE zero_rows_per_granule
 (
     p Date,
@@ -26,6 +28,8 @@ WHERE table = 'zero_rows_per_granule'
     AND active = 1;
 
 INSERT INTO zero_rows_per_granule (p, k, v1, v2);
+
+SYSTEM DROP  TABLE IF EXISTS two_rows_per_granule;
 
 CREATE TABLE two_rows_per_granule
 (
@@ -52,6 +56,8 @@ WHERE table = 'two_rows_per_granule'
 
 INSERT INTO two_rows_per_granule (p, k, v1, v2);
 
+SYSTEM DROP  TABLE IF EXISTS four_rows_per_granule;
+
 CREATE TABLE four_rows_per_granule
 (
     p Date,
@@ -77,6 +83,8 @@ WHERE table = 'four_rows_per_granule'
 
 INSERT INTO four_rows_per_granule (p, k, v1, v2);
 
+SYSTEM DROP  TABLE IF EXISTS huge_granularity_small_blocks;
+
 CREATE TABLE huge_granularity_small_blocks
 (
     p Date,
@@ -101,6 +109,8 @@ WHERE table = 'huge_granularity_small_blocks'
     AND active = 1;
 
 INSERT INTO huge_granularity_small_blocks (p, k, v1, v2);
+
+SYSTEM DROP  TABLE IF EXISTS adaptive_granularity_alter;
 
 CREATE TABLE adaptive_granularity_alter
 (

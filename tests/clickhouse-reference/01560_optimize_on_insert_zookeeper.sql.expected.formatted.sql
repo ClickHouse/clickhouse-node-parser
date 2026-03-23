@@ -1,3 +1,8 @@
+-- Tags: zookeeper
+SYSTEM DROP  TABLE IF EXISTS empty1;
+
+SYSTEM DROP  TABLE IF EXISTS empty2;
+
 CREATE TABLE empty1
 (
     key UInt32,

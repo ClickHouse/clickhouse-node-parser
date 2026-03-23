@@ -78,6 +78,10 @@ ARRAY JOIN ax;
 
 SET joined_subquery_requires_alias = 1;
 
+SYSTEM DROP  TABLE IF EXISTS f;
+
+SYSTEM DROP  TABLE IF EXISTS d;
+
 CREATE TABLE f
 (
     d_ids Array(Int64)

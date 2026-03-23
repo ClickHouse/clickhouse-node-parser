@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_02021;
+
 CREATE TABLE data_02021
 (
     key Int
@@ -29,3 +31,6 @@ FROM data_02021
 PREWHERE 0
     OR ignore(key)
 WHERE key = 1;
+
+-- { echoOff }
+SYSTEM drop  table data_02021;

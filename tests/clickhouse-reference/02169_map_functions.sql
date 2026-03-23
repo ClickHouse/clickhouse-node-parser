@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS table_map;
 CREATE TABLE table_map (id UInt32, col Map(String, UInt64)) engine = MergeTree() ORDER BY tuple();
 INSERT INTO table_map SELECT number, map('key1', number, 'key2', number * 2) FROM numbers(1111, 3);
 INSERT INTO table_map SELECT number, map('key3', number, 'key2', number + 1, 'key4', number + 2) FROM numbers(100, 4);
@@ -81,3 +82,4 @@ SELECT mapConcat([1, 2], map(1, 2)); -- { serverError NO_COMMON_TYPE }
 SELECT mapSort(map(1, 2), map(3, 4)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT mapUpdate(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT mapUpdate(map(1, 3, 3, 2), map(1, 0, 2, 0),  map(1, 0, 2, 0)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+DROP TABLE table_map;

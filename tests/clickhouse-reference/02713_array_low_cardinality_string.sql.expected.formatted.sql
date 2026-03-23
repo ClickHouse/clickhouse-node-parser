@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     foo Array(LowCardinality(String)),
@@ -17,3 +19,5 @@ SELECT
 FROM `system`.data_skipping_indices
 WHERE database = currentDatabase()
     AND table = 'tab';
+
+SYSTEM DROP  TABLE tab;

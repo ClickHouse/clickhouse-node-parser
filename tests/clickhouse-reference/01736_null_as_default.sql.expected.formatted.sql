@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_enum;
+
 CREATE TABLE test_enum
 (
     c Nullable(Enum16('A' = 1, 'B' = 2))
@@ -13,3 +15,5 @@ SELECT toString(c)
 FROM test_enum;
 
 SELECT toString('aaaa', NULL);
+
+SYSTEM drop  table test_enum;

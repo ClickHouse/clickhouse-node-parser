@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS ttl_dict;
+DROP DICTIONARY IF EXISTS always_alive_ids_dict;
+DROP TABLE IF EXISTS always_alive_ids;
 CREATE TABLE always_alive_ids (id UInt64) engine=Memory();
 INSERT INTO always_alive_ids VALUES (-1);
 CREATE DICTIONARY always_alive_ids_dict (id UInt64) PRIMARY KEY id SOURCE(CLICKHOUSE(TABLE 'always_alive_ids')) LAYOUT(HASHED()) LIFETIME(0);

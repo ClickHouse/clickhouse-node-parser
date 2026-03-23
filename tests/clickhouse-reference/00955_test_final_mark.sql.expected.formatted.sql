@@ -1,6 +1,8 @@
 -- Tags: no-random-merge-tree-settings
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE IF EXISTS mt_with_pk;
+
 CREATE TABLE mt_with_pk
 (
     d Date DEFAULT '2000-01-01',
@@ -44,6 +46,8 @@ SELECT COUNT(*)
 FROM mt_with_pk
 WHERE z + w > 5000;
 
+SYSTEM DROP  TABLE IF EXISTS alter_attach;
+
 CREATE TABLE alter_attach
 (
     x UInt64,
@@ -64,6 +68,8 @@ ORDER BY x ASC;
 
 INSERT INTO alter_attach;
 
+SYSTEM DROP  TABLE IF EXISTS alter_update_00806;
+
 CREATE TABLE alter_update_00806
 (
     d Date,
@@ -81,6 +87,8 @@ INSERT INTO alter_update_00806 (d, e);
 SELECT e
 FROM alter_update_00806
 ORDER BY d ASC;
+
+SYSTEM DROP  TABLE IF EXISTS mt_without_pk;
 
 CREATE TABLE mt_without_pk
 (
@@ -109,6 +117,8 @@ WHERE table = 'mt_without_pk'
     AND database = currentDatabase();
 
 INSERT INTO mt_without_pk (d, x, y, z, `n.Age`, `n.Name`);
+
+SYSTEM DROP  TABLE IF EXISTS mt_with_small_granularity;
 
 CREATE TABLE mt_with_small_granularity
 (

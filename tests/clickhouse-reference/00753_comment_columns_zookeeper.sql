@@ -1,3 +1,6 @@
+-- Tags: zookeeper
+
+DROP TABLE IF EXISTS check_comments;
 CREATE TABLE check_comments
   (
     column_name1 UInt8 DEFAULT 1 COMMENT 'comment',
@@ -5,3 +8,4 @@ CREATE TABLE check_comments
   ) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00753/comments', 'r1')
     ORDER BY column_name1;
 SELECT * FROM system.columns WHERE table = 'check.comments' and database = currentDatabase();
+DROP TABLE check_comments;

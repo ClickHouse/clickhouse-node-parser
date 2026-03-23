@@ -4,6 +4,8 @@ SET max_threads = 1;
 
 SET max_insert_threads = 1;
 
+SYSTEM drop  table if exists test_ins_arr;
+
 CREATE TABLE test_ins_arr
 (
     date Date,
@@ -20,6 +22,10 @@ LIMIT 10000;
 SELECT *
 FROM test_ins_arr
 LIMIT 10;
+
+SYSTEM drop  table test_ins_arr;
+
+SYSTEM drop  table if exists test_ins_null;
 
 CREATE TABLE test_ins_null
 (
@@ -38,6 +44,10 @@ SELECT *
 FROM test_ins_null
 LIMIT 10;
 
+SYSTEM drop  table test_ins_null;
+
+SYSTEM drop  table if exists test_ins_arr_null;
+
 CREATE TABLE test_ins_arr_null
 (
     date Date,
@@ -54,6 +64,10 @@ LIMIT 10000;
 SELECT *
 FROM test_ins_arr_null
 LIMIT 10;
+
+SYSTEM drop  table test_ins_arr_null;
+
+SYSTEM drop  table if exists test_ins_arr_arr;
 
 CREATE TABLE test_ins_arr_arr
 (
@@ -72,6 +86,10 @@ SELECT *
 FROM test_ins_arr_arr
 LIMIT 10;
 
+SYSTEM drop  table test_ins_arr_arr;
+
+SYSTEM drop  table if exists test_ins_arr_arr_null;
+
 CREATE TABLE test_ins_arr_arr_null
 (
     date Date,
@@ -89,6 +107,10 @@ SELECT *
 FROM test_ins_arr_arr_null
 LIMIT 10;
 
+SYSTEM drop  table test_ins_arr_arr_null;
+
+SYSTEM drop  table if exists test_ins_arr_arr_arr;
+
 CREATE TABLE test_ins_arr_arr_arr
 (
     date Date,
@@ -105,3 +127,5 @@ LIMIT 10000;
 SELECT *
 FROM test_ins_arr_arr_arr
 LIMIT 10;
+
+SYSTEM drop  table test_ins_arr_arr_arr;

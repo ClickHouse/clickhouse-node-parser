@@ -43,6 +43,9 @@ SELECT *
 FROM information_schema.tables
 SETTINGS use_query_cache = 1; -- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }
 
+-- Issue #69010: A system table name appears as a literal. That's okay and must not throw.
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     uid Int16,
@@ -55,6 +58,8 @@ FROM tab
 WHERE name = 'system.one'
 SETTINGS use_query_cache = true;
 
+SYSTEM DROP  TABLE tab;
+
 -- System tables can be "hidden" inside e.g. table functions
 SELECT *
 FROM clusterAllReplicas('test_shard_localhost', `system`.one)
@@ -63,6 +68,10 @@ SETTINGS use_query_cache = 1; -- {serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE
 SELECT *
 FROM clusterAllReplicas('test_shard_localhost', 'system.one')
 SETTINGS use_query_cache = 1; -- {serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }
+
+-- Note how in the previous query ^^ 'system.one' is also a literal. ClusterAllReplicas gets special handling.
+-- Criminal edge case that a user creates a table named "system". The query cache must not reject queries against it.
+SYSTEM DROP  TABLE IF EXISTS system;
 
 CREATE TABLE `system`
 (
@@ -74,6 +83,11 @@ SELECT *
 FROM `system`
 SETTINGS use_query_cache = 1;
 
+SYSTEM DROP  TABLE system;
+
+-- But queries against system.system are rejected.
+SYSTEM DROP  TABLE IF EXISTS system.system;
+
 CREATE TABLE `system`.`system`
 (
     c UInt64
@@ -83,3 +97,5 @@ ENGINE = Memory;
 SELECT *
 FROM `system`.`system`
 SETTINGS use_query_cache = 1; -- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }
+
+SYSTEM DROP  TABLE system.system;

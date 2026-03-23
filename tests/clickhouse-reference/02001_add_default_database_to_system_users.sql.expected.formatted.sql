@@ -5,3 +5,5 @@ CREATE USER IF NOT EXISTS u_02001 DEFAULT DATABASE `system`;
 SELECT default_database
 FROM `system`.users
 WHERE name = 'u_02001';
+
+SYSTEM drop  user if exists u_02001;

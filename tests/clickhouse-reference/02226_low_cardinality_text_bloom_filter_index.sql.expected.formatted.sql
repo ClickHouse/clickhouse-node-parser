@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS bf_tokenbf_lowcard_test;
+
+SYSTEM DROP  TABLE IF EXISTS bf_ngram_lowcard_test;
+
 CREATE TABLE bf_tokenbf_lowcard_test
 (
     row_id UInt32,
@@ -149,3 +153,7 @@ SELECT *
 FROM bf_ngram_lowcard_test
 WHERE like(lc_fixed, '%CD5%')
 SETTINGS force_data_skipping_indices = 'lc_fixed_ngram';
+
+SYSTEM DROP  TABLE bf_tokenbf_lowcard_test;
+
+SYSTEM DROP  TABLE bf_ngram_lowcard_test;

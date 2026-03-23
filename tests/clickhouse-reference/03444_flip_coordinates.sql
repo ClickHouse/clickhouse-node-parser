@@ -15,6 +15,7 @@ SELECT flipCoordinates(readWkt('MULTIPOLYGON(((0 0, 10 0, 10 10, 0 10)), ((20 20
 SELECT flipCoordinates(readWkt('POINT(-73.935242 40.730610)'));
 SELECT flipCoordinates(readWkt('POLYGON((-180 -90, 180 -90, 180 90, -180 90, -180 -90))'));
 SELECT flipCoordinates(materialize(readWkt('POINT(5 10)'))) FROM numbers(3);
+DROP TABLE IF EXISTS test_geom;
 CREATE TABLE test_geom (id UInt32, geom Geometry) ENGINE = Memory;
 INSERT INTO test_geom VALUES
     (1, readWkt('POINT(10 20)')),
@@ -23,3 +24,4 @@ INSERT INTO test_geom VALUES
     (4, readWkt('POINT(30 40)')),
     (5, readWkt('MULTIPOLYGON(((0 0, 2 0, 2 2, 0 2, 0 0)))'));
 SELECT id, flipCoordinates(geom) FROM test_geom ORDER BY id;
+DROP TABLE test_geom;

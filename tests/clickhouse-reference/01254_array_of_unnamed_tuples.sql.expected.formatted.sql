@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mass_table_457;
+
 CREATE TABLE mass_table_457
 (
     key Array(Tuple(Float64, Float64)),
@@ -12,3 +14,5 @@ LIMIT 10;
 
 SELECT *
 FROM mass_table_457;
+
+SYSTEM DROP  TABLE mass_table_457;

@@ -1,3 +1,7 @@
+-- Tags: no-random-merge-tree-settings
+-- - no-random-merge-tree-settings -- may change amount of granulas
+SYSTEM drop  table if exists data;
+
 CREATE TABLE data
 (
     key Int,

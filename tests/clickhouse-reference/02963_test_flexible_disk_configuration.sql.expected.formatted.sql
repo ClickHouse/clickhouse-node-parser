@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a Int32

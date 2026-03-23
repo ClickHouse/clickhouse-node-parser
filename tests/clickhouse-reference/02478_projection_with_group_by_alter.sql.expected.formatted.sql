@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS testing;
+
 CREATE TABLE testing
 (
     a String,
@@ -39,3 +41,6 @@ FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'testing'
     AND NOT is_done;
+
+-- { echoOff }
+SYSTEM DROP  TABLE testing;

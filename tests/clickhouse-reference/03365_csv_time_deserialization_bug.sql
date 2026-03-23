@@ -1,6 +1,7 @@
 SET enable_time_time64_type = 1;
 SET input_format_csv_use_default_on_bad_values = 1;
 SET input_format_parallel_parsing = 1;
+DROP TABLE IF EXISTS t0;
 CREATE TABLE t0
 (
     c0 Int,

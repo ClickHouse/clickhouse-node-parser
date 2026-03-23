@@ -1,3 +1,8 @@
+-- Tags: log-engine
+SYSTEM DROP  TABLE IF EXISTS test_local;
+
+SYSTEM DROP  TABLE IF EXISTS test_distributed;
+
 CREATE TABLE test_local
 (
     name String,
@@ -46,6 +51,12 @@ PREWHERE name GLOBAL IN (
 
 SET prefer_localhost_replica = 0;
 
+SYSTEM DROP  TABLE test_local;
+
+SYSTEM DROP  TABLE test_distributed;
+
+SYSTEM DROP  TABLE IF EXISTS test_log;
+
 CREATE TABLE test_log
 (
     a int,
@@ -58,3 +69,5 @@ INSERT INTO test_log;
 SELECT count()
 FROM merge(currentDatabase(), '^test_log$')
 PREWHERE a = 3; -- { serverError 182 }
+
+SYSTEM DROP  TABLE test_log;

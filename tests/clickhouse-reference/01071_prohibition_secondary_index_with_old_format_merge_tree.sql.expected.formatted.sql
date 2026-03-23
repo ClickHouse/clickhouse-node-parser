@@ -14,3 +14,7 @@ CREATE TABLE new_syntax_01071_test
 )
 ENGINE = MergeTree()
 ORDER BY id;
+
+SYSTEM DROP  TABLE IF EXISTS old_syntax_01071_test;
+
+SYSTEM DROP  TABLE IF EXISTS new_syntax_01071_test;

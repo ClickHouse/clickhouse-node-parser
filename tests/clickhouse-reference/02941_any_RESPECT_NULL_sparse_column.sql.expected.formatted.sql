@@ -1,3 +1,6 @@
+-- regression for the case when aggregate function will be called with from==to for sparse column
+SYSTEM DROP  TABLE IF EXISTS data_sparse_column;
+
 CREATE TABLE data_sparse_column
 (
     key Int64,

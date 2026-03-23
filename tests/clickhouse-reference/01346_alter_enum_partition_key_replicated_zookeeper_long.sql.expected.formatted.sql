@@ -3,6 +3,10 @@ SET insert_keeper_fault_injection_probability = 0; -- disable fault injection; p
 
 SET replication_alter_partitions_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS test SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS test2 SYNC;
+
 CREATE TABLE test
 (
     x Enum('hello' = 1, 'world' = 2),
@@ -62,3 +66,7 @@ FROM test2
 ORDER BY x ASC;
 
 INSERT INTO test;
+
+SYSTEM DROP  TABLE test SYNC;
+
+SYSTEM DROP  TABLE test2 SYNC;

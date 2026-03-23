@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS join_test;
+
 CREATE TABLE join_test
 (
     id UInt16,
@@ -6,6 +8,8 @@ CREATE TABLE join_test
 ENGINE = Join(`ANY`, `LEFT`, id);
 
 SELECT joinGetOrNull('join_test', 'num', 500);
+
+SYSTEM DROP  TABLE join_test;
 
 CREATE TABLE join_test
 (
@@ -20,6 +24,8 @@ CREATE TABLE join_test
     num Array(UInt16)
 )
 ENGINE = Join(`ANY`, `LEFT`, id);
+
+SYSTEM drop  table if exists test;
 
 CREATE TABLE test
 (

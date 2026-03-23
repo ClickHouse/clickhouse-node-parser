@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -43,3 +45,5 @@ INSERT INTO test_table SELECT
     number,
     number
 FROM numbers(32);
+
+SYSTEM DROP  TABLE test_table;

@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS t_prewarm_cache;
+
 CREATE TABLE t_prewarm_cache
 (
     a UInt64,

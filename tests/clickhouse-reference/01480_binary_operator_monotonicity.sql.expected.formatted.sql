@@ -1,3 +1,19 @@
+SYSTEM DROP  TABLE IF EXISTS binary_op_mono1;
+
+SYSTEM DROP  TABLE IF EXISTS binary_op_mono2;
+
+SYSTEM DROP  TABLE IF EXISTS binary_op_mono3;
+
+SYSTEM DROP  TABLE IF EXISTS binary_op_mono4;
+
+SYSTEM DROP  TABLE IF EXISTS binary_op_mono5;
+
+SYSTEM DROP  TABLE IF EXISTS binary_op_mono6;
+
+SYSTEM DROP  TABLE IF EXISTS binary_op_mono7;
+
+SYSTEM DROP  TABLE IF EXISTS binary_op_mono8;
+
 CREATE TABLE binary_op_mono1
 (
     i int,
@@ -123,6 +139,8 @@ SELECT count()
 FROM binary_op_mono8
 WHERE 1000.0 / i = 33.4;
 
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     i int,
@@ -142,3 +160,5 @@ SET parallel_replicas_index_analysis_only_on_coordinator = 0;
 SELECT *
 FROM x
 WHERE i > 30; -- converted to i / 10 >= 3, thus needs to read 3 granules.
+
+SYSTEM drop  table x;

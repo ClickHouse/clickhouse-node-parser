@@ -1,3 +1,9 @@
+-- Tags: no-fasttest, no-ordinary-database
+-- Tests that quoted and unquoted parameters can be passed to vector search indexes.
+SYSTEM DROP  TABLE IF EXISTS tab1;
+
+SYSTEM DROP  TABLE IF EXISTS tab2;
+
 CREATE TABLE tab1
 (
     id Int32,
@@ -13,6 +19,10 @@ CREATE TABLE tab2
     INDEX vec_idx vec TYPE vector_similarity(hnsw, L2Distance, 1),
     PRIMARY KEY(id)
 );
+
+SYSTEM DROP  TABLE tab1;
+
+SYSTEM DROP  TABLE tab2;
 
 CREATE TABLE tab1
 (

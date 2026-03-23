@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists logs;
+
 CREATE TABLE logs
 (
     a int,

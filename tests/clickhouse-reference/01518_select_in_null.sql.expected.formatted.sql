@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t1
 (
     cA String,
@@ -25,3 +27,5 @@ WHERE CAST(c1 AS Nullable(String)) IN (
         UNION ALL
         SELECT NULL
     );
+
+SYSTEM DROP  TABLE t1;

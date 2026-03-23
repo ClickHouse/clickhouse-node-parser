@@ -25,6 +25,8 @@ FROM url('http://127.0.0.1:8123?query=select+12', 'RawBLOB', headers('X-ClickHou
 SELECT *
 FROM url('http://127.0.0.1:8123?query=select+12', 'RawBLOB', headers('X-ClickHouse-Format' = 'JSONEachRow', 'X-ClickHouse-Database' = 1)); -- { serverError BAD_ARGUMENTS }
 
+SYSTEM drop  table if exists url;
+
 CREATE TABLE url
 (
     i String

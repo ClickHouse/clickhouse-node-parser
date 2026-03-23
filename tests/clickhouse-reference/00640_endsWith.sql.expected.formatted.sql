@@ -16,6 +16,8 @@ SELECT endsWith('123', '32');
 
 SELECT endsWith('123', '');
 
+SYSTEM DROP  TABLE IF EXISTS endsWith_test;
+
 CREATE TABLE endsWith_test
 (
     S1 String,
@@ -39,3 +41,5 @@ FROM endsWith_test
 WHERE endsWith(S2, S3);
 
 SELECT endsWith([], 'str'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+SYSTEM DROP  TABLE endsWith_test;

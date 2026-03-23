@@ -2,6 +2,8 @@
 -- Tag no-parallel-replicas: result of explain is different
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(d Date)
@@ -21,6 +23,8 @@ INSERT INTO test SELECT '{"d" : "2023-01-01"}';
 SELECT *
 FROM test
 ORDER BY json.d ASC;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

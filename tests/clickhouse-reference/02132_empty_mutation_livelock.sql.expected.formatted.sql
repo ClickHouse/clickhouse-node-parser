@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists a8x;
+
 SET empty_result_for_aggregation_by_empty_set = 1;
 
 CREATE TABLE a8x

@@ -1,3 +1,6 @@
+-- Tags: no-random-settings
+
+DROP TABLE IF EXISTS t_merge_tree_index;
 SET output_format_pretty_row_numbers = 0;
 SET print_pretty_type_names = 0;
 SET output_format_pretty_named_tuples_as_json = 0;
@@ -26,3 +29,4 @@ INSERT INTO t_merge_tree_index SELECT number % 5, number, number, 10, ['foo', 'b
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_merge_tree_index) ORDER BY part_name, mark_number FORMAT PrettyCompactNoEscapesMonoBlock;
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_merge_tree_index, with_marks = true) ORDER BY part_name, mark_number FORMAT PrettyCompactNoEscapesMonoBlock;
 SET describe_compact_output = 1;
+DROP TABLE t_merge_tree_index;

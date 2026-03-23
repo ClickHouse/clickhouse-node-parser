@@ -1,3 +1,7 @@
+-- Tags: stateful, no-tsan, no-msan, no-asan, no-parallel
+-- no-parallel: Heavy
+SYSTEM DROP  TABLE IF EXISTS test.hits_1m;
+
 CREATE TABLE test.hits_1m AS test.hits
 ENGINE = MergeTree
 ORDER BY (CounterID, EventDate, intHash32(UserID))
@@ -19,6 +23,8 @@ SETTINGS
     max_parallel_replicas = 1;
 
 CREATE DATABASE IF NOT EXISTS db_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS db_dict.cache_hits;
 
 CREATE DICTIONARY db_dict.cache_hits
 (
@@ -66,3 +72,7 @@ FROM (
         ORDER BY length(arr) DESC
     )
 WHERE arr = [0];
+
+SYSTEM DROP  DATABASE IF  EXISTS db_dict;
+
+SYSTEM DROP  TABLE IF EXISTS hits_1m;

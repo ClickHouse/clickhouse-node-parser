@@ -1,3 +1,11 @@
+-- Possible crash in case of mutations contains subquery, that will use
+-- InterpreterSelectQuery() with only_analyze=true, which uses
+-- getStorageSnapshotWithoutData(), and may crash in
+-- getConditionSelectivityEstimator() since parts was nullptr
+SYSTEM drop  table if exists t0;
+
+SYSTEM drop  table if exists t1;
+
 CREATE TABLE t0
 (
     key Int

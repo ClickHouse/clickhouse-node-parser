@@ -1,3 +1,4 @@
+drop table if exists lc_test;
 CREATE TABLE lc_test
 (
     `id` LowCardinality(String)

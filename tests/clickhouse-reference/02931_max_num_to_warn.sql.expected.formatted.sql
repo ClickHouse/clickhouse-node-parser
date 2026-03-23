@@ -283,3 +283,27 @@ SELECT
 FROM `system`.warnings
 WHERE like(message, 'The number of%')
 ORDER BY message ASC;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_02931;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_1;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_2;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_3;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_4;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_5;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_6;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_7;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_8;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_9;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_10;
+
+SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_11;

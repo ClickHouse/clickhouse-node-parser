@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS join_test;
+
 CREATE TABLE join_test
 (
     id UInt16,
@@ -23,3 +25,6 @@ FROM `system`.numbers
 LIMIT 1000;
 
 SELECT joinGet('join_test', 'num', 500);
+
+-- joinGet('join_test', 'num', 500) will be 1000 and it is not fine
+SYSTEM DROP  TABLE join_test;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02183_dictionary_test_table;
+
 CREATE TABLE `02183_dictionary_test_table`
 (
     id UInt64
@@ -8,6 +10,8 @@ INSERT INTO `02183_dictionary_test_table`;
 
 SELECT *
 FROM `02183_dictionary_test_table`;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02183_flat_dictionary;
 
 CREATE DICTIONARY `02183_flat_dictionary`
 (
@@ -29,6 +33,10 @@ SELECT dictHas('02183_flat_dictionary', 2);
 SELECT *
 FROM `02183_flat_dictionary`;
 
+SYSTEM DROP  DICTIONARY 02183_flat_dictionary;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02183_hashed_dictionary;
+
 CREATE DICTIONARY `02183_hashed_dictionary`
 (
     id UInt64
@@ -46,6 +54,10 @@ SELECT dictHas('02183_hashed_dictionary', 2);
 
 SELECT *
 FROM `02183_hashed_dictionary`;
+
+SYSTEM DROP  DICTIONARY 02183_hashed_dictionary;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02183_hashed_array_dictionary;
 
 CREATE DICTIONARY `02183_hashed_array_dictionary`
 (
@@ -65,6 +77,10 @@ SELECT dictHas('02183_hashed_array_dictionary', 2);
 SELECT *
 FROM `02183_hashed_array_dictionary`;
 
+SYSTEM DROP  DICTIONARY 02183_hashed_array_dictionary;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02183_cache_dictionary;
+
 CREATE DICTIONARY `02183_cache_dictionary`
 (
     id UInt64
@@ -82,6 +98,10 @@ SELECT dictHas('02183_cache_dictionary', 2);
 
 SELECT *
 FROM `02183_cache_dictionary`;
+
+SYSTEM DROP  DICTIONARY 02183_cache_dictionary;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02183_direct_dictionary;
 
 CREATE DICTIONARY `02183_direct_dictionary`
 (
@@ -101,6 +121,12 @@ SELECT dictHas('02183_direct_dictionary', 2);
 SELECT *
 FROM `02183_direct_dictionary`;
 
+SYSTEM DROP  DICTIONARY 02183_direct_dictionary;
+
+SYSTEM DROP  TABLE 02183_dictionary_test_table;
+
+SYSTEM DROP  TABLE IF EXISTS ip_trie_dictionary_source_table;
+
 CREATE TABLE ip_trie_dictionary_source_table
 (
     prefix String
@@ -108,6 +134,8 @@ CREATE TABLE ip_trie_dictionary_source_table
 ENGINE = TinyLog;
 
 INSERT INTO ip_trie_dictionary_source_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02183_ip_trie_dictionary;
 
 CREATE DICTIONARY `02183_ip_trie_dictionary`
 (
@@ -125,6 +153,12 @@ SELECT dictHas('02183_ip_trie_dictionary', tuple(IPv4StringToNum('127.0.0.1')));
 SELECT *
 FROM `02183_ip_trie_dictionary`;
 
+SYSTEM DROP  DICTIONARY 02183_ip_trie_dictionary;
+
+SYSTEM DROP  TABLE ip_trie_dictionary_source_table;
+
+SYSTEM DROP  TABLE IF EXISTS 02183_polygon_dictionary_source_table;
+
 CREATE TABLE `02183_polygon_dictionary_source_table`
 (
     key Array(Array(Array(Tuple(Float64, Float64))))
@@ -132,6 +166,8 @@ CREATE TABLE `02183_polygon_dictionary_source_table`
 ENGINE = TinyLog;
 
 INSERT INTO `02183_polygon_dictionary_source_table`;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02183_polygon_dictionary;
 
 CREATE DICTIONARY `02183_polygon_dictionary`
 (
@@ -149,6 +185,12 @@ SELECT dictHas('02183_polygon_dictionary', tuple(1.5, 1.5));
 SELECT *
 FROM `02183_polygon_dictionary`;
 
+SYSTEM DROP  DICTIONARY 02183_polygon_dictionary;
+
+SYSTEM DROP  TABLE 02183_polygon_dictionary_source_table;
+
+SYSTEM DROP  TABLE IF EXISTS 02183_range_dictionary_source_table;
+
 CREATE TABLE `02183_range_dictionary_source_table`
 (
     key UInt64,
@@ -158,6 +200,8 @@ CREATE TABLE `02183_range_dictionary_source_table`
 ENGINE = TinyLog;
 
 INSERT INTO `02183_range_dictionary_source_table`;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02183_range_dictionary;
 
 CREATE DICTIONARY `02183_range_dictionary`
 (
@@ -177,3 +221,7 @@ FROM `02183_range_dictionary`;
 SELECT dictHas('02183_range_dictionary', 0, 0);
 
 SELECT dictHas('02183_range_dictionary', 0, 2);
+
+SYSTEM DROP  DICTIONARY 02183_range_dictionary;
+
+SYSTEM DROP  TABLE 02183_range_dictionary_source_table;

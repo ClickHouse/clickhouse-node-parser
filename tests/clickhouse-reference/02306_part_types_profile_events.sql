@@ -1,3 +1,6 @@
+-- Tags: no-async-insert
+-- no-async-insert: 1 part is inserted with async inserts
+DROP TABLE IF EXISTS t_parts_profile_events;
 CREATE TABLE t_parts_profile_events (a UInt32)
 ENGINE = MergeTree ORDER BY tuple()
 SETTINGS min_rows_for_wide_part = 10, min_bytes_for_wide_part = 0;
@@ -18,3 +21,4 @@ SELECT part_type FROM system.part_log WHERE database = currentDatabase()
 SELECT part_type, count() > 0 FROM system.part_log WHERE database = currentDatabase()
     AND table = 't_parts_profile_events' AND event_type = 'MergeParts'
     GROUP BY part_type ORDER BY part_type;
+DROP TABLE t_parts_profile_events;

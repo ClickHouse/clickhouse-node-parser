@@ -1,3 +1,8 @@
+-- Tags: no-tsan, no-asan, no-ubsan, no-msan, no-fasttest
+-- no-fasttest: Slow test
+-- no sanitizers: too slow sometimes
+SYSTEM DROP  TABLE IF EXISTS 02581_trips;
+
 CREATE TABLE `02581_trips`
 (
     id UInt32,
@@ -52,3 +57,6 @@ ORDER BY _part ASC;
 SELECT count()
 FROM `02581_trips`
 WHERE description = '';
+
+-- { echoOff }
+SYSTEM DROP  TABLE 02581_trips;

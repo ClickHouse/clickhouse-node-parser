@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     b Int64,
@@ -20,3 +22,5 @@ SELECT
     JSONLength(grp_aggreg, 100, NULL)
 FROM test_table
 SETTINGS optimize_aggregation_in_order = 1;
+
+SYSTEM DROP  TABLE test_table;

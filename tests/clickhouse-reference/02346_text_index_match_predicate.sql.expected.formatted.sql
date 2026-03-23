@@ -2,6 +2,8 @@
 -- Tests that match() utilizes the text index
 SET enable_full_text_index = true;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -105,3 +107,5 @@ FROM (
     )
 WHERE like(`explain`, '%Granules: %')
 SETTINGS enable_analyzer = 1;
+
+SYSTEM DROP  TABLE tab;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS lwd_test;
 SET enable_lightweight_update = 1;
 SET lightweight_delete_mode = 'lightweight_update_force';
 CREATE TABLE lwd_test (id UInt64 , value String) ENGINE MergeTree() ORDER BY id
@@ -6,3 +7,4 @@ INSERT INTO lwd_test SELECT number, randomString(10) FROM system.numbers LIMIT 1
 SET mutations_sync = 2;
 SELECT 'Count', count() FROM lwd_test;
 SELECT 'First row', id, length(value) FROM lwd_test ORDER BY id LIMIT 1;
+DROP TABLE lwd_test;

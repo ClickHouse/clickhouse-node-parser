@@ -1,5 +1,7 @@
 SET optimize_trivial_insert_select = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_sparse_distinct;
+
 CREATE TABLE t_sparse_distinct
 (
     id UInt32,
@@ -32,3 +34,5 @@ ORDER BY name ASC;
 SELECT DISTINCT v
 FROM t_sparse_distinct
 ORDER BY v ASC;
+
+SYSTEM DROP  TABLE t_sparse_distinct;

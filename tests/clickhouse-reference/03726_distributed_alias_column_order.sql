@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_local;
 CREATE TABLE test_local
 (
     `a` UInt64,

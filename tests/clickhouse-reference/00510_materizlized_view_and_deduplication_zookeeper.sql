@@ -1,3 +1,10 @@
+-- Tags: zookeeper, no-ordinary-database, no-parallel
+-- Tag no-parallel: static UUID
+
+DROP TABLE IF EXISTS with_deduplication;
+DROP TABLE IF EXISTS without_deduplication;
+DROP TABLE IF EXISTS with_deduplication_mv;
+DROP TABLE IF EXISTS without_deduplication_mv;
 SET database_replicated_allow_explicit_uuid=3;
 SET database_replicated_allow_replicated_engine_arguments=3;
 CREATE TABLE with_deduplication(x UInt32)

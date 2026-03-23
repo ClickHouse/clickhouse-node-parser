@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM drop  table if exists mt1;
+
 CREATE TABLE mt1
 (
     time DateTime,

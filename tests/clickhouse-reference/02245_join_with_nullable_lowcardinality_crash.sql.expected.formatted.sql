@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists with_nullable;
+
+SYSTEM drop  table if exists without_nullable;
+
 CREATE TABLE with_nullable
 (
     timestamp UInt32,
@@ -24,3 +28,7 @@ FROM
 RIGHT JOIN with_nullable AS t2
     ON t0.country = t2.country
 ORDER BY 1 DESC;
+
+SYSTEM drop  table with_nullable;
+
+SYSTEM drop  table without_nullable;

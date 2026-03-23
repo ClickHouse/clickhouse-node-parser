@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nested;
+
 CREATE TABLE nested
 (
     x UInt8,
@@ -53,3 +55,5 @@ CREATE TABLE nested
 )
 ENGINE = MergeTree
 ORDER BY x;
+
+SYSTEM DROP  TABLE nested;

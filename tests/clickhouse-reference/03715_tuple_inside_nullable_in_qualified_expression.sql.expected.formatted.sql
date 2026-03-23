@@ -3,6 +3,8 @@ SET enable_analyzer = 1;
 
 SET allow_experimental_nullable_tuple_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS qualified_match_nullable_tuple_direct;
+
 CREATE TABLE qualified_match_nullable_tuple_direct
 (
     id UInt8,
@@ -18,6 +20,10 @@ SELECT
     toTypeName(t)
 FROM qualified_match_nullable_tuple_direct
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE IF EXISTS qualified_match_join_left;
+
+SYSTEM DROP  TABLE IF EXISTS qualified_match_join_right;
 
 CREATE TABLE qualified_match_join_left
 (

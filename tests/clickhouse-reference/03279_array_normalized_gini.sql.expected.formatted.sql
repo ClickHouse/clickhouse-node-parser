@@ -6,6 +6,8 @@ SELECT arrayNormalizedGini([0.9, 0.3, 0.8, 0.75, 0.65, 0.6, 0.78, 0.7, 0.05, 0.4
 
 SELECT arrayNormalizedGini(arrayResize([1], 2000000), arrayResize([1], 2000000)); -- { serverError TOO_LARGE_ARRAY_SIZE }
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     a1 Array(Float32),
@@ -24,3 +26,5 @@ FROM t;
 
 SELECT arrayNormalizedGini([0.9, 0.3, 0.8, 0.7], a2)
 FROM t;
+
+SYSTEM DROP  TABLE t;

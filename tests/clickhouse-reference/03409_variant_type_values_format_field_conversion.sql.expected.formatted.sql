@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     v Variant(Map(String, Int32), Tuple(String, Int32))
@@ -8,3 +10,5 @@ INSERT INTO t;
 
 SELECT *
 FROM t;
+
+SYSTEM DROP  TABLE t;

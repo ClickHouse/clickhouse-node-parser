@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS prewhere;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE `prewhere`
@@ -20,3 +22,5 @@ SELECT
 FROM `prewhere`
 PREWHERE like(a, 'hello%')
 ORDER BY a1 ASC;
+
+SYSTEM DROP  TABLE prewhere;

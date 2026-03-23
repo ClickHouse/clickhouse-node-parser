@@ -1,3 +1,15 @@
+SYSTEM DROP  TABLE IF EXISTS constraint_test_assumption;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_test_transitivity;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_test_transitivity2;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_test_transitivity3;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_test_constants_repl;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_test_constants;
+
 SET convert_query_to_cnf = 1;
 
 SET optimize_using_constraints = 1;
@@ -69,6 +81,8 @@ SELECT count()
 FROM constraint_test_assumption
 WHERE (startsWith(URL, 'test') = true); ---> assumption -> 4
 
+SYSTEM DROP  TABLE constraint_test_assumption;
+
 CREATE TABLE constraint_test_transitivity
 (
     a Int64,
@@ -86,6 +100,8 @@ INSERT INTO constraint_test_transitivity (a, b, c, d);
 SELECT count()
 FROM constraint_test_transitivity
 WHERE a = d; ---> assumption -> 1
+
+SYSTEM DROP  TABLE constraint_test_transitivity;
 
 CREATE TABLE constraint_test_strong_connectivity
 (
@@ -120,6 +136,8 @@ SELECT count()
 FROM constraint_test_strong_connectivity
 WHERE a <= c
     OR b <= d; ---> assumption -> 1
+
+SYSTEM DROP  TABLE constraint_test_strong_connectivity;
 
 CREATE TABLE constraint_test_transitivity2
 (
@@ -160,6 +178,8 @@ SELECT count()
 FROM constraint_test_transitivity2
 WHERE a != d; ---> assumption -> 1
 
+SYSTEM DROP  TABLE constraint_test_transitivity2;
+
 CREATE TABLE constraint_test_transitivity3
 (
     a Int64,
@@ -179,6 +199,8 @@ WHERE a < b; ---> assumption -> 1
 SELECT count()
 FROM constraint_test_transitivity3
 WHERE b >= a; ---> assumption -> 1
+
+SYSTEM DROP  TABLE constraint_test_transitivity3;
 
 CREATE TABLE constraint_test_constants_repl
 (
@@ -208,6 +230,8 @@ WHERE a - b = c + d; ---> assumption -> 0
 SELECT count()
 FROM constraint_test_constants_repl
 WHERE ((a - b)) * 2 = c + d; ---> assumption -> 1
+
+SYSTEM DROP  TABLE constraint_test_constants_repl;
 
 CREATE TABLE constraint_test_constants
 (
@@ -252,3 +276,5 @@ WHERE 9 <= a; ---> assumption -> 1
 SELECT count()
 FROM constraint_test_constants
 WHERE 11 <= a; ---> assumption -> 0
+
+SYSTEM DROP  TABLE constraint_test_constants;

@@ -1,3 +1,11 @@
+-- Tags: long, replica
+--- See also tests/queries/0_stateless/01581_deduplicate_by_columns_local.sql
+--- replicated case
+-- Just in case if previous tests run left some stuff behind.
+SYSTEM DROP  TABLE IF EXISTS replicated_deduplicate_by_columns_r1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_deduplicate_by_columns_r2 SYNC;
+
 SET replication_alter_partitions_sync = 2;
 
 -- IRL insert_replica_id were filled from hostname
@@ -52,3 +60,8 @@ GROUP BY
 ORDER BY
     id ASC,
     val ASC;
+
+-- cleanup the mess
+SYSTEM DROP  TABLE replicated_deduplicate_by_columns_r1;
+
+SYSTEM DROP  TABLE replicated_deduplicate_by_columns_r2;

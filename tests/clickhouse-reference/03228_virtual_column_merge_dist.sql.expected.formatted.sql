@@ -1,6 +1,14 @@
 -- There is a bug in old analyzer with currentDatabase() and distributed query.
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_local_1;
+
+SYSTEM DROP  TABLE IF EXISTS t_local_2;
+
+SYSTEM DROP  TABLE IF EXISTS t_merge;
+
+SYSTEM DROP  TABLE IF EXISTS t_distr;
+
 CREATE TABLE t_local_1
 (
     a UInt32

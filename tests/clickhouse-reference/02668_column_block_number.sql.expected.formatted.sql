@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id UInt32,
@@ -29,3 +31,5 @@ FROM test
 ORDER BY id ASC;
 
 INSERT INTO test (id, a);
+
+SYSTEM DROP  TABLE test;

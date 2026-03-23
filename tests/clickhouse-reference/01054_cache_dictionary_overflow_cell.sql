@@ -1,7 +1,10 @@
 -- Tags: no-parallel
 
 create database if not exists test_01054_overflow;
+drop table if exists test_01054_overflow.ints;
+
 create table test_01054_overflow.ints (key UInt64, i8 Int8, i16 Int16, i32 Int32, i64 Int64, u8 UInt8, u16 UInt16, u32 UInt32, u64 UInt64) Engine = Memory;
+
 insert into test_01054_overflow.ints values (1, 1, 1, 1, 1, 1, 1, 1, 1);
 insert into test_01054_overflow.ints values (2, 2, 2, 2, 2, 2, 2, 2, 2);
 insert into test_01054_overflow.ints values (3, 3, 3, 3, 3, 3, 3, 3, 3);
@@ -22,6 +25,7 @@ insert into test_01054_overflow.ints values (17, 17, 17, 17, 17, 17, 17, 17, 17)
 insert into test_01054_overflow.ints values (18, 18, 18, 18, 18, 18, 18, 18, 18);
 insert into test_01054_overflow.ints values (19, 19, 19, 19, 19, 19, 19, 19, 19);
 insert into test_01054_overflow.ints values (20, 20, 20, 20, 20, 20, 20, 20, 20);
+
 select 
 dictGet('one_cell_cache_ints_overflow', 'i8', toUInt64(1)), 
 dictGet('one_cell_cache_ints_overflow', 'i8', toUInt64(2)), 
@@ -43,8 +47,12 @@ dictGet('one_cell_cache_ints_overflow', 'i8', toUInt64(17)),
 dictGet('one_cell_cache_ints_overflow', 'i8', toUInt64(18)), 
 dictGet('one_cell_cache_ints_overflow', 'i8', toUInt64(19)), 
 dictGet('one_cell_cache_ints_overflow', 'i8', toUInt64(20));
+
 SELECT arrayMap(x -> dictGet('one_cell_cache_ints_overflow', 'i8', toUInt64(x)), array)
 FROM
 (
     SELECT [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] AS array
 );
+
+DROP TABLE if exists test_01054.ints;
+DROP DATABASE test_01054_overflow;

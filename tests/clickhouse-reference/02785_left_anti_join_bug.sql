@@ -1,4 +1,6 @@
 SET allow_suspicious_low_cardinality_types=1;
+DROP TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table__fuzz_3;
 CREATE TABLE test_table (`id` Float32, `value` Float32) ENGINE = MergeTree ORDER BY id;
 INSERT INTO test_table VALUES (-10.75, 95.57);
 CREATE TABLE test_table__fuzz_3 (`id` LowCardinality(Nullable(Float32)), `value` Float32) ENGINE = MergeTree ORDER BY id SETTINGS allow_nullable_key=1;

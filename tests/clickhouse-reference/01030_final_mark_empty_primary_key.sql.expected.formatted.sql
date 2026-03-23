@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS empty_pk;
+
 CREATE TABLE empty_pk
 (
     x UInt64
@@ -11,3 +13,5 @@ FROM numbers(100000);
 
 SELECT sum(x)
 FROM empty_pk;
+
+SYSTEM DROP  TABLE empty_pk;

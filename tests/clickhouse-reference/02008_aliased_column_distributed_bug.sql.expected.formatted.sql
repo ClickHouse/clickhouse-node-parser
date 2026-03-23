@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS click_storage;
+
+SYSTEM DROP  TABLE IF EXISTS click_storage_dst;
+
 CREATE TABLE click_storage
 (
     PhraseID UInt64,

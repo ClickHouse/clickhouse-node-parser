@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_tz_hour;
+
 CREATE TABLE test_tz_hour
 (
     t DateTime,
@@ -21,3 +23,5 @@ WHERE toHour_Israel = 8
 GROUP BY
     toHour_UTC,
     toHour_Israel;
+
+SYSTEM drop  table test_tz_hour;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a Date,
@@ -21,3 +23,5 @@ WHERE b = 1
         SELECT c
         FROM test
     );
+
+SYSTEM DROP  TABLE test;

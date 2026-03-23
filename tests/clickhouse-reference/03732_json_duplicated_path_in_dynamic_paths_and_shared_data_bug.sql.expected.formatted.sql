@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists test;
+
+SYSTEM drop  table if exists test2;
+
 CREATE TABLE test
 (
     id UInt64,

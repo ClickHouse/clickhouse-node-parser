@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS not_partitioned;
+
 CREATE TABLE not_partitioned
 (
     x UInt8
@@ -26,6 +28,10 @@ FROM `system`.detached_parts
 WHERE database = currentDatabase()
     AND table = 'not_partitioned';
 
+SYSTEM DROP  TABLE not_partitioned;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_week;
+
 CREATE TABLE partitioned_by_week
 (
     d Date,
@@ -51,6 +57,10 @@ ORDER BY name ASC;
 
 SELECT sum(x)
 FROM partitioned_by_week;
+
+SYSTEM DROP  TABLE partitioned_by_week;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_tuple;
 
 CREATE TABLE partitioned_by_tuple
 (
@@ -78,6 +88,10 @@ ORDER BY name ASC;
 SELECT sum(y)
 FROM partitioned_by_tuple;
 
+SYSTEM DROP  TABLE partitioned_by_tuple;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_string;
+
 CREATE TABLE partitioned_by_string
 (
     s String,
@@ -103,6 +117,10 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM partitioned_by_string;
 
+SYSTEM DROP  TABLE partitioned_by_string;
+
+SYSTEM DROP  TABLE IF EXISTS without_fixed_size_columns;
+
 CREATE TABLE without_fixed_size_columns
 (
     s String
@@ -126,3 +144,5 @@ ORDER BY name ASC;
 SELECT *
 FROM without_fixed_size_columns
 ORDER BY s ASC;
+
+SYSTEM DROP  TABLE without_fixed_size_columns;

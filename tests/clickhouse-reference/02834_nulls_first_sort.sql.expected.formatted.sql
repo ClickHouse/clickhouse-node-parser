@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nulls_first_sort_test;
+
 CREATE TABLE nulls_first_sort_test
 (
     a Nullable(Int32),
@@ -15,3 +17,5 @@ ORDER BY
     b ASC,
     c ASC
 LIMIT 5;
+
+SYSTEM DROP  TABLE nulls_first_sort_test;

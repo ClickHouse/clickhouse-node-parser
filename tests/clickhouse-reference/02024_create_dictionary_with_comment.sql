@@ -12,6 +12,7 @@ CREATE TABLE source_table
 ) ENGINE = Memory();
 INSERT INTO source_table VALUES (1, 'First');
 INSERT INTO source_table VALUES (2, 'Second');
+DROP DICTIONARY IF EXISTS 2024_dictionary_with_comment;
 CREATE DICTIONARY 2024_dictionary_with_comment
 (
     id UInt64,

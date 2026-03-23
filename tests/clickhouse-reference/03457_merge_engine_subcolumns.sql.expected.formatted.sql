@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists test1;
+
+SYSTEM drop  table if exists test2;
+
+SYSTEM drop  table if exists test_merge;
+
 CREATE TABLE test1
 (
     x UInt64,
@@ -86,6 +92,14 @@ SELECT
 FROM test_merge
 ORDER BY `all` ASC;
 
+SYSTEM drop  table test_merge;
+
+SYSTEM drop  table test1;
+
+SYSTEM drop  table test2;
+
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON
@@ -106,3 +120,5 @@ SELECT
     json.c,
     json.d
 FROM test_merge;
+
+SYSTEM drop  table test;

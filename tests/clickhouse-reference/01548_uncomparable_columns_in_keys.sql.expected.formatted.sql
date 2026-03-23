@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS uncomparable_keys;
+
 CREATE TABLE foo
 (
     id UInt64,

@@ -3,6 +3,9 @@
 
 SET enable_full_text_index = 1;
 SET use_skip_indexes_on_data_read = 1;
+-- Tests the preprocessor argument for tokenizers in the text index definitions
+
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     key UInt64,
@@ -22,6 +25,7 @@ SELECT count() FROM tab WHERE hasAllTokens(val, 'Baz');
 SELECT count() FROM tab WHERE hasAnyTokens(val, 'foo');
 SELECT count() FROM tab WHERE hasAnyTokens(val, 'BAR');
 SELECT count() FROM tab WHERE hasAnyTokens(val, 'Baz');
+DROP TABLE tab;
 CREATE TABLE tab
 (
     key UInt64,
@@ -61,6 +65,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+DROP FUNCTION IF EXISTS udf_preprocessor;
 CREATE FUNCTION udf_preprocessor AS (s) -> concat(val, lower(val));
 CREATE TABLE tab
 (
@@ -70,6 +75,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+DROP FUNCTION udf_preprocessor;
 -- The preprocessor argument must reference the index column
 CREATE TABLE tab
 (

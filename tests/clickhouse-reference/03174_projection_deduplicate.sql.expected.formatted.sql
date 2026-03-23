@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/65548
+SYSTEM DROP  TABLE IF EXISTS test_projection_deduplicate;
+
 CREATE TABLE test_projection_deduplicate
 (
     id Int32,
@@ -12,3 +15,5 @@ INSERT INTO test_projection_deduplicate;
 
 SELECT *
 FROM test_projection_deduplicate;
+
+SYSTEM DROP  TABLE test_projection_deduplicate;

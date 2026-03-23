@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS 03457_data;
+
+SYSTEM DROP  TABLE IF EXISTS 03457_filter;
+
 SET parallel_replicas_local_plan = 1;
 
 CREATE TABLE `03457_filter`
@@ -114,3 +118,7 @@ FROM (
             )
     )
 WHERE like(`explain`, '%Prewhere filter column: globalNotIn%');
+
+SYSTEM DROP  TABLE 03457_data;
+
+SYSTEM DROP  TABLE 03457_filter;

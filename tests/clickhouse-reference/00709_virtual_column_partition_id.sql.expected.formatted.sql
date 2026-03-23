@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS partition_id;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE IF NOT EXISTS partition_id

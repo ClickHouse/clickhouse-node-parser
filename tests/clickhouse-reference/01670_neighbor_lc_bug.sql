@@ -12,6 +12,7 @@ FROM
         CAST(s, 'LowCardinality(String)') AS lcs
     FROM numbers(10)
 );
+drop table if exists neighbor_test;
 CREATE TABLE neighbor_test
 (
     `rowNr` UInt8,

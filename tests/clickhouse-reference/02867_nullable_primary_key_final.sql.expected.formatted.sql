@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     d Nullable(Date),
@@ -22,6 +24,8 @@ SELECT
 FROM t FINAL
 WHERE f2 = 'x'
 GROUP BY 1;
+
+SYSTEM DROP  TABLE t;
 
 CREATE TABLE t
 (

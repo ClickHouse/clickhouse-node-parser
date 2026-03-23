@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on OpenSSL
+SYSTEM DROP  TABLE IF EXISTS test_01344;
+
 CREATE TABLE test_01344
 (
     x String,
@@ -20,3 +24,5 @@ WHERE encrypt(ignore(encrypt(NULL, '0.0001048577', lcm(2, 65537), NULL, inf, NUL
 SELECT NULL
 FROM test_01344
 WHERE ignore(x, lcm(NULL, 1048576), -2) = NULL;
+
+SYSTEM DROP  TABLE test_01344;

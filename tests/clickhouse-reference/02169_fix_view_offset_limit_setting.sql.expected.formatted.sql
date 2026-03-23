@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS counter;
+
 CREATE TABLE counter
 (
     id UInt64,
@@ -10,6 +12,8 @@ INSERT INTO counter SELECT
     number,
     now()
 FROM numbers(500);
+
+SYSTEM DROP  TABLE IF EXISTS vcounter;
 
 CREATE VIEW vcounter
 AS
@@ -34,3 +38,7 @@ LIMIT 100
 SETTINGS
     limit = 6,
     offset = 0;
+
+SYSTEM DROP  TABLE vcounter;
+
+SYSTEM DROP  TABLE counter;

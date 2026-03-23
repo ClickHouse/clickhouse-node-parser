@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS nested1;
+
+SYSTEM DROP  TABLE IF EXISTS nested2;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE nested1
@@ -30,3 +34,7 @@ FROM nested1;
 SELECT *
 FROM nested2
 ORDER BY x ASC;
+
+SYSTEM DROP  TABLE nested1;
+
+SYSTEM DROP  TABLE nested2;

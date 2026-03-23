@@ -257,3 +257,5 @@ SELECT
     (tryDecrypt('aes-256-gcm', encrypted, 'keykeykeykeykeykeykeykeykeykey02', iv)) AS value
 FROM decrypt_null
 ORDER BY user_id ASC;
+
+SYSTEM DROP  TABLE encryption_test;

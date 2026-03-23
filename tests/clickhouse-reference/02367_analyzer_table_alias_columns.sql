@@ -1,4 +1,5 @@
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -7,6 +8,7 @@ CREATE TABLE test_table
 ) ENGINE=MergeTree ORDER BY tuple();
 INSERT INTO test_table VALUES (0);
 SELECT id, alias_value_1, alias_value_2 FROM test_table;
+DROP TABLE test_table;
 CREATE TABLE test_table
 (
     id UInt64,

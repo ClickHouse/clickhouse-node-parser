@@ -1,3 +1,6 @@
+-- Tags: shard
+SYSTEM DROP  TABLE IF EXISTS remote_test;
+
 CREATE TABLE remote_test
 (
     a1 UInt8
@@ -17,3 +20,5 @@ FROM remote('127.0.0.1', currentDatabase(), remote_test);
 
 SELECT count(*)
 FROM remote('127.0.0.{1,2}', merge(currentDatabase(), '^remote_test'));
+
+SYSTEM DROP  TABLE remote_test;

@@ -1,3 +1,8 @@
+-- Tags: no-parallel, no-fasttest
+-- Tag no-parallel - uses external data source
+-- Tag no-fasttest - requires SSL for https
+SYSTEM DROP  TABLE IF EXISTS uk_price_paid;
+
 -- table_disk is supported only by s3_plain/s3_plain_rewritable/web
 CREATE TABLE test_table_disk_requires_disk
 (
@@ -38,6 +43,9 @@ SETTINGS disk = disk(type = web, endpoint = 'https://raw.githubusercontent.com/C
 
 SELECT count()
 FROM uk_price_paid;
+
+-- drop does not hung
+SYSTEM DROP  TABLE uk_price_paid;
 
 -- now let's ensure that the table_disk is immutable
 CREATE TABLE test_table_disk_is_immutable

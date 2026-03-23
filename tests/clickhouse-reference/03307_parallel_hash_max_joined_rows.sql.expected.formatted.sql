@@ -1,3 +1,7 @@
+-- Tags: no-tsan, no-asan, no-msan, no-ubsan, no-sanitize-coverage, no-parallel-replicas
+-- no sanitizers -- memory consumption is unpredicatable with sanitizers
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     s String,

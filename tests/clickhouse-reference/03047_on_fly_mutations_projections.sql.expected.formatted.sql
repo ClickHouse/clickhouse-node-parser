@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_update_projections;
+
 SET apply_mutations_on_fly = 1;
 
 SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
@@ -22,3 +24,5 @@ SETTINGS force_optimize_projection = 1;
 
 SELECT sum(v)
 FROM t_update_projections;
+
+SYSTEM DROP  TABLE t_update_projections;

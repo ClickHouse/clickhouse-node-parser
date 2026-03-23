@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS max_length_alias_14053;
+
 CREATE TABLE max_length_alias_14053
 (
     a Date,
@@ -21,3 +23,5 @@ SELECT
     b
 FROM max_length_alias_14053
 GROUP BY b;
+
+SYSTEM DROP  TABLE max_length_alias_14053;

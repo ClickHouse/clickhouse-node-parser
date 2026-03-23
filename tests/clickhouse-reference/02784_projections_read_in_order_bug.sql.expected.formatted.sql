@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS events;
+
 CREATE TABLE events
 (
     organisation_id UUID,
@@ -45,3 +47,5 @@ ORDER BY
     timestamp ASC,
     payload ASC,
     id ASC;
+
+SYSTEM DROP  TABLE events;

@@ -1,6 +1,7 @@
 -- Tags: long
 
 set mutations_sync=1;
+drop table if exists test_updates;
 create table test_updates (id UInt64, json JSON, dynamic Dynamic) engine=MergeTree order by tuple() settings min_rows_for_wide_part=10000000, min_bytes_for_wide_part=1000000000, index_granularity = 8192, index_granularity_bytes = '10Mi';
 insert into test_updates select number, '{"a" : 42, "b" : 42, "c" : 42}', 42::Int64 from numbers(100000);
 select distinct arrayJoin(JSONDynamicPaths(json)) from test_updates order by all;
@@ -9,4 +10,5 @@ select dynamicType(json.a), isDynamicElementInSharedData(json.a), count() from t
 select dynamicType(dynamic), isDynamicElementInSharedData(dynamic), count() from test_updates group by all order by all;
 select json, json.a, dynamic from test_updates where id in (49999, 50000) order by id;
 select json, dynamic from test_updates format Null;
+drop table test_updates;
 create table test_updates (id UInt64, json JSON, dynamic Dynamic) engine=MergeTree order by tuple() settings min_rows_for_wide_part=1, min_bytes_for_wide_part=1, index_granularity = 8192, index_granularity_bytes = '10Mi';

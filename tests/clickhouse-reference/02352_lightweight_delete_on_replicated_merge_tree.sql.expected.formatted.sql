@@ -1,3 +1,8 @@
+-- Tags: long
+SYSTEM DROP  TABLE IF EXISTS replicated_table_r1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_table_r2 SYNC;
+
 CREATE TABLE replicated_table_r1
 (
     id Int32,
@@ -26,6 +31,10 @@ FROM replicated_table_r1;
 
 SELECT COUNT()
 FROM replicated_table_r2;
+
+SYSTEM DROP  TABLE IF EXISTS t_light_r1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS t_light_r2 SYNC;
 
 CREATE TABLE t_light_r1
 (
@@ -101,3 +110,7 @@ SETTINGS min_bytes_for_wide_part = 0;
 SELECT *
 FROM t_light_sync_r2
 ORDER BY a ASC;
+
+SYSTEM DROP  TABLE IF EXISTS t_light_sync_r1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS t_light_sync_r2 SYNC;

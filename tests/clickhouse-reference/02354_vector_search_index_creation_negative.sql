@@ -1,3 +1,8 @@
+-- Tags: no-fasttest, no-ordinary-database
+
+-- Tests that various conditions are checked during creation of vector search indexes.
+
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab(vec Array(Float32), INDEX idx vec TYPE vector_similarity) ENGINE = MergeTree ORDER BY tuple(); -- { serverError INCORRECT_QUERY }
 CREATE TABLE tab(vec Array(Float32), INDEX idx vec TYPE vector_similarity()) ENGINE = MergeTree ORDER BY tuple(); -- { serverError INCORRECT_QUERY }
 CREATE TABLE tab(vec Array(Float32), INDEX idx vec TYPE vector_similarity('cant have', 'two args')) ENGINE = MergeTree ORDER BY tuple(); -- { serverError INCORRECT_QUERY }

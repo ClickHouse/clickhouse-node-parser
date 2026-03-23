@@ -1,6 +1,7 @@
 -- Does additional subquery cache lookups that the test doesn't expect
 set automatic_parallel_replicas_mode=0;
 set enable_analyzer=1;
+drop table if exists tab;
 create table tab (id Int32) engine = MergeTree order by id;
 insert into tab values (1), (2), (3);
 set force_primary_key = 1;

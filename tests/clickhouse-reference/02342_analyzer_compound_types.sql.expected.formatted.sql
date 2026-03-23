@@ -25,6 +25,8 @@ SELECT
     cast((1, 'Value'), 'Tuple (id UInt64, value String)') AS value,
     value.COLUMNS('v') APPLY(toString);
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -98,6 +100,8 @@ FROM test_table;
 
 SELECT value.value_0_level_0.* APPLY(toString)
 FROM test_table;
+
+SYSTEM DROP  TABLE test_table;
 
 CREATE TABLE test_table
 (

@@ -2,6 +2,12 @@
 -- It generates plan with _reading_ from storage join, but reading from storage join with complex keys is currently not supported.
 SET enable_parallel_replicas = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS tj;
+
+SYSTEM DROP  TABLE IF EXISTS tjj;
+
 CREATE TABLE t1
 (
     key1 UInt64,

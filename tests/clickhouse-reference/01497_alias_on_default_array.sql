@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_new_col;
 CREATE TABLE test_new_col
 (
   `_csv` String,

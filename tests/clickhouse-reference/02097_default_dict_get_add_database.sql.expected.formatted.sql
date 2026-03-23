@@ -1,3 +1,6 @@
+-- Tags: no-parallel, log-engine
+SYSTEM DROP  DATABASE IF EXISTS db_02097;
+
 CREATE DATABASE db_02097;
 
 USE db_02097;
@@ -32,3 +35,9 @@ SELECT create_table_query
 FROM `system`.tables
 WHERE name = 'test_table_default'
     AND database = 'db_02097';
+
+SYSTEM DROP  TABLE test_table_default;
+
+SYSTEM DROP  DICTIONARY test_dictionary;
+
+SYSTEM DROP  TABLE test_table;

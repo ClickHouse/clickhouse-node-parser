@@ -1,4 +1,7 @@
 SET allow_experimental_funnel_functions = 1;
+
+DROP TABLE IF EXISTS events_demo;
+
 CREATE TABLE events_demo (
   id UInt32,
   dt DateTime,
@@ -6,6 +9,7 @@ CREATE TABLE events_demo (
 ) ENGINE = MergeTree()
 ORDER BY
   (id, dt);
+
 INSERT INTO
   events_demo (id, dt, action)
 VALUES
@@ -23,6 +27,7 @@ VALUES
   (2, '2025-06-17 08:00:40', 'A'),
   (2, '2025-06-17 08:00:50', 'Y'),
   (1, '2025-06-17 09:00:40', NULL);
+
 SELECT
   DISTINCT '(forward, head, A->B)',
   id,

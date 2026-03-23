@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+
+DROP TABLE IF EXISTS table_rename_with_default;
 CREATE TABLE table_rename_with_default
 (
   date Date,
@@ -13,6 +16,7 @@ INSERT INTO table_rename_with_default (date, key, value1) SELECT toDateTime(toDa
 SELECT * FROM table_rename_with_default WHERE key = 1 FORMAT TSVWithNames;
 SELECT value2 FROM table_rename_with_default WHERE key = 1;
 SELECT value3 FROM table_rename_with_default WHERE key = 1;
+DROP TABLE IF EXISTS table_rename_with_ttl;
 CREATE TABLE table_rename_with_ttl
 (
   date1 Date,

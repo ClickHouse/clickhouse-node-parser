@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS geom1;
+
 CREATE TABLE IF NOT EXISTS geom1
 (
     a Point
@@ -14,6 +16,8 @@ SELECT hex(wkb(a))
 FROM geom1
 ORDER BY `ALL` ASC;
 
+SYSTEM DROP  TABLE IF EXISTS geom2;
+
 CREATE TABLE IF NOT EXISTS geom2
 (
     a LineString
@@ -27,6 +31,8 @@ INSERT INTO geom2;
 SELECT hex(wkb(a))
 FROM geom2
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE IF EXISTS geom3;
 
 CREATE TABLE IF NOT EXISTS geom3
 (
@@ -42,6 +48,8 @@ SELECT hex(wkb(a))
 FROM geom3
 ORDER BY `ALL` ASC;
 
+SYSTEM DROP  TABLE IF EXISTS geom4;
+
 CREATE TABLE IF NOT EXISTS geom4
 (
     a MultiLineString
@@ -55,6 +63,8 @@ INSERT INTO geom4;
 SELECT hex(wkb(a))
 FROM geom4
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE IF EXISTS geom5;
 
 CREATE TABLE IF NOT EXISTS geom5
 (

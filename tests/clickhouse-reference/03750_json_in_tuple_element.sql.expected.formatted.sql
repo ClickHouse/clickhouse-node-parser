@@ -24,6 +24,8 @@ SELECT tupleElement(materialize(['{"a" : 42}'])::Array(JSON)[1], 'a');
 
 SELECT tupleElement(materialize(['{"a" : 42}'])::Array(JSON(a UInt32))[1], 'a');
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(a UInt32)
@@ -46,3 +48,5 @@ FROM test;
 
 SELECT tupleElement(json.c[1], 'd')
 FROM test;
+
+SYSTEM drop  table test;

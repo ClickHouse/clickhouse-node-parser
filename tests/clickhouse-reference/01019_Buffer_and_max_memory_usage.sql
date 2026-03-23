@@ -1,3 +1,8 @@
+-- Tags: no-replicated-database
+
+DROP TABLE IF EXISTS null_;
+DROP TABLE IF EXISTS buffer_;
+DROP TABLE IF EXISTS aggregation_;
 -- Each UInt64  is 8    bytes
 -- So 10e6 rows is 80e6 bytes
 --
@@ -31,3 +36,6 @@ SET min_insert_block_size_bytes=0;
 SET min_insert_block_size_rows=100e3;
 -- Check that 10e6 rows had been flushed from the query, not from the background worker.
 SELECT count() FROM buffer_;
+DROP TABLE null_;
+DROP TABLE buffer_;
+DROP TABLE aggregation_;

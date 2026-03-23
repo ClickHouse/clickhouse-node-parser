@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     x Int32
@@ -38,3 +40,5 @@ FROM (
         SELECT 1
         FROM q
     ); -- { serverError TOO_DEEP_RECURSION }
+
+SYSTEM DROP  TABLE t0;

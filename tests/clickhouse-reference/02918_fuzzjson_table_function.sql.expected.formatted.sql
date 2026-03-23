@@ -1,3 +1,7 @@
+-- Tags: no-parallel, no-replicated-database: Named collection is used
+--
+SYSTEM DROP  NAMED COLLECTION IF EXISTS 02918_json_fuzzer;
+
 CREATE NAMED COLLECTION `02918_json_fuzzer` AS json_str = '{}';
 
 SELECT *
@@ -35,6 +39,9 @@ LIMIT 10;
 SELECT *
 FROM fuzzJSON(`02918_json_fuzzer`, random_seed = 6667, max_object_size = 0, max_array_size = 0)
 LIMIT 10;
+
+--
+SYSTEM DROP  TABLE IF EXISTS 02918_table_str;
 
 CREATE TABLE `02918_table_str`
 (

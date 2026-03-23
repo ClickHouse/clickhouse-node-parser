@@ -13,6 +13,8 @@ from (select number, intDiv(number, 5) p, mod(number, 3) o
 window w as (partition by p order by o, number)
 order by p, o, number
 settings max_block_size = 2;
+drop table if exists product_groups;
+drop table if exists products;
 CREATE TABLE product_groups (
 	group_id Int64,
 	group_name String
@@ -43,3 +45,5 @@ ORDER BY
     group_name ASC,
     price ASC,
     product_name ASC;
+drop table product_groups;
+drop table products;

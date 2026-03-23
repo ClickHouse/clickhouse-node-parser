@@ -2,6 +2,14 @@ SET joined_subquery_requires_alias = 0;
 
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists tab1;
+
+SYSTEM drop  table if exists tab2;
+
+SYSTEM drop  table if exists tab3;
+
+SYSTEM drop  table if exists tab1_copy;
+
 CREATE TABLE tab1
 (
     a1 Int32,
@@ -570,3 +578,11 @@ LEFT JOIN (
     ) AS s
     ON tab1.b1 + 3 = s.b1 + 2
 FORMAT JSONEachRow;
+
+SYSTEM drop  table tab1;
+
+SYSTEM drop  table tab1_copy;
+
+SYSTEM drop  table tab2;
+
+SYSTEM drop  table tab3;

@@ -1,3 +1,12 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS dictionary_source_en;
+
+SYSTEM DROP  TABLE IF EXISTS dictionary_source_ru;
+
+SYSTEM DROP  TABLE IF EXISTS dictionary_source_view;
+
+SYSTEM DROP  DICTIONARY IF EXISTS flat_dictionary;
+
 CREATE TABLE dictionary_source_en
 (
     id UInt64,
@@ -46,3 +55,11 @@ SELECT
     dictGet(concat(currentDatabase(), '.flat_dictionary'), 'value_en', number + 1),
     dictGet(concat(currentDatabase(), '.flat_dictionary'), 'value_ru', number + 1)
 FROM numbers(3);
+
+SYSTEM DROP  TABLE dictionary_source_en;
+
+SYSTEM DROP  TABLE dictionary_source_ru;
+
+SYSTEM DROP  DICTIONARY flat_dictionary;
+
+SYSTEM DROP  TABLE dictionary_source_view;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS file;
+
 CREATE TABLE file
 (
     number UInt64
@@ -8,3 +10,5 @@ SELECT *
 FROM file; -- { serverError FILE_DOESNT_EXIST }
 
 INSERT INTO file;
+
+SYSTEM DROP  TABLE file;

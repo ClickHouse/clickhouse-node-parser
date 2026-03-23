@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt16,
@@ -17,6 +19,8 @@ FROM numbers(100000);
 SELECT *
 FROM test
 WHERE x = 10;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

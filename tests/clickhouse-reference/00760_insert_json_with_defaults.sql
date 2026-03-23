@@ -1,6 +1,7 @@
 -- Tags: no-fasttest
 
 SET input_format_defaults_for_omitted_fields=1;
+DROP TABLE IF EXISTS defaults;
 CREATE TABLE defaults
 (
     x UInt32,
@@ -22,3 +23,4 @@ SELECT * FROM defaults WHERE x = 7 FORMAT JSONEachRow;
 INSERT INTO defaults FORMAT JSONEachRow {"x":8, "y":8, "n.a":[3,4], "n.b":["c","d"]};
 INSERT INTO defaults FORMAT JSONEachRow {"x":9, "y":9};
 SELECT * FROM defaults WHERE x > 7 ORDER BY x FORMAT JSONEachRow;
+DROP TABLE defaults;

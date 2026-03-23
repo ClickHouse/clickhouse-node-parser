@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table1;
+
 CREATE TABLE table1
 (
     number UInt64
@@ -24,3 +26,5 @@ SETTINGS
     cluster_for_parallel_replicas = 'parallel_replicas',
     enable_parallel_replicas = 1,
     max_parallel_replicas = 2;
+
+SYSTEM DROP  TABLE table1;

@@ -1,3 +1,6 @@
+-- Tags: stateful
+SYSTEM DROP  TABLE IF EXISTS view;
+
 CREATE VIEW view
 AS
 SELECT
@@ -26,3 +29,5 @@ SELECT *
 FROM view SAMPLE 0.1
 ORDER BY c DESC
 LIMIT 10;
+
+SYSTEM DROP  TABLE view;

@@ -9,7 +9,9 @@ CREATE TABLE  table_test
 ENGINE = ReplacingMergeTree
 ORDER BY c1
 SETTINGS index_granularity = 8192;
+
 INSERT INTO table_test SELECT * FROM generateRandom() LIMIT 1000;
+
 SELECT
     *,
     ROW_NUMBER() OVER (PARTITION BY c2,
@@ -51,3 +53,5 @@ ORDER BY
     c5,
     c3
 FORMAT Null;
+
+DROP TABLE table_test;

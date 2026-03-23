@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_vertical_merge;
 CREATE TABLE test_vertical_merge (
   k UInt64,
   val1 UInt64,

@@ -1,3 +1,6 @@
+DROP DICTIONARY IF EXISTS groups_dict;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS groups;
 CREATE TABLE users (uid Int16, name String, gid LowCardinality(String), gname LowCardinality(String))
   ENGINE=MergeTree order by tuple();
 CREATE TABLE groups (gid LowCardinality(String), gname LowCardinality(String))

@@ -18,3 +18,8 @@ SELECT * FROM truncate_test_memory;
 SELECT * FROM truncate_test_tiny_log;
 SELECT * FROM truncate_test_stripe_log;
 SELECT * FROM truncate_test_merge_tree;
+DROP TABLE truncate_test_log;
+DROP TABLE truncate_test_memory;
+DROP TABLE truncate_test_tiny_log;
+DROP TABLE truncate_test_stripe_log;
+DROP TABLE truncate_test_merge_tree;

@@ -1,5 +1,9 @@
 SET flatten_nested = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS mv;
+
 CREATE TABLE t
 (
     x int,
@@ -20,6 +24,10 @@ INSERT INTO t;
 
 SELECT *
 FROM mv;
+
+SYSTEM DROP  TABLE t;
+
+SYSTEM DROP  TABLE mv;
 
 CREATE TABLE t
 (

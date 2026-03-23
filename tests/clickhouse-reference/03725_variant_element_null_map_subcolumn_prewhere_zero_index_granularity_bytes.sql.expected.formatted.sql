@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     s Int128,
@@ -14,3 +16,5 @@ INSERT INTO test SELECT
 SELECT v
 FROM test
 PREWHERE 1;
+
+SYSTEM drop  table test;

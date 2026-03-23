@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS events;
 CREATE TABLE events (begin Float64, value Int32) ENGINE = MergeTree() ORDER BY begin;
 INSERT INTO events VALUES (1, 0), (3, 1), (6, 2), (8, 3);
 SET enable_analyzer = 1;

@@ -1,3 +1,6 @@
+-- Tags: long
+SYSTEM drop  table if exists mt sync;
+
 CREATE TABLE mt
 (
     a UInt64,

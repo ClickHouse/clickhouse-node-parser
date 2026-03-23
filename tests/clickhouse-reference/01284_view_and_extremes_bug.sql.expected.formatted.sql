@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists view_bug_const;
+
 CREATE VIEW view_bug_const
 AS
 SELECT 'World' AS hello

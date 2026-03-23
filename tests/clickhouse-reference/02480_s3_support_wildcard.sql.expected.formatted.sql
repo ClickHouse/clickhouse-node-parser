@@ -1,3 +1,10 @@
+-- Tags: no-parallel, no-fasttest
+-- Tag no-fasttest: Depends on AWS
+-- { echo }
+SYSTEM drop  table if exists test_02480_support_wildcard_write;
+
+SYSTEM drop  table if exists test_02480_support_wildcard_write2;
+
 CREATE TABLE test_02480_support_wildcard_write
 (
     a UInt64,
@@ -85,3 +92,7 @@ SELECT
     b
 FROM s3(s3_conn, filename = 'p?*/test_02480_support_wildcard_{56..666}', `format` = Parquet)
 ORDER BY a ASC;
+
+SYSTEM drop  table test_02480_support_wildcard_write;
+
+SYSTEM drop  table test_02480_support_wildcard_write2;

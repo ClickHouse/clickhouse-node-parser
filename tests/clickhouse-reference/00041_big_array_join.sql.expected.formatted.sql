@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS big_array;
+
 CREATE TABLE big_array
 (
     x Array(UInt8)
@@ -56,3 +58,5 @@ FROM
     big_array
 ARRAY JOIN x AS y
 WHERE has(x, 15);
+
+SYSTEM DROP  TABLE big_array;

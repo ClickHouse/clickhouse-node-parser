@@ -1,5 +1,7 @@
 SET enable_json_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_new_json_type;
+
 CREATE TABLE test_new_json_type
 (
     id UInt32,
@@ -22,6 +24,8 @@ INSERT INTO test_new_json_type SELECT
     version + 1 AS _version
 FROM test_new_json_type
 WHERE id = 2;
+
+SYSTEM DROP  TABLE test_new_json_type;
 
 CREATE TABLE test_new_json_type
 (

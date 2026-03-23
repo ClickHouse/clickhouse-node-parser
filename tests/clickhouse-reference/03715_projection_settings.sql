@@ -1,3 +1,6 @@
+-- { echo ON }
+
+DROP TABLE IF EXISTS t;
 CREATE TABLE t(
     x UInt64,
     y String
@@ -8,6 +11,7 @@ INSERT INTO t SETTINGS max_insert_block_size = 2000000 SELECT number, toString(n
 SELECT marks FROM system.projection_parts WHERE active AND database = currentDatabase() AND table = 't' AND name = 'p3';
 SELECT marks FROM system.projection_parts WHERE active AND database = currentDatabase() AND table = 't' AND name = 'p4';
 SELECT name, settings FROM system.projections WHERE database = currentDatabase() AND table = 't' ORDER BY name;
+DROP TABLE t;
 CREATE TABLE t
 (
     x UInt64,

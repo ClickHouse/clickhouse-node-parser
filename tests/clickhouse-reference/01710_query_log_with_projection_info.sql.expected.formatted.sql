@@ -5,6 +5,8 @@ SET log_queries_min_type = 'QUERY_FINISH';
 
 SET optimize_use_implicit_projections = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     id UInt64,
@@ -67,3 +69,5 @@ SELECT
 FROM `system`.query_log
 WHERE current_database = currentDatabase()
     AND query = 'SELECT min(id) FROM t FORMAT Null;';
+
+SYSTEM DROP  TABLE t;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t_00712_1;
+
 CREATE TABLE t_00712_1
 (
     a Int32,
@@ -20,3 +22,5 @@ WHERE a < 1000;
 SELECT c
 FROM t_00712_1
 PREWHERE a < 1000;
+
+SYSTEM drop  table t_00712_1;

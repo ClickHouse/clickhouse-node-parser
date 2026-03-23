@@ -1,3 +1,6 @@
+-- Tags: replica
+SYSTEM DROP  TABLE IF EXISTS replicated_mutations_empty_partitions SYNC;
+
 CREATE TABLE replicated_mutations_empty_partitions
 (
     key UInt64,

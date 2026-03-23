@@ -5,6 +5,7 @@ SELECT cast((1, 'Value'), 'Tuple (id UInt64, value String)') AS value, value.COL
 SELECT cast((1, 'Value'), 'Tuple (id UInt64, value String)') AS value, value.COLUMNS(value) APPLY toString;
 SELECT cast((1, 'Value'), 'Tuple (id UInt64, value String)') AS value, value.COLUMNS('i') APPLY toString;
 SELECT cast((1, 'Value'), 'Tuple (id UInt64, value String)') AS value, value.COLUMNS('v') APPLY toString;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -26,6 +27,7 @@ SELECT value.value_0_level_0 AS alias_value, alias_value.* FROM test_table;
 SELECT value.value_0_level_0 AS alias_value, alias_value.* APPLY toString FROM test_table;
 SELECT value.value_0_level_0.* FROM test_table;
 SELECT value.value_0_level_0.* APPLY toString FROM test_table;
+DROP TABLE test_table;
 CREATE TABLE test_table
 (
     id UInt64,

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     uid Int16,
@@ -30,3 +32,5 @@ GROUP BY
     age;
 
 SET alter_sync = 1;
+
+SYSTEM DROP  TABLE t;

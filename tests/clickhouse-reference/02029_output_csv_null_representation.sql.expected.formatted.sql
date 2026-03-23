@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_data;
+
 CREATE TABLE test_data
 (
     col1 Nullable(String),

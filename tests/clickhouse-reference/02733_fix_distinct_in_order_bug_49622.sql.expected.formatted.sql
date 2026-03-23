@@ -1,5 +1,7 @@
 SET optimize_distinct_in_order = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_string;
+
 CREATE TABLE test_string
 (
     c1 String,

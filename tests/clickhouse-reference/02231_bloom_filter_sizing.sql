@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS bloom_filter_sizing_pk;
 CREATE TABLE bloom_filter_sizing_pk(
   key UInt64,
   value UInt64,
@@ -13,6 +14,7 @@ FROM numbers(100_000);
 SELECT COUNT() from bloom_filter_sizing_pk WHERE key = 1;
 -- Check bloom filter size. According to https://hur.st/bloomfilter/?n=100&p=0.01 for 100 keys it should be less that 200B
 SELECT COUNT() from system.parts where database = currentDatabase() AND table = 'bloom_filter_sizing_pk' and secondary_indices_uncompressed_bytes > 200 and active;
+DROP TABLE IF EXISTS bloom_filter_sizing_sec;
 CREATE TABLE bloom_filter_sizing_sec(
   key1 UInt64,
   key2 UInt64,

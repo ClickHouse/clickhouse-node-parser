@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     id UInt64
@@ -22,3 +26,7 @@ INSERT INTO t2 (conversation);
 
 SELECT *
 FROM t2;
+
+SYSTEM drop  table t1;
+
+SYSTEM drop  table t2;

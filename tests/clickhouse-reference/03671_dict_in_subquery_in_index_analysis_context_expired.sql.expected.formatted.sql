@@ -1,3 +1,10 @@
+-- Tags: no-parallel-replicas
+SYSTEM DROP  DICTIONARY IF EXISTS dict;
+
+SYSTEM DROP  TABLE IF EXISTS info;
+
+SYSTEM DROP  TABLE IF EXISTS ids;
+
 CREATE TABLE info
 (
     iid UInt32

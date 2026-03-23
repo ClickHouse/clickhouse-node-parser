@@ -1,4 +1,5 @@
 SET enable_full_text_index = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     str String,
@@ -36,3 +37,4 @@ SELECT
 FROM system.parts
 WHERE database = currentDatabase() AND table = 'tab' AND active = 1 AND partition = 'tuple()'
 FORMAT Vertical;
+DROP TABLE tab;

@@ -5,6 +5,8 @@ SET enable_full_text_index = 1;
 
 SET use_query_condition_cache = 0;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -219,6 +221,9 @@ WHERE hasAnyTokens(col_str, '');
 SELECT count()
 FROM tab
 WHERE hasAnyTokens(col_str, ['','']);
+
+-- { echoOff }
+SYSTEM DROP  TABLE tab;
 
 -- Test specifically FixedString columns without text index
 CREATE TABLE tab

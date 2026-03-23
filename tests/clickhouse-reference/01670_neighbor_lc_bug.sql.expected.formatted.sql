@@ -14,6 +14,8 @@ FROM (
         FROM numbers(10)
     );
 
+SYSTEM drop  table if exists neighbor_test;
+
 CREATE TABLE neighbor_test
 (
     rowNr UInt8,

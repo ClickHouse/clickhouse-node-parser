@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists nums_in_mem;
+
+SYSTEM drop  table if exists nums_in_mem_dist;
+
 CREATE TABLE nums_in_mem
 (
     v UInt64
@@ -21,3 +25,7 @@ SELECT count() / (
         WHERE rand() > 0
     )
 FROM `system`.one; -- { serverError TOO_MANY_ROWS }
+
+SYSTEM drop  table nums_in_mem;
+
+SYSTEM drop  table nums_in_mem_dist;

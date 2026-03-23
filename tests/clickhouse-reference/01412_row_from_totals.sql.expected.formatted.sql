@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS tracking_events_tmp;
+
+SYSTEM DROP  TABLE IF EXISTS open_events_tmp;
+
 CREATE TABLE tracking_events_tmp
 (
     APIKey UInt32,

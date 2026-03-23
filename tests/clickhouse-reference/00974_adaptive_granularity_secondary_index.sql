@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS indexed_table;
 CREATE TABLE indexed_table
 (
     `tm` DateTime,
@@ -14,6 +15,7 @@ SELECT
     concat('hhhhhhhhhhhhhhhhhhhhhhhhh', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'yyyyyyyyyyyyyyyyyyyyyyyyyy', toString(rand()))
 FROM numbers(1000);
 SELECT COUNT() FROM indexed_table WHERE log_message like '%x%';
+DROP TABLE IF EXISTS another_indexed_table;
 CREATE TABLE another_indexed_table
 (
   `tm` DateTime,

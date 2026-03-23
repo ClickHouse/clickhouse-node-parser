@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS t_async_insert_skip_settings SYNC;
+
 CREATE TABLE t_async_insert_skip_settings
 (
     id UInt64
@@ -52,3 +55,5 @@ SELECT
 FROM `system`.asynchronous_insert_log
 WHERE database = currentDatabase()
     AND table = 't_async_insert_skip_settings';
+
+SYSTEM DROP  TABLE t_async_insert_skip_settings SYNC;

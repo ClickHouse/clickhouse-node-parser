@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS local;
+
+SYSTEM DROP  TABLE IF EXISTS distributed;
+
 CREATE TABLE local
 (
     x UInt8
@@ -17,3 +22,7 @@ FROM local;
 
 SELECT count()
 FROM distributed;
+
+SYSTEM DROP  TABLE local;
+
+SYSTEM DROP  TABLE distributed;

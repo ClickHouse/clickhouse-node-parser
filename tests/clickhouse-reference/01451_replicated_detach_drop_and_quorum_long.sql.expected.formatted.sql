@@ -3,6 +3,10 @@
 -- Tag no-async-insert: async inserts with quorum inserts are only have sence with enabled quorum_parallel setting
 SET replication_alter_partitions_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS replica1;
+
+SYSTEM DROP  TABLE IF EXISTS replica2;
+
 CREATE TABLE replica1
 (
     v UInt8

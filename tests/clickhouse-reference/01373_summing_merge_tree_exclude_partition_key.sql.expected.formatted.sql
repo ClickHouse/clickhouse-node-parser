@@ -1,5 +1,7 @@
 SET optimize_on_insert = 0;
 
+SYSTEM DROP  TABLE IF EXISTS tt_01373;
+
 CREATE TABLE tt_01373
 (
     a Int64,
@@ -56,3 +58,5 @@ SELECT
     _partition_id
 FROM tt_01373_expr
 ORDER BY (a, d, val) ASC;
+
+SYSTEM DROP  TABLE IF EXISTS tt_01373_expr;

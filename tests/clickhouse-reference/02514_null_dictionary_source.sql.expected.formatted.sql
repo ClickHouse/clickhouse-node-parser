@@ -1,3 +1,5 @@
+SYSTEM DROP  DICTIONARY IF EXISTS null_dict;
+
 CREATE DICTIONARY null_dict
 (
     id UInt64,
@@ -33,6 +35,8 @@ SELECT
     val,
     nullable_val
 FROM null_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS null_ip_dict;
 
 CREATE DICTIONARY null_ip_dict
 (

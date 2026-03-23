@@ -1,6 +1,8 @@
 -- Tags: memory-engine
 SET max_block_size = 65409; -- Default value
 
+SYSTEM DROP  TABLE IF EXISTS memory;
+
 CREATE TABLE memory
 (
     i UInt32
@@ -76,3 +78,5 @@ CREATE TABLE faulty_memory
 )
 ENGINE = Memory
 SETTINGS min_bytes_to_keep = 100; -- { serverError SETTING_CONSTRAINT_VIOLATION }
+
+SYSTEM DROP  TABLE memory;

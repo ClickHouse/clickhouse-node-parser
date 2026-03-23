@@ -1,3 +1,19 @@
+SYSTEM DROP  TABLE IF EXISTS part;
+
+SYSTEM DROP  TABLE IF EXISTS supplier;
+
+SYSTEM DROP  TABLE IF EXISTS partsupp;
+
+SYSTEM DROP  TABLE IF EXISTS customer;
+
+SYSTEM DROP  TABLE IF EXISTS orders;
+
+SYSTEM DROP  TABLE IF EXISTS lineitem;
+
+SYSTEM DROP  TABLE IF EXISTS nation;
+
+SYSTEM DROP  TABLE IF EXISTS region;
+
 SET enable_analyzer = 1;
 
 SET cross_to_inner_join_rewrite = 1;
@@ -684,3 +700,19 @@ FROM (
     ) AS custsale
 GROUP BY cntrycode
 ORDER BY cntrycode ASC;
+
+SYSTEM DROP  TABLE part;
+
+SYSTEM DROP  TABLE supplier;
+
+SYSTEM DROP  TABLE partsupp;
+
+SYSTEM DROP  TABLE customer;
+
+SYSTEM DROP  TABLE orders;
+
+SYSTEM DROP  TABLE lineitem;
+
+SYSTEM DROP  TABLE nation;
+
+SYSTEM DROP  TABLE region;

@@ -1,3 +1,6 @@
+-- Tags: long
+SYSTEM DROP  TABLE IF EXISTS normal;
+
 CREATE TABLE IF NOT EXISTS normal
 (
     key UInt32,
@@ -47,6 +50,10 @@ INSERT INTO normal SELECT
     number AS value
 FROM numbers(10100);
 
+SYSTEM DROP  TABLE normal;
+
+SYSTEM DROP  TABLE IF EXISTS agg;
+
 CREATE TABLE agg
 (
     key UInt32,
@@ -87,6 +94,10 @@ INSERT INTO agg SELECT
     number AS key,
     number AS value
 FROM numbers(200);
+
+SYSTEM DROP  TABLE agg;
+
+SYSTEM DROP  TABLE IF EXISTS x;
 
 CREATE TABLE x
 (

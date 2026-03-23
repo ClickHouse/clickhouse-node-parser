@@ -1,5 +1,9 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS numbers_indexed;
+
+SYSTEM DROP  TABLE IF EXISTS squares;
+
 CREATE TABLE numbers_indexed
 ENGINE = MergeTree
 ORDER BY number

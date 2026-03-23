@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS userid_test;
+
 SET use_index_for_in_with_subqueries = 1;
 
 CREATE TABLE userid_test
@@ -10,6 +12,8 @@ PARTITION BY (intDiv(userid, 500))
 SETTINGS index_granularity = 8192;
 
 INSERT INTO userid_test;
+
+SYSTEM DROP  TABLE IF EXISTS userid_set;
 
 CREATE TABLE userid_set
 (
@@ -30,3 +34,7 @@ WHERE toUInt64(1) IN (userid_set);
 SELECT *
 FROM userid_test
 WHERE userid IN (userid_set);
+
+SYSTEM DROP  TABLE userid_test;
+
+SYSTEM DROP  TABLE userid_set;

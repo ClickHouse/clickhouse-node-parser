@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t;
 CREATE TABLE t (item_id UInt64, price_sold Float32, date Date) ENGINE MergeTree ORDER BY item_id;
 SELECT item_id
 FROM (SELECT item_id FROM t GROUP BY item_id WITH TOTALS) l
@@ -80,3 +81,4 @@ FROM (SELECT * FROM t GROUP BY item_id, price_sold, date WITH TOTALS ORDER BY it
 LEFT JOIN (SELECT * FROM t GROUP BY item_id, price_sold, date WITH TOTALS ORDER BY item_id, price_sold, date ) r
 ON l.item_id = r.item_id
 ORDER BY ALL;
+DROP TABLE t;

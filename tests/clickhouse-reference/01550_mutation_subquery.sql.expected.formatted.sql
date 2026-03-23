@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     id String,
@@ -15,3 +17,5 @@ FROM t;
 SET mutations_sync = 1;
 
 SELECT '---';
+
+SYSTEM DROP  TABLE t;

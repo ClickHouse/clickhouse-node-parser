@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     number UInt64,
@@ -15,3 +17,5 @@ LIMIT 3;
 
 SELECT *
 FROM test;
+
+SYSTEM DROP  TABLE test;

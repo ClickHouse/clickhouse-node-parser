@@ -1,3 +1,7 @@
+-- Tags: no-shared-catalog
+-- no-shared-catalog: STOP MERGES will only stop them on the current replica, the second one will continue to merge
+SYSTEM DROP  TABLE IF EXISTS t_lightweight_mut_6;
+
 SET apply_mutations_on_fly = 1;
 
 CREATE TABLE t_lightweight_mut_6
@@ -53,3 +57,5 @@ FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 't_lightweight_mut_6'
     AND NOT is_done;
+
+SYSTEM DROP  TABLE t_lightweight_mut_6;

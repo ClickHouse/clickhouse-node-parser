@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS subcolumns;
+
 CREATE TABLE subcolumns
 (
     t Tuple(a Array(Nullable(UInt32)), u UInt32, s Nullable(String)),
@@ -55,3 +57,6 @@ CREATE TABLE subcolumns
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS min_bytes_for_wide_part = 0;
+
+-- SELECT nested.col1, nested.col2, nested.size0, nested.size0, nested.col2.null FROM subcolumns;
+SYSTEM DROP  TABLE subcolumns;

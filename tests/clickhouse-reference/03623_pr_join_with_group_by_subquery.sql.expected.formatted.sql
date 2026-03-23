@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists users sync;
+
+SYSTEM drop  table if exists messages sync;
+
 CREATE TABLE users
 (
     id Int64,
@@ -135,3 +139,7 @@ RIGHT JOIN (
 ORDER BY
     user_id ASC,
     c ASC;
+
+SYSTEM drop  table users sync;
+
+SYSTEM drop  table messages sync;

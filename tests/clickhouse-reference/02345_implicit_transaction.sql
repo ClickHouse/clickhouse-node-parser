@@ -1,3 +1,7 @@
+-- Tags: no-ordinary-database, no-fasttest, no-encrypted-storage
+DROP TABLE IF EXISTS landing_to_target;
+DROP TABLE IF EXISTS target;
+DROP TABLE IF EXISTS landing;
 CREATE TABLE landing (n Int64) engine=MergeTree order by n;
 CREATE TABLE target  (n Int64) engine=MergeTree order by n;
 CREATE MATERIALIZED VIEW landing_to_target TO target AS

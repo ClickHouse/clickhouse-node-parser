@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_tbl;
+
 CREATE TABLE test_tbl
 (
     x UInt32,
@@ -137,3 +139,5 @@ SELECT
     to_utc_timestamp(toDateTime('2106-02-07 06:28:16'), 'Asia/Tokyo'),
     from_utc_timestamp(toDateTime('2106-02-07 06:28:16'), 'Asia/Tokyo')
 SETTINGS session_timezone = 'UTC';
+
+SYSTEM DROP  TABLE test_tbl;

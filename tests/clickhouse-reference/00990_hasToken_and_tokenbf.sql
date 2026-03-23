@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS bloom_filter;
 CREATE TABLE bloom_filter
 (
     id UInt64,
@@ -12,6 +13,8 @@ SELECT max(id) FROM bloom_filter WHERE hasToken(s, 'abc,def,zzz'); -- { serverEr
 SELECT max(id) FROM bloom_filter WHERE hasTokenCaseInsensitive(s, 'abc,def,zzz'); -- { serverError BAD_ARGUMENTS }
 SELECT max(id) FROM bloom_filter WHERE hasTokenOrNull(s, 'abc,def,zzz');
 SELECT max(id) FROM bloom_filter WHERE hasTokenCaseInsensitiveOrNull(s, 'abc,def,zzz');
+-- as table "bloom_filter" but w/o index_granularity_bytes
+drop table if exists bloom_filter2;
 create table bloom_filter2
 (
     id UInt64,
@@ -40,7 +43,9 @@ select max(id) from bloom_filter2 where hasTokenCaseInsensitive(s, 'abc');
 SELECT max(id) FROM bloom_filter WHERE hasToken(s, 'yyy'); -- { serverError TOO_MANY_ROWS }
 -- this syntax is not supported by tokenbf
 SELECT max(id) FROM bloom_filter WHERE hasToken(s, 'zzz') == 1; -- { serverError TOO_MANY_ROWS }
+DROP TABLE bloom_filter;
 -- AST fuzzer crash, issue #54541
 CREATE TABLE tab (row_id UInt32, str String, INDEX idx str TYPE tokenbf_v1(256, 2, 0)) ENGINE = MergeTree ORDER BY row_id;
 INSERT INTO tab VALUES (0, 'a');
 SELECT * FROM tab WHERE str == 'else' AND 1.0;
+DROP TABLE tab;

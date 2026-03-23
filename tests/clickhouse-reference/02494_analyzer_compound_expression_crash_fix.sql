@@ -1,4 +1,5 @@
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table (
     fingerprint UInt16,
     fields Nested(name Array(UInt32), value String)

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_numbers__fuzz_29;
+
 SET max_threads = 1, max_insert_threads = 1;
 
 CREATE TABLE test_numbers__fuzz_29
@@ -19,3 +21,5 @@ FROM test_numbers__fuzz_29
 GROUP BY a
 WITH ROLLUP
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE test_numbers__fuzz_29;

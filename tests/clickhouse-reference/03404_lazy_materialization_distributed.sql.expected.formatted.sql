@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tt;
+
 CREATE TABLE tt
 (
     k UInt64,
@@ -22,3 +24,5 @@ SELECT
 FROM clusterAllReplicas(test_cluster_one_shard_three_replicas_localhost, currentDatabase(), tt)
 ORDER BY k ASC
 LIMIT 3;
+
+SYSTEM DROP  TABLE tt;

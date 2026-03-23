@@ -215,6 +215,8 @@ SELECT
     'fuzz5',
     finalizeAggregation(CAST(unhex('0100000000000000000FFFFFFFF0'), 'AggregateFunction(argMax, UInt64, String)')); -- { serverError INCORRECT_DATA }
 
+SYSTEM drop  table if exists aggr;
+
 CREATE TABLE aggr
 (
     n int,
@@ -251,3 +253,5 @@ SELECT
     maxMerge(s) AS x,
     length(x)
 FROM aggr;
+
+SYSTEM drop  table aggr;

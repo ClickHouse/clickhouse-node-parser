@@ -6,6 +6,7 @@ SET allow_prefetched_read_pool_for_remote_filesystem = 1;
 SET remote_filesystem_read_prefetch = 1;
 SET remote_filesystem_read_method = 'threadpool';
 SET max_rows_to_read = 0;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt64,
@@ -22,3 +23,4 @@ SELECT
     ProfileEvents['RemoteFSPrefetchedReads'] > 0
 FROM system.query_log
 WHERE current_database = currentDatabase() AND query LIKE '%SELECT count(), sum(id) FROM tab%' AND type = 'QueryFinish';
+DROP TABLE tab;

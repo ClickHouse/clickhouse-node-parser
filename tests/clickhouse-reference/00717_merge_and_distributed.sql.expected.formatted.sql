@@ -3,6 +3,14 @@ SET enable_analyzer = 1;
 
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE IF EXISTS test_local_1;
+
+SYSTEM DROP  TABLE IF EXISTS test_local_2;
+
+SYSTEM DROP  TABLE IF EXISTS test_distributed_1;
+
+SYSTEM DROP  TABLE IF EXISTS test_distributed_2;
+
 SET merge_table_max_tables_to_look_for_schema_inference = 1;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
@@ -201,6 +209,14 @@ SELECT *
 FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2')
 PREWHERE _table IN ('test_local_1', 'test_local_2')
 ORDER BY value ASC; -- { serverError ILLEGAL_PREWHERE }
+
+SYSTEM DROP  TABLE IF EXISTS test_u64_local;
+
+SYSTEM DROP  TABLE IF EXISTS test_s64_local;
+
+SYSTEM DROP  TABLE IF EXISTS test_u64_distributed;
+
+SYSTEM DROP  TABLE IF EXISTS test_s64_distributed;
 
 CREATE TABLE test_s64_local
 (

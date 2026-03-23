@@ -5,6 +5,7 @@ SELECT grouping(num1), num1,
 FROM (SELECT 10 AS num1, 20 AS num2)
 GROUP BY GROUPING SETS ((num1), ())
 ORDER BY grouping(num1) DESC;
+DROP TABLE IF EXISTS users;
 CREATE TABLE users (uid Int16, name String, age Int16, ts DateTime) ENGINE=MergeTree order by tuple();
 INSERT INTO users VALUES (1231, 'John', 1, toDateTime('2025-10-11 12:13:14'));
 INSERT INTO users VALUES (1231, 'John', 2, toDateTime('2025-10-11 12:13:14') + 1);
@@ -43,3 +44,4 @@ group by grouping sets
     ()
 )
 ORDER BY ALL;
+DROP TABLE users;

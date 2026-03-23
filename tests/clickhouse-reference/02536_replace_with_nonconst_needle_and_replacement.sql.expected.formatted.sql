@@ -1,3 +1,6 @@
+-- Tests that functions replaceOne(), replaceAll(), replaceRegexpOne(), replaceRegexpAll() work with with non-const pattern and replacement arguments
+SYSTEM DROP  TABLE IF EXISTS test_tab;
+
 CREATE TABLE test_tab
 (
     id UInt32,

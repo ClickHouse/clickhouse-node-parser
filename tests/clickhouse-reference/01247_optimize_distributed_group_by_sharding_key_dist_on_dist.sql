@@ -3,6 +3,9 @@
 -- TODO: correct testing with real unique shards
 
 set optimize_distributed_group_by_sharding_key=1;
+drop table if exists dist_01247;
+drop table if exists dist_layer_01247;
+drop table if exists data_01247;
 create table data_01247 as system.numbers engine=Memory();
 -- since data is not inserted via distributed it will have duplicates
 -- (and this is how we ensure that this optimization will work)
@@ -17,3 +20,6 @@ select count(), * from dist_01247 group by number order by number limit 1 settin
 create table dist_01247 as data_01247 engine=Distributed(test_cluster_two_shards, currentDatabase(), dist_layer_01247, rand());
 select count(), * from dist_01247 group by number order by number limit 1;
 create table dist_layer_01247 as data_01247 engine=Distributed(test_cluster_two_shards, currentDatabase(), data_01247, rand());
+drop table dist_01247;
+drop table dist_layer_01247;
+drop table data_01247;

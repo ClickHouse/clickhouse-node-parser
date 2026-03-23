@@ -1,3 +1,6 @@
+-- { echo }
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     s String

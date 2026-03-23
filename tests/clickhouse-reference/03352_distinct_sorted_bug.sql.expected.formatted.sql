@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Int
@@ -17,6 +19,8 @@ SELECT DISTINCT
     multiIf(1, 2, 1, materialize(toInt128(3)), 4),
     c0
 FROM t0;
+
+SYSTEM DROP  TABLE IF EXISTS t0__fuzz_41;
 
 CREATE TABLE t0__fuzz_41
 (

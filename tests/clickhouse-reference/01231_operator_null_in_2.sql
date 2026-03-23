@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS null_in_subquery;
 CREATE TABLE null_in_subquery (dt DateTime, idx int, i Nullable(UInt64)) ENGINE = MergeTree() PARTITION BY dt ORDER BY idx SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 INSERT INTO null_in_subquery SELECT number % 3, number, number FROM system.numbers LIMIT 99999;
 SET transform_null_in = 1;
@@ -18,6 +19,7 @@ SELECT count() == 66668 FROM null_in_subquery WHERE i not in (SELECT i FROM null
 SELECT count() == 33335 FROM null_in_subquery WHERE i global in (SELECT i FROM null_in_subquery WHERE dt = 0);
 SELECT count() == 66666 FROM null_in_subquery WHERE i global not in (SELECT i FROM null_in_subquery WHERE dt = 1);
 SELECT count() == 66668 FROM null_in_subquery WHERE i global not in (SELECT i FROM null_in_subquery WHERE dt = 2);
+DROP TABLE IF EXISTS null_in_tuple;
 CREATE TABLE null_in_tuple (dt DateTime, idx int, t Tuple(Nullable(UInt64), Nullable(String))) ENGINE = MergeTree() PARTITION BY dt ORDER BY idx SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 INSERT INTO null_in_tuple VALUES (1, 1, (1, '1')) (2, 2, (2, NULL)) (3, 3, (NULL, '3')) (4, 4, (NULL, NULL));
 SET transform_null_in = 0;

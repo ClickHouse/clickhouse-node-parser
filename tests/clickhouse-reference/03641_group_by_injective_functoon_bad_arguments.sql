@@ -5,3 +5,4 @@ insert into test select '{"a" : "str"}';
 
 select count(), toString(json.a) from test group by toString(json.a) settings enable_analyzer=1, optimize_injective_functions_in_group_by=0;
 select count(), toString(json.a) from test group by toString(json.a) settings enable_analyzer=1, optimize_injective_functions_in_group_by=1;
+drop table test;

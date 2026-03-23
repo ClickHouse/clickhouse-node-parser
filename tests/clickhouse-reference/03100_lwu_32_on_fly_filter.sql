@@ -1,4 +1,5 @@
 SET enable_lightweight_update=1;
+DROP TABLE IF EXISTS lwu_on_fly;
 CREATE TABLE lwu_on_fly (id UInt64, u UInt64, s String)
 ENGINE = MergeTree
 ORDER BY id PARTITION BY id % 2

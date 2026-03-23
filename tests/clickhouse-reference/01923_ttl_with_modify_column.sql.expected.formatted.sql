@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_ttl_modify_column;
+
 CREATE TABLE t_ttl_modify_column
 (
     InsertionDateTime DateTime,

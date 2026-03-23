@@ -1,3 +1,6 @@
+-- Tags: stateful
+SYSTEM DROP  TABLE IF EXISTS hits_snippet;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE hits_snippet
@@ -68,3 +71,5 @@ ORDER BY
     UserID ASC,
     URL ASC,
     Referer ASC;
+
+SYSTEM DROP  TABLE hits_snippet;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_02559;
 CREATE TABLE test_02559 (x UInt8, s String) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO test_02559 VALUES (1, 'Hello, world!');
 INSERT INTO test_02559 VALUES (2, 'Goodbye.', 3);
@@ -15,3 +16,6 @@ INSERT INTO test_02559 VALUES (3, 'So long, and thanks for all the fish.', 42, 0
 SELECT s FROM test_02559 PREWHERE z ORDER BY s;
 SELECT s FROM test_02559 PREWHERE y AND z ORDER BY s;
 SELECT s, z FROM test_02559 PREWHERE NOT y AND z ORDER BY s;
+-- { echoOff }
+
+DROP TABLE test_02559;

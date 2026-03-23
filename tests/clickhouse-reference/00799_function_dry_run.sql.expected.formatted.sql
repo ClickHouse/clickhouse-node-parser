@@ -1,3 +1,6 @@
+-- https://stackoverflow.com/questions/53416531/clickhouse-moving-average
+SYSTEM DROP  TABLE IF EXISTS bm;
+
 CREATE TABLE bm
 (
     amount float,
@@ -6,3 +9,5 @@ CREATE TABLE bm
 ENGINE = Log;
 
 INSERT INTO bm;
+
+SYSTEM DROP  TABLE bm;

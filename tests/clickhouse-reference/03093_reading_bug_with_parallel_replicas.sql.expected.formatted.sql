@@ -12,6 +12,8 @@ SET parallel_replicas_for_non_replicated_merge_tree = 1;
 
 SET allow_aggregate_partitions_independently = 1;
 
+SYSTEM drop  table if exists t2;
+
 CREATE TABLE t2
 (
     a Int16

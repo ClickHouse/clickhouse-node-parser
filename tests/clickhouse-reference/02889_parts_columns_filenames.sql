@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_parts_columns_filenames;
 CREATE TABLE t_parts_columns_filenames (id UInt64, v UInt64, long_v_name UInt64, long_arr_name Array(UInt64), arr_col Array(UInt64))
 ENGINE = MergeTree ORDER BY id
 SETTINGS

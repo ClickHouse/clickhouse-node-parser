@@ -2,6 +2,8 @@ SET allow_experimental_variant_type = 1;
 
 SET enable_json_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS json_test;
+
 CREATE TABLE json_test
 (
     id String,
@@ -16,3 +18,5 @@ INSERT INTO json_test;
 
 SELECT count(*)
 FROM json_test;
+
+SYSTEM DROP  TABLE json_test;

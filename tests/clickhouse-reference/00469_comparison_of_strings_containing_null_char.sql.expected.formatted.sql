@@ -10,6 +10,8 @@ SELECT
     'a\0\0\0\0' < 'a\0\0\0',
     'a\0\0\0\0' > 'a\0\0\0';
 
+SYSTEM DROP  TABLE IF EXISTS strings_00469;
+
 CREATE TABLE strings_00469
 (
     x String,
@@ -43,3 +45,5 @@ FROM strings_00469
 ORDER BY
     x ASC,
     y ASC;
+
+SYSTEM DROP  TABLE strings_00469;

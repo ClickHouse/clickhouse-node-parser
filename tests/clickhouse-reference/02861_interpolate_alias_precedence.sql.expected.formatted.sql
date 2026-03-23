@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02861_interpolate;
+
 CREATE TABLE `02861_interpolate`
 (
     date Date,
@@ -15,3 +17,5 @@ SELECT
 FROM `02861_interpolate`
 WHERE id = '1'
 ORDER BY d ASC WITH FILL STEP toIntervalDay(1) INTERPOLATE (f);
+
+SYSTEM DROP  TABLE 02861_interpolate;

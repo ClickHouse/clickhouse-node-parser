@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS rollup_having;
+
 CREATE TABLE rollup_having
 (
     a Nullable(String),
@@ -41,3 +43,5 @@ ORDER BY
     a ASC,
     b ASC,
     count ASC;
+
+SYSTEM DROP  TABLE rollup_having;

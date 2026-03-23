@@ -1,6 +1,7 @@
 -- Tags: no-azure-blob-storage
 
 SET enable_json_type = 1;
+drop table if exists test;
 create table test (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1;
 insert into test select materialize('{"a" : 42}')::JSON(max_dynamic_paths=8) from numbers(5);
 insert into test select materialize('{"a1" : 42, "a2" : 42, "a3" : 42, "a4" : 42, "a5" : 42, "a6" : 42, "a7" : 42, "a8" : 42, "a" : [{"c" : 42}]}')::JSON(max_dynamic_paths=8) from numbers(5);
@@ -10,3 +11,4 @@ select distinct JSONSharedDataPaths(arrayJoin(json.a[])) as path from test order
 select distinct JSONDynamicPaths(arrayJoin(json.a[])) as path from test order by path;
 select distinct dynamicType(arrayJoin(json.a[].c)) as type, isDynamicElementInSharedData(arrayJoin(json.a[].c)) from test order by type;
 select distinct dynamicType(arrayJoin(json.a[].d)) as type, isDynamicElementInSharedData(arrayJoin(json.a[].d)) from test order by type;
+drop table test;

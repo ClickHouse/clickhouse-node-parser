@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_optimize_equal_ranges;
+
 CREATE TABLE t_optimize_equal_ranges
 (
     a UInt64,
@@ -78,3 +80,5 @@ WHERE type = 'QueryFinish'
 ORDER BY
     func ASC,
     threads ASC;
+
+SYSTEM DROP  TABLE t_optimize_equal_ranges;

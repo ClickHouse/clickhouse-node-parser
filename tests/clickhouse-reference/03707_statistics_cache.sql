@@ -8,6 +8,7 @@ SET mutations_sync = 2;
 SET max_execution_time = 60;
 -- test rely on local execution, - force parallel replicas to genearate local plan
 SET parallel_replicas_local_plan=1;
+DROP TABLE IF EXISTS sc_core SYNC;
 CREATE TABLE sc_core
 (
     k UInt32,
@@ -19,6 +20,10 @@ SETTINGS refresh_statistics_interval = 0;
 INSERT INTO sc_core
 SELECT number, if(number % 20 = 0, NULL, toFloat64(rand()) / 4294967296.0)
 FROM numbers(60000);
+------------------------------------------------------------
+-- SUM() must not trigger statistics
+------------------------------------------------------------
+DROP TABLE IF EXISTS sc_unused SYNC;
 CREATE TABLE sc_unused
 (
     k   UInt64,
@@ -37,6 +42,10 @@ FROM system.query_log
 WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = 'nouse-agg'
 ORDER BY event_time_microseconds DESC
 LIMIT 1;
+------------------------------------------------------------
+-- LowCardinality: CountMin https://github.com/ClickHouse/ClickHouse/issues/87886
+------------------------------------------------------------
+DROP TABLE IF EXISTS st_cm_lc SYNC;
 CREATE TABLE st_cm_lc
 (
     k   UInt32,
@@ -56,6 +65,11 @@ FROM system.query_log
 WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = 'cm-lc-load'
 ORDER BY event_time_microseconds DESC
 LIMIT 1;
+------------------------------------------------------------
+-- JOIN with Uniq
+------------------------------------------------------------
+DROP TABLE IF EXISTS sj_a SYNC;
+DROP TABLE IF EXISTS sj_b SYNC;
 CREATE TABLE sj_a (id UInt32, p UInt8)
 ENGINE = MergeTree
 ORDER BY id

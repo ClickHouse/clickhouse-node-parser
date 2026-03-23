@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 ENGINE = Memory AS
 SELECT *
@@ -27,3 +29,5 @@ SELECT count(r.number)
 FROM
     t
 CROSS JOIN numbers(2) AS r;
+
+SYSTEM drop  table t;

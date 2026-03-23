@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS test_collation;
+
 CREATE TABLE test_collation
 (
     v String,
@@ -16,3 +19,5 @@ INSERT INTO test_collation;
 SELECT *
 FROM test_collation
 ORDER BY v ASC COLLATE 'en';
+
+SYSTEM DROP  TABLE test_collation;

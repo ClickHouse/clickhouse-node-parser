@@ -25,6 +25,8 @@ FROM (
             )
     );
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x Map(UInt8, AggregateFunction(uniq, UInt64))
@@ -40,6 +42,8 @@ FORMAT Null;
 
 SELECT mapApply((k, v) -> (k, finalizeAggregation(v)), x)
 FROM test;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

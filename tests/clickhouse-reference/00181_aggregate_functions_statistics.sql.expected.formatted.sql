@@ -2,6 +2,8 @@ SET any_join_distinct_right_table_keys = 1;
 
 SET joined_subquery_requires_alias = 0;
 
+SYSTEM DROP  TABLE IF EXISTS series;
+
 CREATE TABLE series
 (
     i UInt32,
@@ -347,3 +349,5 @@ FROM numbers(90);
 
 SELECT quantileIf(toFloat64(number), number > 100)
 FROM numbers(90);
+
+SYSTEM DROP  TABLE series;

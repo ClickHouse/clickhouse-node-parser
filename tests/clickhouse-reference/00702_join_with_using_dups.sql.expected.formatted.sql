@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists X;
+
+SYSTEM drop  table if exists Y;
+
 CREATE TABLE X
 (
     id Int32,
@@ -145,3 +149,7 @@ ORDER BY
     j.id ASC,
     s.x_name ASC,
     j.y_name ASC;
+
+SYSTEM drop  table X;
+
+SYSTEM drop  table Y;

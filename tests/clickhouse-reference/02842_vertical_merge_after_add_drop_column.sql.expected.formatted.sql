@@ -1,3 +1,6 @@
+-- In some versions vertical merges after DROP COLUMN was broken in some cases
+SYSTEM drop  table if exists data;
+
 CREATE TABLE data
 (
     key Int,
@@ -11,3 +14,5 @@ SETTINGS min_bytes_for_wide_part = 0, min_rows_for_wide_part = 0, vertical_merge
 INSERT INTO data (key);
 
 INSERT INTO data (key);
+
+SYSTEM DROP  TABLE data;

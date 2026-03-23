@@ -1,3 +1,6 @@
+-- Tags: no-random-settings, no-azure-blob-storage
+
+DROP TABLE IF EXISTS order_by_desc;
 SET enable_filesystem_cache=0;
 SET read_through_distributed_cache=0;
 CREATE TABLE order_by_desc (u UInt32, s String)

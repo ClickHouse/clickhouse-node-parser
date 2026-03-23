@@ -2,6 +2,7 @@ SELECT isIPAddressInRange('127.0.0.1', '127.0.0.0/8');
 SELECT isIPAddressInRange('128.0.0.1', '127.0.0.0/8');
 SELECT isIPAddressInRange('ffff::1', 'ffff::/16');
 SELECT isIPAddressInRange('fffe::1', 'ffff::/16');
+DROP TABLE IF EXISTS test_data;
 CREATE TABLE test_data (cidr String) ENGINE = Memory;
 INSERT INTO test_data
 SELECT

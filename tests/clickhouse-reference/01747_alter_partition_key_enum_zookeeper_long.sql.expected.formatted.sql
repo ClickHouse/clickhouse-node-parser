@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+SYSTEM DROP  TABLE IF EXISTS report;
+
 CREATE TABLE report
 (
     product Enum8('IU' = 1, 'WS' = 2),
@@ -20,6 +23,8 @@ FROM report
 WHERE product = 'PS';
 
 INSERT INTO report;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_report;
 
 CREATE TABLE replicated_report
 (

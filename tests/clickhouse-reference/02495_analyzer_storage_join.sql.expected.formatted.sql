@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS tj;
+
 SET enable_analyzer = 1;
 
 SET single_join_prefer_left_table = 0;

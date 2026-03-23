@@ -14,6 +14,8 @@ FROM (
     )
 ORDER BY X ASC;
 
+SYSTEM DROP  TABLE IF EXISTS globalin;
+
 CREATE TABLE globalin
 (
     CounterID UInt32,
@@ -65,6 +67,10 @@ FROM (
     );
 
 SELECT 'finish ===========================;';
+
+SYSTEM DROP  TABLE globalin;
+
+SYSTEM DROP  TABLE IF EXISTS union_bug;
 
 CREATE TABLE union_bug
 (
@@ -130,3 +136,5 @@ FROM (
         WHERE Event = 'B'
     )
 ORDER BY Datetime ASC;
+
+SYSTEM DROP  TABLE union_bug;

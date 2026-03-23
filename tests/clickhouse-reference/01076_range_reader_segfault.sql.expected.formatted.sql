@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     a Int,
@@ -23,3 +25,5 @@ FROM t
 PREWHERE isNotNull(a)
 WHERE isNotNull(b)
     AND c > 0;
+
+SYSTEM DROP  TABLE t;

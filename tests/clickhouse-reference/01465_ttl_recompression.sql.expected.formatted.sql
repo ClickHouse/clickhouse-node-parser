@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS recompression_table;
+
 CREATE TABLE recompression_table
 (
     dt DateTime,
@@ -108,3 +111,5 @@ WHERE table = 'recompression_table_compact'
     AND active = 1
     AND database = currentDatabase()
 ORDER BY name ASC;
+
+SYSTEM DROP  TABLE recompression_table_compact;

@@ -1,4 +1,7 @@
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS test_a;
+DROP TABLE IF EXISTS test_b;
+DROP TABLE IF EXISTS test_merge;
 CREATE TABLE test_a
 (
     a UInt8,
@@ -19,4 +22,7 @@ SELECT * FROM test_merge ORDER BY a;
 SELECT '--- table function';
 -- Note that this will also pick up the test_merge table, duplicating the results
 SELECT * FROM merge('^test_') ORDER BY a;
+DROP TABLE test_merge;
 SET merge_table_max_tables_to_look_for_schema_inference = 1;
+DROP TABLE test_a;
+DROP TABLE test_b;

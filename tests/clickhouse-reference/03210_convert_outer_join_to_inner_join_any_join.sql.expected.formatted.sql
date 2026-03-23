@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS user_country;
+
+SYSTEM DROP  TABLE IF EXISTS user_transactions;
+
 CREATE TABLE user_country
 (
     user_id UInt64,
@@ -30,3 +34,7 @@ LEFT JOIN user_country
 WHERE user_id = 1
     AND country = 'US'
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE user_country;
+
+SYSTEM DROP  TABLE user_transactions;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS pk;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE pk
@@ -224,3 +226,5 @@ SELECT *
 FROM pk
 WHERE y = 55
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE pk;

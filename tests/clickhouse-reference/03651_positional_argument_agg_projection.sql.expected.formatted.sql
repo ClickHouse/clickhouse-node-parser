@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a UInt64,
@@ -5,3 +7,5 @@ CREATE TABLE test
 )
 ENGINE = MergeTree
 ORDER BY a;
+
+SYSTEM DROP  TABLE test;

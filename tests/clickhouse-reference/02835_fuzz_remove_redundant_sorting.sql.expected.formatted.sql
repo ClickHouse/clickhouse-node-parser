@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS numbers500k;
+
 CREATE TABLE numbers500k
 (
     number UInt32

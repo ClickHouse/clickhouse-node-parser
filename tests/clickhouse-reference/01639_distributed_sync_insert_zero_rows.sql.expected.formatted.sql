@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS local;
+
+SYSTEM DROP  TABLE IF EXISTS distributed;
+
 CREATE TABLE local
 (
     x UInt8
@@ -26,3 +31,7 @@ WHERE number % 2 = 1;
 INSERT INTO distributed SELECT number
 FROM numbers(256)
 WHERE number < 128;
+
+SYSTEM DROP  TABLE local;
+
+SYSTEM DROP  TABLE distributed;

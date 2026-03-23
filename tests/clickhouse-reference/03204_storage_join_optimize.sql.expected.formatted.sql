@@ -13,3 +13,5 @@ FROM numbers(10);
 SELECT *
 FROM dict_03204
 ORDER BY k ASC;
+
+SYSTEM DROP  TABLE dict_03204;

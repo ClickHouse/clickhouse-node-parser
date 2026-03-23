@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_shared SYNC;
+
 SET enable_lightweight_update = 1;
 
 CREATE TABLE t_shared
@@ -36,3 +38,5 @@ SELECT *
 FROM t_shared
 PREWHERE c2 = 'aaa'
 WHERE c1 = 111;
+
+SYSTEM DROP  TABLE t_shared SYNC;

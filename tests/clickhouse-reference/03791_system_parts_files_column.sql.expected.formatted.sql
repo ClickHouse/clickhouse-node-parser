@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_parts_files;
+
 CREATE TABLE test_parts_files
 (
     x UInt64
@@ -19,3 +21,5 @@ WHERE database = currentDatabase()
     AND table = 'test_parts_files'
     AND active
 LIMIT 1;
+
+SYSTEM DROP  TABLE test_parts_files;

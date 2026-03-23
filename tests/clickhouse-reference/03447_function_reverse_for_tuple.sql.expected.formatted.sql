@@ -1,5 +1,7 @@
 SELECT reverse((1, 'Hello', [2, 3]));
 
+SYSTEM DROP  TABLE IF EXISTS t_tuple;
+
 CREATE TABLE t_tuple
 (
     tuple Tuple(a Int32, b String)
@@ -16,3 +18,5 @@ SELECT
     tupleElement(reverse(tuple), 'a'),
     tupleElement(reverse(tuple), 'b')
 FROM t_tuple;
+
+SYSTEM DROP  TABLE t_tuple;

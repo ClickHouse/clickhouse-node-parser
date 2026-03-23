@@ -4,6 +4,8 @@
 -- Tag no-async-insert: async inserts with quorum inserts are only have sence with enabled quorum_parallel setting
 
 SET send_logs_level = 'fatal';
+DROP TABLE IF EXISTS quorum1;
+DROP TABLE IF EXISTS quorum2;
 CREATE TABLE quorum1(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_00732/quorum1', '1') ORDER BY x PARTITION BY y;
 CREATE TABLE quorum2(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_00732/quorum1', '2') ORDER BY x PARTITION BY y;
 SET insert_quorum=2, insert_quorum_parallel=0;
@@ -18,3 +20,5 @@ INSERT INTO quorum1 VALUES (4, '2018-11-15');
 -- and after we add new parts
 SELECT sum(x) FROM quorum1;
 SELECT sum(x) FROM quorum2;
+DROP TABLE quorum1;
+DROP TABLE quorum2;

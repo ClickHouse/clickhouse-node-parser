@@ -1,3 +1,13 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS left_join;
+
+SYSTEM DROP  TABLE IF EXISTS inner_join;
+
+SYSTEM DROP  TABLE IF EXISTS right_join;
+
+SYSTEM DROP  TABLE IF EXISTS full_join;
+
 CREATE TABLE t1
 (
     x UInt32,
@@ -87,6 +97,14 @@ ORDER BY
 
 SET join_use_nulls = 1;
 
+SYSTEM DROP  TABLE left_join;
+
+SYSTEM DROP  TABLE inner_join;
+
+SYSTEM DROP  TABLE right_join;
+
+SYSTEM DROP  TABLE full_join;
+
 CREATE TABLE left_join
 (
     x UInt32,
@@ -118,3 +136,5 @@ CREATE TABLE full_join
 )
 ENGINE = Join(`ALL`, `FULL`, x)
 SETTINGS join_use_nulls = 1;
+
+SYSTEM DROP  TABLE t1;

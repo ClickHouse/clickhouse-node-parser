@@ -6,6 +6,8 @@ SELECT firstLine('foo\r\nbar\r\nbaz');
 
 SELECT firstLine('foobarbaz');
 
+SYSTEM drop  table if exists 02815_first_line_vector;
+
 CREATE TABLE `02815_first_line_vector`
 (
     n Int32,

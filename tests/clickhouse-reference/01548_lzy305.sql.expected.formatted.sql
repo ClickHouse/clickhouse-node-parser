@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS fct_rt_dc_shop_sku_vender_day;
+
 CREATE TABLE fct_rt_dc_shop_sku_vender_day
 (
     stat_year UInt16,
@@ -145,3 +147,5 @@ GROUP BY
     buntype,
     dctype,
     shopformid;
+
+SYSTEM DROP  TABLE fct_rt_dc_shop_sku_vender_day;

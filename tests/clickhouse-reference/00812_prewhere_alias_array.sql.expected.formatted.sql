@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS prewhere;
+
 CREATE TABLE `prewhere`
 (
     x Array(UInt64),
@@ -11,3 +13,5 @@ SELECT count()
 FROM `prewhere`
 PREWHERE (length(s) >= 1) = 0
 WHERE NOT ignore(y);
+
+SYSTEM DROP  TABLE prewhere;

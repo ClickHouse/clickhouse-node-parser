@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_update_empty_nested;
 CREATE TABLE t_update_empty_nested
 (
     `id` UInt32,
@@ -10,3 +11,4 @@ SET mutations_sync = 2;
 INSERT INTO t_update_empty_nested SELECT 1, range(number % 10) FROM numbers(100000);
 SELECT * FROM t_update_empty_nested FORMAT Null;
 SELECT sum(length(nested.arr1)), sum(length(nested.arr2)) FROM t_update_empty_nested;
+DROP TABLE t_update_empty_nested;

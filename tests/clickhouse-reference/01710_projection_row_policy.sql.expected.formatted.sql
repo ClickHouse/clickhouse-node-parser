@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     a UInt32,
@@ -19,3 +21,7 @@ SELECT
     min(a),
     max(a)
 FROM t;
+
+SYSTEM DROP  ROW POLICY rp ON t;
+
+SYSTEM DROP  TABLE t;

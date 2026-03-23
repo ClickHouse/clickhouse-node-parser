@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/88150
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Nullable(String)

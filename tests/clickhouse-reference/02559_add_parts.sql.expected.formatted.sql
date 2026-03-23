@@ -22,3 +22,5 @@ WHERE name = 'check_system_tables'
 INSERT INTO check_system_tables;
 
 INSERT INTO check_system_tables;
+
+SYSTEM DROP  TABLE IF EXISTS check_system_tables;

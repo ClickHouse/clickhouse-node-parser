@@ -24,3 +24,5 @@ SET remote_filesystem_read_prefetch = 0;
 SELECT json.a
 FROM test
 FORMAT Null;
+
+SYSTEM drop  table test;

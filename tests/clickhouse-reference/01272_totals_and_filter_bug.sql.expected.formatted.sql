@@ -58,3 +58,7 @@ FULL JOIN (
     USING (dimension_1)
 WHERE sum_metric_2 < 20
 ORDER BY dimension_1 ASC;
+
+SYSTEM DROP  TABLE foo;
+
+SYSTEM DROP  TABLE bar;

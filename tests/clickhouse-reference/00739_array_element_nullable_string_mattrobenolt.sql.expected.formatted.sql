@@ -1,3 +1,5 @@
+SYSTEM drop  temporary table if exists wups;
+
 CREATE TEMPORARY TABLE wups
 (
     a Array(Nullable(String))
@@ -19,6 +21,8 @@ SELECT
 FROM wups
 GROUP BY a[1]
 ORDER BY a[1] ASC;
+
+SYSTEM drop  temporary table wups;
 
 SELECT a[1]
 FROM wups;

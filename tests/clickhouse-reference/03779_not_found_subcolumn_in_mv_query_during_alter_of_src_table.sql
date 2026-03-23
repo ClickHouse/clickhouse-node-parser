@@ -1,4 +1,7 @@
 SET enable_analyzer=1;
+DROP TABLE IF EXISTS src;
+DROP TABLE IF EXISTS dst;
+DROP VIEW IF EXISTS mv;
 CREATE TABLE src
 (
     data Array(Tuple(id UInt32)),
@@ -26,3 +29,6 @@ WHERE data_joined.id != 42;
 INSERT INTO src VALUES ([tuple(1), tuple(2)], 0), ([], 1), ([tuple(42)], 2);
 SELECT * FROM src;
 SELECT * FROM dst;
+DROP VIEW mv;
+DROP TABLE dst;
+DROP TABLE src;

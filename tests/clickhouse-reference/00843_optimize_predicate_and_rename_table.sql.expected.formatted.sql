@@ -1,5 +1,11 @@
 SET enable_optimize_predicate_expression = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test1_00843;
+
+SYSTEM DROP  TABLE IF EXISTS test2_00843;
+
+SYSTEM DROP  TABLE IF EXISTS view_00843;
+
 CREATE TABLE test1_00843
 (
     a UInt8
@@ -15,3 +21,7 @@ FROM test1_00843;
 
 SELECT *
 FROM view_00843;
+
+SYSTEM DROP  TABLE test1_00843;
+
+SYSTEM DROP  TABLE view_00843;

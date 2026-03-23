@@ -1,4 +1,9 @@
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS customer;
+DROP TABLE IF EXISTS part;
+DROP TABLE IF EXISTS supplier;
+DROP TABLE IF EXISTS lineorder;
+DROP TABLE IF EXISTS date;
 CREATE TABLE customer
 (
         C_CUSTKEY       UInt32,

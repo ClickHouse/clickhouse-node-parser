@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS tab1;
+
+SYSTEM DROP  TABLE IF EXISTS tab2;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE tab1

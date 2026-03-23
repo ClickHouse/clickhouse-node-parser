@@ -14,3 +14,6 @@ set max_bytes_in_join=0;
 set enable_adaptive_memory_spill_scheduler=false;
 select t1.k, t2.x, t3.x from adaptive_spill_03277_1 as t1 left join adaptive_spill_03277_2 as t2 on t1.k = t2.k left join adaptive_spill_03277_3 as t3 on t1.k = t3.k Format Null; --{serverError MEMORY_LIMIT_EXCEEDED}
 set enable_adaptive_memory_spill_scheduler=true;
+drop table if exists adaptive_spill_03277_1;
+drop table if exists adaptive_spill_03277_2;
+drop table if exists adaptive_spill_03277_3;

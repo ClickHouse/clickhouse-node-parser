@@ -6,6 +6,7 @@ SET log_queries = 1;
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 -- Affects the number of read rows.
 SET use_skip_indexes_on_data_read = 0;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab(k UInt64, s String, INDEX af(s) TYPE text(tokenizer = ngrams(2)) GRANULARITY 1)
             ENGINE = MergeTree() ORDER BY k
             SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';
@@ -39,6 +40,7 @@ SELECT read_rows==8 from system.query_log
             AND type='QueryFinish'
             AND result_rows==4
         LIMIT 1;
+DROP TABLE IF EXISTS tab_x;
 CREATE TABLE tab_x(k UInt64, s String, INDEX af(s) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1)
     ENGINE = MergeTree() ORDER BY k
     SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';

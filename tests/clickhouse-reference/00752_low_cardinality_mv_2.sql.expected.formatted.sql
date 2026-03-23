@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists radacct;
+
+SYSTEM drop  table if exists mv_traffic_by_tadig15min;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE radacct

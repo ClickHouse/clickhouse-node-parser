@@ -6,6 +6,8 @@
 -- `IMergeTreeDataPart::removeIfNeeded` will fail to remove the part, causing it to have some error logs.
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE IF EXISTS merge_tree_deduplication;
+
 CREATE TABLE merge_tree_deduplication
 (
     key UInt64,
@@ -98,6 +100,8 @@ SELECT *
 FROM merge_tree_deduplication
 WHERE part = 44
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE IF EXISTS merge_tree_no_deduplication;
 
 CREATE TABLE merge_tree_no_deduplication
 (

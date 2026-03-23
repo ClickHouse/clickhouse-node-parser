@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t_tuple_sparse;
+
 CREATE TABLE t_tuple_sparse
 (
     a UInt64,

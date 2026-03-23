@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS order_by_all SYNC;
+
 CREATE TABLE order_by_all
 (
     a String,
@@ -35,3 +37,5 @@ ORDER BY `all` ASC
 SETTINGS
     enable_order_by_all = 0,
     allow_experimental_parallel_reading_from_replicas = 1;
+
+SYSTEM DROP  TABLE order_by_all SYNC;

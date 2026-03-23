@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/pull/62457
+
+drop table if exists t;
 create table t  (ID String) Engine= Memory() ;
 insert into t values('a'),('b'),('c');
 -- This optimization is disabled by default and even its description says that it could lead to

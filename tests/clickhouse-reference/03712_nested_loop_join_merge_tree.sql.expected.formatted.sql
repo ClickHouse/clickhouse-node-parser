@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS events;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE events
@@ -29,6 +31,8 @@ INSERT INTO events SELECT
     concat('Payload_', toString(number)),
     toDateTime('2024-01-01 00:00:00') + toIntervalMinute(number)
 FROM numbers(500, 500);
+
+SYSTEM DROP  TABLE IF EXISTS attributes;
 
 CREATE TABLE attributes
 (

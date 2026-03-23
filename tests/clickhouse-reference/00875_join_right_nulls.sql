@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t;
+DROP TABLE IF EXISTS nt;
 CREATE TABLE t (x String) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE nt (x Nullable(String)) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO t (x) VALUES ('id'), ('1');
@@ -24,3 +26,5 @@ SELECT sum(isNull(t1.x)), count(t1.x) FROM nt AS t1 INNER JOIN nt AS t2 USING(x)
 SELECT sum(isNull(t1.x)), count(t1.x) FROM nt AS t1 LEFT JOIN nt AS t2 USING(x);
 SELECT sum(isNull(t1.x)), count(t1.x) FROM nt AS t1 RIGHT JOIN nt AS t2 USING(x);
 SELECT sum(isNull(t1.x)), count(t1.x) FROM nt AS t1 FULL JOIN nt AS t2 USING(x);
+DROP TABLE t;
+DROP TABLE nt;

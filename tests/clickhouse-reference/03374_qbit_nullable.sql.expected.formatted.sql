@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS qbit_nullable_test;
+
 CREATE TABLE qbit_nullable_test
 (
     id UInt32,
@@ -12,3 +14,5 @@ SELECT
     data
 FROM qbit_nullable_test
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE qbit_nullable_test;

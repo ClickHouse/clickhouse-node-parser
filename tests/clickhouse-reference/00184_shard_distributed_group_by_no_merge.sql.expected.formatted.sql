@@ -50,6 +50,8 @@ FROM remote('127.0.0.{2,3}', `system`.one)
 ORDER BY d ASC
 SETTINGS distributed_group_by_no_merge = 2;
 
+SYSTEM DROP  TABLE IF EXISTS data_00184;
+
 CREATE TABLE data_00184
 ENGINE = Memory() AS
 SELECT *
@@ -98,3 +100,5 @@ SETTINGS distributed_group_by_no_merge = 2;
 SELECT assumeNotNull(argMax(dummy, 1))
 FROM remote('127.1', `system`.one)
 SETTINGS distributed_group_by_no_merge = 2;
+
+SYSTEM drop  table data_00184;

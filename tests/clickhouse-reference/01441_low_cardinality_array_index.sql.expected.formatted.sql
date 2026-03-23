@@ -1,5 +1,7 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_01411;
+
 CREATE TABLE t_01411
 (
     str LowCardinality(String),
@@ -39,6 +41,8 @@ WHERE has(arr, str);
 SELECT count()
 FROM t_01411
 WHERE indexOf(arr, str) > 0;
+
+SYSTEM DROP  TABLE IF EXISTS t_01411_num;
 
 CREATE TABLE t_01411_num
 (

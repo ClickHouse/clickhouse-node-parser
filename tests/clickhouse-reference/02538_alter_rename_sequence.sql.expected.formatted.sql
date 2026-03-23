@@ -1,3 +1,7 @@
+-- Tags: no-shared-merge-tree
+-- Stop replication queues
+SYSTEM DROP  TABLE IF EXISTS wrong_metadata;
+
 CREATE TABLE wrong_metadata
 (
     column1 UInt64,
@@ -42,3 +46,5 @@ SELECT *
 FROM wrong_metadata_wide
 ORDER BY column1_renamed ASC
 FORMAT JSONEachRow;
+
+SYSTEM DROP  TABLE IF EXISTS wrong_metadata_wide;

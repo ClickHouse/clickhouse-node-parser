@@ -1,4 +1,5 @@
 SET allow_suspicious_low_cardinality_types = 1;
+DROP TABLE IF EXISTS test_table_72265_1;
 CREATE TABLE test_table_72265_1 
 (
     `a` LowCardinality(Nullable(Int64)), 
@@ -14,6 +15,7 @@ SETTINGS
     min_bytes_for_wide_part = 0;
 INSERT INTO test_table_72265_1 SELECT number, number FROM numbers(10000);
 SELECT count() FROM test_table_72265_1 WHERE (a > 100) AND ((a % 2) = toUInt128(0));
+DROP TABLE IF EXISTS test_table_72265_2;
 CREATE TABLE test_table_72265_2
 (
     `part` LowCardinality(Nullable(Int64))

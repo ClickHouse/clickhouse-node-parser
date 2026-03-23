@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists s;
+
 CREATE TABLE t
 (
     a Int64,
@@ -141,3 +145,7 @@ LEFT JOIN s
 WHERE t.b = 2;
 
 SET join_use_nulls = 0;
+
+SYSTEM drop  table t;
+
+SYSTEM drop  table s;

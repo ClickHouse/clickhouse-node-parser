@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_virtual_columns;
+
 -- { echoOn }
 CREATE TABLE test_virtual_columns
 (
@@ -10,3 +12,6 @@ INSERT INTO test_virtual_columns;
 
 SELECT _part_offset
 FROM test_virtual_columns;
+
+-- { echoOff }
+SYSTEM DROP  TABLE test_virtual_columns;

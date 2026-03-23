@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists s;
+
+SYSTEM drop  table if exists y;
+
 CREATE TABLE t
 (
     a Int64,
@@ -81,3 +87,9 @@ LEFT JOIN y
     ON y.b = s.b
 GROUP BY t.a
 ORDER BY t.a ASC;
+
+SYSTEM drop  table t;
+
+SYSTEM drop  table s;
+
+SYSTEM drop  table y;

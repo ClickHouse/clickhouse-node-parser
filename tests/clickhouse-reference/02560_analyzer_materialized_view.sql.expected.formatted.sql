@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -7,6 +9,8 @@ CREATE TABLE test_table
 )
 ENGINE = MergeTree
 ORDER BY id;
+
+SYSTEM DROP  VIEW IF EXISTS test_materialized_view;
 
 CREATE MATERIALIZED VIEW test_materialized_view
 (
@@ -33,6 +37,8 @@ SELECT '--';
 
 INSERT INTO test_table;
 
+SYSTEM DROP  TABLE IF EXISTS test_table_data;
+
 CREATE TABLE test_table_data
 (
     id UInt64,
@@ -47,3 +53,9 @@ INSERT INTO test_table SELECT
     id,
     value
 FROM test_table_data;
+
+SYSTEM DROP  TABLE test_table_data;
+
+SYSTEM DROP  VIEW test_materialized_view;
+
+SYSTEM DROP  TABLE test_table;

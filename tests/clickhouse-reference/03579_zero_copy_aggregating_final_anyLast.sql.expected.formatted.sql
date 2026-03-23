@@ -61,3 +61,7 @@ SELECT
     v6,
     v7
 FROM t_coalesce2 FINAL;
+
+SYSTEM DROP  TABLE t_coalesce;
+
+SYSTEM DROP  TABLE t_coalesce2;

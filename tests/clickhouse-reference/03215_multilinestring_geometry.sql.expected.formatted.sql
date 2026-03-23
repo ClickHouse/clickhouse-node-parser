@@ -11,6 +11,9 @@ SELECT toTypeName(readWKTMultiLineString('MULTILINESTRING ((1 1, 2 2, 3 3, 1 1),
 
 SELECT wkt(readWKTMultiLineString('MULTILINESTRING ((1 1, 2 2, 3 3, 1 1), (1 0, 2 0, 3 0))'));
 
+-- Non constant tests
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE IF NOT EXISTS t
 (
     shape Array(Array(Tuple(Float64, Float64))),

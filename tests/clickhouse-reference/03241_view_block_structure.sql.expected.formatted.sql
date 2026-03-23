@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS foo;
+
+SYSTEM DROP  TABLE IF EXISTS vfoo;
+
 CREATE TABLE foo
 (
     to_dttm DateTime
@@ -15,6 +19,10 @@ FROM foo;
 SELECT *
 FROM vfoo
 WHERE vfoo.to_dttm = toDateTime64('2024-03-26 11:35:03.620846', 6);
+
+SYSTEM DROP  TABLE vfoo;
+
+SYSTEM DROP  TABLE foo;
 
 CREATE TABLE foo
 (

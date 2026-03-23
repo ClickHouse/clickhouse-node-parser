@@ -1,5 +1,9 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS t_dist;
+
 CREATE TABLE t
 (
     id int,
@@ -23,3 +27,7 @@ FROM (
         FROM t_dist
         GROUP BY ALL
     ) AS Z;
+
+SYSTEM DROP  TABLE t_dist;
+
+SYSTEM DROP  TABLE t;

@@ -5,6 +5,7 @@ SET enable_analyzer = 1;
 SET allow_suspicious_types_in_order_by = 1;
 SET allow_suspicious_types_in_group_by = 1;
 SET output_format_native_write_json_as_string = 0;
+DROP TABLE IF EXISTS t_json_array;
 CREATE TABLE t_json_array (id UInt32, arr Array(JSON)) ENGINE = MergeTree ORDER BY id;
 INSERT INTO t_json_array FORMAT JSONEachRow {"id": 1, "arr": [{"k1": 1, "k2": {"k3": 2, "k4": 3}}, {"k1": 2, "k2": {"k5": "foo"}}]}
 
@@ -24,6 +25,7 @@ SELECT id, arr.k1[].k2, arr.k1[].k3, arr.k1[].k4, arr.k5.k6 FROM t_json_array OR
 SELECT arrayJoin(arrayJoin(arr.k1[])) AS k1 FROM t_json_array ORDER BY toString(k1) FORMAT JSONEachRow;
 SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(arrayJoin(arrayJoin(arr.k1[])))) AS path FROM t_json_array order by path;
 SELECT arr.k1 FROM t_json_array GROUP BY arr.k1 ORDER BY toString(arr.k1);
+DROP TABLE t_json_array;
 SELECT * FROM values('arr Array(JSON)', '[\'{"x" : 1}\']') FORMAT JSONEachRow;
 SELECT * FROM values('arr Map(String, JSON)', '{\'x\' : \'{"y" : 1}\', \'t\' : \'{"y" : 2}\'}') FORMAT JSONEachRow;
 SELECT * FROM values('arr Tuple(Int32, JSON)', '(1, \'{"y" : 1}\')', '(2, \'{"y" : 2}\')') FORMAT JSONEachRow;

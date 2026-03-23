@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t1
 (
     date Date,
@@ -18,3 +20,5 @@ SELECT
     s3
 FROM t1
 WHERE s2 = 'bbb';
+
+SYSTEM DROP  TABLE t1;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY number
@@ -9,3 +11,5 @@ FROM numbers(10000000);
 
 SELECT count()
 FROM test;
+
+SYSTEM DROP  TABLE test;

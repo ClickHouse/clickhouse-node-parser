@@ -1,3 +1,6 @@
+-- Tags: no-parallel, no-random-merge-tree-settings
+SYSTEM DROP  TABLE IF EXISTS codecs;
+
 CREATE TABLE codecs
 (
     id UInt32,
@@ -26,6 +29,8 @@ SELECT
     sum(val),
     max(s)
 FROM codecs;
+
+SYSTEM DROP  TABLE codecs;
 
 CREATE TABLE codecs
 (

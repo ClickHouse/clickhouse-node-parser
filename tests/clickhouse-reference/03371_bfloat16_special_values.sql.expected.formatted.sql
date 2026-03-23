@@ -115,6 +115,9 @@ SELECT
     toFloat32(5.5) % toFloat32(inf),
     toBFloat16(5.5) % toBFloat16(inf);
 
+-- Test for Bug 77087
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     c0 Tuple(BFloat16)
@@ -127,6 +130,8 @@ INSERT INTO tab (c0);
 
 SELECT c0
 FROM tab FINAL;
+
+SYSTEM DROP  TABLE tab;
 
 -- Test for Bug 77224
 CREATE TABLE tab

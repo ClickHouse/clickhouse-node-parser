@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS replacing_merge_tree;
+
 CREATE TABLE replacing_merge_tree
 (
     key UInt32,
@@ -12,6 +14,10 @@ INSERT INTO replacing_merge_tree;
 SELECT *
 FROM replacing_merge_tree
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE replacing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS collapsing_merge_tree;
 
 CREATE TABLE collapsing_merge_tree
 (
@@ -28,6 +34,10 @@ INSERT INTO collapsing_merge_tree;
 SELECT *
 FROM collapsing_merge_tree
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE collapsing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS versioned_collapsing_merge_tree;
 
 CREATE TABLE versioned_collapsing_merge_tree
 (
@@ -46,6 +56,10 @@ SELECT *
 FROM versioned_collapsing_merge_tree
 ORDER BY key ASC;
 
+SYSTEM DROP  TABLE versioned_collapsing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS summing_merge_tree;
+
 CREATE TABLE summing_merge_tree
 (
     key UInt32,
@@ -62,6 +76,10 @@ SELECT *
 FROM summing_merge_tree
 ORDER BY key ASC;
 
+SYSTEM DROP  TABLE summing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS aggregating_merge_tree;
+
 CREATE TABLE aggregating_merge_tree
 (
     key UInt32,
@@ -77,6 +95,10 @@ INSERT INTO aggregating_merge_tree;
 SELECT *
 FROM aggregating_merge_tree
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE aggregating_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS empty;
 
 CREATE TABLE empty
 (
@@ -102,3 +124,5 @@ FROM `system`.parts
 WHERE table = 'empty'
     AND active = 1
     AND database = currentDatabase();
+
+SYSTEM DROP  TABLE empty;

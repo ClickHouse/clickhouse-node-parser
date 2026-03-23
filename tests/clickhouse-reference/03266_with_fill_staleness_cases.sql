@@ -1,6 +1,8 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (a Int64, b Int64, c Int64) Engine=MergeTree ORDER BY a;
 INSERT INTO test(a, b, c) VALUES (0, 5, 10), (7, 8, 15), (14, 10, 20);
 SELECT *, 'original' AS orig FROM test ORDER BY a, b WITH FILL TO 20 STEP 2 STALENESS 3, c WITH FILL TO 25 step 3;
+DROP TABLE IF EXISTS test2;
 CREATE TABLE test2 (a Int64, b Int64) Engine=MergeTree ORDER BY a;
 INSERT INTO test2(a, b) values (1, 0), (1, 4), (1, 8), (1, 12);
 SELECT *, 'original' AS orig FROM test2 ORDER BY a, b WITH FILL;

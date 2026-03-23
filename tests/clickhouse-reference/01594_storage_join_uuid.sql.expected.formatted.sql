@@ -1,3 +1,8 @@
+-- the test from simPod, https://github.com/ClickHouse/ClickHouse/issues/5608
+SYSTEM DROP  TABLE IF EXISTS joint; -- the table name from the original issue.
+
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE IF NOT EXISTS joint
 (
     id UUID,
@@ -23,3 +28,7 @@ FROM
     t
 LEFT JOIN joint
     ON t.id = joint.id;
+
+SYSTEM DROP  TABLE joint;
+
+SYSTEM DROP  TABLE t;

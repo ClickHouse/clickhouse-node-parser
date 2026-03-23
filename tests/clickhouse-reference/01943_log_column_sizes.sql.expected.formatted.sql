@@ -1,3 +1,8 @@
+-- Tags: log-engine
+SYSTEM DROP  TABLE IF EXISTS test_log;
+
+SYSTEM DROP  TABLE IF EXISTS test_tiny_log;
+
 CREATE TABLE test_log
 (
     x UInt8,
@@ -27,3 +32,7 @@ SELECT data_compressed_bytes
 FROM `system`.`columns`
 WHERE table = 'test_tiny_log'
     AND database = currentDatabase();
+
+SYSTEM DROP  TABLE test_log;
+
+SYSTEM DROP  TABLE test_tiny_log;

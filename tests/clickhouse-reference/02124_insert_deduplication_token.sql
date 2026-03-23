@@ -1,3 +1,6 @@
+-- insert data duplicates by providing deduplication token on insert
+
+DROP TABLE IF EXISTS insert_dedup_token SYNC;
 CREATE TABLE insert_dedup_token (
     id Int32, val UInt32
 ) ENGINE=MergeTree() ORDER BY id
@@ -9,3 +12,4 @@ INSERT INTO insert_dedup_token VALUES(1, 1001);
 INSERT INTO insert_dedup_token VALUES(2, 1002);
 set insert_deduplication_token = '\x61\x00\x63';
 set insert_deduplication_token = '';
+DROP TABLE insert_dedup_token SYNC;

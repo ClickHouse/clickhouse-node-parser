@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database
+SYSTEM drop  table if exists t1;
+
 CREATE OR REPLACE TABLE t1
 (
     n UInt64,
@@ -22,3 +25,5 @@ SELECT *
 FROM t1;
 
 INSERT INTO t1;
+
+SYSTEM drop  table t1;

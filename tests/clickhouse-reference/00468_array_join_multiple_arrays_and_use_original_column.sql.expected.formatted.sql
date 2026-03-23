@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nested;
+
 CREATE TABLE nested
 (
     nest Nested(x UInt8, y UInt8)
@@ -47,3 +49,5 @@ SELECT
 FROM
     nested
 ARRAY JOIN nest.x AS nx, nest.y AS ny;
+
+SYSTEM DROP  TABLE nested;

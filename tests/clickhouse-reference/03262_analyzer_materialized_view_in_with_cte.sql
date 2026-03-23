@@ -1,4 +1,9 @@
 SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS mv_test;
+DROP TABLE IF EXISTS mv_test_target;
+DROP VIEW IF EXISTS mv_test_mv;
+
 CREATE TABLE mv_test
 (
     `id` UInt64,
@@ -7,6 +12,7 @@ CREATE TABLE mv_test
     `display` String
 )
 ENGINE = Log;
+
 CREATE TABLE mv_test_target
 (
     `id` UInt64,
@@ -15,6 +21,7 @@ CREATE TABLE mv_test_target
     `display` String
 )
 ENGINE = Log;
+
 CREATE MATERIALIZED VIEW mv_test_mv TO mv_test_target
 (
     `id` UInt64,
@@ -46,5 +53,11 @@ WHERE id IN (
     SELECT max_id
     FROM id_set
 );
+
 INSERT INTO mv_test ( id, ref_id, display) values ( 1, 2, 'test');
+
 SELECT * FROM mv_test_target;
+
+DROP VIEW mv_test_mv;
+DROP TABLE mv_test_target;
+DROP TABLE mv_test;

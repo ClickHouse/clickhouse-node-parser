@@ -29,6 +29,8 @@ SELECT
     a AS b,
     b AS a; -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -74,3 +76,5 @@ FROM test_table;
 SET prefer_column_name_to_alias = 1;
 
 SET prefer_column_name_to_alias = 0;
+
+SYSTEM DROP  TABLE test_table;

@@ -4,6 +4,7 @@ SET enable_full_text_index = 1;
 SET use_skip_indexes_on_data_read = 1;
 SET query_plan_direct_read_from_text_index = 0;
 SET max_threads = 2; -- make sure it's running multi-threaded
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
   id UInt64,
@@ -19,6 +20,7 @@ INSERT INTO tab SELECT number, 'clickbench' FROM numbers(1024);
 INSERT INTO tab SELECT number, 'blick' FROM numbers(1024);
 SELECT count() FROM tab WHERE hasAllTokens(msg, sparseGrams('click'));
 SELECT count() FROM tab WHERE hasAnyTokens(msg, sparseGrams('click'));
+DROP TABLE tab;
 CREATE TABLE tab
 (
   id UInt64,

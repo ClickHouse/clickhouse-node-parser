@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_having;
+
 CREATE TABLE t_having
 (
     c0 Int32,
@@ -66,6 +68,8 @@ FROM t_having
 GROUP BY c0
 HAVING c0 = 0;
 
+SYSTEM DROP  TABLE t_having;
+
 CREATE TABLE t_exact
 (
     c0 Bool,
@@ -82,6 +86,8 @@ GROUP BY
     c1,
     c0
 HAVING c0;
+
+SYSTEM DROP  TABLE t_exact;
 
 SELECT 1
 FROM remote('127.0.0.{1,1}')

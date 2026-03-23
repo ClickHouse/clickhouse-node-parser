@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS decimal_in_float_test;
+
 CREATE TABLE decimal_in_float_test
 (
     a Decimal(18, 0),

@@ -1,3 +1,11 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
+SYSTEM DROP  TABLE IF EXISTS test_tmp;
+
+SYSTEM DROP  TABLE IF EXISTS dst;
+
+SYSTEM DROP  TABLE IF EXISTS view;
+
 CREATE TABLE test
 (
     address FixedString(20),
@@ -108,3 +116,11 @@ FROM test_tmp;
 
 SELECT count()
 FROM test;
+
+SYSTEM DROP  TABLE test;
+
+SYSTEM DROP  TABLE test_tmp;
+
+SYSTEM DROP  TABLE dst;
+
+SYSTEM DROP  TABLE view;

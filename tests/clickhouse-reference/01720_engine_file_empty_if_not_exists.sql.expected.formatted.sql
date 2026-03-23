@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS file_engine_table;
+
 CREATE TABLE file_engine_table
 (
     id UInt32
@@ -10,3 +12,5 @@ FROM file_engine_table; --{ serverError FILE_DOESNT_EXIST }
 SET engine_file_empty_if_not_exists = 0;
 
 SET engine_file_empty_if_not_exists = 1;
+
+SYSTEM DROP  TABLE file_engine_table;

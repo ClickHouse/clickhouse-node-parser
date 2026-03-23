@@ -4,6 +4,10 @@ SET enable_parallel_replicas = 0;
 
 SET enable_join_runtime_filters = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     x Int32,

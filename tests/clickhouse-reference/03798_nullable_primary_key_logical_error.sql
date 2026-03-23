@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t;
 CREATE TABLE t (`x` FixedString(3), `y` Nullable(Int16)) ENGINE = MergeTree PARTITION BY y ORDER BY x SETTINGS allow_nullable_key = 1;
 INSERT INTO t VALUES (1, '1990-11-15');
 INSERT INTO t VALUES (2, '1990-11-15');

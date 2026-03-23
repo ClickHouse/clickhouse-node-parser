@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_table_ipv4;
 CREATE TABLE test_table_ipv4
 (
     ip String,
@@ -7,6 +8,8 @@ INSERT INTO test_table_ipv4 VALUES ('1.1.1.1', '1.1.1.1'), ('', ''); --{error CA
 SET input_format_ipv4_default_on_conversion_error = 1;
 SELECT ip, ipv4 FROM test_table_ipv4;
 SET input_format_ipv4_default_on_conversion_error = 0;
+DROP TABLE test_table_ipv4;
+DROP TABLE IF EXISTS test_table_ipv4_materialized;
 CREATE TABLE test_table_ipv4_materialized
 (
     ip String,
@@ -16,6 +19,8 @@ INSERT INTO test_table_ipv4_materialized(ip) VALUES ('1.1.1.1'), (''); --{server
 SET cast_ipv4_ipv6_default_on_conversion_error = 1;
 SELECT ip, ipv6 FROM test_table_ipv4_materialized;
 SET cast_ipv4_ipv6_default_on_conversion_error = 0;
+DROP TABLE test_table_ipv4_materialized;
+DROP TABLE IF EXISTS test_table_ipv6;
 CREATE TABLE test_table_ipv6
 (
     ip String,
@@ -25,6 +30,8 @@ INSERT INTO test_table_ipv6 VALUES ('fe80::9801:43ff:fe1f:7690', 'fe80::9801:43f
 SET input_format_ipv6_default_on_conversion_error = 1;
 SELECT ip, ipv6 FROM test_table_ipv6;
 SET input_format_ipv6_default_on_conversion_error = 0;
+DROP TABLE test_table_ipv6;
+DROP TABLE IF EXISTS test_table_ipv6_materialized;
 CREATE TABLE test_table_ipv6_materialized
 (
     ip String,
@@ -32,3 +39,4 @@ CREATE TABLE test_table_ipv6_materialized
 ) ENGINE = TinyLog;
 INSERT INTO test_table_ipv6_materialized(ip) VALUES ('fe80::9801:43ff:fe1f:7690'), ('1.1.1.1'), (''); --{serverError CANNOT_PARSE_IPV6}
 SELECT ip, ipv6 FROM test_table_ipv6_materialized;
+DROP TABLE test_table_ipv6_materialized;

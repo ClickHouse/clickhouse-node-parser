@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists table;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE table

@@ -1,3 +1,7 @@
+-- Tags: long, replica
+
+DROP TABLE IF EXISTS minmax_idx1;
+DROP TABLE IF EXISTS minmax_idx2;
 CREATE TABLE minmax_idx1
 (
     u64 UInt64,
@@ -49,3 +53,5 @@ SELECT * FROM minmax_idx2 WHERE i32 = 5 AND i32 + f64 < 12 AND 3 < d AND d < 7 A
 /* select with hole made by primary key */
 SELECT * FROM minmax_idx1 WHERE (u64 < 2 OR u64 > 10) AND e != 'b' ORDER BY dt;
 SELECT * FROM minmax_idx2 WHERE (u64 < 2 OR u64 > 10) AND e != 'b' ORDER BY dt;
+DROP TABLE minmax_idx1;
+DROP TABLE minmax_idx2;

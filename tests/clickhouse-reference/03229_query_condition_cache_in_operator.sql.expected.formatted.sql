@@ -5,6 +5,10 @@ SET allow_experimental_analyzer = 1;
 
 SET use_query_condition_cache = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab1;
+
+SYSTEM DROP  TABLE IF EXISTS tab2;
+
 CREATE TABLE tab1
 (
     id UInt32 DEFAULT 0
@@ -33,3 +37,7 @@ WHERE id IN (
     );
 
 INSERT INTO tab2;
+
+SYSTEM DROP  TABLE tab1;
+
+SYSTEM DROP  TABLE tab2;

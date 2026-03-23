@@ -10,6 +10,8 @@ SET max_insert_threads = 1;
 SET max_block_size = 65536;
 SET min_insert_block_size_rows = 0;
 SET min_insert_block_size_bytes = 0;
+DROP TABLE IF EXISTS tab_bitpacking;
+DROP TABLE IF EXISTS tab_uncompressed;
 CREATE TABLE tab_bitpacking
 (
     ts DateTime CODEC(LZ4),
@@ -121,3 +123,5 @@ SELECT
 FROM system.parts
 WHERE database = currentDatabase() AND active AND table IN ('tab_bitpacking','tab_uncompressed')
 GROUP BY table;
+DROP TABLE tab_bitpacking;
+DROP TABLE tab_uncompressed;

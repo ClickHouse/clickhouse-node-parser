@@ -8,3 +8,5 @@ INSERT INTO ip4test;
 
 SELECT *
 FROM ip4test;
+
+SYSTEM DROP  TABLE ip4test;

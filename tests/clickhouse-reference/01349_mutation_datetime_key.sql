@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS cdp_orders;
 CREATE TABLE cdp_orders
 (
     `order_id` String,
@@ -11,3 +12,4 @@ SETTINGS index_granularity = 8192;
 INSERT INTO cdp_orders VALUES ('hello', 'world', '2020-01-02 03:04:05');
 SELECT * FROM cdp_orders;
 SET mutations_sync = 1;
+DROP TABLE cdp_orders;

@@ -6,6 +6,8 @@ SET session_timezone = 'UTC';
 
 SELECT '-- Original Time aggregate functions test';
 
+SYSTEM DROP  TABLE IF EXISTS dt;
+
 CREATE TABLE dt
 (
     time Time,
@@ -23,6 +25,8 @@ FROM dt;
 
 SELECT avg(time)
 FROM dt;
+
+SYSTEM DROP  TABLE dt;
 
 SELECT avg(d)
 FROM (
@@ -100,6 +104,8 @@ FROM (
         SELECT toTime64('01:00:00.000', 3) AS t64
     );
 
+SYSTEM DROP  TABLE IF EXISTS empty_date_test;
+
 CREATE TABLE empty_date_test
 (
     d Date,
@@ -120,6 +126,8 @@ SELECT
     avg(t64)
 FROM empty_date_test
 FORMAT Vertical;
+
+SYSTEM DROP  TABLE empty_date_test;
 
 SELECT avg(d)
 FROM (
@@ -327,6 +335,8 @@ FROM (
         SELECT toTime('100:00:00') AS t
     );
 
+SYSTEM DROP  TABLE IF EXISTS nullable_date_test;
+
 CREATE TABLE nullable_date_test
 (
     d Nullable(Date),
@@ -364,6 +374,10 @@ SELECT avg(d)
 FROM nullable_date_test
 WHERE isNull(d);
 
+SYSTEM DROP  TABLE nullable_date_test;
+
+SYSTEM DROP  TABLE IF EXISTS avgif_date_test;
+
 CREATE TABLE avgif_date_test
 (
     d Date,
@@ -384,6 +398,10 @@ FROM avgif_date_test;
 SELECT avgIf(d, flag = 99)
 FROM avgif_date_test;
 
+SYSTEM DROP  TABLE avgif_date_test;
+
+SYSTEM DROP  TABLE IF EXISTS groupby_date_test;
+
 CREATE TABLE groupby_date_test
 (
     grp String,
@@ -403,6 +421,8 @@ SELECT
 FROM groupby_date_test
 GROUP BY grp
 ORDER BY grp ASC;
+
+SYSTEM DROP  TABLE groupby_date_test;
 
 SELECT avg(d)
 FROM (
@@ -624,6 +644,9 @@ FROM (
         FROM numbers(100)
     );
 
+-- Use CAST for Time types to avoid timezone sensitivity
+SYSTEM DROP  TABLE IF EXISTS jit_time_test;
+
 CREATE TABLE jit_time_test
 (
     t Time,
@@ -642,7 +665,11 @@ FROM jit_time_test;
 SELECT avg(t64)
 FROM jit_time_test;
 
+SYSTEM DROP  TABLE jit_time_test;
+
 SET compile_aggregate_expressions = 0;
+
+SYSTEM DROP  TABLE IF EXISTS negative_time_test;
 
 CREATE TABLE negative_time_test
 (
@@ -656,6 +683,12 @@ FROM numbers(3);
 
 SELECT avg(t)
 FROM negative_time_test;
+
+SYSTEM DROP  TABLE negative_time_test;
+
+SYSTEM DROP  TABLE IF EXISTS mv_source;
+
+SYSTEM DROP  TABLE IF EXISTS mv_target;
 
 CREATE TABLE mv_source
 (
@@ -697,3 +730,9 @@ SELECT
     avgMerge(dt_avg),
     avgMerge(t_avg)
 FROM mv_target;
+
+SYSTEM DROP  VIEW mv_view;
+
+SYSTEM DROP  TABLE mv_target;
+
+SYSTEM DROP  TABLE mv_source;

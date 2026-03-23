@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS merge_tree;
+
 CREATE TABLE merge_tree
 (
     d Date
@@ -37,3 +39,5 @@ SELECT
     *
 FROM merge_tree
 ORDER BY d ASC;
+
+SYSTEM DROP  TABLE merge_tree;

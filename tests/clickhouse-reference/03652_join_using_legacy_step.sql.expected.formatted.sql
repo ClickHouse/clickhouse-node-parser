@@ -2,6 +2,14 @@ SET query_plan_use_new_logical_join_step = 0;
 
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
+SYSTEM DROP  TABLE IF EXISTS t3;
+
+SYSTEM DROP  TABLE IF EXISTS t4;
+
 CREATE TABLE t1
 (
     x Int8

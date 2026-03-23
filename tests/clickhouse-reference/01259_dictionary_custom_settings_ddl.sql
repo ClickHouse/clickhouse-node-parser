@@ -9,7 +9,9 @@ CREATE TABLE table_for_dict
 ENGINE = MergeTree()
 ORDER BY key_column;
 INSERT INTO table_for_dict VALUES (100500, 10000000, 'Hello world');
+DROP DATABASE IF EXISTS ordinary_db;
 CREATE DATABASE ordinary_db;
+DROP DICTIONARY IF EXISTS ordinary_db.dict1;
 CREATE DICTIONARY ordinary_db.dict1
 (
   key_column UInt64 DEFAULT 0,
@@ -21,3 +23,4 @@ SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_fo
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(FLAT()) SETTINGS(max_result_bytes=1);
 SELECT dictGetUInt64('ordinary_db.dict1', 'second_column', toUInt64(100500)); -- { serverError TOO_MANY_ROWS_OR_BYTES }
+DROP TABLE IF EXISTS table_for_dict;

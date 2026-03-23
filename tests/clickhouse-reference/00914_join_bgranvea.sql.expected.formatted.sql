@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1
 (
     A String,
@@ -31,3 +35,7 @@ INNER JOIN table2 AS t2
 ORDER BY
     t1.B ASC,
     t2.B ASC;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;

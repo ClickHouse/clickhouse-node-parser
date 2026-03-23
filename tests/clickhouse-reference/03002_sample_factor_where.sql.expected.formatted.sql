@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_sample_factor;
+
 CREATE TABLE t_sample_factor
 (
     a UInt64,
@@ -19,3 +21,5 @@ WHERE a < -1;
 SELECT uniq(b) * any(_sample_factor)
 FROM t_sample_factor SAMPLE 200000
 PREWHERE a < -1;
+
+SYSTEM DROP  TABLE t_sample_factor;

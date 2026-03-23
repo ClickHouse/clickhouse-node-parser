@@ -5,6 +5,8 @@ SET enable_analyzer = 1;
 
 SET output_format_native_write_json_as_string = 0;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 4)
@@ -52,6 +54,8 @@ SELECT
     json2.k3,
     json2.k4
 FROM test;
+
+SYSTEM drop  table test;
 
 SET max_block_size = 1000;
 

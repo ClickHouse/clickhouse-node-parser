@@ -4,6 +4,7 @@ SET enable_analyzer = 1;
 -- enable projection for parallel replicas
 SET parallel_replicas_local_plan = 1;
 SET optimize_aggregation_in_order = 0;
+DROP TABLE IF EXISTS test_simple_projection;
 CREATE TABLE test_simple_projection
 (
     id UInt64,
@@ -53,6 +54,10 @@ WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[
 SELECT * FROM test_simple_projection WHERE region = 'asia' OR user_id = 101 ORDER BY ALL;
 -- Fuzzer
 SELECT *, _part_offset = (isNullable(1) = toUInt128(6)), * FROM test_simple_projection PREWHERE (101 = user_id) = ignore(255, isZeroOrNull(assumeNotNull(0))) WHERE (106 = user_id) AND (region = 'us_west');
+DROP TABLE test_simple_projection;
+-- verify projection index can filter individual matching rows at top, middle, and bottom of a single granule.
+
+DROP TABLE IF EXISTS test_projection_granule_edge_cases;
 CREATE TABLE test_projection_granule_edge_cases
 (
     id UInt64,
@@ -87,6 +92,10 @@ SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM test_projection_granule_edge_cases WHERE region = 'bol_region')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');
 SELECT * FROM test_projection_granule_edge_cases WHERE region = 'bol_region' ORDER BY ALL;
+DROP TABLE test_projection_granule_edge_cases;
+-- check partially materialized projection index, it should only affect related parts
+
+DROP TABLE IF EXISTS test_partial_projection;
 CREATE TABLE test_partial_projection
 (
     id UInt64,
@@ -107,3 +116,4 @@ SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM test_partial_projection WHERE region = 'cn')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');
 SELECT * FROM test_partial_projection WHERE region = 'cn' ORDER BY ALL;
+DROP TABLE test_partial_projection;

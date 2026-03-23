@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP TABLE IF EXISTS t_primary_index_cache;
 CREATE TABLE t_primary_index_cache (a LowCardinality(String), b LowCardinality(String))
 ENGINE = MergeTree ORDER BY (a, b)
 SETTINGS use_primary_key_cache = 1, prewarm_primary_key_cache = 1, index_granularity = 8192, index_granularity_bytes = '10M', min_bytes_for_wide_part = 0;
@@ -14,3 +17,4 @@ SELECT
 FROM system.query_log
 WHERE log_comment = '03273_reload_query' AND current_database = currentDatabase() AND type = 'QueryFinish'
 ORDER BY event_time_microseconds;
+DROP TABLE t_primary_index_cache;

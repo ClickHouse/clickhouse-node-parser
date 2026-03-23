@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test, src;
+
 SELECT
     count(),
     plus((-9, 0), (number,  number)) AS k

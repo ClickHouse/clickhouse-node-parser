@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     b Float64

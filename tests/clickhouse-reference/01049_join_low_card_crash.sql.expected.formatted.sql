@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS Alpha;
+
+SYSTEM DROP  TABLE IF EXISTS Beta;
+
 CREATE TABLE Alpha
 (
     foo String,
@@ -56,3 +60,7 @@ FULL JOIN (
 ORDER BY js2.k ASC;
 
 SET join_use_nulls = 1;
+
+SYSTEM DROP  TABLE Alpha;
+
+SYSTEM DROP  TABLE Beta;

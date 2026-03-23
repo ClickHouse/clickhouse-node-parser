@@ -7,6 +7,8 @@ SET optimize_read_in_order = 1;
 
 SET enable_analyzer = 1; -- slightly different operator names than w/o
 
+SYSTEM DROP  TABLE IF EXISTS test_skip_idx;
+
 CREATE TABLE test_skip_idx
 (
     id UInt32,
@@ -21,3 +23,5 @@ INSERT INTO test_skip_idx SELECT number
 FROM `system`.numbers
 LIMIT 5
 OFFSET 1;
+
+SYSTEM DROP  TABLE test_skip_idx;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS summing;
+
 CREATE TABLE summing
 (
     k String,
@@ -19,3 +21,5 @@ SELECT
     x,
     e
 FROM summing;
+
+SYSTEM DROP  TABLE summing;

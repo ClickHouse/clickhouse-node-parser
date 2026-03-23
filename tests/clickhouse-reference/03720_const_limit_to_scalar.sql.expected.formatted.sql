@@ -1,3 +1,9 @@
+-- Tags: distributed
+-- https://github.com/ClickHouse/ClickHouse/issues/89607
+SYSTEM DROP  TABLE IF EXISTS t0;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t0
 (
     c0 Int

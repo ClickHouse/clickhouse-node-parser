@@ -1,5 +1,7 @@
 SELECT '=== ataptive granularity: table one -; table two + ===';
 
+SYSTEM DROP  TABLE IF EXISTS table_one;
+
 CREATE TABLE table_one
 (
     id UInt64,
@@ -9,6 +11,8 @@ ENGINE = MergeTree
 ORDER BY value
 PARTITION BY id
 SETTINGS index_granularity = 8192, index_granularity_bytes = 0, min_bytes_for_wide_part = 100;
+
+SYSTEM DROP  TABLE IF EXISTS table_two;
 
 CREATE TABLE table_two
 (

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     n Int32,
@@ -25,3 +27,5 @@ ORDER BY
     n ASC,
     s ASC
 LIMIT 30;
+
+SYSTEM DROP  TABLE test_table;

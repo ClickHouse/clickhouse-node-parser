@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_filter;
 -- { echoOn }
 CREATE TABLE test_filter(a Int32, b Int32, c Int32) ENGINE = MergeTree() ORDER BY a SETTINGS index_granularity = 3, index_granularity_bytes = '10Mi';
 INSERT INTO test_filter SELECT number, number+1, (number/2 + 1) % 2 FROM numbers(15);
@@ -11,3 +12,5 @@ SELECT intDiv(b, c) FROM test_filter PREWHERE c != 0 WHERE b%2 != 0;
 SET mutations_sync = 2;
 SELECT * FROM test_filter PREWHERE intDiv(b, c) > 0;
 SELECT * FROM test_filter PREWHERE b != 0 WHERE intDiv(b, c) > 0;
+-- { echoOff }
+DROP TABLE test_filter;

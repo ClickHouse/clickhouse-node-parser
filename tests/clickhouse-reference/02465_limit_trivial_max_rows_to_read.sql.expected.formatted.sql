@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_max_rows_to_read;
+
 CREATE TABLE t_max_rows_to_read
 (
     a UInt64
@@ -42,3 +44,5 @@ SELECT a
 FROM t_max_rows_to_read
 WHERE a > 50
 LIMIT 1; -- { serverError TOO_MANY_ROWS }
+
+SYSTEM DROP  TABLE t_max_rows_to_read;

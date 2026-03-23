@@ -1,3 +1,9 @@
+--- Based on https://github.com/ClickHouse/ClickHouse/issues/49685
+--- Verify that ReplacingMergeTree properly handles _is_deleted:
+--- SELECT FINAL should take `_is_deleted` into consideration when there is only one partition.
+-- { echoOn }
+
+DROP TABLE IF EXISTS t;
 CREATE TABLE t
 (
     `account_id` UInt64,
@@ -16,3 +22,4 @@ SELECT count() FROM t FINAL;
 -- as if no rows were deleted.
 SELECT count() FROM t FINAL SETTINGS do_not_merge_across_partitions_select_final = 1;
 SELECT count() FROM t FINAL SETTINGS do_not_merge_across_partitions_select_final = 0;
+DROP TABLE t;

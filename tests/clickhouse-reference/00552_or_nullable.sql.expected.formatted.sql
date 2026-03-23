@@ -98,6 +98,8 @@ FROM (
         LIMIT 10
     );
 
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x Nullable(Int32)
@@ -121,3 +123,5 @@ WHERE x != 0
 SELECT x
 FROM test
 WHERE x != 1;
+
+SYSTEM DROP  TABLE test;

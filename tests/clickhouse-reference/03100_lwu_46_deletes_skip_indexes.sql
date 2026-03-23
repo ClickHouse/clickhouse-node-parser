@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+
+DROP TABLE IF EXISTS t_lwd_indexes;
 SET enable_lightweight_update = 1;
 CREATE TABLE t_lwd_indexes
 (
@@ -33,3 +36,4 @@ SELECT trim(explain) FROM
     EXPLAIN indexes = 1 SELECT count() FROM t_lwd_indexes WHERE value = 'v9000' SETTINGS force_data_skipping_indices = 'idx_value'
 )
 WHERE explain LIKE '%Granules%';
+DROP TABLE t_lwd_indexes;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -25,3 +27,5 @@ SETTINGS
     max_parallel_replicas = 4,
     prefer_localhost_replica = 0,
     parallel_replicas_for_non_replicated_merge_tree = 1;
+
+SYSTEM DROP  TABLE test;

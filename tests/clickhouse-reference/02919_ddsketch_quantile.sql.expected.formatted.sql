@@ -52,6 +52,8 @@ FROM (
         FROM numbers(20)
     );
 
+SYSTEM DROP  TABLE IF EXISTS `02919_ddsketch_quantile`;
+
 CREATE TABLE `02919_ddsketch_quantile`
 ENGINE = Log AS
 SELECT quantilesDDState(0.001, 0.9)(number) AS sketch

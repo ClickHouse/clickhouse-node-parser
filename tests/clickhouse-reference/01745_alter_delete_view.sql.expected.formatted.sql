@@ -1,3 +1,7 @@
+SYSTEM DROP  VIEW IF EXISTS test_view;
+
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     f1 Int32,

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nested_test;
+
 CREATE TABLE nested_test
 (
     x UInt32,

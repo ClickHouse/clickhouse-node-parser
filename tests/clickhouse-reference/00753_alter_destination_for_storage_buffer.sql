@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS dst_00753;
+DROP TABLE IF EXISTS buffer_00753;
 SET send_logs_level = 'error';
 CREATE TABLE dst_00753 (x UInt64, y UInt64) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE buffer_00753 (x UInt64, y UInt64) ENGINE = Buffer(currentDatabase(), dst_00753, 1, 99999, 99999, 1, 1, 99999, 99999);

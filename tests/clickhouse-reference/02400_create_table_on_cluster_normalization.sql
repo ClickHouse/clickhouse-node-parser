@@ -1,3 +1,6 @@
+-- Tags: no-replicated-database
+-- Tag no-replicated-database: ON CLUSTER is not allowed
+drop table if exists local_t_l5ydey;
 create table local_t_l5ydey on cluster test_shard_localhost (
     c_qv5rv INTEGER ,
     c_rutjs4 INTEGER ,
@@ -12,3 +15,4 @@ insert into t_l5ydey values (5, 6, 7, '8');
 select * from t_l5ydey order by c_qv5rv;
 -- Correct error code if creating database with the same path as table has
 create database local_t_l5ydey engine=Replicated('/clickhouse/tables/test_' || currentDatabase() || '/{shard}/local_t_l5ydey', '1', '1'); -- { serverError BAD_ARGUMENTS }
+drop table local_t_l5ydey;

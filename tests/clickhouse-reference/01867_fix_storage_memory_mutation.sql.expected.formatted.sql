@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mem_test;
+
 CREATE TABLE mem_test
 (
     a Int64,
@@ -15,3 +17,5 @@ FROM numbers(100);
 SELECT *
 FROM mem_test
 FORMAT Null;
+
+SYSTEM DROP  TABLE mem_test;

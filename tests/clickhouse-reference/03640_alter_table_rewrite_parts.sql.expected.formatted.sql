@@ -1,3 +1,6 @@
+-- Firstly write parts with use_const_adaptive_granularity=0 and then enable it and check that index_granularity_bytes_in_memory_allocated=25 (sizeof constant granularity)
+SYSTEM drop  table if exists test_materialize;
+
 CREATE TABLE test_materialize
 (
     part Int,

@@ -1,3 +1,7 @@
+-- Tags: no-async-insert
+-- no-async-insert: 1 part is inserted with async inserts
+SYSTEM DROP  TABLE IF EXISTS t_parts_profile_events;
+
 CREATE TABLE t_parts_profile_events
 (
     a UInt32
@@ -49,3 +53,5 @@ WHERE database = currentDatabase()
     AND event_type = 'MergeParts'
 GROUP BY part_type
 ORDER BY part_type ASC;
+
+SYSTEM DROP  TABLE t_parts_profile_events;

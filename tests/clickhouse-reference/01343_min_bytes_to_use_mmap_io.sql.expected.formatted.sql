@@ -1,3 +1,6 @@
+-- Tags: no-object-storage
+SYSTEM DROP  TABLE IF EXISTS test_01343;
+
 CREATE TABLE test_01343
 (
     x String
@@ -22,3 +25,5 @@ WHERE current_database = currentDatabase()
     AND type = 2
 ORDER BY event_time DESC
 LIMIT 1;
+
+SYSTEM DROP  TABLE test_01343;

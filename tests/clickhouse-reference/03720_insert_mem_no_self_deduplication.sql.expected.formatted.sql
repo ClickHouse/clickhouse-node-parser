@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 03720_table;
+
 CREATE TABLE `03720_table`
 (
     id UInt32

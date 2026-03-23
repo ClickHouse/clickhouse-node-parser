@@ -1,3 +1,4 @@
+drop table if exists null_lc_set_index;
 CREATE TABLE null_lc_set_index (
   timestamp         DateTime,
   action            LowCardinality(Nullable(String)),

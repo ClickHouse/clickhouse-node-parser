@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS numbers1;
+
+SYSTEM DROP  TABLE IF EXISTS numbers2;
+
 CREATE TABLE numbers1
 ENGINE = Memory AS
 SELECT number AS _table
@@ -15,3 +19,7 @@ WHERE _table = 'numbers1'; -- { serverError TYPE_MISMATCH }
 SELECT count()
 FROM merge(currentDatabase(), '^numbers\\d+$')
 WHERE _table = 1;
+
+SYSTEM DROP  TABLE numbers1;
+
+SYSTEM DROP  TABLE numbers2;

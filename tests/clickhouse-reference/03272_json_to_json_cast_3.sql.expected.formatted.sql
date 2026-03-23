@@ -4,6 +4,8 @@ SET enable_analyzer = 1;
 
 SET output_format_native_write_json_as_string = 0;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 2)
@@ -113,3 +115,5 @@ FROM test;
 
 SELECT json::JSON(SKIP REGEXP '.*c.*', max_dynamic_paths=2)
 FROM test;
+
+SYSTEM drop  table test;

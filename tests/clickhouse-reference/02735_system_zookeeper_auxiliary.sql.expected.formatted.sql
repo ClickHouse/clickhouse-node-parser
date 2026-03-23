@@ -1,3 +1,7 @@
+-- Tags: no-fasttest, no-replicated-database, no-shared-merge-tree
+-- no-shared-merge-tree -- smt doesn't support aux zookeepers
+SYSTEM DROP  TABLE IF EXISTS test_system_zookeeper_auxiliary;
+
 CREATE TABLE test_system_zookeeper_auxiliary
 (
     key UInt64

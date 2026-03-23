@@ -1,3 +1,6 @@
+-- Tags: zookeeper, no-random-merge-tree-settings
+
+DROP TABLE IF EXISTS versioned_collapsing_table;
 CREATE TABLE versioned_collapsing_table(
   d Date,
   key1 UInt64,

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nullable_00571;
+
 CREATE TABLE nullable_00571
 (
     x String
@@ -9,3 +11,5 @@ INSERT INTO nullable_00571;
 
 SELECT *
 FROM nullable_00571;
+
+SYSTEM DROP  TABLE nullable_00571;

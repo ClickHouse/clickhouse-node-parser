@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/21558
+SYSTEM DROP  TABLE IF EXISTS test_array_bloom;
+
 CREATE TABLE test_array_bloom
 (
     id UInt16,
@@ -23,3 +26,5 @@ FROM
 ARRAY JOIN data
 WHERE data IN ('aaa')
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE test_array_bloom;

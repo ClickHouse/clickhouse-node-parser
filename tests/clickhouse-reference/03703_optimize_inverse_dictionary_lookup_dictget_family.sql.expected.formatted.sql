@@ -6,6 +6,12 @@ SET optimize_inverse_dictionary_lookup = 1;
 
 SET optimize_or_like_chain = 0;
 
+SYSTEM DROP  DICTIONARY IF EXISTS dictionary_all;
+
+SYSTEM DROP  TABLE IF EXISTS ref_table_all;
+
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE ref_table_all
 (
     id UInt64,

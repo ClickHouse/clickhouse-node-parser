@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS a;
+
+SYSTEM DROP  TABLE IF EXISTS b;
+
 CREATE VIEW a
 AS
 SELECT 'a' AS id;
@@ -14,3 +18,7 @@ WHERE id IN (
         SELECT id
         FROM a
     );
+
+SYSTEM DROP  TABLE a;
+
+SYSTEM DROP  TABLE b;

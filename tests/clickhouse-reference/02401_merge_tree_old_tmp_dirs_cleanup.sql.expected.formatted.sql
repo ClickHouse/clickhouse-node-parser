@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS test_inserts;
+
 CREATE TABLE test_inserts
 (
     key Int,
@@ -21,3 +24,5 @@ SELECT
     count(),
     sum(part)
 FROM test_inserts;
+
+SYSTEM DROP  TABLE test_inserts;

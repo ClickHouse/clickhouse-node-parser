@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists order;
+
 CREATE TABLE `order`
 (
     ID Int64,

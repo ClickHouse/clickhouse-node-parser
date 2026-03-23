@@ -1,5 +1,7 @@
 SET compatibility_ignore_auto_increment_in_create_table = false;
 
+SYSTEM DROP  TABLE IF EXISTS ignore_auto_increment SYNC;
+
 CREATE TABLE ignore_auto_increment
 (
     id int

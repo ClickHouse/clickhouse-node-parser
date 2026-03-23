@@ -45,12 +45,18 @@ SELECT
     1.1::BFloat16 * 1.1 AS c,
     1.1 / 1.1::BFloat16 AS d,
     toTypeName(a), toTypeName(b), toTypeName(c), toTypeName(d);
+-- Tables
+
+DROP TABLE IF EXISTS t;
 CREATE TEMPORARY TABLE t (n UInt64, x BFloat16);
 INSERT INTO t SELECT number, number FROM numbers(10000);
 SELECT *, n = x, n - x FROM t WHERE n % 1000 = 0 ORDER BY n;
 -- Aggregate functions
 
 SELECT sum(n), sum(x), avg(n), avg(x), min(n), min(x), max(n), max(x), uniq(n), uniq(x), uniqExact(n), uniqExact(x) FROM t;
+-- MergeTree
+
+DROP TABLE t;
 CREATE TABLE t (n UInt64, x BFloat16) ENGINE = MergeTree ORDER BY n;
 -- Introspection
 

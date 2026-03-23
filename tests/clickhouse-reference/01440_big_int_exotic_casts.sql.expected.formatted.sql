@@ -248,6 +248,8 @@ SELECT
 FROM numbers_mt(10)
 ORDER BY number ASC;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x UInt64,
@@ -277,3 +279,5 @@ INSERT INTO t SELECT
     x AS u256,
     x AS d256
 FROM numbers(10000);
+
+SYSTEM DROP  TABLE t;

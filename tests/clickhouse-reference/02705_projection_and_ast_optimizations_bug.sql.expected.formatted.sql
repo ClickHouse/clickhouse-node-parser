@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t1;
+
 CREATE TABLE t1
 (
     c0 Int32
@@ -17,3 +19,5 @@ GROUP BY
     (sqrt((negate((t1.c0))))),
     t1.c0,
     pow((erf((negate((t1.c0))))), t1.c0);
+
+SYSTEM drop  table t1;

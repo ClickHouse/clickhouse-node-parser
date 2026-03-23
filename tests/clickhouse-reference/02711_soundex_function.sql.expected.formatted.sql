@@ -26,6 +26,9 @@ SELECT soundex('Smith');
 
 SELECT '---';
 
+-- same input strings but in a table
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     col String
@@ -37,6 +40,8 @@ INSERT INTO tab;
 
 SELECT soundex(col)
 FROM tab;
+
+SYSTEM DROP  TABLE tab;
 
 -- negative tests
 SELECT soundex(toFixedString('Smith', 5)); -- { serverError ILLEGAL_COLUMN }

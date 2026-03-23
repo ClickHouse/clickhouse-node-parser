@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM drop  table if exists merge;
+
 CREATE TABLE merge
 (
     dt Date,
@@ -9,6 +12,10 @@ CREATE TABLE merge
     colAlias3 UInt32
 )
 ENGINE = Merge(currentDatabase(), '^alias_');
+
+SYSTEM drop  table if exists alias_1;
+
+SYSTEM drop  table if exists alias_2;
 
 CREATE TABLE alias_1
 (

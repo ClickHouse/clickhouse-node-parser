@@ -1,3 +1,7 @@
+-- Tags: zookeeper, no-parallel, no-shared-merge-tree
+-- no-shared-merge-tree: This failure injection is only RMT specific
+
+DROP TABLE IF EXISTS t_hardware_error NO DELAY;
 CREATE TABLE t_hardware_error (
     KeyID UInt32
 ) Engine = ReplicatedMergeTree('/clickhouse/tables/{shard}/{database}/t_async_insert_dedup', '{replica}')
@@ -7,3 +11,4 @@ insert into t_hardware_error values (6), (7), (8), (9), (10); -- {serverError UN
 insert into t_hardware_error values (11), (12), (13), (14), (15);
 -- All 3 commits have been written correctly. The unknown status is ok (since it failed after the operation)
 Select arraySort(groupArray(KeyID)) FROM t_hardware_error;
+DROP TABLE t_hardware_error NO DELAY;

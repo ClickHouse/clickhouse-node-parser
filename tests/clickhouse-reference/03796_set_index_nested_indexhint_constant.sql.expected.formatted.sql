@@ -3,6 +3,8 @@
 -- The issue was that constant columns of non-UInt8 type weren't being wrapped with __bitWrapperFunc
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     k LowCardinality(Nullable(UInt16)),
@@ -31,3 +33,5 @@ WHERE indexHint(toUInt256(1));
 SELECT count()
 FROM tab
 WHERE indexHint(indexHint(toInt64(1)));
+
+SYSTEM DROP  TABLE tab;

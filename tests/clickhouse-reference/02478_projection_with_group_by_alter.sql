@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS testing;
 CREATE TABLE testing
 (
     a String,
@@ -19,3 +20,6 @@ INSERT INTO testing SELECT number, number, number, number, number%2 FROM numbers
 SELECT c FROM testing ORDER BY d;
 SELECT c FROM testing ORDER BY e, d;
 SELECT * FROM system.mutations WHERE database = currentDatabase() AND table = 'testing' AND not is_done;
+-- { echoOff }
+
+DROP TABLE testing;

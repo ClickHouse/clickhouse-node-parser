@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- no-fasttest: upper/lowerUTF8 use ICU
+
+drop table if exists utf8_overlap;
 create table utf8_overlap (str String) engine=Memory();
 -- { echoOn }
 -- NOTE: total string size should be > 16 (sizeof(__m128i))

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS optimize_final;
+
 SET optimize_skip_merged_partitions = 1;
 
 CREATE TABLE optimize_final
@@ -38,3 +40,5 @@ FROM `system`.parts
 WHERE table = 'optimize_final'
     AND database = currentDatabase()
     AND active = 1;
+
+SYSTEM DROP  TABLE optimize_final;

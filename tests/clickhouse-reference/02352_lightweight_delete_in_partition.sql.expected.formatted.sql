@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t_merge_tree SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS t_replicated_merge_tree SYNC;
+
 CREATE TABLE t_merge_tree
 (
     time Date,
@@ -47,3 +51,7 @@ FROM t_merge_tree;
 
 SELECT COUNT()
 FROM t_replicated_merge_tree;
+
+SYSTEM DROP  TABLE t_merge_tree SYNC;
+
+SYSTEM DROP  TABLE t_replicated_merge_tree SYNC;

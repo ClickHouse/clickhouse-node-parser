@@ -1,3 +1,6 @@
+-- Test from https://github.com/ClickHouse/ClickHouse/issues/37673
+SYSTEM drop  table if exists  data_proj_order_by_comp;
+
 CREATE TABLE data_proj_order_by_comp
 (
     t UInt64,

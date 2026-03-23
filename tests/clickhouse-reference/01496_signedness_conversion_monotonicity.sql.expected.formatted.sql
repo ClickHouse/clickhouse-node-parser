@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test1;
+
 CREATE TABLE test1
 (
     i Int64

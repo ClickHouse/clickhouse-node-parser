@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_lwd_vertical;
 CREATE TABLE t_lwd_vertical
 (
     id UInt8,

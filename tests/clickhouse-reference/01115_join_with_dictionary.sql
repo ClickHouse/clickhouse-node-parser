@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS t1;
+DROP DICTIONARY IF EXISTS dict_flat;
+DROP DICTIONARY IF EXISTS dict_hashed;
+DROP DICTIONARY IF EXISTS dict_complex_cache;
 CREATE TABLE t1 (key UInt64, a UInt8, b String, c Float64) ENGINE = MergeTree() ORDER BY key;
 INSERT INTO t1 SELECT number, number, toString(number), number from numbers(4);
 CREATE DICTIONARY dict_flat (key UInt64 DEFAULT 0, a UInt8 DEFAULT 42, b String DEFAULT 'x', c Float64 DEFAULT 42.0)
@@ -47,3 +51,7 @@ SELECT * FROM (SELECT number AS key FROM numbers(2)) s1 SEMI RIGHT JOIN dict_fla
 SELECT * FROM (SELECT number AS key FROM numbers(2)) s1 ANTI RIGHT JOIN dict_flat d USING(key) ORDER BY key;
 SET join_algorithm = 'auto';
 SET join_algorithm = 'partial_merge';
+DROP DICTIONARY dict_flat;
+DROP DICTIONARY dict_hashed;
+DROP DICTIONARY dict_complex_cache;
+DROP TABLE t1;

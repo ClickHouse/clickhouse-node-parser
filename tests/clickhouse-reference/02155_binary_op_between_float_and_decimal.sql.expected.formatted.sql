@@ -20,6 +20,8 @@ SELECT least(1.5, 1.0::Decimal32(5));
 
 SELECT greatest(1.5, 1.0::Decimal32(5));
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     d1 Decimal32(5),
@@ -374,3 +376,5 @@ SELECT
     greatest(d4, f2)
 FROM t
 ORDER BY f2 ASC;
+
+SYSTEM DROP  TABLE t;

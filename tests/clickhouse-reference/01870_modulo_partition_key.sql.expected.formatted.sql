@@ -2,6 +2,8 @@ SET insert_keeper_max_retries = 100;
 
 SET insert_keeper_retry_max_backoff_ms = 10;
 
+SYSTEM DROP  TABLE IF EXISTS table1 SYNC;
+
 CREATE TABLE table1
 (
     id Int64,
@@ -43,6 +45,8 @@ FROM table1
 WHERE id % 200 < 0
 ORDER BY id ASC;
 
+SYSTEM DROP  TABLE IF EXISTS table2 SYNC;
+
 CREATE TABLE table2
 (
     id Int64,
@@ -68,6 +72,8 @@ WHERE table = 'table2'
     AND database = currentDatabase()
 ORDER BY p ASC;
 
+SYSTEM DROP  TABLE IF EXISTS table3 SYNC;
+
 CREATE TABLE table3
 (
     id Int64,
@@ -92,6 +98,8 @@ FROM `system`.parts
 WHERE table = 'table3'
     AND database = currentDatabase()
 ORDER BY p ASC;
+
+SYSTEM DROP  TABLE IF EXISTS table4 SYNC;
 
 CREATE TABLE table4
 (
@@ -121,3 +129,11 @@ SELECT
     moduloLegacy(vv, 200)
 FROM table1
 ORDER BY v ASC;
+
+SYSTEM DROP  TABLE table1 SYNC;
+
+SYSTEM DROP  TABLE table2 SYNC;
+
+SYSTEM DROP  TABLE table3 SYNC;
+
+SYSTEM DROP  TABLE table4 SYNC;

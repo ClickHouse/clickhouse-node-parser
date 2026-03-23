@@ -1,3 +1,8 @@
+-- Tags: shard
+SYSTEM drop  table if exists local_02175;
+
+SYSTEM drop  table if exists dist_02175;
+
 CREATE TABLE local_02175
 ENGINE = Memory() AS
 SELECT *
@@ -31,3 +36,8 @@ FROM
     remote('127.1', currentDatabase(), dist_02175) AS l
 INNER JOIN local_02175 AS r
     USING (dummy);
+
+-- { echoOff }
+SYSTEM drop  table local_02175;
+
+SYSTEM drop  table dist_02175;

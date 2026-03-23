@@ -3,6 +3,7 @@
 -- Implicit indices should not prevent any ALTERs, even if `alter_column_secondary_index_mode` is set to 'throw'
 
 SET enable_analyzer=1; -- Different plan
+DROP TABLE IF EXISTS test_alter;
 CREATE TABLE test_alter (
       a Int32,
       b Int32,

@@ -1,3 +1,4 @@
+drop table if exists test;
 create table test
 (
    n1 UInt32,
@@ -5,3 +6,4 @@ create table test
    n3 UInt32 materialized n2 + 1
 )engine=MergeTree order by n1;
 insert into test select * from generateRandom() limit 10;
+drop table test;

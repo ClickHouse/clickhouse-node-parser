@@ -1,3 +1,11 @@
+SYSTEM drop  table if exists src_table_1;
+
+SYSTEM drop  table if exists src_table_2;
+
+SYSTEM drop  table if exists src_table_3;
+
+SYSTEM drop  table if exists set;
+
 CREATE TABLE src_table_1
 (
     n UInt64
@@ -81,3 +89,11 @@ SELECT
 FROM merge(currentDatabase(), 'src_table')
 WHERE n % 2 = 0
     AND _table IN (tmp);
+
+SYSTEM drop  table src_table_1;
+
+SYSTEM drop  table src_table_2;
+
+SYSTEM drop  table src_table_3;
+
+SYSTEM drop  table set;

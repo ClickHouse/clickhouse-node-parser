@@ -1,6 +1,8 @@
 -- Specific value doesn't matter, we just need it to be fixed, because it is a part of `EXPLAIN PIPELINE` output.
 SET max_threads = 8;
 
+SYSTEM DROP  TABLE IF EXISTS grouping_sets;
+
 CREATE TABLE grouping_sets
 (
     fact_1_id Int32,
@@ -90,6 +92,8 @@ WITH TOTALS
 ORDER BY
     fact_1_id ASC,
     fact_3_id ASC; -- { serverError NOT_IMPLEMENTED }
+
+SYSTEM DROP  TABLE grouping_sets;
 
 SELECT
     SUM(number) AS sum_value,

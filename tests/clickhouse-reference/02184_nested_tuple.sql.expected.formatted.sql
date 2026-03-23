@@ -1,5 +1,7 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_nested_tuple;
+
 CREATE TABLE t_nested_tuple
 (
     endUserIDs Tuple(_experience Tuple(aaid Tuple(id Nullable(String), namespace Tuple(code LowCardinality(Nullable(String))), primary LowCardinality(Nullable(UInt8))), mcid Tuple(id Nullable(String), namespace Tuple(code LowCardinality(Nullable(String))), primary LowCardinality(Nullable(UInt8)))))
@@ -38,3 +40,5 @@ FORMAT JSONEachRow;
 SELECT endUserIDs._experience.aaid.primary
 FROM t_nested_tuple
 FORMAT JSONEachRow;
+
+SYSTEM DROP  TABLE t_nested_tuple;

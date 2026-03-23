@@ -1,5 +1,6 @@
 -- Tags: long, no-object-storage, no-random-merge-tree-settings
 SET output_format_pretty_row_numbers = 0;
+DROP TABLE IF EXISTS check_system_tables;
 -- Check MergeTree declaration in new format
 CREATE TABLE check_system_tables
   (
@@ -44,9 +45,11 @@ CREATE TABLE check_system_tables
 CREATE TABLE check_system_tables (key UInt8) ENGINE = TinyLog();
 SELECT total_bytes, total_rows FROM system.tables WHERE name = 'check_system_tables' AND database = currentDatabase();
 INSERT INTO check_system_tables VALUES (1);
+DROP TABLE check_system_tables;
 CREATE TABLE check_system_tables (key UInt8) ENGINE = Log();
 CREATE TABLE check_system_tables (key UInt8) ENGINE = StripeLog();
 CREATE TABLE check_system_tables (key UInt16) ENGINE = Memory();
+DROP TABLE IF EXISTS check_system_tables_null;
 CREATE TABLE check_system_tables_null (key UInt16) ENGINE = Null();
 CREATE TABLE check_system_tables (key UInt16) ENGINE = Buffer(
     currentDatabase(),
@@ -59,6 +62,7 @@ CREATE TABLE check_system_tables (key UInt16) ENGINE = Buffer(
 INSERT INTO check_system_tables SELECT * FROM numbers_mt(50);
 SELECT lifetime_bytes, lifetime_rows FROM system.tables WHERE name = 'check_system_tables' AND database = currentDatabase();
 INSERT INTO check_system_tables SELECT * FROM numbers_mt(101); -- direct block write (due to min_rows exceeded)
+DROP TABLE check_system_tables_null;
 CREATE TABLE check_system_tables Engine=Set() AS SELECT * FROM numbers(50);
 INSERT INTO check_system_tables SELECT number+50 FROM numbers(50);
 CREATE TABLE check_system_tables Engine=Join(ANY, LEFT, number) AS SELECT * FROM numbers(50);
@@ -77,3 +81,4 @@ CREATE TABLE check_system_tables
 CREATE MATERIALIZED VIEW check_system_tables_mv ENGINE = MergeTree() ORDER BY name2 AS SELECT name1, name2, name3 FROM check_system_tables;
 SELECT total_bytes_uncompressed, total_bytes, total_rows FROM system.tables WHERE name = 'check_system_tables_mv' AND database = currentDatabase();
 SELECT total_bytes_uncompressed > 0, total_bytes > 0, total_rows FROM system.tables WHERE name = 'check_system_tables_mv' AND database = currentDatabase();
+DROP TABLE check_system_tables_mv;

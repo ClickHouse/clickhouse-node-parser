@@ -3,6 +3,9 @@ SELECT L2Norm([3., 4., 5.]);
 SELECT L2SquaredNorm([3., 4., 5.]);
 SELECT LpNorm([3., 4., 5.], 1.1);
 SELECT LinfNorm([0, 0, 2]);
+DROP TABLE IF EXISTS vec1;
+DROP TABLE IF EXISTS vec1f;
+DROP TABLE IF EXISTS vec1d;
 CREATE TABLE vec1 (id UInt64, v Array(UInt8)) ENGINE = Memory;
 CREATE TABLE vec1f (id UInt64, v Array(Float32)) ENGINE = Memory;
 CREATE TABLE vec1d (id UInt64, v Array(Float64)) ENGINE = Memory;
@@ -21,3 +24,6 @@ SELECT LpNorm([1,2], -3.4); -- { serverError ARGUMENT_OUT_OF_BOUND }
 SELECT LpNorm([1,2], 'aa'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT LpNorm([1,2], [1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT LpNorm([1,2], materialize(3.14)); -- { serverError ILLEGAL_COLUMN }
+DROP TABLE vec1;
+DROP TABLE vec1f;
+DROP TABLE vec1d;

@@ -1,3 +1,6 @@
+-- Tags: distributed
+SYSTEM drop  table if exists tab;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE tab
@@ -14,3 +17,5 @@ SELECT time
 FROM remote('127.0.0.{1,2}', currentDatabase(), tab)
 WHERE date = '2018-01-21'
 LIMIT 2;
+
+SYSTEM drop  table tab;

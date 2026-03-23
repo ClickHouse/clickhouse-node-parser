@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1__fuzz_4;
+
+SYSTEM DROP  TABLE IF EXISTS t0__fuzz_29;
+
 SET allow_suspicious_low_cardinality_types = 1, join_algorithm = 'partial_merge', join_use_nulls = 1;
 
 CREATE TABLE t1__fuzz_4
@@ -25,3 +29,7 @@ FROM
 FULL JOIN t1__fuzz_4
     USING (x)
 PREWHERE NULL;
+
+SYSTEM DROP  TABLE t1__fuzz_4;
+
+SYSTEM DROP  TABLE t0__fuzz_29;

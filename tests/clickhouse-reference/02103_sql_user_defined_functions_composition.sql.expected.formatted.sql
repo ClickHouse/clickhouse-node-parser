@@ -8,3 +8,9 @@ CREATE FUNCTION `02103_test_function_with_nested_function_arg` AS x -> `02103_te
 SELECT `02103_test_function_with_nested_function_empty_args`();
 
 SELECT `02103_test_function_with_nested_function_arg`(1);
+
+SYSTEM DROP  FUNCTION 02103_test_function_with_nested_function_empty_args;
+
+SYSTEM DROP  FUNCTION 02103_test_function_with_nested_function_arg;
+
+SYSTEM DROP  FUNCTION 02103_test_function;

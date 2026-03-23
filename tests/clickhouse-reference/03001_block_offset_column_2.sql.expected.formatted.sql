@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_block_offset;
+
 CREATE TABLE t_block_offset
 (
     id UInt32
@@ -25,3 +27,5 @@ ORDER BY
 
 INSERT INTO t_block_offset SELECT number * 2 + 1
 FROM numbers(16);
+
+SYSTEM DROP  TABLE t_block_offset;

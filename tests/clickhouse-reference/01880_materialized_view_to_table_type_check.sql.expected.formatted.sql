@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS test_mv;
+
+SYSTEM DROP  TABLE IF EXISTS test;
+
+SYSTEM DROP  TABLE IF EXISTS test_input;
+
 CREATE TABLE test_input
 (
     id Int32
@@ -49,3 +55,9 @@ GROUP BY id;
 
 INSERT INTO test_input SELECT toInt32(number % 1000) AS id
 FROM numbers(100, 3);
+
+SYSTEM DROP  TABLE test_mv;
+
+SYSTEM DROP  TABLE test;
+
+SYSTEM DROP  TABLE test_input;

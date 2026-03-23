@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -16,6 +18,8 @@ SELECT
     alias_value_1,
     alias_value_2
 FROM test_table;
+
+SYSTEM DROP  TABLE test_table;
 
 CREATE TABLE test_table
 (

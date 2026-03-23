@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS l;
+DROP TABLE IF EXISTS r;
 CREATE TABLE l (a String, b Tuple(String, String)) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE r (a String, c Tuple(String, String)) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO l (a, b) VALUES ('a', ('b', 'c')), ('d', ('e', 'f'));
@@ -8,6 +10,8 @@ SELECT a from l RIGHT JOIN r USING a ORDER BY a;
 SELECT * from l RIGHT JOIN r USING a ORDER BY a;
 SET join_use_nulls = 1;
 SELECT a from l LEFT JOIN r USING a ORDER BY a;
+DROP TABLE l;
+DROP TABLE r;
 CREATE TABLE l (a String, b String) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE r (a String, c Array(String)) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO l (a, b) VALUES ('a', 'b'), ('d', 'e');

@@ -1,3 +1,6 @@
+-- Test Array empty (size0 substream)
+SYSTEM drop  table if exists test_empty_array;
+
 CREATE TABLE test_empty_array
 (
     id UInt64,
@@ -23,6 +26,10 @@ FROM test_empty_array
 WHERE empty(a)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echoOff }
+-- Test Array notEmpty (size0 substream)
+SYSTEM drop  table if exists test_notempty_array;
+
 CREATE TABLE test_notempty_array
 (
     id UInt64,
@@ -47,6 +54,10 @@ SELECT id
 FROM test_notempty_array
 WHERE notEmpty(a)
 SETTINGS optimize_functions_to_subcolumns = 0;
+
+-- { echoOff }
+-- Test Array length (size0 substream)
+SYSTEM drop  table if exists test_length_array;
 
 CREATE TABLE test_length_array
 (
@@ -75,6 +86,10 @@ SELECT
 FROM test_length_array
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echoOff }
+-- Test String empty (size substream)
+SYSTEM drop  table if exists test_empty_string;
+
 CREATE TABLE test_empty_string
 (
     id UInt64,
@@ -100,6 +115,10 @@ FROM test_empty_string
 WHERE empty(s)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echoOff }
+-- Test String notEmpty (size substream)
+SYSTEM drop  table if exists test_notempty_string;
+
 CREATE TABLE test_notempty_string
 (
     id UInt64,
@@ -124,6 +143,10 @@ SELECT id
 FROM test_notempty_string
 WHERE notEmpty(s)
 SETTINGS optimize_functions_to_subcolumns = 0;
+
+-- { echoOff }
+-- Test String length (size substream)
+SYSTEM drop  table if exists test_length_string;
 
 CREATE TABLE test_length_string
 (
@@ -152,6 +175,10 @@ SELECT
 FROM test_length_string
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echoOff }
+-- Test Map empty (size0 substream)
+SYSTEM drop  table if exists test_empty_map;
+
 CREATE TABLE test_empty_map
 (
     id UInt64,
@@ -177,6 +204,10 @@ FROM test_empty_map
 WHERE empty(m)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echoOff }
+-- Test Map notEmpty (size0 substream)
+SYSTEM drop  table if exists test_notempty_map;
+
 CREATE TABLE test_notempty_map
 (
     id UInt64,
@@ -201,6 +232,10 @@ SELECT id
 FROM test_notempty_map
 WHERE notEmpty(m)
 SETTINGS optimize_functions_to_subcolumns = 0;
+
+-- { echoOff }
+-- Test Map length (size0 substream)
+SYSTEM drop  table if exists test_length_map;
 
 CREATE TABLE test_length_map
 (
@@ -229,6 +264,10 @@ SELECT
 FROM test_length_map
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echoOff }
+-- Test Map mapKeys (keys substream)
+SYSTEM drop  table if exists test_mapkeys;
+
 CREATE TABLE test_mapkeys
 (
     id UInt64,
@@ -237,6 +276,9 @@ CREATE TABLE test_mapkeys
 )
 ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
+
+-- Test Map mapValues (values substream)
+SYSTEM drop  table if exists test_mapvalues;
 
 CREATE TABLE test_mapvalues
 (
@@ -247,6 +289,9 @@ CREATE TABLE test_mapvalues
 ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 
+-- Test Map mapContainsKey (keys substream)
+SYSTEM drop  table if exists test_mapcontainskey;
+
 CREATE TABLE test_mapcontainskey
 (
     id UInt64,
@@ -255,6 +300,9 @@ CREATE TABLE test_mapcontainskey
 )
 ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
+
+-- Test Nullable isNull (null substream)
+SYSTEM drop  table if exists test_isnull;
 
 CREATE TABLE test_isnull
 (
@@ -281,6 +329,10 @@ FROM test_isnull
 WHERE isNull(n)
 SETTINGS optimize_functions_to_subcolumns = 0;
 
+-- { echoOff }
+-- Test Nullable isNotNull (null substream)
+SYSTEM drop  table if exists test_isnotnull;
+
 CREATE TABLE test_isnotnull
 (
     id UInt64,
@@ -305,6 +357,10 @@ SELECT id
 FROM test_isnotnull
 WHERE isNotNull(n)
 SETTINGS optimize_functions_to_subcolumns = 0;
+
+-- { echoOff }
+-- Test Nullable count (null substream)
+SYSTEM drop  table if exists test_count_nullable;
 
 CREATE TABLE test_count_nullable
 (
@@ -333,6 +389,10 @@ SETTINGS optimize_functions_to_subcolumns = 1;
 SELECT count(n)
 FROM test_count_nullable
 SETTINGS optimize_functions_to_subcolumns = 0;
+
+-- { echoOff }
+-- Test Tuple tupleElement (named subcolumn)
+SYSTEM drop  table if exists test_tupleelement;
 
 CREATE TABLE test_tupleelement
 (

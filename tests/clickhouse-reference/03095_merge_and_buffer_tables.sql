@@ -1,3 +1,8 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/36963
+
+DROP TABLE IF EXISTS mt1;
+DROP TABLE IF EXISTS mt2;
+DROP TABLE IF EXISTS b;
 create table mt1 (f1 Int32, f2 Int32) engine = MergeTree() order by f1;
 create table mt2 as mt1 engine = MergeTree() order by f1;
 create table b as mt1 engine = Buffer(currentDatabase(), mt2, 16, 1, 1, 10000, 1000000, 10000000, 100000000);

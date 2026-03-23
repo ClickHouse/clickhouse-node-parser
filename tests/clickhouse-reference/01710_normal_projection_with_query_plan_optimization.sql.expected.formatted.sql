@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     id UInt64,
@@ -29,3 +31,5 @@ SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, 
 SELECT count()
 FROM t
 WHERE id = 3;
+
+SYSTEM drop  table t;

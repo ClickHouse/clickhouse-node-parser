@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 
 SET send_logs_level = 'fatal';
+DROP DATABASE IF EXISTS dict_db_01224;
+DROP DATABASE IF EXISTS dict_db_01224_dictionary;
 set allow_deprecated_database_ordinary=1;
 -- Creation of a database with Ordinary engine emits a warning.
 CREATE DATABASE dict_db_01224 ENGINE=Ordinary;  -- Different internal dictionary name with Atomic
@@ -19,3 +21,6 @@ SELECT status FROM system.dictionaries WHERE database = 'dict_db_01224' AND name
 SELECT * FROM system.tables FORMAT Null;
 SELECT engine, metadata_path LIKE '%metadata/dict\_db\_01224/dict.sql', create_table_query FROM system.tables WHERE database = 'dict_db_01224' AND name = 'dict';
 SELECT name, type FROM system.columns WHERE database = 'dict_db_01224' AND table = 'dict';
+DROP DICTIONARY dict_db_01224.dict;
+DROP DATABASE dict_db_01224;
+DROP DATABASE dict_db_01224_dictionary;

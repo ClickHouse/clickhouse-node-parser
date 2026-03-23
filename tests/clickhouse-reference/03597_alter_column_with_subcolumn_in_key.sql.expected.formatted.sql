@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt32,
@@ -9,6 +11,8 @@ ORDER BY t.a;
 INSERT INTO test SELECT
     1,
     tuple(1);
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

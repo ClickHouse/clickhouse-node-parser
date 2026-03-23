@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists test_left;
+
+SYSTEM drop  table if exists test_right;
+
 CREATE TABLE test_left
 (
     a Int64,
@@ -45,3 +49,7 @@ FROM
     test_left
 LEFT JOIN test_right
     ON test_left.b = test_right.b;
+
+SYSTEM drop  table test_left;
+
+SYSTEM drop  table test_right;

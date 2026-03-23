@@ -1,5 +1,6 @@
 SELECT hex(groupArrayIntersectState([1]) AS a), toTypeName(a);
 SELECT finalizeAggregation(CAST(unhex('010101'), 'AggregateFunction(groupArrayIntersect, Array(UInt8))'));
+DROP TABLE IF EXISTS grouparray;
 CREATE TABLE grouparray
 (
     `v` AggregateFunction(groupArrayIntersect, Array(UInt8))
@@ -16,6 +17,7 @@ INSERT INTO grouparray Select groupArrayIntersectState([10]::Array(UInt8));
 SELECT '6', arraySort(groupArrayIntersectMerge(v)) FROM grouparray;
 INSERT INTO grouparray Select groupArrayIntersectState([]::Array(UInt8));
 SELECT '7', arraySort(groupArrayIntersectMerge(v)) FROM grouparray;
+DROP TABLE IF EXISTS grouparray_string;
 CREATE TABLE grouparray_string
 (
     `v` AggregateFunction(groupArrayIntersect, Array(Tuple(Array(String))))

@@ -22,6 +22,10 @@ FROM (
             )
     );
 
+SYSTEM drop  table if exists lc_small_dict;
+
+SYSTEM drop  table if exists lc_big_dict;
+
 CREATE TABLE lc_small_dict
 (
     str LowCardinality(String)

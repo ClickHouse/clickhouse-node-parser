@@ -1,5 +1,7 @@
 SET optimize_on_insert = 0;
 
+SYSTEM DROP  TABLE IF EXISTS summing_composite_key;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE summing_composite_key
@@ -156,3 +158,5 @@ ORDER BY
     m.k1 ASC,
     m.k2ID ASC,
     m.s ASC;
+
+SYSTEM DROP  TABLE summing_composite_key;

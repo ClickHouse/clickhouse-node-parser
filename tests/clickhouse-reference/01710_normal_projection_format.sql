@@ -1,3 +1,4 @@
+DROP TABLE if exists test;
 CREATE TABLE test
 (
     uuid FixedString(16),
@@ -7,3 +8,4 @@ CREATE TABLE test
 )
 ENGINE = MergeTree
 ORDER BY (id, dt, uuid);
+drop table test;

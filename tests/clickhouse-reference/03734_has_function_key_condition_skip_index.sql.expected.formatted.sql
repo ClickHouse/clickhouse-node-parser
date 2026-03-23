@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM DROP  TABLE IF EXISTS test_has_skip_minmax;
+
 CREATE TABLE test_has_skip_minmax
 (
     id UInt32,
@@ -23,6 +26,8 @@ SELECT count()
 FROM test_has_skip_minmax
 WHERE key_col IN ([5432, 7432, 9999]);
 
+SYSTEM DROP  TABLE IF EXISTS test_has_skip_set;
+
 CREATE TABLE test_has_skip_set
 (
     user_id UInt32,
@@ -45,6 +50,8 @@ WHERE has([10, 20, 30], user_id);
 SELECT count()
 FROM test_has_skip_set
 WHERE user_id IN (10, 20, 30);
+
+SYSTEM DROP  TABLE IF EXISTS test_has_skip_bloom;
 
 CREATE TABLE test_has_skip_bloom
 (

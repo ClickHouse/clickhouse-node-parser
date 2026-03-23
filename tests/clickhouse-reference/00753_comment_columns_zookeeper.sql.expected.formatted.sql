@@ -1,3 +1,6 @@
+-- Tags: zookeeper
+SYSTEM DROP  TABLE IF EXISTS check_comments;
+
 CREATE TABLE check_comments
 (
     column_name1 UInt8 DEFAULT 1 COMMENT 'comment',
@@ -10,3 +13,5 @@ SELECT *
 FROM `system`.`columns`
 WHERE table = 'check.comments'
     AND database = currentDatabase();
+
+SYSTEM DROP  TABLE check_comments;

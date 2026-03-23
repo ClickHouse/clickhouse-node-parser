@@ -1,3 +1,12 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS 02483_substitute_udf;
+
+SYSTEM DROP  FUNCTION IF EXISTS 02483_plusone;
+
+SYSTEM DROP  FUNCTION IF EXISTS 02483_plustwo;
+
+SYSTEM DROP  FUNCTION IF EXISTS 02483_plusthree;
+
 -- { echo }
 CREATE FUNCTION `02483_plusone` AS a -> a + 1;
 
@@ -22,3 +31,11 @@ INSERT INTO `02483_substitute_udf` (id, number);
 CREATE FUNCTION `02483_plusthree` AS a -> a + 3;
 
 INSERT INTO `02483_substitute_udf` (id, new_number);
+
+SYSTEM DROP  TABLE 02483_substitute_udf;
+
+SYSTEM DROP  FUNCTION 02483_plusone;
+
+SYSTEM DROP  FUNCTION 02483_plustwo;
+
+SYSTEM DROP  FUNCTION 02483_plusthree;

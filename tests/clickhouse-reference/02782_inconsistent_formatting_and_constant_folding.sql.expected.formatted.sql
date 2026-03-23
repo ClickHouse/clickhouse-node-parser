@@ -6,6 +6,10 @@ SELECT
     -0.,
     toTypeName(-0.);
 
+SYSTEM DROP  TABLE IF EXISTS t4;
+
+SYSTEM DROP  TABLE IF EXISTS t7;
+
 CREATE TABLE t4
 (
     c26 String
@@ -47,3 +51,7 @@ FROM (
         GROUP BY ref_0.c_2_c46_1
     )
 WHERE x <= multiIf(true, 1, exp10(x) <= 1, 1, 1);
+
+SYSTEM DROP  TABLE t7;
+
+SYSTEM DROP  TABLE t4;

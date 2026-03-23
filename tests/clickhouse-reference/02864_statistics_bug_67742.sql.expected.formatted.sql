@@ -4,6 +4,8 @@ SET allow_statistics_optimize = 1;
 
 SET mutations_sync = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     a Float64 STATISTICS(tdigest)
@@ -18,6 +20,8 @@ LIMIT 10000;
 SELECT count(*)
 FROM tab
 WHERE a < '10';
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

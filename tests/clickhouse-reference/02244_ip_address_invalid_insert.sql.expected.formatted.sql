@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table_ipv4;
+
 CREATE TABLE test_table_ipv4
 (
     ip String,
@@ -15,6 +17,10 @@ SELECT
 FROM test_table_ipv4;
 
 SET input_format_ipv4_default_on_conversion_error = 0;
+
+SYSTEM DROP  TABLE test_table_ipv4;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_ipv4_materialized;
 
 CREATE TABLE test_table_ipv4_materialized
 (
@@ -34,6 +40,10 @@ FROM test_table_ipv4_materialized;
 
 SET cast_ipv4_ipv6_default_on_conversion_error = 0;
 
+SYSTEM DROP  TABLE test_table_ipv4_materialized;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_ipv6;
+
 CREATE TABLE test_table_ipv6
 (
     ip String,
@@ -52,6 +62,10 @@ FROM test_table_ipv6;
 
 SET input_format_ipv6_default_on_conversion_error = 0;
 
+SYSTEM DROP  TABLE test_table_ipv6;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_ipv6_materialized;
+
 CREATE TABLE test_table_ipv6_materialized
 (
     ip String,
@@ -65,3 +79,5 @@ SELECT
     ip,
     ipv6
 FROM test_table_ipv6_materialized;
+
+SYSTEM DROP  TABLE test_table_ipv6_materialized;

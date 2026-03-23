@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS summing_table;
+
 CREATE TABLE summing_table
 (
     id UInt32,
@@ -37,3 +39,5 @@ INSERT INTO summing_table (id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.
 INSERT INTO summing_table (id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.total, uuidMap.value, uuidMap.total);
 
 INSERT INTO summing_table (id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.total, uuidMap.value, uuidMap.total);
+
+SYSTEM DROP  TABLE summing_table;

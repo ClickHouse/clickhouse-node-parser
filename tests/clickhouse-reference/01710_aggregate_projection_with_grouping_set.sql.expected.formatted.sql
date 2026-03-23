@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     dim1 String,
@@ -67,3 +69,5 @@ ORDER BY
     dim1 ASC,
     dim2 ASC,
     count() ASC;
+
+SYSTEM drop  table test;

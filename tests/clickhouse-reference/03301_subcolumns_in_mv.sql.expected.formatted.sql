@@ -1,5 +1,11 @@
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists src;
+
+SYSTEM drop  table if exists dst;
+
+SYSTEM drop  view if exists view;
+
 CREATE TABLE src
 (
     a Tuple(b Tuple(c UInt32)),
@@ -30,3 +36,9 @@ INSERT INTO src SELECT
 
 SELECT *
 FROM dst;
+
+SYSTEM drop  view view;
+
+SYSTEM drop  table dst;
+
+SYSTEM drop  table src;

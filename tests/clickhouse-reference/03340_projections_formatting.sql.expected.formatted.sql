@@ -10,6 +10,8 @@ CREATE TEMPORARY TABLE test
 ENGINE = MergeTree
 ORDER BY tuple();
 
+SYSTEM DROP  TABLE test;
+
 CREATE TEMPORARY TABLE test
 (
     user_id UInt64,

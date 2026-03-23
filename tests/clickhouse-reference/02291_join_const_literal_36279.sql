@@ -1,3 +1,7 @@
+-- Tags: distributed
+
+DROP TABLE IF EXISTS test_distributed;
+DROP TABLE IF EXISTS test_local;
 SET prefer_localhost_replica = 1;
 -- https://github.com/ClickHouse/ClickHouse/issues/36279
 CREATE TABLE test_local (text String, text2 String) ENGINE = MergeTree() ORDER BY text;
@@ -14,6 +18,9 @@ INNER JOIN
 ) USING (text)
 WHERE (text ILIKE '%text-for-search%') AND (text2 ILIKE '%text-for-search%')
 ;
+DROP TABLE IF EXISTS user_local;
+DROP TABLE IF EXISTS user_all;
+DROP TABLE IF EXISTS event;
 -- https://github.com/ClickHouse/ClickHouse/issues/36300
 CREATE TABLE user_local ( id Int64, name String, age Int32 )
 ENGINE = MergeTree ORDER BY name;

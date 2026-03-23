@@ -3,6 +3,7 @@ SET parallel_replicas_local_plan = 1; -- this setting may skip index analysis wh
 SET use_skip_indexes_on_data_read = 0;
 SET materialize_skip_indexes_on_insert = 0;
 SET mutations_sync = 2; -- disable asynchronous mutations
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     a UInt64,
@@ -26,3 +27,5 @@ FROM
 WHERE (explain LIKE '%Name%') OR (explain LIKE '%Description%') OR (explain LIKE '%Parts%') OR (explain LIKE '%Granules%') OR (explain LIKE '%Range%');
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100);
 SELECT * FROM explain_indexes;
+DROP TABLE tab;
+DROP VIEW explain_indexes;

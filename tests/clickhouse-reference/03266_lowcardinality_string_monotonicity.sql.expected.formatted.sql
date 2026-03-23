@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_lc_pk;
+
 CREATE TABLE test_lc_pk
 (
     s String
@@ -29,3 +31,5 @@ FROM (
             ))
     )
 WHERE like(`explain`, '%Condition%');
+
+SYSTEM DROP  TABLE test_lc_pk;

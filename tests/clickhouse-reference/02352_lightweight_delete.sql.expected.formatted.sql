@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS lwd_test;
+
 CREATE TABLE lwd_test
 (
     id UInt64,
@@ -35,3 +37,5 @@ SELECT
 FROM lwd_test
 ORDER BY id ASC
 LIMIT 1;
+
+SYSTEM DROP  TABLE lwd_test;

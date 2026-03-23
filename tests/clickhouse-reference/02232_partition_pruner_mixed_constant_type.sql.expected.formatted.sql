@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS broken;
+
 CREATE TABLE broken
 (
     time UInt64
@@ -11,3 +13,5 @@ INSERT INTO broken (time);
 SELECT *
 FROM broken
 WHERE time > -1;
+
+SYSTEM DROP  TABLE broken;

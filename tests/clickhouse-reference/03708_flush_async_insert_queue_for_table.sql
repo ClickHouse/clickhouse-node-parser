@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+drop table if exists `test_table with spaces`;
 create table if not exists `test_table with spaces`
 (
     `id` UInt64,
@@ -11,7 +14,10 @@ insert into `test_table with spaces` values (1, 'a'), (2, 'b'), (3, 'c');
 insert into `test_table with spaces` values (2, 'b'), (3, 'c'), (4, 'd');
 select '`test_table with spaces`', count() from `test_table with spaces`;
 insert into `test_table with spaces` values (3, 'b'), (4, 'c'), (5, 'd');
+drop table `test_table with spaces`;
+drop database if exists `this.is.a.valid.databasename`;
 create database `this.is.a.valid.databasename`;
+drop table if exists `this.is.a.valid.databasename`.`test_table with spaces`;
 create table `this.is.a.valid.databasename`.`test_table with spaces`
 (
     `id` UInt64,
@@ -21,3 +27,5 @@ ORDER by id;
 insert into `this.is.a.valid.databasename`.`test_table with spaces` values (1, 'a'), (2, 'b'), (3, 'c');
 insert into `this.is.a.valid.databasename`.`test_table with spaces` values (2, 'b'), (3, 'c'), (4, 'd');
 select '`this.is.a.valid.databasename`.`test_table with spaces`', count() from `this.is.a.valid.databasename`.`test_table with spaces`;
+drop table `this.is.a.valid.databasename`.`test_table with spaces`;
+drop database `this.is.a.valid.databasename`;

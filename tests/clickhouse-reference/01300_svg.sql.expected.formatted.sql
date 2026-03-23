@@ -14,6 +14,8 @@ SELECT SVG([[(0., 0.), (10, 0), (10, 10), (0, 10)], [(4., 4.), (5, 4), (5, 5), (
 
 SELECT SVG([[[(0., 0.), (10, 0), (10, 10), (0, 10)], [(4., 4.), (5, 4), (5, 5), (4, 5)]], [[(-10., -10.), (-10, -9), (-9, 10)]]], 'b');
 
+SYSTEM DROP  TABLE IF EXISTS geo;
+
 CREATE TABLE geo
 (
     p Tuple(Float64, Float64),
@@ -97,3 +99,5 @@ INSERT INTO geo;
 SELECT SVG([[[(0., 0.), (10, 0), (10, 10), (0, 10)], [(4., 4.), (5, 4), (5, 5), (4, 5)]], [[(-10., -10.), (-10, -9), (-9, 10)]]], s)
 FROM geo
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE geo;

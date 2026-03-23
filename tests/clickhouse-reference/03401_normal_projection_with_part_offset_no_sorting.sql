@@ -1,3 +1,6 @@
+-- { echo ON }
+
+DROP TABLE IF EXISTS test;
 CREATE TABLE test
 (
     `a` Int32,
@@ -20,3 +23,4 @@ INSERT INTO test SELECT number * 3 + 1, rand() FROM numbers(360000);
 INSERT INTO test SELECT number * 3 + 2, rand() FROM numbers(360000);
 SELECT sum(l._part_offset = r._parent_part_offset) FROM test l JOIN mergeTreeProjection(currentDatabase(), test, p) r USING (a) SETTINGS enable_analyzer = 1;
 SELECT sum(l._part_offset = r._parent_part_offset) FROM test l JOIN mergeTreeProjection(currentDatabase(), test, p2) r USING (a) SETTINGS enable_analyzer = 1;
+DROP TABLE test;

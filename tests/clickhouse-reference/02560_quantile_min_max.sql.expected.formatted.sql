@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nums;
+
 CREATE TABLE nums
 (
     n UInt32
@@ -11,3 +13,5 @@ FROM nums;
 
 SELECT quantilesExactInclusive(0, 1)(n)
 FROM nums;
+
+SYSTEM DROP  TABLE nums;

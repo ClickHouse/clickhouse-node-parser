@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-fasttest
+SYSTEM DROP  TABLE IF EXISTS 02417_test SYNC;
+
 CREATE TABLE `02417_test`
 (
     key UInt64,
@@ -27,3 +30,7 @@ INSERT INTO `02417_test_another`;
 SELECT *
 FROM `02417_test_another`
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE 02417_test SYNC;
+
+SYSTEM DROP  TABLE 02417_test_another SYNC;

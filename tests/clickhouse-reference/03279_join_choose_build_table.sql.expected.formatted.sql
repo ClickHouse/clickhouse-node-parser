@@ -1,5 +1,9 @@
 SET use_statistics = 0;
 
+SYSTEM DROP  TABLE IF EXISTS products;
+
+SYSTEM DROP  TABLE IF EXISTS sales;
+
 SET enable_analyzer = 1;
 
 CREATE TABLE sales

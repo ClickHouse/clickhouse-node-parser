@@ -1,3 +1,9 @@
+-- Tags: long, replica, no-shared-merge-tree
+-- no-shared-merge-tree: require sync replica, added new test
+SYSTEM DROP  TABLE IF EXISTS replicated_truncate1;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_truncate2;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE replicated_truncate1

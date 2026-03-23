@@ -1,3 +1,6 @@
+-- It is special because actions cannot be reused for SimpleAggregateFunction (see https://github.com/ClickHouse/ClickHouse/pull/54436)
+SYSTEM drop  table if exists data;
+
 CREATE TABLE data
 (
     key SimpleAggregateFunction(max, Int)

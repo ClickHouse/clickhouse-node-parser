@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS test1;
+
+SYSTEM DROP  TABLE IF EXISTS test2;
+
+SYSTEM DROP  TABLE IF EXISTS mat_view;
+
 CREATE TABLE test1
 (
     a LowCardinality(String)
@@ -17,3 +23,9 @@ TO test2
 AS
 SELECT toUInt64(a = 'test') AS a
 FROM test1;
+
+SYSTEM DROP  TABLE test_mv;
+
+SYSTEM DROP  TABLE test1;
+
+SYSTEM DROP  TABLE test2;

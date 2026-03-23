@@ -10,6 +10,12 @@ SELECT toTypeName(now64(3) - 1);
 
 SELECT toTypeName(toTimeZone(now64(3), 'UTC') - 1);
 
+SYSTEM DROP  TABLE IF EXISTS tt_null;
+
+SYSTEM DROP  TABLE IF EXISTS tt;
+
+SYSTEM DROP  TABLE IF EXISTS tt_mv;
+
 CREATE TABLE tt_null
 (
     p String
@@ -34,3 +40,9 @@ FROM tt_null
 GROUP BY p;
 
 INSERT INTO tt_null;
+
+SYSTEM DROP  TABLE tt_null;
+
+SYSTEM DROP  TABLE tt;
+
+SYSTEM DROP  TABLE tt_mv;

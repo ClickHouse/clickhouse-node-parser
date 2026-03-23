@@ -5,6 +5,8 @@ SET allow_experimental_statistics = 1;
 
 SET use_statistics = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     u64 UInt64,
@@ -569,3 +571,5 @@ WHERE s_countmin = '7';
 SELECT count(*)
 FROM tab
 WHERE s_uniq = '7';
+
+SYSTEM DROP  TABLE tab;

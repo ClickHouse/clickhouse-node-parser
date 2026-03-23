@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS lwd_test;
+
 CREATE TABLE lwd_test
 (
     id UInt64,
@@ -53,3 +55,5 @@ INSERT INTO lwd_test SELECT
     number AS id,
     toString(number + 200) AS value
 FROM numbers(10);
+
+SYSTEM DROP  TABLE lwd_test;

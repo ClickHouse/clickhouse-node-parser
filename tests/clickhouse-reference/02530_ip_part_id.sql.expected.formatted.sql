@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ip_part_test;
+
 CREATE TABLE ip_part_test
 (
     ipv4 IPv4,

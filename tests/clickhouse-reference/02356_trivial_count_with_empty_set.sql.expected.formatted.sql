@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a Int64
@@ -9,3 +11,5 @@ SET optimize_trivial_count_query = 1, empty_result_for_aggregation_by_empty_set 
 
 SELECT count()
 FROM test;
+
+SYSTEM drop  table test;

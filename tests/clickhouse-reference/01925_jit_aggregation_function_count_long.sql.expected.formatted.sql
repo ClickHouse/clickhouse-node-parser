@@ -3,6 +3,8 @@ SET compile_aggregate_expressions = 1;
 
 SET min_count_to_compile_aggregate_expression = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -25,3 +27,5 @@ SELECT
 FROM test_table
 GROUP BY id
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE test_table;

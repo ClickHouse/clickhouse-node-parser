@@ -16,6 +16,8 @@ SELECT startsWith('123', '1234');
 
 SELECT startsWith('123', '');
 
+SYSTEM DROP  TABLE IF EXISTS startsWith_test;
+
 CREATE TABLE startsWith_test
 (
     S1 String,
@@ -37,3 +39,5 @@ WHERE startsWith(S1, S2);
 SELECT COUNT()
 FROM startsWith_test
 WHERE startsWith(S2, S3);
+
+SYSTEM DROP  TABLE startsWith_test;

@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists cdp_segments;
+
+SYSTEM drop  table if exists cdp_customers;
+
 CREATE TABLE cdp_segments
 (
     seg_id String,
@@ -13,3 +17,7 @@ CREATE TABLE cdp_customers
 )
 ENGINE = ReplacingMergeTree()
 ORDER BY (mid_seq);
+
+SYSTEM drop  table cdp_segments;
+
+SYSTEM drop  table cdp_customers;

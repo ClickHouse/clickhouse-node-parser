@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists merge;
+
+SYSTEM drop  table if exists merge1;
+
+SYSTEM drop  table if exists merge2;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE merge1
@@ -55,3 +61,9 @@ SELECT
 FROM merge
 WHERE dummy1 <> ''
 LIMIT 10;
+
+SYSTEM drop  table merge;
+
+SYSTEM drop  table merge1;
+
+SYSTEM drop  table merge2;

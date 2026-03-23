@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table_with_compact_parts;
+
 CREATE TABLE table_with_compact_parts
 (
     date Date,

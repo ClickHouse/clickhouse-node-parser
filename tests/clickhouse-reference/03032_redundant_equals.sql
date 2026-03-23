@@ -1,3 +1,5 @@
+-- add_minmax_index_for_numeric_columns=0: Different plan
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     k UInt64,
@@ -74,3 +76,4 @@ FROM
 )
 WHERE
     explain LIKE '%Granules: 1/%';
+DROP TABLE test_table;

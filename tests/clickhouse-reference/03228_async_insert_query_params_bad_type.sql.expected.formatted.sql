@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_async_insert_params;
+
 CREATE TABLE t_async_insert_params
 (
     id UInt64
@@ -18,3 +20,5 @@ INSERT INTO t_async_insert_params; -- { serverError  TYPE_MISMATCH }
 SELECT *
 FROM t_async_insert_params
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_async_insert_params;

@@ -2,6 +2,8 @@ SET compile_expressions = 1;
 
 SET min_count_to_compile_expression = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_jit_nonnull;
+
 CREATE TABLE test_jit_nonnull
 (
     value UInt8
@@ -16,6 +18,8 @@ SELECT
     if(value, 1, 0)
 FROM test_jit_nonnull;
 
+SYSTEM DROP  TABLE IF EXISTS test_jit_nullable;
+
 CREATE TABLE test_jit_nullable
 (
     value Nullable(UInt8)
@@ -29,3 +33,7 @@ SELECT
     multiIf(value = 1, 2, value, 1, 0),
     if(value, 1, 0)
 FROM test_jit_nullable;
+
+SYSTEM DROP  TABLE test_jit_nonnull;
+
+SYSTEM DROP  TABLE test_jit_nullable;

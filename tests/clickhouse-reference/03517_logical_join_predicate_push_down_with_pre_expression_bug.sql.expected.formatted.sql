@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists td;
+
+SYSTEM drop  table if exists tdt;
+
 CREATE TABLE td
 (
     id Int16,

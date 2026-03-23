@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS rmt1;
+
 SET use_skip_indexes = 1;
 
 SET use_skip_indexes_if_final = 1;
@@ -114,3 +116,5 @@ WHERE ((and(greaterOrEquals(id, 650), lessOrEquals(id, 900))
     OR and(greaterOrEquals(id, 12000), lessOrEquals(id, 13000))
     AND and(greaterOrEquals(id, 16000), lessOrEquals(id, 16500))))
     AND val = 88888888;
+
+SYSTEM DROP  TABLE rmt1;

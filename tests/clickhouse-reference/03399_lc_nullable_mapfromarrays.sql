@@ -19,6 +19,7 @@ SELECT mapFromArrays(
 ) GROUP BY 1; -- { serverError BAD_ARGUMENTS }
 -- Run tests on tables
 SET allow_suspicious_low_cardinality_types=1;
+DROP TABLE IF EXISTS 03399_lc_nullable_int_simple;
 CREATE TABLE 03399_lc_nullable_int_simple(
     k Array(LowCardinality(Nullable(Int32))),
     v Array(Int32)
@@ -27,6 +28,7 @@ AS
 SELECT [1, 2], [3, 4];
 SELECT mapFromArrays(k, v) FROM 03399_lc_nullable_int_simple;
 SELECT mapFromArrays(k, v) FROM 03399_lc_nullable_int_simple GROUP BY 1;
+DROP TABLE IF EXISTS 03399_lc_nullable_int_mixed;
 CREATE TABLE 03399_lc_nullable_int_mixed(
     k Array(LowCardinality(Nullable(Int32))),
     v Array(Int32)
@@ -37,6 +39,7 @@ UNION ALL
 SELECT [5, null], [7, 8];
 SELECT mapFromArrays(k, v) FROM 03399_lc_nullable_int_mixed; -- { serverError BAD_ARGUMENTS }
 SELECT mapFromArrays(k, v) FROM 03399_lc_nullable_int_mixed GROUP BY 1; -- { serverError BAD_ARGUMENTS }
+DROP TABLE IF EXISTS 03399_lc_nullable_string_simple;
 CREATE TABLE 03399_lc_nullable_string_simple(
     k Array(LowCardinality(Nullable(String))),
     v Array(Int32)
@@ -45,6 +48,7 @@ AS
 SELECT ['a', 'b'], [1, 2];
 SELECT mapFromArrays(k, v) FROM 03399_lc_nullable_string_simple;
 SELECT mapFromArrays(k, v) FROM 03399_lc_nullable_string_simple GROUP BY 1;
+DROP TABLE IF EXISTS 03399_lc_nullable_string_mixed;
 CREATE TABLE 03399_lc_nullable_string_mixed(
     k Array(LowCardinality(Nullable(String))),
     v Array(Int32)

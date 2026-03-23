@@ -28,6 +28,8 @@ SELECT
     multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, concat('str_', toString(number)), range(number))::Dynamic AS dynamic
 FROM numbers(8);
 
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     id UInt64 DEFAULT generateSerialID('03212_variant_seq'),
@@ -221,3 +223,5 @@ ORDER BY res ASC;
 SELECT d
 FROM t
 ORDER BY id ASC;
+
+SYSTEM drop  table t;

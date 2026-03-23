@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_wide_nested;
+
 CREATE TABLE test_wide_nested
 (
     id Int,
@@ -26,6 +28,10 @@ ORDER BY id ASC;
 SELECT *
 FROM test_wide_nested;
 
+SYSTEM DROP  TABLE test_wide_nested;
+
+SYSTEM DROP  TABLE IF EXISTS test_wide_not_nested;
+
 CREATE TABLE test_wide_not_nested
 (
     id Int,
@@ -47,3 +53,5 @@ FROM numbers(5);
 SELECT *
 FROM test_wide_not_nested
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE test_wide_not_nested;

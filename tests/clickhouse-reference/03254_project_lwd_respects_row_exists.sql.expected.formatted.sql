@@ -1,3 +1,6 @@
+-- compact test
+SYSTEM DROP  TABLE IF EXISTS users_compact;
+
 CREATE TABLE users_compact
 (
     uid Int16,
@@ -25,6 +28,9 @@ SETTINGS
     parallel_replicas_local_plan = 1,
     parallel_replicas_support_projection = 1,
     optimize_aggregation_in_order = 0;
+
+-- wide test
+SYSTEM DROP  TABLE IF EXISTS users_wide;
 
 CREATE TABLE users_wide
 (

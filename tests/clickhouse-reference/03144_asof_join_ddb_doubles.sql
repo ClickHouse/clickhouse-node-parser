@@ -1,5 +1,6 @@
 SET join_algorithm = 'full_sorting_merge';
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS events0;
 CREATE TABLE events0 (
     begin Float64,
     value Int32
@@ -19,6 +20,8 @@ ON p.ts >= e.begin
 ORDER BY p.ts ASC
 -- SETTINGS join_use_nulls = 1
 ;
+DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS probes;
 CREATE TABLE events (
     key Int32,
     begin Float64,

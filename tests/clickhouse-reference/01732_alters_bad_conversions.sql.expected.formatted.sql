@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS bad_conversions;
+
+SYSTEM DROP  TABLE IF EXISTS bad_conversions_2;
+
 CREATE TABLE bad_conversions
 (
     a UInt32

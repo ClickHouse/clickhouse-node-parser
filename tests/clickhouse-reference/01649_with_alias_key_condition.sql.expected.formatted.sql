@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists alias_key_condition;
+
 CREATE TABLE alias_key_condition
 (
     i int,

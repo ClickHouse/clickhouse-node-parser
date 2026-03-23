@@ -1,5 +1,7 @@
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     s Array(String),
@@ -13,3 +15,5 @@ ORDER BY tuple();
 INSERT INTO tab (s);
 
 INSERT INTO tab (s);
+
+SYSTEM DROP  TABLE tab;

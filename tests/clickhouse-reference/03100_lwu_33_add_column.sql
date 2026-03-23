@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_lwu_add_column;
 SET enable_lightweight_update = 1;
 CREATE TABLE t_lwu_add_column(a UInt64)
 ENGINE = MergeTree ORDER BY tuple()

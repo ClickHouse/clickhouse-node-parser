@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS Customers;
+
 CREATE TABLE Customers
 (
     FirstName Nullable(String),
@@ -9,6 +12,14 @@ CREATE TABLE Customers
 ENGINE = Memory;
 
 INSERT INTO Customers;
+
+-- datatable (Version:string) [
+--     '1.2.3.4',
+--     '1.2',
+--     '1.2.3',
+--     '1'
+-- ]
+SYSTEM DROP  TABLE IF EXISTS Versions;
 
 CREATE TABLE Versions
 (

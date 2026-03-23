@@ -1,3 +1,8 @@
+-- Tags: no-parallel, no-fasttest, use-rocksdb
+
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t3;
 CREATE TABLE t1
 (
     `n` Int8
@@ -47,3 +52,4 @@ SELECT
 FROM system.tables
 WHERE name IN ('t1', 't2', 't3', 't4', 't5', 't6')
     AND database = currentDatabase() order by name;
+DROP TABLE t1, t2, t3, t4, t5, t6;

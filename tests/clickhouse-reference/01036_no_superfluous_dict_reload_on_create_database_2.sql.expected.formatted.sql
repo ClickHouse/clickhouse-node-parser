@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS `foo 1234`;
+
 CREATE DATABASE `foo 1234`;
 
 CREATE TABLE `foo 1234`.dict_data
@@ -24,4 +27,14 @@ WHERE database = 'foo 1234'
 
 SELECT dictGetUInt64('foo 1234.dict', 'val', toUInt64(0));
 
+SYSTEM DROP  DATABASE IF EXISTS `foo 123`;
+
 CREATE DATABASE `foo 123`;
+
+SYSTEM DROP  DICTIONARY `foo 1234`.dict;
+
+SYSTEM DROP  TABLE `foo 1234`.dict_data;
+
+SYSTEM DROP  DATABASE `foo 1234`;
+
+SYSTEM DROP  DATABASE `foo 123`;

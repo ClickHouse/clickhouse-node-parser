@@ -1,6 +1,7 @@
 set allow_experimental_dynamic_type = 1;
 set allow_experimental_variant_type = 1;
 set use_variant_as_common_type = 1;
+drop table if exists test;
 create table test (x UInt64, y UInt64) engine=MergeTree order by x settings min_rows_for_wide_part=1, min_bytes_for_wide_part=1;
 insert into test select number, number from numbers(3);
 select count(), dynamicType(d) from test group by dynamicType(d) order by count(), dynamicType(d);
@@ -14,3 +15,4 @@ insert into test select number, number, multiIf(number % 4 == 0, number, number 
 insert into test select number, number, multiIf(number % 4 == 0, number, number % 4 == 1, 'str_' || toString(number), number % 4 == 2, toDate(number), NULL) from numbers(19, 4);
 select x, y, y.UInt64, y.String, y.`Tuple(a UInt64)`.a, d.String, d.UInt64, d.Date, d.`Tuple(a UInt64)`.a from test order by x;
 insert into test select number, multiIf(number % 3 == 0, number, number % 3 == 1, 'str_' || toString(number), NULL), NULL from numbers(23, 3);
+drop table test;

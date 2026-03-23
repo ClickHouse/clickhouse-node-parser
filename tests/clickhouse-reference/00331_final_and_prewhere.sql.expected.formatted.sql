@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS replace;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE `replace`
@@ -33,3 +35,5 @@ WHERE Version = 0
 ORDER BY
     Id ASC,
     Version ASC;
+
+SYSTEM DROP  TABLE replace;

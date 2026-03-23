@@ -4,6 +4,8 @@
 -- See: 02346_text_index_bug86300
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id Int,
@@ -40,3 +42,5 @@ WHERE NOT hasAllTokens(text, ['']);
 SELECT count()
 FROM tab
 WHERE NOT hasToken(text, '');
+
+SYSTEM DROP  TABLE tab;

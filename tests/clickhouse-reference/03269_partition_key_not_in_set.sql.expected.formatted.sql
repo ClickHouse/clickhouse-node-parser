@@ -1,3 +1,10 @@
+-- Related to https://github.com/ClickHouse/ClickHouse/issues/69829
+--
+-- The main goal of the test is to assert that constant transformation
+-- for set constant while partition pruning won't be performed
+-- if it's not allowed (NOT IN operator case)
+SYSTEM DROP  TABLE IF EXISTS 03269_filters;
+
 CREATE TABLE `03269_filters`
 (
     id Int32,
@@ -15,6 +22,8 @@ SELECT
     '2021-01-01';
 
 SELECT '-- Monotonic function in partition key';
+
+SYSTEM DROP  TABLE IF EXISTS 03269_single_monotonic;
 
 CREATE TABLE `03269_single_monotonic`
 (
@@ -38,6 +47,10 @@ WHERE id NOT IN (
         FROM `03269_filters`
     );
 
+SYSTEM DROP  TABLE 03269_single_monotonic;
+
+SYSTEM DROP  TABLE IF EXISTS 03269_single_non_monotonic;
+
 CREATE TABLE `03269_single_non_monotonic`
 (
     id Int32
@@ -59,6 +72,10 @@ WHERE id NOT IN (
         SELECT id
         FROM `03269_filters`
     );
+
+SYSTEM DROP  TABLE 03269_single_non_monotonic;
+
+SYSTEM DROP  TABLE IF EXISTS 03269_multiple_part_cols;
 
 CREATE TABLE `03269_multiple_part_cols`
 (
@@ -114,3 +131,5 @@ WHERE (id, dt) NOT IN (
             dt
         FROM `03269_filters`
     );
+
+SYSTEM DROP  TABLE 03269_multiple_part_cols;

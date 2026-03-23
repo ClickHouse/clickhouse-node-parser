@@ -2,6 +2,8 @@
 -- add_minmax_index_for_numeric_columns=0: Different sizes
 SET optimize_trivial_insert_select = 1;
 
+SYSTEM drop  table if exists test_02381;
+
 CREATE TABLE test_02381
 (
     a UInt64,
@@ -16,6 +18,8 @@ INSERT INTO test_02381 SELECT
     number * 10
 FROM `system`.numbers
 LIMIT 1000000;
+
+SYSTEM drop  table if exists test_02381_compress;
 
 CREATE TABLE test_02381_compress
 (
@@ -60,6 +64,9 @@ SELECT *
 FROM test_02381
 WHERE a = 10000
 LIMIT 1;
+
+-- Test compact part
+SYSTEM drop  table if exists test_02381_compact;
 
 CREATE TABLE test_02381_compact
 (

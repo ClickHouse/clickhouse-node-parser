@@ -1,3 +1,6 @@
+-- Tags: zookeeper
+
+DROP TABLE IF EXISTS join_inner_table SYNC;
 CREATE TABLE join_inner_table
 (
     id UUID,
@@ -67,6 +70,9 @@ GROUP BY key, value1, value2
 ORDER BY key, value1, value2
 LIMIT 10
 SETTINGS enable_parallel_replicas = 1, enable_analyzer=1;
+---- Query with JOIN
+
+DROP TABLE IF EXISTS join_outer_table SYNC;
 CREATE TABLE join_outer_table
 (
     id UUID,

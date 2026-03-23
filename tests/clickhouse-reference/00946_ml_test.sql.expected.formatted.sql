@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE IF NOT EXISTS defaults
 (
     param1 Float64,
@@ -20,7 +22,13 @@ ENGINE = Memory;
 
 INSERT INTO defaults;
 
+SYSTEM DROP  TABLE IF EXISTS model;
+
 CREATE TABLE model
 ENGINE = Memory AS
 SELECT stochasticLinearRegressionState(0.1, 0.0, 5, 'SGD')(target, param1, param2, param3, param4, param5, param6, param7) AS state
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;
+
+SYSTEM DROP  TABLE model;

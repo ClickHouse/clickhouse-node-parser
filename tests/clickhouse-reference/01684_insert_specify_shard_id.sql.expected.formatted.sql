@@ -1,3 +1,12 @@
+-- Tags: shard
+SYSTEM DROP  TABLE IF EXISTS x;
+
+SYSTEM DROP  TABLE IF EXISTS x_dist;
+
+SYSTEM DROP  TABLE IF EXISTS y;
+
+SYSTEM DROP  TABLE IF EXISTS y_dist;
+
 CREATE TABLE x AS `system`.numbers
 ENGINE = MergeTree
 ORDER BY number;
@@ -53,3 +62,11 @@ SETTINGS insert_shard_id = 3; -- { serverError INVALID_SHARD_ID }
 INSERT INTO y_dist SELECT *
 FROM numbers(10)
 SETTINGS insert_shard_id = 3; -- { serverError INVALID_SHARD_ID }
+
+SYSTEM DROP  TABLE x;
+
+SYSTEM DROP  TABLE x_dist;
+
+SYSTEM DROP  TABLE y;
+
+SYSTEM DROP  TABLE y_dist;

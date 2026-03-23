@@ -1,6 +1,8 @@
 -- Tags: no-fasttest, no-replicated-database
 CREATE NAMED COLLECTION IF NOT EXISTS cache_collection_sql AS path = 'collection_sql', max_size = '1Mi';
 
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a Int32,

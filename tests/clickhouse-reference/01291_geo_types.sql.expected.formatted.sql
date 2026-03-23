@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS geo;
+
 CREATE TABLE geo
 (
     a Point,
@@ -11,3 +13,5 @@ INSERT INTO geo;
 
 SELECT *
 FROM geo;
+
+SYSTEM DROP  TABLE geo;

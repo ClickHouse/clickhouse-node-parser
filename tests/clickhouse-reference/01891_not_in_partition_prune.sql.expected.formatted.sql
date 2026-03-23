@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test1;
+
 CREATE TABLE test1
 (
     i int,
@@ -32,6 +34,12 @@ SELECT *
 FROM test1
 WHERE i NOT IN (1, 2, 3, 4, 5)
 ORDER BY i ASC;
+
+SYSTEM drop  table test1;
+
+SYSTEM drop  table if exists t1;
+
+SYSTEM drop  table if exists t2;
 
 CREATE TABLE t1
 (
@@ -100,3 +108,7 @@ WHERE (date, a, b) NOT IN (
             b
         FROM t1
     );
+
+SYSTEM drop  table t1;
+
+SYSTEM drop  table t2;

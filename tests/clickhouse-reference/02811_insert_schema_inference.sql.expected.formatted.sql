@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     n1 UInt32,
@@ -10,3 +12,5 @@ ORDER BY n1;
 INSERT INTO test SELECT *
 FROM generateRandom()
 LIMIT 10;
+
+SYSTEM drop  table test;

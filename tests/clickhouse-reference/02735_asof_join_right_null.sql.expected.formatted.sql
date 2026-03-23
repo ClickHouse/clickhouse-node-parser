@@ -82,3 +82,5 @@ LEFT JOIN t2
 ORDER BY t1.b ASC;
 
 SET join_use_nulls = 1;
+
+SYSTEM DROP  TABLE t1;

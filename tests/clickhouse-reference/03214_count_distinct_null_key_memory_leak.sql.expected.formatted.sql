@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS testnull;
+
 CREATE TABLE testnull
 (
     a Nullable(String),
@@ -18,3 +21,5 @@ SELECT countDistinct(b)
 FROM testnull
 GROUP BY a
 SETTINGS max_memory_usage = 10000000; -- {serverError MEMORY_LIMIT_EXCEEDED}
+
+SYSTEM DROP  TABLE testnull;

@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS t_primary_index_cache;
+
 CREATE TABLE t_primary_index_cache
 (
     a LowCardinality(String),
@@ -37,3 +40,5 @@ WHERE log_comment = '03273_reload_query'
     AND current_database = currentDatabase()
     AND type = 'QueryFinish'
 ORDER BY event_time_microseconds ASC;
+
+SYSTEM DROP  TABLE t_primary_index_cache;

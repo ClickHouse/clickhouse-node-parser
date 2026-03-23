@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists d;
+
 CREATE TABLE d
 (
     i int,
@@ -75,6 +77,12 @@ GROUP BY
     _partition_id
 ORDER BY _partition_id ASC;
 
+SYSTEM drop  table d;
+
+SYSTEM drop  table if exists has_final_mark;
+
+SYSTEM drop  table if exists mixed_final_mark;
+
 CREATE TABLE has_final_mark
 (
     i int,
@@ -122,6 +130,9 @@ SELECT
     max(j)
 FROM mixed_final_mark;
 
+-- The first primary expr is the same of some partition column
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     server_date Date,
@@ -135,6 +146,8 @@ INSERT INTO t;
 
 SELECT count()
 FROM t;
+
+SYSTEM drop  table t;
 
 CREATE TABLE d
 (
@@ -198,6 +211,9 @@ SELECT count('')
 FROM d
 PREWHERE ceil(j) <= NULL;
 
+-- count variant optimization
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id Int64,
@@ -222,3 +238,5 @@ SETTINGS force_optimize_projection = 1;
 SELECT count(if(d = 4, NULL, 1))
 FROM test
 SETTINGS force_optimize_projection = 1; -- { serverError PROJECTION_NOT_USED }
+
+SYSTEM drop  table test;

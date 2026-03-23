@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS codecs;
 CREATE TABLE codecs
 (
     a UInt8 CODEC(LZ4),
@@ -10,6 +11,7 @@ CREATE TABLE codecs
     h DateTime64 CODEC(DoubleDelta, LZ4),
     i String CODEC(NONE)
 ) ENGINE = MergeTree ORDER BY tuple();
+DROP TABLE codecs;
 -- test what should not work
 
 CREATE TABLE codecs (a UInt8 CODEC(NONE, NONE)) ENGINE = MergeTree ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
@@ -25,6 +27,19 @@ CREATE TABLE codecs (a FixedString(2) CODEC(Gorilla)) ENGINE = MergeTree ORDER B
 CREATE TABLE codecs (a Decimal(15,5) CODEC(Gorilla)) ENGINE = MergeTree ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 CREATE TABLE codecs (a Float64 CODEC(Delta, Gorilla)) ENGINE = MergeTree ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 CREATE TABLE codecs (a Float32 CODEC(DoubleDelta, FPC)) ENGINE = MergeTree ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
+-- test that sanity check is not performed in ATTACH query
+
+DROP TABLE IF EXISTS codecs1;
+DROP TABLE IF EXISTS codecs2;
+DROP TABLE IF EXISTS codecs3;
+DROP TABLE IF EXISTS codecs4;
+DROP TABLE IF EXISTS codecs5;
+DROP TABLE IF EXISTS codecs6;
+DROP TABLE IF EXISTS codecs7;
+DROP TABLE IF EXISTS codecs8;
+DROP TABLE IF EXISTS codecs9;
+DROP TABLE IF EXISTS codecs10;
+DROP TABLE IF EXISTS codecs11;
 SET allow_suspicious_codecs = 1;
 CREATE TABLE codecs1 (a UInt8 CODEC(NONE, NONE)) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE codecs2 (a UInt8 CODEC(NONE, LZ4)) ENGINE = MergeTree ORDER BY tuple();
@@ -49,3 +64,14 @@ SELECT * FROM codecs8;
 SELECT * FROM codecs9;
 SELECT * FROM codecs10;
 SELECT * FROM codecs11;
+DROP TABLE codecs1;
+DROP TABLE codecs2;
+DROP TABLE codecs3;
+DROP TABLE codecs4;
+DROP TABLE codecs5;
+DROP TABLE codecs6;
+DROP TABLE codecs7;
+DROP TABLE codecs8;
+DROP TABLE codecs9;
+DROP TABLE codecs10;
+DROP TABLE codecs11;

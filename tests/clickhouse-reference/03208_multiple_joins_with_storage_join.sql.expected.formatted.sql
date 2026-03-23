@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     k Nullable(UInt32),
@@ -10,6 +13,8 @@ ORDER BY tuple();
 
 INSERT INTO tab;
 
+SYSTEM DROP  TABLE IF EXISTS mem;
+
 CREATE TABLE mem
 (
     k UInt64,
@@ -18,6 +23,8 @@ CREATE TABLE mem
 ENGINE = Join(`ANY`, `LEFT`, k);
 
 INSERT INTO mem;
+
+SYSTEM DROP  TABLE IF EXISTS mem2;
 
 CREATE TABLE mem2
 (
@@ -28,6 +35,8 @@ ENGINE = Join(`ANY`, `RIGHT`, k);
 
 INSERT INTO mem2;
 
+SYSTEM DROP  TABLE IF EXISTS mem3;
+
 CREATE TABLE mem3
 (
     k UInt64,
@@ -37,6 +46,8 @@ ENGINE = Join(`ALL`, `FULL`, k)
 SETTINGS join_use_nulls = 1;
 
 INSERT INTO mem3;
+
+SYSTEM DROP  TABLE IF EXISTS mem4;
 
 CREATE TABLE mem4
 (

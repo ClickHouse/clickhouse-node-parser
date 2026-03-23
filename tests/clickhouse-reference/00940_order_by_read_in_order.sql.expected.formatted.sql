@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS pk_order;
+
 SET optimize_read_in_order = 1;
 
 CREATE TABLE pk_order
@@ -201,6 +203,8 @@ SELECT toStartOfHour(d) AS d1
 FROM pk_order
 ORDER BY d1 ASC
 LIMIT 5;
+
+SYSTEM DROP  TABLE pk_order;
 
 CREATE TABLE pk_order
 (

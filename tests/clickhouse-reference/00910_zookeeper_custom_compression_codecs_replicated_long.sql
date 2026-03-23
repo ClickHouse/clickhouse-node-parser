@@ -2,6 +2,8 @@
 
 SET send_logs_level = 'fatal';
 SET allow_suspicious_codecs = 1;
+DROP TABLE IF EXISTS compression_codec_replicated1;
+DROP TABLE IF EXISTS compression_codec_replicated2;
 CREATE TABLE compression_codec_replicated1(
     id UInt64 CODEC(LZ4),
     data String CODEC(ZSTD),
@@ -26,6 +28,8 @@ SELECT * FROM compression_codec_replicated2 ORDER BY id;
 INSERT INTO compression_codec_replicated1 VALUES(2, '', toDate('2018-12-13'), 4.4, 'ddd', 8);
 SELECT count(*) FROM compression_codec_replicated1 WHERE id = 2 GROUP BY id;
 SELECT count(*) FROM compression_codec_replicated2 WHERE id = 2 GROUP BY id;
+DROP TABLE IF EXISTS compression_codec_multiple_replicated1;
+DROP TABLE IF EXISTS compression_codec_multiple_replicated2;
 SET network_compression_method = 'lz4hc';
 CREATE TABLE compression_codec_multiple_replicated1 (
     id UInt64 CODEC(LZ4, ZSTD, NONE, LZ4HC, Delta(4)),
@@ -51,6 +55,7 @@ SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_replicated1;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_replicated2;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple_replicated2;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple_replicated1;
+DROP TABLE IF EXISTS compression_codec_multiple_more_types_replicated;
 CREATE TABLE compression_codec_multiple_more_types_replicated (
     id Decimal128(13) CODEC(ZSTD, LZ4, ZSTD, ZSTD, Delta(2), Delta(4), Delta(1), LZ4HC),
     data FixedString(12) CODEC(ZSTD, ZSTD, Delta(1), Delta(1), Delta(1), NONE, NONE, NONE, LZ4HC),
@@ -59,6 +64,7 @@ CREATE TABLE compression_codec_multiple_more_types_replicated (
 INSERT INTO compression_codec_multiple_more_types_replicated VALUES(1.5555555555555, 'hello world!', [77], ['John']);
 INSERT INTO compression_codec_multiple_more_types_replicated VALUES(7.1, 'xxxxxxxxxxxx', [127], ['Henry']);
 SELECT * FROM compression_codec_multiple_more_types_replicated order by id;
+DROP TABLE IF EXISTS compression_codec_multiple_with_key_replicated;
 SET network_compression_method = 'zstd';
 SET network_zstd_compression_level = 5;
 CREATE TABLE compression_codec_multiple_with_key_replicated (
@@ -70,3 +76,4 @@ INSERT INTO compression_codec_multiple_with_key_replicated VALUES(toDate('2018-1
 SELECT data FROM compression_codec_multiple_with_key_replicated WHERE id BETWEEN 3 AND 1112;
 INSERT INTO compression_codec_multiple_with_key_replicated SELECT toDate('2018-10-12'), number, toString(number) FROM system.numbers LIMIT 1000;
 SELECT COUNT(DISTINCT data) FROM compression_codec_multiple_with_key_replicated WHERE id < 222;
+DROP TABLE compression_codec_multiple_more_types_replicated;

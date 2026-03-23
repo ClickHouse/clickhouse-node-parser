@@ -1,3 +1,6 @@
+-- Tags: long, no-msan, no-distributed-cache
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     number UInt64
@@ -15,3 +18,5 @@ SET max_threads = 1, max_block_size = 12345;
 
 SELECT arrayDistinct(arrayPopFront(arrayDifference(groupArray(number))))
 FROM t;
+
+SYSTEM DROP  TABLE t;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS prewhere;
+
 CREATE TABLE `prewhere`
 (
     light UInt8,
@@ -18,6 +20,10 @@ FROM `prewhere`
 WHERE light != 0
     AND cond != 0;
 
+SYSTEM DROP  TABLE prewhere;
+
+SYSTEM DROP  TABLE IF EXISTS testtable;
+
 CREATE TABLE testtable
 (
     DT Datetime,
@@ -33,3 +39,5 @@ INSERT INTO testtable (*);
 SELECT arrayJoin([0, 1]) AS arrayIdx
 FROM testtable
 WHERE arrayIdx = 0;
+
+SYSTEM DROP  TABLE testtable;

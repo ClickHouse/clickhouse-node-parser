@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM drop  table if exists funnel_test;
+
 CREATE TABLE funnel_test
 (
     timestamp UInt32,
@@ -31,6 +34,8 @@ FROM funnel_test;
 SELECT 5 = windowFunnel(4)(timestamp, event = 1003, event = 1004, event = 1005, event = 1006, event = 1007)
 FROM funnel_test;
 
+SYSTEM drop  table if exists funnel_test2;
+
 CREATE TABLE funnel_test2
 (
     uid UInt32 DEFAULT 1,
@@ -52,6 +57,8 @@ FROM funnel_test2;
 
 SELECT 4 = windowFunnel(4)(timestamp, event <= 1007, event >= 1002, event <= 1006, event >= 1004)
 FROM funnel_test2;
+
+SYSTEM drop  table if exists funnel_test_u64;
 
 CREATE TABLE funnel_test_u64
 (
@@ -75,6 +82,8 @@ FROM funnel_test_u64;
 SELECT 4 = windowFunnel(4)(timestamp, event <= 1007, event >= 1002, event <= 1006, event >= 1004)
 FROM funnel_test_u64;
 
+SYSTEM drop  table if exists funnel_test_strict;
+
 CREATE TABLE funnel_test_strict
 (
     timestamp UInt32,
@@ -89,6 +98,16 @@ FROM funnel_test_strict;
 
 SELECT 7 = windowFunnel(10000)(timestamp, event = 1000, event = 1001, event = 1002, event = 1003, event = 1004, event = 1005, event = 1006)
 FROM funnel_test_strict;
+
+SYSTEM drop  table funnel_test;
+
+SYSTEM drop  table funnel_test2;
+
+SYSTEM drop  table funnel_test_u64;
+
+SYSTEM drop  table funnel_test_strict;
+
+SYSTEM drop  table if exists funnel_test_strict_order;
 
 CREATE TABLE funnel_test_strict_order
 (
@@ -146,6 +165,11 @@ WHERE user = 7
 GROUP BY user
 FORMAT JSONCompactEachRow;
 
+SYSTEM drop  table funnel_test_strict_order;
+
+--https://github.com/ClickHouse/ClickHouse/issues/27469
+SYSTEM drop  table if exists strict_BiteTheDDDD;
+
 CREATE TABLE strict_BiteTheDDDD
 (
     ts UInt64,
@@ -158,6 +182,10 @@ INSERT INTO strict_BiteTheDDDD;
 SELECT 3 = windowFunnel(86400, 'strict_deduplication')(ts, event = 'a', event = 'b', event = 'c', event = 'd')
 FROM strict_BiteTheDDDD
 FORMAT JSONCompactEachRow;
+
+SYSTEM drop  table strict_BiteTheDDDD;
+
+SYSTEM drop  table if exists funnel_test_non_null;
 
 CREATE TABLE funnel_test_non_null
 (
@@ -218,6 +246,8 @@ FROM funnel_test_non_null
 GROUP BY u
 ORDER BY u ASC
 FORMAT JSONCompactEachRow;
+
+SYSTEM drop  table funnel_test_non_null;
 
 CREATE TABLE funnel_test_strict_increase
 (
@@ -295,6 +325,10 @@ WHERE event_ts >= 0
 GROUP BY uid
 ORDER BY uid ASC;
 
+SYSTEM drop  table funnel_test_strict_increase;
+
+SYSTEM drop  table if exists funnel_test_reentry;
+
 CREATE TABLE funnel_test_reentry
 (
     uid Int32,
@@ -348,3 +382,5 @@ FROM funnel_test_reentry
 WHERE uid = 3
 GROUP BY uid
 FORMAT JSONCompactEachRow;
+
+SYSTEM drop  table funnel_test_reentry;

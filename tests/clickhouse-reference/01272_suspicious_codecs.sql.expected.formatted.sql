@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS codecs;
+
 CREATE TABLE codecs
 (
     a UInt8 CODEC(LZ4),
@@ -12,6 +14,8 @@ CREATE TABLE codecs
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
+SYSTEM DROP  TABLE codecs;
 
 -- test what should not work
 CREATE TABLE codecs
@@ -104,6 +108,29 @@ CREATE TABLE codecs
 )
 ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
+
+-- test that sanity check is not performed in ATTACH query
+SYSTEM DROP  TABLE IF EXISTS codecs1;
+
+SYSTEM DROP  TABLE IF EXISTS codecs2;
+
+SYSTEM DROP  TABLE IF EXISTS codecs3;
+
+SYSTEM DROP  TABLE IF EXISTS codecs4;
+
+SYSTEM DROP  TABLE IF EXISTS codecs5;
+
+SYSTEM DROP  TABLE IF EXISTS codecs6;
+
+SYSTEM DROP  TABLE IF EXISTS codecs7;
+
+SYSTEM DROP  TABLE IF EXISTS codecs8;
+
+SYSTEM DROP  TABLE IF EXISTS codecs9;
+
+SYSTEM DROP  TABLE IF EXISTS codecs10;
+
+SYSTEM DROP  TABLE IF EXISTS codecs11;
 
 SET allow_suspicious_codecs = 1;
 
@@ -218,3 +245,25 @@ FROM codecs10;
 
 SELECT *
 FROM codecs11;
+
+SYSTEM DROP  TABLE codecs1;
+
+SYSTEM DROP  TABLE codecs2;
+
+SYSTEM DROP  TABLE codecs3;
+
+SYSTEM DROP  TABLE codecs4;
+
+SYSTEM DROP  TABLE codecs5;
+
+SYSTEM DROP  TABLE codecs6;
+
+SYSTEM DROP  TABLE codecs7;
+
+SYSTEM DROP  TABLE codecs8;
+
+SYSTEM DROP  TABLE codecs9;
+
+SYSTEM DROP  TABLE codecs10;
+
+SYSTEM DROP  TABLE codecs11;

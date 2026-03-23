@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM DROP  TABLE IF EXISTS midpoint_test;
+
 CREATE TABLE midpoint_test
 (
     ui8 UInt8,
@@ -183,6 +186,11 @@ SELECT
     midpoint(toNullable(toDate('2025-01-01')), toDate('2025-01-05')) AS result,
     toTypeName(result) AS type;
 
+-- ===============================================================
+-- Nullable columns: per-row NULL skipping
+-- ===============================================================
+SYSTEM DROP  TABLE IF EXISTS midpoint_nullable_test;
+
 CREATE TABLE midpoint_nullable_test
 (
     a Nullable(Int32),
@@ -319,6 +327,11 @@ SELECT
     midpoint(materialize(toNullable(ui8)), 11) AS result,
     toTypeName(result) AS type
 FROM midpoint_test;
+
+-- ===============================================================
+-- All arguments are Nullable columns: some rows all NULL, others partially non-NULL
+-- ===============================================================
+SYSTEM DROP  TABLE IF EXISTS midpoint_nullable3_test;
 
 CREATE TABLE midpoint_nullable3_test
 (

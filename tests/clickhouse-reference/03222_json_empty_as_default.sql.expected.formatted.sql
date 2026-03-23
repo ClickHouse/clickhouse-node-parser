@@ -23,11 +23,17 @@ FROM format(JSONEachRow, 'x IPv6', '{"x":""}');
 SELECT x
 FROM format(JSONEachRow, 'x UUID', '{"x":""}');
 
+-- { echoOff }
+-- Simple type AggregateFunction
+SYSTEM DROP  TABLE IF EXISTS table1;
+
 CREATE TABLE table1
 (
     col AggregateFunction(uniq, UInt64)
 )
 ENGINE = Memory();
+
+SYSTEM DROP  TABLE IF EXISTS table2;
 
 CREATE TABLE table2
 (
@@ -44,6 +50,11 @@ FROM format(JSONEachRow, 'x AggregateFunction(uniq, UInt64)' AS T, '{"x":""}');
 -- { echoOn }
 SELECT COUNTDistinct(col)
 FROM table1;
+
+-- { echoOff }
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;
 
 -- The setting input_format_defaults_for_omitted_fields determines the default value if enabled.
 CREATE TABLE table1

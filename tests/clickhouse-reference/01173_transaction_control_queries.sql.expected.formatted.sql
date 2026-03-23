@@ -1,3 +1,8 @@
+-- Tags: no-ordinary-database, no-encrypted-storage
+SYSTEM drop  table if exists mt1;
+
+SYSTEM drop  table if exists mt2;
+
 CREATE TABLE mt1
 (
     n Int64
@@ -177,3 +182,9 @@ INSERT INTO m; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM m; -- { serverError INVALID_TRANSACTION }
+
+SYSTEM drop  table m;
+
+SYSTEM drop  table mt1;
+
+SYSTEM drop  table mt2;

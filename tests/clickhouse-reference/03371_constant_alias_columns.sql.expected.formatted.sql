@@ -4,6 +4,8 @@ SET allow_experimental_parallel_reading_from_replicas = 1;
 
 SET cluster_for_parallel_replicas = 'parallel_replicas';
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     a UInt64,

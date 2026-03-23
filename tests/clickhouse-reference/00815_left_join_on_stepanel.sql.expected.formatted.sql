@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS fact_cpc_clicks;
+
+SYSTEM DROP  TABLE IF EXISTS dim_model;
+
 CREATE TABLE fact_cpc_clicks
 (
     model_id UInt8
@@ -29,3 +33,5 @@ FROM
 LEFT JOIN {CLICKHOUSE_DATABASE:Identifier}.dim_model AS d
     ON f.model_id = d.model_id
 LIMIT 10;
+
+SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};

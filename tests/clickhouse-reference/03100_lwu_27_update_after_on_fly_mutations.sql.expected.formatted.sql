@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lwu_on_fly SYNC;
+
 SET enable_lightweight_update = 1;
 
 CREATE TABLE t_lwu_on_fly
@@ -20,3 +22,5 @@ SET apply_mutations_on_fly = 1;
 SELECT *
 FROM t_lwu_on_fly
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_lwu_on_fly SYNC;

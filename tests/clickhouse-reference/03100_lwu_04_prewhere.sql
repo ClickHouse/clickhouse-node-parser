@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_shared SYNC;
 SET enable_lightweight_update = 1;
 CREATE TABLE t_shared (id UInt64, c1 UInt64, c2 String)
 ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_shared/', '1')
@@ -11,3 +12,4 @@ SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 1;
 SELECT * FROM t_shared PREWHERE c2 = 'aaa' AND c1 = 111;
 SELECT * FROM t_shared WHERE c2 = 'aaa' AND c1 = 111;
 SELECT * FROM t_shared PREWHERE c2 = 'aaa' WHERE c1 = 111;
+DROP TABLE t_shared SYNC;

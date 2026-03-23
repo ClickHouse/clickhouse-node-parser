@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 
 CREATE TABLE t
@@ -21,6 +23,10 @@ SELECT
 FROM t
 SETTINGS additional_table_filters = map('t', '0');
 
+SYSTEM DROP  TABLE t;
+
+SYSTEM drop  table if exists atf_p;
+
 CREATE TABLE atf_p
 (
     x UInt64
@@ -34,3 +40,5 @@ FROM numbers(10);
 SELECT count()
 FROM atf_p
 SETTINGS additional_table_filters = map('atf_p', 'x <= 2');
+
+SYSTEM drop  table atf_p;

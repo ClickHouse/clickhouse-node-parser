@@ -5,6 +5,13 @@ SET max_insert_threads = 2;
 
 SET parallel_view_processing = 1;
 
+-- { echo }
+SYSTEM DROP  TABLE IF EXISTS 03633_mv_src;
+
+SYSTEM DROP  TABLE IF EXISTS 03633_mv_dst;
+
+SYSTEM DROP  VIEW IF EXISTS 03633_mv;
+
 CREATE TABLE `03633_mv_src`
 (
     key Int
@@ -32,3 +39,9 @@ SET materialized_views_squash_parallel_inserts = 1;
 SET materialized_views_squash_parallel_inserts = 0;
 
 SET deduplicate_blocks_in_dependent_materialized_views = 1;
+
+SYSTEM DROP  VIEW 03633_mv;
+
+SYSTEM DROP  TABLE 03633_mv_src;
+
+SYSTEM DROP  TABLE 03633_mv_dst;

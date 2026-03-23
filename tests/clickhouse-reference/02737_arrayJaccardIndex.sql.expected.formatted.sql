@@ -38,6 +38,8 @@ SELECT
     [[1,2], [3,5]] AS arr2,
     round(arrayJaccardIndex(arr1, arr2), 2);
 
+SYSTEM DROP  TABLE IF EXISTS array_jaccard_index;
+
 CREATE TABLE array_jaccard_index
 (
     arr Array(UInt8)
@@ -85,3 +87,5 @@ SELECT
     round(arrayJaccardIndex(arr, arr), 2)
 FROM array_jaccard_index
 ORDER BY arr ASC;
+
+SYSTEM DROP  TABLE array_jaccard_index;

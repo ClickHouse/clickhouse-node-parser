@@ -1,3 +1,14 @@
+-- Check for Block::sortColumns(), can be done using Buffer.
+SYSTEM drop  table if exists out_01277;
+
+SYSTEM drop  table if exists in_01277;
+
+SYSTEM drop  table if exists buffer_01277;
+
+SYSTEM drop  table if exists mv_01277_1;
+
+SYSTEM drop  table if exists mv_01277_2;
+
 CREATE TABLE out_01277
 (
     k1 Int,
@@ -68,3 +79,13 @@ INSERT INTO mv_01277_2 SELECT
     number AS b2,
     number AS c
 FROM numbers(1);
+
+SYSTEM drop  table mv_01277_1;
+
+SYSTEM drop  table mv_01277_2;
+
+SYSTEM drop  table buffer_01277;
+
+SYSTEM drop  table out_01277;
+
+SYSTEM drop  table in_01277;

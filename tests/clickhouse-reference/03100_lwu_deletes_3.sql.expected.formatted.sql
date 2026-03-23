@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lwu_deletes_3 SYNC;
+
 CREATE TABLE t_lwu_deletes_3
 (
     id UInt64,
@@ -71,3 +73,5 @@ WHERE database = currentDatabase()
     AND table = 't_lwu_deletes_3'
     AND NOT startsWith(name, 'patch')
     AND active;
+
+SYSTEM DROP  TABLE t_lwu_deletes_3 SYNC;

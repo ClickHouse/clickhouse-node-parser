@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_sparse_intersect;
+
 CREATE TABLE t_sparse_intersect
 (
     a UInt64,
@@ -34,3 +36,5 @@ INTERSECT
         SELECT *
         FROM t_sparse_intersect
     );
+
+SYSTEM DROP  TABLE t_sparse_intersect;

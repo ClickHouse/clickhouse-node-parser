@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  FUNCTION IF EXISTS 02148_test_function;
+
 CREATE FUNCTION `02148_test_function` AS () -> (
     SELECT 1
 );
@@ -8,15 +11,23 @@ CREATE FUNCTION `02148_test_function` AS () -> (
     SELECT 2
 );
 
+SYSTEM DROP  FUNCTION 02148_test_function;
+
 CREATE FUNCTION `02148_test_function` AS x -> (
     SELECT x + 1
 );
 
 SELECT `02148_test_function`(1);
 
+SYSTEM DROP  FUNCTION IF EXISTS 02148_test_function_nested;
+
 CREATE FUNCTION `02148_test_function_nested` AS x -> `02148_test_function`(x + 2);
 
 SELECT `02148_test_function_nested`(1);
+
+SYSTEM DROP  FUNCTION 02148_test_function_nested;
+
+SYSTEM DROP  TABLE IF EXISTS 02148_test_table;
 
 CREATE TABLE `02148_test_table`
 (
@@ -38,3 +49,5 @@ CREATE FUNCTION `02148_test_function` AS () -> (
     FROM `02148_test_table`
     LIMIT 1
 );
+
+SYSTEM DROP  TABLE 02148_test_table;

@@ -1,9 +1,11 @@
 SET mutations_sync = 2;
+DROP TABLE IF EXISTS tab;
 SELECT '-- Compact parts';
 CREATE TABLE tab (id Int64, dflt Int64 DEFAULT 54321) ENGINE MergeTree ORDER BY id;
 INSERT INTO tab (id, dflt) VALUES (1, 1);
 INSERT INTO tab (id) VALUES (2);
 SELECT * FROM tab ORDER BY id;
+DROP TABLE tab;
 CREATE TABLE tab (id Int64, dflt Int64 DEFAULT 54321) ENGINE MergeTree ORDER BY id SETTINGS min_bytes_for_wide_part = 1;
 CREATE TABLE tab (id Int64, dflt Nullable(Int64) DEFAULT 54321) ENGINE MergeTree ORDER BY id SETTINGS min_bytes_for_wide_part = 1;
 INSERT INTO tab (id, dflt) VALUES (2, NULL);

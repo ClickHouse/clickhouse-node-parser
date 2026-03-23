@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists X;
+
+SYSTEM drop  table if exists Y;
+
 CREATE TABLE X
 (
     id Int32,
@@ -449,3 +453,9 @@ ORDER BY
     s.id ASC,
     s.x_a ASC,
     s.x_b ASC;
+
+--select 'self full nullable vs not nullable 2';
+--select Y.*, s.* from Y full join (select * from Y) as s on concat('n', Y.y_a) = s.y_b order by id;
+SYSTEM drop  table X;
+
+SYSTEM drop  table Y;

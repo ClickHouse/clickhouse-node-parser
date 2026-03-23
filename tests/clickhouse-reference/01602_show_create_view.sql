@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS test_1602;
 CREATE DATABASE test_1602;
 CREATE TABLE test_1602.tbl (`EventDate` DateTime, `CounterID` UInt32, `UserID` UInt32) ENGINE = MergeTree() PARTITION BY toYYYYMM(EventDate) ORDER BY (CounterID, EventDate, intHash32(UserID)) SETTINGS index_granularity = 8192;
 CREATE VIEW test_1602.v AS SELECT * FROM test_1602.tbl;

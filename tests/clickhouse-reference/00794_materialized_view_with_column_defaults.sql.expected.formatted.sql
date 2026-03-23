@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS table_view;
+
+SYSTEM DROP  TABLE IF EXISTS source_table;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE source_table

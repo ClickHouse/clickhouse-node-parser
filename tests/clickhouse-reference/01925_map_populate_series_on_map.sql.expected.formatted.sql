@@ -1,3 +1,6 @@
+-- { echo }
+SYSTEM drop  table if exists map_test;
+
 CREATE TABLE map_test
 ENGINE = TinyLog() AS
 (SELECT
@@ -19,6 +22,8 @@ FROM map_test;
 
 SELECT mapPopulateSeries(m, n)
 FROM map_test;
+
+SYSTEM drop  table map_test;
 
 SELECT
     mapPopulateSeries(map(toUInt8(1), toUInt8(1), 2, 1)) AS res,

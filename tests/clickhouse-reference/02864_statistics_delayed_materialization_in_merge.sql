@@ -1,3 +1,9 @@
+-- Tests delayed materialization of statistics in merge instead of during insert (setting 'materialize_statistics_on_insert = 0').
+-- (The concrete statistics type, column data type and predicate type don't matter)
+
+-- Checks by the predicate evaluation order in EXPLAIN. This is quite fragile, a better approach would be helpful (maybe 'send_logs_level'?)
+
+DROP TABLE IF EXISTS tab;
 SET allow_experimental_statistics = 1;
 SET use_statistics = 1;
 SET enable_analyzer = 1;
@@ -11,3 +17,4 @@ SETTINGS min_bytes_for_wide_part = 0, enable_vertical_merge_algorithm = 0; -- TO
 INSERT INTO tab SELECT number, -number FROM system.numbers LIMIT 10000;
 SELECT replaceRegexpAll(explain, '__table1\.', '') FROM (EXPLAIN actions=1 SELECT count(*) FROM tab WHERE b < 10 and a < 10) WHERE explain LIKE '%Prewhere%'; -- checks b first, then a (statistics not used)
 SET mutations_sync = 2;
+DROP TABLE tab;

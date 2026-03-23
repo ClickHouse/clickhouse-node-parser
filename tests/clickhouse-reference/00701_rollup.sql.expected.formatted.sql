@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS rollup;
+
 CREATE TABLE `rollup`
 (
     a String,
@@ -77,3 +80,5 @@ WITH ROLLUP
 ORDER BY
     a ASC,
     b ASC;
+
+SYSTEM DROP  TABLE rollup;

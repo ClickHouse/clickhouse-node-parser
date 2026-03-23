@@ -9,6 +9,8 @@ SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, 
 
 SET optimize_use_projection_filtering = 1;
 
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     i int,
@@ -45,3 +47,5 @@ SETTINGS
 SELECT part_name
 FROM `system`.query_condition_cache
 ORDER BY part_name ASC;
+
+SYSTEM drop  table t;

@@ -1,5 +1,7 @@
 SET mutations_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS t_sparse_alter;
+
 CREATE TABLE t_sparse_alter
 (
     id UInt64,
@@ -32,3 +34,5 @@ FROM t_sparse_alter;
 
 SELECT uniqExact(t)
 FROM t_sparse_alter;
+
+SYSTEM DROP  TABLE t_sparse_alter;

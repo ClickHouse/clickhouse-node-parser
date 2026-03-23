@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt64
@@ -12,6 +14,8 @@ FROM numbers(2);
 SELECT *
 FROM test
 ORDER BY x ASC;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

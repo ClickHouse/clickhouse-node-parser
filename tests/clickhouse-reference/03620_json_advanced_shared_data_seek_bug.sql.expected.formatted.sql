@@ -1,5 +1,7 @@
 SET use_variant_as_common_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -18,3 +20,5 @@ SELECT json.b.b._1.:String
 FROM test
 FORMAT Null
 SETTINGS max_threads = 1;
+
+SYSTEM drop  table test;

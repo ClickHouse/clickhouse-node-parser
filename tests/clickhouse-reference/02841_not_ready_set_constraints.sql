@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE t1 (
     `id` UInt64
 )
@@ -10,3 +12,5 @@ CREATE TABLE t2 (
 ENGINE = MergeTree ORDER BY conversation;
 INSERT INTO t2(conversation) VALUES (42);
 select * from t2;
+drop table t1;
+drop table t2;

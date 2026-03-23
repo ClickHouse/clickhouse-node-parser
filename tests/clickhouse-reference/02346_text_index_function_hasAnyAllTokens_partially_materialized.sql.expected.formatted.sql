@@ -6,6 +6,14 @@ SET use_skip_indexes_on_data_read = 0;
 
 SET mutations_sync = 2; -- want synchronous materialize
 
+-- In this test we make sure that text search functions hasAny/AllTokens work correctly for
+-- tables in which only some parts have a materialized index. The expected behavior is that
+-- the search acts the same as if the whole column was indexed, but of course an inefficient
+-- brute force search is used for the un-indexed rows. Furthermore we test that the same
+-- tokenizer used to create the index is used for the un-indexed parts as is specified in
+-- the index.
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -14,6 +22,8 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY (id)
 SETTINGS index_granularity = 2;
+
+SYSTEM DROP  VIEW IF EXISTS explain_indexes;
 
 CREATE VIEW explain_indexes
 AS
@@ -82,6 +92,9 @@ SELECT arraySort(groupArray(id))
 FROM tab
 WHERE hasAllTokens(message, ['abc', 'fo']);
 
+-- { echoOff }
+SYSTEM DROP  TABLE tab;
+
 SELECT arraySort(groupArray(id))
 FROM tab
 WHERE hasAnyTokens(message, ['bar$']); -- test default tokenizer
@@ -97,3 +110,5 @@ WHERE hasAllTokens(message, ['bar$']); -- test default tokenizer
 SELECT arraySort(groupArray(id))
 FROM tab
 WHERE hasAllTokens(message, tokens('bar$', 'splitByNonAlpha'));
+
+SYSTEM DROP  VIEW explain_indexes;

@@ -1,4 +1,7 @@
 SET enable_full_text_index = 1;
+-- Some tests for lightweight deleted on a column with text index
+
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (
     s FixedString(37),
     INDEX idx s TYPE text(tokenizer = array())
@@ -10,3 +13,4 @@ INSERT INTO TABLE tab (s) VALUES ('would'), ('\t'), ('need'), ('('), ('名字');
 INSERT INTO TABLE tab (s) SELECT CAST(number AS String) FROM numbers(5);
 INSERT INTO TABLE tab (s) SELECT s FROM generateRandom('s FixedString(37)', 12734763443271340066, 25, 2) LIMIT 3;
 SELECT count() FROM tab WHERE hasAllTokens(s, 'was');
+DROP TABLE tab;

@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -29,3 +31,5 @@ INNER JOIN (
     ON t1.id = t2.id
 WHERE t1.value = '1'
 SETTINGS force_data_skipping_indices = 'value_idx';
+
+SYSTEM DROP  TABLE test_table;

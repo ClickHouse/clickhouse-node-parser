@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS moving_sum_num;
+DROP TABLE IF EXISTS moving_sum_dec;
 CREATE TABLE moving_sum_num (
   k String,
   dt DateTime,
@@ -28,3 +30,5 @@ SELECT k, groupArrayMovingAvg(3)(v) FROM (SELECT * FROM moving_sum_num ORDER BY 
 CREATE TABLE moving_sum_dec ENGINE = Memory AS
   SELECT k, dt, toDecimal64(v, 2) as v
   FROM moving_sum_num;
+DROP TABLE moving_sum_dec;
+DROP TABLE moving_sum_num;

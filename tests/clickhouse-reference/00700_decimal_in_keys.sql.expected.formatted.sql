@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS decimal;
+
 CREATE TABLE IF NOT EXISTS decimal
 (
     d1 DECIMAL(9, 8),
@@ -55,3 +57,5 @@ SELECT *
 FROM decimal
 WHERE d1 IN (1, 3)
 ORDER BY d2 ASC;
+
+SYSTEM DROP  TABLE decimal;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists lc_perm;
+
 CREATE TABLE lc_perm
 (
     val UInt32,

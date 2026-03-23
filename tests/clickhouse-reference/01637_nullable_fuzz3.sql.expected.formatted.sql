@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     item_id UInt64,
@@ -60,3 +62,5 @@ FULL JOIN (
     ) AS r
     USING (item_id)
 SETTINGS join_use_nulls = '1';
+
+SYSTEM DROP  TABLE t;

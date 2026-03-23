@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_lwu_sequence;
 SET enable_lightweight_update = 1;
 CREATE TABLE t_lwu_sequence (a UInt64, b UInt64)
 ENGINE = MergeTree ORDER BY a
@@ -10,3 +11,4 @@ INSERT INTO t_lwu_sequence SELECT number, number FROM numbers(10);
 SELECT b FROM t_lwu_sequence WHERE a = 5 SETTINGS apply_patch_parts = 0;
 SELECT b FROM t_lwu_sequence WHERE a = 5 SETTINGS apply_patch_parts = 1;
 SELECT count(), sum(rows) FROM system.parts WHERE database = currentDatabase() AND table = 't_lwu_sequence' AND startsWith(name, 'patch') AND active;
+DROP TABLE t_lwu_sequence;

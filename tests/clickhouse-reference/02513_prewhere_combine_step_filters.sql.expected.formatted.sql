@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table_02513;
+
 CREATE TABLE table_02513
 (
     n UInt64
@@ -52,3 +54,6 @@ SELECT *
 FROM table_02513
 PREWHERE n % 143011
 WHERE n % 13;
+
+-- { echoOff }
+SYSTEM DROP  TABLE table_02513;

@@ -1,4 +1,8 @@
 set enable_analyzer=1;
+drop table if exists test1;
+drop table if exists test2;
+drop table if exists test3;
+drop table if exists test_merge;
 create table test1(a UInt64, b UInt64) engine=Memory;
 create table test2(a UInt64, c UInt64) engine=Memory;
 create table test3(a UInt64, d UInt64) engine=Memory;
@@ -38,3 +42,7 @@ select b, e, _table from test_merge order by all;
 select c, d, _table from test_merge order by all;
 select c, e, _table from test_merge order by all;
 select d, e, _table from test_merge order by all;
+drop table test1;
+drop table test2;
+drop table test3;
+drop table test_merge;

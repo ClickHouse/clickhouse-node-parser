@@ -1,3 +1,12 @@
+-- Tags: no-ordinary-database
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists dist;
+
+SYSTEM drop  table if exists buf;
+
+SYSTEM drop  table if exists join;
+
 CREATE TABLE t
 (
     n UInt64,
@@ -59,3 +68,11 @@ SELECT name
 FROM `system`.tables
 WHERE database = currentDatabase()
 ORDER BY name ASC;
+
+SYSTEM drop  table t;
+
+SYSTEM drop  table dist;
+
+SYSTEM drop  table buf;
+
+SYSTEM drop  table join;

@@ -3,6 +3,8 @@ SET optimize_syntax_fuse_functions = 1;
 
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a Float64,

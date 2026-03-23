@@ -6,6 +6,10 @@ SET ignore_cold_parts_seconds = 0;
 
 SET optimize_on_insert = 0;
 
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_tuple_replica1_00661 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_tuple_replica2_00661 SYNC;
+
 CREATE TABLE partitioned_by_tuple_replica1_00661
 (
     d Date,
@@ -43,3 +47,7 @@ ORDER BY
     x ASC,
     w ASC,
     y ASC;
+
+SYSTEM DROP  TABLE partitioned_by_tuple_replica1_00661 SYNC;
+
+SYSTEM DROP  TABLE partitioned_by_tuple_replica2_00661 SYNC;

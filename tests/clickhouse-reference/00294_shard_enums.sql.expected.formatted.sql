@@ -1,6 +1,8 @@
 -- Tags: shard
 SET max_threads = 1;
 
+SYSTEM drop  table if exists enums;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE enums
@@ -26,6 +28,8 @@ FROM enums
 ORDER BY _part ASC;
 
 INSERT INTO enums (letter, e);
+
+SYSTEM drop  table enums;
 
 CREATE TABLE enums
 (
@@ -104,6 +108,8 @@ SELECT
     e
 FROM enums;
 
+SYSTEM drop  table if exists enums_copy;
+
 CREATE TABLE enums_copy
 ENGINE = TinyLog AS
 SELECT *
@@ -111,6 +117,8 @@ FROM enums;
 
 SELECT *
 FROM enums_copy;
+
+SYSTEM drop  table enums_copy;
 
 CREATE TABLE enums_copy
 ENGINE = TinyLog AS

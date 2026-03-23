@@ -1,6 +1,10 @@
+-- Cache is only for MergeTree
+drop table if exists t_mem;
 create table t_mem (key Int) engine=Memory();
 insert into t_mem values (1);
 select columns_descriptions_cache_size from system.tables where database = currentDatabase() and table = 't_mem';
+-- MergeTree
+drop table if exists t_mt;
 -- { echoOn }
 create table t_mt (key Int) engine=MergeTree() order by ();
 select columns_descriptions_cache_size from system.tables where database = currentDatabase() and table = 't_mt';

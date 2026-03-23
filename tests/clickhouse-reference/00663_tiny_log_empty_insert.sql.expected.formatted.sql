@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS empty;
+
+SYSTEM DROP  TABLE IF EXISTS data;
+
 CREATE TABLE empty
 (
     value Int8
@@ -17,3 +21,7 @@ SELECT *
 FROM data;
 
 INSERT INTO data SELECT 1;
+
+SYSTEM DROP  TABLE empty;
+
+SYSTEM DROP  TABLE data;

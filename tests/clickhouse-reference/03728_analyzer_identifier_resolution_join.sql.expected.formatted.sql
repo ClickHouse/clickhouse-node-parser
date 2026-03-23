@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS address;
+
+SYSTEM DROP  TABLE IF EXISTS fact_click;
+
 CREATE TABLE address
 (
     email_address String,
@@ -25,3 +29,7 @@ ORDER BY (campaign_sid, campaign_batch_sid, sid)
 SETTINGS index_granularity = 8192;
 
 SET enable_analyzer = 1;
+
+SYSTEM DROP  TABLE address;
+
+SYSTEM DROP  TABLE fact_click;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists aliases_test;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE aliases_test
@@ -38,3 +40,5 @@ SELECT
 FROM
     aliases_test
 ARRAY JOIN struct AS class;
+
+SYSTEM drop  table aliases_test;

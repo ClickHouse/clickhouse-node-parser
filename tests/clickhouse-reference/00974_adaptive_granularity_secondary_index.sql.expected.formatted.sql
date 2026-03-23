@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS indexed_table;
+
 CREATE TABLE indexed_table
 (
     tm DateTime,
@@ -21,6 +23,8 @@ FROM numbers(1000);
 SELECT COUNT()
 FROM indexed_table
 WHERE like(log_message, '%x%');
+
+SYSTEM DROP  TABLE IF EXISTS another_indexed_table;
 
 CREATE TABLE another_indexed_table
 (

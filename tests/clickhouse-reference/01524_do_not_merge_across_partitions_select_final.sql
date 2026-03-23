@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+
+DROP TABLE IF EXISTS select_final;
 SET allow_asynchronous_read_from_io_pool_for_merge_tree = 0;
 SET do_not_merge_across_partitions_select_final = 1;
 SET max_threads = 16;
@@ -12,3 +15,4 @@ INSERT INTO select_final SELECT toDate('2020-01-01'), number, 'updated' FROM num
 SELECT max(x) FROM select_final FINAL where string = 'updated';
 INSERT INTO select_final SELECT toDate('2000-01-01'), number, '' FROM numbers(500000);
 SELECT max(x) FROM select_final FINAL;
+DROP TABLE select_final;

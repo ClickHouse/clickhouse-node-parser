@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists projection_without_key;
+
 CREATE TABLE projection_without_key
 (
     key UInt32,
@@ -17,3 +19,5 @@ SETTINGS optimize_use_projections = 1;
 SELECT sum(key)
 FROM projection_without_key
 SETTINGS optimize_use_projections = 0;
+
+SYSTEM drop  table projection_without_key;

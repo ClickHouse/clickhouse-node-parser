@@ -1,5 +1,7 @@
 SET optimize_use_projections = 1;
 
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     i int,
@@ -18,3 +20,5 @@ FROM `system`.projection_parts
 WHERE database = currentDatabase()
     AND table = 't'
     AND active;
+
+SYSTEM drop  table t;

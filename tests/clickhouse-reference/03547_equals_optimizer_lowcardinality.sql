@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (d1 Dynamic(max_types=2), d2 Dynamic(max_types=2)) ENGINE = Memory;
 INSERT INTO test VALUES (42, 42), (42, 43), (43, 42), ('abc', 'abc'), ('abc', 'abd'), ('abd', 'abc'),
 ([1,2,3], [1,2,3]), ([1,2,3], [1,2,4]), ([1,2,4], [1,2,3]),

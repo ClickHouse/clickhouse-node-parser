@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS A;
+
 CREATE TABLE A
 (
     A Int64,
@@ -23,3 +25,5 @@ LIMIT 1
 FORMAT Null;
 
 SET join_algorithm = 'grace_hash', grace_hash_join_initial_buckets = 128, grace_hash_join_max_buckets = 128;
+
+SYSTEM DROP  TABLE A;

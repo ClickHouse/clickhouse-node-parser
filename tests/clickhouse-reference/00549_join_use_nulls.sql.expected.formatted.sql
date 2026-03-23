@@ -1,5 +1,7 @@
 SET join_use_nulls = 1;
 
+SYSTEM DROP  TABLE IF EXISTS null_00549;
+
 CREATE TABLE null_00549
 (
     k UInt64,
@@ -36,3 +38,5 @@ ORDER BY
     k ASC,
     a ASC,
     b ASC;
+
+SYSTEM DROP  TABLE null_00549;

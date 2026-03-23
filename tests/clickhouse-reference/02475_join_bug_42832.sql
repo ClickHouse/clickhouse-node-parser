@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS tab1;
+DROP TABLE IF EXISTS tab2;
 SET allow_suspicious_low_cardinality_types = 1;
 CREATE TABLE tab1 (a1 Int32, b1 Int32, val UInt64) ENGINE = MergeTree ORDER BY a1;
 CREATE TABLE tab2 (a2 LowCardinality(Int32), b2 Int32) ENGINE = MergeTree ORDER BY a2;

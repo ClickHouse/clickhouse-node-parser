@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS abc;
+
 CREATE TABLE abc
 (
     f1 String,
@@ -28,3 +30,5 @@ SELECT f2
 FROM merge(currentDatabase(), '^abc$')
 PREWHERE f1 = 'a'
 WHERE _table = 'abc';
+
+SYSTEM DROP  TABLE abc;

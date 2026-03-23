@@ -1,3 +1,5 @@
+drop table if exists product_groups;
+drop table if exists products;
 CREATE TABLE product_groups (
 	group_id Int64,
 	group_name String
@@ -78,3 +80,5 @@ SELECT
 			price RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) avg1
 FROM products INNER JOIN  product_groups USING (group_id)) t
 order by group_name, product_name, price;
+drop table product_groups;
+drop table products;

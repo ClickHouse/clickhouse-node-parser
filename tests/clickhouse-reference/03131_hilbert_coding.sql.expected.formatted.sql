@@ -1,5 +1,7 @@
 SELECT '----- START -----';
 
+SYSTEM drop  table if exists hilbert_numbers_03131;
+
 CREATE TABLE hilbert_numbers_03131
 (
     n1 UInt32,
@@ -21,6 +23,8 @@ INSERT INTO hilbert_numbers_03131 SELECT
 FROM
     numbers(pow(2, 32) - 8, 8) AS n1
 CROSS JOIN numbers(pow(2, 32) - 8, 8) AS n2;
+
+SYSTEM drop  table if exists hilbert_numbers_1_03131;
 
 CREATE TABLE hilbert_numbers_1_03131
 (

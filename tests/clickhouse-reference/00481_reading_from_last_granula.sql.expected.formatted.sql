@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tab_00481;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE tab_00481
@@ -26,3 +28,5 @@ FROM tab_00481
 FORMAT Null;
 
 SELECT 0;
+
+SYSTEM DROP  TABLE tab_00481;

@@ -1,3 +1,14 @@
+-- Tags: no-parallel
+SYSTEM drop  table if exists summing_table01747;
+
+SYSTEM drop  view if exists rates01747;
+
+SYSTEM drop  view if exists agg_view01747;
+
+SYSTEM drop  table if exists dictst01747;
+
+SYSTEM drop  DICTIONARY if exists default.dict01747;
+
 CREATE TABLE summing_table01747
 (
     some_name String,
@@ -58,3 +69,13 @@ FROM agg_view01747;
 SELECT field2
 FROM agg_view01747
 WHERE field1 = 'test';
+
+SYSTEM drop  table summing_table01747;
+
+SYSTEM drop  view rates01747;
+
+SYSTEM drop  view agg_view01747;
+
+SYSTEM drop  DICTIONARY default.dict01747;
+
+SYSTEM drop  table dictst01747;

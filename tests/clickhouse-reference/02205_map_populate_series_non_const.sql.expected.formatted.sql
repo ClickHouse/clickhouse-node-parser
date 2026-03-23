@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02005_test_table;
+
 CREATE TABLE `02005_test_table`
 (
     value Map(Int64, Int64)
@@ -25,6 +27,8 @@ SELECT mapPopulateSeries(map(toUInt64(18446744073709551615), toUInt64(5)), 18446
 SELECT mapPopulateSeries(map(1, 4, 1, 5, 5, 6));
 
 SELECT mapPopulateSeries(map(1, 4, 1, 5, 5, 6), materialize(10));
+
+SYSTEM DROP  TABLE 02005_test_table;
 
 CREATE TABLE `02005_test_table`
 (

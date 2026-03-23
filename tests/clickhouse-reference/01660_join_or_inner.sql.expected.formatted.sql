@@ -1,5 +1,9 @@
 SET joined_subquery_requires_alias = 0;
 
+SYSTEM drop  table if exists tab2;
+
+SYSTEM drop  table if exists tab3;
+
 CREATE TABLE tab2
 (
     a2 Int32,
@@ -91,3 +95,7 @@ INNER JOIN (
     OR aaaa = bbbb
     OR a = bbbbb
     OR aa = bbbbb;
+
+SYSTEM drop  table tab2;
+
+SYSTEM drop  table tab3;

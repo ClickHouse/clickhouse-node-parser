@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS test_string;
+
+SYSTEM DROP  TABLE IF EXISTS test_string_alias;
+
 CREATE OR REPLACE TABLE test_string
 (
     id UInt64,
@@ -26,3 +30,7 @@ WHERE database = currentDatabase()
 ORDER BY
     table ASC,
     name ASC;
+
+SYSTEM DROP  TABLE test_string;
+
+SYSTEM DROP  TABLE test_string_alias;

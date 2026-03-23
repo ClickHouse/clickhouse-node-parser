@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS clicks;
+
+SYSTEM DROP  TABLE IF EXISTS transactions;
+
 CREATE TABLE clicks
 (
     domain String
@@ -319,3 +323,7 @@ FULL JOIN (
 ORDER BY
     total ASC,
     domain ASC;
+
+SYSTEM DROP  TABLE clicks;
+
+SYSTEM DROP  TABLE transactions;

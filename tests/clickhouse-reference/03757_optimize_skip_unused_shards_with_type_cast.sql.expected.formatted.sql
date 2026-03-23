@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t1;
+
 CREATE TABLE t1
 (
     Col LowCardinality(String)

@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS test_low_cardinality_string;
+DROP TABLE IF EXISTS test_low_cardinality_uuid;
+DROP TABLE IF EXISTS test_low_cardinality_int;
 CREATE TABLE test_low_cardinality_string (data String) ENGINE MergeTree ORDER BY data;
 CREATE TABLE test_low_cardinality_uuid (data String) ENGINE MergeTree ORDER BY data;
 CREATE TABLE test_low_cardinality_int (data String) ENGINE MergeTree ORDER BY data;
@@ -46,3 +49,6 @@ SELECT JSONExtract(data, 'Tuple(
                             c LowCardinality(UUID),
                             d LowCardinality(UUID)
                             )') AS json FROM test_low_cardinality_uuid;
+DROP TABLE test_low_cardinality_string;
+DROP TABLE test_low_cardinality_uuid;
+DROP TABLE test_low_cardinality_int;

@@ -20,6 +20,10 @@ SETTINGS min_rows_for_wide_part = 1000;
 
 INSERT INTO mt_compact_2;
 
+SYSTEM drop  table mt_compact;
+
+SYSTEM drop  table mt_compact_2;
+
 SET send_logs_level = 'error';
 
 CREATE TABLE mt_compact

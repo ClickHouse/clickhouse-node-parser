@@ -1,3 +1,6 @@
+-- Tags: no-object-storage, no-random-merge-tree-settings
+SYSTEM DROP  TABLE IF EXISTS data_01551;
+
 CREATE TABLE data_01551
 (
     key UInt32
@@ -19,3 +22,5 @@ SET merge_tree_min_rows_for_concurrent_read = 10000;
 SET optimize_aggregation_in_order = 1;
 
 SET read_in_order_two_level_merge_threshold = 1;
+
+SYSTEM DROP  TABLE data_01551;

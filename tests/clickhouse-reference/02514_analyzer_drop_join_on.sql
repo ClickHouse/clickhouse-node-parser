@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS a;
+DROP TABLE IF EXISTS b;
+DROP TABLE IF EXISTS c;
+DROP TABLE IF EXISTS d;
 CREATE TABLE a (k UInt64, a1 UInt64, a2 String) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO a VALUES (1, 1, 'a'), (2, 2, 'b'), (3, 3, 'c');
 CREATE TABLE b (k UInt64, b1 UInt64, b2 String) ENGINE = MergeTree ORDER BY tuple();

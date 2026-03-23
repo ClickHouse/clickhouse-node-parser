@@ -1,3 +1,4 @@
+drop table if exists table_01323_many_parts;
 set remote_filesystem_read_method = 'read';
 set local_filesystem_read_method = 'pread';
 set load_marks_asynchronously = 0;

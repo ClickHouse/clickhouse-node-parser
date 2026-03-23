@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_02559;
 CREATE TABLE t_02559 (
     key UInt64,
     value Array(String))

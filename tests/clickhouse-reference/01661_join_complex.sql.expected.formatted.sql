@@ -525,6 +525,10 @@ SET joined_subquery_requires_alias = 0;
 
 SET max_threads = 1;
 
+SYSTEM drop  table if exists tab2;
+
+SYSTEM drop  table if exists tab3;
+
 CREATE TABLE tab2
 (
     a2 Int32,
@@ -564,3 +568,7 @@ LEFT JOIN tab3
     OR b2 = b3
     AND a2 + 1 = b3 + 0
 ORDER BY `ALL` ASC;
+
+SYSTEM drop  table tab2;
+
+SYSTEM drop  table tab3;

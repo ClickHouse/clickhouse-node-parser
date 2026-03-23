@@ -34,6 +34,10 @@
 
 SET enable_analyzer = 1;
 SET join_algorithm = 'hash';
+--
+-- different tree example
+--
+DROP TABLE IF EXISTS tree;
 CREATE TABLE tree(
     id UInt64,
     parent_id Nullable(UInt64)

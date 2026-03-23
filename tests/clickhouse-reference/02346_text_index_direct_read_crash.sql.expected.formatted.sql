@@ -3,6 +3,8 @@ SET enable_full_text_index = 1;
 
 SET use_skip_indexes_on_data_read = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt64,

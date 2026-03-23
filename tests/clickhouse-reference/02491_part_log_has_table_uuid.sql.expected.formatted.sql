@@ -8,3 +8,5 @@ ORDER BY tuple()
 SETTINGS old_parts_lifetime = 600;
 
 INSERT INTO data_02491;
+
+SYSTEM drop  table data_02491;

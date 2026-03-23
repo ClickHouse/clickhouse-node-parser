@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists bad_date_time;
+
 CREATE TABLE bad_date_time
 (
     time Datetime('Asia/Istanbul'),

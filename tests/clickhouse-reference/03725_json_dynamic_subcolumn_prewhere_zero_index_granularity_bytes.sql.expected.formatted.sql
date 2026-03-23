@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     s String,
@@ -16,3 +18,5 @@ SELECT count()
 FROM test
 WHERE s = 'a'
     AND isNull(json.a);
+
+SYSTEM DROP  TABLE test;

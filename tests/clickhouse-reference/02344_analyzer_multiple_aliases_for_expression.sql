@@ -1,4 +1,5 @@
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -14,3 +15,4 @@ SELECT (SELECT 1) AS subquery, 1 AS subquery; -- { serverError MULTIPLE_EXPRESSI
 SELECT id AS value, value AS value FROM test_table; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 SELECT id AS value_1, value AS value_1 FROM test_table; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 SELECT id AS value, (id + 1) AS value FROM test_table; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
+DROP TABLE test_table;

@@ -4,6 +4,8 @@ SELECT tupleHammingDistance((120, 243), (120, 434));
 
 SELECT tupleHammingDistance((-12, 434), (434, 434));
 
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     t1 Tuple(UInt16, UInt16),
@@ -22,3 +24,5 @@ FROM defaults;
 
 SELECT tupleHammingDistance(t2, t3)
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;

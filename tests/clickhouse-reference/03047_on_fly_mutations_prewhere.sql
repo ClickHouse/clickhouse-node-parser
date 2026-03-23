@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_update_prewhere;
 SET mutations_sync = 2;
 SET apply_mutations_on_fly = 0;
 CREATE TABLE t_update_prewhere (id UInt64, c1 UInt64, c2 UInt64, c3 UInt64)

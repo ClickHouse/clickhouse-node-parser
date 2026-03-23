@@ -1,4 +1,5 @@
 SET optimize_on_insert = 0;
+DROP TABLE IF EXISTS replacing_table;
 CREATE TABLE replacing_table (a UInt32, b UInt32, c UInt32)
 ENGINE = ReplacingMergeTree ORDER BY a
 SETTINGS vertical_merge_algorithm_min_rows_to_activate = 1,

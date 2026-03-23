@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 01802_empsalary;
+
 CREATE TABLE `01802_empsalary`
 (
     depname LowCardinality(String),

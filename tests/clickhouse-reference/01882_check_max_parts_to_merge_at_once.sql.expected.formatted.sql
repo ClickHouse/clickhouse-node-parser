@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS limited_merge_table;
+
 SET max_threads = 1;
 
 SET max_block_size = 1;

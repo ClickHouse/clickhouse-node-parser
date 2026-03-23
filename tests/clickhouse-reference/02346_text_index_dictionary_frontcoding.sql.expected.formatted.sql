@@ -1,5 +1,8 @@
 SET enable_full_text_index = 1;
 
+-- Tests text index parameter `dictionary_block_frontcoding_compression`.
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -36,3 +39,5 @@ WHERE hasToken(text_raw, 'abc');
 SELECT count()
 FROM tab
 WHERE hasToken(text_fc, 'abc');
+
+SYSTEM DROP  TABLE tab;

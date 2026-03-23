@@ -19,6 +19,7 @@ INSERT INTO order_by_const(a, b, c, d) VALUES (1, 5, 104, 1), (1, 6, 105, 1), (2
 INSERT INTO order_by_const(a, b, c, d) VALUES (2, 2, 107, 2), (2, 3, 108, 2), (2, 4, 109, 2);
 -- output 1 sorted stream
 SELECT row_number() OVER (order by 1, a) FROM order_by_const SETTINGS query_plan_enable_multithreading_after_window_functions=0;
+drop table order_by_const;
 -- expressions in window frame
 select count() over (rows between 1 + 1 preceding and 1 + 1 following) from numbers(10);
 -- signed and unsigned in offset do not cause logical error

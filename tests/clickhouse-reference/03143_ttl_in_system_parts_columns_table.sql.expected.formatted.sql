@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_03143;
+
 CREATE TABLE test_03143
 (
     timestamp DateTime,

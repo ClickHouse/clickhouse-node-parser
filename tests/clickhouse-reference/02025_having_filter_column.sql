@@ -1,3 +1,4 @@
+drop table if exists test;
 -- #29010
 CREATE TABLE test
 (

@@ -2,6 +2,8 @@ SELECT '-- enable distinct in order optimization';
 
 SET optimize_distinct_in_order = 1;
 
+SYSTEM drop  table if exists distinct_in_order sync;
+
 CREATE TABLE distinct_in_order
 (
     a int
@@ -178,6 +180,8 @@ ORDER BY
     a ASC,
     b ASC;
 
+SYSTEM drop  table if exists distinct_cardinality_low sync;
+
 CREATE TABLE distinct_cardinality_low
 (
     low UInt64,
@@ -193,6 +197,8 @@ INSERT INTO distinct_cardinality_low SELECT
     number % 1e2,
     number % 1e3
 FROM numbers_mt(1e4);
+
+SYSTEM drop  table if exists ordinary_distinct sync;
 
 CREATE TABLE distinct_in_order
 (
@@ -241,6 +247,10 @@ INSERT INTO ordinary_distinct SELECT DISTINCT *
 FROM distinct_cardinality_low
 SETTINGS optimize_distinct_in_order = 0;
 
+SYSTEM drop  table if exists distinct_in_order;
+
+SYSTEM drop  table if exists ordinary_distinct;
+
 INSERT INTO distinct_in_order SELECT DISTINCT *
 FROM distinct_cardinality_low
 WHERE low > 0
@@ -250,6 +260,13 @@ INSERT INTO ordinary_distinct SELECT DISTINCT *
 FROM distinct_cardinality_low
 WHERE low > 0
 SETTINGS optimize_distinct_in_order = 0;
+
+SYSTEM drop  table if exists distinct_cardinality_low;
+
+-- bug 42185
+SYSTEM drop  table if exists sorting_key_empty_tuple;
+
+SYSTEM drop  table if exists sorting_key_contain_function;
 
 CREATE TABLE sorting_key_empty_tuple
 (
@@ -286,3 +303,7 @@ FROM sorting_key_contain_function;
 
 SELECT DISTINCT toDate(datetime)
 FROM sorting_key_contain_function;
+
+SYSTEM drop  table sorting_key_empty_tuple;
+
+SYSTEM drop  table sorting_key_contain_function;

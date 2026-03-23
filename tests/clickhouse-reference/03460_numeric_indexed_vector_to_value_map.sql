@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS uin_value_details_int32_int8;
 CREATE TABLE uin_value_details_int32_int8
 (
     ds Date,
@@ -8,6 +9,7 @@ ENGINE = MergeTree()
 ORDER BY ds;
 INSERT INTO uin_value_details_int32_int8 (ds, uin, value) values ('2023-12-26', 105, -5), ('2023-12-26', 104, -128), ('2023-12-26', 103, 3), ('2023-12-26', 102, -2), ('2023-12-26', 10000001, -127), ('2023-12-26', 10000002, 127), ('2023-12-26', 10000003, 25), ('2023-12-26', 10000004, 38);
 INSERT INTO uin_value_details_int32_int8 (ds, uin, value) values ('2023-12-27', 103, -4), ('2023-12-27', 104, -5), ('2023-12-27', 105, -5), ('2023-12-27', 106, 6), ('2023-12-27', 10000001, 7), ('2023-12-27', 10000002, 3);
+DROP TABLE IF EXISTS uin_value_details_int32_int64;
 CREATE TABLE uin_value_details_int32_int64
 (
     ds Date,
@@ -18,6 +20,7 @@ ENGINE = MergeTree()
 ORDER BY ds;
 INSERT INTO uin_value_details_int32_int64 (ds, uin, value) values ('2023-12-26', 105, -9223372036854775808), ('2023-12-26', 104, 9223372036854775807), ('2023-12-26', 103, 3), ('2023-12-26', 102, -2), ('2023-12-26', 10000001, -127), ('2023-12-26', 10000002, 127), ('2023-12-26', 10000003, 25), ('2023-12-26', 10000004, 38);
 INSERT INTO uin_value_details_int32_int64 (ds, uin, value) values ('2023-12-27', 103, -9223372036854775807), ('2023-12-27', 104, -9223372036854775806), ('2023-12-27', 105, -5), ('2023-12-27', 106, 6), ('2023-12-27', 10000001, 7), ('2023-12-27', 10000002, 3);
+DROP TABLE IF EXISTS uin_value_details_int32_float64;
 CREATE TABLE uin_value_details_int32_float64
 (
     ds Date,

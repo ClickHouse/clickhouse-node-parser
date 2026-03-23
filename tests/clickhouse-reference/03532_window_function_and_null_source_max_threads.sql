@@ -131,3 +131,4 @@ SELECT trimLeft(explain) FROM (
         FROM window2
         SETTINGS max_threads = 300, enable_parallel_replicas=0
 ) WHERE explain LIKE '%Resize%' LIMIT 1;
+DROP TABLE empty;

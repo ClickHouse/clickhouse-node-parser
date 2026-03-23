@@ -4,6 +4,8 @@ SELECT toTypeName([toDate('2000-01-01'), toDateTime('2000-01-01', 'Asia/Istanbul
 
 SELECT toTypeName([toDate('2000-01-01'), toDateTime('2000-01-01', 'Asia/Istanbul'), toDateTime64('2000-01-01', 5, 'Asia/Istanbul'), toDateTime64('2000-01-01', 6, 'Asia/Istanbul')]);
 
+SYSTEM DROP  TABLE IF EXISTS predicate_table;
+
 CREATE TABLE predicate_table
 (
     value UInt8

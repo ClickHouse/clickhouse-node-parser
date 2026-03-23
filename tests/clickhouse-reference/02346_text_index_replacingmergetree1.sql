@@ -1,4 +1,7 @@
 SET enable_full_text_index = 1;
+-- Tests text index with the 'ReplacingMergeTree' engine
+
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt32,
@@ -23,3 +26,4 @@ SELECT value FROM tab WHERE hasToken(key, 'bar') ORDER BY value;
 SELECT value FROM tab FINAL WHERE hasToken(key, 'bar') ORDER BY value;
 SELECT value FROM tab WHERE hasToken(key, 'baz') ORDER BY value;
 SELECT value FROM tab FINAL WHERE hasToken(key, 'baz') ORDER BY value;
+DROP TABLE tab;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bitmap_test;
+
 CREATE TABLE bitmap_test
 (
     pickup_date Date,
@@ -23,6 +25,8 @@ INSERT INTO bitmap_test SELECT
     2,
     4294967295 + number
 FROM numbers(1, 210);
+
+SYSTEM DROP  TABLE IF EXISTS bitmap_state_test;
 
 CREATE TABLE bitmap_state_test
 (
@@ -148,3 +152,7 @@ SELECT bitmapToArray(bitmapAnd(groupBitmapState(uid), bitmapBuild(CAST([42949672
 FROM bitmap_test
 GROUP BY city_id
 ORDER BY city_id ASC;
+
+SYSTEM DROP  TABLE bitmap_state_test;
+
+SYSTEM DROP  TABLE bitmap_test;

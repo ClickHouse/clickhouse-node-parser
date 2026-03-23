@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS my_first_table;
+
 CREATE TABLE my_first_table
 (
     user_id UInt32,
@@ -31,3 +33,5 @@ ORDER BY
     constant ASC,
     user_id ASC,
     job_id ASC;
+
+SYSTEM DROP  TABLE my_first_table;

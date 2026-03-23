@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS t_cache_sparse;
+
 CREATE TABLE t_cache_sparse
 (
     id UInt64,
@@ -29,3 +32,5 @@ FORMAT Null;
 SELECT count()
 FROM `system`.query_cache
 WHERE like(query, 'SELECT v FROM t_cache_sparse%');
+
+SYSTEM DROP  TABLE t_cache_sparse;

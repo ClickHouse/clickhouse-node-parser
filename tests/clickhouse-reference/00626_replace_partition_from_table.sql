@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS src;
+DROP TABLE IF EXISTS dst;
 CREATE TABLE src (p UInt64, k String, d UInt64) ENGINE = MergeTree PARTITION BY p ORDER BY k;
 CREATE TABLE dst (p UInt64, k String, d UInt64) ENGINE = MergeTree PARTITION BY p ORDER BY k SETTINGS merge_selector_base=1000;
 INSERT INTO src VALUES (0, '0', 1);
@@ -12,6 +14,8 @@ SELECT count(), sum(d) FROM dst;
 CREATE TEMPORARY table test_block_numbers (m UInt64);
 INSERT INTO test_block_numbers SELECT max(max_block_number) AS m FROM system.parts WHERE database=currentDatabase() AND  table='dst' AND active AND name LIKE '1_%';
 SELECT (max(m) - min(m) > 1) AS new_block_is_generated FROM test_block_numbers;
+DROP TEMPORARY TABLE test_block_numbers;
+DROP TABLE src;
 INSERT INTO src VALUES (2, '2', 1);
 INSERT INTO src VALUES (3, '3', 1);
 INSERT INTO dst VALUES (1, '1', 2), (1, '2', 0);

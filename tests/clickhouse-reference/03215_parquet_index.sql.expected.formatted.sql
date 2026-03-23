@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- default settings.
+SYSTEM DROP  TABLE IF EXISTS test_parquet;
+
 CREATE TABLE test_parquet
 (
     col1 int,

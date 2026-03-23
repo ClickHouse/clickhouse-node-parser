@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS base;
+
+SYSTEM DROP  TABLE IF EXISTS copy_without_comment;
+
+SYSTEM DROP  TABLE IF EXISTS copy_with_comment;
+
 CREATE TABLE base
 (
     a Int32

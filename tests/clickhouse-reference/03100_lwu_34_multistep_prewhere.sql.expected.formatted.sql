@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lwu_multistep;
+
 SET enable_multiple_prewhere_read_steps = 1;
 
 SET enable_lightweight_update = 1;

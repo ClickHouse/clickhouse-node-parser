@@ -1,3 +1,7 @@
+-- Tags: no-random-merge-tree-settings, no-random-settings, no-parallel
+-- no-parallel: SYSTEM CLEAR MARK CACHE is used.
+
+DROP TABLE IF EXISTS t_lightweight_mut_5;
 SET apply_mutations_on_fly = 1;
 CREATE TABLE t_lightweight_mut_5 (id UInt64, s1 String, s2 String)
 ENGINE = MergeTree ORDER BY id
@@ -15,3 +19,4 @@ WHERE
     AND query ILIKE 'SELECT%FROM t_lightweight_mut_5%'
     AND type = 'QueryFinish'
 ORDER BY event_time_microseconds;
+DROP TABLE t_lightweight_mut_5;

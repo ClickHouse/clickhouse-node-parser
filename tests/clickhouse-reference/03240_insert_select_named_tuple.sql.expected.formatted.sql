@@ -3,6 +3,10 @@ SET enable_analyzer = 1;
 
 SET enable_named_columns_in_function_tuple = 1;
 
+SYSTEM DROP  TABLE IF EXISTS src;
+
+SYSTEM DROP  TABLE IF EXISTS dst;
+
 CREATE TABLE src
 (
     id UInt32,
@@ -31,6 +35,10 @@ FROM src;
 
 SELECT *
 FROM dst;
+
+SYSTEM DROP  TABLE src;
+
+SYSTEM DROP  TABLE dst;
 
 SELECT
     id,

@@ -2,6 +2,10 @@
 
 SET enable_analyzer = 1;
 SET send_logs_level = 'fatal';
+DROP TABLE IF EXISTS test_local_1;
+DROP TABLE IF EXISTS test_local_2;
+DROP TABLE IF EXISTS test_distributed_1;
+DROP TABLE IF EXISTS test_distributed_2;
 SET merge_table_max_tables_to_look_for_schema_inference = 1;
 SET allow_deprecated_syntax_for_merge_tree = 1;
 CREATE TABLE test_local_1 (date Date, value UInt32) ENGINE = MergeTree(date, date, 8192);
@@ -46,6 +50,10 @@ SELECT * FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2') 
 SELECT * FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2') PREWHERE _table = 'test_local_1'; -- { serverError ILLEGAL_PREWHERE }
 SELECT * FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2') WHERE _table in ('test_local_1', 'test_local_2') ORDER BY value;
 SELECT * FROM merge(currentDatabase(), 'test_distributed_1|test_distributed_2') PREWHERE _table in ('test_local_1', 'test_local_2') ORDER BY value; -- { serverError ILLEGAL_PREWHERE }
+DROP TABLE IF EXISTS test_u64_local;
+DROP TABLE IF EXISTS test_s64_local;
+DROP TABLE IF EXISTS test_u64_distributed;
+DROP TABLE IF EXISTS test_s64_distributed;
 CREATE TABLE test_s64_local (date Date, value Int64) ENGINE = MergeTree(date, date, 8192);
 CREATE TABLE test_u64_local (date Date, value UInt64) ENGINE = MergeTree(date, date, 8192);
 CREATE TABLE test_s64_distributed AS test_s64_local ENGINE = Distributed('test_shard_localhost', currentDatabase(), test_s64_local, rand());

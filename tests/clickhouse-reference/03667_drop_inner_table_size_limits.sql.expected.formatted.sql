@@ -20,4 +20,6 @@ FROM numbers(1000);
 
 SET max_table_size_to_drop = 1, max_partition_size_to_drop = 1;
 
+SYSTEM DROP  TABLE mv; -- { serverError TABLE_SIZE_EXCEEDS_MAX_DROP_SIZE_LIMIT }
+
 SET max_table_size_to_drop = 0, max_partition_size_to_drop = 0;

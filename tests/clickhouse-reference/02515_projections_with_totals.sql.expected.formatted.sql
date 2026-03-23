@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x UInt8,
@@ -17,3 +19,5 @@ GROUP BY x
 WITH TOTALS;
 
 SET optimize_aggregation_in_order = 1;
+
+SYSTEM DROP  TABLE t;

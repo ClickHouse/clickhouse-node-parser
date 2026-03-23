@@ -1,5 +1,9 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_table__fuzz_3;
+
 CREATE TABLE test_table
 (
     id Float32,

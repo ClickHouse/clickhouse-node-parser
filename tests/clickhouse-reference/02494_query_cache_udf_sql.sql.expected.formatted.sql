@@ -1,3 +1,5 @@
+SYSTEM DROP  FUNCTION IF EXISTS udf;
+
 CREATE FUNCTION udf AS a -> a + 1;
 
 SELECT '-- query_cache_nondeterministic_function_handling = throw';
@@ -16,3 +18,5 @@ SETTINGS use_query_cache = true, query_cache_nondeterministic_function_handling 
 SELECT udf(1)
 FORMAT Null
 SETTINGS use_query_cache = true, query_cache_nondeterministic_function_handling = 'ignore';
+
+SYSTEM DROP  FUNCTION udf;

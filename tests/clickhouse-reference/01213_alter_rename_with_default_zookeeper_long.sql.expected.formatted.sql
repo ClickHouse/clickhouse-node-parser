@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+SYSTEM DROP  TABLE IF EXISTS table_rename_with_default;
+
 CREATE TABLE table_rename_with_default
 (
     date Date,
@@ -28,6 +31,8 @@ WHERE key = 1;
 SELECT value3
 FROM table_rename_with_default
 WHERE key = 1;
+
+SYSTEM DROP  TABLE IF EXISTS table_rename_with_ttl;
 
 CREATE TABLE table_rename_with_ttl
 (

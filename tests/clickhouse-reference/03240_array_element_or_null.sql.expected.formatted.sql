@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM DROP  TABLE IF EXISTS array_element_or_null_test;
+
 CREATE TABLE array_element_or_null_test
 (
     arr Array(Int32),
@@ -57,6 +60,8 @@ CREATE TABLE array_element_or_null_test
 ENGINE = Memory;
 
 INSERT INTO array_element_or_null_test;
+
+SYSTEM DROP  TABLE array_element_or_null_test;
 
 SELECT arrayElementOrNull(range(0), -1);
 

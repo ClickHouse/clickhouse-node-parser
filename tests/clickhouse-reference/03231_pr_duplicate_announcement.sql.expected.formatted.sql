@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table SYNC;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -7,6 +9,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/test/{database}/test_table', 'r1')
 ORDER BY tuple();
 
 INSERT INTO test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_for_in SYNC;
 
 CREATE TABLE test_table_for_in
 (
@@ -30,3 +34,7 @@ WHERE id IN (
         SELECT id
         FROM test_table_for_in
     );
+
+SYSTEM DROP  TABLE test_table SYNC;
+
+SYSTEM DROP  TABLE test_table_for_in SYNC;

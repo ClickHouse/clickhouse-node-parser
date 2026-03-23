@@ -1,4 +1,5 @@
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -31,5 +32,8 @@ WHERE NOT ignore(elem)
 GROUP BY
     sum(ignore(ignore(ignore(1., 1, 36, 8, 8), ignore(52, 37, 37, '03147_parquet_memory_tracking.parquet', 37, 37, toUInt256(37), 37, 37, toNullable(37), 37, 37), 1., 1, 36, 8, 8), emptyArrayToSingle(arrayMap(x -> toString(x), arrayMap(x -> nullIf(x, 2), arrayJoin([[1]])))))) IGNORE NULLS,
     modulo(toLowCardinality('03147_parquet_memory_tracking.parquet'), number, toLowCardinality(3)); -- { serverError UNKNOWN_IDENTIFIER }
+-- { echoOff }
+
+DROP TABLE test_table;
 select [1, 2] as arr, x from system.one array join arr as x;
 select x + 1 as x from (select [number] as arr from numbers(2)) as s array join arr as x;

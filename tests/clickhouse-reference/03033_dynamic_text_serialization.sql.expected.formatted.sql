@@ -79,6 +79,8 @@ FROM format(Values, 'd Dynamic', '
 ')
 FORMAT Values;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     s String
@@ -99,3 +101,5 @@ SELECT
     dynamicType(d),
     isDynamicElementInSharedData(d)
 FROM test;
+
+SYSTEM drop  table test;

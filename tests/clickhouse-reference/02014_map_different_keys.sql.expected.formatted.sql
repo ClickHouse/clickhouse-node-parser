@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_map_02014;
+
 CREATE TABLE t_map_02014
 (
     i1 UInt64,

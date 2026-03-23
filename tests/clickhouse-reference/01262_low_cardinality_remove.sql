@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS testView;
+DROP TABLE IF EXISTS testTable;
 CREATE TABLE IF NOT EXISTS testTable (
  A LowCardinality(String), -- like voter
  B Int64
@@ -13,6 +15,7 @@ FROM
 SELECT CAST(ALow, 'String') AS AStr
 FROM testView
 GROUP BY AStr ORDER BY AStr;
+DROP TABLE testTable;
 CREATE TABLE IF NOT EXISTS testTable (
  A String, -- like voter
  B Int64

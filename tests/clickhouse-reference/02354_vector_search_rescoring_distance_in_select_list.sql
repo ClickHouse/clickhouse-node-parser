@@ -11,6 +11,8 @@
 
 SET enable_analyzer = 1;
 SET vector_search_with_rescoring = 0;
+DROP TABLE IF EXISTS tab_f32;
+DROP TABLE IF EXISTS tab_bf16;
 CREATE TABLE tab_f32
 (
     id Int32,
@@ -50,3 +52,5 @@ INSERT INTO tab_bf16 VALUES (0, [1.0, 0.0]),
                         (8, [0.0, 2.3]),
                         (9, [0.0, 2.4]);
 SELECT '-- Search vector: Array(Float64)';
+DROP TABLE tab_f32;
+DROP TABLE tab_bf16;

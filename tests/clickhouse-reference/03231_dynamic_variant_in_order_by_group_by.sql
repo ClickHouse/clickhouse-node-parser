@@ -1,5 +1,6 @@
 set allow_experimental_variant_type=1;
 set allow_experimental_dynamic_type=1;
+drop table if exists test;
 create table test (d Dynamic) engine=MergeTree order by d; -- {serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY}
 create table test (d Dynamic) engine=MergeTree order by tuple(d); -- {serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY}
 create table test (d Dynamic) engine=MergeTree order by array(d); -- {serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY}
@@ -40,4 +41,5 @@ select array(d) from test group by array(d) order by all;
 select map('str', d) from test group by map('str', d) order by all;
 select * from test group by grouping sets ((d), ('str')) order by all;
 SET enable_analyzer=0;
+drop table test;
 create table test (d Variant(UInt64)) engine=Memory;

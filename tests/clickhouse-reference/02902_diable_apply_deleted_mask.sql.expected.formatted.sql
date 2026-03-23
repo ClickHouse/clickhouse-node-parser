@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_apply_deleted_mask;
+
 CREATE TABLE test_apply_deleted_mask
 (
     id Int64,
@@ -31,3 +33,5 @@ INSERT INTO test_apply_deleted_mask SELECT
     number,
     number::String
 FROM numbers(5, 1);
+
+SYSTEM DROP  TABLE test_apply_deleted_mask;

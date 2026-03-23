@@ -4,6 +4,7 @@
 
 SET insert_keeper_fault_injection_probability = 0.0;
 SET enable_lightweight_update = 1;
+DROP TABLE IF EXISTS t_shared SYNC;
 CREATE TABLE t_shared (id UInt64, c1 UInt64)
 ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_shared/', '1')
 ORDER BY id
@@ -15,6 +16,7 @@ INSERT INTO t_shared VALUES (1, 2) (3, 4);
 SELECT name, rows from system.parts WHERE database = currentDatabase() AND table = 't_shared' AND active ORDER BY name;
 SELECT * FROM t_shared ORDER BY id;
 INSERT INTO t_shared VALUES (5, 6);
+DROP TABLE t_shared SYNC;
 SELECT mapSort(mapFilter((k, v) -> k IN ('ReadTasksWithAppliedPatches', 'PatchesAppliedInAllReadTasks', 'PatchesMergeAppliedInAllReadTasks', 'PatchesJoinAppliedInAllReadTasks'), ProfileEvents))
 FROM system.query_log
 WHERE current_database = currentDatabase() AND query LIKE '%SELECT * FROM t_shared ORDER BY id%' AND type = 'QueryFinish'

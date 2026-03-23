@@ -34,6 +34,11 @@
 
 SET enable_analyzer = 1;
 SET join_algorithm = 'hash';
+--
+-- test cycle detection
+--
+
+DROP TABLE IF EXISTS graph;
 CREATE TABLE graph(
     f UInt64,
     t UInt64,

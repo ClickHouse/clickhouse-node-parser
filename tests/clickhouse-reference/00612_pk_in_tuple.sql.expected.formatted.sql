@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tab_00612;
+
 CREATE TABLE tab_00612
 (
     key UInt64,
@@ -143,3 +145,5 @@ FROM tab_00612
 WHERE (key1, id1) IN (-1, 1)
     AND (key1, 1) IN (-1, 1)
 SETTINGS force_primary_key = 1;
+
+SYSTEM drop  table tab_00612;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tab_00650;
+
 CREATE TABLE tab_00650
 (
     val UInt32,
@@ -24,6 +26,8 @@ FROM tab_00650;
 
 SELECT arrayEnumerateUniq(arrayMap((a, b) -> (a, b), n.x, n.y), arrayMap((a, b) -> (b, a), n.x, n.y))
 FROM tab_00650;
+
+SYSTEM drop  table tab_00650;
 
 CREATE TABLE tab_00650
 (

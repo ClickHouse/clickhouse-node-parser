@@ -33,3 +33,5 @@ WHERE current_database = currentDatabase()
     AND like(log_comment, '03176_q_')
     AND type IN ('QueryFinish', 'ExceptionBeforeStart')
 ORDER BY log_comment ASC;
+
+SYSTEM DROP  TABLE t_03176;

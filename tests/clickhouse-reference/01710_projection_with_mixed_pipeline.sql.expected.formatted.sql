@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     x UInt32

@@ -8,6 +8,8 @@ SET allow_experimental_dynamic_type = 1;
 
 SET enable_named_columns_in_function_tuple = 0;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -66,3 +68,5 @@ INSERT INTO test SELECT
     number,
     tuple(toDateTime(number))::Tuple(a Dynamic(max_types=2))
 FROM numbers(40000);
+
+SYSTEM drop  table test;

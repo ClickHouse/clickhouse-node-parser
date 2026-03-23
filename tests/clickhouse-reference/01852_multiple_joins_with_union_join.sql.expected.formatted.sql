@@ -1,5 +1,9 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS v1;
+
+SYSTEM DROP  TABLE IF EXISTS v2;
+
 CREATE TABLE v1
 (
     id Int32

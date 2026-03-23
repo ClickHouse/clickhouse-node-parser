@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS nested;
 CREATE TABLE nested
 (
     column Nested
@@ -47,3 +48,4 @@ CREATE TABLE nested
         types Array(Enum8('PU' = 1, 'US' = 2, 'OTHER' = 3))
     )
 ) ENGINE = Memory;
+DROP TABLE nested;

@@ -4,6 +4,14 @@ CREATE DATABASE IF NOT EXISTS test_01824;
 
 USE test_01824;
 
+SYSTEM DROP  TABLE IF EXISTS t1_shard;
+
+SYSTEM DROP  TABLE IF EXISTS t2_shard;
+
+SYSTEM DROP  TABLE IF EXISTS t1_distr;
+
+SYSTEM DROP  TABLE IF EXISTS t2_distr;
+
 CREATE TABLE t1_shard
 (
     id Int32
@@ -46,3 +54,13 @@ INNER JOIN (
 
 -- Force using local mode
 SET distributed_product_mode = 'local';
+
+SYSTEM DROP  TABLE t1_shard;
+
+SYSTEM DROP  TABLE t2_shard;
+
+SYSTEM DROP  TABLE t1_distr;
+
+SYSTEM DROP  TABLE t2_distr;
+
+SYSTEM DROP  DATABASE test_01824;

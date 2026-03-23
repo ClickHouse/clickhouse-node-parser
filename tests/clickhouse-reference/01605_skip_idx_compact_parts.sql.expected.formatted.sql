@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS skip_idx_comp_parts;
+
 CREATE TABLE skip_idx_comp_parts
 (
     a Int,
@@ -16,3 +18,5 @@ FROM numbers(200);
 SELECT count()
 FROM skip_idx_comp_parts
 WHERE b > 100;
+
+SYSTEM DROP  TABLE skip_idx_comp_parts;

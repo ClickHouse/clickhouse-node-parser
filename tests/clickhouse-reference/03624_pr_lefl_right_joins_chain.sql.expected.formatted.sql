@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     k Nullable(UInt32),
@@ -10,6 +12,8 @@ ORDER BY tuple();
 
 INSERT INTO tab;
 
+SYSTEM DROP  TABLE IF EXISTS mem;
+
 CREATE TABLE mem
 (
     k UInt64,
@@ -18,6 +22,8 @@ CREATE TABLE mem
 ENGINE = Join(`ANY`, `LEFT`, k);
 
 INSERT INTO mem;
+
+SYSTEM DROP  TABLE IF EXISTS mem2;
 
 CREATE TABLE mem2
 (
@@ -74,3 +80,9 @@ FROM (
             parallel_replicas_for_non_replicated_merge_tree = 1
     )
 WHERE ilike(`explain`, '%ReadFromRemoteParallelReplicas%');
+
+SYSTEM DROP  TABLE mem2;
+
+SYSTEM DROP  TABLE mem;
+
+SYSTEM DROP  TABLE tab;

@@ -5,6 +5,8 @@ SET use_skip_indexes_if_final = 1;
 
 SET use_skip_indexes_if_final_exact_mode = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id1 UInt32,
@@ -47,6 +49,11 @@ FROM (
     )
 WHERE ilike(`explain`, '%PrimaryKeyExpand%');
 
+SYSTEM DROP  TABLE tab;
+
+-- Test from fuzzer : https://github.com/ClickHouse/ClickHouse/issues/89387
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Int64,
@@ -63,3 +70,5 @@ SELECT rank() OVER ()
 FROM t0 FINAL
 WHERE t0.c0 > 0.1
 FORMAT null;
+
+SYSTEM DROP  TABLE t0;

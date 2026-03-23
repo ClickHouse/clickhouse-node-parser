@@ -4,6 +4,8 @@ SET compile_sort_description = 1;
 
 SET min_count_to_compile_sort_description = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test1_00395;
+
 CREATE TABLE test1_00395
 (
     col1 UInt64,
@@ -50,3 +52,5 @@ ORDER BY multiIf(27, 1, multiIf(materialize(1), toLowCardinality(2), 3, 1, 4), N
 SELECT col1
 FROM test1_00395
 ORDER BY multiIf(27, 1, multiIf(materialize(1), toLowCardinality(2), 3, 1, 4), NULL, 4) ASC;
+
+SYSTEM DROP  TABLE test1_00395;

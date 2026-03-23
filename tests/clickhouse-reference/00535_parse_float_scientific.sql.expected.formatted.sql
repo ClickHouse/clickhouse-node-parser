@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS float;
+
 CREATE TABLE float
 (
     x Float64
@@ -8,3 +10,5 @@ INSERT INTO float;
 
 SELECT *
 FROM float;
+
+SYSTEM DROP  TABLE float;

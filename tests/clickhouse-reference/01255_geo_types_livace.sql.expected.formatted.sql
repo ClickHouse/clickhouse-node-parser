@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tutorial;
+
 CREATE TABLE tutorial
 (
     inner_poly Array(Tuple(Int32, Int32)),
@@ -9,3 +11,5 @@ SELECT *
 FROM tutorial;
 
 INSERT INTO tutorial;
+
+SYSTEM DROP  TABLE tutorial;

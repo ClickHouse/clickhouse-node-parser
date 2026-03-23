@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM drop  table if exists dist_01670;
+
+SYSTEM drop  table if exists data_01670;
+
 CREATE TABLE data_01670
 (
     key Int
@@ -15,3 +20,7 @@ SETTINGS bytes_to_throw_insert = 1;
 INSERT INTO dist_01670 SELECT *
 FROM numbers(1)
 SETTINGS prefer_localhost_replica = 0;
+
+SYSTEM drop  table dist_01670;
+
+SYSTEM drop  table data_01670;

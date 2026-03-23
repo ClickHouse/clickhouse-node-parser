@@ -1,4 +1,6 @@
 set joined_subquery_requires_alias = 0;
+drop table if exists t_00725_2;
+drop table if exists s_00725_2;
 create table t_00725_2(a Int64, b Int64) engine = MergeTree ORDER BY tuple();
 insert into t_00725_2 values(1,1);
 insert into t_00725_2 values(2,2);

@@ -1,3 +1,8 @@
+-- Tags: no-tsan, no-asan, no-msan, no-ubsan, no-parallel-replicas
+SYSTEM drop  table if exists lhs;
+
+SYSTEM drop  table if exists rhs;
+
 CREATE TABLE lhs
 (
     a UInt64,

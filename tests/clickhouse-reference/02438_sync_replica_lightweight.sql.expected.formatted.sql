@@ -80,3 +80,7 @@ SELECT
     _part
 FROM rmt2
 ORDER BY n ASC;
+
+SYSTEM drop  table rmt1;
+
+SYSTEM drop  table rmt2;

@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists ax;
+
+SYSTEM drop  table if exists bx;
+
 CREATE TABLE ax
 (
     A Int64,
@@ -21,3 +25,7 @@ FROM
 CROSS JOIN ax
 WHERE ax.A = bx.A
     AND ax.B IN (1, 2);
+
+SYSTEM drop  table ax;
+
+SYSTEM drop  table bx;

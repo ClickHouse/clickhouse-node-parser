@@ -27,3 +27,5 @@ ALL FULL OUTER JOIN
 ) AS subquery_2 USING (dimension_1)
 WHERE sum_metric_2 < 20
 ORDER BY dimension_1 ASC;
+DROP TABLE foo;
+DROP TABLE bar;

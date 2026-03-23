@@ -1,3 +1,15 @@
+SYSTEM DROP  TABLE IF EXISTS 3538_array_except1;
+
+SYSTEM DROP  TABLE IF EXISTS 3538_array_except2;
+
+SYSTEM DROP  TABLE IF EXISTS 3538_array_except3;
+
+SYSTEM DROP  TABLE IF EXISTS 3538_array_except4;
+
+SYSTEM DROP  TABLE IF EXISTS 3538_array_except5;
+
+SYSTEM DROP  TABLE IF EXISTS 3538_array_except6;
+
 SELECT arrayExcept([1, 2, 3, 4], [3, 5]) AS result;
 
 SELECT arrayExcept([1, 2, 2, 3], [2]) AS result;

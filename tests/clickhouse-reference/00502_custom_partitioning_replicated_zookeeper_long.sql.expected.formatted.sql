@@ -4,6 +4,10 @@ SET replication_alter_partitions_sync = 2;
 
 SET insert_keeper_fault_injection_probability = 0;
 
+SYSTEM DROP  TABLE IF EXISTS not_partitioned_replica1_00502 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS not_partitioned_replica2_00502 SYNC;
+
 CREATE TABLE not_partitioned_replica1_00502
 (
     x UInt8
@@ -42,6 +46,14 @@ ORDER BY name ASC;
 
 SELECT sum(x)
 FROM not_partitioned_replica2_00502;
+
+SYSTEM DROP  TABLE not_partitioned_replica1_00502 SYNC;
+
+SYSTEM DROP  TABLE not_partitioned_replica2_00502 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_week_replica1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_week_replica2 SYNC;
 
 CREATE TABLE partitioned_by_week_replica1
 (
@@ -86,6 +98,14 @@ ORDER BY name ASC;
 
 SELECT sum(x)
 FROM partitioned_by_week_replica2;
+
+SYSTEM DROP  TABLE partitioned_by_week_replica1 SYNC;
+
+SYSTEM DROP  TABLE partitioned_by_week_replica2 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_tuple_replica1_00502 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_tuple_replica2_00502 SYNC;
 
 CREATE TABLE partitioned_by_tuple_replica1_00502
 (
@@ -132,6 +152,14 @@ ORDER BY name ASC;
 SELECT sum(y)
 FROM partitioned_by_tuple_replica2_00502;
 
+SYSTEM DROP  TABLE partitioned_by_tuple_replica1_00502 SYNC;
+
+SYSTEM DROP  TABLE partitioned_by_tuple_replica2_00502 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_string_replica1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS partitioned_by_string_replica2 SYNC;
+
 CREATE TABLE partitioned_by_string_replica1
 (
     s String,
@@ -175,6 +203,14 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM partitioned_by_string_replica2;
 
+SYSTEM DROP  TABLE partitioned_by_string_replica1 SYNC;
+
+SYSTEM DROP  TABLE partitioned_by_string_replica2 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS without_fixed_size_columns_replica1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS without_fixed_size_columns_replica2 SYNC;
+
 CREATE TABLE without_fixed_size_columns_replica1
 (
     s String
@@ -206,3 +242,7 @@ ORDER BY name ASC;
 SELECT *
 FROM without_fixed_size_columns_replica2
 ORDER BY s ASC;
+
+SYSTEM DROP  TABLE without_fixed_size_columns_replica1 SYNC;
+
+SYSTEM DROP  TABLE without_fixed_size_columns_replica2 SYNC;

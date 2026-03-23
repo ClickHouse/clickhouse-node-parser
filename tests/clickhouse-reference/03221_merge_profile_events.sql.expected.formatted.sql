@@ -1,3 +1,6 @@
+-- Tags: no-random-settings, no-random-merge-tree-settings
+SYSTEM DROP  TABLE IF EXISTS t_merge_profile_events_1;
+
 CREATE TABLE t_merge_profile_events_1
 (
     id UInt64,
@@ -32,6 +35,8 @@ WHERE database = currentDatabase()
     AND table = 't_merge_profile_events_1'
     AND event_type = 'MergeParts'
     AND part_name = 'all_1_2_1';
+
+SYSTEM DROP  TABLE IF EXISTS t_merge_profile_events_2;
 
 CREATE TABLE t_merge_profile_events_2
 (
@@ -69,6 +74,8 @@ WHERE database = currentDatabase()
     AND table = 't_merge_profile_events_2'
     AND event_type = 'MergeParts'
     AND part_name = 'all_1_2_1';
+
+SYSTEM DROP  TABLE IF EXISTS t_merge_profile_events_3;
 
 CREATE TABLE t_merge_profile_events_3
 (

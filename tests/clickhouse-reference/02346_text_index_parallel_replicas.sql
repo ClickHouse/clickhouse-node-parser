@@ -9,6 +9,7 @@ SET parallel_replicas_mark_segment_size = 128;
 SET enable_analyzer = 1;
 -- With small index granularity, the amount of rows left to read after the index analysis might be too small to utilize parallel replicas. So, we set it to 0.
 SET parallel_replicas_min_number_of_rows_per_replica = 0;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt64,
@@ -26,3 +27,4 @@ SELECT
     sum(ProfileEvents['TextIndexUsedEmbeddedPostings']) > 0
 FROM system.query_log
 WHERE (current_database = currentDatabase() OR position(query, currentDatabase()) > 0) AND query LIKE '%SELECT%tab%hasAnyTokens%' AND type = 'QueryFinish';
+DROP TABLE tab;

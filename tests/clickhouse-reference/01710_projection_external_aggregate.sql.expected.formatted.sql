@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS agg;
+
 CREATE TABLE agg
 (
     key UInt32,
@@ -23,3 +25,5 @@ INSERT INTO agg SELECT
     toDateTime('2021-12-06 00:00:00') + number,
     number
 FROM numbers(100000);
+
+SYSTEM DROP  TABLE agg;

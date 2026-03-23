@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS 02985_test;
 SET async_insert = 1;
 SET deduplicate_blocks_in_dependent_materialized_views = 1;
 CREATE TABLE 03006_test

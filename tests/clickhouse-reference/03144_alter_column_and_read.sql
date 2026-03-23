@@ -1,3 +1,4 @@
+drop table if exists tab;
 create table tab (x UInt32) engine = MergeTree order by tuple();
 insert into tab select number from numbers(10);
 set alter_sync = 0;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE IF NOT EXISTS defaults
 (
     param1 Float64,
@@ -9,6 +11,8 @@ CREATE TABLE IF NOT EXISTS defaults
 ENGINE = Memory;
 
 INSERT INTO defaults;
+
+SYSTEM DROP  TABLE IF EXISTS model;
 
 CREATE TABLE model
 ENGINE = Memory AS
@@ -50,6 +54,9 @@ FROM (
         FROM defaults
     );
 
+-- Check GROUP BY
+SYSTEM DROP  TABLE IF EXISTS grouptest;
+
 CREATE TABLE IF NOT EXISTS grouptest
 (
     user_id UInt32,
@@ -88,3 +95,9 @@ FROM (
         ORDER BY user_id ASC
         LIMIT 0, 1
     );
+
+SYSTEM DROP  TABLE defaults;
+
+SYSTEM DROP  TABLE model;
+
+SYSTEM DROP  TABLE grouptest;

@@ -1,5 +1,7 @@
 SET enable_analyzer = 1, max_threads = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t1, t2, t3;
+
 CREATE TABLE t1
 (
     id UInt32,
@@ -73,3 +75,5 @@ LEFT JOIN t2
 SELECT *
 FROM t3
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE t1, t2, t3;

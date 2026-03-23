@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS crash_02919;
+
 CREATE TABLE crash_02919
 (
     b Int64,
@@ -14,3 +16,5 @@ SELECT
     c,
     d
 FROM crash_02919;
+
+SYSTEM DROP  TABLE crash_02919;

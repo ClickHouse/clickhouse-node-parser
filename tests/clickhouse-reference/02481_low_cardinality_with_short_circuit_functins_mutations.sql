@@ -1,3 +1,4 @@
+drop table if exists issue_46128;
 create table issue_46128 (
 	id Int64,
 	a LowCardinality(Nullable(String)),
@@ -5,3 +6,4 @@ create table issue_46128 (
 ) Engine = MergeTree order by id
 as  select number%100, 'xxxx', 'yyyy' from numbers(10);
 select * from issue_46128 where id  <= 2 order by id;
+drop table issue_46128;

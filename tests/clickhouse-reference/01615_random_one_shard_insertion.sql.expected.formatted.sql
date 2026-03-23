@@ -3,6 +3,12 @@ CREATE DATABASE IF NOT EXISTS shard_0;
 
 CREATE DATABASE IF NOT EXISTS shard_1;
 
+SYSTEM drop  table if exists shard_0.tbl;
+
+SYSTEM drop  table if exists shard_1.tbl;
+
+SYSTEM drop  table if exists distr;
+
 CREATE TABLE shard_0.tbl
 (
     number UInt64
@@ -46,3 +52,9 @@ SELECT *
 FROM distr
 ORDER BY number ASC
 LIMIT 20;
+
+SYSTEM drop  database shard_0;
+
+SYSTEM drop  database shard_1;
+
+SYSTEM drop  table distr;

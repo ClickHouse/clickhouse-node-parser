@@ -1,3 +1,4 @@
+drop table if exists test;
 CREATE TABLE test (
     `start_s`  UInt32 EPHEMERAL COMMENT 'start UNIX time' ,
     `start_us` UInt16 EPHEMERAL COMMENT 'start microseconds',

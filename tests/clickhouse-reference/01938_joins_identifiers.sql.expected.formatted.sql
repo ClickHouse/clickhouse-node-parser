@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS "/t0";
+
+SYSTEM DROP  TABLE IF EXISTS "/t1";
+
 CREATE TABLE `/t0`
 (
     a Int64,
@@ -25,3 +29,7 @@ FROM
     `/t0`
 INNER JOIN `/t1`
     USING (a);
+
+SYSTEM DROP  TABLE "/t0";
+
+SYSTEM DROP  TABLE "/t1";

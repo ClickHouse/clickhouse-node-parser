@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists dst_02224;
+
+SYSTEM drop  table if exists src_02224;
+
 CREATE TABLE dst_02224
 (
     key Int
@@ -38,3 +42,8 @@ FROM remote('127.{1,2}', currentDatabase(), src_02224, key)
 SETTINGS
     parallel_distributed_insert_select = 2,
     max_distributed_depth = 1;
+
+-- { echoOff }
+SYSTEM drop  table src_02224;
+
+SYSTEM drop  table dst_02224;

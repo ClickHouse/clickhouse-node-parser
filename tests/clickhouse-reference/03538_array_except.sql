@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS 3538_array_except1;
+DROP TABLE IF EXISTS 3538_array_except2;
+DROP TABLE IF EXISTS 3538_array_except3;
+DROP TABLE IF EXISTS 3538_array_except4;
+DROP TABLE IF EXISTS 3538_array_except5;
+DROP TABLE IF EXISTS 3538_array_except6;
 SELECT arrayExcept([1, 2, 3, 4], [3, 5]) AS result;
 SELECT arrayExcept([1, 2, 2, 3], [2]) AS result;
 SELECT arrayExcept(['apple', 'banana', 'cherry'], ['banana', 'date']) AS result;

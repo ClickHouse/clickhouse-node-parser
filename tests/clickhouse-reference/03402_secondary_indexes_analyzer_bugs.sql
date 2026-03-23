@@ -1,3 +1,4 @@
+drop table if exists t;
 CREATE TABLE t
 (
     `tenant` String,
@@ -10,6 +11,7 @@ ENGINE = MergeTree
 ORDER BY recordTimestamp
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 INSERT INTO t SELECT toString(number), number, toString(number) from numbers(65536);
+drop table if exists tab_v1;
 CREATE TABLE tab_v1
 (
     content String,
@@ -17,6 +19,7 @@ CREATE TABLE tab_v1
 )
 ENGINE = MergeTree
 ORDER BY content;
+drop table if exists tab_v3;
 CREATE VIEW tab_v3
 AS SELECT * FROM tab_v1;
 INSERT INTO tab_v1 (content) VALUES ('aaa bbb'), ('ccc ddd');

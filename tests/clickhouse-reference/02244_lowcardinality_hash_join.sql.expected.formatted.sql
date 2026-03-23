@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS lc_table;
+
 CREATE TABLE lc_table
 (
     col LowCardinality(String)

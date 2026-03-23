@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tbulk;
+
 CREATE TABLE tbulk
 (
     g UInt64,

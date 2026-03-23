@@ -1,3 +1,8 @@
+-- Tags: no-random-settings
+SYSTEM DROP  TABLE IF EXISTS buf_dest;
+
+SYSTEM DROP  TABLE IF EXISTS buf;
+
 CREATE TABLE buf_dest
 (
     timestamp DateTime

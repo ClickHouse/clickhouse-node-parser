@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x UInt8
@@ -17,3 +19,5 @@ FROM `system`.part_log
 WHERE database = currentDatabase()
     AND table = 'test'
     AND event_type = 'MergeParts';
+
+SYSTEM DROP  TABLE test;

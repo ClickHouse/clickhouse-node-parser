@@ -1,3 +1,8 @@
+-- { echo }
+SYSTEM DROP  TABLE IF EXISTS t_sparse;
+
+SYSTEM DROP  TABLE IF EXISTS t_sparse_1;
+
 CREATE TABLE t_sparse
 (
     id UInt64,
@@ -97,3 +102,7 @@ ORDER BY
     v DESC,
     id ASC
 LIMIT 5;
+
+SYSTEM DROP  TABLE t_sparse;
+
+SYSTEM DROP  TABLE t_sparse_1;

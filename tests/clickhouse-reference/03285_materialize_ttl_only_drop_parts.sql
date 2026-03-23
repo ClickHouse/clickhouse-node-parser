@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_03285_mat_ttl;
 CREATE TABLE test_03285_mat_ttl (id UInt64, value String, event_time DateTime)
     ENGINE MergeTree()
         ORDER BY id
@@ -7,3 +8,4 @@ INSERT INTO test_03285_mat_ttl SELECT number, randomString(10), now() FROM numbe
 SET mutations_sync=1;
 SELECT 'Rows in parts', SUM(rows) FROM system.parts WHERE database = currentDatabase() AND table = 'test_03285_mat_ttl' AND active;
 SELECT 'Count', count() FROM test_03285_mat_ttl;
+DROP TABLE test_03285_mat_ttl;

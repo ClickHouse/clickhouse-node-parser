@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS spark_bar_test;
+
 CREATE TABLE spark_bar_test
 (
     cnt UInt64,

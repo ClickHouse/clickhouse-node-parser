@@ -1,3 +1,5 @@
+drop table if exists proj;
+
 create table proj (
     bool_value UInt8,
     zero_integer_value Int32,
@@ -23,4 +25,7 @@ partition by
   toDate (datetime_value)
 order by
   bool_value;
+
 insert into proj values (1, 1, 1, 1, '2012-10-24 21:30:00', 'ab');
+
+drop table proj;

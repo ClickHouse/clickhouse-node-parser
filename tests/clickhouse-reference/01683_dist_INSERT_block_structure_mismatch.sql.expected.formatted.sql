@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS tmp_01683;
+
+SYSTEM DROP  TABLE IF EXISTS dist_01683;
+
 SET prefer_localhost_replica = 0;
 
 -- To suppress "Structure does not match (remote: n Int8 Int8(size = 0), local: n UInt64 UInt64(size = 1)), implicit conversion will be done."
@@ -25,3 +29,7 @@ SET distributed_foreground_insert = 0;
 SELECT *
 FROM tmp_01683
 ORDER BY n ASC;
+
+SYSTEM DROP  TABLE tmp_01683;
+
+SYSTEM DROP  TABLE dist_01683;

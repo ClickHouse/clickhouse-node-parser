@@ -1,5 +1,7 @@
 SET mutations_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS t_sparse_mutations_5;
+
 CREATE TABLE t_sparse_mutations_5
 (
     k UInt64,
@@ -26,3 +28,5 @@ WHERE database = currentDatabase()
     AND column = 't'
     AND active
 ORDER BY name ASC;
+
+SYSTEM DROP  TABLE t_sparse_mutations_5;

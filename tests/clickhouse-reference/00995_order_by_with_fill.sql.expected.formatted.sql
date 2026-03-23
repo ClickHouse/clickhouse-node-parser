@@ -1,3 +1,6 @@
+--{ echoOn }
+SYSTEM DROP  TABLE IF EXISTS fill;
+
 CREATE TABLE `fill`
 (
     date Date,
@@ -46,6 +49,8 @@ FROM `fill`
 ORDER BY
     date ASC WITH FILL TO toDate('2019-06-23') STEP 3,
     val ASC WITH FILL FROM -10 STEP 2;
+
+SYSTEM DROP  TABLE fill;
 
 CREATE TABLE `fill`
 (

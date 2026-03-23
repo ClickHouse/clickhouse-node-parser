@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_temp;
+
 CREATE TABLE t_temp
 (
     a UInt32,
@@ -18,3 +20,5 @@ INSERT INTO t_temp SELECT
     now()
 FROM `system`.numbers
 LIMIT 100000;
+
+SYSTEM DROP  TABLE t_temp;

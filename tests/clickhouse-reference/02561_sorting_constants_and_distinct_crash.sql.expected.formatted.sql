@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_table;
+
 CREATE TABLE test_table
 (
     string_value String
@@ -36,3 +38,5 @@ ORDER BY
     constant_value ASC,
     string_value ASC
 SETTINGS max_threads = 1;
+
+SYSTEM drop  table test_table;

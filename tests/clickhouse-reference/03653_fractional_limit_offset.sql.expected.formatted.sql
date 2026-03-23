@@ -125,6 +125,8 @@ FROM numbers(1000000)
 LIMIT 1
 OFFSET 0.0999999;
 
+SYSTEM DROP  TABLE IF EXISTS num_tab;
+
 CREATE TABLE num_tab
 (
     id UInt8,

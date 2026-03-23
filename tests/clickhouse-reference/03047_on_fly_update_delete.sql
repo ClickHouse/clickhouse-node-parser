@@ -1,3 +1,7 @@
+-- Tags: no-shared-catalog
+-- no-shared-catalog: STOP MERGES will only stop them on the current replica, the second one will continue to merge
+
+DROP TABLE IF EXISTS t_lightweight_mut_6;
 SET apply_mutations_on_fly = 1;
 CREATE TABLE t_lightweight_mut_6 (id UInt64, v UInt64)
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_6', '1')
@@ -14,3 +18,4 @@ SELECT count(), sum(v) FROM t_lightweight_mut_6 PREWHERE id % 5 = 0;
 SELECT count(), sum(v) FROM t_lightweight_mut_6 PREWHERE id % 5 = 0 SETTINGS apply_mutations_on_fly = 0;
 SELECT count() FROM system.mutations
 WHERE database = currentDatabase() AND table = 't_lightweight_mut_6' AND NOT is_done;
+DROP TABLE t_lightweight_mut_6;

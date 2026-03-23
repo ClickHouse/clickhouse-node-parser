@@ -1,3 +1,4 @@
+drop table if exists tab;
 create table tab engine=Memory() as (select ([1, number], [toInt32(2),2]) as map from numbers(1, 10));
 -- mapAdd
 select mapAdd([1], [1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
@@ -7,6 +8,8 @@ select mapAdd(([toUInt64(1)], [1]), map) from tab; -- { serverError ILLEGAL_TYPE
 select mapAdd(([toUInt64(1), 2], [toInt32(1)]), map) from tab; -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 select mapAdd(([toUInt64(1)], [toInt32(1)]), map) from tab;
 select mapAdd(cast(map, 'Tuple(Array(UInt8), Array(UInt8))'), ([1], [1]), ([2],[2]) ) from tab;
+-- cleanup
+drop table tab;
 -- check types
 select mapAdd(([toUInt8(1), 2], [1, 1]), ([toUInt8(1), 2], [1, 1])) as res, toTypeName(res);
 select mapAdd(([toUInt16(1), 2], [toUInt16(1), 1]), ([toUInt16(1), 2], [toUInt16(1), 1])) as res, toTypeName(res);

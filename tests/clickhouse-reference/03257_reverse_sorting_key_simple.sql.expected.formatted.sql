@@ -3,6 +3,10 @@ SET optimize_read_in_order = 1;
 
 SET read_in_order_two_level_merge_threshold = 100;
 
+SYSTEM drop  table if exists x1;
+
+SYSTEM drop  table if exists x2;
+
 CREATE TABLE x1
 (
     i Nullable(int)
@@ -68,3 +72,7 @@ ORDER BY
     i ASC,
     j ASC
 LIMIT 5;
+
+SYSTEM drop  table x1;
+
+SYSTEM drop  table x2;

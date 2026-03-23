@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS array_test;
+
 CREATE TABLE array_test
 (
     floats Array(Float64),

@@ -15,6 +15,10 @@ SET min_insert_block_size_rows = 0;
 
 SET min_insert_block_size_bytes = 0;
 
+SYSTEM DROP  TABLE IF EXISTS tab_bitpacking;
+
+SYSTEM DROP  TABLE IF EXISTS tab_uncompressed;
+
 CREATE TABLE tab_bitpacking
 (
     ts DateTime CODEC(LZ4),
@@ -85,3 +89,7 @@ WHERE database = currentDatabase()
     AND active
     AND table IN ('tab_bitpacking', 'tab_uncompressed')
 GROUP BY table;
+
+SYSTEM DROP  TABLE tab_bitpacking;
+
+SYSTEM DROP  TABLE tab_uncompressed;

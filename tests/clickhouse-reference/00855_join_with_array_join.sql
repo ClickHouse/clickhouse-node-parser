@@ -9,6 +9,8 @@ JOIN system.one s2 ON s1.c = s2.dummy
 JOIN system.one s3 ON s1.c = s3.dummy
 ARRAY JOIN ax;
 SET joined_subquery_requires_alias = 1;
+DROP TABLE IF EXISTS f;
+DROP TABLE IF EXISTS d;
 CREATE TABLE f (`d_ids` Array(Int64) ) ENGINE = TinyLog;
 INSERT INTO f VALUES ([1, 2]);
 CREATE TABLE d (`id` Int64, `name` String ) ENGINE = TinyLog;

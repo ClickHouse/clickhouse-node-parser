@@ -22,6 +22,9 @@ select IPv6StringToNum(materialize('not an ip string')) == toFixedString(materia
 /* IPv4ToIPv6 */
 
 SELECT hex(IPv4ToIPv6(1297626935));
+/* Тест с таблицей */
+
+DROP TABLE IF EXISTS addresses;
 CREATE TABLE addresses(addr UInt32) ENGINE = Memory;
 INSERT INTO addresses(addr) VALUES (1297626935), (2130706433), (3254522122);
 SELECT hex(IPv4ToIPv6(addr)) FROM addresses ORDER BY addr ASC;
@@ -102,3 +105,4 @@ INSERT INTO addresses(addr) VALUES ('20010DB8AC10FE01FEEDBABECAFEF00D'), ('20010
 SELECT cutIPv6(toFixedString(unhex(addr), 16), 3, 0) FROM addresses ORDER BY addr ASC;
 INSERT INTO addresses(addr) VALUES ('00000000000000000000FFFFC1FC110A'), ('00000000000000000000FFFF4D583737'), ('00000000000000000000FFFF7F000001');
 SELECT cutIPv6(toFixedString(unhex(addr), 16), 0, 3) FROM addresses ORDER BY addr ASC;
+DROP TABLE addresses;

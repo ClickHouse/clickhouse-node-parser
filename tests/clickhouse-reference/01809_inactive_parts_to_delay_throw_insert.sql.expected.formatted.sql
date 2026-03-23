@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_01809;
+
 CREATE TABLE data_01809
 (
     i int
@@ -11,3 +13,5 @@ INSERT INTO data_01809;
 INSERT INTO data_01809;
 
 INSERT INTO data_01809;
+
+SYSTEM drop  table data_01809;

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS view_order_attribution;
+
+SYSTEM DROP  TABLE IF EXISTS order_attribution;
+
 CREATE TABLE order_attribution
 (
     order_product_event_id String,
@@ -85,3 +89,7 @@ GROUP BY
     gmv,
     gsv,
     po_created_at;
+
+SYSTEM DROP  TABLE view_order_attribution;
+
+SYSTEM DROP  TABLE order_attribution;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     key1 UInt64,
@@ -28,3 +30,5 @@ SELECT *
 FROM t
 WHERE value12 = '000'
 SETTINGS max_rows_to_read = 0;
+
+SYSTEM DROP  TABLE t;

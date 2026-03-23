@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mass_table_312;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE mass_table_312
@@ -23,3 +25,5 @@ SELECT
 FROM
     mass_table_312
 ARRAY JOIN n;
+
+SYSTEM DROP  TABLE mass_table_312;

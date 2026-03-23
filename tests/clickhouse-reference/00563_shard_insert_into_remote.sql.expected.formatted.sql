@@ -1,3 +1,6 @@
+-- Tags: shard
+SYSTEM drop  table if exists tab;
+
 CREATE TABLE tab
 (
     val UInt8
@@ -14,3 +17,5 @@ INSERT INTO FUNCTION remote('127.0.0.{2|3|4}', currentDatabase(), tab);
 SELECT *
 FROM tab
 ORDER BY val ASC;
+
+SYSTEM drop  table tab;

@@ -2,6 +2,8 @@
 -- Random settings limits: index_granularity=(100, None); merge_max_block_size=(100, None)
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -34,3 +36,5 @@ GROUP BY dynamicType(d)
 ORDER BY
     count() ASC,
     dynamicType(d) ASC;
+
+SYSTEM drop  table test;

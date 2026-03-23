@@ -1,3 +1,8 @@
+-- Tags: no-ordinary-database, no-parallel
+SYSTEM DROP  TABLE IF EXISTS test_00609;
+
+SYSTEM DROP  TABLE IF EXISTS test_mv_00609;
+
 CREATE TABLE test_00609
 (
     a Int8
@@ -35,3 +40,7 @@ WHERE a IN (
         SELECT a
         FROM test_mv_00609
     ); -- OK
+
+SYSTEM DROP  TABLE test_00609;
+
+SYSTEM DROP  TABLE test_mv_00609;

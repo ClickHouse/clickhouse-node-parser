@@ -13,6 +13,7 @@ SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'test_for
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(HASHED());
 SELECT * FROM database_dictionary_test_key_expression.test_query_log_dictionary_simple ORDER BY value_id;
+DROP DICTIONARY IF EXISTS database_dictionary_test_key_expression.test_query_log_dictionary_simple;
 CREATE DICTIONARY database_dictionary_test_key_expression.test_query_log_dictionary_complex
 (
     `value_id` UInt64 EXPRESSION cityHash64(value),
@@ -24,3 +25,6 @@ SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'test_for
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(COMPLEX_KEY_HASHED());
 SELECT * FROM database_dictionary_test_key_expression.test_query_log_dictionary_complex ORDER BY value_id;
+DROP DICTIONARY IF EXISTS database_dictionary_test_key_expression.test_query_log_dictionary_complex;
+DROP TABLE IF EXISTS database_dictionary_test_key_expression.test_for_dictionary;
+DROP DATABASE IF EXISTS database_dictionary_test_key_expression;

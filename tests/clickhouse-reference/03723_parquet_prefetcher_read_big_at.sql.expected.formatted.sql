@@ -1,3 +1,8 @@
+-- Tags: no-fasttest, no-random-settings
+-- Closes #90890
+-- This tests verifies that while reading a parquet file, the prefetcher leverages more efficient readBigAt logic (ReadMode::RandomRead)
+SYSTEM DROP  TABLE IF EXISTS t_parquet_prefetcher_read_big_at;
+
 CREATE TABLE t_parquet_prefetcher_read_big_at
 (
     a Int32,

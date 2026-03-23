@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bug_36995;
+
 CREATE TABLE bug_36995
 (
     time DateTime,
@@ -31,3 +33,5 @@ PREWHERE (isNotNull(time))
 WHERE (product IN (
         SELECT '1'
     ));
+
+SYSTEM DROP  TABLE bug_36995;

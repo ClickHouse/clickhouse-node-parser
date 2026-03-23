@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_agg_proj_02302;
+
 CREATE TABLE test_agg_proj_02302
 (
     x Int32,
@@ -38,3 +40,6 @@ LIMIT 5
 SETTINGS
     optimize_aggregation_in_order = 1,
     optimize_read_in_order = 1;
+
+-- { echoOff }
+SYSTEM drop  table test_agg_proj_02302;

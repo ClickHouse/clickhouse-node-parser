@@ -4,6 +4,8 @@ SET deduplicate_blocks_in_dependent_materialized_views = 1;
 
 SET insert_deduplication_token = 'test';
 
+SYSTEM DROP  TABLE IF EXISTS landing;
+
 CREATE TABLE landing
 (
     timestamp UInt64,
@@ -12,6 +14,8 @@ CREATE TABLE landing
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
+
+SYSTEM DROP  TABLE IF EXISTS ds_1_1;
 
 CREATE TABLE ds_1_1
 (
@@ -22,6 +26,8 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
 
+SYSTEM DROP  VIEW IF EXISTS mv_1_1;
+
 CREATE MATERIALIZED VIEW mv_1_1
 TO ds_1_1
 AS
@@ -30,6 +36,8 @@ SELECT
     sum(value) AS v
 FROM landing
 GROUP BY t;
+
+SYSTEM DROP  VIEW IF EXISTS mv_1_2;
 
 CREATE MATERIALIZED VIEW mv_1_2
 TO ds_1_1
@@ -61,3 +69,11 @@ ORDER BY
 
 SELECT count()
 FROM landing;
+
+SYSTEM DROP  TABLE landing;
+
+SYSTEM DROP  TABLE ds_1_1;
+
+SYSTEM DROP  VIEW mv_1_1;
+
+SYSTEM DROP  VIEW mv_1_2;

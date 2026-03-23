@@ -2,6 +2,7 @@
 -- but for less redundancy, just let CI test the parameter.
 
 SET lightweight_deletes_sync = 2, alter_sync = 2;
+DROP TABLE IF EXISTS users_compact;
 CREATE TABLE users_compact (
     uid Int16,
     name String,
@@ -28,6 +29,9 @@ SELECT
     name, parent_name
 FROM system.projection_parts
 WHERE (database = currentDatabase()) AND (`table` = 'users_compact') AND (active = 1) AND parent_name like 'all_3_3%';
+-- { echoOff }
+
+DROP TABLE users_compact;
 CREATE TABLE users_wide (
     uid Int16,
     name String,
@@ -54,3 +58,6 @@ SELECT
     name, parent_name
 FROM system.projection_parts
 WHERE (database = currentDatabase()) AND (`table` = 'users_wide') AND (active = 1) AND parent_name like 'all_3_3%';
+-- { echoOff }
+
+DROP TABLE users_wide;

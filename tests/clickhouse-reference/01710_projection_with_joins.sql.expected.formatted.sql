@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     s UInt16,
@@ -29,6 +31,10 @@ INNER JOIN (
     USING (s)
 ORDER BY s ASC
 SETTINGS optimize_use_projections = 0;
+
+SYSTEM drop  table t;
+
+SYSTEM drop  table if exists mt;
 
 CREATE TABLE mt
 (
@@ -76,6 +82,10 @@ INNER JOIN (
 ORDER BY id1 ASC
 SETTINGS optimize_use_projections = 1;
 
+SYSTEM drop  table mt;
+
+SYSTEM drop  table if exists j;
+
 CREATE TABLE j
 (
     id1 Int8,
@@ -113,3 +123,5 @@ INNER JOIN (
 WHERE id2 IN (2, 3, 4)
 ORDER BY id1 ASC
 SETTINGS optimize_use_projections = 1;
+
+SYSTEM drop  table j;

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS test1_00671;
+
+SYSTEM DROP  TABLE IF EXISTS test2_00671;
+
 CREATE TABLE test1_00671
 (
     start Integer,
@@ -21,3 +25,7 @@ FROM test1_00671;
 
 SELECT maxIntersections(start, `end`)
 FROM test2_00671;
+
+SYSTEM DROP  TABLE test1_00671;
+
+SYSTEM DROP  TABLE test2_00671;

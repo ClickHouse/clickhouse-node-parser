@@ -1,3 +1,8 @@
+-- Tags: replica
+SYSTEM DROP  TABLE IF EXISTS keeper_retries_r1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS keeper_retries_r2 SYNC;
+
 CREATE TABLE keeper_retries_r1
 (
     a UInt8
@@ -33,3 +38,7 @@ INSERT INTO keeper_retries_r1 SETTINGS insert_keeper_fault_injection_probability
 SELECT *
 FROM keeper_retries_r1
 ORDER BY a ASC;
+
+SYSTEM DROP  TABLE keeper_retries_r1 SYNC;
+
+SYSTEM DROP  TABLE keeper_retries_r2 SYNC;

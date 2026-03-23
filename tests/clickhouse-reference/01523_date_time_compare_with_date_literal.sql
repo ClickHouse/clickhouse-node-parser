@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test(timestamp DateTime) ENGINE = MergeTree ORDER BY timestamp;
 INSERT INTO test VALUES ('2020-10-15 00:00:00');
 INSERT INTO test VALUES ('2020-10-15 12:00:00');
@@ -14,4 +15,5 @@ SELECT * FROM test WHERE '2020-10-15' < timestamp ORDER BY timestamp;
 SELECT * FROM test WHERE '2020-10-15' <= timestamp ORDER BY timestamp;
 SELECT * FROM test WHERE '2020-10-16' > timestamp ORDER BY timestamp;
 SELECT * FROM test WHERE '2020-10-16' >= timestamp ORDER BY timestamp;
+DROP TABLE test;
 CREATE TABLE test(timestamp DateTime64) ENGINE = MergeTree ORDER BY timestamp;

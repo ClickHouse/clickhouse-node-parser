@@ -1,3 +1,7 @@
+-- Tags: stateful, no-replicated-database
+-- Tag no-replicated-database: Fails due to additional replicas or shards
+SYSTEM DROP  TABLE IF EXISTS fixed_granularity_table;
+
 CREATE TABLE fixed_granularity_table
 (
     WatchID UInt64,

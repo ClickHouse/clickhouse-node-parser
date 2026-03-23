@@ -1,5 +1,13 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS source_table1;
+
+SYSTEM DROP  TABLE IF EXISTS source_table2;
+
+SYSTEM DROP  TABLE IF EXISTS distributed_table1;
+
+SYSTEM DROP  TABLE IF EXISTS distributed_table2;
+
 CREATE TABLE source_table1
 (
     a Int64,

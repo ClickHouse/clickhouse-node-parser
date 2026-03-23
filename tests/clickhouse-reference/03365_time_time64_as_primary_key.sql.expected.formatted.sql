@@ -2,6 +2,8 @@ SET allow_experimental_time_time64_type = 1;
 
 SET use_legacy_to_time = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_time;
+
 CREATE TABLE test_time
 (
     a Time,
@@ -33,3 +35,5 @@ WHERE (a > 12435)
     AND (a < 12437)
 GROUP BY minute_bucket
 ORDER BY minute_bucket ASC;
+
+SYSTEM DROP  TABLE test_time;

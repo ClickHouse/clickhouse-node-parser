@@ -34,6 +34,8 @@ FROM (
     )
 GROUP BY x;
 
+SYSTEM DROP  TABLE IF EXISTS decimal;
+
 CREATE TABLE IF NOT EXISTS decimal
 (
     A UInt64,
@@ -67,3 +69,5 @@ FROM (
             A,
             B_str
     );
+
+SYSTEM DROP  TABLE decimal;

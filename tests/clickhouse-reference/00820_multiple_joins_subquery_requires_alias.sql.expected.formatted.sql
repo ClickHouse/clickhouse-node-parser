@@ -1,5 +1,13 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
+SYSTEM DROP  TABLE IF EXISTS table3;
+
+SYSTEM DROP  TABLE IF EXISTS table5;
+
 CREATE TABLE table1
 (
     a UInt32
@@ -210,3 +218,11 @@ INNER JOIN table2 AS t2
 INNER JOIN table3 AS t3
     ON t2_b = t3_b
 ORDER BY t1.a ASC;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;
+
+SYSTEM DROP  TABLE table3;
+
+SYSTEM DROP  TABLE table5;

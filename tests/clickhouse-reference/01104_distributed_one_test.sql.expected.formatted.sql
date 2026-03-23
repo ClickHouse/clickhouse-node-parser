@@ -1,3 +1,6 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS d_one;
+
 CREATE TABLE d_one
 (
     dummy UInt8
@@ -33,6 +36,8 @@ WHERE o.dummy = 1
 ORDER BY _shard_num ASC;
 
 SET distributed_product_mode = 'local';
+
+SYSTEM DROP  TABLE d_one;
 
 SELECT
     'remote_0',

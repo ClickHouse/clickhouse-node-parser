@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS enum_pk;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE enum_pk
@@ -117,3 +119,5 @@ SELECT cityHash64(groupArraySorted(100)(d))
 FROM enum_pk
 WHERE (d != '0'
     AND d != '1');
+
+SYSTEM DROP  TABLE enum_pk;

@@ -1,3 +1,5 @@
+drop table if exists t;
+drop table if exists s;
 create table t(a Int64, b Int64) engine = MergeTree ORDER BY tuple();
 create table s(a Int64, b Int64) engine = MergeTree ORDER BY tuple();
 insert into t values (1,1), (2,2);
@@ -18,3 +20,5 @@ select t.*, s.* from t left join s on (s.a=t.a) order by t.a;
 select t.*, s.* from t left join s on (t.b=toInt64(1) and s.a=t.a) where s.b=1;
 select t.*, s.* from t left join s on (t.b=toInt64(2) and s.a=t.a) where t.b=2;
 set join_use_nulls = 0;
+drop table t;
+drop table s;

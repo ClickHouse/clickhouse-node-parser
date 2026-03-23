@@ -3,6 +3,8 @@ SET enable_multiple_prewhere_read_steps = 0;
 
 SET allow_experimental_nullable_tuple_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS nullable_tuple_sparse;
+
 CREATE TABLE nullable_tuple_sparse
 (
     tup Nullable(Tuple(u UInt64, s String))
@@ -16,6 +18,8 @@ SELECT tup
 FROM nullable_tuple_sparse
 WHERE isNull(tup)
     AND tup.s = 'a';
+
+SYSTEM DROP  TABLE IF EXISTS nullable_tuple_sparse_2;
 
 CREATE TABLE nullable_tuple_sparse_2
 (
@@ -58,6 +62,8 @@ FROM nullable_tuple_sparse_2
 WHERE tup.u IN (0, 5, 10)
 ORDER BY tup.u ASC;
 
+SYSTEM DROP  TABLE IF EXISTS test_structure;
+
 CREATE TABLE test_structure
 (
     t Nullable(Tuple(x UInt32, y UInt64)),
@@ -71,6 +77,8 @@ FROM numbers(10);
 
 SELECT DISTINCT dumpColumnStructure(*)
 FROM test_structure;
+
+SYSTEM DROP  TABLE IF EXISTS test_structure_2;
 
 CREATE TABLE test_structure_2
 (

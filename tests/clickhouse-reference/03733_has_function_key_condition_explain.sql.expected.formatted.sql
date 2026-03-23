@@ -1,3 +1,9 @@
+-- Tags: no-replicated-database, no-parallel-replicas, no-parallel, no-random-merge-tree-settings
+-- add_minmax_index_for_numeric_columns=0: Different plan
+-- EXPLAIN output may differ
+-- { echoOn }
+SYSTEM DROP  TABLE IF EXISTS test_has_idx_simple;
+
 CREATE TABLE test_has_idx_simple
 (
     id UInt32,
@@ -11,6 +17,8 @@ INSERT INTO test_has_idx_simple SELECT
     number,
     toString(number)
 FROM numbers(100000);
+
+SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_col;
 
 CREATE TABLE test_has_idx_tuple_col
 (
@@ -28,6 +36,8 @@ INSERT INTO test_has_idx_tuple_col SELECT
     toString(number)
 FROM numbers(100000);
 
+SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_col_nullable_elements;
+
 CREATE TABLE test_has_idx_tuple_col_nullable_elements
 (
     id UInt32,
@@ -43,6 +53,8 @@ INSERT INTO test_has_idx_tuple_col_nullable_elements SELECT
     tuple(number, NULL),
     toString(number)
 FROM numbers(100000);
+
+SYSTEM DROP  TABLE IF EXISTS test_has_idx_array_col;
 
 CREATE TABLE test_has_idx_array_col
 (
@@ -60,6 +72,8 @@ INSERT INTO test_has_idx_array_col SELECT
     toString(number)
 FROM numbers(100000);
 
+SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_two_cols;
+
 CREATE TABLE test_has_idx_tuple_two_cols
 (
     k1 UInt32,
@@ -76,6 +90,8 @@ INSERT INTO test_has_idx_tuple_two_cols SELECT
     toString(number)
 FROM numbers(100000);
 
+SYSTEM DROP  TABLE IF EXISTS test_has_idx_lowcard;
+
 CREATE TABLE test_has_idx_lowcard
 (
     id UInt32,
@@ -89,6 +105,8 @@ INSERT INTO test_has_idx_lowcard SELECT
     number,
     toString((number % 100) + 1000000)
 FROM numbers(100000);
+
+SYSTEM DROP  TABLE IF EXISTS test_has_idx_nullable;
 
 CREATE TABLE test_has_idx_nullable
 (
@@ -104,6 +122,8 @@ INSERT INTO test_has_idx_nullable SELECT
     if(number % 10 = 0, NULL, number)
 FROM numbers(100000);
 
+SYSTEM DROP  TABLE IF EXISTS test_has_idx_func_key;
+
 CREATE TABLE test_has_idx_func_key
 (
     ts DateTime,
@@ -117,6 +137,8 @@ INSERT INTO test_has_idx_func_key SELECT
     toDate('2020-01-01') + number,
     toString(number)
 FROM numbers(100000);
+
+SYSTEM DROP  TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (

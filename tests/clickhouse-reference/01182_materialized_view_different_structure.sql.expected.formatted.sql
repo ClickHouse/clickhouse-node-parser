@@ -1,5 +1,19 @@
 SET allow_materialized_view_with_bad_select = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
+SYSTEM DROP  TABLE IF EXISTS numbers;
+
+SYSTEM DROP  TABLE IF EXISTS test_mv;
+
+SYSTEM DROP  TABLE IF EXISTS src;
+
+SYSTEM DROP  TABLE IF EXISTS dst;
+
+SYSTEM DROP  TABLE IF EXISTS mv;
+
+SYSTEM DROP  TABLE IF EXISTS dist;
+
 CREATE TABLE test_table
 (
     key UInt32,
@@ -127,3 +141,17 @@ SELECT
     max(toUInt32(n)),
     min(toInt128(n))
 FROM dist;
+
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE numbers;
+
+SYSTEM DROP  TABLE test_mv;
+
+SYSTEM DROP  TABLE src;
+
+SYSTEM DROP  TABLE dst;
+
+SYSTEM DROP  TABLE mv;
+
+SYSTEM DROP  TABLE dist;

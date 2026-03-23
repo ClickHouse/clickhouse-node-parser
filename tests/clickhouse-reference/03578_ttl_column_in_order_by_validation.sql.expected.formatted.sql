@@ -10,3 +10,5 @@ CREATE TABLE IF NOT EXISTS test_break_ddl
 ENGINE = ReplacingMergeTree()
 ORDER BY (id, event_date, event_time)
 PARTITION BY event_date;
+
+SYSTEM DROP  TABLE IF EXISTS test_break_ddl;

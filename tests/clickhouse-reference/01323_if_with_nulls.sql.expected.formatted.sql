@@ -130,6 +130,9 @@ LEFT JOIN (
     ) AS y
     USING (k);
 
+-- test case from https://github.com/ClickHouse/ClickHouse/issues/7347
+SYSTEM DROP  TABLE IF EXISTS test_nullable_float_issue7347;
+
 CREATE TABLE test_nullable_float_issue7347
 (
     ne UInt64,
@@ -146,6 +149,8 @@ SELECT
     toTypeName(test),
     IF(test = 0, 1, 0)
 FROM test_nullable_float_issue7347;
+
+SYSTEM DROP  TABLE test_nullable_float_issue7347;
 
 -- test case from https://github.com/ClickHouse/ClickHouse/issues/10846
 SELECT if(isFinite(toUInt64OrZero(toNullable('123'))), 1, 0);

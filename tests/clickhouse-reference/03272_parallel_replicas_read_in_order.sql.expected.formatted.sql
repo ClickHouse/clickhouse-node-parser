@@ -2,6 +2,8 @@ SET log_queries = 1;
 
 SET optimize_read_in_order = 1;
 
+SYSTEM DROP  TABLE IF EXISTS read_in_order_with_parallel_replicas;
+
 CREATE TABLE read_in_order_with_parallel_replicas
 (
     id UInt64
@@ -57,3 +59,5 @@ FROM `system`.query_log
 WHERE current_database = currentDatabase()
     AND log_comment = 'test read in order asc with parallel replicas'
     AND read_rows > 2;
+
+SYSTEM DROP  TABLE read_in_order_with_parallel_replicas;

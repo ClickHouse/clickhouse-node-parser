@@ -7,6 +7,7 @@ SET allow_experimental_statistics = 1;
 SET use_statistics = 1;
 SET mutations_sync = 1;
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     a Float64 STATISTICS(tdigest),

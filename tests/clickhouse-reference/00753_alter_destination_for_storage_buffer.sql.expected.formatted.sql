@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS dst_00753;
+
+SYSTEM DROP  TABLE IF EXISTS buffer_00753;
+
 SET send_logs_level = 'error';
 
 CREATE TABLE dst_00753

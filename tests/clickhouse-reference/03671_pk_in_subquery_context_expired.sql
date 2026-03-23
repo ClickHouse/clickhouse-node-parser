@@ -1,3 +1,7 @@
+-- Issue: https://github.com/ClickHouse/ClickHouse/issues/89433
+
+DROP TABLE IF EXISTS tbl;
+DROP TABLE IF EXISTS join_engine;
 CREATE TABLE tbl
 (
     `id1` LowCardinality(String),

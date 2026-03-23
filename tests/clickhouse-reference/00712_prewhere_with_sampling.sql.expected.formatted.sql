@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tab_00712_2;
+
 CREATE TABLE tab_00712_2
 (
     a UInt32,
@@ -13,6 +15,8 @@ SELECT a
 FROM tab_00712_2 SAMPLE 1/2
 PREWHERE b = 2;
 
+SYSTEM DROP  TABLE IF EXISTS sample_prewhere;
+
 CREATE TABLE sample_prewhere
 (
     CounterID UInt32,
@@ -25,3 +29,5 @@ SAMPLE BY UserID;
 SELECT count()
 FROM sample_prewhere SAMPLE 1/2
 PREWHERE CounterID = 1;
+
+SYSTEM DROP  TABLE sample_prewhere;

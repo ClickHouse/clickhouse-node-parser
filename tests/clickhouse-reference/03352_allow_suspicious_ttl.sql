@@ -3,6 +3,7 @@
 -- Replicated
 
 SET allow_suspicious_ttl_expressions = 0;
+DROP TABLE IF EXISTS replicated_ttl_00933 SYNC;
 -- Create
 CREATE TABLE replicated_ttl_00933 (a Int32, d DateTime)
   ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/test_ttl_00933', 'r1')

@@ -2,6 +2,12 @@
 -- no-parallel: Heavy usage
 SET check_query_single_value_result = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test.hits_log;
+
+SYSTEM DROP  TABLE IF EXISTS test.hits_tinylog;
+
+SYSTEM DROP  TABLE IF EXISTS test.hits_stripelog;
+
 CREATE TABLE test.hits_log
 (
     CounterID UInt32,
@@ -75,3 +81,9 @@ SELECT
     count(),
     sum(cityHash64(*))
 FROM test.hits_stripelog;
+
+SYSTEM DROP  TABLE test.hits_log;
+
+SYSTEM DROP  TABLE test.hits_tinylog;
+
+SYSTEM DROP  TABLE test.hits_stripelog;

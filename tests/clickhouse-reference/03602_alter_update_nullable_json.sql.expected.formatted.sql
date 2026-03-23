@@ -2,6 +2,8 @@ SET mutations_sync = 1;
 
 SET max_block_size = 1000;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt32,
@@ -21,6 +23,8 @@ FROM test;
 
 SELECT DISTINCT arrayJoin(JSONSharedDataPaths(assumeNotNull(json)))
 FROM test;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

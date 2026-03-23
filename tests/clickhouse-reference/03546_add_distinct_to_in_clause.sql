@@ -1,3 +1,9 @@
+-- Tags: shard, no-parallel
+
+drop table if exists local_table_1;
+drop table if exists local_table_2;
+drop table if exists distributed_table_1;
+drop table if exists distributed_table_2;
 SET prefer_localhost_replica = 0;
 SET allow_experimental_analyzer = 1;
 SET distributed_product_mode = 'allow';

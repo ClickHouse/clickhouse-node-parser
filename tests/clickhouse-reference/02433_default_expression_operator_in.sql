@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS dep;
+DROP TABLE IF EXISTS dep2;
+DROP TABLE IF EXISTS id_join;
 CREATE TABLE id_join (`country` String, `location` Array(Int32)) ENGINE = Join(ANY, LEFT, country);
 INSERT INTO id_join values ('CLICK', [1234]);
 CREATE TABLE dep
@@ -17,3 +20,6 @@ ENGINE = ReplicatedMergeTree('/test/02433/{database}/dep', '2') ORDER BY tuple()
 -- Ensure that a table name cannot be passed to IN as string literal
 create table test (n int, m default n in 'default.table_name') engine=Memory; -- { serverError TYPE_MISMATCH }
 create table test (n int, m default in(n, 'default.table_name')) engine=Memory; -- { serverError TYPE_MISMATCH }
+DROP TABLE dep;
+DROP TABLE dep2;
+DROP TABLE id_join;

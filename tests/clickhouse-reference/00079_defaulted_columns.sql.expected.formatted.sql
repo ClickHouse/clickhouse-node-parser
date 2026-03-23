@@ -1,8 +1,12 @@
+SYSTEM drop  table if exists defaulted;
+
 CREATE TABLE defaulted
 (
     col1 DEFAULT 0
 )
 ENGINE = Memory;
+
+SYSTEM drop  table defaulted;
 
 CREATE TABLE defaulted
 (

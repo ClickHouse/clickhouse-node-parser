@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS tb1;
+
 CREATE TABLE tb1
 (
     n UInt32,

@@ -1,9 +1,12 @@
+DROP TABLE IF EXISTS xp;
+DROP TABLE IF EXISTS xp_d;
 SET log_queries = 1;
 CREATE TABLE xp (`A` Date, `B` Int64, `S` String) ENGINE = MergeTree PARTITION BY toYYYYMM(A) ORDER BY B;
 INSERT INTO xp SELECT '2020-01-01', number, '' FROM numbers(100000);
 CREATE TABLE xp_d AS xp ENGINE = Distributed(test_shard_localhost, currentDatabase(), xp);
 SELECT count(7 = (SELECT number FROM numbers(0) ORDER BY number ASC NULLS FIRST LIMIT 7)) FROM xp_d PREWHERE toYYYYMM(A) GLOBAL IN (SELECT NULL = (SELECT number FROM numbers(1) ORDER BY number DESC NULLS LAST LIMIT 1), toYYYYMM(min(A)) FROM xp_d) WHERE B > NULL FORMAT Null;
 SELECT count() FROM xp_d WHERE A GLOBAL IN (SELECT NULL);
+DROP TABLE IF EXISTS trace_log;
 CREATE TABLE trace_log
 (
    `event_date` Date,

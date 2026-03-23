@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON
@@ -12,3 +14,5 @@ SETTINGS max_dynamic_subcolumns_in_json_type_parsing = 10;
 SELECT DISTINCT (arrayJoin(JSONDynamicPaths(json))) AS path
 FROM test
 ORDER BY path ASC;
+
+SYSTEM drop  table test;

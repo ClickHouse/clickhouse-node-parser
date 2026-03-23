@@ -180,6 +180,8 @@ FROM numbers(20)
 LIMIT 18446744073709551615
 OFFSET -446744073709551615;
 
+SYSTEM DROP  TABLE IF EXISTS num_tab;
+
 CREATE TABLE num_tab
 (
     id UInt8,
@@ -211,6 +213,8 @@ ENGINE = MergeTree
 ORDER BY number AS
 SELECT number
 FROM numbers(1000000);
+
+SYSTEM DROP  TABLE IF EXISTS modified_tab;
 
 CREATE TABLE modified_tab
 ENGINE = MergeTree()

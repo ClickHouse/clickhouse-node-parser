@@ -1,3 +1,9 @@
+SYSTEM DROP  DICTIONARY IF EXISTS groups_dict;
+
+SYSTEM DROP  TABLE IF EXISTS users;
+
+SYSTEM DROP  TABLE IF EXISTS groups;
+
 CREATE TABLE users
 (
     uid Int16,

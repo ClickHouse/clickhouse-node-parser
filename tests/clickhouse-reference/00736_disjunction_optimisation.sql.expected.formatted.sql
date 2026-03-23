@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bug;
+
 CREATE TABLE IF NOT EXISTS bug
 (
     k UInt64,
@@ -116,3 +118,5 @@ SELECT
     OR 23 = s)
 FROM bug
 SETTINGS enable_analyzer = 1;
+
+SYSTEM DROP  TABLE bug;

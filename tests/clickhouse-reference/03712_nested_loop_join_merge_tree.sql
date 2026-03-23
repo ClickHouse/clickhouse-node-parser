@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS events;
 SET allow_suspicious_low_cardinality_types = 1;
 CREATE TABLE events
 (
@@ -15,6 +16,7 @@ UNION ALL
 SELECT 32, 'Payload_Dup', toDateTime('2024-01-01 00:10:00');
 -- Separate inserts to have several blocks in left table to perform multiple lookups
 INSERT INTO events SELECT number, concat('Payload_', toString(number)), toDateTime('2024-01-01 00:00:00') + INTERVAL number MINUTES FROM numbers(500, 500);
+DROP TABLE IF EXISTS attributes;
 CREATE TABLE attributes
 (
     `EventId` UInt64,

@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS ttl_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS always_alive_ids_dict;
+
+SYSTEM DROP  TABLE IF EXISTS always_alive_ids;
+
 CREATE TABLE always_alive_ids
 (
     id UInt64

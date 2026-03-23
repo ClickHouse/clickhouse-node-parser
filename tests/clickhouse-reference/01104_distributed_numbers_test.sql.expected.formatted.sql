@@ -13,6 +13,8 @@ LIMIT 2
 SETTINGS max_threads = 1
 FORMAT Null;
 
+SYSTEM DROP  TABLE IF EXISTS d_numbers;
+
 CREATE TABLE d_numbers
 (
     number UInt32
@@ -44,3 +46,5 @@ SETTINGS
     prefer_localhost_replica = 1;
 
 SET distributed_product_mode = 'local';
+
+SYSTEM DROP  TABLE d_numbers;

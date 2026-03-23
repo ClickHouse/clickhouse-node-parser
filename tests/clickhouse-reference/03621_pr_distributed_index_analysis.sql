@@ -1,3 +1,9 @@
+-- Tags: no-replicated-database, long
+-- - no-replicated-database - it uses cluster of multiple nodes, while we use different clusters
+
+-- Make sure that distributed index analysis works with parallel replicas
+
+drop table if exists test_10m;
 create table test_10m (key Int, value Int) engine=MergeTree() order by key settings distributed_index_analysis_min_parts_to_activate=0, distributed_index_analysis_min_indexes_size_to_activate=0;
 insert into test_10m select number, number*100 from numbers(10e6);
 set parallel_replicas_for_non_replicated_merge_tree=1;

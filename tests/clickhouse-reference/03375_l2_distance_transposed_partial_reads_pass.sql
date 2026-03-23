@@ -4,6 +4,7 @@ SET enable_analyzer = 1;
 CREATE TABLE qbit (id UInt32, vec QBit(BFloat16, 16)) ENGINE = Memory;
 SET optimize_qbit_distance_function_reads = true;
 SET optimize_qbit_distance_function_reads = false;
+DROP TABLE qbit;
 -- https://github.com/ClickHouse/ClickHouse/issues/88362
 
 CREATE TABLE qbit (id UInt32, vec QBit(BFloat16, 1)) ENGINE = Memory;

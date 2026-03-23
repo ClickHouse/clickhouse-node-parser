@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS array_element_test;
+
 CREATE TABLE array_element_test
 (
     arr Array(Int32),
@@ -57,3 +59,5 @@ CREATE TABLE array_element_test
 ENGINE = Memory;
 
 INSERT INTO array_element_test;
+
+SYSTEM DROP  TABLE array_element_test;

@@ -1,3 +1,9 @@
+-- Tags: no-parallel
+-- Test for apply_row_policy_after_final setting with ReplacingMergeTree, https://github.com/ClickHouse/ClickHouse/issues/90986
+SYSTEM DROP  TABLE IF EXISTS tab;
+
+SYSTEM DROP  ROW POLICY IF EXISTS pol1 ON tab;
+
 CREATE TABLE tab
 (
     x UInt32,
@@ -28,6 +34,14 @@ CREATE ROW POLICY pol1 ON tab USING y != 'ccc' TO ALL;
 
 SET apply_row_policy_after_final = 1;
 
+SYSTEM DROP  ROW POLICY pol1 ON tab;
+
+SYSTEM DROP  TABLE tab;
+
+SYSTEM DROP  TABLE IF EXISTS tab2;
+
+SYSTEM DROP  ROW POLICY IF EXISTS pol2 ON tab2;
+
 CREATE TABLE tab2
 (
     x UInt32,
@@ -48,6 +62,14 @@ CREATE ROW POLICY pol2 ON tab2 USING x != 1 TO ALL;
 SELECT *
 FROM tab2 FINAL
 ORDER BY x ASC;
+
+SYSTEM DROP  ROW POLICY pol2 ON tab2;
+
+SYSTEM DROP  TABLE tab2;
+
+SYSTEM DROP  TABLE IF EXISTS tab3;
+
+SYSTEM DROP  ROW POLICY IF EXISTS pol3 ON tab3;
 
 CREATE TABLE tab3
 (
@@ -73,6 +95,14 @@ SELECT *
 FROM tab3 FINAL
 PREWHERE z < 250
 ORDER BY x ASC;
+
+SYSTEM DROP  ROW POLICY pol3 ON tab3;
+
+SYSTEM DROP  TABLE tab3;
+
+SYSTEM DROP  TABLE IF EXISTS tab4;
+
+SYSTEM DROP  ROW POLICY IF EXISTS pol4 ON tab4;
 
 CREATE TABLE tab4
 (
@@ -100,6 +130,14 @@ SELECT
 FROM tab4 FINAL
 ORDER BY x ASC;
 
+SYSTEM DROP  ROW POLICY pol4 ON tab4;
+
+SYSTEM DROP  TABLE tab4;
+
+SYSTEM DROP  TABLE IF EXISTS tab_final;
+
+SYSTEM DROP  ROW POLICY IF EXISTS pol_final ON tab_final;
+
 CREATE TABLE tab_final
 (
     x UInt32,
@@ -121,3 +159,5 @@ PREWHERE y != 'ccc'
 ORDER BY x ASC;
 
 SET apply_prewhere_after_final = 0;
+
+SYSTEM DROP  TABLE tab_final;

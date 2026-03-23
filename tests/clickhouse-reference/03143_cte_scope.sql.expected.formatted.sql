@@ -1,6 +1,10 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/56287
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tmp_a;
+
+SYSTEM DROP  TABLE IF EXISTS tmp_b;
+
 CREATE TEMPORARY TABLE IF NOT EXISTS tmp_a
 (
     k1 Int32,

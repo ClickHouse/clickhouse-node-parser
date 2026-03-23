@@ -1,3 +1,10 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS ids;
+
+SYSTEM DROP  TABLE IF EXISTS data;
+
+SYSTEM DROP  TABLE IF EXISTS data2;
+
 CREATE TABLE ids
 (
     id UUID,

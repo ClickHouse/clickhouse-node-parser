@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x Decimal(18, 3)
@@ -10,6 +12,8 @@ INSERT INTO t;
 SELECT *
 FROM t
 WHERE toUInt64(x) = 1;
+
+SYSTEM DROP  TABLE t;
 
 CREATE TABLE t
 (

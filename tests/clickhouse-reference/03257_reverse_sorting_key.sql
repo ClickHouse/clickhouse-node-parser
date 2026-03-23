@@ -2,6 +2,8 @@
 
 set optimize_read_in_order = 1;
 set read_in_order_two_level_merge_threshold=100;
+drop table if exists x1;
+drop table if exists x2;
 create table x1 (i Nullable(int)) engine MergeTree order by i desc settings allow_nullable_key = 1, index_granularity = 2, allow_experimental_reverse_key = 1;
 insert into x1 select * from numbers(100);
 select * from x1 where i = 3;
@@ -18,3 +20,5 @@ select trimLeft(explain) from (explain actions=1 select * from x2 order by i, j 
 select * from x2 order by i, j desc limit 5;
 select trimLeft(explain) from (explain actions=1 select * from x2 order by i, j limit 5) where explain ilike '%sort%' settings max_threads=1, enable_analyzer=1;
 select * from x2 order by i, j limit 5;
+drop table x1;
+drop table x2;

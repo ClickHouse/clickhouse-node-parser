@@ -2,6 +2,7 @@
 
 SET compile_aggregate_expressions = 1;
 SET min_count_to_compile_aggregate_expression = 0;
+DROP TABLE IF EXISTS test_table_unsigned_values;
 CREATE TABLE test_table_unsigned_values
 (
     id UInt64,
@@ -21,6 +22,8 @@ SELECT
     sumIf(value3, predicate_value),
     sumIf(value4, predicate_value)
 FROM test_table_unsigned_values GROUP BY id ORDER BY id;
+DROP TABLE test_table_unsigned_values;
+DROP TABLE IF EXISTS test_table_signed_values;
 CREATE TABLE test_table_signed_values
 (
     id UInt64,
@@ -40,6 +43,8 @@ SELECT
     sumIf(value3, predicate_value),
     sumIf(value4, predicate_value)
 FROM test_table_signed_values GROUP BY id ORDER BY id;
+DROP TABLE test_table_signed_values;
+DROP TABLE IF EXISTS test_table_float_values;
 CREATE TABLE test_table_float_values
 (
     id UInt64,
@@ -55,6 +60,8 @@ SELECT
     sumIf(value1, predicate_value),
     sumIf(value2, predicate_value)
 FROM test_table_float_values GROUP BY id ORDER BY id;
+DROP TABLE test_table_float_values;
+DROP TABLE IF EXISTS test_table_nullable_unsigned_values;
 CREATE TABLE test_table_nullable_unsigned_values
 (
     id UInt64,
@@ -74,6 +81,8 @@ SELECT
     sumIf(value3, predicate_value),
     sumIf(value4, predicate_value)
 FROM test_table_nullable_unsigned_values GROUP BY id ORDER BY id;
+DROP TABLE test_table_nullable_unsigned_values;
+DROP TABLE IF EXISTS test_table_nullable_signed_values;
 CREATE TABLE test_table_nullable_signed_values
 (
     id UInt64,
@@ -93,6 +102,8 @@ SELECT
     sumIf(value3, predicate_value),
     sumIf(value4, predicate_value)
 FROM test_table_nullable_signed_values GROUP BY id ORDER BY id;
+DROP TABLE test_table_nullable_signed_values;
+DROP TABLE IF EXISTS test_table_nullable_float_values;
 CREATE TABLE test_table_nullable_float_values
 (
     id UInt64,
@@ -108,6 +119,8 @@ SELECT
     sumIf(value1, predicate_value),
     sumIf(value2, predicate_value)
 FROM test_table_nullable_float_values GROUP BY id ORDER BY id;
+DROP TABLE test_table_nullable_float_values;
+DROP TABLE IF EXISTS test_table_null_specifics;
 CREATE TABLE test_table_null_specifics
 (
     id UInt64,

@@ -1,5 +1,9 @@
 SET join_algorithm = 'partial_merge';
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS nr;
+
 CREATE TABLE t
 (
     x UInt32,
@@ -266,3 +270,7 @@ FROM
 FULL JOIN nr AS r
     USING (lc)
 ORDER BY x ASC;
+
+SYSTEM DROP  TABLE nr;
+
+SYSTEM DROP  TABLE t;

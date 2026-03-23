@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_joinGet;
+
 CREATE TABLE test_joinGet
 (
     a String,
@@ -21,3 +23,7 @@ ENGINE = Join(`any`, `left`, a, b);
 INSERT INTO test_lc;
 
 SELECT joinGet(test_lc, 'c', 'ab', '1');
+
+SYSTEM DROP  TABLE test_joinGet;
+
+SYSTEM DROP  TABLE test_lc;

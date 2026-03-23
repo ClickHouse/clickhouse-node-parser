@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_update_prewhere;
+
 SET mutations_sync = 2;
 
 SET apply_mutations_on_fly = 0;

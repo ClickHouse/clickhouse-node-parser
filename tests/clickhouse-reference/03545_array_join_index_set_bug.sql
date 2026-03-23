@@ -1,3 +1,4 @@
+drop table if exists right;
 CREATE TABLE right
 (
     `array_in_index` Array(String),
@@ -7,7 +8,9 @@ CREATE TABLE right
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
 insert into right select [''], [''], toString(number) from numbers(1000);
+
 SELECT COUNT() AS x
 FROM
 (

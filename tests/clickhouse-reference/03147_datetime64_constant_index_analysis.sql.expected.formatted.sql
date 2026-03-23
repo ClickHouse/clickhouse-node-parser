@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     d DateTime,
@@ -37,3 +39,5 @@ WHERE d <= '2024-01-02';
 SELECT count()
 FROM test
 WHERE d <= toDate('2024-01-02');
+
+SYSTEM DROP  TABLE test;

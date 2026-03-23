@@ -1,5 +1,7 @@
 SET mutations_sync = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -19,6 +21,8 @@ FROM test;
 
 SELECT DISTINCT arrayJoin(JSONSharedDataPaths(json))
 FROM test;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

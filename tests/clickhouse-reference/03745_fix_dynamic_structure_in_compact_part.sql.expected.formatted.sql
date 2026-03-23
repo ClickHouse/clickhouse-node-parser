@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -11,3 +13,5 @@ INSERT INTO test SELECT
     number,
     '{}'
 FROM numbers(10000);
+
+SYSTEM drop  table test;

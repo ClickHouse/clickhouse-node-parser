@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS merge;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE IF NOT EXISTS merge
@@ -16,6 +18,8 @@ FROM merge
 ORDER BY
     _part_index ASC,
     x ASC;
+
+SYSTEM DROP  TABLE merge;
 
 INSERT INTO merge (x) SELECT number AS x
 FROM `system`.numbers

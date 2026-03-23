@@ -7,5 +7,7 @@ $$
 $$);
 select * from format(CSV, '1,2,"[1,2,3]","[[\'abc\'], [], [\'d\', \'e\']]"');
 select * from format(CSV, 'a1 Int32, a2 UInt64, a3 Array(Int32), a4 Array(Array(String))', '1,2,"[1,2,3]","[[\'abc\'], [], [\'d\', \'e\']]"');
+drop table if exists test;
 create table test as format(TSV, 'cust_id UInt128', '20210129005809043707\n123456789\n987654321');
 select * from test;
+drop table test;

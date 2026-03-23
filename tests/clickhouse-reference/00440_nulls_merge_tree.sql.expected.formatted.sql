@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nulls;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE `nulls`
@@ -16,3 +18,5 @@ LIMIT 10000;
 SELECT count()
 FROM `nulls`
 WHERE isNull(x);
+
+SYSTEM DROP  TABLE nulls;

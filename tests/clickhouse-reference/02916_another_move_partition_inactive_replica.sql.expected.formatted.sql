@@ -3,6 +3,14 @@ CREATE DATABASE IF NOT EXISTS shard_0;
 
 CREATE DATABASE IF NOT EXISTS shard_1;
 
+SYSTEM drop  table if exists shard_0.from_1;
+
+SYSTEM drop  table if exists shard_1.from_1;
+
+SYSTEM drop  table if exists shard_0.to;
+
+SYSTEM drop  table if exists shard_1.to;
+
 CREATE TABLE shard_0.from_1
 (
     x UInt32

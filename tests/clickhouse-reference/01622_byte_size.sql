@@ -1,3 +1,4 @@
+drop table if exists test_byte_size_number0;
 create table test_byte_size_number0
 (
     key Int32,
@@ -20,6 +21,7 @@ insert into test_byte_size_number0 values(2, 8, 16, 32, 64, 256, -8, -16, -32, -
 select key, toTypeName(u8), byteSize(u8), toTypeName(u16), byteSize(u16), toTypeName(u32), byteSize(u32), toTypeName(u64), byteSize(u64), toTypeName(u256), byteSize(u256) from test_byte_size_number0 order by key;
 select key, toTypeName(i8), byteSize(i8), toTypeName(i16), byteSize(i16), toTypeName(i32), byteSize(i32), toTypeName(i64), byteSize(i64), toTypeName(i128), byteSize(i128), toTypeName(u256), byteSize(u256) from test_byte_size_number0 order by key;
 select key, toTypeName(f32), byteSize(f32), toTypeName(f64), byteSize(f64) from test_byte_size_number0 order by key;
+drop table if exists test_byte_size_number1;
 create table test_byte_size_number1
 (
     key Int32,
@@ -40,6 +42,7 @@ select key, byteSize(*), toTypeName(date), byteSize(date), toTypeName(dt), byteS
 select 0x1, byteSize(0x1), 0x100, byteSize(0x100), 0x10000, byteSize(0x10000), 0x100000000, byteSize(0x100000000), 0.5, byteSize(0.5), 1e-10, byteSize(1e-10);
 select toDate('2020-01-01'), byteSize(toDate('2020-01-01')), toDateTime('2020-01-01 01:02:03'), byteSize(toDateTime('2020-01-01 01:02:03')), toDateTime64('2020-01-01 01:02:03',3), byteSize(toDateTime64('2020-01-01 01:02:03',3));
 select toTypeName(generateUUIDv4()), byteSize(generateUUIDv4());
+drop table if exists test_byte_size_string;
 create table test_byte_size_string
 (
     key Int32,
@@ -52,6 +55,8 @@ insert into test_byte_size_string values(1, '', 'a', '', 'abcde');
 insert into test_byte_size_string values(2, 'abced', '', 'abcde', '');
 select key, byteSize(*), str1, byteSize(str1), str2, byteSize(str2), fstr1, byteSize(fstr1), fstr2, byteSize(fstr2) from test_byte_size_string order by key;
 select 'constants: ', '', byteSize(''), 'a', byteSize('a'), 'abcde', byteSize('abcde');
+-- simple arrays --
+drop table if exists test_byte_size_array;
 create table test_byte_size_array
 (
     key Int32,
@@ -71,6 +76,8 @@ select key, byteSize(*), uints8, byteSize(uints8), ints8, byteSize(ints8), ints3
 select 'constants:', [], byteSize([]), [1,1], byteSize([1,1]), [-1,-1], byteSize([-1,-1]), toTypeName([256,256]), byteSize([256,256]), toTypeName([1.1,1.1]), byteSize([1.1,1.1]);
 select 'constants:', [toDecimal32(1.1,4),toDecimal32(1.1,4)], byteSize([toDecimal32(1.1,4),toDecimal32(1.1,4)]), [toDate('2020-01-01'),toDate('2020-01-01')], byteSize([toDate('2020-01-01'),toDate('2020-01-01')]);
 select 'constants:', [toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'),toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0')], byteSize([toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'),toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0')]);
+-- complex arrays --
+drop table if exists test_byte_size_complex_array;
 create table test_byte_size_complex_array
 (
     key Int32,
@@ -88,6 +95,8 @@ select 'constants:', [[], [1,2], [0,0x10000]],toTypeName([[], [1,2], [0,0x10000]
 -- select key, byteSize(*), strs, byteSize(strs), str_strs, byteSize(str_strs) from test_byte_size_complex_array order by key;
 select key, byteSize(*), strs, byteSize(strs), str_strs, byteSize(str_strs) from test_byte_size_complex_array order by key;
 select 'constants:', [[], [''], ['','a']], byteSize([[], [''], ['','a']]);
+-- others --
+drop table if exists test_byte_size_other;
 create table test_byte_size_other
 (
     key Int32,
@@ -102,6 +111,8 @@ insert into test_byte_size_other values(3, 256, 'abcde', tuple(256, 'abcde'), 'a
 select key, byteSize(*), opt_int32, byteSize(opt_int32), opt_str, byteSize(opt_str), tuple, byteSize(tuple), strings, byteSize(strings) from test_byte_size_other order by key;
 select 'constants:', NULL, byteSize(NULL), tuple(0x10000, NULL), byteSize(tuple(0x10000, NULL)), tuple(0x10000, toNullable('a')), byteSize(tuple(0x10000, toNullable('a')));
 select 'constants:', toLowCardinality('abced'),toTypeName(toLowCardinality('abced')), byteSize(toLowCardinality('abced'));
+-- more complex fields --
+drop table if exists test_byte_size_more_complex;
 create table test_byte_size_more_complex
 (
     key Int32,

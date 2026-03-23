@@ -14,3 +14,5 @@ WHERE (date_col, id_col) IN (
         SELECT (date_col, id_col)
         FROM dummy_table_03215
     );
+
+SYSTEM DROP  TABLE IF EXISTS dummy_table_03215;

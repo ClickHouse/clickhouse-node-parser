@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_null_array;
+
 CREATE TABLE bloom_filter_null_array
 (
     v Array(LowCardinality(Nullable(String))),

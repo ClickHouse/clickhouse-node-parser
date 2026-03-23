@@ -8,6 +8,9 @@ SET use_skip_indexes_on_data_read = 1;
 
 SET query_plan_text_index_add_hint = 1;
 
+-- Tests profile events for text search setting 'query_plan_text_index_add_hint'
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     s String,
@@ -35,3 +38,5 @@ WHERE current_database = currentDatabase()
     AND type = 'QueryFinish'
     AND like(query, 'SELECT count() FROM tab%')
 ORDER BY event_time_microseconds ASC;
+
+SYSTEM DROP  TABLE tab;

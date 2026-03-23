@@ -15,3 +15,5 @@ SELECT
     OR id = 1
     OR id = 2) AS x
 FROM foo_00234;
+
+SYSTEM DROP  TABLE foo_00234;

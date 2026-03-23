@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_multiple_array_join;
+
 CREATE TABLE test_multiple_array_join
 (
     id UInt64,
@@ -19,3 +21,5 @@ FROM
 ARRAY JOIN person
 ARRAY JOIN properties
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE test_multiple_array_join;

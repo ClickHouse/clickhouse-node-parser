@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS uin_value_details;
 CREATE TABLE uin_value_details
 (
     ds Date,
@@ -14,6 +15,7 @@ insert into uin_value_details (ds, uin, value) select '2023-12-26', number, numb
 insert into uin_value_details (ds, uin, value) select '2023-12-27', number, number from numbers(30000);
 insert into uin_value_details (ds, uin, value) select '2023-12-28', number * 3, number * 3 * number * 3 from numbers(30000);
 insert into uin_value_details (ds, uin, value) select '2023-12-29', number * 3, number * 3 from numbers(30000);
+DROP TABLE IF EXISTS numeric_indexed_vector;
 CREATE TABLE numeric_indexed_vector
 (
     ds Date,

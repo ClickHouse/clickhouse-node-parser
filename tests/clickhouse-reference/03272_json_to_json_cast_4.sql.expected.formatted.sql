@@ -4,6 +4,8 @@ SET enable_analyzer = 1;
 
 SET output_format_native_write_json_as_string = 0;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 2, k1 UInt32, k2 String)
@@ -76,3 +78,5 @@ SELECT
     json2.k6,
     json2.k7
 FROM test;
+
+SYSTEM drop  table test;

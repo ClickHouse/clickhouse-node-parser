@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS alter_test;
+
 CREATE TEMPORARY TABLE alter_test
 (
     a UInt32,

@@ -1,3 +1,7 @@
+-- Tags: no-random-settings
+
+DROP TABLE IF EXISTS buf_dest;
+DROP TABLE IF EXISTS buf;
 CREATE TABLE buf_dest (timestamp DateTime)
 ENGINE = MergeTree PARTITION BY toYYYYMMDD(timestamp)
 ORDER BY (timestamp);

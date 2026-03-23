@@ -213,3 +213,5 @@ SELECT
     'aes-256-gcm' AS mode,
     hex(encrypt(mode, input, key32, iv, 'AAD'))
 FROM encryption_test;
+
+SYSTEM DROP  TABLE encryption_test;

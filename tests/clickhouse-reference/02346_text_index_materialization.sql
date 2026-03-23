@@ -3,6 +3,7 @@
 
 SET enable_full_text_index = 1;
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt64,
@@ -29,3 +30,4 @@ SELECT trim(explain) FROM
 WHERE explain ILIKE '%Granules%';
 -- ------------------------------------------------------------
 SET mutations_sync = 2;
+DROP TABLE tab;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tbl;
+
 CREATE TABLE tbl
 (
     a String,
@@ -23,3 +25,5 @@ SET mutations_sync = 1;
 SELECT *
 FROM tbl
 FORMAT TabSeparatedWithNamesAndTypes;
+
+SYSTEM DROP  TABLE tbl;

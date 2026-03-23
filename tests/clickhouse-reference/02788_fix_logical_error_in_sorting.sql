@@ -1,4 +1,6 @@
 SET allow_deprecated_error_prone_window_functions = 1;
+DROP TABLE IF EXISTS session_events;
+DROP TABLE IF EXISTS event_types;
 CREATE TABLE session_events
 (
     clientId UInt64,
@@ -34,3 +36,5 @@ INSERT INTO event_types SELECT
     number % 2
 FROM numbers(20);
 SET optimize_sorting_by_input_stream_properties = 1;
+DROP TABLE session_events;
+DROP TABLE event_types;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS cube;
+
 CREATE TABLE `cube`
 (
     a String,
@@ -65,3 +67,5 @@ ORDER BY
     b ASC;
 
 SET group_by_two_level_threshold = 1;
+
+SYSTEM DROP  TABLE cube;

@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS t1 SYNC;
+DROP TABLE IF EXISTS t2 SYNC;
+DROP TABLE IF EXISTS t3 SYNC;
 CREATE TABLE t1(k UInt32, v UInt32) ENGINE ReplicatedMergeTree('/parallel_replicas/{database}/test_tbl', 'r1') ORDER BY k settings index_granularity=10;
 CREATE TABLE t2(k UInt32, v UInt32) ENGINE ReplicatedMergeTree('/parallel_replicas/{database}/test_tbl', 'r2') ORDER BY k settings index_granularity=10;
 CREATE TABLE t3(k UInt32, v UInt32) ENGINE ReplicatedMergeTree('/parallel_replicas/{database}/test_tbl', 'r3') ORDER BY k settings index_granularity=10;

@@ -1,5 +1,7 @@
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(a UInt32, max_dynamic_paths = 2)
@@ -73,3 +75,5 @@ SELECT
 FROM test
 GROUP BY json
 ORDER BY toString(json) ASC;
+
+SYSTEM drop  table test;

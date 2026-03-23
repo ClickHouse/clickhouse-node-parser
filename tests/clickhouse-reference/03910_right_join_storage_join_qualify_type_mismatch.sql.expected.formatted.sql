@@ -14,6 +14,10 @@ SET enable_analyzer = 1;
 
 SET query_plan_use_new_logical_join_step = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS right_join;
+
 CREATE TABLE t1
 (
     x Nullable(UInt32),
@@ -38,3 +42,7 @@ FROM
 RIGHT JOIN right_join
     USING (x)
 QUALIFY x = 1;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE right_join;

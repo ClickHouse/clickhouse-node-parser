@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS mv2;
+DROP TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS n1_n2_join;
+DROP TABLE IF EXISTS n1;
+DROP TABLE IF EXISTS n2;
+DROP TABLE IF EXISTS n3;
 CREATE TABLE n1 (key UInt64, value String) ENGINE = MergeTree ORDER BY key SETTINGS index_granularity=1;
 CREATE TABLE n2 (key UInt64, value Int64) ENGINE = MergeTree ORDER BY key SETTINGS index_granularity=1;
 CREATE TABLE n1_n2_join (k UInt64, v1 String, v2 Int64) ENGINE = MergeTree ORDER BY k;
@@ -12,3 +18,9 @@ SET enable_parallel_replicas=1, max_parallel_replicas=3, cluster_for_parallel_re
 -- materailzed view with inner table
 CREATE MATERIALIZED VIEW mv2
 AS SELECT n1.key as k, n1.value as v1, n2.value as v2 from n1 JOIN n2 ON n1.key = n2.key ORDER BY n1.key;
+DROP TABLE mv2;
+DROP TABLE mv;
+DROP TABLE n1_n2_join;
+DROP TABLE n1;
+DROP TABLE n2;
+DROP TABLE n3;

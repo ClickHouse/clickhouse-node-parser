@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists local_table;
+
+SYSTEM drop  table if exists distributed_table;
+
+SYSTEM drop  table if exists distributed_table2;
+
 SET optimize_skip_unused_shards = true;
 
 SET prefer_localhost_replica = 0;

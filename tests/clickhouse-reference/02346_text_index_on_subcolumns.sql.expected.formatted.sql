@@ -1,5 +1,7 @@
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt64,
@@ -17,6 +19,8 @@ SELECT id
 FROM tab
 WHERE hasAllTokens(c0.c1, 'aa aaa')
 SETTINGS force_data_skipping_indices = 'i0';
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

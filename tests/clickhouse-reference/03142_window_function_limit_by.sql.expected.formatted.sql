@@ -21,6 +21,8 @@ ORDER BY `ALL` ASC
 LIMIT 1 BY k
 WINDOW w AS (ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING);
 
+SYSTEM DROP  TABLE error_win_func;
+
 -- https://github.com/ClickHouse/ClickHouse/issues/47217
 CREATE TABLE t
 (
@@ -38,3 +40,5 @@ FROM t
 WHERE st IN ('x', 'y')
 ORDER BY `ALL` ASC
 LIMIT 1 BY m;
+
+SYSTEM DROP  TABLE t;

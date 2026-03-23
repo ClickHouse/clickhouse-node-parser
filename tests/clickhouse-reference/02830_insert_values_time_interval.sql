@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t1;
 CREATE TABLE t1
 (
     c1 DateTime DEFAULT now() NOT NULL,
@@ -7,6 +8,7 @@ CREATE TABLE t1
 ) ENGINE = MergeTree()
 ORDER BY (c1, c2, c3);
 INSERT INTO t1 (c1,c2,c3) VALUES(now() + INTERVAL '1 day 1 hour 1 minute 1 second', now(), now());
+DROP TABLE t1;
 CREATE TABLE t1 (n int, dt DateTime) ENGINE=Memory;
 SET input_format_values_interpret_expressions=0;
 INSERT INTO t1 VALUES (1, toDateTime('2023-07-20 21:53:01') + INTERVAL '1 day 1 hour 1 minute 1 second'), (2, toDateTime('2023-07-20 21:53:01') + INTERVAL '1 day');

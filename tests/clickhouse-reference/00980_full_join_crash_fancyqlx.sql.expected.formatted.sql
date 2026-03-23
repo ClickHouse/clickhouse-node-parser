@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_join;
+
 CREATE TABLE test_join
 (
     date Date,
@@ -47,3 +49,5 @@ FULL JOIN (
 ORDER BY
     id ASC,
     name ASC;
+
+SYSTEM drop  table test_join;

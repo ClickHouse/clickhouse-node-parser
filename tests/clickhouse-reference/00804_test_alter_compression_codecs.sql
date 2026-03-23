@@ -2,6 +2,7 @@
 -- (because the INSERT with 300k rows sometimes takes >5 minutes in msan build, I didn't investigate why)
 
 SET send_logs_level = 'fatal';
+DROP TABLE IF EXISTS alter_compression_codec;
 CREATE TABLE alter_compression_codec (
     somedate Date CODEC(LZ4),
     id UInt64 CODEC(NONE)
@@ -17,10 +18,13 @@ INSERT INTO alter_compression_codec VALUES('2018-01-01', 6, '6');
 SET allow_suspicious_codecs = 1;
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 7, '7');
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 8, '8');
+DROP TABLE IF EXISTS alter_bad_codec;
 CREATE TABLE alter_bad_codec (
     somedate Date CODEC(LZ4),
     id UInt64 CODEC(NONE)
 ) ENGINE = MergeTree() ORDER BY tuple();
+DROP TABLE IF EXISTS large_alter_table_00804;
+DROP TABLE IF EXISTS store_of_hash_00804;
 CREATE TABLE large_alter_table_00804 (
     somedate Date CODEC(ZSTD, ZSTD, ZSTD(12), LZ4HC(12)),
     id UInt64 CODEC(LZ4, ZSTD, NONE, LZ4HC),

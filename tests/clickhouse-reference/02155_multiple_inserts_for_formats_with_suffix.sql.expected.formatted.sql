@@ -1,3 +1,6 @@
+-- Tags: no-fasttest, no-parallel
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     number UInt64
@@ -17,6 +20,8 @@ SETTINGS engine_file_allow_create_multiple_files = 1;
 SELECT *
 FROM test
 ORDER BY number ASC;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

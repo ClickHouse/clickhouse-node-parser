@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 SET max_partitions_per_insert_block = 99999999;
 
 SET compatibility = '23.3';
@@ -33,3 +37,7 @@ FROM
 INNER JOIN t2 AS lo
     ON toInt64OrNull(l.c3) = lo.c4
 FORMAT NULL;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;

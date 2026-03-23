@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table;
+
 CREATE TABLE table
 (
     uid UUID,
@@ -29,3 +31,5 @@ WHERE toDate(date) = toDate('2021-03-24')
 ORDER BY
     uid ASC,
     date ASC;
+
+SYSTEM DROP  TABLE table;

@@ -5,3 +5,4 @@ SET parallel_replicas_for_non_replicated_merge_tree = 1;
 SET parallel_replicas_only_with_analyzer = 0;  -- necessary for CI run with disabled analyzer
 SELECT * FROM parallel_replicas_final FINAL FORMAT Null;
 SET enable_parallel_replicas=2;
+DROP TABLE IF EXISTS parallel_replicas_final;

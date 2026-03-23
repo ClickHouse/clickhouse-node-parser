@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02919_test_table_noarg;
+
 CREATE TABLE `02919_test_table_noarg`
 (
     str String
@@ -11,6 +13,9 @@ FROM (
         LIMIT 100
     );
 
+--
+SYSTEM DROP  TABLE IF EXISTS 02919_test_table_valid_args;
+
 CREATE TABLE `02919_test_table_valid_args`
 (
     str String
@@ -23,6 +28,9 @@ FROM (
         FROM `02919_test_table_valid_args`
         LIMIT 100
     );
+
+--
+SYSTEM DROP  TABLE IF EXISTS 02919_test_table_reuse_args;
 
 CREATE TABLE `02919_test_table_reuse_args`
 (
@@ -56,11 +64,17 @@ FROM (
         LIMIT 100
     );
 
+--
+SYSTEM DROP  TABLE IF EXISTS 02919_test_table_invalid_col_type;
+
 CREATE TABLE `02919_test_table_invalid_col_type`
 (
     str Nullable(Int64)
 )
 ENGINE = FuzzJSON('{"pet":"rat"}', NULL); -- { serverError BAD_ARGUMENTS }
+
+--
+SYSTEM DROP  TABLE IF EXISTS 02919_test_multi_col;
 
 CREATE TABLE `02919_test_multi_col`
 (

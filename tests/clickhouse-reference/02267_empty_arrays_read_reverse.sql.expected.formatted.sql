@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_02267;
+
 CREATE TABLE t_02267
 (
     a Array(String),

@@ -1,3 +1,7 @@
+-- Tags: no-msan
+-- msan: too slow
+SYSTEM DROP  TABLE IF EXISTS tab_00625;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE tab_00625
@@ -23,3 +27,5 @@ INSERT INTO tab_00625 SELECT
     [number + 8190]
 FROM `system`.numbers
 LIMIT 10;
+
+SYSTEM DROP  TABLE tab_00625;

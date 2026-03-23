@@ -1,3 +1,5 @@
+SYSTEM drop  view if exists slow_view1;
+
 CREATE VIEW slow_view1
 AS
 WITH c1 AS (

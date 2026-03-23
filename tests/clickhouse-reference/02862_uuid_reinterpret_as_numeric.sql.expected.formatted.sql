@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_uuid;
+
 CREATE TABLE t_uuid
 (
     x UUID

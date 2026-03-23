@@ -1,3 +1,7 @@
+-- Tags: long
+-- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
+SYSTEM drop  table if exists test_wide_advanced;
+
 CREATE TABLE test_wide_advanced
 (
     json JSON(max_dynamic_paths = 8)
@@ -254,3 +258,5 @@ SELECT
     json
 FROM test_wide_advanced
 FORMAT Null;
+
+SYSTEM drop  table test_wide_advanced;

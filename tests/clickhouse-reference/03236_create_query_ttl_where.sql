@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS ttl;
 CREATE TABLE ttl
 (
     `a` UInt32,
@@ -10,3 +11,4 @@ TTL timestamp + toIntervalSecond(2) WHERE a IN (
     FROM system.numbers
     LIMIT 100000
 );
+DROP TABLE ttl;

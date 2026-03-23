@@ -1,3 +1,4 @@
+drop table if exists aliases_test;
 set allow_deprecated_syntax_for_merge_tree=1;
 create table aliases_test (
 date Date, id UInt64,
@@ -77,3 +78,4 @@ select array,
 struct.d1, struct.a1, struct.a2, struct.a3, struct.a4, struct.a5, struct.a6,
 class.d1, class.a1, class.a2, class.a3, class.a4, class.a5, class.a6
 from aliases_test array join struct as class;
+drop table aliases_test;

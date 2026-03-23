@@ -1,3 +1,8 @@
+-- Tags: long, zookeeper, no-replicated-database, no-shared-merge-tree
+-- Tag no-replicated-database: Old syntax is not allowed
+-- no-shared-merge-tree: implemented replacement
+SYSTEM DROP  TABLE IF EXISTS deduplication;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE deduplication
@@ -11,3 +16,5 @@ INSERT INTO deduplication (x);
 
 SELECT *
 FROM deduplication;
+
+SYSTEM DROP  TABLE deduplication;

@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS h3_indexes;
+
 CREATE TABLE h3_indexes
 (
     h3_index UInt64
@@ -37,6 +40,10 @@ INSERT INTO h3_indexes;
 INSERT INTO h3_indexes;
 
 INSERT INTO h3_indexes;
+
+SYSTEM DROP  TABLE h3_indexes;
+
+SYSTEM DROP  TABLE IF EXISTS h3_geo;
 
 -- compare if the results of h3ToGeo and geoToH3 are the same
 CREATE TABLE h3_geo
@@ -88,3 +95,5 @@ FROM (
             AND abs(input_geo.2 - output_geo.2) < 0.001, 'ok', 'fail') AS result
         FROM h3_geo
     );
+
+SYSTEM DROP  TABLE h3_geo;

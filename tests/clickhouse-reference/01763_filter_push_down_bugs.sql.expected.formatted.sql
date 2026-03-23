@@ -50,6 +50,8 @@ FROM (
     )
 WHERE s2 = '2';
 
+SYSTEM DROP  TABLE IF EXISTS Test;
+
 CREATE TABLE Test
 ENGINE = MergeTree()
 PRIMARY KEY (String1, String2)
@@ -112,6 +114,8 @@ WHERE a = 1
     OR x != 1))
     AND x = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     a UInt8
@@ -129,6 +133,10 @@ FROM
 INNER JOIN t AS t2
     ON t1.a = t2.a
 WHERE t1.a;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
 
 CREATE TABLE t1
 (

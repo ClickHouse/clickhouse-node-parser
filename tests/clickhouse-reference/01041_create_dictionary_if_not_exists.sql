@@ -16,3 +16,5 @@ SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_fo
 LIFETIME(1)
 LAYOUT(FLAT());
 SELECT dictGetFloat64({CLICKHOUSE_DATABASE:String} || '.dict_exists', 'value', toUInt64(1));
+DROP DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict_exists;
+DROP TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict;

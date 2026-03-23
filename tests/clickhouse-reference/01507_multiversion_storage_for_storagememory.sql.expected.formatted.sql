@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     n Int32
@@ -9,3 +11,5 @@ FROM numbers(10);
 
 SELECT *
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;

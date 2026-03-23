@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists num_10m;
+
 CREATE TABLE num_10m
 (
     number UInt64

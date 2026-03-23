@@ -3,6 +3,8 @@ SET automatic_parallel_replicas_mode = 0;
 
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists tab;
+
 CREATE TABLE tab
 (
     id Int32

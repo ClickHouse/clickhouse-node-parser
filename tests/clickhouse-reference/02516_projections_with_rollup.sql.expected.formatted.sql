@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS video_log;
+
+SYSTEM DROP  TABLE IF EXISTS video_log_result__fuzz_0;
+
+SYSTEM DROP  TABLE IF EXISTS rng;
+
 CREATE TABLE video_log
 (
     datetime DateTime,
@@ -79,3 +85,9 @@ LEFT JOIN (
     USING (hour)
 SETTINGS joined_subquery_requires_alias = 0
 FORMAT Null;
+
+SYSTEM DROP  TABLE video_log;
+
+SYSTEM DROP  TABLE video_log_result__fuzz_0;
+
+SYSTEM DROP  TABLE rng;

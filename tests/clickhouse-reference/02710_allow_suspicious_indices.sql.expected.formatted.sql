@@ -1,3 +1,6 @@
+-- Check CREATE TABLE
+SYSTEM DROP  TABLE IF EXISTS tbl;
+
 CREATE TABLE tbl
 (
     id UInt32

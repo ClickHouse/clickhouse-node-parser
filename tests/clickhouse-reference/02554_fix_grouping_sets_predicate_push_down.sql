@@ -2,6 +2,7 @@
 
 -- Specific value doesn't matter, we just need it to be fixed, because it is a part of `EXPLAIN PIPELINE` output.
 SET max_threads = 8;
+DROP TABLE IF EXISTS test_grouping_sets_predicate;
 CREATE TABLE test_grouping_sets_predicate
 (
     day_ Date,
@@ -34,3 +35,4 @@ FROM
     ) AS t
 )
 WHERE type_1 = 'all';
+DROP TABLE test_grouping_sets_predicate;

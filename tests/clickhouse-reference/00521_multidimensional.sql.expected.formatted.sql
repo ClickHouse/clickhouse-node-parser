@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS multidimensional;
+
 CREATE TABLE multidimensional
 (
     x UInt64,
@@ -16,6 +18,8 @@ INSERT INTO multidimensional (t);
 SELECT *
 FROM multidimensional
 ORDER BY t ASC;
+
+SYSTEM DROP  TABLE multidimensional;
 
 CREATE TABLE multidimensional
 (

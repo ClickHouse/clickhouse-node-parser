@@ -1,3 +1,7 @@
+-- Tags: no-fasttest, no-ordinary-database
+-- Vector similarity indexes must reject empty Arrays or Arrays with default values (issue #52258)
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt64,
@@ -10,3 +14,5 @@ ORDER BY id;
 INSERT INTO tab; -- { serverError INCORRECT_DATA }
 
 INSERT INTO tab (id); -- { serverError INCORRECT_DATA }
+
+SYSTEM DROP  TABLE tab;

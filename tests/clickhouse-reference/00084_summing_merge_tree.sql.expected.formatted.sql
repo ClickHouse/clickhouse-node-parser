@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS summing_merge_tree;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE summing_merge_tree
@@ -25,6 +27,8 @@ ORDER BY
     y ASC,
     z ASC;
 
+SYSTEM DROP  TABLE summing_merge_tree;
+
 CREATE TABLE summing_merge_tree
 (
     d Date,
@@ -34,6 +38,9 @@ CREATE TABLE summing_merge_tree
     z Float64
 )
 ENGINE = SummingMergeTree(d, a, 8192, (y, z));
+
+--
+SYSTEM DROP  TABLE IF EXISTS summing;
 
 CREATE TABLE summing
 (
@@ -52,3 +59,5 @@ SELECT
     s
 FROM summing
 ORDER BY k ASC;
+
+SYSTEM DROP  TABLE summing;

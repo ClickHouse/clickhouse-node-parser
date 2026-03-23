@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS b_customers;
+
 CREATE TABLE b_customers
 (
     customer_id Int64,
@@ -18,6 +20,8 @@ INSERT INTO b_customers SELECT
 FROM `system`.numbers
 LIMIT 2; -- will work without this line or LIMIT 1
 
+SYSTEM DROP  TABLE IF EXISTS b_orders;
+
 CREATE TABLE b_orders
 (
     order_id Int64,
@@ -37,6 +41,8 @@ INSERT INTO b_orders SELECT
     'fake'
 FROM b_customers
 GROUP BY first_order_id;
+
+SYSTEM DROP  TABLE IF EXISTS b_addresses;
 
 CREATE TABLE b_addresses
 (

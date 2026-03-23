@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS decimal_sum;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE decimal_sum
 (
@@ -11,3 +12,4 @@ INSERT INTO decimal_sum VALUES ('2001-01-01', 1, -1, -1);
 SELECT * FROM decimal_sum;
 INSERT INTO decimal_sum VALUES ('2001-01-01', -2, 1, 2);
 INSERT INTO decimal_sum VALUES ('2001-01-01', 0, -1, 0);
+drop table decimal_sum;

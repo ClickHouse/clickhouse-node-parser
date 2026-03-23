@@ -2,6 +2,8 @@
 
 SET allow_experimental_prql_dialect = 1;
 SET allow_experimental_kusto_dialect = 1;
+DROP TABLE IF EXISTS shared_test_table;
+DROP TABLE IF EXISTS distributed_test_table;
 CREATE TABLE shared_test_table (id UInt64)
 ENGINE = MergeTree
 ORDER BY (id);
@@ -12,3 +14,5 @@ SELECT id FROM distributed_test_table LIMIT 3;
 SET dialect = 'kusto';
 SET dialect = 'prql';
 SET dialect = 'clickhouse';
+DROP TABLE distributed_test_table;
+DROP TABLE shared_test_table;

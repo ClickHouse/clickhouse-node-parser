@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t1
 (
     c1 DateTime NOT NULL DEFAULT now(),
@@ -9,6 +11,8 @@ ENGINE = MergeTree()
 ORDER BY (c1, c2, c3);
 
 INSERT INTO t1 (c1, c2, c3);
+
+SYSTEM DROP  TABLE t1;
 
 CREATE TABLE t1
 (

@@ -4,6 +4,14 @@ SET convert_query_to_cnf = 0;
 
 SET cross_to_inner_join_rewrite = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
+SYSTEM DROP  TABLE IF EXISTS t3;
+
+SYSTEM DROP  TABLE IF EXISTS t4;
+
 CREATE TABLE t1
 (
     a UInt32,
@@ -616,3 +624,11 @@ ORDER BY
     t2.b ASC,
     t3.b ASC,
     t4.b ASC;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;
+
+SYSTEM DROP  TABLE t3;
+
+SYSTEM DROP  TABLE t4;

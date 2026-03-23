@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists da_memory_efficient_shard;
+
 CREATE TABLE da_memory_efficient_shard
 (
     A Int64,

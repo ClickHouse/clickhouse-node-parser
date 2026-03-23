@@ -1,5 +1,7 @@
 SET single_join_prefer_left_table = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     key UInt64,
@@ -137,6 +139,10 @@ ORDER BY
     exp(key + a) ASC
 SETTINGS enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     id UInt64
@@ -152,3 +158,9 @@ ENGINE = MergeTree()
 ORDER BY id;
 
 SET optimize_redundant_functions_in_order_by = 0;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;
+
+SYSTEM DROP  TABLE test;

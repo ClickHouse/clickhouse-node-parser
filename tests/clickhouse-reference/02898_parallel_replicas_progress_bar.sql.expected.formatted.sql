@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS t1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS t2 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS t3 SYNC;
+
 CREATE TABLE t1
 (
     k UInt32,
@@ -93,3 +99,9 @@ WHERE query_id IN (
     )
     AND like(message, '%Updated total rows to read: added % rows, total 3000 rows%')
     AND event_date >= yesterday();
+
+SYSTEM DROP  TABLE t1 SYNC;
+
+SYSTEM DROP  TABLE t2 SYNC;
+
+SYSTEM DROP  TABLE t3 SYNC;

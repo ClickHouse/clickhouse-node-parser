@@ -1,3 +1,5 @@
+-- String type
+drop table if exists table_map;
 create table table_map (a Map(String, String)) engine = Memory;
 insert into table_map values ({'name':'zhangsan', 'gender':'male'}), ({'name':'lisi', 'gender':'female'});
 select a['name'] from table_map;
@@ -13,6 +15,7 @@ select b from table_map where a = map('name','lisi', 'gender', 'female');
 create table table_map (d DATE, m Map(Int8, UInt256)) ENGINE = MergeTree() order by d SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 insert into table_map values ('2020-01-01', map(1, 0, 2, 1));
 select * from table_map;
+drop table table_map;
 -- Integer type
 
 create table table_map (d DATE, m Map(Int8, Int8)) ENGINE = MergeTree() order by d SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';

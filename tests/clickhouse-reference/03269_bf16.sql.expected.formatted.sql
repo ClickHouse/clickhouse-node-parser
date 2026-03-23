@@ -51,6 +51,9 @@ SELECT
     toTypeName(c),
     toTypeName(d);
 
+-- Tables
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TEMPORARY TABLE t
 (
     n UInt64,
@@ -85,6 +88,9 @@ SELECT
     uniqExact(n),
     uniqExact(x)
 FROM t;
+
+-- MergeTree
+SYSTEM DROP  TABLE t;
 
 CREATE TABLE t
 (

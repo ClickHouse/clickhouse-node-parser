@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS sparse_tuple;
+
 CREATE TABLE sparse_tuple
 (
     id UInt64,

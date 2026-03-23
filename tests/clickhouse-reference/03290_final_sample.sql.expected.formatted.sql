@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_sample_final;
+
 CREATE TABLE t_sample_final
 (
     CounterID UInt32,
@@ -30,3 +32,5 @@ SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_i
 SELECT count()
 FROM t_sample_final FINAL SAMPLE 1/2
 WHERE NOT ignore(*);
+
+SYSTEM DROP  TABLE t_sample_final;

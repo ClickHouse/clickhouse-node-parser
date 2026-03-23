@@ -1,5 +1,7 @@
 SET parallel_replicas_local_plan = 1;
 
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_has_const_array;
+
 CREATE TABLE bloom_filter_has_const_array
 (
     bf String,

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02918_parallel_replicas;
+
 CREATE TABLE `02918_parallel_replicas`
 (
     x String,
@@ -46,3 +48,5 @@ SET use_hedged_requests = 0;
 
 -- { echoOff }
 SET send_logs_level = 'warning';
+
+SYSTEM DROP  TABLE 02918_parallel_replicas;

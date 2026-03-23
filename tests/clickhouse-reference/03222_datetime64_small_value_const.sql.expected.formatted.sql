@@ -47,6 +47,12 @@ CREATE DATABASE IF NOT EXISTS shard_0;
 
 CREATE DATABASE IF NOT EXISTS shard_1;
 
+SYSTEM drop  table if exists shard_0.dt64_03222;
+
+SYSTEM drop  table if exists shard_1.dt64_03222;
+
+SYSTEM drop  table if exists distr_03222_dt64;
+
 CREATE TABLE shard_0.dt64_03222
 (
     id UInt64,
@@ -134,3 +140,7 @@ FROM distr_03222_dt64
 WHERE dt < (
         SELECT toDateTime64('2004-07-20 00:00:00', 3)
     );
+
+SYSTEM drop  database shard_0;
+
+SYSTEM drop  database shard_1;

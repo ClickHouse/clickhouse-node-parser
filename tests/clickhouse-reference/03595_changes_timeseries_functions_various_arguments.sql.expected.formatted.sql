@@ -108,3 +108,7 @@ SELECT timeSeriesChangesToGrid(100, 150, 10, 30)([1, 2, 3]::Array(UInt32), 1.); 
 SELECT timeSeriesResetsToGrid(100, 150, 10, 30)(toDateTime(105), [1., 2., 3.]); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT timeSeriesResetsToGrid(100, 150, 10, 30)([1, 2, 3]::Array(UInt32), 1.); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}
+
+SYSTEM DROP  TABLE ts_data;
+
+SYSTEM DROP  TABLE ts_data_nullable;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     dt String
@@ -11,3 +13,5 @@ INSERT INTO x;
 SELECT *
 FROM x
 WHERE like(dt, '2022-10-01%');
+
+SYSTEM drop  table x;

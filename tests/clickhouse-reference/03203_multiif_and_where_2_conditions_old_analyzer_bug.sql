@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS bugcheck1;
 CREATE TABLE bugcheck1
 ENGINE = MergeTree
 ORDER BY tuple()
@@ -22,3 +23,4 @@ SELECT *,
 FROM (SELECT column_a, column_b FROM bugcheck1)
 WHERE (condition_1 IN ('yes')) AND (condition_2 in ('true'))
 SETTINGS enable_analyzer=1;
+DROP TABLE bugcheck1;

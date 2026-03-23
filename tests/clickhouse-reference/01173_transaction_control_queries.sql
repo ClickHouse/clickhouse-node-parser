@@ -1,3 +1,7 @@
+-- Tags: no-ordinary-database, no-encrypted-storage
+
+drop table if exists mt1;
+drop table if exists mt2;
 create table mt1 (n Int64) engine=MergeTree order by n;
 create table mt2 (n Int64) engine=MergeTree order by n;
 insert into mt1 values (1);
@@ -39,3 +43,6 @@ set transaction snapshot 5; -- { serverError INVALID_TRANSACTION }
 create table m (n int) engine=Memory; -- { serverError NOT_IMPLEMENTED }
 insert into m values (1); -- { serverError NOT_IMPLEMENTED }
 select * from m; -- { serverError INVALID_TRANSACTION }
+drop table m;
+drop table mt1;
+drop table mt2;

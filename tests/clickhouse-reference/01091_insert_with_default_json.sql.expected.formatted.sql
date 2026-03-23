@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS table_with_complex_default;
+
 CREATE TABLE table_with_complex_default
 (
     i Int8,
@@ -7,6 +10,8 @@ CREATE TABLE table_with_complex_default
 ENGINE = TinyLog;
 
 INSERT INTO table_with_complex_default;
+
+SYSTEM DROP  TABLE IF EXISTS test_default_using_alias;
 
 CREATE TABLE test_default_using_alias
 (

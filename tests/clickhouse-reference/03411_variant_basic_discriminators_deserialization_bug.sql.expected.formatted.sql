@@ -1,5 +1,7 @@
 SET max_threads = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Variant(String, Int)
@@ -12,3 +14,5 @@ INSERT INTO t0 (c0);
 
 SELECT c0
 FROM t0;
+
+SYSTEM DROP  TABLE t0;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(e Enum('a' = 1, 'b' = 2))
@@ -12,3 +14,5 @@ FROM test;
 
 SELECT json.e
 FROM test;
+
+SYSTEM drop  table test;

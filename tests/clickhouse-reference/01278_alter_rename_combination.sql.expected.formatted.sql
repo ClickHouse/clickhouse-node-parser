@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS rename_table;
+
 CREATE TABLE rename_table
 (
     key Int32,
@@ -22,6 +24,8 @@ ORDER BY k ASC
 FORMAT TSVWithNames;
 
 SELECT '---polymorphic---';
+
+SYSTEM DROP  TABLE IF EXISTS rename_table_polymorphic;
 
 CREATE TABLE rename_table_polymorphic
 (

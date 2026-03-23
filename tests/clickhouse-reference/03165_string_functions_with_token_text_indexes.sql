@@ -1,4 +1,5 @@
 SELECT '-------- Bloom filter --------';
+DROP TABLE IF EXISTS 03165_token_bf;
 SET enable_full_text_index=1;
 CREATE TABLE 03165_token_bf
 (
@@ -64,6 +65,7 @@ FROM (
 WHERE explain LIKE '%Parts:%';
 SELECT * FROM 03165_token_bf WHERE multiSearchAny(message, [' wx ', 'yz']);
 SET enable_full_text_index = 1;
+DROP TABLE IF EXISTS 03165_token_ft;
 CREATE TABLE 03165_token_ft
 (
     id Int64,

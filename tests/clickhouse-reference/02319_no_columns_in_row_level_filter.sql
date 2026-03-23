@@ -1,3 +1,6 @@
+DROP ROW POLICY IF EXISTS test_filter_policy ON test_table;
+DROP ROW POLICY IF EXISTS test_filter_policy_2 ON test_table;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table (`n` UInt64, `s` String)
 ENGINE = MergeTree
 PRIMARY KEY n ORDER BY n SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
@@ -15,3 +18,6 @@ CREATE ROW POLICY test_filter_policy_2 ON test_table USING (n % 5) >= 3 TO defau
 SELECT count(1) FROM test_table PREWHERE 7 / (n % 5) > 2;
 SELECT count(1) FROM test_table WHERE 7 / (n % 5) > 2;
 SELECT count(1) FROM test_table PREWHERE 7 / (n % 5) > 2 WHERE (n % 33) == 0;
+DROP TABLE test_table;
+DROP ROW POLICY test_filter_policy ON test_table;
+DROP ROW POLICY test_filter_policy_2 ON test_table;

@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS 02501_test;
+DROP TABLE IF EXISTS 02501_dist;
+DROP VIEW IF EXISTS 02501_view;
 -- create local table
 CREATE TABLE 02501_test(`a` UInt64) ENGINE = Memory;
 -- create dist table

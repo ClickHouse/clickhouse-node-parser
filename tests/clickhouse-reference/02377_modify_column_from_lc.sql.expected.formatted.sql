@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t_modify_from_lc_1;
+
+SYSTEM DROP  TABLE IF EXISTS t_modify_from_lc_2;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE t_modify_from_lc_1

@@ -1,4 +1,6 @@
 set optimize_throw_if_noop = 1;
+-- basic test
+drop table if exists simple;
 create table simple (id UInt64,val SimpleAggregateFunction(sum,Double)) engine=AggregatingMergeTree order by id;
 insert into simple select number,number from system.numbers limit 10;
 select * from simple;
@@ -24,9 +26,12 @@ insert into simple values(1,null,null,'2','2.2.2.2', 2, ([1,3], [1,1]), ([1,3], 
 insert into simple values(10,'10',null,'10','10.10.10.10', 4, ([2,3], [1,1]), ([2,3], [3,3]), ([2,3], [3,3]), [], [], {});
 insert into simple values(10,'2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222','10','20','20.20.20.20', 1, ([2, 4], [1,1]), ([2, 4], [4,4]), ([2, 4], [4,4]), [], [], {});
 select toTypeName(nullable_str),toTypeName(nullable_str_respect_nulls),toTypeName(low_str),toTypeName(ip),toTypeName(status), toTypeName(tup), toTypeName(tup_min), toTypeName(tup_max), toTypeName(arr), toTypeName(uniq_arr), toTypeName(map_uniq_arr) from simple limit 1;
+drop table simple;
+drop table if exists with_overflow;
 create table with_overflow (
     id UInt64,
     s SimpleAggregateFunction(sumWithOverflow, UInt8)
 ) engine AggregatingMergeTree order by id;
 insert into with_overflow select 1, 1 from numbers(256);
 select 'with_overflow', * from with_overflow;
+drop table with_overflow;

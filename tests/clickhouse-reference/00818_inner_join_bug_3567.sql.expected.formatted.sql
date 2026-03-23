@@ -2,6 +2,10 @@ SET output_format_pretty_color = 1;
 
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1
 (
     a String,
@@ -65,3 +69,7 @@ ORDER BY
     d ASC,
     t1.a ASC
 FORMAT PrettyCompact;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;

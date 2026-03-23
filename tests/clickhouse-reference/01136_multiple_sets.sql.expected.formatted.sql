@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     project LowCardinality(String)
@@ -23,3 +25,5 @@ WHERE project IN ('val1', 'val2');
 SELECT project IN ('val1', 'val2')
 FROM test
 WHERE project IN ('val1', 'val2');
+
+SYSTEM drop  table test;

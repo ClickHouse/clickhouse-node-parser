@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS users;
 SET session_timezone = 'UTC';
 CREATE TABLE users (uid Int16, d DateTime('UTC'))
 ENGINE = MergeTree ORDER BY uid TTL d + INTERVAL 1 MONTH WHERE uid = 1

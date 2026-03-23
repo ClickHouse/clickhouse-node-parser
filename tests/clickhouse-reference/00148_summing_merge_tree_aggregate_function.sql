@@ -1,3 +1,5 @@
+drop table if exists summing_merge_tree_aggregate_function;
+drop table if exists summing_merge_tree_null;
 ---- partition merge
 set allow_deprecated_syntax_for_merge_tree=1;
 create table summing_merge_tree_aggregate_function (
@@ -18,6 +20,7 @@ select today() as d,
 from numbers(5000)
 group by d, k;
 select count() from summing_merge_tree_aggregate_function;
+drop table summing_merge_tree_aggregate_function;
 create table summing_merge_tree_aggregate_function (
     d materialized today(),
     k UInt64,
@@ -92,3 +95,4 @@ group by d, k;
 -- prime number 53 to avoid resonanse between %3 and %53
 insert into summing_merge_tree_null select number % 3, 1, number % 53 from numbers(999999);
 select k, sum(c), uniqMerge(u) from summing_merge_tree_aggregate_function group by k order by k;
+drop table summing_merge_tree_null;

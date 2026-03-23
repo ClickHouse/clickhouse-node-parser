@@ -1,3 +1,10 @@
+-- Test case for fix: QueryPlan was not initialized error when pushing down filter to Merge table
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
+SYSTEM DROP  TABLE IF EXISTS foo_merge;
+
 CREATE TABLE t1
 (
     Val UInt64
@@ -32,3 +39,9 @@ FROM viewExplain('EXPLAIN', '', (
             enable_join_runtime_filters = 1,
             parallel_replicas_local_plan = 1
     ));
+
+SYSTEM DROP  TABLE foo_merge;
+
+SYSTEM DROP  TABLE t2;
+
+SYSTEM DROP  TABLE t1;

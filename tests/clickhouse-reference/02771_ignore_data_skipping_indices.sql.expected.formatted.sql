@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+SYSTEM DROP  TABLE IF EXISTS data_02771;
+
 CREATE TABLE data_02771
 (
     key Int,
@@ -67,3 +70,5 @@ WHERE notLike(`explain`, '%Expression%')
     AND notLike(`explain`, '%Filter%');
 
 SET enable_analyzer = 1;
+
+SYSTEM DROP  TABLE data_02771;

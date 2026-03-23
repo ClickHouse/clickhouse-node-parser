@@ -5,6 +5,10 @@ SET force_optimize_skip_unused_shards = 2;
 
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM drop  table if exists data_01270;
+
+SYSTEM drop  table if exists dist_01270;
+
 CREATE TABLE data_01270
 (
     key LowCardinality(Int)
@@ -17,3 +21,7 @@ ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01270, key
 SELECT *
 FROM dist_01270
 WHERE key = 1;
+
+SYSTEM drop  table data_01270;
+
+SYSTEM drop  table dist_01270;

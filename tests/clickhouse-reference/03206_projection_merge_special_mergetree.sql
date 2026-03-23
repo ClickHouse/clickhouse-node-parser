@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tp;
 -- test regular merge tree
 CREATE TABLE tp (
     type Int32,
@@ -5,6 +6,7 @@ CREATE TABLE tp (
     PROJECTION p (select sum(eventcnt), type group by type)
 ) engine = MergeTree order by type;
 INSERT INTO tp SELECT number%3, 1 FROM numbers(3);
+DROP TABLE tp;
 CREATE TABLE tp (
     type Int32,
     eventcnt UInt64,

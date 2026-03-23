@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists coords;
+
 CREATE TABLE coords
 (
     x Float32,

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS retention_test;
+
 CREATE TABLE retention_test
 (
     date Date,
@@ -56,3 +58,5 @@ FROM (
         WHERE date IN ('2018-08-06', '2018-08-07', '2018-08-08')
         GROUP BY uid
     );
+
+SYSTEM DROP  TABLE retention_test;

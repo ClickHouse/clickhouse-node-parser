@@ -1,3 +1,11 @@
+-- Based on https://github.com/ClickHouse/ClickHouse/issues/52436
+-- Test that inserts performed via Buffer table engine land into destination table.
+-- { echoOn }
+
+DROP TABLE IF EXISTS null_table;
+DROP TABLE IF EXISTS null_table_buffer;
+DROP TABLE IF EXISTS null_mv;
+DROP VIEW IF EXISTS number_view;
 CREATE TABLE null_table (number UInt64) ENGINE = Null;
 CREATE VIEW number_view as SELECT * FROM numbers(10) as tb;
 CREATE MATERIALIZED VIEW null_mv Engine = Log AS SELECT * FROM null_table LEFT JOIN number_view as tb USING number;

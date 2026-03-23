@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     id UInt64,
@@ -18,3 +21,5 @@ FROM `system`.parts_columns
 WHERE (database = currentDatabase())
     AND (table = 't')
     AND active;
+
+SYSTEM DROP  TABLE t;

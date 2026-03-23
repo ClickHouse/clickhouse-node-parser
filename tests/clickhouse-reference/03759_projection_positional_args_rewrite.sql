@@ -3,6 +3,8 @@
 -- https://s3.amazonaws.com/clickhouse-test-reports/json.html?PR=96357&sha=76567a89617ff50443418c3f4297fab8183d22d5&name_0=PR&name_1=Stress%20test%20%28amd_tsan%29
 
 SET enable_positional_arguments_for_projections = 1;
+-- Test 1: CREATE TABLE with positional GROUP BY in projection
+DROP TABLE IF EXISTS test_proj_positional;
 CREATE TABLE test_proj_positional
 (
     `a` UInt64,
@@ -14,6 +16,7 @@ ORDER BY a;
 INSERT INTO test_proj_positional VALUES (1, 'x'), (2, 'y');
 SET enable_positional_arguments_for_projections = 0;
 SELECT * FROM test_proj_positional ORDER BY a;
+DROP TABLE test_proj_positional;
 CREATE TABLE test_proj_positional
 (
     `a` UInt64,

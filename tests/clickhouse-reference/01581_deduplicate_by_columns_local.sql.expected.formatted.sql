@@ -1,3 +1,8 @@
+--- See also tests/queries/0_stateless/01581_deduplicate_by_columns_replicated.sql
+--- local case
+-- Just in case if previous tests run left some stuff behind.
+SYSTEM DROP  TABLE IF EXISTS source_data;
+
 CREATE TABLE source_data
 (
     pk Int32,
@@ -15,6 +20,8 @@ SELECT
     'TOTAL rows',
     count()
 FROM source_data;
+
+SYSTEM DROP  TABLE IF EXISTS full_duplicates;
 
 -- table with duplicates on MATERIALIZED columns
 CREATE TABLE full_duplicates
@@ -37,6 +44,10 @@ FROM source_data;
 SELECT *
 FROM full_duplicates;
 
+--DROP TABLE full_duplicates;
+-- Now to the partial duplicates when MATERIALIZED column alway has unique value.
+SYSTEM DROP  TABLE IF EXISTS partial_duplicates;
+
 CREATE TABLE partial_duplicates
 (
     pk Int32,
@@ -58,3 +69,9 @@ FROM partial_duplicates;
 
 SELECT *
 FROM partial_duplicates;
+
+SYSTEM DROP  TABLE full_duplicates;
+
+SYSTEM DROP  TABLE partial_duplicates;
+
+SYSTEM DROP  TABLE source_data;

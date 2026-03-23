@@ -3,6 +3,10 @@
 -- Basic tests for vector similarity index stored in compact vs. wide format, respectively full vs. packed parts
 SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to have local plan for parallel replicas
 
+SYSTEM DROP  TABLE IF EXISTS tab_compact_full;
+
+SYSTEM DROP  TABLE IF EXISTS tab_wide_full;
+
 CREATE TABLE tab_compact_full
 (
     id Int32,
@@ -60,3 +64,7 @@ FROM (
     )
 WHERE like(`explain`, '%vector_similarity%')
     OR like(`explain`, '%Granules:%');
+
+SYSTEM DROP  TABLE tab_compact_full;
+
+SYSTEM DROP  TABLE tab_wide_full;

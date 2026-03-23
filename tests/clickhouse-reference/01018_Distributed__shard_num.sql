@@ -4,6 +4,12 @@
 SET max_threads = 1;
 -- data should be inserted into Distributed table synchronously
 SET distributed_foreground_insert = 1;
+DROP TABLE IF EXISTS mem1;
+DROP TABLE IF EXISTS mem2;
+DROP TABLE IF EXISTS mem3;
+DROP TABLE IF EXISTS dist_1;
+DROP TABLE IF EXISTS dist_2;
+DROP TABLE IF EXISTS dist_3;
 CREATE TABLE mem1 (key Int) Engine=Memory();
 INSERT INTO mem1 VALUES (10);
 CREATE TABLE dist_1 AS mem1 Engine=Distributed(test_shard_localhost, currentDatabase(), mem1);

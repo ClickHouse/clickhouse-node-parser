@@ -1,5 +1,7 @@
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_max_types;
+
 CREATE TABLE test_max_types
 (
     d Dynamic(max_types = 5)
@@ -12,6 +14,8 @@ SELECT
     d,
     dynamicType(d)
 FROM test_max_types;
+
+SYSTEM DROP  TABLE IF EXISTS test_nested_dynamic;
 
 CREATE TABLE test_nested_dynamic
 (
@@ -28,6 +32,8 @@ SELECT
     d2,
     dynamicType(d2)
 FROM test_nested_dynamic;
+
+SYSTEM DROP  TABLE IF EXISTS test_rapid_schema;
 
 CREATE TABLE test_rapid_schema
 (
@@ -58,3 +64,9 @@ FROM (
                 FROM numbers(10000)
             )
     );
+
+SYSTEM DROP  TABLE test_max_types;
+
+SYSTEM DROP  TABLE test_nested_dynamic;
+
+SYSTEM DROP  TABLE test_rapid_schema;

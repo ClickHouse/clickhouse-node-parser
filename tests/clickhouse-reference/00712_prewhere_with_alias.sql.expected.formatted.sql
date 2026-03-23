@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists prewhere_alias;
+
 CREATE TABLE prewhere_alias
 (
     a UInt8,

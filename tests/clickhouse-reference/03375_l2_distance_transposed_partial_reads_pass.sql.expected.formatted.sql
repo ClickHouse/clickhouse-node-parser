@@ -12,6 +12,8 @@ SET optimize_qbit_distance_function_reads = true;
 
 SET optimize_qbit_distance_function_reads = false;
 
+SYSTEM DROP  TABLE qbit;
+
 -- https://github.com/ClickHouse/ClickHouse/issues/88362
 CREATE TABLE qbit
 (

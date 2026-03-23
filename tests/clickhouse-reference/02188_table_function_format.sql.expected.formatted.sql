@@ -28,6 +28,8 @@ SET max_block_size = 5;
 SELECT *
 FROM format(CSV, '1,2,"[1,2,3]","[[''abc''], [], [''d'', ''e'']]"');
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test AS format(JSONEachRow, '
 {"a": "Hello", "b": 111}
 {"a": "World", "b": 123}
@@ -38,3 +40,5 @@ CREATE TABLE test AS format(JSONEachRow, '
 
 SELECT *
 FROM test;
+
+SYSTEM drop  table test;

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t1 SYNC;
+DROP TABLE IF EXISTS t2 SYNC;
 CREATE TABLE t1 (x UInt32, s String) engine = ReplicatedMergeTree('/clickhouse/{database}/t1', 'r1') ORDER BY tuple();
 CREATE TABLE t2 (x UInt32, s String) engine = ReplicatedMergeTree('/clickhouse/{database}/t2', 'r1') ORDER BY tuple();
 INSERT INTO t1 (x, s) VALUES (0, 'a1'), (1, 'a2'), (2, 'a3'), (3, 'a4'), (4, 'a5');
@@ -9,3 +11,5 @@ SELECT t1.*, t2.* FROM t1 ANY INNER JOIN t2 USING(x) ORDER BY t1.x, t2.x;
 SELECT t1.*, t2.* FROM t2 ANY INNER JOIN t1 USING(x) ORDER BY t1.x, t2.x;
 SELECT t1.*, t2.* FROM t1 ANY RIGHT JOIN t2 USING(x) ORDER BY t1.x, t2.x;
 SELECT t1.*, t2.* FROM t2 ANY RIGHT JOIN t1 USING(x) ORDER BY t1.x, t2.x;
+DROP TABLE t1 SYNC;
+DROP TABLE t2 SYNC;

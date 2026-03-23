@@ -5,6 +5,18 @@ SET max_threads = 1;
 -- data should be inserted into Distributed table synchronously
 SET distributed_foreground_insert = 1;
 
+SYSTEM DROP  TABLE IF EXISTS mem1;
+
+SYSTEM DROP  TABLE IF EXISTS mem2;
+
+SYSTEM DROP  TABLE IF EXISTS mem3;
+
+SYSTEM DROP  TABLE IF EXISTS dist_1;
+
+SYSTEM DROP  TABLE IF EXISTS dist_2;
+
+SYSTEM DROP  TABLE IF EXISTS dist_3;
+
 CREATE TABLE mem1
 (
     key Int

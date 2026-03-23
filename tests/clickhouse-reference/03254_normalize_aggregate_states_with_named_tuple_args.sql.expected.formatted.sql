@@ -13,6 +13,12 @@ FROM (
     )
 FORMAT JSONEachRow;
 
+SYSTEM DROP  TABLE IF EXISTS users;
+
+SYSTEM DROP  TABLE IF EXISTS users2;
+
+SYSTEM DROP  TABLE IF EXISTS test_mv;
+
 CREATE TABLE users
 (
     id UInt8,

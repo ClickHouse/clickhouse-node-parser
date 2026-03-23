@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists users_items;
+
 CREATE TABLE users_items
 (
     user_id UInt64

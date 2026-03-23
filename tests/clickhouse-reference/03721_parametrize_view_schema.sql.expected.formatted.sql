@@ -31,3 +31,9 @@ FROM 03271_parametrized_v_expl_mismatch(upper_bound = 3); -- { serverError TYPE_
 
 SELECT *
 FROM 03271_parametrized_v_expl(upper_bound = 3);
+
+SYSTEM DROP  VIEW 03271_parametrized_v;
+
+SYSTEM DROP  VIEW 03271_parametrized_v_expl;
+
+SYSTEM DROP  VIEW 03271_parametrized_v_expl_mismatch;

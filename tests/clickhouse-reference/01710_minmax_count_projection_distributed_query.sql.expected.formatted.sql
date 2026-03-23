@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     n int,
@@ -13,3 +15,5 @@ SELECT
     count(n),
     count(s)
 FROM cluster('test_cluster_two_shards', currentDatabase(), t);
+
+SYSTEM drop  table t;

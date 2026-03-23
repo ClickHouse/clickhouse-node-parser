@@ -1,6 +1,10 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/41964
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS ab_12_aaa;
+
+SYSTEM DROP  TABLE IF EXISTS ab_12_bbb;
+
 CREATE TABLE ab_12_aaa
 (
     id String,

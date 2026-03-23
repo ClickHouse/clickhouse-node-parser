@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS union1;
+
+SYSTEM DROP  TABLE IF EXISTS union2;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE union1
@@ -19,3 +24,7 @@ CREATE TABLE union2
     d Int32
 )
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), 'union1');
+
+SYSTEM DROP  TABLE union1;
+
+SYSTEM DROP  TABLE union2;

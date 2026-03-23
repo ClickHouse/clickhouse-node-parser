@@ -1,3 +1,7 @@
+-- Test for crash when LIMIT 0 is used with use_skip_indexes_for_top_k
+-- Regression test for https://github.com/ClickHouse/ClickHouse/issues/95065
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -28,3 +32,5 @@ FROM tab
 ORDER BY v1 ASC
 LIMIT 0
 SETTINGS use_skip_indexes_for_top_k = 1;
+
+SYSTEM DROP  TABLE tab;

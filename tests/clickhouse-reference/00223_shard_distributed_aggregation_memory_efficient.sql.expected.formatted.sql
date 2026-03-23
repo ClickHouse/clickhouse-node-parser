@@ -1,6 +1,8 @@
 -- Tags: distributed
 SET max_block_size = 1000;
 
+SYSTEM DROP  TABLE IF EXISTS numbers_10_00223;
+
 CREATE TABLE numbers_10_00223
 ENGINE = Log AS
 SELECT *
@@ -83,6 +85,8 @@ FROM (
             k1 ASC,
             k2 ASC
     );
+
+SYSTEM DROP  TABLE numbers_10_00223;
 
 SELECT count()
 FROM remote('127.0.0.{2,3}', `system`.one);

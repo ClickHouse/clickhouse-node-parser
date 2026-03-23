@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on AWS
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt32,
@@ -11,3 +15,5 @@ FROM s3Cluster('test_cluster_one_shard_three_replicas_localhost', 'http://localh
 
 SELECT *
 FROM test;
+
+SYSTEM drop  table test;

@@ -3,6 +3,11 @@ SET materialized_views_ignore_errors = 1;
 -- Catch "WriteBuffer is neither finalized nor canceled when destructor is called. No exceptions in flight are detected."
 SET send_logs_level = 'error';
 
+-- First case with exception during reading
+SYSTEM DROP  TABLE IF EXISTS tab;
+
+SYSTEM DROP  TABLE IF EXISTS mv;
+
 CREATE TABLE tab
 (
     c0 Int

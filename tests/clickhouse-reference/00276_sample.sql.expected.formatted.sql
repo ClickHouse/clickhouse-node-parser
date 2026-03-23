@@ -1,3 +1,7 @@
+-- Tags: no-azure-blob-storage
+-- no-azure-blob-storage: too slow
+SYSTEM DROP  TABLE IF EXISTS sample_00276;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 SET min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0;
@@ -586,6 +590,8 @@ FROM (
         HAVING c = 1
         ORDER BY x ASC
     );
+
+SYSTEM DROP  TABLE sample_00276;
 
 SET max_block_size = 8192;
 

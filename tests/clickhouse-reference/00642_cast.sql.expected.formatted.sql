@@ -10,6 +10,8 @@ SELECT CAST(1, 'Enum8(''hello'' = 1,\n\t''world'' = 2)');
 
 SELECT toTimeZone(CAST(1 AS TIMESTAMP), 'UTC');
 
+SYSTEM DROP  TABLE IF EXISTS cast;
+
 CREATE TABLE cast
 (
     x UInt8,
@@ -25,3 +27,5 @@ INSERT INTO cast (x);
 
 SELECT *
 FROM cast;
+
+SYSTEM DROP  TABLE cast;

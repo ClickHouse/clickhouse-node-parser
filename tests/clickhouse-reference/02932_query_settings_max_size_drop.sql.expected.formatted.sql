@@ -3,3 +3,7 @@ ENGINE = MergeTree()
 ORDER BY number AS
 SELECT number
 FROM numbers(1000);
+
+SYSTEM DROP  TABLE test_max_size_drop SETTINGS max_table_size_to_drop = 1; -- { serverError TABLE_SIZE_EXCEEDS_MAX_DROP_SIZE_LIMIT }
+
+SYSTEM DROP  TABLE test_max_size_drop;

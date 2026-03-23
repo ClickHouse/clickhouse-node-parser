@@ -1,5 +1,7 @@
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS qbit_dynamic_test;
+
 CREATE TABLE qbit_dynamic_test
 (
     id UInt32,
@@ -17,3 +19,5 @@ FROM qbit_dynamic_test
 ORDER BY id ASC;
 
 INSERT INTO qbit_dynamic_test;
+
+SYSTEM DROP  TABLE qbit_dynamic_test;

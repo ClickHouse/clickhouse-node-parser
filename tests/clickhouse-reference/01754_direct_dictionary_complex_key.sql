@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS 01754_dictionary_db;
 CREATE DATABASE 01754_dictionary_db;
 CREATE TABLE 01754_dictionary_db.complex_key_simple_attributes_source_table
 (
@@ -30,6 +33,8 @@ SELECT dictGetOrDefault('01754_dictionary_db.direct_dictionary_complex_key_simpl
     dictGetOrDefault('01754_dictionary_db.direct_dictionary_complex_key_simple_attributes', 'value_second', (number, concat('id_key_', toString(number))), toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01754_dictionary_db.direct_dictionary_complex_key_simple_attributes', (number, concat('id_key_', toString(number)))) FROM system.numbers LIMIT 4;
 SELECT * FROM 01754_dictionary_db.direct_dictionary_complex_key_simple_attributes ORDER BY ALL;
+DROP DICTIONARY 01754_dictionary_db.direct_dictionary_complex_key_simple_attributes;
+DROP TABLE 01754_dictionary_db.complex_key_simple_attributes_source_table;
 CREATE TABLE 01754_dictionary_db.complex_key_complex_attributes_source_table
 (
    id UInt64,
@@ -62,3 +67,6 @@ SELECT dictGetOrDefault('01754_dictionary_db.direct_dictionary_complex_key_compl
     dictGetOrDefault('01754_dictionary_db.direct_dictionary_complex_key_complex_attributes', 'value_second', (number, concat('id_key_', toString(number))), toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01754_dictionary_db.direct_dictionary_complex_key_complex_attributes', (number, concat('id_key_', toString(number)))) FROM system.numbers LIMIT 4;
 SELECT * FROM 01754_dictionary_db.direct_dictionary_complex_key_complex_attributes ORDER BY ALL;
+DROP DICTIONARY 01754_dictionary_db.direct_dictionary_complex_key_complex_attributes;
+DROP TABLE 01754_dictionary_db.complex_key_complex_attributes_source_table;
+DROP DATABASE 01754_dictionary_db;

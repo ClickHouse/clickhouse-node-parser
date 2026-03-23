@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     s String
@@ -11,3 +13,5 @@ FROM numbers(1);
 
 SELECT *
 FROM test;
+
+SYSTEM drop  table test;

@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  DATABASE IF EXISTS test_01516;
+
 SET allow_deprecated_database_ordinary = 1;
 
 -- Creation of a database with Ordinary engine emits a warning.
@@ -8,6 +10,8 @@ CREATE DATABASE test_01516
 ENGINE = Ordinary; -- Full ATTACH requires UUID with Atomic
 
 USE test_01516;
+
+SYSTEM DROP  TABLE IF EXISTS primary_key_test;
 
 CREATE TABLE primary_key_test
 (
@@ -21,6 +25,8 @@ INSERT INTO primary_key_test;
 
 SELECT *
 FROM primary_key_test FINAL;
+
+SYSTEM DROP  TABLE primary_key_test;
 
 CREATE TABLE primary_key_test
 (
@@ -79,3 +85,5 @@ FROM primary_key_test FINAL
 ORDER BY
     v1 ASC,
     v2 ASC;
+
+SYSTEM DROP  DATABASE test_01516;

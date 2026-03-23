@@ -31,6 +31,17 @@
 -- { echoOn }
 SET enable_analyzer = 1;
 
+--
+-- Some examples with a tree
+--
+-- department structure represented here is as follows:
+--
+-- ROOT-+->A-+->B-+->C
+--      |         |
+--      |         +->D-+->F
+--      +->E-+->G
+SYSTEM DROP  TABLE IF EXISTS department;
+
 CREATE TABLE department
 (
     id UInt64,

@@ -5,6 +5,8 @@
 -- such pre-join filters are not produced. It also validates join-order-dependent pushdown
 SET enable_analyzer=1;
 SET enable_join_runtime_filters=0;
+DROP TABLE IF EXISTS tp1;
+DROP TABLE IF EXISTS tp2;
 CREATE TABLE tp1 (k Int32, a Int32) ENGINE = MergeTree() ORDER BY k;
 CREATE TABLE tp2 (k Int32, x Int32) ENGINE = MergeTree() ORDER BY k;
 INSERT INTO tp1 VALUES (1,10),(2,20),(3,30),(4,40),(5,50),(6,60);
@@ -67,6 +69,12 @@ FROM tp1 AS t1
 JOIN tp2 AS t2 ON t1.k = t2.k
 WHERE (t1.k IN (1,2)) OR (t1.k IN (3,4))
 ORDER BY t1.k;
+DROP TABLE tp1;
+DROP TABLE tp2;
+---------- CASE D ----------
+
+DROP TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table2;
 CREATE TABLE table1 (a UInt32, b String) ENGINE = Memory;
 CREATE TABLE table2 (c UInt32, d String) ENGINE = Memory;
 INSERT INTO table1 VALUES (5, 'a5'), (6, 'a6'), (7, 'a7'), (10, 'a10');
@@ -92,6 +100,8 @@ WHERE (a > 0) AND (c > 0)
   AND ( ((a > 5) AND (c < 10)) OR ((a > 6) AND (c < 11)) )
 ORDER BY a, c
 FORMAT TSV;
+DROP TABLE table1;
+DROP TABLE table2;
 SELECT n1.number, n2.number
 FROM numbers(6) AS n1, numbers(6) AS n2
 WHERE ((n1.number = 1 AND n2.number = 2) OR (n1.number = 3 AND n2.number = 4) OR (n1.number = 5))

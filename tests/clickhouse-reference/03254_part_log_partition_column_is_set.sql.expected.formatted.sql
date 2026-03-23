@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x UInt8,
@@ -18,6 +20,8 @@ SET mutations_sync = 1;
 SELECT *
 FROM test
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE test SYNC;
 
 -- SELECT * FROM system.part_log WHERE database = currentDatabase() FORMAT Vertical;
 SELECT DISTINCT throwIf(empty(`partition`))

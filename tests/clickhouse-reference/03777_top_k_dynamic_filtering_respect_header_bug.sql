@@ -1,3 +1,4 @@
+drop table if exists logs;
 CREATE TABLE logs
 (
     `a` int,
@@ -12,6 +13,7 @@ AS SELECT
     number,
     number
 FROM numbers(1);
+
 SELECT a,b,c
 FROM logs
 WHERE a > 0

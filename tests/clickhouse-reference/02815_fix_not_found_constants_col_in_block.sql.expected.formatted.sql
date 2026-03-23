@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     vkey UInt32,
@@ -26,3 +28,5 @@ FROM t0 AS ref_2
 ORDER BY
     c_2_0 ASC,
     c_2_1 ASC;
+
+SYSTEM DROP  TABLE t0;

@@ -20,3 +20,5 @@ SELECT
     *
 FROM mt
 WHERE d = '1970-01-01';
+
+SYSTEM DROP  TABLE mt;

@@ -1,3 +1,6 @@
+-- Tags: long, no-random-settings, no-tsan, no-asan, no-msan, no-object-storage
+SYSTEM DROP  TABLE IF EXISTS t_read_in_order_2;
+
 CREATE TABLE t_read_in_order_2
 (
     id UInt64,
@@ -23,3 +26,5 @@ SELECT *
 FROM t_read_in_order_2
 ORDER BY id ASC
 FORMAT Null;
+
+SYSTEM DROP  TABLE t_read_in_order_2;

@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -45,3 +47,6 @@ FROM test_table AS test_table_alias
 SETTINGS
     asterisk_include_alias_columns = 1,
     asterisk_include_materialized_columns = 1;
+
+-- { echoOff }
+SYSTEM DROP  TABLE test_table;

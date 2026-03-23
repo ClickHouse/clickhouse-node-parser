@@ -1,3 +1,7 @@
+-- Test for ORDER BY ... LIMIT n optimization (top-K) - dynamic PREWHERE filtering will be used to skip rows
+-- Tags: long, no-tsan, no-asan, no-msan, no-s3-storage
+SYSTEM DROP  TABLE IF EXISTS tab1;
+
 CREATE TABLE tab1
 (
     id UInt32,

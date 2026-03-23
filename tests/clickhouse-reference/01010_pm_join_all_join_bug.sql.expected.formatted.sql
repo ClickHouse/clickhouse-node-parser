@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ints;
+
 CREATE TABLE ints
 (
     i64 Int64,
@@ -42,3 +44,5 @@ RIGHT JOIN (
         FROM numbers(2)
     ) AS t2
     USING (s); -- { serverError NOT_FOUND_COLUMN_IN_BLOCK, UNKNOWN_IDENTIFIER }
+
+SYSTEM DROP  TABLE ints;

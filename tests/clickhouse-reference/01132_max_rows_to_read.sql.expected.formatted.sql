@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS row_limits_test;
+
 SET max_block_size = 10;
 
 SET max_rows_to_read = 20;
@@ -32,6 +34,13 @@ FROM numbers(31);
 SET max_block_size = 11;
 
 SET max_block_size = 9;
+
+-- When reaching row limits, make sure we don't do a large amount of range scans and continue
+-- processing all parts when we don't need to. For instance, we create 3 parts below with 10,000 rows in each
+-- and we have a row limit <= 1000, we shouldn't exceed this value when max_threads = 1.
+-- (process_part in MergeTreeDataSelectExecutor uses a thread pool the size of max_threads to read data,
+-- so we can exceed it slightly if max_threads > 1, but we'll still prevent a lot of scans and part processing)
+SYSTEM DROP  TABLE IF EXISTS row_limits_fail_fast;
 
 CREATE TABLE row_limits_fail_fast
 (
@@ -114,3 +123,5 @@ WHERE key < 100000; -- { serverError TOO_MANY_ROWS }
 SELECT count()
 FROM row_limits_fail_fast
 WHERE key < 400;
+
+SYSTEM DROP  TABLE row_limits_fail_fast;

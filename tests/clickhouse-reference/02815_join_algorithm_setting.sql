@@ -1,3 +1,7 @@
+-- Tags: use-rocksdb
+
+DROP TABLE IF EXISTS rdb;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE rdb ( `key` UInt32, `value` String )
 ENGINE = EmbeddedRocksDB PRIMARY KEY key;
 INSERT INTO rdb VALUES (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd'), (5, 'e');
@@ -28,6 +32,8 @@ SELECT countIf(explain like '%Algorithm: GraceHashJoin%'), countIf(explain like 
 );
 SET join_algorithm = 'grace_hash, hash, auto';
 SELECT value = 'grace_hash,hash,auto' FROM system.settings WHERE name = 'join_algorithm';
+DROP DICTIONARY IF EXISTS dict;
+DROP TABLE IF EXISTS src;
 CREATE TABLE src (id UInt64, s String) ENGINE = MergeTree ORDER BY id
 AS SELECT number, toString(number) FROM numbers(1000000);
 CREATE DICTIONARY dict(

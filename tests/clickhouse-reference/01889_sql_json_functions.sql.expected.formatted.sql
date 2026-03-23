@@ -149,6 +149,8 @@ SELECT JSON_EXISTS('{"a":[{"b":1},{"c":2}]}', '$.a[*].f');
 
 SELECT JSON_EXISTS('{"a":[[{"b":1}, {"g":1}],[{"h":1},{"y":1}]]}', '$.a[*][0].h');
 
+SYSTEM DROP  TABLE IF EXISTS 01889_sql_json;
+
 CREATE TABLE `01889_sql_json`
 (
     id UInt8,
@@ -174,3 +176,5 @@ SELECT
     JSON_VALUE(json, '$.friends[0]')
 FROM `01889_sql_json`
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE 01889_sql_json;

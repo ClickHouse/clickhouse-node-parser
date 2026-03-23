@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS n1;
+DROP TABLE IF EXISTS n2;
+DROP TABLE IF EXISTS n3;
 SET query_plan_optimize_join_order_limit=16;
 CREATE TABLE n1 (number UInt64) ENGINE = MergeTree ORDER BY number;
 INSERT INTO n1 SELECT number FROM numbers(3);

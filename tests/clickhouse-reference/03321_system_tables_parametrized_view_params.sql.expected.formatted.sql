@@ -1,3 +1,15 @@
+SYSTEM DROP  TABLE IF EXISTS raw_data;
+
+SYSTEM DROP  TABLE IF EXISTS raw_temporary_data;
+
+SYSTEM DROP  TABLE IF EXISTS parameterized_view_one_param;
+
+SYSTEM DROP  TABLE IF EXISTS parameterized_view_multiple_params;
+
+SYSTEM DROP  TABLE IF EXISTS parameterized_view_one_param_temporary;
+
+SYSTEM DROP  TABLE IF EXISTS parameterized_view_multiple_params_temporary;
+
 SELECT '-----------------------------------------';
 
 CREATE TABLE raw_data
@@ -79,3 +91,15 @@ SELECT
 FROM `system`.tables
 WHERE database = currentDatabase()
     AND name = 'parameterized_view_multiple_params_temporary';
+
+SYSTEM DROP  TABLE parameterized_view_one_param;
+
+SYSTEM DROP  TABLE parameterized_view_multiple_params;
+
+SYSTEM DROP  TABLE parameterized_view_one_param_temporary;
+
+SYSTEM DROP  TABLE parameterized_view_multiple_params_temporary;
+
+SYSTEM DROP  TABLE raw_temporary_data;
+
+SYSTEM DROP  TABLE raw_data;

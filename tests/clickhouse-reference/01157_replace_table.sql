@@ -1,3 +1,9 @@
+-- Tags: no-ordinary-database
+
+drop table if exists t;
+drop table if exists dist;
+drop table if exists buf;
+drop table if exists join;
 create table t (n UInt64, s String default 's' || toString(n)) engine=Memory;
 create table dist (n int) engine=Distributed(test_shard_localhost, currentDatabase(), t);
 create table buf (n int) engine=Buffer(currentDatabase(), dist, 1, 10, 100, 10, 100, 1000, 1000);
@@ -14,3 +20,7 @@ select * from numbers(10) as t any join join on t.number=join.n order by n;
 -- table is not replaced if select fails
 insert into t(n) values (4);
 select name from system.tables where database=currentDatabase() order by name;
+drop table t;
+drop table dist;
+drop table buf;
+drop table join;

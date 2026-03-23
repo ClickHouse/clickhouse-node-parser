@@ -12,6 +12,7 @@ ORDER BY tuple();
 -- do one insert to make sure we can insert into the table
 INSERT INTO test(str, column_with_codec) VALUES ('test', 'test2');
 SELECT str, column_with_alias, valid_column_1, valid_column_2 FROM test;
+DROP TABLE test;
 CREATE TABLE test2
 (
     str String,
@@ -22,6 +23,7 @@ ENGINE = ReplicatedMergeTree('/clickhouse/03224_invalid_alter/{database}/{table}
 ORDER BY tuple();
 INSERT INTO test2(str, column_with_codec) VALUES ('test2', 'test22');
 SELECT str, column_with_alias, valid_column_1, valid_column_2 FROM test2;
+DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier} ON CLUSTER test_shard_localhost ENGINE = Atomic;
 CREATE TABLE test3 ON CLUSTER test_shard_localhost
 (

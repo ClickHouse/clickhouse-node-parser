@@ -6,6 +6,7 @@ SET query_plan_max_limit_for_lazy_materialization = 10;
 SET optimize_read_in_order = 1;
 SET enable_analyzer = 1;
 SET parallel_replicas_local_plan = 1;
+DROP TABLE IF EXISTS test_lazy_read_in_order;
 -- Create a table with sorting key on column 'a'
 CREATE TABLE test_lazy_read_in_order
 (
@@ -123,6 +124,8 @@ FROM test_lazy_read_in_order
 WHERE a >= 0
 ORDER BY a, a + 1
 LIMIT 5;
+-- Additional correctness tests for lazy materialization with read-in-order
+DROP TABLE IF EXISTS test_correctness;
 CREATE TABLE test_correctness
 (
     id    UInt64,

@@ -1,5 +1,7 @@
 SET use_variant_as_common_type = 0;
 
+SYSTEM drop  table if exists test_index;
+
 CREATE TABLE test_index
 (
     date Date

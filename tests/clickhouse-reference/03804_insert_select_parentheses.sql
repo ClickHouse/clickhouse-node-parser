@@ -1,3 +1,7 @@
+-- Test that INSERT SELECT with parentheses around the SELECT part is supported
+-- This was previously rejected by the parser
+
+DROP TABLE IF EXISTS t_insert_select_parens;
 CREATE TABLE t_insert_select_parens (x UInt64) ENGINE = Memory;
 -- Basic case: INSERT SELECT with parentheses
 INSERT INTO t_insert_select_parens (x) (SELECT 1);
@@ -12,3 +16,4 @@ INSERT INTO t_insert_select_parens (x) (SELECT * FROM numbers(5)) INTERSECT (SEL
 INSERT INTO t_insert_select_parens (x) ((SELECT 10));
 -- INSERT SELECT with CTE inside parentheses
 INSERT INTO t_insert_select_parens (x) (WITH cte AS (SELECT 100 AS val) SELECT val FROM cte);
+DROP TABLE t_insert_select_parens;

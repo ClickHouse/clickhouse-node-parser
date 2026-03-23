@@ -1,10 +1,16 @@
 SET send_logs_level = 'fatal';
 SET optimize_on_insert = 0;
+DROP TABLE IF EXISTS no_order;
 CREATE TABLE no_order(a UInt32, b UInt32) ENGINE = MergeTree ORDER BY tuple();
+DROP TABLE no_order;
+DROP TABLE IF EXISTS old_style;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE old_style(d Date, x UInt32) ENGINE MergeTree(d, x, 8192);
+DROP TABLE old_style;
+DROP TABLE IF EXISTS summing;
 CREATE TABLE summing(x UInt32, y UInt32, val UInt32) ENGINE SummingMergeTree ORDER BY (x, y);
 INSERT INTO summing(x, y, z, val) values (1, 2, 0, 10), (1, 2, 1, 30), (1, 2, 2, 40);
 SELECT * FROM summing;
 INSERT INTO summing(x, y, z, val) values (1, 2, 0, 20), (1, 2, 2, 50);
 SELECT * FROM summing FINAL ORDER BY x, y, z;
+DROP TABLE summing;

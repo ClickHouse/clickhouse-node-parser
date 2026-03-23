@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_03143;
 CREATE TABLE test_03143 (
    timestamp DateTime,
    x UInt32 TTL timestamp + INTERVAL 1 MONTH,

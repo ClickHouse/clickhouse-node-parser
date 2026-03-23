@@ -1,3 +1,7 @@
+-- Tags: no-object-storage
+-- Output slightly different plan
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     a Int,
@@ -41,3 +45,5 @@ SELECT sum(a)
 FROM t
 WHERE a IN (0, 3)
     AND b = 0;
+
+SYSTEM drop  table t;

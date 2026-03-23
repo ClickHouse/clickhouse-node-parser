@@ -10,6 +10,8 @@ SET enable_analyzer = 1;
 -- Reading of aggregation states from disk will affect `ReadCompressedBytes`
 SET max_bytes_before_external_group_by = 0, max_bytes_ratio_before_external_group_by = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 -- Statistics are disabled to avoid accounting for them in `ReadCompressedBytes`
 CREATE TABLE t
 (
@@ -99,3 +101,5 @@ FROM (
         ORDER BY event_time_microseconds ASC
     )
 WHERE greatest(compressed_bytes, statistics_input_bytes) / least(compressed_bytes, statistics_input_bytes) > 2;
+
+SYSTEM DROP  TABLE t;

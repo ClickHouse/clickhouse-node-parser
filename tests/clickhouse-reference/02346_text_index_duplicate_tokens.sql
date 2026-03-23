@@ -1,3 +1,8 @@
+-- Tags: no-parallel-replicas
+
+-- Tests queries with duplicate tokens against a text index
+
+DROP TABLE IF EXISTS tab;
 SET enable_analyzer = 1;
 SET enable_full_text_index = 1;
 SET use_skip_indexes_on_data_read = 1;
@@ -17,6 +22,7 @@ SELECT trim(explain) FROM
     EXPLAIN actions = 1 SELECT count() FROM tab WHERE s LIKE '%Hello%' OR s LIKE '%hello%' SETTINGS use_skip_indexes_on_data_read = 1
 )
 WHERE explain LIKE '%Filter column%';
+DROP TABLE tab;
 CREATE TABLE tab
 (
     s String,

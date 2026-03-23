@@ -1,3 +1,5 @@
+drop table if exists t;
+drop table if exists t_mv;
 create table t (x UInt64) engine = MergeTree order by x;
 create materialized view t_mv engine = MergeTree order by tuple() as select uniq(x), bitAnd(x, 255) as y from t group by y;
 set max_bytes_before_external_group_by = 1000000000;

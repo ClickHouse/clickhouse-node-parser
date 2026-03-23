@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists p;
+
 CREATE TABLE p
 (
     d Date,

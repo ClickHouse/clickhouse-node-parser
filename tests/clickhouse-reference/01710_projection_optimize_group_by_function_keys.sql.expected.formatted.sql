@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists proj;
+
 CREATE TABLE proj
 (
     bool_value UInt8,
@@ -21,3 +23,5 @@ ORDER BY bool_value
 PARTITION BY toDate(datetime_value);
 
 INSERT INTO proj;
+
+SYSTEM drop  table proj;

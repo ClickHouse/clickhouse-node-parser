@@ -24,3 +24,7 @@ INSERT INTO tableIn;
 
 SELECT count()
 FROM tableOut;
+
+SYSTEM drop  table tableIn;
+
+SYSTEM drop  table tableOut;

@@ -3,6 +3,8 @@ SELECT hex(SHA256(''));
 
 SELECT hex(SHA256('abc'));
 
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     s FixedString(20)
@@ -15,3 +17,5 @@ LIMIT 20;
 
 SELECT hex(SHA256(s))
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;

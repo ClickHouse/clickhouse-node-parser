@@ -38,6 +38,7 @@ SELECT length(HMAC('sha256', '', '')) = 32;
 CREATE TEMPORARY TABLE hmac_test (message String, key String);
 INSERT INTO hmac_test VALUES ('hello', 'world'), ('foo', 'bar'), ('test', 'key');
 SELECT message, key, hex(HMAC('sha256', message, key)) AS hmac_hex FROM hmac_test ORDER BY message;
+DROP TABLE hmac_test;
 -- Test invalid algorithm (should throw error)
 SELECT HMAC('invalid_algo', 'message', 'key'); -- { serverError BAD_ARGUMENTS }
 -- Test big column

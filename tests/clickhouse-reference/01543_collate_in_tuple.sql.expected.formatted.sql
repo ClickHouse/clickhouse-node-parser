@@ -1,3 +1,10 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS collate_test1;
+
+SYSTEM DROP  TABLE IF EXISTS collate_test2;
+
+SYSTEM DROP  TABLE IF EXISTS collate_test3;
+
 CREATE TABLE collate_test1
 (
     x UInt32,
@@ -60,3 +67,9 @@ FROM collate_test3
 ORDER BY
     x ASC,
     s ASC COLLATE 'ru';
+
+SYSTEM DROP  TABLE collate_test1;
+
+SYSTEM DROP  TABLE collate_test2;
+
+SYSTEM DROP  TABLE collate_test3;

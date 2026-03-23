@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS distributed_tbl;
+DROP TABLE IF EXISTS merge_tree_table;
 CREATE TABLE merge_tree_table
 (
     Date Date,

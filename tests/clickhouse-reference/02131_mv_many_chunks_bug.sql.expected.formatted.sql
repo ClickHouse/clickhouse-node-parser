@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists t_mv;
+
 CREATE TABLE t
 (
     x UInt64

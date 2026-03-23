@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS h3_indexes;
+
 CREATE TABLE h3_indexes
 (
     id int,
@@ -81,3 +84,5 @@ FROM h3_indexes
 ORDER BY id ASC;
 
 SELECT h3Line(0xffffffffffffff, 0xffffffffffffff); -- { serverError INCORRECT_DATA }
+
+SYSTEM DROP  TABLE h3_indexes;

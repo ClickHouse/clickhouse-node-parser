@@ -2,6 +2,8 @@ SET enable_analyzer = 1;
 
 SET optimize_empty_string_comparisons = 0;
 
+SYSTEM DROP  TABLE IF EXISTS 02952_disjunction_optimization;
+
 CREATE TABLE `02952_disjunction_optimization`
 (
     a Int32,
@@ -44,3 +46,5 @@ WHERE (a <> 1
     AND a <> 2
     AND a <> 4)
     OR b = '';
+
+SYSTEM DROP  TABLE 02952_disjunction_optimization;

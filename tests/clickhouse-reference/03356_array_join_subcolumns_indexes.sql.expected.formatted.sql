@@ -7,6 +7,8 @@ SET use_variant_as_common_type = 1;
 
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(a Array(UInt32), b Array(UInt32), c UInt32),
@@ -25,3 +27,5 @@ FROM
     test
 ARRAY JOIN json.b
 WHERE has(json.a, 2);
+
+SYSTEM drop  table test;

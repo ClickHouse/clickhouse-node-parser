@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t2
 (
     k UInt64,
@@ -121,3 +123,5 @@ LEFT JOIN t2
     ON js1.k == t2.k
     OR js1.s == t2.k
 ORDER BY k ASC; -- { serverError NOT_IMPLEMENTED, INCOMPATIBLE_TYPE_OF_JOIN }
+
+SYSTEM DROP  TABLE t2;

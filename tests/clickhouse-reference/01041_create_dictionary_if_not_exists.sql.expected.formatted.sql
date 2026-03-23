@@ -19,3 +19,7 @@ LIFETIME(1)
 LAYOUT(FLAT());
 
 SELECT dictGetFloat64(concat({CLICKHOUSE_DATABASE:String}, '.dict_exists'), 'value', toUInt64(1));
+
+SYSTEM DROP  DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict_exists;
+
+SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict;

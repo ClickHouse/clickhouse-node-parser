@@ -18,6 +18,8 @@ SELECT
     NOT negate(((negate(c1)) AS a2))
 FROM tab;
 
+SYSTEM DROP  TABLE tab;
+
 SELECT 'test'
 SETTINGS max_query_size = 9223372036854775309;
 
@@ -58,6 +60,8 @@ INNER JOIN t2
     ON ((t1.x = t2.x)
     AND (isNull(t1.x)) AS e2);
 
+SYSTEM DROP  TABLE t1, t2;
+
 SELECT
     tuple(1, 'a') AS a1,
     NOT(tuple(1, 'a') AS a1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
@@ -81,6 +85,8 @@ FROM tab
 EXCEPT
 SELECT *
 FROM tab;
+
+SYSTEM DROP  TABLE tab2;
 
 SELECT
     1,

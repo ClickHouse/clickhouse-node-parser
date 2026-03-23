@@ -63,3 +63,9 @@ ORDER BY
     x2 ASC,
     x3 ASC
 LIMIT 100;
+
+SYSTEM drop  table if exists adaptive_spill_03277_1;
+
+SYSTEM drop  table if exists adaptive_spill_03277_2;
+
+SYSTEM drop  table if exists adaptive_spill_03277_3;

@@ -16,3 +16,5 @@ SELECT
     t2,
     t3
 FROM test;
+
+SYSTEM DROP  TABLE test;

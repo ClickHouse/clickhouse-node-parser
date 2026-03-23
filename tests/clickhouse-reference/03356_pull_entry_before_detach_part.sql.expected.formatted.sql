@@ -2,6 +2,8 @@
 -- Forbid fault injection to avoid part name randomization, since we rely on it
 SET insert_keeper_fault_injection_probability = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t1 SYNC;
+
 CREATE TABLE t1
 (
     x UInt32

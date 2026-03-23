@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS using1;
+
+SYSTEM DROP  TABLE IF EXISTS using2;
+
 CREATE TABLE using1
 (
     a UInt8,
@@ -25,6 +29,15 @@ LEFT JOIN (
     ) AS js2
     USING (a, b)
 ORDER BY a ASC;
+
+SYSTEM DROP  TABLE using1;
+
+SYSTEM DROP  TABLE using2;
+
+--
+SYSTEM drop  table if exists persons;
+
+SYSTEM drop  table if exists children;
 
 CREATE TABLE persons
 (
@@ -132,3 +145,7 @@ ORDER BY
     id ASC,
     name ASC,
     childName ASC;
+
+SYSTEM drop  table persons;
+
+SYSTEM drop  table children;

@@ -1,6 +1,11 @@
+-- Tags: no-object-storage, no-fasttest
+-- no-fasttest: It can be slow
+
+drop table if exists data_01643;
 create table data_01643 (key Int) engine=MergeTree() order by key;
 insert into data_01643 values (1);
 select * from data_01643;
+drop table data_01643;
 create table data_01643 (key Int) engine=MergeTree() order by key settings min_rows_for_wide_part=2, fsync_after_insert=1;
 create table data_01643 (key Int) engine=MergeTree() order by key settings min_rows_for_wide_part=2, fsync_after_insert=1, fsync_part_directory=1;
 create table data_01643 (key Int) engine=MergeTree() order by key settings min_bytes_for_wide_part=0, fsync_after_insert=1;

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS mutate_and_zero_copy_replication1;
+DROP TABLE IF EXISTS mutate_and_zero_copy_replication2;
 CREATE TABLE mutate_and_zero_copy_replication1
 (
     a UInt64,
@@ -18,4 +20,5 @@ ORDER BY tuple()
 SETTINGS old_parts_lifetime=0, cleanup_delay_period=300,  max_cleanup_delay_period=300, cleanup_delay_period_random_add=300;
 INSERT INTO mutate_and_zero_copy_replication1 VALUES (1, '1', 1.0);
 SET mutations_sync=2;
+DROP TABLE mutate_and_zero_copy_replication1 SYNC;
 SELECT * FROM mutate_and_zero_copy_replication2 WHERE NOT ignore(*);

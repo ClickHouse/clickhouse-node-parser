@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 03199_fixedstring_array;
+
 CREATE TABLE `03199_fixedstring_array`
 (
     arr Array(LowCardinality(FixedString(8)))
@@ -8,3 +10,5 @@ INSERT INTO `03199_fixedstring_array`;
 
 SELECT has(arr, toFixedString(materialize('a'), 1))
 FROM `03199_fixedstring_array`;
+
+SYSTEM DROP  TABLE 03199_fixedstring_array;

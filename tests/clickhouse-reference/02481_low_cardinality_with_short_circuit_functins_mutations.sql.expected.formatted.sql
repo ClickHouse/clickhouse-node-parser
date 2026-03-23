@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists issue_46128;
+
 CREATE TABLE issue_46128
 (
     id Int64,
@@ -16,3 +18,5 @@ SELECT *
 FROM issue_46128
 WHERE id <= 2
 ORDER BY id ASC;
+
+SYSTEM drop  table issue_46128;

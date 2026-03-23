@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x UInt64,
@@ -48,3 +50,5 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'test'
     AND active;
+
+SYSTEM DROP  TABLE test;

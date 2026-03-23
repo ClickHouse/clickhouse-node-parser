@@ -1,6 +1,8 @@
 -- Tags: long, no-azure-blob-storage
 SET output_format_json_quote_64bit_integers = 0;
 
+SYSTEM drop  table if exists source;
+
 CREATE TABLE source
 (
     json JSON(max_dynamic_paths = 8)
@@ -8,6 +10,8 @@ CREATE TABLE source
 ENGINE = Memory;
 
 INSERT INTO source;
+
+SYSTEM drop  table if exists test_wide_advanced;
 
 CREATE TABLE test_wide_advanced
 (
@@ -265,3 +269,7 @@ SELECT
     json
 FROM test_wide_advanced
 LIMIT 3;
+
+SYSTEM drop  table test_wide_advanced;
+
+SYSTEM drop  table source;

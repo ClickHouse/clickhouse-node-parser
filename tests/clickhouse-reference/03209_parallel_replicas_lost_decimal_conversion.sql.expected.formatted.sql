@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_03209 SYNC;
+
 CREATE TABLE t_03209
 (
     a Decimal(18, 0),
@@ -20,3 +22,5 @@ SELECT *
 FROM t_03209
 WHERE a IN (toDecimal32('33.3000', 4))
 SETTINGS allow_experimental_parallel_reading_from_replicas = 1;
+
+SYSTEM DROP  TABLE t_03209 SYNC;

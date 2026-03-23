@@ -11,6 +11,7 @@ SET max_execution_speed = 10;
 SET timeout_before_checking_execution_speed = 0;
 SET max_block_size = 1;
 CREATE TEMPORARY TABLE times (t DateTime);
+DROP TABLE IF EXISTS t00156_max_execution_speed_sample_merge;
 CREATE TABLE t00156_max_execution_speed_sample_merge (v UInt64);
 INSERT INTO t00156_max_execution_speed_sample_merge SELECT number FROM numbers(28);
 INSERT INTO times SELECT now();

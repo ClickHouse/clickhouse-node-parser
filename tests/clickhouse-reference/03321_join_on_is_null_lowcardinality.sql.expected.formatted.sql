@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
+SYSTEM DROP  TABLE IF EXISTS test2;
+
 SET enable_analyzer = 1;
 
 CREATE TABLE test

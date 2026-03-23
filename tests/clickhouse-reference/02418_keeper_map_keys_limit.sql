@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-fasttest
+
+DROP TABLE IF EXISTS 02418_test SYNC;
 CREATE TABLE 02418_test (key UInt64, value Float64) Engine=KeeperMap('/' || currentDatabase() || '/test2418', 3) PRIMARY KEY(key);
 INSERT INTO 02418_test VALUES (1, 1.1), (2, 2.2);
 SELECT count() FROM 02418_test;
@@ -9,3 +12,5 @@ INSERT INTO 02418_test_another VALUES (4, 4.4);
 SELECT count() FROM 02418_test_another;
 INSERT INTO 02418_test VALUES (1, 1.1);
 INSERT INTO 02418_test VALUES (2, 1.1); -- { serverError LIMIT_EXCEEDED }
+DROP TABLE 02418_test SYNC;
+DROP TABLE 02418_test_another SYNC;

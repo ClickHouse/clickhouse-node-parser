@@ -7,6 +7,8 @@
 -- before being written to the external table.
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab0;
+
 CREATE TABLE tab0
 (
     x UInt32,
@@ -44,3 +46,5 @@ WHERE x GLOBAL IN (
         SELECT toNullable(number)
         FROM numbers(5)
     );
+
+SYSTEM DROP  TABLE tab0;

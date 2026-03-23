@@ -1,3 +1,12 @@
+-- Tags: distributed
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists td1;
+
+SYSTEM drop  table if exists td2;
+
+SYSTEM drop  table if exists td3;
+
 CREATE TABLE t
 (
     val UInt32

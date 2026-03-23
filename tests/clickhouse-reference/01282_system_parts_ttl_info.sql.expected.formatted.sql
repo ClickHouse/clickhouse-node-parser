@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ttl;
+
 CREATE TABLE ttl
 (
     d DateTime
@@ -31,3 +33,5 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'ttl'
     AND active;
+
+SYSTEM DROP  TABLE ttl;

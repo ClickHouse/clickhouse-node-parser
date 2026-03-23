@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+drop database if exists db_01501;
 create database db_01501;
 CREATE TABLE db_01501.table_cache_dict(
 KeyField UInt64,
@@ -63,3 +66,5 @@ SELECT arrayDistinct(groupArray(dictGet('db_01501.cache_dict', 'Decimal64_', toU
 SELECT arrayDistinct(groupArray(dictGet('db_01501.cache_dict', 'Decimal128_', toUInt64(number)))) from numbers(10);
 SELECT arrayDistinct(groupArray(dictGetString('db_01501.cache_dict', 'String_', toUInt64(number)))) from numbers(10);
 SELECT groupArray(dictHas('db_01501.cache_dict', toUInt64(number))) from numbers(10);
+drop dictionary db_01501.cache_dict;
+drop table db_01501.table_cache_dict;

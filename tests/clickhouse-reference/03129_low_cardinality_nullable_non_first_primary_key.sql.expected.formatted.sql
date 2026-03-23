@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS small;
+
 CREATE TABLE small
 (
     dt DateTime,
@@ -15,3 +17,5 @@ FROM numbers(1e2);
 SELECT SUM(dt::int)
 FROM small
 WHERE isNull(user_email);
+
+SYSTEM DROP  TABLE small;

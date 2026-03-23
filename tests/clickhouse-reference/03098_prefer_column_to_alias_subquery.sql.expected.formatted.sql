@@ -1,3 +1,8 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/47552
+SYSTEM DROP  TABLE IF EXISTS clickhouse_alias_issue_1;
+
+SYSTEM DROP  TABLE IF EXISTS clickhouse_alias_issue_2;
+
 CREATE TABLE clickhouse_alias_issue_1
 (
     id bigint,

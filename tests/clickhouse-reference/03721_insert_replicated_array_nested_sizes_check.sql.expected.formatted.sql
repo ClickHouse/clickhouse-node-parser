@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a Array(UInt64)
@@ -14,3 +16,5 @@ ARRAY JOIN range(number + 1);
 
 SELECT *
 FROM test;
+
+SYSTEM drop  table test;

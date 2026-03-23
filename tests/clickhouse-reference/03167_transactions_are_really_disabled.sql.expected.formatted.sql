@@ -1,3 +1,8 @@
+-- Tags: no-encrypted-storage
+SYSTEM DROP  TABLE IF EXISTS mv_table;
+
+SYSTEM DROP  TABLE IF EXISTS null_table;
+
 CREATE TABLE null_table
 (
     str String

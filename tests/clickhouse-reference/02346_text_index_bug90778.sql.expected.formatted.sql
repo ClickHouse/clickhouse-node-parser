@@ -1,6 +1,8 @@
 -- Tags: no-parallel-replicas
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     col LowCardinality(String),
@@ -42,3 +44,5 @@ FROM (
             query_plan_text_index_add_hint = 1
     )
 WHERE like(`explain`, '%Filter column:%');
+
+SYSTEM DROP  TABLE tab;

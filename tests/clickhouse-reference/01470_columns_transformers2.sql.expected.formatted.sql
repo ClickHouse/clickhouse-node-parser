@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS columns_transformers;
+
 CREATE TABLE columns_transformers
 (
     i int,

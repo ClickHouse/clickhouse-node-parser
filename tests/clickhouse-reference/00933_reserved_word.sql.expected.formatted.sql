@@ -1,6 +1,10 @@
+SYSTEM DROP  TABLE IF EXISTS reserved_word_table;
+
 CREATE TABLE reserved_word_table
 (
     index UInt8
 )
 ENGINE = MergeTree
 ORDER BY index;
+
+SYSTEM DROP  TABLE reserved_word_table;

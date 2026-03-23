@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_lwu_replace;
 SET enable_lightweight_update = 1;
 CREATE TABLE t_lwu_replace (c0 Int)
 ENGINE = MergeTree ORDER BY tuple()

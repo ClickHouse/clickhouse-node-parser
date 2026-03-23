@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP TABLE IF EXISTS t_async_insert_skip_settings SYNC;
 CREATE TABLE t_async_insert_skip_settings (id UInt64)
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/tables/t_async_insert_skip_settings', '1')
 ORDER BY id;
@@ -22,3 +25,4 @@ ORDER BY first_update;
 SELECT * FROM t_async_insert_skip_settings ORDER BY id;
 SELECT 'flush queries', uniqExact(flush_query_id) FROM system.asynchronous_insert_log
 WHERE database = currentDatabase() AND table = 't_async_insert_skip_settings';
+DROP TABLE t_async_insert_skip_settings SYNC;

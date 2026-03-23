@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS topk_test;
+
 CREATE TABLE topk_test
 (
     foo UInt64,
@@ -62,3 +64,5 @@ FROM (
 ORDER BY
     `top`.count DESC,
     `top`.item ASC;
+
+SYSTEM DROP  TABLE topk_test;

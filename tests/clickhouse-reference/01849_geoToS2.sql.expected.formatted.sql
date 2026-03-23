@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: needs s2
+SYSTEM DROP  TABLE IF EXISTS s2_indexes;
+
 CREATE TABLE s2_indexes
 (
     s2_index UInt64,

@@ -1,3 +1,8 @@
+-- Tags: stateful
+SYSTEM DROP  TABLE IF EXISTS hits_dst;
+
+SYSTEM DROP  TABLE IF EXISTS hits_buffer;
+
 CREATE TABLE hits_dst AS test.hits
 ENGINE = MergeTree
 ORDER BY (CounterID, EventDate, intHash32(UserID))
@@ -17,3 +22,7 @@ FROM hits_buffer;
 
 SELECT count()
 FROM hits_dst;
+
+SYSTEM DROP  TABLE hits_dst;
+
+SYSTEM DROP  TABLE hits_buffer;

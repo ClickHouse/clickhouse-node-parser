@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     timestamp DateTime('UTC'),
@@ -48,3 +50,10 @@ LEFT JOIN (
     ) AS anything
     ON x = i
 WHERE timestamp >= '2020-05-13T00:00:00'; -- Not using toDateTime in the WHERE also fixes the issue.
+
+/*
+┌─converted───────────┬─original────────────┐
+│ 2020-05-13 13:38:45 │ 2020-05-13 16:38:45 │ <-- toTimeZone works.
+└─────────────────────┴─────────────────────┘
+*/
+SYSTEM DROP  TABLE test;

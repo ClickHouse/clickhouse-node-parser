@@ -1,3 +1,5 @@
+-- Tags: no-random-merge-tree-settings
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (
     `col_\xFF\0привет���` UInt8,
     INDEX `minmax_index_Data2_\xFF\0привет���` `col_\xFF\0привет���` TYPE minmax() GRANULARITY 1
@@ -8,3 +10,4 @@ INSERT INTO test SELECT number FROM numbers(1); -- Compact / packed
 INSERT INTO test SELECT number FROM numbers(10000); -- Wide
 SELECT count() FROM test;
 SELECT min(`col_\xFF\0привет���`), max(`col_\xFF\0привет���`) FROM test;
+DROP TABLE test;

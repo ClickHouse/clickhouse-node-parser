@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS ttl_where;
 CREATE TABLE ttl_where
 (
     `d` Date,
@@ -12,6 +13,8 @@ TTL d + toIntervalYear(10) DELETE WHERE i % 3 = 0,
 INSERT INTO ttl_where SELECT toDate('2000-10-10'), number FROM numbers(10);
 INSERT INTO ttl_where SELECT toDate('1970-10-10'), number FROM numbers(10);
 SELECT * FROM ttl_where ORDER BY d, i;
+DROP TABLE ttl_where;
+DROP TABLE IF EXISTS ttl_group_by;
 CREATE TABLE ttl_group_by
 (
     `d` Date,
@@ -25,3 +28,4 @@ TTL d + toIntervalYear(10) GROUP BY toStartOfMonth(d), i % 10 SET d = any(toStar
 INSERT INTO ttl_group_by SELECT toDate('2000-10-10'), number, number FROM numbers(100);
 INSERT INTO ttl_group_by SELECT toDate('1970-10-10'), number, number FROM numbers(100);
 SELECT * FROM ttl_group_by ORDER BY d, i;
+DROP TABLE ttl_group_by;

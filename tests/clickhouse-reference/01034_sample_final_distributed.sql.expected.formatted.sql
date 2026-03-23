@@ -7,6 +7,8 @@ SET max_parallel_replicas = 3;
 
 SET parallel_replicas_for_non_replicated_merge_tree = 1;
 
+SYSTEM drop  table if exists sample_final;
+
 CREATE TABLE sample_final
 (
     CounterID UInt32,

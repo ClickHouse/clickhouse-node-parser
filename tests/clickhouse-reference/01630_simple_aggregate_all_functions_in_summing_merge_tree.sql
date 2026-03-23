@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS simple_agf_aggregating_mt;
 CREATE TABLE simple_agf_aggregating_mt
 (
     a Int64,
@@ -156,3 +157,4 @@ INSERT INTO simple_agf_aggregating_mt SELECT
     maxMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13))))
 FROM numbers(10000)
 GROUP BY a;
+DROP TABLE simple_agf_aggregating_mt;

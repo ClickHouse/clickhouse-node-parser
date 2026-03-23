@@ -1,3 +1,24 @@
+-- This tests shouldn't deadlock or crash the server
+SYSTEM DROP  DICTIONARY IF EXISTS filesystem_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS kafka_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS mergetree_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS ddlworker_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS storages3_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS background_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS temporaryfiles_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS parts_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS distrcache_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS drop_dict;
+
 CREATE DICTIONARY filesystem_dict
 (
     metric String,
@@ -106,6 +127,26 @@ PRIMARY KEY metric
 SOURCE(clickhouse(QUERY 'SELECT metric, value FROM system.metrics WHERE metric LIKE ''Drop%'''))
 LIFETIME(MIN 0 MAX 1000)
 LAYOUT(COMPLEX_KEY_HASHED());
+
+SYSTEM DROP  TABLE IF EXISTS filesystem_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS kafka_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS mergetree_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS ddlworker_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS storages3_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS background_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS temporaryfiles_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS parts_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS distrcache_metrics;
+
+SYSTEM DROP  TABLE IF EXISTS drop_metrics;
 
 CREATE TABLE background_metrics
 (
@@ -316,3 +357,43 @@ WHERE metric IN (
         SELECT metric
         FROM temporaryfiles_dict
     );
+
+SYSTEM DROP  TABLE filesystem_metrics;
+
+SYSTEM DROP  TABLE kafka_metrics;
+
+SYSTEM DROP  TABLE mergetree_metrics;
+
+SYSTEM DROP  TABLE ddlworker_metrics;
+
+SYSTEM DROP  TABLE storages3_metrics;
+
+SYSTEM DROP  TABLE background_metrics;
+
+SYSTEM DROP  TABLE temporaryfiles_metrics;
+
+SYSTEM DROP  TABLE parts_metrics;
+
+SYSTEM DROP  TABLE distrcache_metrics;
+
+SYSTEM DROP  TABLE drop_metrics;
+
+SYSTEM DROP  DICTIONARY filesystem_dict;
+
+SYSTEM DROP  DICTIONARY kafka_dict;
+
+SYSTEM DROP  DICTIONARY mergetree_dict;
+
+SYSTEM DROP  DICTIONARY ddlworker_dict;
+
+SYSTEM DROP  DICTIONARY storages3_dict;
+
+SYSTEM DROP  DICTIONARY background_dict;
+
+SYSTEM DROP  DICTIONARY temporaryfiles_dict;
+
+SYSTEM DROP  DICTIONARY parts_dict;
+
+SYSTEM DROP  DICTIONARY distrcache_dict;
+
+SYSTEM DROP  DICTIONARY drop_dict;

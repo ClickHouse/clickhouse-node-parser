@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     start Integer,
@@ -23,3 +25,5 @@ FROM test;
 
 SELECT maxIntersectionsPosition(start, `end`)
 FROM test;
+
+SYSTEM DROP  TABLE test;

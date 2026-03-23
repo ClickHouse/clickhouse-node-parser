@@ -1,3 +1,6 @@
+-- Tags: shard
+SYSTEM DROP  TABLE IF EXISTS nested;
+
 CREATE TABLE nested
 (
     n Nested(x UInt8)
@@ -10,6 +13,8 @@ SELECT 1 AS x
 FROM
     remote('127.0.0.2', currentDatabase(), nested)
 ARRAY JOIN n.x;
+
+SYSTEM DROP  TABLE nested;
 
 SELECT
     dummy AS dummy,

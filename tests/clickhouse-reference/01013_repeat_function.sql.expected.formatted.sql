@@ -1,5 +1,7 @@
 SELECT repeat('abc', 10);
 
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     strings String,
@@ -40,3 +42,5 @@ SELECT repeat('abc', u64)
 FROM defaults;
 
 SELECT repeat('Hello, world! ', 3);
+
+SYSTEM DROP  TABLE defaults;

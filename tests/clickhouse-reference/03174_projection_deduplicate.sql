@@ -1,3 +1,5 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/65548
+DROP TABLE IF EXISTS test_projection_deduplicate;
 CREATE TABLE test_projection_deduplicate
 (
     `id` Int32,
@@ -12,3 +14,4 @@ ENGINE = MergeTree
 PRIMARY KEY id;
 INSERT INTO test_projection_deduplicate VALUES (1, 'one');
 SELECT * FROM test_projection_deduplicate;
+DROP TABLE test_projection_deduplicate;

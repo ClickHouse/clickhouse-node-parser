@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-fasttest
+SYSTEM DROP  TABLE IF EXISTS 03549_test SYNC;
+
 CREATE TABLE `03549_test`
 (
     key UInt64,

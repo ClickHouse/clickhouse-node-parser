@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS projections;
+DROP TABLE IF EXISTS projections_2;
+
 CREATE TABLE projections
 (
     key String,
@@ -9,6 +12,7 @@ CREATE TABLE projections
 )
 Engine=MergeTree()
 ORDER BY key;
+
 CREATE TABLE projections_2
 (
     name String,
@@ -23,7 +27,13 @@ CREATE TABLE projections_2
 )
 Engine=MergeTree()
 ORDER BY name;
+
 SELECT * FROM system.projections WHERE database = currentDatabase();
+
 SELECT count(*) FROM system.projections WHERE table = 'projections' AND database = currentDatabase();
 SELECT count(*) FROM system.projections WHERE table = 'projections_2' AND database = currentDatabase();
+
 SELECT name FROM system.projections WHERE type = 'Normal' AND database = currentDatabase();
+
+DROP TABLE projections;
+DROP TABLE projections_2;

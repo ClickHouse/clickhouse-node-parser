@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t_left;
+
+SYSTEM DROP  TABLE IF EXISTS t_right;
+
 CREATE TABLE t_left
 (
     id UInt64,

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS multiword_types;
+
+SYSTEM DROP  TABLE IF EXISTS unsigned_types;
+
 CREATE TABLE multiword_types
 (
     a DOUBLE,
@@ -53,3 +57,7 @@ SELECT
     CAST(42, 'NATIONAL CHARACTER VARYING'),
     CAST(-1 AS TINYINT UNSIGNED),
     CAST(65535, ' sMaLlInT  signed ');
+
+SYSTEM DROP  TABLE multiword_types;
+
+SYSTEM DROP  TABLE unsigned_types;

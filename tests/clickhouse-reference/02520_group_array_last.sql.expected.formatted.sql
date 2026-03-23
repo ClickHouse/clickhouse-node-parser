@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists simple_agg_groupArrayLastArray;
+
 -- { echo }
 -- BAD_ARGUMENTS
 SELECT groupArrayLast(number + 1)

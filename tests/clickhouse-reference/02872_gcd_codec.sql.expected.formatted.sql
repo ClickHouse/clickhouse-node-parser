@@ -327,6 +327,11 @@ INSERT INTO table_gcd_codec_only_zeros;
 SELECT *
 FROM table_gcd_codec_only_zeros;
 
+-- Tests for Bug #56672:
+SYSTEM DROP  TABLE IF EXISTS table_gcd_codec_one_hundred_zeros;
+
+SYSTEM DROP  TABLE IF EXISTS table_gcd_codec_one_hundred_ones;
+
 CREATE TABLE table_gcd_codec_one_hundred_zeros
 (
     a Nullable(Int64) CODEC(GCD, LZ4)
@@ -352,3 +357,7 @@ FROM numbers(100);
 
 SELECT *
 FROM table_gcd_codec_one_hundred_ones;
+
+SYSTEM DROP  TABLE table_gcd_codec_one_hundred_zeros;
+
+SYSTEM DROP  TABLE table_gcd_codec_one_hundred_ones;

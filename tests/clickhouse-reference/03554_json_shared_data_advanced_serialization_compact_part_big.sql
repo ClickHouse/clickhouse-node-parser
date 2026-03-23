@@ -1,3 +1,7 @@
+-- Tags: long, no-msan
+-- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
+
+drop table if exists test_compact_without_substreams_advanced;
 create table test_compact_without_substreams_advanced (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings min_bytes_for_wide_part='200G', min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=0, object_serialization_version='v3', object_shared_data_serialization_version='advanced', object_shared_data_serialization_version_for_zero_level_parts='advanced', object_shared_data_buckets_for_compact_part=2;
 insert into test_compact_without_substreams_advanced select multiIf(
 number < 15000,
@@ -15,6 +19,8 @@ number < 40000,
 '{"a" : {"a1" : 5, "a2" : 6}}'
 ) from numbers(45000);
 select json from test_compact_without_substreams_advanced format Null;
+drop table test_compact_without_substreams_advanced;
+drop table if exists test_compact_advanced;
 create table test_compact_advanced (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings min_bytes_for_wide_part='200G', min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='advanced', object_shared_data_serialization_version_for_zero_level_parts='advanced', object_shared_data_buckets_for_compact_part=2;
 insert into test_compact_advanced select multiIf(
 number < 15000,
@@ -64,3 +70,4 @@ select json.arr[].arr1, json.^a, json.a.a1, json.a.arr[].arr1, json.b, json.arr 
 select json.a.a1, json.a.arr[].arr1, json.b, json.arr, json.^a, json.arr[].arr1 from test_compact_advanced format Null;
 select json, json.arr[].arr1, json.^a, json.a.a1, json.a.arr[].arr1, json.b, json.arr from test_compact_advanced format Null;
 select json.a.a1, json.a.arr[].arr1, json.b, json.arr, json.^a, json.arr[].arr1, json from test_compact_advanced format Null;
+drop table test_compact_advanced;

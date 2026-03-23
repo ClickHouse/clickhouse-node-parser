@@ -1,5 +1,7 @@
 SET exact_rows_before_limit = 1;
 
+SYSTEM DROP  TABLE IF EXISTS users;
+
 CREATE TABLE users
 (
     uid Int16,
@@ -17,6 +19,10 @@ GROUP BY age
 LIMIT 20
 FORMAT JSON
 SETTINGS output_format_write_statistics = 0;
+
+SYSTEM DROP  TABLE users;
+
+SYSTEM DROP  TABLE IF EXISTS test_rows_count_bug_local;
 
 CREATE TABLE test_rows_count_bug_local
 (
@@ -40,3 +46,5 @@ ORDER BY service_name ASC
 LIMIT 20
 FORMAT JSON
 SETTINGS output_format_write_statistics = 0;
+
+SYSTEM DROP  TABLE test_rows_count_bug_local;

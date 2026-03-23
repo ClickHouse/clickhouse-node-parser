@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_00563;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE test_00563
@@ -17,6 +19,8 @@ WHERE toInt32(site_id) IN (100);
 SELECT *
 FROM test_00563
 WHERE toInt32(site_id) IN (100, 101);
+
+SYSTEM DROP  TABLE IF EXISTS join_with_index;
 
 CREATE TABLE join_with_index
 (

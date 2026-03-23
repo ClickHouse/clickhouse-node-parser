@@ -149,6 +149,8 @@ FROM (
 GROUP BY tag
 ORDER BY tag ASC;
 
+SYSTEM DROP  TABLE IF EXISTS 3533_xirr_test;
+
 SELECT round(financialNetPresentValue(0.1, [-10000, 3000, 4200, 6800], false), 6);
 
 SELECT round(financialNetPresentValue(0.08, [8000., 9200., 10000., 12000., 14500.], false), 6) - 40000;

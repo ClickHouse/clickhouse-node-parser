@@ -1,5 +1,9 @@
 SET allow_dynamic_type_in_join_keys = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t0
 (
     c0 Dynamic,
@@ -47,3 +51,7 @@ SET enable_analyzer = 1;
 SET query_plan_use_new_logical_join_step = 0;
 
 SET query_plan_use_new_logical_join_step = 1;
+
+SYSTEM DROP  TABLE t0;
+
+SYSTEM DROP  TABLE t1;

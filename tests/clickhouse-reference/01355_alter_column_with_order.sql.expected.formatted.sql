@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS alter_01355;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE alter_01355

@@ -1,3 +1,6 @@
+-- Tags: shard
+SYSTEM drop  table if exists dist_01757;
+
 CREATE TABLE dist_01757 AS `system`.one
 ENGINE = Distributed(test_cluster_two_shards, `system`, one, dummy);
 
@@ -90,6 +93,8 @@ SELECT *
 FROM dist_01757
 WHERE dummy IN (0, 1)
 SETTINGS optimize_skip_unused_shards_limit = 9223372036854775808; -- { serverError ARGUMENT_OUT_OF_BOUND }
+
+SYSTEM drop  table dist_01757;
 
 -- fuzzed
 SELECT *

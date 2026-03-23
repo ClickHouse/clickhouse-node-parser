@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS requests;
+
 CREATE TABLE requests
 (
     event_time DateTime,
@@ -28,3 +30,5 @@ WHERE t.event_tm > toDate('2000-01-01');
 SELECT *
 FROM requests AS t
 WHERE t.event_tm > toDate('2000-01-01');
+
+SYSTEM DROP  TABLE requests;

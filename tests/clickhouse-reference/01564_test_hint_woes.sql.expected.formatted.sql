@@ -30,3 +30,7 @@ ENGINE = Memory();
 INSERT INTO t0 (c0, c1); -- { error UNKNOWN_IDENTIFIER }
 
 INSERT INTO t0 (c0, c1);
+
+SYSTEM drop  table t0;
+
+SYSTEM drop  table values_01564;

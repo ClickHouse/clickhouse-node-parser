@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS complex_key_simple_attributes_source_short_circuit_table;
+DROP DICTIONARY IF EXISTS cache_dictionary_complex_key_simple_attributes_short_circuit;
 CREATE TABLE complex_key_simple_attributes_source_short_circuit_table
 (
     id UInt64,

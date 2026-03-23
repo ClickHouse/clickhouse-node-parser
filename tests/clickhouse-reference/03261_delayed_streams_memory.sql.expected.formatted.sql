@@ -1,3 +1,6 @@
+-- Tags: long, no-debug, no-asan, no-tsan, no-msan, no-ubsan, no-random-settings, no-random-merge-tree-settings
+SYSTEM DROP  TABLE IF EXISTS t_100_columns;
+
 CREATE TABLE t_100_columns
 (
     id UInt64,
@@ -68,3 +71,5 @@ FROM `system`.query_log
 WHERE current_database = currentDatabase()
     AND like(query, 'INSERT INTO t_100_columns%')
     AND type = 'QueryFinish';
+
+SYSTEM DROP  TABLE t_100_columns;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -16,3 +18,5 @@ SELECT json.`^b`
 FROM test
 ORDER BY id ASC
 FORMAT Null;
+
+SYSTEM drop  table test;

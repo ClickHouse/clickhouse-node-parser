@@ -1,3 +1,6 @@
+-- Tags: no-parallel, no-random-settings, no-random-merge-tree-settings
+SYSTEM DROP  TABLE IF EXISTS t_prewarm_columns;
+
 CREATE TABLE t_prewarm_columns
 (
     a UInt64,
@@ -21,3 +24,5 @@ WHERE current_database = currentDatabase()
     AND type = 'QueryFinish'
     AND like(query, 'SELECT count() FROM t_prewarm_columns%')
 ORDER BY event_time_microseconds ASC;
+
+SYSTEM DROP  TABLE t_prewarm_columns;

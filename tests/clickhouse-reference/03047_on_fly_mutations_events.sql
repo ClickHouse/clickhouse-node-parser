@@ -1,3 +1,8 @@
+-- Tags: no-shared-catalog, no-parallel-replicas
+-- FIXME no-shared-catalog: STOP MERGES will only stop them on the current replica, the second one will continue to merge
+-- no-parallel-replicas: profile events may differ with parallel replicas.
+
+DROP TABLE IF EXISTS t_lightweight_mut_7;
 SET apply_mutations_on_fly = 1;
 SET max_streams_for_merge_tree_reading = 1;
 CREATE TABLE t_lightweight_mut_7 (id UInt64, v UInt64)
@@ -14,3 +19,4 @@ SELECT
 FROM system.query_log
 WHERE current_database = currentDatabase() AND query ILIKE 'SELECT%FROM%t_lightweight_mut_7%' AND type = 'QueryFinish'
 ORDER BY event_time_microseconds;
+DROP TABLE t_lightweight_mut_7;

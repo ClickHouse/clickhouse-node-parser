@@ -4,6 +4,10 @@ SET enable_positional_arguments = 1;
 
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists test;
+
+SYSTEM drop  table if exists test2;
+
 CREATE TABLE test
 (
     x1 Int,
@@ -305,6 +309,8 @@ FROM (
         ORDER BY 1 ASC
     );
 
+SYSTEM drop  table if exists tp2;
+
 CREATE TABLE tp2
 (
     first_col String,
@@ -382,3 +388,5 @@ SELECT
     0 AS data
 FROM test
 GROUP BY data;
+
+SYSTEM drop  table test;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ties;
+
 CREATE TABLE `ties`
 (
     id UInt8
@@ -112,3 +114,5 @@ FROM (
         ORDER BY n ASC
         LIMIT 0.25 WITH TIES
     );
+
+SYSTEM DROP  TABLE ties;

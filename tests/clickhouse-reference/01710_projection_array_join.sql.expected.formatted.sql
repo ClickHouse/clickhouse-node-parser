@@ -1,5 +1,7 @@
 SET optimize_use_projections = 1;
 
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     pk int,
@@ -16,3 +18,5 @@ SELECT a
 FROM
     x
 ARRAY JOIN arr AS a;
+
+SYSTEM drop  table x;

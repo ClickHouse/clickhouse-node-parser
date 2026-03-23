@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     dt DateTime,
@@ -18,6 +21,8 @@ WHERE i = 1;
 SELECT i
 FROM x
 WHERE i = 42;
+
+SYSTEM drop  table x;
 
 CREATE TABLE x
 (

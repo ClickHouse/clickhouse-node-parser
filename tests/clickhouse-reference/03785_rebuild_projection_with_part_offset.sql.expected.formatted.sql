@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a Int32,
@@ -28,3 +30,5 @@ FROM
 INNER JOIN mergeTreeProjection(currentDatabase(), test, p) AS r
     USING (a)
 SETTINGS enable_analyzer = 1;
+
+SYSTEM DROP  TABLE test;

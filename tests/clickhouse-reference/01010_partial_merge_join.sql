@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE t0 (x UInt32, y UInt64) engine = MergeTree ORDER BY (x,y);
 CREATE TABLE t1 (x UInt32, y UInt64) engine = MergeTree ORDER BY (x,y);
 CREATE TABLE t2 (x UInt32, y UInt64) engine = MergeTree ORDER BY (x,y);
@@ -40,3 +43,6 @@ SELECT t1.*, t2.* FROM t1 INNER JOIN t2 ON t1.y = t2.y ORDER BY x;
 SELECT t1.*, t2.* FROM t1 INNER JOIN t2 ON t1.x = t2.x AND t1.y = t2.y ORDER BY x;
 SELECT t1.*, t2.* FROM t1 INNER JOIN t2 ON t1.x = t2.x AND toUInt32(intDiv(t1.y,10)) = t2.x ORDER BY x, t2.y;
 SELECT t1.*, t2.* FROM t1 INNER JOIN t2 ON t1.x = t2.x AND toUInt64(t1.x) = intDiv(t2.y,10) ORDER BY x, t2.y;
+DROP TABLE t0;
+DROP TABLE t1;
+DROP TABLE t2;

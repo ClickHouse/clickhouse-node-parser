@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP TABLE IF EXISTS 03717_table;
 CREATE TABLE 03717_table
 (
     id UInt32
@@ -5,6 +8,7 @@ CREATE TABLE 03717_table
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_table', '1')
 ORDER BY id
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+DROP TABLE IF EXISTS 03717_mv_table_odd;
 CREATE TABLE 03717_mv_table_odd
 (
     value UInt32,
@@ -12,9 +16,11 @@ CREATE TABLE 03717_mv_table_odd
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_odd', '1')
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+DROP TABLE IF EXISTS 03717_mv_odd;
 CREATE MATERIALIZED VIEW 03717_mv_odd
 TO 03717_mv_table_odd AS
 SELECT count() as value FROM 03717_table where id % 2 = 1;
+DROP TABLE IF EXISTS 03717_mv_table_even;
 CREATE TABLE 03717_mv_table_even
 (
     value UInt32,
@@ -22,9 +28,11 @@ CREATE TABLE 03717_mv_table_even
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_even', '1')
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+DROP TABLE IF EXISTS 03717_mv_even;
 CREATE MATERIALIZED VIEW 03717_mv_even
 TO 03717_mv_table_even AS
 SELECT count() as value FROM 03717_table where id % 2 = 0;
+DROP TABLE IF EXISTS 03717_mv_table_all;
 CREATE TABLE 03717_mv_table_all
 (
     value UInt32,
@@ -32,6 +40,7 @@ CREATE TABLE 03717_mv_table_all
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_all', '1')
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+DROP TABLE IF EXISTS 03717_mv_all;
 CREATE MATERIALIZED VIEW 03717_mv_all
 TO 03717_mv_table_all AS
 SELECT count() as value FROM 03717_table;

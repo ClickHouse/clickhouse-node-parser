@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS map_test_index_map_keys;
 CREATE TABLE map_test_index_map_keys
 (
     row_id UInt32,
@@ -26,6 +27,8 @@ SELECT * FROM map_test_index_map_keys WHERE mapContainsKey(map, '');
 SELECT * FROM map_test_index_map_keys WHERE has(map, 'K0') SETTINGS force_data_skipping_indices='map_bloom_filter_keys';
 SELECT * FROM map_test_index_map_keys WHERE has(map, 'K2') SETTINGS force_data_skipping_indices='map_bloom_filter_keys';
 SELECT * FROM map_test_index_map_keys WHERE has(map, '') SETTINGS force_data_skipping_indices='map_bloom_filter_keys';
+DROP TABLE map_test_index_map_keys;
+DROP TABLE IF EXISTS map_test_index_map_values;
 CREATE TABLE map_test_index_map_values
 (
     row_id UInt32,
@@ -48,3 +51,4 @@ SELECT * FROM map_test_index_map_values WHERE map['K3'] NOT IN '';
 SELECT * FROM map_test_index_map_values WHERE mapContainsValue(map, 'V0') SETTINGS force_data_skipping_indices='map_bloom_filter_values';
 SELECT * FROM map_test_index_map_values WHERE mapContainsValue(map, 'V2') SETTINGS force_data_skipping_indices='map_bloom_filter_values';
 SELECT * FROM map_test_index_map_values WHERE mapContainsValue(map, '');
+DROP TABLE map_test_index_map_values;

@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS test_low_cardinality_string;
+
+SYSTEM DROP  TABLE IF EXISTS test_low_cardinality_uuid;
+
+SYSTEM DROP  TABLE IF EXISTS test_low_cardinality_int;
+
 CREATE TABLE test_low_cardinality_string
 (
     data String
@@ -80,3 +86,9 @@ SELECT JSONExtract(data, 'Tuple(
                             d LowCardinality(UUID)
                             )') AS json
 FROM test_low_cardinality_uuid;
+
+SYSTEM DROP  TABLE test_low_cardinality_string;
+
+SYSTEM DROP  TABLE test_low_cardinality_uuid;
+
+SYSTEM DROP  TABLE test_low_cardinality_int;

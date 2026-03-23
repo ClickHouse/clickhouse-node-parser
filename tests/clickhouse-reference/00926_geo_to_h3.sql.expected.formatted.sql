@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS table1;
+
 CREATE TABLE table1
 (
     lat Float64,
@@ -50,3 +53,5 @@ SELECT
 FROM table1
 GROUP BY k
 ORDER BY k ASC;
+
+SYSTEM DROP  TABLE table1;

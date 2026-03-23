@@ -1,6 +1,8 @@
 -- In order version of LIMIT BY works only if analyzer enabled
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS 03701_unsorted, 03701_sorted;
+
 CREATE TABLE `03701_unsorted`
 (
     key UInt32,
@@ -137,6 +139,8 @@ ORDER BY key ASC
 LIMIT 2 BY key
 LIMIT 16;
 
+SYSTEM DROP  TABLE 03701_unsorted;
+
 CREATE TABLE `03701_sorted`
 (
     key UInt32,
@@ -268,3 +272,5 @@ FROM `03701_sorted`
 ORDER BY key ASC
 LIMIT 2 BY key
 LIMIT 16;
+
+SYSTEM DROP  TABLE 03701_sorted;

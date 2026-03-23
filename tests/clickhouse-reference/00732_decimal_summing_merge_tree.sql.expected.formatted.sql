@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS decimal_sum;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE decimal_sum
@@ -19,3 +21,5 @@ FROM decimal_sum;
 INSERT INTO decimal_sum;
 
 INSERT INTO decimal_sum;
+
+SYSTEM drop  table decimal_sum;

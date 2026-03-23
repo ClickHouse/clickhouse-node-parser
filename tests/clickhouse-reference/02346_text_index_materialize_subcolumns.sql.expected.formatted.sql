@@ -1,6 +1,8 @@
 -- Tests that text indexes can be created and used on subcolumns
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     data JSON(a String)
@@ -27,6 +29,8 @@ SELECT count()
 FROM tab
 WHERE data.b::String = 'bbb'
 SETTINGS force_data_skipping_indices = 'b_idx';
+
+SYSTEM DROP  TABLE tab;
 
 -- Test the same, but for compact parts
 CREATE TABLE tab

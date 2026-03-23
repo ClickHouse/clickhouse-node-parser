@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a JSON,
@@ -18,3 +20,5 @@ SELECT
     ab,
     bcd
 FROM test;
+
+SYSTEM drop  table test;

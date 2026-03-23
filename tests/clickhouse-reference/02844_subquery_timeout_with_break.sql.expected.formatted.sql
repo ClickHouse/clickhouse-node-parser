@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     key UInt64,
@@ -22,3 +24,5 @@ WHERE value IN (
         SELECT number
         FROM numbers(1000000000)
     );
+
+SYSTEM DROP  TABLE t;

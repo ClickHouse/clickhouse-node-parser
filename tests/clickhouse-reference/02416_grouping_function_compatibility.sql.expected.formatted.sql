@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test02416;
+
 CREATE TABLE test02416
 (
     a UInt64,
@@ -29,3 +31,6 @@ SELECT
 FROM test02416
 GROUP BY ROLLUP(a, b)
 ORDER BY (amount, a, b) ASC;
+
+-- { echoOff }
+SYSTEM DROP  TABLE test02416;

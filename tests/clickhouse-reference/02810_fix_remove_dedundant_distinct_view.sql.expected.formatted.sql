@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists tab_v;
+
+SYSTEM drop  table if exists tab;
+
 CREATE TABLE tab
 (
     x UInt64,

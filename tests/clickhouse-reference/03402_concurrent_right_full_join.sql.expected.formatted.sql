@@ -6,6 +6,11 @@ SET join_algorithm = 'parallel_hash';
 
 SET query_plan_join_swap_table = 0;
 
+-- 1) Small dataset: RIGHT OUTER ALL
+SYSTEM DROP  TABLE IF EXISTS t_l_small;
+
+SYSTEM DROP  TABLE IF EXISTS t_r_small;
+
 CREATE TABLE t_l_small
 (
     id UInt32,
@@ -48,6 +53,11 @@ ORDER BY
     coalesce(l.id, r.id) ASC,
     r.id ASC;
 
+-- 3) RIGHT ANY with duplicates on left (identical values to avoid nondeterminism), aggregated checks
+SYSTEM DROP  TABLE IF EXISTS t_l_any;
+
+SYSTEM DROP  TABLE IF EXISTS t_r_any;
+
 CREATE TABLE t_l_any
 (
     id UInt32,
@@ -73,6 +83,11 @@ FROM
     t_l_any AS l
 RIGHT JOIN t_r_any AS r
     ON l.id = r.id;
+
+-- 4) RIGHT OUTER with additional ON filter
+SYSTEM DROP  TABLE IF EXISTS t_l_filter;
+
+SYSTEM DROP  TABLE IF EXISTS t_r_filter;
 
 CREATE TABLE t_l_filter
 (
@@ -103,6 +118,11 @@ RIGHT JOIN t_r_filter AS r
     AND like(r.description, 'F%')
 ORDER BY r.id ASC;
 
+-- 5) RIGHT OUTER with null keys on right
+SYSTEM DROP  TABLE IF EXISTS t_l_null;
+
+SYSTEM DROP  TABLE IF EXISTS t_r_null;
+
 CREATE TABLE t_l_null
 (
     id UInt32,
@@ -130,6 +150,11 @@ FROM
 RIGHT JOIN t_r_null AS r
     ON l.id = r.id
 ORDER BY r.d ASC;
+
+-- 6) Composite key RIGHT OUTER ALL
+SYSTEM DROP  TABLE IF EXISTS t_l_cmp;
+
+SYSTEM DROP  TABLE IF EXISTS t_r_cmp;
 
 CREATE TABLE t_l_cmp
 (
@@ -197,6 +222,10 @@ FULL JOIN (
     ON l.id = r.id;
 
 SET allow_experimental_analyzer = 1;
+
+SYSTEM DROP  TABLE IF EXISTS l;
+
+SYSTEM DROP  TABLE IF EXISTS r;
 
 CREATE TABLE l
 (

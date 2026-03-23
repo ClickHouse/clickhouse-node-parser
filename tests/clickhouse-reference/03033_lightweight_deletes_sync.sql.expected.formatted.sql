@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lightweight_deletes;
+
 CREATE TABLE t_lightweight_deletes
 (
     a UInt64
@@ -15,3 +17,5 @@ FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 't_lightweight_deletes'
     AND NOT is_done;
+
+SYSTEM DROP  TABLE t_lightweight_deletes;

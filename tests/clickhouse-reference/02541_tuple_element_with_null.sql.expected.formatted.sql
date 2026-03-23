@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_tuple_element;
+
 CREATE TABLE test_tuple_element
 (
     tuple Tuple(k1 Nullable(UInt64), k2 UInt64)
@@ -14,3 +16,5 @@ SELECT
     tupleElement(tuple, 'k2', 0) AS k2_with_0,
     tupleElement(tuple, 'k2', NULL) AS k2_with_null
 FROM test_tuple_element;
+
+SYSTEM DROP  TABLE test_tuple_element;

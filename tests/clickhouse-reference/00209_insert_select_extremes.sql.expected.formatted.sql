@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_00209;
+
 CREATE TABLE test_00209
 (
     x UInt8
@@ -25,3 +27,5 @@ SELECT
     min(x),
     max(x)
 FROM test_00209;
+
+SYSTEM DROP  TABLE test_00209;

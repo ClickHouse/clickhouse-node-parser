@@ -6,6 +6,8 @@ SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injectio
 -- Prevent remote replicas from skipping index analysis in Parallel Replicas. Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
 SET parallel_replicas_index_analysis_only_on_coordinator = 0;
 
+SYSTEM DROP  TABLE IF EXISTS single_column_bloom_filter;
+
 CREATE TABLE single_column_bloom_filter
 (
     u64 UInt64,
@@ -113,6 +115,8 @@ WHERE indexOf([10, 20, 30], i32) != 0;
 SELECT COUNT()
 FROM single_column_bloom_filter
 WHERE has([100, 200, 300], 200);
+
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_types_test;
 
 CREATE TABLE bloom_filter_types_test
 (
@@ -239,6 +243,8 @@ WHERE str IN (
         SELECT str
         FROM bloom_filter_types_test
     );
+
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_array_types_test;
 
 CREATE TABLE bloom_filter_array_types_test
 (
@@ -515,6 +521,8 @@ SELECT COUNT()
 FROM bloom_filter_array_types_test
 WHERE has(dt64, toDateTime64('1970-01-01 02:00:10', 3, 'Asia/Istanbul'));
 
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_null_types_test;
+
 CREATE TABLE bloom_filter_null_types_test
 (
     order_key UInt64,
@@ -719,6 +727,8 @@ WHERE str IN (
         FROM bloom_filter_null_types_test
     );
 
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_lc_null_types_test;
+
 CREATE TABLE bloom_filter_lc_null_types_test
 (
     order_key UInt64,
@@ -766,6 +776,8 @@ WHERE str IN (
         SELECT str
         FROM bloom_filter_lc_null_types_test
     );
+
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_array_lc_null_types_test;
 
 CREATE TABLE bloom_filter_array_lc_null_types_test
 (
@@ -1178,6 +1190,8 @@ SELECT COUNT()
 FROM bloom_filter_array_lc_null_types_test
 WHERE has(fixed_string, toFixedString('100', 5));
 
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_array_offsets_lc_str;
+
 CREATE TABLE bloom_filter_array_offsets_lc_str
 (
     order_key int,
@@ -1197,6 +1211,8 @@ LIMIT 10000;
 SELECT count()
 FROM bloom_filter_array_offsets_lc_str
 WHERE has(str, 'value');
+
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_array_offsets_str;
 
 CREATE TABLE bloom_filter_array_offsets_str
 (
@@ -1218,6 +1234,8 @@ SELECT count()
 FROM bloom_filter_array_offsets_str
 WHERE has(str, 'value');
 
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_array_offsets_i;
+
 CREATE TABLE bloom_filter_array_offsets_i
 (
     order_key int,
@@ -1237,6 +1255,8 @@ LIMIT 10000;
 SELECT count()
 FROM bloom_filter_array_offsets_i
 WHERE has(i, 99999);
+
+SYSTEM DROP  TABLE IF EXISTS test_bf_indexOf;
 
 CREATE TABLE test_bf_indexOf
 (
@@ -1535,6 +1555,9 @@ WHERE ary[indexOf(ary, 'value3')] = 'value3'
 ORDER BY id ASC
 FORMAT TSV;
 
+-- Test for bug #65597
+SYSTEM DROP  TABLE IF EXISTS test_bf_cast;
+
 CREATE TABLE test_bf_cast
 (
     c Int32,
@@ -1555,3 +1578,5 @@ FROM test_bf_cast
 WHERE CAST(c = 1
     OR c = 9999 AS Bool)
 SETTINGS use_skip_indexes = 1;
+
+SYSTEM DROP  TABLE test_bf_cast;

@@ -1,4 +1,5 @@
 SELECT '----- START -----';
+drop table if exists morton_numbers_02457;
 create table morton_numbers_02457(
     n1 UInt32,
     n2 UInt32,
@@ -28,6 +29,7 @@ from numbers(256-4, 4) n1
     cross join numbers(256-4, 4) n7
     cross join numbers(256-4, 4) n8
 ;
+drop table if exists morton_numbers_1_02457;
 create table morton_numbers_1_02457(
     n1 UInt64,
     n2 UInt64,
@@ -61,6 +63,7 @@ create table morton_numbers_2_02457(
 insert into morton_numbers_2_02457
 select untuple(mortonDecode(4, mortonEncode(n1, n2, n3, n4)))
 from morton_numbers_02457;
+drop table if exists morton_numbers_2_02457;
 insert into morton_numbers_02457
 select n1.number, n2.number, 0, 0, 0, 0, 0, 0
 from numbers(pow(2, 32)-8,8) n1
@@ -68,6 +71,7 @@ from numbers(pow(2, 32)-8,8) n1
     cross join numbers(pow(2, 32)-8, 8) n3
     cross join numbers(pow(2, 32)-8, 8) n4
 ;
+drop table if exists morton_numbers_3_02457;
 create table morton_numbers_3_02457(
     n1 UInt64,
     n2 UInt64

@@ -1,5 +1,7 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
+SYSTEM drop  table if exists a;
+
 CREATE TABLE a
 (
     i int
@@ -80,6 +82,10 @@ WHERE i = -3
 ORDER BY i ASC
 SETTINGS force_primary_key = 1; -- { serverError INDEX_NOT_USED }
 
+SYSTEM drop  table a;
+
+SYSTEM drop  table if exists b;
+
 CREATE TABLE b
 (
     i int
@@ -105,3 +111,5 @@ WHERE (_part = 'all_1_1_0'
     AND _part_offset IN (0, 4))
 ORDER BY i ASC
 SETTINGS max_rows_to_read = 6;
+
+SYSTEM drop  table b;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (k UInt64, v String)
 ENGINE = MergeTree
 ORDER BY k

@@ -15,6 +15,11 @@ SET allow_suspicious_low_cardinality_types = 1;
 
 SET output_format_parquet_enum_as_byte_array = 0;
 
+-- Write random data to parquet file, then read from it and check that it matches what we wrote.
+-- Do this for all kinds of data types: primitive, Nullable(primitive), Array(primitive),
+-- Array(Nullable(primitive)), Array(Array(primitive)), Map(primitive, primitive), etc.
+SYSTEM drop  table if exists basic_types_02735;
+
 CREATE TEMPORARY TABLE basic_types_02735 AS
 SELECT *
 FROM generateRandom('
@@ -60,6 +65,12 @@ SELECT (
         FROM file(basic_types_02735.parquet)
     );
 
+SYSTEM drop  table basic_types_02735;
+
+-- DateTime values don't roundtrip (without output_format_parquet_datetime_as_uint32) because we
+-- write them as DateTime64(3) (the closest type supported by Parquet).
+SYSTEM drop  table if exists datetime_02735;
+
 CREATE TEMPORARY TABLE datetime_02735 AS
 SELECT *
 FROM generateRandom('datetime DateTime')
@@ -83,6 +94,10 @@ SELECT (
         SELECT sum(cityHash64(*))
         FROM file(datetime_02735.parquet, Parquet, 'datetime DateTime')
     );
+
+SYSTEM drop  table datetime_02735;
+
+SYSTEM drop  table if exists nullables_02735;
 
 CREATE TEMPORARY TABLE nullables_02735 AS
 SELECT *
@@ -109,6 +124,15 @@ SELECT (
         SELECT sum(cityHash64(*))
         FROM file(nullables_02735.parquet)
     );
+
+SYSTEM drop  table nullables_02735;
+
+-- TODO: When cityHash64() fully supports Nullable: https://github.com/ClickHouse/ClickHouse/pull/58754
+--       the next two blocks can be simplified: arrays_out_02735 intermediate table is not needed,
+--       a.csv and b.csv are not needed.
+SYSTEM drop  table if exists arrays_02735;
+
+SYSTEM drop  table if exists arrays_out_02735;
 
 CREATE TABLE arrays_02735
 ENGINE = Memory AS
@@ -143,6 +167,14 @@ SELECT (
         SELECT sum(cityHash64(*))
         FROM arrays_out_02735
     );
+
+--select (select sum(cityHash64(*)) from arrays_02735) -
+--       (select sum(cityHash64(u32, i8, datetime, enum16, float32, str, fstr, arrayMap(x->reinterpret(x, 'UInt128'), u128), decimal64, ipv4, msi, tup)) from file(arrays_02735.parquet));
+SYSTEM drop  table arrays_02735;
+
+SYSTEM drop  table arrays_out_02735;
+
+SYSTEM drop  table if exists madness_02735;
 
 CREATE TEMPORARY TABLE madness_02735 AS
 SELECT *
@@ -191,6 +223,10 @@ SELECT (
         SELECT sum(cityHash64(*))
         FROM file(b.csv, LineAsString)
     );
+
+--select (select sum(cityHash64(*)) from madness_02735) -
+--       (select sum(cityHash64(aa, aaa, an, aan, l, ln, map(x->reinterpret(x, 'UInt128'), al), aaln, mln, t, n.hello, n.world)) from file(madness_02735.parquet));
+SYSTEM drop  table madness_02735;
 
 -- Merging input blocks into bigger row groups.
 INSERT INTO FUNCTION file(squash_02735.parquet) SELECT '012345'
@@ -294,6 +330,9 @@ SETTINGS output_format_parquet_compression_method = 'zstd';
 
 SELECT sum(cityHash64(*))
 FROM file(compressed_02735.parquet);
+
+-- Single-threaded encoding and Arrow encoder.
+SYSTEM drop  table if exists other_encoders_02735;
 
 CREATE TEMPORARY TABLE other_encoders_02735 AS
 SELECT

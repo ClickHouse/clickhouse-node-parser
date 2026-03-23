@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS collapsing;
+
 CREATE TABLE collapsing
 (
     key String,
@@ -19,3 +21,5 @@ INSERT INTO collapsing;
 SELECT *
 FROM collapsing
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE collapsing;

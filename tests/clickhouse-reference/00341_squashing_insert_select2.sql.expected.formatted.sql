@@ -1,3 +1,6 @@
+-- Tags: log-engine
+SYSTEM DROP  TABLE IF EXISTS numbers_squashed;
+
 CREATE TABLE numbers_squashed
 (
     number UInt8
@@ -53,3 +56,5 @@ UNION ALL
 SELECT arrayJoin(range(10));
 
 SET min_insert_block_size_rows = 10;
+
+SYSTEM DROP  TABLE numbers_squashed;

@@ -30,6 +30,8 @@ SELECT
     arrayMap(x -> x + a, [1, 2, 3]),
     arrayJoin([1,2,3]) AS a;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -51,3 +53,9 @@ SELECT
     arrayJoin(value_1) AS a,
     a
 FROM test_table;
+
+-- SELECT '--';
+-- SELECT id, arrayJoin(value_1), arrayJoin(value_2) FROM test_table;
+-- SELECT '--';
+-- SELECT id, arrayJoin(value_1), arrayJoin(value_2), arrayJoin([5, 6]) FROM test_table;
+SYSTEM DROP  TABLE test_table;

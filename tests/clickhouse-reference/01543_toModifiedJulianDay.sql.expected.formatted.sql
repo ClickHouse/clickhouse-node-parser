@@ -20,6 +20,8 @@ SELECT toModifiedJulianDayOrNull('1999-02-29');
 
 SELECT toModifiedJulianDayOrNull('1999-13-32');
 
+SYSTEM DROP  TABLE IF EXISTS toModifiedJulianDay_test;
+
 CREATE TABLE toModifiedJulianDay_test
 (
     d String
@@ -30,6 +32,8 @@ INSERT INTO toModifiedJulianDay_test;
 
 SELECT toModifiedJulianDay(d)
 FROM toModifiedJulianDay_test;
+
+SYSTEM DROP  TABLE toModifiedJulianDay_test;
 
 CREATE TABLE toModifiedJulianDay_test
 (

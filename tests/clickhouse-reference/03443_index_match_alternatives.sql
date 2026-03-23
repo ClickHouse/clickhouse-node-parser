@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS 03443_data;
 CREATE TABLE 03443_data
 (
     id Int32,
@@ -23,3 +24,4 @@ SELECT trim(leading ' ' from explain) FROM (EXPLAIN indexes=1 SELECT name FROM 0
 SELECT trim(leading ' ' from explain) FROM (EXPLAIN indexes=1 SELECT name FROM 03443_data WHERE match(name, 'XYZ|J')) WHERE explain LIKE '%Granules: %' SETTINGS use_skip_indexes = 1;
 SELECT trim(leading ' ' from explain) FROM (EXPLAIN indexes=1 SELECT name FROM 03443_data WHERE match(name, '[J]|XYZ')) WHERE explain LIKE '%Granules: %' SETTINGS use_skip_indexes = 1;
 SELECT trim(leading ' ' from explain) FROM (EXPLAIN indexes=1 SELECT name FROM 03443_data WHERE match(name, 'XYZ|[J]')) WHERE explain LIKE '%Granules: %' SETTINGS use_skip_indexes = 1;
+DROP TABLE 03443_data;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Bool
@@ -15,3 +17,5 @@ WHERE table = 't0'
 
 SELECT c0
 FROM t0;
+
+SYSTEM DROP  TABLE t0;

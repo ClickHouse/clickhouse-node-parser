@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS 02680_datetime64_monotonic_check;
+
+SYSTEM DROP  TABLE IF EXISTS 02680_datetime_monotonic_check_lc;
+
 CREATE TABLE `02680_datetime64_monotonic_check`
 (
     t DateTime64(3),
@@ -20,6 +24,8 @@ GROUP BY
     toHour_UTC,
     toHour_Israel;
 
+SYSTEM DROP  TABLE 02680_datetime64_monotonic_check;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE `02680_datetime_monotonic_check_lc`
@@ -35,3 +41,5 @@ INSERT INTO `02680_datetime_monotonic_check_lc`;
 SELECT toDateTime(timestamp, 'Asia/Jerusalem')
 FROM `02680_datetime_monotonic_check_lc`
 WHERE toHour(toDateTime(timestamp, 'Asia/Jerusalem')) = 2;
+
+SYSTEM DROP  TABLE 02680_datetime_monotonic_check_lc;

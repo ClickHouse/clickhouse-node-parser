@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists tbl;
+
+SYSTEM drop  table if exists tbl2;
+
 CREATE TABLE tbl
 (
     dt DateTime,
@@ -49,3 +53,7 @@ FROM tbl2; -- { serverError UNKNOWN_IDENTIFIER }
 SELECT _partition_value
 FROM tbl2
 GROUP BY 1; -- { serverError UNKNOWN_IDENTIFIER }
+
+SYSTEM drop  table tbl;
+
+SYSTEM drop  table tbl2;

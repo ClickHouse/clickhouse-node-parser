@@ -1,3 +1,4 @@
+DROP SETTINGS PROFILE IF EXISTS s1_01418, s2_01418;
 SELECT '--- assigning ---';
 SET custom_a = 5;
 SET custom_b = -177;
@@ -26,9 +27,11 @@ SET custom_compound.identifier.v1 = 'test';
 SELECT getSetting('custom_compound.identifier.v1') as v, toTypeName(v);
 SELECT name, value FROM system.settings WHERE name = 'custom_compound.identifier.v1';
 CREATE SETTINGS PROFILE s1_01418 SETTINGS custom_compound.identifier.v2 = 100;
+DROP SETTINGS PROFILE s1_01418;
 SELECT getSetting('custom_null') as v, toTypeName(v) SETTINGS custom_null = NULL;
 SELECT name, value FROM system.settings WHERE name = 'custom_null' SETTINGS custom_null = NULL;
 SET custom_null = NULL;
 SELECT getSetting('custom_null') as v, toTypeName(v);
 SELECT name, value FROM system.settings WHERE name = 'custom_null';
 CREATE SETTINGS PROFILE s2_01418 SETTINGS custom_null = NULL;
+DROP SETTINGS PROFILE s2_01418;

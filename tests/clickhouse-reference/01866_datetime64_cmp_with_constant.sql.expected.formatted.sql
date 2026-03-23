@@ -104,3 +104,5 @@ WHERE dt_column != toDateTime64('2020-01-13 13:37:00', 3);
 SELECT 'dt != dt64'
 FROM dt64test
 WHERE dt_column != materialize(toDateTime64('2020-01-13 13:37:00', 3));
+
+SYSTEM DROP  TABLE dt64test;

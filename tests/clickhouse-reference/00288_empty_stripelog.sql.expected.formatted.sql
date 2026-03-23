@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS stripelog;
+
 CREATE TABLE stripelog
 (
     x UInt8
@@ -9,3 +11,5 @@ FROM stripelog
 ORDER BY x ASC;
 
 INSERT INTO stripelog;
+
+SYSTEM DROP  TABLE stripelog;

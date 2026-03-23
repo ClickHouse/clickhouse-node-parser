@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS alter_00665;
+
 CREATE TABLE alter_00665
 (
     boolean_false Nullable(String)
@@ -13,3 +15,5 @@ FROM alter_00665;
 SELECT *
 FROM alter_00665
 ORDER BY boolean_false ASC;
+
+SYSTEM DROP  TABLE alter_00665;

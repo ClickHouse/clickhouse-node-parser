@@ -1,3 +1,11 @@
+-- Tags: use-rocksdb, no-parallel-replicas
+-- no-parallel-replicas: Can't execute any of specified algorithms for specified strictness/kind and right storage type. (NOT_IMPLEMENTED)
+SYSTEM DROP  TABLE IF EXISTS rdb;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE rdb
 (
     key UInt32,

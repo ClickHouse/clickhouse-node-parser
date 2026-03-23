@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS checks SYNC;
 CREATE TABLE checks
 (
     `check_name` LowCardinality(String),
@@ -38,3 +39,4 @@ WHERE 1
     AND test_name ilike '%parallel_replicas%'
 ORDER BY check_start_time desc, check_name, test_name
 SETTINGS query_plan_read_in_order = 1, optimize_read_in_order = 1, allow_experimental_parallel_reading_from_replicas = 1, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost', max_parallel_replicas = 3;
+DROP TABLE checks SYNC;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test
     (
         x UInt8,
@@ -10,3 +11,4 @@ INSERT INTO test (x) SELECT number FROM numbers(1); -- Compact / packed
 INSERT INTO test (x) SELECT number FROM numbers(10000); -- Wide
 SELECT 'alias_before_clear', min(x), max(x) FROM test;
 SELECT 'alias_after_clear', min(x), max(x) FROM test;
+DROP TABLE test;

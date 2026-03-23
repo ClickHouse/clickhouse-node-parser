@@ -1,3 +1,6 @@
+-- Tags: shard, long
+SYSTEM DROP  TABLE IF EXISTS group_uniq_str;
+
 CREATE TABLE group_uniq_str
 ENGINE = Memory AS
 SELECT

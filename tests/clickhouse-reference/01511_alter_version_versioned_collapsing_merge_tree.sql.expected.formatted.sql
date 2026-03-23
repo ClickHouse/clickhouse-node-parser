@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table_with_version;
+
 CREATE TABLE table_with_version
 (
     key UInt64,

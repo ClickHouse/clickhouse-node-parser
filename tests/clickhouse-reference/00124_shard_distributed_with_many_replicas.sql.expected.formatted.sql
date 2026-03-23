@@ -7,6 +7,8 @@ SET max_parallel_replicas = 2;
 
 SET parallel_replicas_for_non_replicated_merge_tree = 1;
 
+SYSTEM DROP  TABLE IF EXISTS report;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE report
@@ -30,3 +32,5 @@ FROM (
         FROM remote('127.0.0.{2|3}', currentDatabase(), report)
     )
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE report;

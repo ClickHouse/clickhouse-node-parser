@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02581_trips;
+
 CREATE TABLE `02581_trips`
 (
     id UInt32,
@@ -55,3 +57,7 @@ FROM numbers(10000000);
 
 INSERT INTO `02581_set` SELECT number * 10 + 8
 FROM numbers(10000000);
+
+SYSTEM DROP  TABLE 02581_set;
+
+SYSTEM DROP  TABLE 02581_trips;

@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- no-fasttest: upper/lowerUTF8 use ICU
+SYSTEM DROP  TABLE IF EXISTS test_data;
+
 CREATE TABLE test_data
 (
     ShipmentDate Date
@@ -14,3 +18,5 @@ GROUP BY c
 ORDER BY c ASC
 LIMIT 62
 OFFSET 0;
+
+SYSTEM DROP  TABLE test_data;

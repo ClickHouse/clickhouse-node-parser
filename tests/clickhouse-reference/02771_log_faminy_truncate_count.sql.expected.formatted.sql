@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_log;
+
 CREATE TABLE test_log
 (
     crypto_name String,
@@ -16,3 +18,5 @@ CREATE TABLE test_log
     trade_date Date
 )
 ENGINE = StripeLog;
+
+SYSTEM DROP  TABLE test_log;

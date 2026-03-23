@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS lwd_test;
 CREATE TABLE lwd_test
 (
     `id` UInt64,
@@ -27,3 +28,4 @@ SET mutations_sync = 0;
 INSERT INTO lwd_test SELECT number AS id, toString(number+100) AS value FROM numbers(10);
 -- add another part that doesn't have deleted rows
 INSERT INTO lwd_test SELECT number AS id, toString(number+200) AS value FROM numbers(10);
+DROP TABLE lwd_test;

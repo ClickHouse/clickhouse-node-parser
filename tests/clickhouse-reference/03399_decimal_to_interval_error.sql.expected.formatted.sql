@@ -6,6 +6,8 @@ SELECT toIntervalSecond(CAST(1 AS Decimal(18, 3))); -- { serverError ILLEGAL_TYP
 
 SELECT toIntervalMillisecond(CAST(1 AS Nullable(Decimal(18, 3)))); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     d Nullable(Decimal(18, 3))
@@ -15,3 +17,5 @@ ORDER BY tuple();
 
 SELECT toIntervalMillisecond(d)
 FROM t; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+SYSTEM DROP  TABLE t;

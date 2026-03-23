@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t2
 (
     s String,
@@ -82,3 +84,5 @@ FROM
     ) AS t1
 LEFT JOIN t2 AS t2
     USING (k);
+
+SYSTEM DROP  TABLE t2;

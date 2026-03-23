@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/91380
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     s Nullable(String),
@@ -19,6 +22,8 @@ FULL JOIN t0 AS ty
     ON ty.s = t.a
 WHERE t.a.size = 1
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE t0;
 
 CREATE TABLE t0
 (

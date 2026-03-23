@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/57590
+SYSTEM DROP  TABLE IF EXISTS tab_with_primary_key_index;
+
 CREATE TABLE tab_with_primary_key_index
 (
     id UInt32,
@@ -10,6 +13,8 @@ INSERT INTO tab_with_primary_key_index SELECT
     number,
     if(number % 2, 1, number)
 FROM numbers(10);
+
+SYSTEM DROP  TABLE IF EXISTS tab_with_primary_key_index_and_skipping_index;
 
 CREATE TABLE tab_with_primary_key_index_and_skipping_index
 (
@@ -36,6 +41,8 @@ SELECT count(*)
 FROM information_schema.tables
 WHERE like(table_name, 'tab_with_primary_key_index%')
     AND table_schema = currentDatabase();
+
+SYSTEM DROP  TABLE tab_with_primary_key_index;
 
 -- Check that information_schema.tables.index_length is 0 for non-MergeTree tables
 SELECT if(index_length = 0, 'OK', 'FAIL')

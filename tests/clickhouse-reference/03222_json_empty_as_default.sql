@@ -8,12 +8,21 @@ SELECT toTimeZone(x, 'UTC') FROM format(JSONEachRow, 'x DateTime64', '{"x":""}')
 SELECT x FROM format(JSONEachRow, 'x IPv4', '{"x":""}');
 SELECT x FROM format(JSONEachRow, 'x IPv6', '{"x":""}');
 SELECT x FROM format(JSONEachRow, 'x UUID', '{"x":""}');
+-- { echoOff }
+
+-- Simple type AggregateFunction
+DROP TABLE IF EXISTS table1;
 CREATE TABLE table1(col AggregateFunction(uniq, UInt64)) ENGINE=Memory();
+DROP TABLE IF EXISTS table2;
 CREATE TABLE table2(UserID UInt64) ENGINE=Memory();
 INSERT INTO table1 SELECT uniqState(UserID) FROM table2;
 INSERT INTO table1 SELECT x FROM format(JSONEachRow, 'x AggregateFunction(uniq, UInt64)' AS T, '{"x":""}');
 -- { echoOn }
 SELECT COUNT(DISTINCT col) FROM table1;
+-- { echoOff }
+
+DROP TABLE table1;
+DROP TABLE table2;
 -- The setting input_format_defaults_for_omitted_fields determines the default value if enabled.
 CREATE TABLE table1(address IPv6 DEFAULT toIPv6('2001:db8:3333:4444:5555:6666:7777:8888')) ENGINE=Memory();
 SET input_format_defaults_for_omitted_fields = 0;

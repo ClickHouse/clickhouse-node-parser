@@ -1,3 +1,6 @@
+-- Tags: stateful
+
+DROP TABLE IF EXISTS join;
 CREATE TABLE join (UserID UInt64, loyalty Int8) ENGINE = Join(SEMI, LEFT, UserID);
 INSERT INTO join
 SELECT
@@ -15,3 +18,4 @@ SELECT
 FROM test.hits SEMI LEFT JOIN join USING UserID
 GROUP BY loyalty
 ORDER BY loyalty ASC;
+DROP TABLE join;

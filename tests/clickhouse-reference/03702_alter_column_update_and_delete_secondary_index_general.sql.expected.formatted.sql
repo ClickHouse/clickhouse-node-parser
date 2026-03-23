@@ -6,6 +6,10 @@ SET mutations_sync = 1;
 
 SET alter_sync = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_compact;
+
+SYSTEM DROP  TABLE IF EXISTS test_wide;
+
 CREATE TABLE test_compact
 (
     a Int32,

@@ -1,11 +1,15 @@
 -- Tags: no-fasttest
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON
 )
 ENGINE = Memory;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

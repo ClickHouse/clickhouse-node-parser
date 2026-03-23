@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS trend;
+
 CREATE TABLE trend
 (
     event_date Date,
@@ -28,3 +30,5 @@ ORDER BY level ASC;
 SELECT '---';
 
 INSERT INTO trend;
+
+SYSTEM DROP  TABLE trend;

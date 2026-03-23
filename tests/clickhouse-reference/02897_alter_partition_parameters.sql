@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test
 (
   EventDate Date
@@ -9,6 +10,7 @@ INSERT INTO test VALUES(toDate('2023-10-09'));
 SELECT count() FROM test;
 SET param_partition='2023-10-09';
 set param_partition_id = '20231009';
+DROP TABLE IF EXISTS test2;
 CREATE TABLE test2
 (
   a UInt32,
@@ -21,6 +23,7 @@ INSERT INTO test2 VALUES(1, 2);
 SELECT count() FROM test2;
 SET param_first='2';
 SET param_second='4';
+DROP TABLE IF EXISTS test3;
 CREATE TABLE test3
 (
   a UInt32,
@@ -32,9 +35,11 @@ PARTITION BY a;
 INSERT INTO test3 VALUES(1, 2);
 SET param_simple='1';
 SELECT count() FROM test3;
+DROP TABLE IF EXISTS test4;
 CREATE TABLE test4 (EventDate Date) ENGINE = MergeTree() ORDER BY tuple() PARTITION BY EventDate;
 INSERT INTO test4 VALUES(toDate('2023-10-09'));
 SELECT count() FROM test4;
+DROP TABLE IF EXISTS test5;
 CREATE TABLE test5
 (
   a UInt32,
@@ -47,6 +52,7 @@ INSERT INTO test5 VALUES(1, 2);
 SET param_f='1';
 SET param_s='2';
 SELECT count() FROM test5;
+DROP TABLE IF EXISTS test6;
 CREATE TABLE test6
 (
   a UInt32,

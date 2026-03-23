@@ -4,6 +4,8 @@ SET parallel_hash_join_threshold = 0;
 
 SET enable_join_runtime_filters = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_table_1;
+
 CREATE TABLE test_table_1
 (
     id UInt64,
@@ -12,6 +14,8 @@ CREATE TABLE test_table_1
 )
 ENGINE = MergeTree
 ORDER BY id;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_2;
 
 CREATE TABLE test_table_2
 (
@@ -29,3 +33,7 @@ INSERT INTO test_table_2;
 SET query_plan_join_swap_table = 'false';
 
 SELECT '--';
+
+SYSTEM DROP  TABLE test_table_1;
+
+SYSTEM DROP  TABLE test_table_2;

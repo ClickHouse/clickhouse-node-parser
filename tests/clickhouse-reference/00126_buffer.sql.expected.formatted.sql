@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS buffer_00126;
+
+SYSTEM DROP  TABLE IF EXISTS null_sink_00126;
+
 CREATE TABLE null_sink_00126
 (
     a UInt8,
@@ -154,3 +158,7 @@ ORDER BY
 INSERT INTO buffer_00126 (c, b, a);
 
 INSERT INTO buffer_00126 (a, c);
+
+SYSTEM DROP  TABLE buffer_00126;
+
+SYSTEM DROP  TABLE null_sink_00126;

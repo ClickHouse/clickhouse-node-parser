@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     a Int8,
@@ -23,3 +25,5 @@ FROM (
 ORDER BY val1 ASC;
 
 SET enable_optimize_predicate_expression = 1;
+
+SYSTEM drop  table t;

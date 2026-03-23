@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS arrays_test;
+
 CREATE TABLE arrays_test
 (
     s String,
@@ -68,3 +70,5 @@ SELECT
     sumArrayIf(arr, like(s, '%l%')),
     sumArrayIf(arr, like(s, '%e%'))
 FROM arrays_test;
+
+SYSTEM DROP  TABLE arrays_test;

@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists a;
+
+SYSTEM drop  table if exists b;
+
 CREATE TABLE a
 (
     i int,
@@ -15,3 +19,7 @@ INSERT INTO a;
 
 SELECT countMerge(*)
 FROM b;
+
+SYSTEM drop  table b;
+
+SYSTEM drop  table a;

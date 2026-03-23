@@ -3,6 +3,7 @@
 -- Tests that match() utilizes the text index
 
 SET enable_full_text_index = true;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt32,
@@ -89,3 +90,4 @@ WHERE
     explain LIKE '%Granules: %'
 SETTINGS
     enable_analyzer = 1;
+DROP TABLE tab;

@@ -1,3 +1,6 @@
+-- add_minmax_index_for_numeric_columns=0: Adds more output to system.data_skipping_indices
+SYSTEM drop  table if exists t_index;
+
 CREATE TABLE t_index
 (
     a int,
@@ -22,6 +25,12 @@ SELECT
 FROM `system`.data_skipping_indices
 WHERE database = currentDatabase()
     AND table = 't_index';
+
+SYSTEM drop  index i_a on t_index;
+
+SYSTEM drop  index if exists i_a on t_index;
+
+SYSTEM drop  table t_index;
 
 CREATE TABLE t_index
 (

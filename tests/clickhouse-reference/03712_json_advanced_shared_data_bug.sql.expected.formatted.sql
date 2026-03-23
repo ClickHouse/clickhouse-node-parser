@@ -1,5 +1,7 @@
 SET optimize_if_transform_strings_to_enum = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 JSON(max_dynamic_paths = 0)
@@ -15,3 +17,5 @@ SELECT
     c0.arr.:`Array(JSON)`,
     c0.`^a`
 FROM t0;
+
+SYSTEM DROP  TABLE t0;

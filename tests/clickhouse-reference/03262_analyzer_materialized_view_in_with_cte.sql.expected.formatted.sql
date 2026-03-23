@@ -1,5 +1,11 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS mv_test;
+
+SYSTEM DROP  TABLE IF EXISTS mv_test_target;
+
+SYSTEM DROP  VIEW IF EXISTS mv_test_mv;
+
 CREATE TABLE mv_test
 (
     id UInt64,
@@ -55,3 +61,9 @@ INSERT INTO mv_test (id, ref_id, display);
 
 SELECT *
 FROM mv_test_target;
+
+SYSTEM DROP  VIEW mv_test_mv;
+
+SYSTEM DROP  TABLE mv_test_target;
+
+SYSTEM DROP  TABLE mv_test;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_func_to_subcolumns;
+
 SET enable_analyzer = 1;
 
 SET optimize_functions_to_subcolumns = 1;
@@ -59,6 +61,10 @@ FULL JOIN (
     USING (id)
 ORDER BY id ASC;
 
+SYSTEM DROP  TABLE t_func_to_subcolumns;
+
+SYSTEM DROP  TABLE IF EXISTS t_tuple_null;
+
 CREATE TABLE t_tuple_null
 (
     t Tuple(`null` UInt32)
@@ -72,3 +78,5 @@ SELECT
     isNull(t),
     t.`null`
 FROM t_tuple_null;
+
+SYSTEM DROP  TABLE t_tuple_null;

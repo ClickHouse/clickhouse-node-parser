@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_sparse_reload;
+
 CREATE TABLE t_sparse_reload
 (
     id UInt64,
@@ -15,3 +17,5 @@ FROM numbers(100000);
 SELECT count()
 FROM t_sparse_reload
 WHERE NOT ignore(*);
+
+SYSTEM DROP  TABLE t_sparse_reload;

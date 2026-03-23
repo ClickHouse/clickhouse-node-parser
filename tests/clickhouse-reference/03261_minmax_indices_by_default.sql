@@ -1,4 +1,9 @@
 SET mutations_sync = 2;
+DROP TABLE IF EXISTS tbl1;
+DROP TABLE IF EXISTS tbl2;
+DROP TABLE IF EXISTS tbl3;
+DROP TABLE IF EXISTS tbl4;
+DROP TABLE IF EXISTS tbl5;
 CREATE TABLE tbl1
 (
     key Int,
@@ -79,3 +84,9 @@ SETTINGS add_minmax_index_for_numeric_columns = FALSE,
          add_minmax_index_for_string_columns = FALSE,
          add_minmax_index_for_temporal_columns = FALSE;
 SELECT name,type,expr,data_compressed_bytes FROM system.data_skipping_indices WHERE table = 'tbl6' AND database = currentDatabase();
+DROP TABLE tbl1;
+DROP TABLE tbl2;
+DROP TABLE tbl3;
+DROP TABLE tbl4;
+DROP TABLE tbl5;
+DROP TABLE tbl6;

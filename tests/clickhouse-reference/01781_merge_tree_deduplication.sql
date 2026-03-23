@@ -1,3 +1,7 @@
+-- Tags: no-replicated-database
+-- Tag no-replicated-database: Unsupported type of ALTER query
+
+DROP TABLE IF EXISTS merge_tree_deduplication;
 CREATE TABLE merge_tree_deduplication
 (
     key UInt64,
@@ -35,6 +39,7 @@ INSERT INTO merge_tree_deduplication (key, value, part) VALUES (2, '2', 44);
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (3, '3', 44);
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (4, '4', 44);
 SELECT * FROM merge_tree_deduplication WHERE part = 44 ORDER BY key;
+DROP TABLE IF EXISTS merge_tree_no_deduplication;
 CREATE TABLE merge_tree_no_deduplication
 (
     key UInt64,

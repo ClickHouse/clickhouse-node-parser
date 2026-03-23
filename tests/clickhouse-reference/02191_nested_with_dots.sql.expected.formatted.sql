@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_nested_with_dots;
+
 CREATE TABLE t_nested_with_dots
 (
     n Nested(id UInt64, `values.id` Array(UInt64))

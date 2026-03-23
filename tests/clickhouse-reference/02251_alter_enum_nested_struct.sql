@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS alter_enum_array;
 CREATE TABLE alter_enum_array(
     Key UInt64,
     Value Array(Enum8('Option1'=1, 'Option2'=2))

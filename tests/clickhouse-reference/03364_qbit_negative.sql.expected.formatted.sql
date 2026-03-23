@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS qbits;
+
 CREATE TABLE qbits
 (
     id UInt32,
@@ -31,3 +33,5 @@ FROM qbits; -- { serverError TYPE_MISMATCH }
 
 SELECT vec::QBit(Float64, 1)
 FROM qbits;
+
+SYSTEM DROP  TABLE qbits;

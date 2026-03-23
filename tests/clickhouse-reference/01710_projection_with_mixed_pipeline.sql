@@ -1,3 +1,4 @@
+drop table if exists t;
 create table t (x UInt32) engine = MergeTree order by tuple() settings index_granularity = 8;
 insert into t select number from numbers(100);
 insert into t select number + 100 from numbers(100);

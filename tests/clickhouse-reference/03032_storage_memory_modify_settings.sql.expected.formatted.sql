@@ -1,6 +1,8 @@
 -- Tags: memory-engine
 SET max_block_size = 65409; -- Default value
 
+SYSTEM DROP  TABLE IF EXISTS memory;
+
 CREATE TABLE memory
 (
     i UInt32
@@ -57,3 +59,5 @@ FROM numbers(2000, 70); -- 70 rows
 
 INSERT INTO memory SELECT *
 FROM numbers(3000, 1100); -- 1100 rows
+
+SYSTEM DROP  TABLE memory;

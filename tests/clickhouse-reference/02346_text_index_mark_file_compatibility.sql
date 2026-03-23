@@ -2,6 +2,7 @@
 
 SET allow_experimental_full_text_index = 1;
 SET use_query_condition_cache = 0;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     i Int32,
@@ -22,3 +23,4 @@ SELECT
             'cc') AS str
 FROM numbers(1024000);
 SELECT count() FROM tab WHERE hasToken(str, 'aa'); -- this must not return an error
+DROP TABLE tab;

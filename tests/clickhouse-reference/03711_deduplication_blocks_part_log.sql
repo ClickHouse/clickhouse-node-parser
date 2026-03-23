@@ -1,4 +1,14 @@
+-- Tags: no-parallel, no-parallel-replicas, no-async-insert
+
+-- no-parallel-replicas -- https://github.com/ClickHouse/ClickHouse/issues/90063
+
+-- Tags: deduplication blocks have different values for sync and async inserts,
+-- async insert calculates it as a has of data in the block,
+-- sync insert uses MergeTreePartWriter's hash which covers only data in the partition.
+
+DROP DATABASE IF EXISTS 03710_database;
 CREATE DATABASE 03710_database;
+DROP TABLE IF EXISTS 03710_database.03711_join_with;
 CREATE TABLE 03710_database.03711_join_with
 (
     id UInt32,
@@ -9,6 +19,7 @@ ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 INSERT INTO 03710_database.03711_join_with VALUES (1, 'a1'), (1, 'b1'), (1, 'c1');
 INSERT INTO 03710_database.03711_join_with VALUES (2, 'a2'), (2, 'b2'), (2, 'c2');
+DROP TABLE IF EXISTS 03710_database.03711_table;
 CREATE TABLE 03710_database.03711_table
 (
     id UInt32
@@ -16,6 +27,7 @@ CREATE TABLE 03710_database.03711_table
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+DROP TABLE IF EXISTS 03710_database.03711_mv_table_1;
 CREATE TABLE 03710_database.03711_mv_table_1
 (
     id UInt32,
@@ -24,6 +36,7 @@ CREATE TABLE 03710_database.03711_mv_table_1
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+DROP TABLE IF EXISTS 03710_database.03711_mv_table_2;
 CREATE TABLE 03710_database.03711_mv_table_2
 (
     id UInt32,
@@ -32,9 +45,11 @@ CREATE TABLE 03710_database.03711_mv_table_2
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+DROP TABLE IF EXISTS 03710_database.03711_mv_1;
 CREATE MATERIALIZED VIEW 03710_database.03711_mv_1
 TO 03710_database.03711_mv_table_1 AS
 SELECT r.id as id, r.value as value FROM 03710_database.03711_table as l JOIN 03710_database.03711_join_with as r ON l.id == r.id and l.id = 1;
+DROP TABLE IF EXISTS 03710_database.03711_mv_2;
 CREATE MATERIALIZED VIEW 03710_database.03711_mv_2
 TO 03710_database.03711_mv_table_2 AS
 SELECT r.id as id, r.value as value FROM 03710_database.03711_table as l JOIN 03710_database.03711_join_with as r ON l.id == r.id and l.id = 2;
@@ -50,3 +65,4 @@ WHERE
     AND database = '03710_database'
 group BY database, table, name
 ORDER BY ALL;
+DROP DATABASE 03710_database;

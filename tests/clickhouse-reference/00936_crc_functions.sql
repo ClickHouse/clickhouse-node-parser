@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS table1;
 CREATE TABLE table1 (str1 String, str2 String) ENGINE = Memory;
 INSERT INTO table1 VALUES('qwerty', 'string');
 INSERT INTO table1 VALUES('qqq', 'aaa');
@@ -10,5 +11,6 @@ select CRC32(str1) from table1 order by CRC32(str1);
 select CRC32(str2) from table1 order by CRC32(str2);
 select CRC32(str1), CRC32(str2) from table1 order by CRC32(str1), CRC32(str2);
 select str1, str2, CRC32(str1), CRC32(str2) from table1 order by CRC32(str1), CRC32(str2);
+DROP TABLE table1;
 SELECT hex(CRC32IEEE('foo'));
 SELECT hex(CRC64('foo'));

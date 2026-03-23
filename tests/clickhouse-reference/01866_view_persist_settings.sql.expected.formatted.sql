@@ -1,3 +1,11 @@
+SYSTEM DROP  TABLE IF EXISTS view_no_nulls;
+
+SYSTEM DROP  TABLE IF EXISTS view_no_nulls_set;
+
+SYSTEM DROP  TABLE IF EXISTS view_nulls_set;
+
+SYSTEM DROP  TABLE IF EXISTS view_nulls;
+
 SET join_use_nulls = 0;
 
 CREATE OR REPLACE VIEW view_no_nulls

@@ -1,5 +1,9 @@
 SET allow_materialized_view_with_bad_select = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS v;
+
 CREATE TABLE t
 (
     c String
@@ -17,6 +21,14 @@ TO t
 AS
 SELECT *
 FROM v; -- { serverError UNKNOWN_TABLE }
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
+SYSTEM DROP  TABLE IF EXISTS v1;
+
+SYSTEM DROP  TABLE IF EXISTS v2;
 
 CREATE TABLE t1
 (

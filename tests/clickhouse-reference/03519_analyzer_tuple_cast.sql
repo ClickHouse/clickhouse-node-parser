@@ -1,4 +1,5 @@
 set enable_analyzer=1;
+DROP TABLE IF EXISTS test, src;
 SELECT count(), plus((-9, 0), (number,  number)) AS k FROM remote('127.0.0.{3,2}', numbers(2)) GROUP BY k ORDER BY k;
 SELECT count(), mapAdd(map(1::UInt128, 1), map(1::UInt128 ,number)) AS k FROM remote('127.0.0.{3,2}', numbers(2)) GROUP BY k ORDER BY k;
 CREATE TABLE test (s String) ORDER BY ();

@@ -6,6 +6,10 @@ SET mutations_sync = 1;
 
 SET alter_sync = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_compact;
+
+SYSTEM DROP  TABLE IF EXISTS test_wide;
+
 CREATE TABLE test_compact
 (
     a Int32,
@@ -49,3 +53,7 @@ FROM `system`.data_skipping_indices
 WHERE table = 'test_wide'
     AND database = currentDatabase()
     AND name = 'idx_minmax';
+
+SYSTEM DROP  TABLE test_compact;
+
+SYSTEM DROP  TABLE test_wide;

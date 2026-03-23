@@ -1,3 +1,6 @@
+-- Tags: memory-engine
+SYSTEM DROP  TABLE IF EXISTS t_memory_compressed;
+
 CREATE TABLE t_memory_compressed
 (
     id UInt64,
@@ -15,3 +18,5 @@ INSERT INTO t_memory_compressed;
 SELECT *
 FROM t_memory_compressed
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_memory_compressed;

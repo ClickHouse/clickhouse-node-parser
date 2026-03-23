@@ -1,3 +1,6 @@
+-- add_minmax_index_for_numeric_columns=0: Implicit indices will filter before projections
+SYSTEM drop  table if exists projection_test;
+
 CREATE TABLE projection_test
 (
     `sum(block_count)` UInt64,
@@ -97,6 +100,8 @@ WHERE domain = '1'
 GROUP BY dt_m
 ORDER BY dt_m ASC;
 
+SYSTEM drop  row policy if exists filter on projection_test;
+
 CREATE ROW POLICY filter ON projection_test USING (domain = 'non_existing_domain') TO ALL;
 
 -- prewhere with alias with row policy (non existing)
@@ -109,6 +114,8 @@ PREWHERE domain_alias = 1
 WHERE domain = '1'
 GROUP BY dt_m
 ORDER BY dt_m ASC;
+
+SYSTEM drop  row policy filter on projection_test;
 
 -- TODO There is a bug in row policy filter (not related to projections, crash in master)
 -- drop row policy if exists filter on projection_test;
@@ -179,6 +186,8 @@ ORDER BY
     countIf(first_time = 0) / count(-2147483649) DESC,
     1048576 DESC;
 
+SYSTEM drop  table if exists projection_without_key;
+
 CREATE TABLE projection_without_key
 (
     key UInt32,
@@ -194,3 +203,5 @@ SET force_optimize_projection = 1, optimize_use_projections = 1;
 
 SELECT max(key)
 FROM projection_without_key;
+
+SYSTEM drop  table projection_without_key;

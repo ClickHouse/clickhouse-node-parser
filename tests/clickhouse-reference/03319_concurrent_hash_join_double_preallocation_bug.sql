@@ -1,3 +1,7 @@
+-- Tags: no-tsan, no-asan, no-msan, no-ubsan, no-parallel-replicas
+
+drop table if exists lhs;
+drop table if exists rhs;
 create table lhs(a UInt64, b UInt64) Engine = MergeTree order by tuple();
 create table rhs(a UInt64, b UInt64) Engine = MergeTree order by tuple();
 insert into lhs select number, number from numbers_mt(2e5);

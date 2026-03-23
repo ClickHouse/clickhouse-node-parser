@@ -29,3 +29,9 @@ SELECT
     name,
     num
 FROM parsed_eph;
+
+SYSTEM DROP  VIEW parse_mv_eph;
+
+SYSTEM DROP  TABLE parsed_eph;
+
+SYSTEM DROP  TABLE raw;

@@ -1,3 +1,9 @@
+-- Tags: no-msan
+-- ^ slow
+SYSTEM DROP  TABLE IF EXISTS mt_00160;
+
+SYSTEM DROP  TABLE IF EXISTS merge_00160;
+
 CREATE TABLE mt_00160
 (
     d Date DEFAULT toDate('2015-05-01'),
@@ -38,6 +44,10 @@ FROM merge_00160
 WHERE x IN (12345, 67890)
     AND NOT ignore(blockSize() < 10 AS b)
 ORDER BY x ASC;
+
+SYSTEM DROP  TABLE merge_00160;
+
+SYSTEM DROP  TABLE mt_00160;
 
 CREATE TABLE mt_00160
 (

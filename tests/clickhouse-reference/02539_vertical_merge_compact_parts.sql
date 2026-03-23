@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_compact_vertical_merge;
 CREATE TABLE t_compact_vertical_merge (id UInt64, s LowCardinality(String), arr Array(UInt64))
 ENGINE MergeTree ORDER BY id
 SETTINGS
@@ -9,3 +10,4 @@ SETTINGS
     allow_vertical_merges_from_compact_to_wide_parts = 1,
     min_bytes_for_full_part_storage = 0;
 INSERT INTO t_compact_vertical_merge SELECT number, toString(number), range(number % 10) FROM numbers(40);
+DROP TABLE t_compact_vertical_merge;

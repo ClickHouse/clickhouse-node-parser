@@ -1,5 +1,7 @@
 SELECT sumMerge(initializeAggregation('sumState', 1) * CAST('1.1.1.1', 'IPv4')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     a IPv4,
@@ -15,3 +17,5 @@ FROM (
         FROM t
         GROUP BY a
     ); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+SYSTEM DROP  TABLE t;

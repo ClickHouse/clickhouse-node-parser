@@ -1,3 +1,6 @@
+-- Tags: no-fasttest, use-vectorscan
+SYSTEM DROP  TABLE IF EXISTS t;
+
 -- test that the check which rejects hyperscan regexes with too big bounded repeats works
 -- {n}
 SELECT multiMatchAny('test', ['.{51}']); -- { serverError HYPERSCAN_CANNOT_SCAN_TEXT }
@@ -85,3 +88,5 @@ SELECT multiFuzzyMatchAllIndices('Hallo Welt', 1, ['.{51}']); -- { serverError H
 
 SELECT multiFuzzyMatchAllIndices(c, 1, ['.{51}'])
 FROM t; -- { serverError HYPERSCAN_CANNOT_SCAN_TEXT }
+
+SYSTEM DROP  TABLE t;

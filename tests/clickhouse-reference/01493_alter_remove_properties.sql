@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS prop_table;
 CREATE TABLE prop_table
 (
     column_default UInt64 DEFAULT 42,

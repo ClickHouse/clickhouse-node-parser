@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS A;
+
 SELECT CAST(1 AS DateTime64('abc')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Invalid scale parameter type
 
 SELECT CAST(1 AS DateTime64(100)); -- { serverError ARGUMENT_OUT_OF_BOUND } # too big scale
@@ -48,3 +50,5 @@ FROM A
 ORDER BY t ASC;
 
 SELECT toDateTime64('2019-09-16 19:20:11.234', 3, 'Europe/Minsk');
+
+SYSTEM DROP  TABLE A;

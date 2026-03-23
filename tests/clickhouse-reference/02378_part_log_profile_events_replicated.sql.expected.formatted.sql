@@ -1,3 +1,9 @@
+-- Tags: long, replica, no-replicated-database, no-parallel, no-shared-merge-tree
+-- no-shared-merge-tree: depend on events for replicatied merge tree
+SYSTEM DROP  TABLE IF EXISTS part_log_profile_events_r1 SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS part_log_profile_events_r2 SYNC;
+
 CREATE TABLE part_log_profile_events_r1
 (
     x UInt64
@@ -28,3 +34,7 @@ WHERE event_time > now() - toIntervalMinute(10)
     AND database == currentDatabase()
     AND table == 'part_log_profile_events_r2'
     AND event_type == 'DownloadPart';
+
+SYSTEM DROP  TABLE part_log_profile_events_r1 SYNC;
+
+SYSTEM DROP  TABLE part_log_profile_events_r2 SYNC;

@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t3;
+DROP TABLE IF EXISTS t4;
 CREATE TABLE t1 (id String, name String, value UInt32)
 ENGINE = Join(ANY, LEFT, id)
 SETTINGS join_use_nulls = 1;
@@ -19,3 +23,7 @@ select *, toTypeName(id), toTypeName(name) from t2;
 select *, toTypeName(id), toTypeName(name) from t3;
 select *, toTypeName(id), toTypeName(name) from t4;
 SET join_use_nulls = 1;
+DROP TABLE t1;
+DROP TABLE t2;
+DROP TABLE t3;
+DROP TABLE t4;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_block_number_mut;
+
 SET mutations_sync = 2;
 
 CREATE TABLE t_block_number_mut

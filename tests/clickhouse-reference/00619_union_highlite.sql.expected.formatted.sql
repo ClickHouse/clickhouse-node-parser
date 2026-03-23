@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS union;
+
 CREATE VIEW `union`
 AS
 SELECT 1 AS test
@@ -7,3 +9,5 @@ SELECT 2;
 SELECT *
 FROM `union`
 ORDER BY test ASC;
+
+SYSTEM DROP  TABLE union;

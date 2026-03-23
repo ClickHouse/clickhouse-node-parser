@@ -1,3 +1,7 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/448
+
+DROP TABLE IF EXISTS a;
+DROP TABLE iF EXISTS b;
 CREATE TABLE a ( a UInt64, b UInt64) ENGINE = Memory;
 CREATE TABLE b ( b UInt64) ENGINE = Memory;
 SET enable_analyzer = 1;

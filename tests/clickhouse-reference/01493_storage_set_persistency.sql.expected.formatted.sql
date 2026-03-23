@@ -1,3 +1,8 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS set;
+
+SYSTEM DROP  TABLE IF EXISTS number;
+
 CREATE TABLE number
 (
     number UInt64
@@ -21,6 +26,8 @@ FROM number
 WHERE number IN (`set`)
 LIMIT 1;
 
+SYSTEM DROP  TABLE set;
+
 CREATE TABLE `set`
 (
     val UInt64
@@ -34,3 +41,5 @@ CREATE TABLE `set`
 )
 ENGINE = Set()
 SETTINGS persistent = 0;
+
+SYSTEM DROP  TABLE number;

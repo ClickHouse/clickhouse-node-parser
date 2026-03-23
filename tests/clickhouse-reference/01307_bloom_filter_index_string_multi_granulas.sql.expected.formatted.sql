@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_01307;
+
 CREATE TABLE test_01307
 (
     id UInt64,
@@ -20,3 +22,5 @@ WHERE identity(val) = '2';
 SELECT count()
 FROM test_01307
 WHERE val = '2';
+
+SYSTEM DROP  TABLE test_01307;

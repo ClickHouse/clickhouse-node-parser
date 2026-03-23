@@ -1,6 +1,11 @@
 -- Tags: shard
 
 set optimize_skip_unused_shards=1;
+drop table if exists data_01071;
+drop table if exists dist_01071;
+drop table if exists data2_01071;
+drop table if exists dist2_01071;
+drop table if exists dist2_layer_01071;
 create table data_01071 (key Int) Engine=Null();
 create table dist_01071 as data_01071 Engine=Distributed(test_cluster_two_shards, currentDatabase(), data_01071);
 set force_optimize_skip_unused_shards=0;

@@ -1,5 +1,9 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t1__fuzz_8;
+
+SYSTEM DROP  TABLE IF EXISTS full_join__fuzz_4;
+
 CREATE TABLE t1__fuzz_8
 (
     x LowCardinality(UInt32),

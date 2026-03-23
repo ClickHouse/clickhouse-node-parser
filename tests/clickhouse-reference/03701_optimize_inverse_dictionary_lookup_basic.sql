@@ -4,6 +4,8 @@
 SET enable_analyzer = 1;
 SET optimize_inverse_dictionary_lookup = 1;
 SET optimize_or_like_chain = 0;
+DROP DICTIONARY IF EXISTS colors;
+DROP TABLE IF EXISTS ref_colors;
 CREATE TABLE ref_colors
 (
     id UInt64,
@@ -28,6 +30,7 @@ PRIMARY KEY id
 SOURCE(CLICKHOUSE(TABLE 'ref_colors'))
 LAYOUT(HASHED())
 LIFETIME(0);
+DROP TABLE IF EXISTS t;
 CREATE TABLE t
 (
     color_id UInt64,
@@ -164,6 +167,7 @@ ORDER BY color_id;
 -- Validation of attribute name
 CREATE DICTIONARY `dict` (`c0` UInt128) PRIMARY KEY (`c0`) SOURCE(NULL()) LAYOUT(FLAT()) LIFETIME(0);
 SELECT *, dictGetUInt16('dict', 'c0', `t1`.`c0`) = TRUE FROM `dict` AS t1; -- { serverError BAD_ARGUMENTS }
+DROP TABLE IF EXISTS t__fuzz_0;
 CREATE TABLE t__fuzz_0 (`color_id` UInt64, `payload` String)
 ENGINE = MergeTree ORDER BY color_id;
 CREATE DICTIONARY colors
@@ -178,6 +182,9 @@ LIFETIME(0);
 SELECT equals(materialize(9), CAST('red' AS Nullable(String)) = dictGetString('colors', 'payload', color_id))
 FROM t__fuzz_0;
 SET allow_suspicious_low_cardinality_types = 1;
+DROP DICTIONARY IF EXISTS dictionary_all;
+DROP TABLE IF EXISTS ref_table_all;
+DROP TABLE IF EXISTS tab__fuzz_24;
 CREATE TABLE tab__fuzz_24
 (`id` LowCardinality(UInt16), `payload` LowCardinality(Nullable(Int8)))
 ENGINE = MergeTree ORDER BY id;

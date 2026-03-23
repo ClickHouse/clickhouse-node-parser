@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t64;
 CREATE TABLE t64
 (
     i8 Int8,
@@ -81,3 +82,4 @@ INSERT INTO t64 SELECT (10 - toInt64(intExp2(56)) + number) AS x, x, x, x, x, x,
 INSERT INTO t64 SELECT (64 - toInt64(intExp2(56)) + number) AS x, x, x, x, x, x, x, x FROM numbers(2048);
 INSERT INTO t64 SELECT (64 - toInt64(intExp2(56)) + number) AS x, x, x, x, x, x, x, x FROM numbers(2049);
 INSERT INTO t64 SELECT (1 - toInt64(intExp2(56)) + number) AS x, x, x, x, x, x, x, x FROM numbers(2049);
+DROP TABLE t64;

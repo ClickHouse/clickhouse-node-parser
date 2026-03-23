@@ -2,6 +2,10 @@ SET join_algorithm = 'auto';
 
 SET max_bytes_in_join = 100;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS nr;
+
 CREATE TABLE t
 (
     x UInt32,
@@ -137,3 +141,7 @@ FROM
 FULL JOIN nr AS r
     USING (x)
 ORDER BY t.x ASC;
+
+SYSTEM DROP  TABLE t;
+
+SYSTEM DROP  TABLE nr;

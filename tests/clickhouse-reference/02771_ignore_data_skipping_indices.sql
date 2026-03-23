@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+
+DROP TABLE IF EXISTS data_02771;
 CREATE TABLE data_02771
 (
     key Int,
@@ -20,3 +23,4 @@ SET enable_analyzer = 0;
 SELECT * from ( EXPLAIN indexes = 1 SELECT * FROM data_02771 WHERE x = 1 AND y = 2 ) WHERE explain NOT LIKE '%Expression%' AND explain NOT LIKE '%Filter%';
 SELECT * from ( EXPLAIN indexes = 1 SELECT * FROM data_02771 WHERE x = 1 AND y = 2 SETTINGS ignore_data_skipping_indices='xy_idx' ) WHERE explain NOT LIKE '%Expression%' AND explain NOT LIKE '%Filter%';
 SET enable_analyzer = 1;
+DROP TABLE data_02771;

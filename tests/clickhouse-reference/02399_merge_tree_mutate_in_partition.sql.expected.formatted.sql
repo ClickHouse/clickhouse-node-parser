@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists mt;
+
+SYSTEM drop  table if exists m;
+
 CREATE TABLE mt
 (
     p int,
@@ -23,6 +27,8 @@ SELECT
 FROM mt
 ORDER BY _part ASC;
 
+SYSTEM drop  table m;
+
 SELECT
     mutation_id,
     command,
@@ -37,3 +43,5 @@ FROM mt
 ORDER BY
     p ASC,
     n ASC;
+
+SYSTEM drop  table mt;

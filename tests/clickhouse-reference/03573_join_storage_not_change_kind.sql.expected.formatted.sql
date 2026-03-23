@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS users;
+
+SYSTEM DROP  TABLE IF EXISTS events;
+
 CREATE TABLE users
 (
     uid UInt64,

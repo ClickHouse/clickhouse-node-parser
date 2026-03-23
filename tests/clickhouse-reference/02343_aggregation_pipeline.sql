@@ -9,6 +9,9 @@ set optimize_aggregation_in_order = 0;
 set max_block_size = 65505;
 set allow_prefetched_read_pool_for_remote_filesystem = 0;
 set allow_prefetched_read_pool_for_local_filesystem = 0;
+-- { echoOff }
+
+DROP TABLE IF EXISTS proj_agg_02343;
 CREATE TABLE proj_agg_02343
 (
     k1 UInt32,

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lwu_condition_cache;
+
 SET use_query_condition_cache = 1;
 
 SET enable_lightweight_update = 1;

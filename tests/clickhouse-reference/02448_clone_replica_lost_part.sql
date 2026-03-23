@@ -2,6 +2,8 @@
 -- no-shared-merge-tree: depend on replication queue/fetches
 
 SET insert_keeper_fault_injection_probability=0; -- disable fault injection; part ids are non-deterministic in case of insert retries
+drop table if exists rmt1;
+drop table if exists rmt2;
 create table rmt1 (n int) engine=ReplicatedMergeTree('/test/02448/{database}/rmt', '1') order by tuple()
     settings min_replicated_logs_to_keep=1, max_replicated_logs_to_keep=2,
     max_cleanup_delay_period=1, cleanup_delay_period=0, cleanup_delay_period_random_add=1,
@@ -65,3 +67,5 @@ select sleepEachRow(2) from url('http://localhost:8123/?param_tries={1..10}&quer
 select throwIf(n = 200) from rmt1 format Null;
 select 11, arraySort(groupArray(n)) from rmt2;
 select 12, arraySort(groupArray(n)) from rmt1;
+drop table rmt1;
+drop table rmt2;

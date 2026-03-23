@@ -18,6 +18,8 @@ CREATE WORKLOAD another_root; -- {serverError BAD_ARGUMENTS}
 
 CREATE WORKLOAD self_ref IN self_ref; -- {serverError BAD_ARGUMENTS}
 
+SYSTEM drop  workload all; -- {serverError BAD_ARGUMENTS}
+
 CREATE WORKLOAD invalid IN `03232_write`; -- {serverError BAD_ARGUMENTS}
 
 CREATE WORKLOAD invalid IN `all`; -- {serverError BAD_ARGUMENTS}
@@ -95,3 +97,16 @@ CREATE OR REPLACE WORKLOAD development IN `all`;
 CREATE OR REPLACE WORKLOAD development IN production;
 
 CREATE OR REPLACE WORKLOAD development IN admin;
+
+-- Clean up
+SYSTEM drop  workload if exists production;
+
+SYSTEM drop  workload if exists development;
+
+SYSTEM drop  workload if exists admin;
+
+SYSTEM drop  workload if exists all;
+
+SYSTEM drop  resource if exists 03232_write;
+
+SYSTEM drop  resource if exists 03232_read;

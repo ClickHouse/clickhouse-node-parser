@@ -1,3 +1,8 @@
+-- Tags: no-replicated-database
+-- no-replicated-database: fails due to additional shard.
+
+DROP TABLE IF EXISTS t_detach_attach_patches SYNC;
+DROP TABLE IF EXISTS t_detach_attach_patches_dst SYNC;
 SET enable_lightweight_update = 1;
 CREATE TABLE t_detach_attach_patches (id UInt64, a UInt64, b UInt64, c UInt64)
 ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_lwu_on_fly/', '1')
@@ -22,3 +27,5 @@ INSERT INTO t_detach_attach_patches VALUES (4, 1, 1, 1) (4, 2, 2, 2);
 INSERT INTO t_detach_attach_patches VALUES (5, 1, 1, 1) (5, 2, 2, 2);
 SELECT * FROM t_detach_attach_patches ORDER BY ALL;
 SET apply_patch_parts = 0;
+DROP TABLE t_detach_attach_patches SYNC;
+DROP TABLE t_detach_attach_patches_dst SYNC;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tp;
+
 CREATE TABLE tp
 (
     x Int32,
@@ -9,3 +11,5 @@ CREATE TABLE tp
 )
 ENGINE = MergeTree
 ORDER BY y;
+
+SYSTEM drop  table tp;

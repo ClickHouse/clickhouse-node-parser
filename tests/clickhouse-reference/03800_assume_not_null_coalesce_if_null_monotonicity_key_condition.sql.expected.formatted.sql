@@ -1,3 +1,15 @@
+-- Tags: no-replicated-database, no-parallel-replicas
+-- no-replicated-database: EXPLAIN output differs for replicated database.
+-- no-parallel-replicas: EXPLAIN output differs for parallel replicas.
+-- { echoOn }
+SYSTEM DROP  VIEW IF EXISTS view_ifnull;
+
+SYSTEM DROP  VIEW IF EXISTS view_coalesce;
+
+SYSTEM DROP  VIEW IF EXISTS view_assume;
+
+SYSTEM DROP  TABLE IF EXISTS test;
+
 SET session_timezone = 'UTC';
 
 CREATE TABLE test
@@ -53,6 +65,9 @@ FROM view_ifnull
 WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY id ASC;
 
+-- Nullable type, bounded max (right is not NULL/+Inf) => monotonicity is allowed.
+SYSTEM DROP  TABLE IF EXISTS test_non_null;
+
 CREATE TABLE test_non_null
 (
     ts Nullable(DateTime64(3))
@@ -77,6 +92,9 @@ SELECT *
 FROM test_non_null
 WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
+
+-- Nullable type, +Inf max due to NULLs (right is NULL/+Inf) => monotonicity is disabled.
+SYSTEM DROP  TABLE IF EXISTS test_null;
 
 CREATE TABLE test_null
 (
@@ -103,6 +121,8 @@ FROM test_null
 WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
 
+SYSTEM DROP  TABLE IF EXISTS test_null_rev;
+
 CREATE TABLE test_null_rev
 (
     ts Nullable(DateTime64(3))
@@ -127,6 +147,8 @@ SELECT *
 FROM test_null_rev
 WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE IF EXISTS test_lc_left_inf;
 
 SET allow_suspicious_low_cardinality_types = 1;
 

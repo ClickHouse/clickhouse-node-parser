@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS compress_table;
+
 CREATE TABLE compress_table
 (
     key UInt64,

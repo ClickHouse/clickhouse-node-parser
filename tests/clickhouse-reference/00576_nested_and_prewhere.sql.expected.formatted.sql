@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nested;
+
 CREATE TABLE nested
 (
     x UInt64,
@@ -31,3 +33,5 @@ SELECT DISTINCT
 FROM nested
 PREWHERE filter
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE nested;

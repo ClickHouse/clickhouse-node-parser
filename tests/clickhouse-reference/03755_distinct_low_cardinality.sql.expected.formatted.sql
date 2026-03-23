@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM DROP  TABLE IF EXISTS distinct_lc_basic;
+
 CREATE TABLE distinct_lc_basic
 (
     id UInt32,
@@ -41,6 +44,8 @@ SELECT (
             )
     );
 
+SYSTEM DROP  TABLE IF EXISTS distinct_lc_low_cardinality;
+
 CREATE TABLE distinct_lc_low_cardinality
 (
     id UInt32,
@@ -83,6 +88,8 @@ SELECT (
                 FROM distinct_lc_low_cardinality
             )
     );
+
+SYSTEM DROP  TABLE IF EXISTS distinct_lc_nullable;
 
 CREATE TABLE distinct_lc_nullable
 (
@@ -219,6 +226,8 @@ SELECT (
             )
     );
 
+SYSTEM DROP  TABLE IF EXISTS distinct_lc_mixed;
+
 CREATE TABLE distinct_lc_mixed
 (
     id UInt32,
@@ -257,6 +266,8 @@ SELECT (
         SELECT uniqExact(k1)
         FROM distinct_lc_mixed
     );
+
+SYSTEM DROP  TABLE IF EXISTS distinct_lc_all_same;
 
 CREATE TABLE distinct_lc_all_same
 (
@@ -300,6 +311,8 @@ SELECT (
                 FROM distinct_lc_all_same
             )
     );
+
+SYSTEM DROP  TABLE IF EXISTS distinct_lc_sparse_nulls;
 
 CREATE TABLE distinct_lc_sparse_nulls
 (

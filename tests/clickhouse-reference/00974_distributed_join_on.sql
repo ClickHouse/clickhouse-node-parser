@@ -1,3 +1,9 @@
+-- Tags: distributed
+
+DROP TABLE IF EXISTS source_table1;
+DROP TABLE IF EXISTS source_table2;
+DROP TABLE IF EXISTS distributed_table1;
+DROP TABLE IF EXISTS distributed_table2;
 CREATE TABLE source_table1 (a Int64, b String) ENGINE = Memory;
 CREATE TABLE source_table2 (c Int64, d String) ENGINE = Memory;
 INSERT INTO source_table1 VALUES (42, 'qwe');
@@ -13,3 +19,7 @@ SELECT 1 FROM distributed_table1 AS t1 GLOBAL JOIN distributed_table1 AS t2 ON t
 SET prefer_localhost_replica = 0;
 SELECT t1.a as t1_a, t2.a as t2_a FROM source_table1 AS t1 JOIN source_table1 AS t2 ON t1_a = t2_a LIMIT 1;
 SELECT t1.a as t1_a, t2.a as t2_a FROM distributed_table1 AS t1 GLOBAL JOIN distributed_table1 AS t2 ON t1_a = t2_a LIMIT 1;
+DROP TABLE source_table1;
+DROP TABLE source_table2;
+DROP TABLE distributed_table1;
+DROP TABLE distributed_table2;

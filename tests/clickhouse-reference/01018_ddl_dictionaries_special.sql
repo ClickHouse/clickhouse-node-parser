@@ -81,3 +81,4 @@ SELECT dictGetHierarchy({CLICKHOUSE_DATABASE:String} || '.dictionary_with_hierar
 SELECT dictIsIn({CLICKHOUSE_DATABASE:String} || '.dictionary_with_hierarchy', toUInt64(3), toUInt64(2));
 SELECT dictIsIn({CLICKHOUSE_DATABASE:String} || '.dictionary_with_hierarchy', toUInt64(7), toUInt64(10000));
 SELECT dictIsIn({CLICKHOUSE_DATABASE:String} || '.dictionary_with_hierarchy', toUInt64(1), toUInt64(5));
+DROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};

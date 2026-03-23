@@ -11,3 +11,4 @@ select sleepEachRow(2) as higher_probablility_of_reproducing_the_issue format Nu
 -- mutation should not be finished yet
 select * from mut;
 select mutation_id, command, parts_to_do_names from system.mutations where database=currentDatabase() and table='mut';
+drop table tmp; -- btw, it will check that mutation can be cancelled between blocks on shutdown

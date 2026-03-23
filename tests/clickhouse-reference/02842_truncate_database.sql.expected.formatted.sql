@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS test_truncate_database;
+
 -- test TRUNCATE DATABASE operation.
 -- create tables, views and dictionary and populate them. Then try truncating the database.
 -- all tables, views and dictionaries should be removed leaving an empty database
@@ -153,3 +156,5 @@ CREATE TABLE new_table
 )
 ENGINE = MergeTree
 ORDER BY x;
+
+SYSTEM DROP  DATABASE test_truncate_database;

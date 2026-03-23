@@ -12,6 +12,9 @@ FROM
         uniqState(map(nt, nt))::AggregateFunction(uniq, Map(Tuple(int, int), Tuple(int, int))) z
 )
 FORMAT JSONEachRow;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users2;
+DROP TABLE IF EXISTS test_mv;
 CREATE TABLE users (id UInt8, city String, name String) ENGINE=Memory;
 CREATE TABLE users2 (id UInt8, city_name_uniq AggregateFunction(uniq, Tuple(String,String))) ENGINE=AggregatingMergeTree() ORDER BY (id);
 CREATE MATERIALIZED VIEW test_mv TO users2 AS SELECT id, uniqState((city, name)) AS city_name_uniq FROM users GROUP BY id;

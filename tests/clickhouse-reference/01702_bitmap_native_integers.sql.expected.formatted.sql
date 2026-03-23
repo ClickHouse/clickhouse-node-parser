@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     i8 Int8,
@@ -16,3 +18,5 @@ FROM (
         SELECT * APPLY(groupBitmapState)
         FROM t
     );
+
+SYSTEM drop  table t;

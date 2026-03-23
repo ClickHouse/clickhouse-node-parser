@@ -47,3 +47,11 @@ SELECT x
 FROM distributed
 GROUP BY x
 WITH TOTALS; -- { serverError TYPE_MISMATCH }
+
+SYSTEM DROP  TABLE distributed;
+
+SYSTEM DROP  TABLE local;
+
+SYSTEM DROP  TABLE alias_local10;
+
+SYSTEM DROP  TABLE alias10__fuzz_13;

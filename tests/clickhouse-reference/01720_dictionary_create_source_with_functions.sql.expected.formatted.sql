@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS 01720_dictionary_db;
+
 CREATE DATABASE `01720_dictionary_db`;
 
 CREATE TABLE `01720_dictionary_db`.dictionary_source_table
@@ -21,3 +24,9 @@ LAYOUT(FLAT());
 
 SELECT *
 FROM `01720_dictionary_db`.dictionary;
+
+SYSTEM DROP  DICTIONARY 01720_dictionary_db.dictionary;
+
+SYSTEM DROP  TABLE 01720_dictionary_db.dictionary_source_table;
+
+SYSTEM DROP  DATABASE 01720_dictionary_db;

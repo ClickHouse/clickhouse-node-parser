@@ -2,6 +2,7 @@
 
 ----- Group of very similar simple tests ------
 select '----HORIZONTAL MERGE TESTS----';
+DROP TABLE IF EXISTS zero_rows_per_granule;
 CREATE TABLE zero_rows_per_granule (
   p Date,
   k UInt64,
@@ -12,6 +13,7 @@ INSERT INTO zero_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 
 SELECT COUNT(*) FROM zero_rows_per_granule;
 SELECT distinct(marks) from system.parts WHERE table = 'zero_rows_per_granule' and database=currentDatabase() and active=1;
 INSERT INTO zero_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
+DROP TABLE IF EXISTS two_rows_per_granule;
 CREATE TABLE two_rows_per_granule (
   p Date,
   k UInt64,
@@ -22,6 +24,7 @@ INSERT INTO two_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2
 SELECT COUNT(*) FROM two_rows_per_granule;
 SELECT distinct(marks) from system.parts WHERE table = 'two_rows_per_granule' and database=currentDatabase() and active=1;
 INSERT INTO two_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
+DROP TABLE IF EXISTS four_rows_per_granule;
 CREATE TABLE four_rows_per_granule (
   p Date,
   k UInt64,
@@ -32,6 +35,7 @@ INSERT INTO four_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 
 SELECT COUNT(*) FROM four_rows_per_granule;
 SELECT distinct(marks) from system.parts WHERE table = 'four_rows_per_granule' and database=currentDatabase() and active=1;
 INSERT INTO four_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
+DROP TABLE IF EXISTS huge_granularity_small_blocks;
 CREATE TABLE huge_granularity_small_blocks (
   p Date,
   k UInt64,
@@ -42,6 +46,7 @@ INSERT INTO huge_granularity_small_blocks (p, k, v1, v2) VALUES ('2018-05-15', 1
 SELECT COUNT(*) FROM huge_granularity_small_blocks;
 SELECT distinct(marks) from system.parts WHERE table = 'huge_granularity_small_blocks' and database=currentDatabase() and active=1;
 INSERT INTO huge_granularity_small_blocks (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2000), ('2018-05-16', 5, 3000, 4000), ('2018-05-17', 6, 5000, 6000), ('2018-05-19', 7, 7000, 8000);
+DROP TABLE IF EXISTS adaptive_granularity_alter;
 CREATE TABLE adaptive_granularity_alter (
   p Date,
   k UInt64,

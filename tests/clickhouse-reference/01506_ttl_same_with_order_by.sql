@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS derived_metrics_local;
 CREATE TABLE derived_metrics_local
 (
   timestamp DateTime,
@@ -12,6 +13,7 @@ INSERT INTO derived_metrics_local values('2020-01-01 00:00:00', 1);
 INSERT INTO derived_metrics_local values('2020-01-01 00:01:00', 3);
 INSERT INTO derived_metrics_local values('2020-01-01 00:02:00', 2);
 SELECT * FROM derived_metrics_local;
+DROP TABLE derived_metrics_local;
 CREATE TABLE derived_metrics_local
 (
   timestamp DateTime,

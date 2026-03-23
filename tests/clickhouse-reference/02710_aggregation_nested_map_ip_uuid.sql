@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS summing_table;
 CREATE TABLE summing_table
 (
     id UInt32,
@@ -22,3 +23,4 @@ INSERT INTO summing_table(id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.t
     values(2, ['1.2.3.4'], [19], ['::2'], [20], ['00130949-0cd4-4c3d-84c4-cc421eff480f'], [21]);
 INSERT INTO summing_table(id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.total, uuidMap.value, uuidMap.total)
     values(1, ['1.2.3.4'], [22], ['::1'], [23], ['00000000-0cd4-4c3d-84c4-cc421eff480f'], [24]);
+DROP TABLE summing_table;

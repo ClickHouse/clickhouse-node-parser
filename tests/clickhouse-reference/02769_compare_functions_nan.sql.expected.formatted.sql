@@ -26,6 +26,8 @@ SELECT
 
 SELECT '--';
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt32,
@@ -43,6 +45,8 @@ FROM (
     ) AS subquery
 WHERE ((value = value)
     AND (NOT value = value));
+
+SYSTEM DROP  TABLE test_table;
 
 SELECT
     nan AS value,

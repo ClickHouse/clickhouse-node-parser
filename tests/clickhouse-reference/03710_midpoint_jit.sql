@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS midpoint_jit;
 CREATE TABLE midpoint_jit
 (
     xi Int64,

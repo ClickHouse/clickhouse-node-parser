@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tab;
 -- Tests text index with the 'ReplacingMergeTree' engine
 
 SET enable_full_text_index = 1;
@@ -17,3 +18,4 @@ SELECT count() FROM tab WHERE text = 'v12345';
 SELECT count() FROM tab WHERE text = 'v12345_updated';
 SELECT count() FROM tab FINAL WHERE text = 'v54320';
 SELECT count() FROM tab WHERE text = 'v54320_updated';
+DROP TABLE tab;

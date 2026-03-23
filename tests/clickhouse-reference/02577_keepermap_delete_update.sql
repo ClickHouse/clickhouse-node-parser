@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-fasttest
+
+DROP TABLE IF EXISTS 02577_keepermap_delete_update;
 CREATE TABLE 02577_keepermap_delete_update (key UInt64, value String, value2 UInt64) ENGINE=KeeperMap('/' ||  currentDatabase() || '/test02577_keepermap_delete_update') PRIMARY KEY(key);
 INSERT INTO 02577_keepermap_delete_update VALUES (1, 'Some string', 0), (2, 'Some other string', 0), (3, 'random', 0), (4, 'random2', 0);
 SELECT *, _version FROM 02577_keepermap_delete_update ORDER BY key;

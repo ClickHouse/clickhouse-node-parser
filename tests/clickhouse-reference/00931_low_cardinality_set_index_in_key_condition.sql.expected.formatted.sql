@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_in;
+
 CREATE TABLE test_in
 (
     a LowCardinality(String)

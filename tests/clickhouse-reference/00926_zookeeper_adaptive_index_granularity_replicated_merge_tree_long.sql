@@ -2,6 +2,8 @@
 
 ----- Group of very similar simple tests ------
 select '----HORIZONTAL MERGE TESTS----';
+DROP TABLE IF EXISTS zero_rows_per_granule1;
+DROP TABLE IF EXISTS zero_rows_per_granule2;
 CREATE TABLE zero_rows_per_granule1 (
   p Date,
   k UInt64,
@@ -21,6 +23,8 @@ SELECT COUNT(*) FROM zero_rows_per_granule2;
 SELECT distinct(marks) from system.parts WHERE table = 'zero_rows_per_granule2' and database=currentDatabase() and active=1;
 INSERT INTO zero_rows_per_granule2 (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
 SELECT sleep(0.7) Format Null;
+DROP TABLE IF EXISTS four_rows_per_granule1;
+DROP TABLE IF EXISTS four_rows_per_granule2;
 CREATE TABLE four_rows_per_granule1 (
   p Date,
   k UInt64,
@@ -39,6 +43,8 @@ SELECT distinct(marks) from system.parts WHERE table = 'four_rows_per_granule1' 
 SELECT COUNT(*) FROM four_rows_per_granule2;
 SELECT distinct(marks) from system.parts WHERE table = 'four_rows_per_granule2' and database=currentDatabase() and active=1;
 INSERT INTO four_rows_per_granule2 (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
+DROP TABLE IF EXISTS adaptive_granularity_alter1;
+DROP TABLE IF EXISTS adaptive_granularity_alter2;
 CREATE TABLE adaptive_granularity_alter1 (
   p Date,
   k UInt64,

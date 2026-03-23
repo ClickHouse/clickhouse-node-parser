@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS open_events_tmp;
+
+SYSTEM DROP  TABLE IF EXISTS tracking_events_tmp;
+
 CREATE TABLE open_events_tmp
 (
     APIKey UInt32,
@@ -71,3 +75,7 @@ SETTINGS
     group_by_overflow_mode = 'any',
     max_rows_to_group_by = 10000000,
     joined_subquery_requires_alias = 0;
+
+SYSTEM DROP  TABLE open_events_tmp;
+
+SYSTEM DROP  TABLE tracking_events_tmp;

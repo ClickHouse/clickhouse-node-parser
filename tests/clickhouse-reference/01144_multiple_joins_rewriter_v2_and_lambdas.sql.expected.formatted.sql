@@ -40,6 +40,8 @@ CROSS JOIN (
         SELECT 1 AS A
     ) AS check_single_query;
 
+SYSTEM drop  table if exists table;
+
 CREATE TABLE table
 (
     query String,
@@ -118,3 +120,5 @@ CROSS JOIN (
         SELECT throwIf(uniq((test, query)))
         FROM table
     ) AS check_single_query;
+
+SYSTEM drop  table table;

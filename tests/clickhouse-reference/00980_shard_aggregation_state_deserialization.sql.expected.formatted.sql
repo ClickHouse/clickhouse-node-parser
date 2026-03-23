@@ -1,3 +1,6 @@
+-- Tags: shard
+SYSTEM DROP  TABLE IF EXISTS numbers500k;
+
 CREATE VIEW numbers500k
 AS
 SELECT number
@@ -12,3 +15,5 @@ WHERE bitmapContains((
         SELECT groupBitmapState(number)
         FROM numbers500k
     ), toUInt32(number));
+
+SYSTEM DROP  TABLE numbers500k;

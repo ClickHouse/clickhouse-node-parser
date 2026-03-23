@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_00688;
+
 CREATE TABLE test_00688
 (
     a UInt8
@@ -8,3 +10,5 @@ INSERT INTO test_00688;
 
 SELECT multiIf(a = 1, 0, NULL)
 FROM test_00688;
+
+SYSTEM DROP  TABLE test_00688;

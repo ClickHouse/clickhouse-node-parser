@@ -3,6 +3,10 @@ SET enable_analyzer = 1; -- parallel distributed insert select for replicated ta
 
 SET parallel_distributed_insert_select = 2;
 
+SYSTEM DROP  TABLE IF EXISTS t_mt_source;
+
+SYSTEM DROP  TABLE IF EXISTS t_rmt_target SYNC;
+
 CREATE TABLE t_mt_source
 (
     k UInt64,
@@ -76,3 +80,7 @@ WHERE ((current_database = currentDatabase()
     AND has(tables, concat(currentDatabase(), '.t_rmt_target'))
 ORDER BY event_time_microseconds ASC
 SETTINGS allow_experimental_parallel_reading_from_replicas = 0;
+
+SYSTEM DROP  TABLE t_mt_source;
+
+SYSTEM DROP  TABLE t_rmt_target SYNC;

@@ -7,6 +7,8 @@ SET allow_experimental_dynamic_type = 1;
 
 SET min_bytes_to_use_direct_io = 0; -- min_bytes_to_use_direct_io > 0 is broken
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -181,3 +183,5 @@ SELECT
     d.`Array(Array(Dynamic))`.`Map(String, Tuple(a UInt64))`.values.a
 FROM test
 FORMAT Null;
+
+SYSTEM drop  table test;

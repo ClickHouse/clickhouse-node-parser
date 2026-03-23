@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/53640
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     i UInt32,
@@ -16,3 +19,5 @@ FROM (
         FROM tab
         ORDER BY i ASC WITH FILL INTERPOLATE (col1 AS col1 + col2, col2)
     );
+
+SYSTEM DROP  TABLE tab;

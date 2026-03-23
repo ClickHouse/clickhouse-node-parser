@@ -5,6 +5,10 @@ SET send_logs_level = 'fatal';
 
 SET prefer_localhost_replica = 1;
 
+SYSTEM DROP  DATABASE IF EXISTS test_01155_ordinary;
+
+SYSTEM DROP  DATABASE IF EXISTS test_01155_atomic;
+
 SET allow_deprecated_database_ordinary = 1;
 
 -- Creation of a database with Ordinary engine emits a warning.
@@ -110,6 +114,8 @@ WHERE database = 'test_01155_ordinary';
 SELECT substr(name, 1, 10)
 FROM `system`.tables
 WHERE database = 'test_01155_atomic';
+
+SYSTEM DROP  DATABASE test_01155_ordinary;
 
 USE default;
 

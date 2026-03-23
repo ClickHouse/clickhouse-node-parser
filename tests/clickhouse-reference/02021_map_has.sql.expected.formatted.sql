@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_map;
+
 CREATE TABLE test_map
 (
     value Map(String, String)
@@ -17,3 +19,5 @@ FROM `system`.one;
 
 SELECT has(map('K0', 'V0'), 'K1')
 FROM `system`.one;
+
+SYSTEM DROP  TABLE test_map;

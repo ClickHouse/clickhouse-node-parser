@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `test_foo_#`;
 CREATE TABLE `test_foo_#` (
     `date` Date,
     `town` LowCardinality(String),
@@ -8,6 +9,7 @@ PARTITION BY toYear(date)
 COMMENT 'test' -- to end ENGINE definition, so SETTINGS will be in the query level
 SETTINGS
     enforce_strict_identifier_format=true; -- { serverError BAD_ARGUMENTS }
+DROP TABLE IF EXISTS test_foo;
 CREATE TABLE test_foo (
     `insecure_#` Int8,
     `date` Date,

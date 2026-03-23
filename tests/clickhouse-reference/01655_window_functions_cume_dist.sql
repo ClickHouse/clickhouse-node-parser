@@ -19,3 +19,4 @@ SELECT a, b, cume_dist() OVER (ORDER BY b NULLS LAST) FROM test_cume_dist ORDER 
 SELECT a, b, cume_dist() OVER (PARTITION BY a ORDER BY b) FROM test_cume_dist WHERE a = 3;
 SELECT a, b, cume_dist() OVER (PARTITION BY a ORDER BY b) FROM test_cume_dist WHERE a = 7;
 SELECT number, cume_dist() OVER (ORDER BY number ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) FROM numbers(5); -- { serverError BAD_ARGUMENTS }
+DROP TABLE test_cume_dist;

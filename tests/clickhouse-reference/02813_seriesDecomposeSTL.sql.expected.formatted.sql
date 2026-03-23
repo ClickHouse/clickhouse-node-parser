@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tb2;
+
 CREATE TABLE tb2
 (
     period UInt32,

@@ -1,3 +1,12 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS hits;
+
+SYSTEM DROP  TABLE IF EXISTS visits;
+
+SYSTEM DROP  TABLE IF EXISTS hits_layer;
+
+SYSTEM DROP  TABLE IF EXISTS visits_layer;
+
 CREATE TABLE visits
 (
     StartDate Date
@@ -35,3 +44,11 @@ PREWHERE WatchID IN (
         FROM visits_layer AS vl
     )
 WHERE 0;
+
+SYSTEM DROP  TABLE hits;
+
+SYSTEM DROP  TABLE visits;
+
+SYSTEM DROP  TABLE hits_layer;
+
+SYSTEM DROP  TABLE visits_layer;

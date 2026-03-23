@@ -1,3 +1,4 @@
+DROP DICTIONARY IF EXISTS 03148_dictionary;
 CREATE DICTIONARY 03148_dictionary (
     id UInt64,
     name String

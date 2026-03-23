@@ -56,6 +56,8 @@ SELECT space(30303030303030303030303030303030::UInt64); -- { serverError TOO_LAR
 
 SELECT space(NULL);
 
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     u8 UInt8,
@@ -134,3 +136,5 @@ SELECT
     space(i64),
     length(space(i64))
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;

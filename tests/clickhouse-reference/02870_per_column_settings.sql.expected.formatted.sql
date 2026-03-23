@@ -1,3 +1,9 @@
+-- Tags: no-random-merge-tree-settings, no-replicated-database
+-- Tag no-replicated-database: Old syntax is not allowed
+-- The test use replicated table to test serialize and deserialize column with settings declaration on zookeeper
+-- Tests column-level settings for MergeTree* tables
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt64,
@@ -30,6 +36,8 @@ SELECT formatQuery('ALTER TABLE tab MODIFY COLUMN long_string RESET SETTING min_
 SELECT formatQuery('ALTER TABLE tab MODIFY COLUMN long_string REMOVE SETTINGS;');
 
 SELECT formatQuery('ALTER TABLE tab MODIFY COLUMN long_string String SETTINGS (min_compress_block_size = 163840, max_compress_block_size = 163840);');
+
+SYSTEM DROP  TABLE tab;
 
 SELECT '---';
 

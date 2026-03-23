@@ -1,3 +1,17 @@
+SYSTEM DROP  DICTIONARY IF EXISTS uk_mortgage_rates_dict;
+
+SYSTEM DROP  TABLE IF EXISTS uk_mortgage_rates;
+
+SYSTEM DROP  VIEW IF EXISTS uk_prices_aggs_view;
+
+SYSTEM DROP  TABLE IF EXISTS uk_prices_aggs_dest;
+
+SYSTEM DROP  VIEW IF EXISTS prices_by_year_view;
+
+SYSTEM DROP  TABLE IF EXISTS prices_by_year_dest;
+
+SYSTEM DROP  TABLE IF EXISTS uk_price_paid;
+
 -- Create tables, views, dictionaries
 CREATE TABLE uk_price_paid
 (
@@ -144,3 +158,17 @@ SELECT ('Settings: user_display & BackticksMySQL');
 
 -- Show tables, views, dictionaries with show_create_query_identifier_quoting_rule='when_necessary', show_create_query_identifier_quoting_style='BackticksMySQL'
 SELECT ('Settings: when_necessary & BackticksMySQL');
+
+SYSTEM DROP  DICTIONARY uk_mortgage_rates_dict;
+
+SYSTEM DROP  TABLE uk_mortgage_rates;
+
+SYSTEM DROP  VIEW uk_prices_aggs_view;
+
+SYSTEM DROP  TABLE uk_prices_aggs_dest;
+
+SYSTEM DROP  VIEW prices_by_year_view;
+
+SYSTEM DROP  TABLE prices_by_year_dest;
+
+SYSTEM DROP  TABLE uk_price_paid;

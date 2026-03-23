@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_23634;
+
 SET force_primary_key = 1;
 
 CREATE TABLE test_23634
@@ -78,3 +80,5 @@ ORDER BY
     id ASC,
     s1 ASC,
     s1 ASC;
+
+SYSTEM drop  table test_23634;

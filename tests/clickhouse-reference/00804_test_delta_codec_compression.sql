@@ -3,6 +3,8 @@
 
 SET send_logs_level = 'fatal';
 SET joined_subquery_requires_alias = 0;
+DROP TABLE IF EXISTS delta_codec_synthetic;
+DROP TABLE IF EXISTS default_codec_synthetic;
 CREATE TABLE delta_codec_synthetic
 (
     id UInt64 Codec(Delta, ZSTD(3))
@@ -28,6 +30,8 @@ FROM
 INNER JOIN
     (SELECT 1 AS key, sum(cityHash64(*)) AS big_hash FROM default_codec_synthetic)
 USING(key);
+DROP TABLE IF EXISTS delta_codec_float;
+DROP TABLE IF EXISTS default_codec_float;
 CREATE TABLE delta_codec_float
 (
     id Float64 Codec(Delta, LZ4HC)
@@ -51,6 +55,8 @@ FROM
 INNER JOIN
     (SELECT 1 AS key, sum(cityHash64(*)) AS big_hash FROM default_codec_float)
 USING(key);
+DROP TABLE IF EXISTS delta_codec_string;
+DROP TABLE IF EXISTS default_codec_string;
 CREATE TABLE delta_codec_string
 (
     id Float64 Codec(Delta, LZ4)

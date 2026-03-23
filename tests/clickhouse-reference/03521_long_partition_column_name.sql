@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_long_partition_column_name;
 CREATE TABLE t_long_partition_column_name (
 `一个非常非常非常非常非常非常非常非常非常非常非常长的中文字符串` Int,
 )

@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+SYSTEM DROP  TABLE IF EXISTS test_alter;
+
 CREATE TABLE test_alter
 (
     x Date,
@@ -6,6 +9,12 @@ CREATE TABLE test_alter
 ENGINE = MergeTree
 ORDER BY s
 PARTITION BY x;
+
+SYSTEM DROP  TABLE test_alter;
+
+SYSTEM DROP  TABLE IF EXISTS test_alter_r1;
+
+SYSTEM DROP  TABLE IF EXISTS test_alter_r2;
 
 CREATE TABLE test_alter_r1
 (
@@ -24,3 +33,7 @@ CREATE TABLE test_alter_r2
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_01267/alter', 'r2')
 ORDER BY s
 PARTITION BY x;
+
+SYSTEM DROP  TABLE test_alter_r1;
+
+SYSTEM DROP  TABLE test_alter_r2;

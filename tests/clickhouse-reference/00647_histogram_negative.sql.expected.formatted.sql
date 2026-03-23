@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists histogram;
+
 CREATE TABLE histogram
 (
     num Int64

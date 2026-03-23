@@ -1,3 +1,6 @@
+-- Tags: deadlock
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x UInt8
@@ -11,6 +14,8 @@ FROM t;
 
 SELECT count()
 FROM t;
+
+SYSTEM DROP  TABLE t;
 
 CREATE TABLE t
 (

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     s String
@@ -43,3 +45,5 @@ SELECT s != ''
 FROM test
 WHERE s < '9999999999'
 LIMIT 1;
+
+SYSTEM DROP  TABLE test;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS primary;
+
 CREATE TABLE primary
 (
     primary String
@@ -10,3 +12,5 @@ FROM numbers(1000);
 
 SELECT max(primary)
 FROM primary;
+
+SYSTEM DROP  TABLE primary;

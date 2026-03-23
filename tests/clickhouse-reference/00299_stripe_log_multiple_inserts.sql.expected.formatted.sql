@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS log;
+
 CREATE TABLE log
 (
     x UInt8
@@ -13,6 +15,8 @@ INSERT INTO log;
 INSERT INTO log;
 
 INSERT INTO log;
+
+SYSTEM DROP  TABLE log;
 
 CREATE TABLE log
 (

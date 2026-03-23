@@ -253,6 +253,8 @@ ORDER BY tuple() ASC;
 
 SELECT arrayElementOrNull([(1, 'a'), (2, 'b')], 'x'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
+SYSTEM DROP  TABLE IF EXISTS test_array_tuple_mergetree;
+
 CREATE TABLE test_array_tuple_mergetree
 (
     id UInt8,

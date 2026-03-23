@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tp;
 CREATE TABLE tp (
     type Int32,
     eventcnt UInt64,
@@ -13,3 +14,4 @@ FROM tp
 GROUP BY type
 ORDER BY eventcnt, type;
 SET optimize_use_projections = true, force_optimize_projection = true;
+DROP TABLE tp;

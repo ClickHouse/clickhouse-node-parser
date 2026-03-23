@@ -1,5 +1,6 @@
 SET optimize_on_insert = 0;
 select '-- SummingMergeTree with Nullable column without duplicates.';
+drop table if exists tst;
 create table tst (timestamp DateTime, val Nullable(Int8)) engine SummingMergeTree partition by toYYYYMM(timestamp) ORDER by (timestamp);
 insert into tst values ('2018-02-01 00:00:00', 1), ('2018-02-02 00:00:00', 2);
 select * from tst final order by timestamp;
@@ -17,3 +18,4 @@ select count() from tst final where val>0;
 select count() from tst final prewhere val>0;
 insert into tst values ('2018-02-01 00:00:00', 1), ('2018-02-02 00:00:00', 2), ('2018-02-01 00:00:00', 3), ('2018-02-02 00:00:00', 4);
 create table tst (timestamp DateTime, val Int8) engine SummingMergeTree partition by toYYYYMM(timestamp) ORDER by (timestamp);
+drop table tst;

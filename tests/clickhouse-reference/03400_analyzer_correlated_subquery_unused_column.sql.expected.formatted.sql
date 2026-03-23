@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS users;
+
 CREATE TABLE users
 (
     uid Int16,
@@ -14,6 +16,8 @@ INSERT INTO users;
 INSERT INTO users;
 
 INSERT INTO users;
+
+SYSTEM DROP  TABLE IF EXISTS users2;
 
 CREATE TABLE users2
 (

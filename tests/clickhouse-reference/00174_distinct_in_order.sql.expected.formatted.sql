@@ -1,6 +1,10 @@
 -- Tags: stateful
 SELECT '-- check that distinct with and w/o optimization produce the same result';
 
+SYSTEM drop  table if exists distinct_in_order sync;
+
+SYSTEM drop  table if exists ordinary_distinct sync;
+
 CREATE TABLE distinct_in_order
 (
     CounterID UInt32,

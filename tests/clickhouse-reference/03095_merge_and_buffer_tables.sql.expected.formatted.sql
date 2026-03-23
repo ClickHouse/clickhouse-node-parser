@@ -1,3 +1,10 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/36963
+SYSTEM DROP  TABLE IF EXISTS mt1;
+
+SYSTEM DROP  TABLE IF EXISTS mt2;
+
+SYSTEM DROP  TABLE IF EXISTS b;
+
 CREATE TABLE mt1
 (
     f1 Int32,

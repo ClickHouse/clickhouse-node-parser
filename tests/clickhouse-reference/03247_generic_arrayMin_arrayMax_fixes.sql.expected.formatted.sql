@@ -12,6 +12,8 @@ SELECT arrayMin(x1 -> (x1 * toNullable(-1)), materialize([1, 2, 3]));
 
 SELECT arrayMin(x1 -> x1 * -1, [1,2,3]);
 
+SYSTEM DROP  TABLE IF EXISTS test_aggregation_array;
+
 CREATE TABLE test_aggregation_array
 (
     x Array(Int)

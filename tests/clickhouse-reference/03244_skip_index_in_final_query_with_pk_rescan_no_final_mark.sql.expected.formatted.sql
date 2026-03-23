@@ -6,6 +6,8 @@ SET use_skip_indexes_if_final = 1;
 
 SET use_skip_indexes_if_final_exact_mode = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab1;
+
 -- The CREATE TABLE raises a warning due to index_granularity_bytes = 0
 SET send_logs_level = 'fatal';
 
@@ -35,3 +37,5 @@ FROM numbers(1e4);
 SELECT *
 FROM tab1 FINAL
 WHERE ric = 'BOWNU.O';
+
+SYSTEM DROP  TABLE tab1;

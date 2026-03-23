@@ -1,6 +1,8 @@
 -- Tags: long
 SET mutations_sync = 1;
 
+SYSTEM drop  table if exists test_updates;
+
 CREATE TABLE test_updates
 (
     id UInt64,
@@ -54,6 +56,8 @@ SELECT
     dynamic
 FROM test_updates
 FORMAT Null;
+
+SYSTEM drop  table test_updates;
 
 CREATE TABLE test_updates
 (

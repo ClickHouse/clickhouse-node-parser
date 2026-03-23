@@ -1,3 +1,12 @@
+-- Tags: distributed
+SYSTEM drop  table if exists table_1;
+
+SYSTEM drop  table if exists table_2;
+
+SYSTEM drop  table if exists v_numbers;
+
+SYSTEM drop  table if exists mv_table;
+
 SET max_rows_to_read = 0;
 
 CREATE TABLE table_1

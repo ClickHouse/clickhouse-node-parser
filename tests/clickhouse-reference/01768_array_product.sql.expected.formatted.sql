@@ -14,6 +14,8 @@ SELECT
     arrayProduct([toDecimal64(1,8), toDecimal64(2,8), toDecimal64(3,8)]) AS a,
     toTypeName(a);
 
+SYSTEM DROP  TABLE IF EXISTS test_aggregation;
+
 CREATE TABLE test_aggregation
 (
     x Array(Int)
@@ -24,6 +26,8 @@ INSERT INTO test_aggregation;
 
 SELECT arrayProduct(x)
 FROM test_aggregation;
+
+SYSTEM DROP  TABLE test_aggregation;
 
 CREATE TABLE test_aggregation
 (

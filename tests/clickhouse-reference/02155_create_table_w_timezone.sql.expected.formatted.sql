@@ -9,3 +9,7 @@ CREATE TABLE t02155_t_tz
     a DateTime('America/Chicago')
 )
 ENGINE = Memory;
+
+SYSTEM drop  table t02155_t64_tz;
+
+SYSTEM drop  table t02155_t_tz;

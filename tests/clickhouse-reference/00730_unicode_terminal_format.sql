@@ -1,5 +1,6 @@
 SET output_format_pretty_squash_consecutive_ms = 0;
 SET output_format_pretty_max_column_name_width_cut_to = 0;
+DROP TABLE IF EXISTS unicode;
 CREATE TABLE unicode(c1 String, c2 String) ENGINE = Memory;
 INSERT INTO unicode VALUES ('Здравствуйте', 'Этот код можно отредактировать и запустить!');
 INSERT INTO unicode VALUES ('你好', '这段代码是可以编辑并且能够运行的！');

@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+
+DROP TABLE IF EXISTS t_json_mutations;
 SET enable_json_type = 1;
 SET output_format_json_named_tuples_as_objects = 1;
 SET mutations_sync = 2;
@@ -6,3 +9,4 @@ INSERT INTO t_json_mutations VALUES (1, 'q', '{"k1": 1, "k2": 2, "k3": [{"k4": "
 INSERT INTO t_json_mutations VALUES (2, 'w', '{"k1": 3, "k2": 4, "k3": [{"k4": "ccc"}]}');
 INSERT INTO t_json_mutations VALUES (3, 'e', '{"k1": 5, "k2": 6}');
 SELECT * FROM t_json_mutations ORDER BY id;
+DROP TABLE t_json_mutations;

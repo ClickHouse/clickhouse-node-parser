@@ -1,3 +1,8 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS test_alter_attach_01901S;
+
+SYSTEM DROP  TABLE IF EXISTS test_alter_attach_01901D;
+
 CREATE TABLE test_alter_attach_01901S
 (
     A Int64,
@@ -23,3 +28,7 @@ FROM test_alter_attach_01901D;
 
 SELECT count()
 FROM test_alter_attach_01901S;
+
+SYSTEM DROP  TABLE test_alter_attach_01901S;
+
+SYSTEM DROP  TABLE test_alter_attach_01901D;

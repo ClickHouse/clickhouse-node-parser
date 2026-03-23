@@ -1,5 +1,15 @@
 SET optimize_read_in_order = 1, query_plan_read_in_order = 1, enable_analyzer = 0;
 
+SYSTEM drop  table if exists tab;
+
+SYSTEM drop  table if exists tab2;
+
+SYSTEM drop  table if exists tab3;
+
+SYSTEM drop  table if exists tab4;
+
+SYSTEM drop  table if exists tab5;
+
 CREATE TABLE tab
 (
     a UInt32,

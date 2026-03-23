@@ -7,6 +7,10 @@ SET max_bytes_before_external_group_by = 0;
 
 SET max_bytes_ratio_before_external_group_by = 0;
 
+SYSTEM drop  table if exists dist_01247;
+
+SYSTEM drop  table if exists data_01247;
+
 CREATE TABLE data_01247 AS `system`.numbers
 ENGINE = Memory();
 
@@ -300,3 +304,7 @@ SELECT
     sum(sum(value)) OVER (ROWS UNBOUNDED PRECEDING)
 FROM dist_01247
 GROUP BY key;
+
+SYSTEM drop  table dist_01247;
+
+SYSTEM drop  table data_01247;

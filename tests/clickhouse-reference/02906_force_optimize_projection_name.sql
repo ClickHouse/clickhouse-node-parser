@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test
 (
    `id` UInt64,
@@ -22,3 +23,4 @@ WHERE current_database = currentDatabase()
     AND query LIKE '%SELECT name FROM test%'
     AND Settings['force_optimize_projection_name'] = 'projection_name'
     AND type = 'ExceptionBeforeStart';
+DROP TABLE test;

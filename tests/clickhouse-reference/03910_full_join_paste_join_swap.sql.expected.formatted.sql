@@ -10,6 +10,8 @@
 -- https://s3.amazonaws.com/clickhouse-test-reports/json.html?REF=master&sha=b373b658edd0a03cb8daacf2c6d77aedd250e7f1&name_0=MasterCI&name_1=Stress%20test%20%28arm_asan%29
 SET query_plan_join_swap_table = 'true', join_algorithm = 'hash', query_plan_use_new_logical_join_step = 0, enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Int32
@@ -136,3 +138,5 @@ FROM (
             ty.c1 ASC
     )
 SETTINGS query_plan_join_swap_table = 'false';
+
+SYSTEM DROP  TABLE t0;

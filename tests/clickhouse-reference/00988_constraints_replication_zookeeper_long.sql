@@ -1,3 +1,7 @@
+-- Tags: long, replica
+
+DROP TABLE IF EXISTS replicated_constraints1;
+DROP TABLE IF EXISTS replicated_constraints2;
 CREATE TABLE replicated_constraints1
 (
     a UInt32,
@@ -16,3 +20,5 @@ INSERT INTO replicated_constraints1 VALUES (10, 10); -- { serverError VIOLATED_C
 INSERT INTO replicated_constraints2 VALUES (10, 10);
 INSERT INTO replicated_constraints1 VALUES (10, 11); -- { serverError VIOLATED_CONSTRAINT }
 INSERT INTO replicated_constraints2 VALUES (9, 10); -- { serverError VIOLATED_CONSTRAINT }
+DROP TABLE replicated_constraints1;
+DROP TABLE replicated_constraints2;

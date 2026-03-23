@@ -60,3 +60,5 @@ ORDER BY
     old_users ASC,
     new_users ASC,
     diff_users ASC;
+
+SYSTEM DROP  TABLE IF EXISTS group_bitmap_data_test;

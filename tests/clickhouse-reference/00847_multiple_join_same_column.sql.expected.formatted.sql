@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists s;
+
+SYSTEM drop  table if exists y;
+
 CREATE TABLE t
 (
     a Int64,
@@ -137,3 +143,9 @@ LEFT JOIN y
     ON y.b = s.b
 ORDER BY t.a ASC
 FORMAT PrettyCompactMonoBlock;
+
+SYSTEM drop  table t;
+
+SYSTEM drop  table s;
+
+SYSTEM drop  table y;

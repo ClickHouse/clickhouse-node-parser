@@ -3,6 +3,8 @@ SET max_threads = 3;
 
 SET min_bytes_to_use_direct_io = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -33,3 +35,5 @@ FROM (
         FROM test
     )
 ORDER BY `all` ASC;
+
+SYSTEM drop  table test;

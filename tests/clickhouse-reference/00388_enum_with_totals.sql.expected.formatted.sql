@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS enum_totals;
+
 CREATE TABLE enum_totals
 (
     e Enum8('hello' = 1, 'world' = 2)
@@ -13,3 +15,5 @@ FROM enum_totals
 GROUP BY e
 WITH TOTALS
 ORDER BY e ASC;
+
+SYSTEM DROP  TABLE enum_totals;

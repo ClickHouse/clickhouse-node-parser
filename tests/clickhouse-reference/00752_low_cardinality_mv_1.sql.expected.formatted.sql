@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists lc_00752;
+
+SYSTEM drop  table if exists lc_mv_00752;
+
 CREATE TABLE lc_00752
 (
     str LowCardinality(String)

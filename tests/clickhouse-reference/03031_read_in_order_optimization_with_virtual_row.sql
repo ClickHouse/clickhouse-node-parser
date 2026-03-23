@@ -4,6 +4,7 @@
 
 SET read_in_order_use_virtual_row = 1;
 SET use_query_condition_cache = 0;
+DROP TABLE IF EXISTS t;
 CREATE TABLE t
 (
     `x` UInt64,
@@ -102,6 +103,9 @@ AND log_comment = 'no preliminary merge, with filter'
 AND type = 'QueryFinish'
 ORDER BY query_start_time DESC
 LIMIT 1;
+DROP TABLE t;
+-- from 02149_read_in_order_fixed_prefix
+DROP TABLE IF EXISTS fixed_prefix;
 CREATE TABLE fixed_prefix(a UInt32, b UInt32)
 ENGINE = MergeTree ORDER BY (a, b)
 SETTINGS index_granularity = 3;
@@ -120,6 +124,8 @@ ORDER BY b
 SETTINGS max_threads = 1,
 optimize_read_in_order = 1,
 read_in_order_two_level_merge_threshold = 5;  --avoid preliminary merge
+DROP TABLE fixed_prefix;
+DROP TABLE IF EXISTS function_pk;
 CREATE TABLE function_pk
 (
     `A` Int64,
@@ -137,8 +143,10 @@ limit 3
 SETTINGS max_threads = 1,
 optimize_read_in_order = 1,
 read_in_order_two_level_merge_threshold = 5;  --avoid preliminary merge
+DROP TABLE function_pk;
 -- modified from 02317_distinct_in_order_optimization
 SELECT '-- test distinct ----';
+DROP TABLE IF EXISTS distinct_in_order SYNC;
 CREATE TABLE distinct_in_order
 (
     `a` int,
@@ -160,3 +168,4 @@ ORDER BY a ASC
 SETTINGS read_in_order_two_level_merge_threshold = 0,
 optimize_read_in_order = 1,
 max_threads = 2;
+DROP TABLE distinct_in_order;

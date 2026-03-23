@@ -58,6 +58,8 @@ SETTINGS
     enable_software_prefetch_in_aggregation = 1,
     compile_aggregate_expressions = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt64
@@ -200,3 +202,5 @@ SETTINGS
     optimize_group_by_constant_keys = 1,
     enable_software_prefetch_in_aggregation = 1,
     compile_aggregate_expressions = 1;
+
+SYSTEM drop  table test;

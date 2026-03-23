@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS view_order_attribution;
+DROP TABLE IF EXISTS order_attribution;
 CREATE TABLE order_attribution
 (
     `order_product_event_id` String,
@@ -103,3 +105,5 @@ GROUP BY
     gmv,
     gsv,
     po_created_at;
+DROP TABLE view_order_attribution;
+DROP TABLE order_attribution;

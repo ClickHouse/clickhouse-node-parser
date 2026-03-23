@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists rate_test;
+
+SYSTEM drop  table if exists rate_test2;
+
 CREATE TABLE rate_test
 (
     timestamp UInt32,

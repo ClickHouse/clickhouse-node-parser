@@ -1,3 +1,11 @@
+-- Reproducer for out-of-bounds access in partial_disjunction_result bitset.
+-- When use_primary_key = 0, the key_condition RPN has 1 element (skip_analysis_),
+-- so the check key_condition.getRPN().size() <= 32 passes trivially.
+-- But the key_condition_rpn_template and index conditions have the full RPN,
+-- which can exceed 32 elements, leading to out-of-bounds writes in the callback.
+-- The disjunction feature requires at least 2 useful skip indexes and OR conditions.
+SYSTEM DROP  TABLE IF EXISTS t_skip_index_disj_oob;
+
 CREATE TABLE t_skip_index_disj_oob
 (
     a UInt64,
@@ -43,3 +51,5 @@ SETTINGS
     use_skip_indexes_for_disjunctions = 1,
     use_query_condition_cache = 0,
     optimize_min_equality_disjunction_chain_length = 100;
+
+SYSTEM DROP  TABLE t_skip_index_disj_oob;

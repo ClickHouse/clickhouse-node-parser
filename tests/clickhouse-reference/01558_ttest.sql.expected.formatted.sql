@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS welch_ttest;
+
 CREATE TABLE welch_ttest
 (
     `left` Float64,
@@ -43,6 +45,8 @@ SELECT
     roundBankers(welchTTest(0.95)(`left`, `right`).4, 6) AS p_value
 FROM welch_ttest;
 
+SYSTEM DROP  TABLE IF EXISTS student_ttest;
+
 /*Check t-stat and p-value and compare it with scipy.stat implementation
   First: a=1, sigma (not sigma^2)=5, size=500
   Second: a=1, sigma = 5, size = 500 */
@@ -74,6 +78,9 @@ SELECT
     roundBankers(studentTTest(0.95)(`left`, `right`).3, 6) AS t_stat,
     roundBankers(studentTTest(0.95)(`left`, `right`).4, 6) AS p_value
 FROM student_ttest;
+
+/* One-sample t-test against population mean 75 */
+SYSTEM DROP  TABLE IF EXISTS onesample_ttest;
 
 CREATE TABLE onesample_ttest
 (

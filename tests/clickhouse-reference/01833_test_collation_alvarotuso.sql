@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+
+DROP TABLE IF EXISTS test_collation;
 CREATE TABLE test_collation
 (
     `v` String,
@@ -10,3 +13,4 @@ insert into test_collation values ('A', 'A');
 insert into test_collation values ('B', 'B');
 insert into test_collation values ('C', 'C');
 SELECT * FROM test_collation ORDER BY v ASC COLLATE 'en';
+DROP TABLE test_collation;

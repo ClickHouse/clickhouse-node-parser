@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Int
@@ -11,6 +14,8 @@ INSERT INTO t0 (c0);
 
 SELECT sum(c0)
 FROM t0 FINAL;
+
+SYSTEM DROP  TABLE t0;
 
 CREATE TABLE t0
 (

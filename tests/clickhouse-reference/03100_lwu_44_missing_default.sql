@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t_lwu_defaults;
+DROP TABLE IF EXISTS t_mutation_defaults;
 CREATE TABLE t_lwu_defaults
 (
     x UInt32,

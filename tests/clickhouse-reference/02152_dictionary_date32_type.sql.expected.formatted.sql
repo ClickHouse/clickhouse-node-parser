@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -6,6 +8,8 @@ CREATE TABLE test_table
 ENGINE = TinyLog;
 
 INSERT INTO test_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary;
 
 CREATE DICTIONARY test_dictionary
 (
@@ -20,3 +24,7 @@ SELECT *
 FROM test_dictionary;
 
 SELECT dictGet('test_dictionary', 'value', toUInt64(0));
+
+SYSTEM DROP  DICTIONARY test_dictionary;
+
+SYSTEM DROP  TABLE test_table;

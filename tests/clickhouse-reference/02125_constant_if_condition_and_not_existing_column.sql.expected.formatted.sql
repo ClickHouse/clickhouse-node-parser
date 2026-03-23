@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 -- this queries does not have to pass, but they works historically
 -- let's support this while can, see #31687
 CREATE TABLE test
@@ -25,3 +27,5 @@ FROM test;
 
 SELECT if(cast(cast(0, 'UInt8'), 'UInt8'), y, 42)
 FROM test;
+
+SYSTEM drop  table if exists t;

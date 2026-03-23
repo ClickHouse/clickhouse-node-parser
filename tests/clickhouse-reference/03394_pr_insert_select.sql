@@ -1,5 +1,7 @@
 SET enable_analyzer=1; -- parallel distributed insert select for replicated tables works only with analyzer
 SET parallel_distributed_insert_select=2;
+DROP TABLE IF EXISTS t_mt_source;
+DROP TABLE IF EXISTS t_rmt_target SYNC;
 CREATE TABLE t_mt_source (k UInt64, v String) ENGINE = MergeTree() ORDER BY k;
 CREATE TABLE t_rmt_target (k UInt64, v String) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_rmt_target', 'r1') ORDER BY ();
 INSERT INTO t_mt_source SELECT number as k, toString(number) as v FROM system.numbers LIMIT 1e6;
@@ -12,3 +14,5 @@ select count() from t_rmt_target;
 select * from t_rmt_target order by k
 except
 select * from t_mt_source order by k;
+DROP TABLE t_mt_source;
+DROP TABLE t_rmt_target SYNC;

@@ -1,6 +1,7 @@
 -- Tags: no-fasttest
 
 set allow_experimental_dynamic_type = 1;
+drop table if exists test;
 create table test (x UInt64, d Dynamic) engine=Memory;
 insert into test select number, number from numbers(4);
 select d + 1 as res, toTypeName(res) from test;
@@ -55,6 +56,7 @@ select 'str_' || d || d as res, toTypeName(res) from test;
 select 'str_' || d || x || d as res, toTypeName(res) from test;
 select d || NULL as res, toTypeName(res) from test;
 select 'str_' || d || NULL as res, toTypeName(res) from test;
+drop table test;
 create table test (x Nullable(UInt64), d Dynamic) engine=Memory;
 insert into test select number % 2 ? NULL : number, number from numbers(4);
 create table test (x String, d Dynamic) engine=Memory;

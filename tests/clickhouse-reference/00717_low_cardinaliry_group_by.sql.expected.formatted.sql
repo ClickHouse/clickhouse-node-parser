@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tab_00717;
+
 CREATE TABLE tab_00717
 (
     a String,

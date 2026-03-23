@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+
+DROP TABLE IF EXISTS table_for_rename_pk;
 CREATE TABLE table_for_rename_pk
 (
   date Date,
@@ -12,6 +15,7 @@ PARTITION BY date
 ORDER BY (key1, pow(key2, 2), key3);
 INSERT INTO table_for_rename_pk SELECT toDate('2019-10-01') + number % 3, number, number, number, toString(number), toString(number) from numbers(9);
 SELECT key1, value1 FROM table_for_rename_pk WHERE key1 = 1 AND key2 = 1 AND key3 = 1;
+DROP TABLE IF EXISTS table_for_rename_with_primary_key;
 CREATE TABLE table_for_rename_with_primary_key
 (
   date Date,

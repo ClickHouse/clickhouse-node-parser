@@ -14,6 +14,12 @@ FROM (
             )
     );
 
+SYSTEM drop  table if exists consumer_02366;
+
+SYSTEM drop  table if exists producer_02366;
+
+SYSTEM drop  table if exists mv_02366;
+
 CREATE TABLE consumer_02366
 (
     id UInt16,
@@ -52,3 +58,9 @@ SELECT
     id,
     finalizeAggregation(dec)
 FROM consumer_02366;
+
+SYSTEM drop  table consumer_02366;
+
+SYSTEM drop  table producer_02366;
+
+SYSTEM drop  table mv_02366;

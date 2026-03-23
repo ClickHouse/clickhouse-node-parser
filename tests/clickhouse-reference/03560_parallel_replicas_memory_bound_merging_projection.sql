@@ -1,3 +1,4 @@
+drop table if exists pr_t;
 create table pr_t(a UInt64, b UInt64) engine=MergeTree order by a;
 insert into pr_t select number % 1000, number % 1000 from numbers_mt(1e6);
 set parallel_replicas_only_with_analyzer = 0;  -- necessary for CI run with disabled analyzer

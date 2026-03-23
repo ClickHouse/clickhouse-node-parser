@@ -1,3 +1,6 @@
+-- Tags: zookeeper
+SYSTEM DROP  TABLE IF EXISTS merge_tree_pk SYNC;
+
 CREATE TABLE merge_tree_pk
 (
     key UInt64,
@@ -23,6 +26,8 @@ FROM merge_tree_pk FINAL
 ORDER BY
     key ASC,
     value ASC;
+
+SYSTEM DROP  TABLE IF EXISTS merge_tree_pk_sql SYNC;
 
 CREATE TABLE merge_tree_pk_sql
 (
@@ -53,6 +58,8 @@ ORDER BY
 INSERT INTO merge_tree_pk_sql;
 
 INSERT INTO merge_tree_pk_sql;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_merge_tree_pk_sql SYNC;
 
 CREATE TABLE replicated_merge_tree_pk_sql
 (

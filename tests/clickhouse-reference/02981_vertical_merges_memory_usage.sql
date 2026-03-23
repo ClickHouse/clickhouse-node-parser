@@ -1,3 +1,6 @@
+-- Tags: long, no-random-merge-tree-settings
+
+DROP TABLE IF EXISTS t_vertical_merge_memory;
 CREATE TABLE t_vertical_merge_memory (id UInt64, arr Array(String))
 ENGINE = MergeTree ORDER BY id
 SETTINGS

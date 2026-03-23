@@ -1,4 +1,8 @@
 SET enable_analyzer=1;
+DROP TABLE IF EXISTS foo;
+DROP TABLE IF EXISTS foo1;
+DROP TABLE IF EXISTS foo_merge;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE foo(Id Int32, Val Int32) Engine=MergeTree PARTITION BY Val ORDER BY Id;
 CREATE TABLE foo1(Id Int32, Val Decimal32(9)) Engine=MergeTree PARTITION BY Val ORDER BY Id;
 INSERT INTO foo SELECT number, number%5 FROM numbers(1000);

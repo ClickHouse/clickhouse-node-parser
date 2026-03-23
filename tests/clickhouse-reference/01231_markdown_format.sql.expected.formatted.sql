@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS markdown;
+
 CREATE TABLE markdown
 (
     id UInt32,

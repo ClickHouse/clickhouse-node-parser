@@ -1,5 +1,7 @@
 SET optimize_move_to_prewhere = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x UInt8
@@ -12,4 +14,10 @@ INSERT INTO t;
 SELECT count()
 FROM t;
 
+SYSTEM DROP  ROW POLICY IF EXISTS filter ON t;
+
 CREATE ROW POLICY filter ON t USING (x % 2 = 1) TO ALL;
+
+SYSTEM DROP  ROW POLICY filter ON t;
+
+SYSTEM DROP  TABLE t;

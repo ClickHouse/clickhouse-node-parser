@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tab;
+
 CREATE TABLE tab
 ENGINE = Memory() AS
 (SELECT ([1, number], [toInt32(2),2]) AS map
@@ -22,6 +24,9 @@ FROM tab;
 
 SELECT mapAdd(cast(map, 'Tuple(Array(UInt8), Array(UInt8))'), ([1], [1]), ([2],[2]))
 FROM tab;
+
+-- cleanup
+SYSTEM drop  table tab;
 
 -- check types
 SELECT

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_hierarchy_source_table;
+
 CREATE TABLE test_hierarchy_source_table
 (
     id UInt64,
@@ -7,6 +9,8 @@ ENGINE = MergeTree
 ORDER BY id;
 
 INSERT INTO test_hierarchy_source_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS hierarchy_flat_dictionary_index;
 
 CREATE DICTIONARY hierarchy_flat_dictionary_index
 (
@@ -36,6 +40,10 @@ FROM `system`.dictionaries
 WHERE name = 'hierarchy_flat_dictionary_index'
     AND database = currentDatabase();
 
+SYSTEM DROP  DICTIONARY hierarchy_flat_dictionary_index;
+
+SYSTEM DROP  DICTIONARY IF EXISTS hierarchy_hashed_dictionary_index;
+
 CREATE DICTIONARY hierarchy_hashed_dictionary_index
 (
     id UInt64,
@@ -54,6 +62,10 @@ FROM `system`.dictionaries
 WHERE name = 'hierarchy_hashed_dictionary_index'
     AND database = currentDatabase();
 
+SYSTEM DROP  DICTIONARY hierarchy_hashed_dictionary_index;
+
+SYSTEM DROP  DICTIONARY IF EXISTS hierarchy_hashed_array_dictionary_index;
+
 CREATE DICTIONARY hierarchy_hashed_array_dictionary_index
 (
     id UInt64,
@@ -71,3 +83,7 @@ SELECT hierarchical_index_bytes_allocated > 0
 FROM `system`.dictionaries
 WHERE name = 'hierarchy_hashed_array_dictionary_index'
     AND database = currentDatabase();
+
+SYSTEM DROP  DICTIONARY hierarchy_hashed_array_dictionary_index;
+
+SYSTEM DROP  TABLE test_hierarchy_source_table;

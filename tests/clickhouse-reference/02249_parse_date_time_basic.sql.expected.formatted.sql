@@ -1,5 +1,7 @@
 SET date_time_output_format = 'iso';
 
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     a DateTime('UTC'),

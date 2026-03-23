@@ -1,4 +1,5 @@
 SET allow_suspicious_low_cardinality_types=1;
+DROP TABLE IF EXISTS lc_nullable;
 CREATE TABLE lc_nullable (
     order_key   Array(LowCardinality(Nullable(UInt64))),
 

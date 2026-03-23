@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_01409;
+
 CREATE TABLE data_01409
 ENGINE = Memory AS
 SELECT *
@@ -14,3 +16,5 @@ FROM remote('127.{1,1}', currentDatabase(), data_01409);
 
 SELECT length(topKWeighted(20)((number, ''), 1))
 FROM remote('127.{1,1}', currentDatabase(), data_01409);
+
+SYSTEM drop  table data_01409;

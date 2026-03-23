@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS simple_agf_any_aggregating_mt;
 CREATE TABLE simple_agf_any_aggregating_mt
 (
     a Int64,

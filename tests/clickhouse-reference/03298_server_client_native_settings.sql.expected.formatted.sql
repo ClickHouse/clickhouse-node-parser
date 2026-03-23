@@ -1,3 +1,6 @@
+-- Tags: memory-engine
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Int
@@ -14,3 +17,5 @@ INSERT INTO t0 (c0);
 
 SELECT *
 FROM t0;
+
+SYSTEM DROP  TABLE t0;

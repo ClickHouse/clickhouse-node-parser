@@ -1,6 +1,8 @@
 -- check ALTER MODIFY COLUMN with partitions
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE IF EXISTS alter_column;
+
 CREATE TABLE alter_column
 (
     x UInt32,
@@ -19,3 +21,5 @@ LIMIT 50;
 SELECT *
 FROM alter_column
 ORDER BY _part ASC;
+
+SYSTEM DROP  TABLE alter_column;

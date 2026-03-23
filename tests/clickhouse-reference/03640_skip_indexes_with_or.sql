@@ -9,6 +9,7 @@ SET parallel_replicas_local_plan = 1;
 SET use_query_condition_cache = 0;
 SET use_skip_indexes_on_data_read = 0;
 SET use_skip_indexes = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt32,
@@ -49,6 +50,7 @@ SELECT explain AS explain FROM (
 ) WHERE explain LIKE '%Granules%' OR explain LIKE '%PrimaryKey%' OR explain LIKE '%Name%';
 -- Test with RPN size of 23 - only 6 granules and 6x64=384 rows should be read
 SELECT count(*) FROM tab WHERE  (v1 = 1 AND v2 = 10000) OR (v1 = 129 AND v2 = 9872) OR (v1 = 999 OR v2 = 9002) OR (v1 = 1300 AND v2 = 8701) OR (v1 = 5000 AND v2 = 5001) OR (v1 = 9000 AND v2 = 1001) SETTINGS max_rows_to_read=384;
+DROP TABLE tab;
 CREATE TABLE tab
 (
     x UInt32,

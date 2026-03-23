@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS video_log;
+DROP TABLE IF EXISTS video_log_result__fuzz_0;
+DROP TABLE IF EXISTS rng;
 CREATE TABLE video_log
 (
     `datetime` DateTime,
@@ -74,3 +77,6 @@ LEFT JOIN
 ) USING (hour)
 SETTINGS joined_subquery_requires_alias = 0
 FORMAT Null;
+DROP TABLE video_log;
+DROP TABLE video_log_result__fuzz_0;
+DROP TABLE rng;

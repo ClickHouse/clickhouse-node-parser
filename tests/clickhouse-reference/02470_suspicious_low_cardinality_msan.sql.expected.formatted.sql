@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS alias_2__fuzz_25;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE alias_2__fuzz_25
@@ -21,3 +23,5 @@ SELECT
     colAlias2,
     colAlias3
 FROM alias_2__fuzz_25; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+SYSTEM DROP  TABLE alias_2__fuzz_25;

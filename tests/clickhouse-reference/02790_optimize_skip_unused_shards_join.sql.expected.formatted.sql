@@ -1,3 +1,12 @@
+-- Issue: https://github.com/ClickHouse/ClickHouse/issues/15995
+SYSTEM DROP  TABLE IF EXISTS outer;
+
+SYSTEM DROP  TABLE IF EXISTS inner;
+
+SYSTEM DROP  TABLE IF EXISTS outer_distributed;
+
+SYSTEM DROP  TABLE IF EXISTS inner_distributed;
+
 CREATE TABLE IF NOT EXISTS outer
 (
     id UInt64,

@@ -1,3 +1,11 @@
+DROP TABLE IF EXISTS dest_table_mv;
+DROP TABLE IF EXISTS left_table;
+DROP TABLE IF EXISTS right_table;
+DROP TABLE IF EXISTS dest_table;
+DROP TABLE IF EXISTS src_table;
+DROP VIEW IF EXISTS dst_mv;
+DROP VIEW IF EXISTS dst_mv_1;
+DROP VIEW IF EXISTS dst_mv_2;
 create table src_table Engine=Memory as system.numbers;
 CREATE MATERIALIZED VIEW dst_mv_1 Engine=Memory as select *, (SELECT count() FROM src_table) AS cnt FROM src_table;
 insert into src_table select 1 from numbers(3);
@@ -13,3 +21,8 @@ insert into left_table select toDate('2020-01-01'), 0, number * 2 from numbers(3
 select * from dest_table order by Date, Id, Units;
 insert into left_table select toDate('2020-01-01'), 5, number * 2 from numbers(3);
 insert into left_table select toDate('2020-01-01') + 5, 5, number * 2 from numbers(3);
+drop table dest_table_mv;
+drop table left_table;
+drop table right_table;
+drop table dest_table;
+drop table src_table;

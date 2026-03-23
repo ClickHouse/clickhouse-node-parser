@@ -72,6 +72,8 @@ SELECT
 FROM hmac_test
 ORDER BY message ASC;
 
+SYSTEM DROP  TABLE hmac_test;
+
 -- Test invalid algorithm (should throw error)
 SELECT HMAC('invalid_algo', 'message', 'key'); -- { serverError BAD_ARGUMENTS }
 

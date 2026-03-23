@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_async_insert_table_function;
+
 CREATE TABLE t_async_insert_table_function
 (
     id UInt32,
@@ -12,3 +14,5 @@ INSERT INTO FUNCTION remote('127.0.0.1', currentDatabase(), t_async_insert_table
 SELECT *
 FROM t_async_insert_table_function
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_async_insert_table_function;

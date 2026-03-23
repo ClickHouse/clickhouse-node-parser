@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tbl;
+
 -- Checks that (floating-point) time series codecs can be combined
 --   with Nullable and
 --   with composite types Array and Tuple

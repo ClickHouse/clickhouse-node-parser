@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     n Int32,
@@ -17,3 +19,5 @@ FROM t;
 SELECT aRray_Agg(s)
 FROM t
 GROUP BY n;
+
+SYSTEM drop  table t;

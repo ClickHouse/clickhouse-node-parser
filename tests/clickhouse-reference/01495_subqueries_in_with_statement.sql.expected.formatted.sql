@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test1;
+
 CREATE TABLE test1
 (
     i int,
@@ -25,7 +27,11 @@ SELECT '---------------------------';
 
 SET empty_result_for_aggregation_by_empty_set = 0;
 
+SYSTEM drop  table if exists with_test;
+
 CREATE TABLE with_test
 ENGINE = Memory AS
 SELECT CAST(number - 1 AS Nullable(Int64)) AS n
 FROM numbers(10000);
+
+SYSTEM drop  table  with_test;

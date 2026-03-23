@@ -1,3 +1,6 @@
+-- Tests that sort expression ORDER BY ALL
+
+DROP TABLE IF EXISTS order_by_all;
 CREATE TABLE order_by_all
 (
     a String,
@@ -15,6 +18,7 @@ SELECT a, b FROM order_by_all ORDER BY ALL DESC;
 SELECT b, a FROM order_by_all ORDER BY ALL NULLS FIRST;
 SELECT b, a FROM order_by_all ORDER BY ALL NULLS LAST;
 SELECT * FROM order_by_all ORDER BY all;
+DROP TABLE order_by_all;
 CREATE TABLE order_by_all
 (
     a String,

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a UInt8,
@@ -12,3 +14,5 @@ PARTITION BY date;
 SET default_temporary_table_engine = 'MergeTree';
 
 CREATE TEMPORARY TABLE test3 AS test;
+
+SYSTEM DROP  TABLE test;

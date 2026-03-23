@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS summing_mt_aggregating_column;
+
 CREATE TABLE summing_mt_aggregating_column
 (
     Key UInt64,

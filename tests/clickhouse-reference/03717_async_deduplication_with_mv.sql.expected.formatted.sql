@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS 03717_table;
+
 CREATE TABLE `03717_table`
 (
     id UInt32
@@ -5,6 +8,8 @@ CREATE TABLE `03717_table`
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_table', '1')
 ORDER BY id
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+
+SYSTEM DROP  TABLE IF EXISTS 03717_mv_table_odd;
 
 CREATE TABLE `03717_mv_table_odd`
 (
@@ -14,12 +19,16 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_odd',
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 
+SYSTEM DROP  TABLE IF EXISTS 03717_mv_odd;
+
 CREATE MATERIALIZED VIEW `03717_mv_odd`
 TO `03717_mv_table_odd`
 AS
 SELECT count() AS value
 FROM `03717_table`
 WHERE id % 2 = 1;
+
+SYSTEM DROP  TABLE IF EXISTS 03717_mv_table_even;
 
 CREATE TABLE `03717_mv_table_even`
 (
@@ -29,12 +38,16 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_even'
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 
+SYSTEM DROP  TABLE IF EXISTS 03717_mv_even;
+
 CREATE MATERIALIZED VIEW `03717_mv_even`
 TO `03717_mv_table_even`
 AS
 SELECT count() AS value
 FROM `03717_table`
 WHERE id % 2 = 0;
+
+SYSTEM DROP  TABLE IF EXISTS 03717_mv_table_all;
 
 CREATE TABLE `03717_mv_table_all`
 (
@@ -43,6 +56,8 @@ CREATE TABLE `03717_mv_table_all`
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_all', '1')
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+
+SYSTEM DROP  TABLE IF EXISTS 03717_mv_all;
 
 CREATE MATERIALIZED VIEW `03717_mv_all`
 TO `03717_mv_table_all`

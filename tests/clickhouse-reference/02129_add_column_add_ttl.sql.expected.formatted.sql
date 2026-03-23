@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists ttl_test_02129;
+
 CREATE TABLE ttl_test_02129
 (
     a Int64,
@@ -29,6 +31,8 @@ ORDER BY
     b ASC,
     d ASC,
     c ASC;
+
+SYSTEM drop  table ttl_test_02129;
 
 CREATE TABLE ttl_test_02129
 (

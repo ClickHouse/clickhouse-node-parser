@@ -1,3 +1,9 @@
+-- Tags: long, replica, no-shared-merge-tree
+-- no-shared-merge-tree: not possible to stop replicated sends
+SYSTEM DROP  TABLE IF EXISTS r1;
+
+SYSTEM DROP  TABLE IF EXISTS r2;
+
 CREATE TABLE r1
 (
     x String
@@ -23,3 +29,7 @@ FROM r2;
 INSERT INTO r2;
 
 SELECT '---';
+
+SYSTEM DROP  TABLE r1;
+
+SYSTEM DROP  TABLE r2;

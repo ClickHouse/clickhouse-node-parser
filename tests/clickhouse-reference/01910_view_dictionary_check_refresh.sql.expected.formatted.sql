@@ -1,3 +1,10 @@
+-- Tags: long
+SYSTEM DROP  DICTIONARY IF EXISTS TestTblDict;
+
+SYSTEM DROP  VIEW IF EXISTS TestTbl_view;
+
+SYSTEM DROP  TABLE IF EXISTS TestTbl;
+
 CREATE TABLE TestTbl
 (
     id UInt16,

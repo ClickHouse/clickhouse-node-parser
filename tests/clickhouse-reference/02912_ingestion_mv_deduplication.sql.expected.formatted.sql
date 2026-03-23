@@ -46,6 +46,10 @@ SELECT *
 FROM mv FINAL
 ORDER BY hour ASC;
 
+SYSTEM DROP  TABLE IF EXISTS landing SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS mv SYNC;
+
 /*
 
     This is the unexpected behavior due to setting max_insert_delayed_streams_for_parallel_write > 1.
@@ -151,3 +155,5 @@ ORDER BY
     pk2 ASC,
     pk4 ASC,
     pk3 ASC;
+
+SYSTEM DROP  TABLE IF EXISTS ds SYNC;

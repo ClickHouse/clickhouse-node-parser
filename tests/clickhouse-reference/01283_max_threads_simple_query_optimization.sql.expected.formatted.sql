@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS data_01283;
+
 SET allow_asynchronous_read_from_io_pool_for_merge_tree = 0;
 
 SET remote_filesystem_read_method = 'read';
@@ -32,3 +34,5 @@ WHERE current_database = currentDatabase()
     AND like(query, '%data_01283 LIMIT 1%')
 GROUP BY thread_ids
 FORMAT Null;
+
+SYSTEM DROP  TABLE data_01283;

@@ -1,3 +1,11 @@
+DROP TABLE IF EXISTS part;
+DROP TABLE IF EXISTS supplier;
+DROP TABLE IF EXISTS partsupp;
+DROP TABLE IF EXISTS customer;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS lineitem;
+DROP TABLE IF EXISTS nation;
+DROP TABLE IF EXISTS region;
 SET enable_analyzer = 1;
 SET cross_to_inner_join_rewrite = 1;
 CREATE TABLE part
@@ -721,3 +729,11 @@ group by
     cntrycode
 order by
     cntrycode;
+DROP TABLE part;
+DROP TABLE supplier;
+DROP TABLE partsupp;
+DROP TABLE customer;
+DROP TABLE orders;
+DROP TABLE lineitem;
+DROP TABLE nation;
+DROP TABLE region;

@@ -6,6 +6,20 @@ SET prefer_localhost_replica = 1; -- Make sure plan is reliable
 
 SET optimize_functions_to_subcolumns = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t_02156_mt1;
+
+SYSTEM DROP  TABLE IF EXISTS t_02156_mt2;
+
+SYSTEM DROP  TABLE IF EXISTS t_02156_log;
+
+SYSTEM DROP  TABLE IF EXISTS t_02156_dist;
+
+SYSTEM DROP  TABLE IF EXISTS t_02156_merge1;
+
+SYSTEM DROP  TABLE IF EXISTS t_02156_merge2;
+
+SYSTEM DROP  TABLE IF EXISTS t_02156_merge3;
+
 CREATE TABLE t_02156_mt1
 (
     k UInt32,

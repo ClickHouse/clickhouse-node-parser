@@ -11,6 +11,8 @@ ORDER BY
     number ASC,
     value ASC;
 
+SYSTEM drop  table if exists wt;
+
 CREATE TABLE wt
 (
     a Int,

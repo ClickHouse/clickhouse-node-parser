@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS Bin_at_test;
 CREATE TABLE Bin_at_test
 (    
     `Date` DateTime('UTC'),

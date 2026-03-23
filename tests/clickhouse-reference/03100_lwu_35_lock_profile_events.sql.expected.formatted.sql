@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_lwu_lock_profile_events SYNC;
+
 CREATE TABLE t_lwu_lock_profile_events
 (
     id UInt64
@@ -23,3 +25,5 @@ FROM `system`.query_log
 WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND like(query, '%DELETE FROM t_lwu_lock_profile_events WHERE id < 10000%');
+
+SYSTEM DROP  TABLE t_lwu_lock_profile_events SYNC;

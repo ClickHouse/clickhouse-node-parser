@@ -1,3 +1,11 @@
+-- Tags: no-replicated-database, no-shared-merge-tree
+-- SharedMergeTree doesn't support replace partition from MergeTree engine
+SYSTEM DROP  TEMPORARY TABLE IF EXISTS src;
+
+SYSTEM DROP  TABLE IF EXISTS dst;
+
+SYSTEM DROP  TABLE IF EXISTS rdst;
+
 CREATE TEMPORARY TABLE src
 (
     p UInt64,

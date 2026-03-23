@@ -1,3 +1,7 @@
+-- Tags: zookeeper
+-- Check that settings are correctly passed through Distributed table
+SYSTEM DROP  TABLE IF EXISTS simple;
+
 CREATE TABLE simple
 (
     d Int8
@@ -20,3 +24,5 @@ INSERT INTO FUNCTION remote('127.0.0.1', currentDatabase(), 'simple') SETTINGS p
 SELECT *
 FROM remote('127.0.0.2', currentDatabase(), 'simple')
 ORDER BY d ASC;
+
+SYSTEM DROP  TABLE simple;

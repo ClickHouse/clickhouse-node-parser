@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS insert_fewer_columns;
+
 CREATE TABLE insert_fewer_columns
 (
     a UInt8,
@@ -9,6 +11,9 @@ INSERT INTO insert_fewer_columns (a);
 
 SELECT *
 FROM insert_fewer_columns;
+
+-- Test position arguments in insert.
+SYSTEM DROP  TABLE IF EXISTS insert_fewer_columns_2;
 
 CREATE TABLE insert_fewer_columns_2
 (
@@ -29,3 +34,5 @@ SELECT
     a,
     b
 FROM insert_fewer_columns_2;
+
+SYSTEM DROP  TABLE insert_fewer_columns;

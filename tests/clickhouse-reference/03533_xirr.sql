@@ -110,6 +110,7 @@ FROM (
 )
 GROUP BY tag
 ORDER BY tag;
+DROP TABLE IF EXISTS 3533_xirr_test;
 SELECT round(financialNetPresentValue(0.1, [-10000, 3000, 4200, 6800], False), 6);
 SELECT round(financialNetPresentValue(0.08, [8000., 9200., 10000., 12000., 14500.], False), 6) - 40000;
 SELECT round(financialNetPresentValueExtended(0.09, [-10_000, 2750, 4250, 3250, 2750], [toDate('2008-01-01'), toDate('2008-03-01'), toDate('2008-10-30'), toDate('2009-02-15'), toDate('2009-04-01')], 'ACT_365F'), 6);

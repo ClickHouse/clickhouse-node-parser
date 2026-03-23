@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_sparse_mutation;
+
 CREATE TABLE t_sparse_mutation
 (
     id UInt64,
@@ -24,3 +26,5 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 't_sparse_mutation'
     AND active;
+
+SYSTEM DROP  TABLE t_sparse_mutation;

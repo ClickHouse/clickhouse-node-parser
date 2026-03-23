@@ -1,3 +1,15 @@
+SYSTEM DROP  TABLE IF EXISTS join_any_inner;
+
+SYSTEM DROP  TABLE IF EXISTS join_any_left;
+
+SYSTEM DROP  TABLE IF EXISTS join_any_left_null;
+
+SYSTEM DROP  TABLE IF EXISTS join_all_inner;
+
+SYSTEM DROP  TABLE IF EXISTS join_all_left;
+
+SYSTEM DROP  TABLE IF EXISTS join_string_key;
+
 CREATE TABLE join_any_inner
 (
     s String,
@@ -97,6 +109,21 @@ SELECT
 
 USE default;
 
+SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.join_any_inner;
+
+SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.join_any_left;
+
+SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.join_any_left_null;
+
+SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.join_all_inner;
+
+SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.join_all_left;
+
+SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.join_string_key;
+
+-- test provided by Alexander Zaitsev
+SYSTEM DROP  TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.join_test;
+
 CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.join_test
 (
     a UInt8,
@@ -111,3 +138,5 @@ SELECT joinGet('join_test', 'b', 1);
 USE system;
 
 SELECT joinGet(concat({CLICKHOUSE_DATABASE:String}, '.join_test'), 'b', 1);
+
+SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.join_test;

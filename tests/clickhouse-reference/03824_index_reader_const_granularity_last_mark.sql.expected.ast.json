@@ -1,5 +1,15 @@
 [
   {
+    "kind": "system",
+    "body": "DROP  TABLE IF EXISTS tab",
+    "leadingComments": [
+      "-- Test that MergeTreeReaderIndex correctly handles the last granule",
+      "-- when use_const_adaptive_granularity=1 and index_granularity_bytes=0",
+      "-- (the last mark in the granularity may report more rows than actually exist).",
+      "-- Tags: no-parallel-replicas"
+    ]
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -215,5 +225,9 @@
       "-- The bug was that the index reader reported 64 rows for the last granule (instead of 16),",
       "-- causing a mismatch with the actual data reader."
     ]
+  },
+  {
+    "kind": "system",
+    "body": "DROP  TABLE tab"
   }
 ]

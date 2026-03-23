@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_materialize;
+
 CREATE TABLE test_materialize
 (
     part Int,

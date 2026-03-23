@@ -1,6 +1,8 @@
 -- Tags: global
 
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+drop table if exists xp;
+drop table if exists xp_d;
 create table xp(i UInt64, j UInt64) engine MergeTree order by i settings index_granularity = 1;
 create table xp_d as xp engine Distributed(test_shard_localhost, currentDatabase(), xp);
 insert into xp select number, number + 2 from numbers(10);

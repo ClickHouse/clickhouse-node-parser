@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS select_final;
+
 SET allow_asynchronous_read_from_io_pool_for_merge_tree = 0;
 
 SET do_not_merge_across_partitions_select_final = 1;
@@ -69,3 +72,5 @@ FROM numbers(500000);
 
 SELECT max(x)
 FROM select_final FINAL;
+
+SYSTEM DROP  TABLE select_final;

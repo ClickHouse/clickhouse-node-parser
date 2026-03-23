@@ -1,3 +1,10 @@
+-- Tags: memory-engine
+SYSTEM DROP  TABLE IF EXISTS mv;
+
+SYSTEM DROP  TABLE IF EXISTS src;
+
+SYSTEM DROP  TABLE IF EXISTS dst;
+
 -- { echo ON }
 CREATE TABLE src
 (

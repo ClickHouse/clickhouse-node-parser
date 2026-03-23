@@ -6,6 +6,8 @@ SET max_block_size = 65536;
 
 SET enable_analyzer = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_limit_by_all_old_planner;
+
 CREATE TABLE test_limit_by_all_old_planner
 (
     id Int32,
@@ -198,3 +200,5 @@ ORDER BY
     category ASC,
     value ASC
 LIMIT 1 BY id, category;
+
+SYSTEM DROP  TABLE test_limit_by_all_old_planner;

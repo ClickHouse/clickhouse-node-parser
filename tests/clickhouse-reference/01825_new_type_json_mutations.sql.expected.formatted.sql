@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS t_json_mutations;
+
 SET enable_json_type = 1;
 
 SET output_format_json_named_tuples_as_objects = 1;
@@ -22,3 +25,5 @@ INSERT INTO t_json_mutations;
 SELECT *
 FROM t_json_mutations
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_json_mutations;

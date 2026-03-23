@@ -1,3 +1,5 @@
+drop table if exists dst_02224;
+drop table if exists src_02224;
 create table dst_02224 (key Int) engine=Memory();
 create table src_02224 (key Int) engine=Memory();
 insert into src_02224 values (1);
@@ -14,3 +16,7 @@ settings parallel_distributed_insert_select=2, max_distributed_depth=1;
 insert into function remote('127.{1,2}', currentDatabase(), dst_02224, key)
 select * from remote('127.{1,2}', currentDatabase(), src_02224, key)
 settings parallel_distributed_insert_select=2, max_distributed_depth=1;
+-- { echoOff }
+
+drop table src_02224;
+drop table dst_02224;

@@ -11,6 +11,8 @@ SET remote_filesystem_read_method = 'threadpool';
 
 SET max_rows_to_read = 0;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt64,
@@ -48,3 +50,5 @@ FROM `system`.query_log
 WHERE current_database = currentDatabase()
     AND like(query, '%SELECT count(), sum(id) FROM tab%')
     AND type = 'QueryFinish';
+
+SYSTEM DROP  TABLE tab;

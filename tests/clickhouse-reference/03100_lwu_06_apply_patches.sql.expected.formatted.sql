@@ -4,6 +4,8 @@ SET insert_keeper_fault_injection_probability = 0.0;
 
 SET enable_lightweight_update = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_shared SYNC;
+
 CREATE TABLE t_shared
 (
     id UInt64,
@@ -43,3 +45,5 @@ WHERE database = currentDatabase()
     AND table = 't_shared'
     AND active
 ORDER BY name ASC;
+
+SYSTEM DROP  TABLE t_shared SYNC;

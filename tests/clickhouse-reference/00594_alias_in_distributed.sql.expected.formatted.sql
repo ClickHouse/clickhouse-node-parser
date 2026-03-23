@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS alias_local10;
+
+SYSTEM DROP  TABLE IF EXISTS alias10;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE alias_local10
@@ -83,6 +88,8 @@ SELECT field3
 FROM alias10
 WHERE field3 = '12345';
 
+SYSTEM DROP  TABLE alias10;
+
 CREATE TABLE alias10
 (
     Id Int8,
@@ -92,3 +99,5 @@ CREATE TABLE alias10
     field3 String
 )
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), alias_local10);
+
+SYSTEM DROP  TABLE alias_local10;

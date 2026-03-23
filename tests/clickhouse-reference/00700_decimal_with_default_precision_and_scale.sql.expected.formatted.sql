@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS decimal;
+
 CREATE TABLE IF NOT EXISTS decimal
 (
     d1 DECIMAL(9, 8),
@@ -21,3 +23,5 @@ SELECT
     toTypeName(d3)
 FROM decimal
 LIMIT 1;
+
+SYSTEM DROP  TABLE decimal;

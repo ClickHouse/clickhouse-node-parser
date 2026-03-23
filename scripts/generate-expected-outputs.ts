@@ -24,7 +24,7 @@ const QUERY_PARAMS = '<Query Parameters>';
 const dir = new URL('../tests/clickhouse-reference', import.meta.url).pathname;
 
 // ClickHouse HTTP endpoint.
-const CLICKHOUSE_URL = 'http://localhost:8123';
+const CLICKHOUSE_URL = 'http://localhost:8125';
 
 // Maximum number of concurrent HTTP requests to the ClickHouse server.
 const CONCURRENCY = 20;

@@ -6,6 +6,8 @@
 -- Ignore BAD_ARGUMENTS
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE IF EXISTS x;
+
 SELECT uuid
 FROM `system`.tables
 WHERE database = currentDatabase()
@@ -15,6 +17,8 @@ SELECT replica_path
 FROM `system`.replicas
 WHERE database = currentDatabase()
     AND table = 'x';
+
+SYSTEM DROP  TABLE x;
 
 -- {uuid} macro forbidden for CREATE TABLE without explicit UUID
 CREATE TABLE x

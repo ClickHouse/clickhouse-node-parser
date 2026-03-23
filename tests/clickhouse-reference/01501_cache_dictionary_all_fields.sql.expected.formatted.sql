@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM drop  database if exists db_01501;
+
 CREATE DATABASE db_01501;
 
 CREATE TABLE db_01501.table_cache_dict
@@ -106,3 +109,7 @@ FROM numbers(10);
 
 SELECT groupArray(dictHas('db_01501.cache_dict', toUInt64(number)))
 FROM numbers(10);
+
+SYSTEM drop  dictionary db_01501.cache_dict;
+
+SYSTEM drop  table db_01501.table_cache_dict;

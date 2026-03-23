@@ -3,6 +3,7 @@ SET enable_json_type = 1;
 set allow_experimental_variant_type = 1;
 set use_variant_as_common_type=1;
 set session_timezone = 'UTC';
+drop table if exists test;
 create table test (id UInt64, json JSON(max_dynamic_paths=2, a.b.c UInt32)) engine=Memory;
 insert into test select number, '{}' from numbers(5);
 insert into test select number, toJSONString(map('a.b.c', number)) from numbers(5, 5);
@@ -67,3 +68,4 @@ select json.^a, json.a.b.d, json.a.b.d.:Int64, json.a.b.d.:Date from test order 
 select json, json.^a, json.a.b.d from test order by id format JSONColumns;
 select json, json.^a, json.a.b.d.:Int64, json.a.b.d.:Date from test order by id format JSONColumns;
 select json, json.^a, json.a.b.d, json.a.b.d.:Int64, json.a.b.d.:Date from test order by id format JSONColumns;
+drop table test;

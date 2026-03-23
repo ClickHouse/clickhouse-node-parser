@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+SYSTEM DROP  TABLE IF EXISTS test_indexHint_prewhere;
+
 CREATE TABLE test_indexHint_prewhere
 (
     id UInt32,
@@ -39,3 +42,5 @@ FROM (
             AND (like(colB, '%dKappNQY6I%')))))
     )
 WHERE like(`explain`, '%Prewhere filter column%colA%colB%');
+
+SYSTEM DROP  TABLE test_indexHint_prewhere;

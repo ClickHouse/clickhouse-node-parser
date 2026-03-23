@@ -1,5 +1,7 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS constraint_on_nullable_type;
+
 CREATE TABLE constraint_on_nullable_type
 (
     id Nullable(UInt64),
@@ -13,6 +15,10 @@ INSERT INTO constraint_on_nullable_type;
 
 SELECT *
 FROM constraint_on_nullable_type;
+
+SYSTEM DROP  TABLE constraint_on_nullable_type;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_on_low_cardinality_type;
 
 CREATE TABLE constraint_on_low_cardinality_type
 (
@@ -28,6 +34,10 @@ INSERT INTO constraint_on_low_cardinality_type;
 SELECT *
 FROM constraint_on_low_cardinality_type;
 
+SYSTEM DROP  TABLE constraint_on_low_cardinality_type;
+
+SYSTEM DROP  TABLE IF EXISTS constraint_on_low_cardinality_nullable_type;
+
 CREATE TABLE constraint_on_low_cardinality_nullable_type
 (
     id LowCardinality(Nullable(UInt64)),
@@ -41,3 +51,5 @@ INSERT INTO constraint_on_low_cardinality_nullable_type;
 
 SELECT *
 FROM constraint_on_low_cardinality_nullable_type;
+
+SYSTEM DROP  TABLE constraint_on_low_cardinality_nullable_type;

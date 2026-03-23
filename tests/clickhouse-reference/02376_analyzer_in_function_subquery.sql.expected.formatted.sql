@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -9,6 +11,8 @@ ENGINE = MergeTree
 ORDER BY tuple();
 
 INSERT INTO test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_for_in;
 
 CREATE TABLE test_table_for_in
 (
@@ -80,3 +84,8 @@ WHERE id IN (
         SELECT id
         FROM test_table_for_in
     );
+
+-- { echoOff }
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE test_table_for_in;

@@ -1,3 +1,6 @@
+-- Tags: no-random-merge-tree-settings
+SYSTEM DROP  TABLE IF EXISTS adaptive_table;
+
 CREATE TABLE adaptive_table
 (
     key UInt64,
@@ -57,3 +60,5 @@ SETTINGS
     merge_tree_min_bytes_for_concurrent_read = 1,
     max_threads = 100
 FORMAT CSV;
+
+SYSTEM DROP  TABLE adaptive_table;

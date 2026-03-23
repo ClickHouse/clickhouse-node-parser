@@ -2,6 +2,8 @@ SET compile_expressions = 1;
 
 SET min_count_to_compile_expression = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     a UInt64
@@ -34,6 +36,8 @@ ORDER BY ((test_table.a == test_table.a)) + 1 ASC;
 SELECT test_table.a
 FROM test_table
 ORDER BY ((test_table.a != test_table.a)) + 1 ASC;
+
+SYSTEM DROP  TABLE test_table;
 
 CREATE TABLE test_table
 (

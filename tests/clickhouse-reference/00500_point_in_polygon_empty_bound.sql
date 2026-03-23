@@ -8,6 +8,7 @@ SELECT pointInPolygon((2., 2.), [(0., 0.), (5., 5.), (5., 0.)], [(2., 2.)]);
 SELECT pointInPolygon((2., 2.), [(0., 0.), (5., 5.), (5., 0.)], [(2., 2.), (5., 2.)]);
 SELECT pointInPolygon((2.5, 2.5), [(0., 0.), (5., 0.), (10., 0.)], [(2., 2.), (3., 3.), (3., 2.)]);
 SELECT pointInPolygon((1., 1.), [(0., 0.), (5., 0.), (10., 0.)], [(2., 2.), (3., 3.), (3., 2.)]);
+DROP TABLE IF EXISTS points_test;
 CREATE TABLE points_test
 (
     x  Float64,

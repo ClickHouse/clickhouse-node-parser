@@ -8,6 +8,8 @@ SET read_in_order_two_level_merge_threshold = 100;
 
 SET read_in_order_use_virtual_row = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_read_in_order;
+
 CREATE TABLE t_read_in_order
 (
     date Date,
@@ -122,6 +124,8 @@ FROM t_read_in_order
 WHERE a = 1
 ORDER BY b DESC
 SETTINGS read_in_order_two_level_merge_threshold = 1;
+
+SYSTEM DROP  TABLE t_read_in_order;
 
 CREATE TABLE t_read_in_order
 (

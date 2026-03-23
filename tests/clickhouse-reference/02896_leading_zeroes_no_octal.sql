@@ -1,3 +1,7 @@
+-- Tags: no-async-insert
+
+DROP TABLE IF EXISTS t_leading_zeroes;
+DROP TABLE IF EXISTS t_leading_zeroes_f;
 CREATE TABLE t_leading_zeroes(id Int64, input String, val Int64, expected Int64, comment String) ENGINE=MergeTree ORDER BY id;
 CREATE TABLE t_leading_zeroes_f(id Int64, input String, val Float64, expected Float64, comment String) ENGINE=MergeTree ORDER BY id;
 SET input_format_values_interpret_expressions = 0;

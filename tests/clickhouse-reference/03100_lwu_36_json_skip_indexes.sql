@@ -1,3 +1,7 @@
+-- Tags: no-parallel-replicas
+-- no-parallel-replicas: the result of EXPLAIN differs with parallel replicas
+
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (
     id UInt64,
     document JSON(name String, age UInt16),

@@ -23,6 +23,8 @@ FROM (
 GROUP BY GROUPING SETS ((num1), ())
 ORDER BY grouping(num1) DESC;
 
+SYSTEM DROP  TABLE IF EXISTS users;
+
 CREATE TABLE users
 (
     uid Int16,
@@ -73,3 +75,5 @@ SELECT
 FROM users
 GROUP BY GROUPING SETS ((uid, name), ())
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE users;

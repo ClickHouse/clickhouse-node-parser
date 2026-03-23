@@ -1,3 +1,10 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS landing SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS landing_dist SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS ds SYNC;
+
 CREATE TABLE landing
 (
     timestamp DateTime64(3),

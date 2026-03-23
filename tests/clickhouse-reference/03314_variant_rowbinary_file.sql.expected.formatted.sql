@@ -1,5 +1,7 @@
 SET enable_variant_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Variant(Int, Int)

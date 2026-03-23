@@ -1,3 +1,9 @@
+-- Tags: long, zookeeper, no-random-merge-tree-settings, no-replicated-database
+-- { echo ON }
+SYSTEM DROP  TABLE IF EXISTS x1;
+
+SYSTEM DROP  TABLE IF EXISTS x2;
+
 CREATE TABLE x1
 (
     i int
@@ -44,3 +50,7 @@ WHERE active
     AND database = currentDatabase()
     AND table = 'x2'
     AND name = 'p2';
+
+SYSTEM DROP  TABLE x1;
+
+SYSTEM DROP  TABLE x2;

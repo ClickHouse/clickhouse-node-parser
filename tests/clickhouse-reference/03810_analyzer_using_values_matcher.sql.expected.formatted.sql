@@ -1,6 +1,10 @@
 -- Tags: no-parallel
 SET enable_analyzer = 1;
 
+SYSTEM DROP  FUNCTION IF EXISTS f1;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t1
 (
     c0 String,

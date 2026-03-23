@@ -4,6 +4,7 @@
 
 SET enable_analyzer = 1;
 SET enable_full_text_index = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt32,
@@ -25,6 +26,7 @@ SELECT count() FROM tab WHERE mapContains(map_fixed, toFixedString('K0', 2));
 SELECT count() FROM tab WHERE mapContains(map_fixed, toFixedString('K1', 2));
 SELECT count() FROM tab WHERE mapContains(map_fixed, toFixedString('K2', 2));
 SELECT count() FROM tab WHERE mapContains(map_fixed, toFixedString('K3', 2));
+DROP VIEW IF EXISTS explain_index_mapContains;
 CREATE VIEW explain_index_mapContains AS (
     SELECT trimLeft(explain) AS explain FROM (
         EXPLAIN indexes = 1
@@ -54,6 +56,7 @@ SELECT count() FROM tab WHERE map_fixed[toFixedString('K0', 2)] = 'V0';
 SELECT count() FROM tab WHERE map_fixed[toFixedString('K1', 2)] = 'V1';
 SELECT count() FROM tab WHERE map_fixed[toFixedString('K2', 2)] = 'V2';
 SELECT count() FROM tab WHERE map_fixed[toFixedString('K3', 2)] = 'V3';
+DROP VIEW IF EXISTS explain_index_equals;
 CREATE VIEW explain_index_equals AS (
     SELECT trimLeft(explain) AS explain FROM (
         EXPLAIN indexes = 1
@@ -83,6 +86,7 @@ SELECT count() FROM tab WHERE has(map_fixed, toFixedString('K0', 2));
 SELECT count() FROM tab WHERE has(map_fixed, toFixedString('K1', 2));
 SELECT count() FROM tab WHERE has(map_fixed, toFixedString('K2', 2));
 SELECT count() FROM tab WHERE has(map_fixed, toFixedString('K3', 2));
+DROP VIEW IF EXISTS explain_index_has;
 CREATE VIEW explain_index_has AS (
     SELECT trimLeft(explain) AS explain FROM (
         EXPLAIN indexes = 1
@@ -112,6 +116,7 @@ SELECT count() FROM tab WHERE hasAnyTokens(mapKeys(map_fixed), 'K0 K1');
 SELECT count() FROM tab WHERE hasAnyTokens(mapKeys(map_fixed), 'K1 K2');
 SELECT count() FROM tab WHERE hasAnyTokens(mapKeys(map_fixed), 'K2 K3');
 SELECT count() FROM tab WHERE hasAnyTokens(mapKeys(map_fixed), 'K3 K4');
+DROP VIEW IF EXISTS explain_index_has_any_tokens;
 CREATE VIEW explain_index_has_any_tokens AS (
     SELECT trimLeft(explain) AS explain FROM (
         EXPLAIN indexes=1
@@ -141,6 +146,7 @@ SELECT count() FROM tab WHERE hasAllTokens(mapKeys(map_fixed), 'K0 K1');
 SELECT count() FROM tab WHERE hasAllTokens(mapKeys(map_fixed), 'K1 K2');
 SELECT count() FROM tab WHERE hasAllTokens(mapKeys(map_fixed), 'K2 K3');
 SELECT count() FROM tab WHERE hasAllTokens(mapKeys(map_fixed), 'K3 K4');
+DROP VIEW IF EXISTS explain_index_has_all_tokens;
 CREATE VIEW explain_index_has_all_tokens AS (
     SELECT trimLeft(explain) AS explain FROM (
         EXPLAIN indexes=1
@@ -162,6 +168,9 @@ SELECT * FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'K0 K1');
 SELECT * FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'K1 K2');
 SELECT * FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'K2 K3');
 SELECT * FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'K3 K4');
+DROP VIEW explain_index_has_any_tokens;
+DROP VIEW explain_index_has_all_tokens;
+DROP TABLE tab;
 CREATE TABLE tab
 (
     id UInt32,
@@ -288,6 +297,9 @@ SELECT count() from tab WHERE mapContainsKeyLike(map_fixed, '% n %');
 SELECT count() from tab WHERE mapContainsValueLike(map_fixed, '% e %');
 SELECT count() from tab WHERE mapContainsValueLike(map_fixed, '% k %');
 SELECT count() from tab WHERE mapContainsValueLike(map_fixed, '% q %');
+-- 
+
+DROP VIEW IF EXISTS explain_index_key_like;
 CREATE VIEW explain_index_key_like AS (
     SELECT trimLeft(explain) AS explain FROM (
         EXPLAIN indexes=1
@@ -296,6 +308,7 @@ CREATE VIEW explain_index_key_like AS (
     WHERE explain LIKE '%Description:%' OR explain LIKE '%Parts:%' OR explain LIKE '%Granules:%'
     LIMIT 2, 3
 );
+DROP VIEW IF EXISTS explain_index_value_like;
 CREATE VIEW explain_index_value_like AS (
     SELECT trimLeft(explain) AS explain FROM (
         EXPLAIN indexes=1
@@ -316,3 +329,8 @@ SELECT * FROM explain_index_key_like(col = 'map_fixed', pattern = '% h %');
 SELECT * FROM explain_index_value_like(col = 'map_fixed', pattern = '% e %');
 SELECT * FROM explain_index_value_like(col = 'map_fixed', pattern = '% q %');
 SELECT * FROM explain_index_value_like(col = 'map_fixed', pattern = '% k %');
+DROP VIEW explain_index_mapContains;
+DROP VIEW explain_index_equals;
+DROP VIEW explain_index_has;
+DROP VIEW explain_index_key_like;
+DROP VIEW explain_index_value_like;

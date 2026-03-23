@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS old_school_table;
+
 CREATE TABLE old_school_table
 (
     key UInt64,

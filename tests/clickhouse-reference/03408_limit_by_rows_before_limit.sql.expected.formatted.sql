@@ -1,5 +1,7 @@
 SET output_format_write_statistics = 0;
 
+SYSTEM DROP  TABLE IF EXISTS 03408_unsorted;
+
 CREATE TABLE `03408_unsorted`
 (
     id Int32,
@@ -60,6 +62,10 @@ LIMIT 3
 FORMAT JsonCompact
 SETTINGS max_block_size = 1, exact_rows_before_limit = 1;
 
+SYSTEM DROP  TABLE 03408_unsorted;
+
+SYSTEM DROP  TABLE IF EXISTS 03408_sorted;
+
 CREATE TABLE `03408_sorted`
 (
     id Int32,
@@ -117,3 +123,5 @@ LIMIT 1 BY id
 LIMIT 3
 FORMAT JsonCompact
 SETTINGS max_block_size = 1, exact_rows_before_limit = 1;
+
+SYSTEM DROP  TABLE 03408_sorted;

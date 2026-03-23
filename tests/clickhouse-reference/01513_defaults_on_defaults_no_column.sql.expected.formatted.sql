@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS defaults_on_defaults;
+
 CREATE TABLE defaults_on_defaults
 (
     key UInt64

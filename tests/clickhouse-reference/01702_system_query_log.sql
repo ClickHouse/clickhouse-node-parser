@@ -2,6 +2,13 @@
 
 -- fire all kinds of queries and then check if those are present in the system.query_log
 SET log_comment='system.query_log logging test';
+DROP DATABASE IF EXISTS sqllt SYNC;
+DROP USER IF EXISTS sqllt_user;
+DROP ROLE IF EXISTS sqllt_role;
+DROP POLICY IF EXISTS sqllt_policy ON sqllt.table, sqllt.view, sqllt.dictionary;
+DROP ROW POLICY IF EXISTS sqllt_row_policy ON sqllt.table, sqllt.view, sqllt.dictionary;
+DROP QUOTA IF EXISTS sqllt_quota;
+DROP SETTINGS PROFILE IF EXISTS sqllt_settings_profile;
 CREATE DATABASE sqllt;
 CREATE TABLE sqllt.table
 (
@@ -18,6 +25,7 @@ CREATE QUOTA sqllt_quota KEYED BY user_name TO sqllt_role;
 CREATE SETTINGS PROFILE sqllt_settings_profile SETTINGS interactive_delay = 200000;
 SET log_profile_events=false;
 SET DEFAULT ROLE sqllt_role TO sqllt_user;
+DROP TABLE sqllt.table SYNC;
 SET log_comment='';
 -- Try to filter out all possible previous junk events by excluding old log entries,
 SELECT query_kind, query FROM system.query_log
@@ -25,3 +33,4 @@ WHERE
     log_comment LIKE '%system.query_log%' AND type == 'QueryStart' AND event_date >= yesterday()
     AND current_database == currentDatabase() AND is_internal = 0
 ORDER BY event_time_microseconds;
+DROP DATABASE IF EXISTS sqllt;

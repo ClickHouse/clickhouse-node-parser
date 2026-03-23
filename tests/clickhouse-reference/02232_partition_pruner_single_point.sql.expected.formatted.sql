@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS lower_test;
+
 CREATE TABLE lower_test
 (
     a Int32,
@@ -13,3 +15,5 @@ SELECT a
 FROM lower_test
 WHERE lower(b) IN ('a', 'b')
 ORDER BY a ASC;
+
+SYSTEM DROP  TABLE lower_test;

@@ -1,6 +1,8 @@
 -- 1 shard
 
 SELECT '-- 1 shard, 3 replicas';
+DROP TABLE IF EXISTS test_d;
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (id UInt64, date Date)
 ENGINE = MergeTree
 ORDER BY id;
@@ -11,6 +13,8 @@ SET enable_parallel_replicas = 2, max_parallel_replicas = 3, parallel_replicas_f
 SET parallel_replicas_only_with_analyzer = 0;  -- necessary for CI run with disabled analyzer
 SELECT count(), min(id), max(id), avg(id)
 FROM test_d;
+DROP TABLE IF EXISTS test2_d;
+DROP TABLE IF EXISTS test2;
 CREATE TABLE test2 (id UInt64, date Date)
 ENGINE = MergeTree
 ORDER BY id;

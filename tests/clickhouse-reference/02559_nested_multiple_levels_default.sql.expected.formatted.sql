@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS data_compact;
+
+SYSTEM DROP  TABLE IF EXISTS data_memory;
+
+SYSTEM DROP  TABLE IF EXISTS data_wide;
+
 CREATE TABLE data_compact
 (
     `root.array` Array(UInt8)

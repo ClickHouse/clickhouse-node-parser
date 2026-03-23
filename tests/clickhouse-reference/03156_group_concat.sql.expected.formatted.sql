@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_groupConcat;
+
 CREATE TABLE test_groupConcat
 (
     id UInt64,

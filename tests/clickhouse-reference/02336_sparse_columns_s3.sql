@@ -1,3 +1,6 @@
+-- Tags: no-parallel, no-fasttest, no-object-storage
+
+DROP TABLE IF EXISTS t_sparse_s3;
 CREATE TABLE t_sparse_s3 (id UInt32, cond UInt8, s String)
 engine = MergeTree ORDER BY id
 settings ratio_of_defaults_for_sparse_serialization = 0.01, storage_policy = 's3_cache',
@@ -29,3 +32,4 @@ SELECT count() FROM t_sparse_s3
 PREWHERE cond
 WHERE id IN (1, 3, 5, 7, 9, 11, 13, 15, 17)
 AND NOT ignore(s);
+DROP TABLE t_sparse_s3;

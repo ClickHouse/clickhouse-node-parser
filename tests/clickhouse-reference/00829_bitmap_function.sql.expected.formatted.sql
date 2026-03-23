@@ -22,6 +22,8 @@ SELECT bitmapAndCardinality(bitmapBuild([100, 200, 500]), bitmapBuild(CAST([100,
 
 SELECT bitmapToArray(bitmapAnd(bitmapBuild([100, 200, 500]), bitmapBuild(CAST([100, 200], 'Array(UInt16)'))));
 
+SYSTEM DROP  TABLE IF EXISTS bitmap_test;
+
 CREATE TABLE bitmap_test
 (
     pickup_date Date,
@@ -161,6 +163,9 @@ FROM bitmap_test
 GROUP BY city_id
 ORDER BY city_id ASC;
 
+-- bitmap state test
+SYSTEM DROP  TABLE IF EXISTS bitmap_state_test;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE bitmap_state_test
@@ -187,6 +192,9 @@ FROM bitmap_state_test
 GROUP BY pickup_date
 ORDER BY pickup_date ASC;
 
+-- between column and expression test
+SYSTEM DROP  TABLE IF EXISTS bitmap_column_expr_test;
+
 CREATE TABLE bitmap_column_expr_test
 (
     t DateTime,
@@ -209,6 +217,8 @@ FROM bitmap_column_expr_test;
 
 SELECT bitmapCardinality(bitmapAnd(z, bitmapBuild(CAST([19,7] AS Array(UInt32)))))
 FROM bitmap_column_expr_test;
+
+SYSTEM DROP  TABLE IF EXISTS bitmap_column_expr_test2;
 
 CREATE TABLE bitmap_column_expr_test2
 (
@@ -256,6 +266,8 @@ SELECT arraySort(bitmapToArray(groupBitmapXorState(z)))
 FROM bitmap_column_expr_test2
 WHERE like(tag_id, 'tag%');
 
+SYSTEM DROP  TABLE IF EXISTS bitmap_column_expr_test3;
+
 CREATE TABLE bitmap_column_expr_test3
 (
     tag_id String,
@@ -264,6 +276,8 @@ CREATE TABLE bitmap_column_expr_test3
 )
 ENGINE = MergeTree
 ORDER BY tag_id;
+
+SYSTEM DROP  TABLE IF EXISTS numbers10;
 
 CREATE VIEW numbers10
 AS
@@ -562,3 +576,5 @@ LEFT JOIN (
     ) AS js2
     USING (city_id)
 FORMAT Null;
+
+SYSTEM drop  table bitmap_test;

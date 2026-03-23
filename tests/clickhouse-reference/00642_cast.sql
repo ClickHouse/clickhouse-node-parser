@@ -5,6 +5,7 @@ SELECT CAST(1 AS Enum8(
     'world' = 2));
 SELECT CAST(1, 'Enum8(\'hello\' = 1,\n\t\'world\' = 2)');
 SELECT toTimeZone(CAST(1 AS TIMESTAMP), 'UTC');
+DROP TABLE IF EXISTS cast;
 CREATE TABLE cast
 (
     x UInt8,
@@ -27,3 +28,4 @@ CREATE TABLE cast
 ) ENGINE = MergeTree ORDER BY e;
 INSERT INTO cast (x) VALUES (1);
 SELECT * FROM cast;
+DROP TABLE cast;

@@ -1,3 +1,15 @@
+-- Tags: shard
+
+-- NOTE: this test cannot use 'current_database = currentDatabase()',
+-- because it does not propagated via remote queries,
+-- hence it uses 'with (select currentDatabase()) as X'
+-- (with subquery to expand it on the initiator).
+
+drop table if exists dist_01756;
+drop table if exists dist_01756_str;
+drop table if exists dist_01756_column;
+drop table if exists data_01756_str;
+drop table if exists data_01756_signed;
 -- separate log entry for localhost queries
 set prefer_localhost_replica=0;
 set force_optimize_skip_unused_shards=2;
@@ -99,3 +111,10 @@ select * from dist_01756_column where dummy in (0, '255foo'); -- { serverError T
 select * from dist_01756 where dummy in ('0', '2');
 select * from dist_01756 where dummy in (0, 2) settings optimize_skip_unused_shards_limit=1; -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }
 select * from dist_01756 where dummy in (0, 2) settings optimize_skip_unused_shards_limit=1, force_optimize_skip_unused_shards=0;
+-- { echoOff }
+
+drop table dist_01756;
+drop table dist_01756_str;
+drop table dist_01756_column;
+drop table data_01756_str;
+drop table data_01756_signed;

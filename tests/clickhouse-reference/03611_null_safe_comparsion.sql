@@ -1,4 +1,5 @@
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS 03611_nscmp_tbl;
 CREATE TABLE 03611_nscmp_tbl
 (
     `key` Int64,
@@ -480,6 +481,7 @@ SELECT
     c_map <=> c_tuple,
     c_map IS DISTINCT FROM c_tuple
 FROM 03611_nscmp_tbl;   -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+DROP TABLE IF EXISTS 03611_t_nullsafe;
 CREATE TABLE IF NOT EXISTS 03611_t_nullsafe
 (
     id Int32,

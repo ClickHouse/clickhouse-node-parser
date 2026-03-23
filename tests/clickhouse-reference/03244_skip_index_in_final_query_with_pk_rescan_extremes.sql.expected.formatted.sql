@@ -5,6 +5,8 @@ SET use_skip_indexes_if_final = 1;
 
 SET use_skip_indexes_if_final_exact_mode = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab1;
+
 CREATE TABLE tab1
 (
     id Int32,
@@ -79,6 +81,11 @@ SELECT id
 FROM tab1 FINAL
 WHERE v = 9999;
 
+-- Test for repeated PK range. Rows will have PK like this -
+--    (1,1,1,<v>), (1,1,2,<v>), (1,1,3,<v>), ...
+-- Test for PR https://github.com/ClickHouse/ClickHouse/pull/82667
+SYSTEM DROP  TABLE IF EXISTS tab2;
+
 CREATE TABLE tab2
 (
     id1 Int32,
@@ -112,6 +119,9 @@ SELECT
     id3
 FROM tab2 FINAL
 WHERE v = rand() % 10000;
+
+-- Tests with single range parts (https://github.com/ClickHouse/ClickHouse/issues/82792)
+SYSTEM DROP  TABLE IF EXISTS tab3;
 
 CREATE TABLE tab3
 (
@@ -207,3 +217,9 @@ SELECT
 FROM tab3 FINAL
 WHERE value = 9
 SETTINGS max_rows_to_read = 2;
+
+SYSTEM DROP  TABLE tab1;
+
+SYSTEM DROP  TABLE tab2;
+
+SYSTEM DROP  TABLE tab3;

@@ -8,6 +8,8 @@ SELECT hex(SHA512_256(''));
 
 SELECT hex(SHA512_256('abc'));
 
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     s FixedString(20)
@@ -23,3 +25,5 @@ FROM defaults;
 
 SELECT hex(SHA512_256(s))
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;

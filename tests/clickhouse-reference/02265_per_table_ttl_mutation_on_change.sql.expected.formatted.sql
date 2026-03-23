@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists per_table_ttl_02265;
+
 CREATE TABLE per_table_ttl_02265
 (
     key Int,
@@ -13,3 +15,6 @@ SELECT count()
 FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'per_table_ttl_02265';
+
+-- { echoOff }
+SYSTEM drop  table per_table_ttl_02265;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tmp;
+
 SET mutations_sync = 2;
 
 CREATE TABLE tmp
@@ -16,3 +18,5 @@ SELECT
     arraySort(groupArray(x)),
     arraySort(groupArray(s))
 FROM tmp;
+
+SYSTEM DROP  TABLE tmp;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_mtree;
+
 CREATE TABLE test_mtree
 (
     x String,
@@ -11,3 +13,5 @@ INSERT INTO test_mtree;
 SELECT count()
 FROM test_mtree
 WHERE x = NULL;
+
+SYSTEM DROP  TABLE test_mtree;

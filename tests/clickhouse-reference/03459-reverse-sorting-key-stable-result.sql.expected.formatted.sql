@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     A Int64
@@ -28,3 +31,5 @@ FROM (
         ORDER BY identity(A) DESC
         LIMIT 10
     );
+
+SYSTEM drop  table t;

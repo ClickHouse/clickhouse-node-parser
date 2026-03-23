@@ -8,6 +8,7 @@ SET use_skip_indexes_on_data_read = 1;
 SET max_rows_to_read = 0;
 set use_query_condition_cache=0;
 set merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability=0;
+DROP TABLE IF EXISTS test;
 CREATE TABLE test
 (
     id UInt64,
@@ -42,6 +43,10 @@ SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMain
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_2';
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_3';
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_4';
+DROP TABLE test;
+-- check partially materialized index, it should only affect related parts
+
+DROP TABLE IF EXISTS test_partial_index;
 CREATE TABLE test_partial_index
 (
     id UInt64,
@@ -76,3 +81,4 @@ SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMain
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_partial_2';
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_partial_3';
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_partial_4';
+DROP TABLE test_partial_index;

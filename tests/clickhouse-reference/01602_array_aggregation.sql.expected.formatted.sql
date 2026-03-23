@@ -18,6 +18,8 @@ SELECT arrayMin([[3], [1], [2]]);
 
 SELECT arrayMax([[3], [1], [2]]);
 
+SYSTEM DROP  TABLE IF EXISTS test_aggregation;
+
 CREATE TABLE test_aggregation
 (
     x Array(Int)
@@ -37,6 +39,8 @@ FROM test_aggregation;
 
 SELECT arrayAvg(x)
 FROM test_aggregation;
+
+SYSTEM DROP  TABLE test_aggregation;
 
 CREATE TABLE test_aggregation
 (

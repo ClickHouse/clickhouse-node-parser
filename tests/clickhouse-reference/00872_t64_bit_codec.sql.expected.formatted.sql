@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t64;
+
 CREATE TABLE t64
 (
     u8 UInt8,
@@ -428,3 +430,5 @@ INSERT INTO t64 SELECT
     x,
     x
 FROM numbers(10);
+
+SYSTEM DROP  TABLE t64;

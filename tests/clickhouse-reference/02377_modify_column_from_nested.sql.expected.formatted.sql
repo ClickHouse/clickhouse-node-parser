@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_nested_modify;
+
 CREATE TABLE t_nested_modify
 (
     id UInt64,
@@ -19,3 +21,5 @@ SELECT
     toTypeName(`n.b`)
 FROM t_nested_modify
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_nested_modify;

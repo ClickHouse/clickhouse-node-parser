@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS d;
+
 CREATE TABLE t
 (
     x Enum8('abc' = 0, 'def' = 1, 'ghi' = 2)
@@ -20,6 +25,8 @@ ENGINE = Distributed(test_shard_localhost, currentDatabase(), t);
 SELECT *
 FROM d;
 
+SYSTEM DROP  TABLE d;
+
 CREATE TABLE d
 (
     x Enum8('abc' = 0, 'def' = 1, 'xyz' = 2)
@@ -31,3 +38,5 @@ CREATE TABLE d
     x Enum8('abc' = 0, 'def' = 1, 'xyz' = 2)
 )
 ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), t);
+
+SYSTEM DROP  TABLE t;

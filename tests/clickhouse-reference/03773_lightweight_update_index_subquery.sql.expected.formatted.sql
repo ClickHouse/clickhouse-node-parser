@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_lwd;
+
 CREATE TABLE test_lwd
 (
     id UInt64

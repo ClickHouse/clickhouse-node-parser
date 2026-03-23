@@ -1,3 +1,10 @@
+-- Tags: no-parallel, no-fasttest, use-rocksdb
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
+SYSTEM DROP  TABLE IF EXISTS t3;
+
 CREATE TABLE t1
 (
     n Int8
@@ -50,3 +57,5 @@ FROM `system`.tables
 WHERE name IN ('t1', 't2', 't3', 't4', 't5', 't6')
     AND database = currentDatabase()
 ORDER BY name ASC;
+
+SYSTEM DROP  TABLE t1, t2, t3, t4, t5, t6;

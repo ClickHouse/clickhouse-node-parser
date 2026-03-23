@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS 01765_db;
+
 CREATE DATABASE `01765_db`;
 
 CREATE TABLE `01765_db`.simple_key_simple_attributes_source_table
@@ -58,6 +61,8 @@ SELECT *
 FROM `01765_db`.hashed_dictionary_simple_key_simple_attributes
 ORDER BY id ASC;
 
+SYSTEM DROP  DICTIONARY 01765_db.hashed_dictionary_simple_key_simple_attributes;
+
 CREATE DICTIONARY `01765_db`.sparse_hashed_dictionary_simple_key_simple_attributes
 (
     id UInt64,
@@ -100,6 +105,10 @@ LIMIT 4;
 SELECT *
 FROM `01765_db`.sparse_hashed_dictionary_simple_key_simple_attributes
 ORDER BY id ASC;
+
+SYSTEM DROP  DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_simple_attributes;
+
+SYSTEM DROP  TABLE 01765_db.simple_key_simple_attributes_source_table;
 
 CREATE TABLE `01765_db`.simple_key_complex_attributes_source_table
 (
@@ -158,6 +167,8 @@ SELECT *
 FROM `01765_db`.hashed_dictionary_simple_key_complex_attributes
 ORDER BY id ASC;
 
+SYSTEM DROP  DICTIONARY 01765_db.hashed_dictionary_simple_key_complex_attributes;
+
 CREATE DICTIONARY `01765_db`.sparse_hashed_dictionary_simple_key_complex_attributes
 (
     id UInt64,
@@ -201,6 +212,10 @@ SELECT *
 FROM `01765_db`.sparse_hashed_dictionary_simple_key_complex_attributes
 ORDER BY id ASC;
 
+SYSTEM DROP  DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_complex_attributes;
+
+SYSTEM DROP  TABLE 01765_db.simple_key_complex_attributes_source_table;
+
 CREATE TABLE `01765_db`.simple_key_hierarchy_table
 (
     id UInt64,
@@ -234,6 +249,8 @@ SELECT dictGetHierarchy('01765_db.hashed_dictionary_simple_key_hierarchy', toUIn
 
 SELECT dictGetHierarchy('01765_db.hashed_dictionary_simple_key_hierarchy', toUInt64(4));
 
+SYSTEM DROP  DICTIONARY 01765_db.hashed_dictionary_simple_key_hierarchy;
+
 CREATE DICTIONARY `01765_db`.sparse_hashed_dictionary_simple_key_hierarchy
 (
     id UInt64,
@@ -251,3 +268,9 @@ LIMIT 5;
 SELECT dictGetHierarchy('01765_db.sparse_hashed_dictionary_simple_key_hierarchy', toUInt64(1));
 
 SELECT dictGetHierarchy('01765_db.sparse_hashed_dictionary_simple_key_hierarchy', toUInt64(4));
+
+SYSTEM DROP  DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_hierarchy;
+
+SYSTEM DROP  TABLE 01765_db.simple_key_hierarchy_table;
+
+SYSTEM DROP  DATABASE 01765_db;

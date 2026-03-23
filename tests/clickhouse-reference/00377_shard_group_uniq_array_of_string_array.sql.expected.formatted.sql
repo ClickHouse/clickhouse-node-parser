@@ -1,6 +1,8 @@
 -- Tags: shard, long
 SET max_rows_to_read = '55M';
 
+SYSTEM DROP  TABLE IF EXISTS group_uniq_arr_str;
+
 CREATE TABLE group_uniq_arr_str
 ENGINE = Memory AS
 SELECT

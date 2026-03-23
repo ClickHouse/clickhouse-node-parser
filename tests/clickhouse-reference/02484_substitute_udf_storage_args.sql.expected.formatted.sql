@@ -1,3 +1,16 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS 02484_substitute_udf;
+
+SYSTEM DROP  FUNCTION IF EXISTS 02484_plusone;
+
+SYSTEM DROP  FUNCTION IF EXISTS 02484_plustwo;
+
+SYSTEM DROP  FUNCTION IF EXISTS 02484_plusthree;
+
+SYSTEM DROP  FUNCTION IF EXISTS 02484_plusthreemonths;
+
+SYSTEM DROP  FUNCTION IF EXISTS 02484_plusthreedays;
+
 CREATE FUNCTION `02484_plusone` AS a -> a + 1;
 
 CREATE FUNCTION `02484_plustwo` AS a -> a + 2;
@@ -20,3 +33,15 @@ TTL `02484_plusthreemonths`(dt);
 CREATE FUNCTION `02484_plusthree` AS a -> a + 3;
 
 CREATE FUNCTION `02484_plusthreedays` AS a -> a + toIntervalDay(3);
+
+SYSTEM DROP  TABLE 02484_substitute_udf;
+
+SYSTEM DROP  FUNCTION 02484_plusone;
+
+SYSTEM DROP  FUNCTION 02484_plustwo;
+
+SYSTEM DROP  FUNCTION 02484_plusthree;
+
+SYSTEM DROP  FUNCTION 02484_plusthreemonths;
+
+SYSTEM DROP  FUNCTION 02484_plusthreedays;

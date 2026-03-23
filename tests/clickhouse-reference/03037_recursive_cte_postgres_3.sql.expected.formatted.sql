@@ -33,6 +33,11 @@ SET enable_analyzer = 1;
 
 SET join_algorithm = 'hash';
 
+--
+-- different tree example
+--
+SYSTEM DROP  TABLE IF EXISTS tree;
+
 CREATE TABLE tree
 (
     id UInt64,

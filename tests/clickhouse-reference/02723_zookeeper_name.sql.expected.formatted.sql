@@ -38,3 +38,7 @@ ORDER BY
     table ASC,
     zookeeper_name ASC
 FORMAT CSV;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;

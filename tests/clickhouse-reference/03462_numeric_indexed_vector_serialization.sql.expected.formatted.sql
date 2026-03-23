@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS uin_value_details_int32_float64;
+
 CREATE TABLE uin_value_details_int32_float64
 (
     ds Date,
@@ -10,6 +12,8 @@ ORDER BY ds;
 INSERT INTO uin_value_details_int32_float64 (ds, uin, value);
 
 INSERT INTO uin_value_details_int32_float64 (ds, uin, value);
+
+SYSTEM DROP  TABLE IF EXISTS vector_int32_float64;
 
 CREATE TABLE vector_int32_float64
 (

@@ -1,4 +1,5 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+DROP TABLE IF EXISTS ttl_group_by_bug;
 CREATE TABLE ttl_group_by_bug
 (key UInt32, ts DateTime, value UInt32, min_value UInt32 default value, max_value UInt32 default value)
 ENGINE = MergeTree()

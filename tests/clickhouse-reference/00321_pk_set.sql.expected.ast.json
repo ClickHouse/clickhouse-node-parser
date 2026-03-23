@@ -1,5 +1,9 @@
 [
   {
+    "kind": "system",
+    "body": "DROP  TABLE IF EXISTS pk_set"
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -662,5 +666,15 @@
         }
       ]
     }
+  },
+  {
+    "kind": "system",
+    "body": "DROP  TABLE pk_set",
+    "leadingComments": [
+      "-- that barely reproduces the problem",
+      "-- better way:",
+      "-- for i in {1..1000}; do echo \"SELECT count() FROM pk_set WHERE host IN ('a'\"$(seq 1 $i | sed -r \"s/.+/,'\\\\0'/\")\") AND code = 100 AND n = 11;\"; done > queries.tsv",
+      "-- clickhouse-benchmark < queries.tsv"
+    ]
   }
 ]

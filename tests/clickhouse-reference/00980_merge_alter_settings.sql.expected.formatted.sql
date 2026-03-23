@@ -1,9 +1,15 @@
+-- Tags: no-replicated-database, log-engine
+-- Tag no-replicated-database: Unsupported type of ALTER query
+SYSTEM DROP  TABLE IF EXISTS log_for_alter;
+
 CREATE TABLE log_for_alter
 (
     id UInt64,
     Data String
 )
 ENGINE = Log();
+
+SYSTEM DROP  TABLE IF EXISTS table_for_alter;
 
 CREATE TABLE table_for_alter
 (
@@ -20,6 +26,8 @@ INSERT INTO table_for_alter; -- { serverError TOO_MANY_PARTS }
 
 SELECT COUNT()
 FROM table_for_alter;
+
+SYSTEM DROP  TABLE IF EXISTS table_for_reset_setting;
 
 CREATE TABLE table_for_reset_setting
 (

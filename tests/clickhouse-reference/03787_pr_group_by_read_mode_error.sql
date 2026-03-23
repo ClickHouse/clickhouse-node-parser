@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE t1 (key UInt8) ENGINE = MergeTree ORDER BY key SETTINGS index_granularity=1024;
 INSERT INTO t1 SELECT number % 1000  from numbers(100000);
 CREATE TABLE t2 (key UInt64) ENGINE = MergeTree ORDER BY key SETTINGS index_granularity=1024;

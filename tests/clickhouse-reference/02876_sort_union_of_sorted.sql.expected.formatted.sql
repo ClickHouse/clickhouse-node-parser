@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1
 (
     number UInt64
@@ -53,3 +57,7 @@ FROM (
         ORDER BY number DESC)
     )
 ORDER BY number DESC;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;

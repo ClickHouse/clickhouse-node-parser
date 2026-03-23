@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS enum_as_num;
+
 CREATE TABLE enum_as_num
 (
     Id Int32,

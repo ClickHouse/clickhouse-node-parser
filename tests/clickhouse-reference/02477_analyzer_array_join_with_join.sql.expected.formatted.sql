@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -321,3 +323,6 @@ ARRAY JOIN id AS id_nested_array
 ARRAY JOIN id_nested_array AS id
 INNER JOIN test_table
     USING (id);
+
+-- { echoOff }
+SYSTEM DROP  TABLE test_table;

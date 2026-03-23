@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (col Int8) ENGINE=MergeTree ORDER BY tuple()
 SETTINGS vertical_merge_algorithm_min_rows_to_activate=1,
          vertical_merge_algorithm_min_columns_to_activate=1,

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS a;
+
+SYSTEM DROP  TABLE IF EXISTS j;
+
 CREATE TABLE a
 (
     id UInt32,
@@ -35,6 +39,10 @@ ORDER BY
     a.id ASC,
     a.val ASC
 SETTINGS enable_optimize_predicate_expression = 0;
+
+SYSTEM DROP  TABLE a;
+
+SYSTEM DROP  TABLE j;
 
 CREATE TABLE j
 (

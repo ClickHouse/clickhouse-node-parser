@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS 02713_seqt;
+
+SYSTEM DROP  TABLE IF EXISTS 02713_seqt_distr;
+
 SELECT
     'serialized state is not used',
     sequenceMatch('(?1)(?2)')(time, number_ = 1, number_ = 0) AS seq

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS pk_func;
+
 CREATE TABLE pk_func
 (
     d DateTime,
@@ -26,3 +28,5 @@ SELECT
     ui
 FROM pk_func FINAL
 ORDER BY d ASC;
+
+SYSTEM DROP  TABLE pk_func;

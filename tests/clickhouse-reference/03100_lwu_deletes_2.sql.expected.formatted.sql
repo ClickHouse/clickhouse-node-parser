@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS lwd_test;
+
 SET enable_lightweight_update = 1;
 
 SET lightweight_delete_mode = 'lightweight_update_force';
@@ -31,3 +33,5 @@ SELECT
 FROM lwd_test
 ORDER BY id ASC
 LIMIT 1;
+
+SYSTEM DROP  TABLE lwd_test;

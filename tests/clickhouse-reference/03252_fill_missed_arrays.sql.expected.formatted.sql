@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_fill_arrays;
+
 CREATE TABLE t_fill_arrays
 (
     id String,
@@ -13,3 +15,5 @@ FROM numbers(10000);
 SELECT count()
 FROM t_fill_arrays
 WHERE NOT ignore(arrCol, mapCol.values);
+
+SYSTEM DROP  TABLE t_fill_arrays;

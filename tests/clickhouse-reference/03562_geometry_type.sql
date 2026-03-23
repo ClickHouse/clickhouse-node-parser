@@ -1,9 +1,11 @@
+DROP TABLE IF EXISTS geom1;
 CREATE TABLE IF NOT EXISTS geom1 (geom Geometry) ENGINE = Memory();
 INSERT INTO geom1 VALUES((10, 20));
 INSERT INTO geom1 VALUES((30, 40));
 INSERT INTO geom1 VALUES([(0, 0), (10, 0), (10, 10), (0, 10)]);
 INSERT INTO geom1 VALUES([[(20, 20), (50, 20), (50, 50), (20, 50)], [(30, 30), (50, 50), (50, 30)]]);
 SELECT count(*) FROM geom1;
+DROP TABLE IF EXISTS geo;
 CREATE TABLE IF NOT EXISTS geo (geom String, id Int) ENGINE = Memory();
 INSERT INTO geo VALUES ('POLYGON((1 0,10 0,10 10,0 10,1 0),(4 4,5 4,5 5,4 5,4 4))', 1);
 INSERT INTO geo VALUES ('POINT(0 0)', 2);

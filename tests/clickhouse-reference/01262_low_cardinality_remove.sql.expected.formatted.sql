@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS testView;
+
+SYSTEM DROP  TABLE IF EXISTS testTable;
+
 CREATE TABLE IF NOT EXISTS testTable
 (
     A LowCardinality(String),
@@ -19,6 +23,8 @@ SELECT CAST(ALow, 'String') AS AStr
 FROM testView
 GROUP BY AStr
 ORDER BY AStr ASC;
+
+SYSTEM DROP  TABLE testTable;
 
 CREATE TABLE IF NOT EXISTS testTable
 (

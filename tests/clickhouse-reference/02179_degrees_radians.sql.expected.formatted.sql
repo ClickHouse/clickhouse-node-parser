@@ -1,3 +1,6 @@
+-- test conversion from degrees to radians
+SYSTEM DROP  TABLE IF EXISTS test_degs_to_rads;
+
 CREATE TABLE test_degs_to_rads
 (
     degrees Float64
@@ -31,6 +34,11 @@ ORDER BY degrees ASC;
 SELECT RADIANS(degrees)
 FROM test_degs_to_rads
 ORDER BY degrees ASC;
+
+SYSTEM DROP  TABLE test_degs_to_rads;
+
+-- test conversion from radians to degrees
+SYSTEM DROP  TABLE IF EXISTS test_rads_to_degs;
 
 CREATE TABLE test_rads_to_degs
 (
@@ -71,3 +79,5 @@ ORDER BY radians ASC;
 SELECT DEGREES(radians)
 FROM test_rads_to_degs
 ORDER BY radians ASC;
+
+SYSTEM DROP  TABLE test_rads_to_degs;

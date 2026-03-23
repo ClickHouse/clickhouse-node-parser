@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists X;
+
+SYSTEM drop  table if exists Y;
+
 CREATE TABLE X
 (
     id Int64
@@ -109,3 +113,7 @@ ORDER BY
 SELECT '----';
 
 SET join_use_nulls = 1;
+
+SYSTEM drop  table X;
+
+SYSTEM drop  table Y;

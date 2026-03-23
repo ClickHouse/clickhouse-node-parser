@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS sparse_t;
 CREATE TABLE sparse_t (
     id UInt64,
     u UInt64,

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     x Int32,
@@ -10,3 +12,5 @@ INSERT INTO t;
 
 SELECT *
 FROM merge('', 't');
+
+SYSTEM drop  table t;

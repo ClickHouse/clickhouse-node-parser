@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+
+DROP TABLE IF EXISTS h3_indexes;
 CREATE TABLE h3_indexes (h3_index UInt64) ENGINE = Memory;
 -- Random geo coordinates were generated using the H3 tool: https://github.com/ClickHouse-Extras/h3/blob/master/src/apps/testapps/mkRandGeo.c at various resolutions from 0 to 15.
 -- Corresponding H3 index values were in turn generated with those geo coordinates using `geoToH3(lat, lon, res)` ClickHouse function for the following test.
@@ -18,6 +21,8 @@ INSERT INTO h3_indexes VALUES (634600058503392255);
 INSERT INTO h3_indexes VALUES (635544851677385791);
 INSERT INTO h3_indexes VALUES (639763125756281263);
 INSERT INTO h3_indexes VALUES (644178757620501158);
+DROP TABLE h3_indexes;
+DROP TABLE IF EXISTS h3_geo;
 -- compare if the results of h3ToGeo and geoToH3 are the same
 
 CREATE TABLE h3_geo(lat Float64, lon Float64, res UInt8) ENGINE = Memory;
@@ -44,3 +49,4 @@ SELECT result FROM (
         if(abs(input_geo.1 - output_geo.1) < 0.001 AND abs(input_geo.2 - output_geo.2) < 0.001, 'ok', 'fail') AS result
     FROM h3_geo
 );
+DROP TABLE h3_geo;

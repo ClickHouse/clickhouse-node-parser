@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t_enum;
+
+SYSTEM DROP  TABLE IF EXISTS t_source;
+
 CREATE TABLE t_enum
 (
     x Enum8('hello' = 1, 'world' = 2)

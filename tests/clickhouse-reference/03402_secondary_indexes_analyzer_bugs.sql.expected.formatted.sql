@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     tenant String,
@@ -16,6 +18,8 @@ INSERT INTO t SELECT
     toString(number)
 FROM numbers(65536);
 
+SYSTEM drop  table if exists tab_v1;
+
 CREATE TABLE tab_v1
 (
     content String,
@@ -23,6 +27,8 @@ CREATE TABLE tab_v1
 )
 ENGINE = MergeTree
 ORDER BY content;
+
+SYSTEM drop  table if exists tab_v3;
 
 CREATE VIEW tab_v3
 AS

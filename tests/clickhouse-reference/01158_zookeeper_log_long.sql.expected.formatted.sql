@@ -4,6 +4,8 @@
 -- no-async-insert: Test expects new part for each insert
 SET insert_keeper_fault_injection_probability = 0; -- disable fault injection; part ids are non-deterministic in case of insert retries
 
+SYSTEM drop  table if exists rmt sync;
+
 -- cleanup code will perform extra Exists
 -- (so the .reference will not match)
 CREATE TABLE rmt
@@ -42,6 +44,8 @@ ORDER BY
     xid ASC,
     type ASC,
     request_idx ASC;
+
+SYSTEM drop  table rmt sync;
 
 SELECT count() > 0
 FROM `system`.zookeeper_log

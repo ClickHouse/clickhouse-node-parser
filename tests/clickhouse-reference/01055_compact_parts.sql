@@ -1,5 +1,6 @@
 -- Testing basic functionality with compact parts
 set mutations_sync = 2;
+drop table if exists mt_compact;
 create table mt_compact(a UInt64, b UInt64 DEFAULT a * a, s String, n Nested(x UInt32, y String), lc LowCardinality(String))
 engine = MergeTree
 order by a partition by a % 10

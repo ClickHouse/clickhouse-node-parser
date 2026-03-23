@@ -49,6 +49,8 @@ FROM (
             )
     );
 
+SYSTEM DROP  TABLE IF EXISTS sensor_value;
+
 CREATE TABLE sensor_value
 (
     received_at DateTime('Asia/Istanbul'),
@@ -83,6 +85,8 @@ FROM (
     )
 GROUP BY time
 ORDER BY time ASC;
+
+SYSTEM DROP  TABLE sensor_value;
 
 SELECT
     s.a,

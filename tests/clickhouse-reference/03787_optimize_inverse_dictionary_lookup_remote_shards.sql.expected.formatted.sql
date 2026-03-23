@@ -6,6 +6,8 @@ SET rewrite_in_to_join = 0;
 
 SET prefer_localhost_replica = 1;
 
+SYSTEM DROP  DICTIONARY IF EXISTS inverse_dict_lookup_remote_shards;
+
 CREATE DICTIONARY inverse_dict_lookup_remote_shards
 (
     id Int64,
@@ -23,6 +25,8 @@ FROM remote('localhost,localhost', `system`.one)
 LIMIT 1;
 
 SET optimize_inverse_dictionary_lookup = 1;
+
+SYSTEM DROP  DICTIONARY IF EXISTS inverse_dict_lookup_remote_shards_composite_key;
 
 CREATE DICTIONARY inverse_dict_lookup_remote_shards_composite_key
 (

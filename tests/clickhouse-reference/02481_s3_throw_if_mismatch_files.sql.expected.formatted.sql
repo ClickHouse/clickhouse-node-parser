@@ -1,3 +1,8 @@
+-- Tags: no-parallel, no-fasttest
+-- Tag no-fasttest: Depends on AWS
+-- { echo }
+SYSTEM drop  table if exists test_02481_mismatch_files;
+
 CREATE TABLE test_02481_mismatch_files
 (
     a UInt64,

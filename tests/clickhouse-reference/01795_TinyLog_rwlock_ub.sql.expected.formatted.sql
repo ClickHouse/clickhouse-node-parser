@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS underlying_01795;
+
 CREATE TABLE underlying_01795
 (
     key UInt64
@@ -11,3 +13,5 @@ LIMIT 1;
 SELECT *
 FROM underlying_01795
 FORMAT Null;
+
+SYSTEM DROP  TABLE underlying_01795;

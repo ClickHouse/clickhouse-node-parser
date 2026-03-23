@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS 01682_database_for_cache_dictionary;
 CREATE DATABASE 01682_database_for_cache_dictionary;
 CREATE TABLE 01682_database_for_cache_dictionary.complex_key_simple_attributes_source_table
 (
@@ -31,6 +34,8 @@ SELECT dictGetOrDefault('01682_database_for_cache_dictionary.cache_dictionary_co
     dictGetOrDefault('01682_database_for_cache_dictionary.cache_dictionary_complex_key_simple_attributes', 'value_second', (number, concat('id_key_', toString(number))), toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01682_database_for_cache_dictionary.cache_dictionary_complex_key_simple_attributes', (number, concat('id_key_', toString(number)))) FROM system.numbers LIMIT 4;
 SELECT * FROM 01682_database_for_cache_dictionary.cache_dictionary_complex_key_simple_attributes ORDER BY id;
+DROP DICTIONARY 01682_database_for_cache_dictionary.cache_dictionary_complex_key_simple_attributes;
+DROP TABLE 01682_database_for_cache_dictionary.complex_key_simple_attributes_source_table;
 CREATE TABLE 01682_database_for_cache_dictionary.complex_key_complex_attributes_source_table
 (
    id UInt64,
@@ -64,3 +69,6 @@ SELECT dictGetOrDefault('01682_database_for_cache_dictionary.cache_dictionary_co
     dictGetOrDefault('01682_database_for_cache_dictionary.cache_dictionary_complex_key_complex_attributes', 'value_second', (number, concat('id_key_', toString(number))), toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01682_database_for_cache_dictionary.cache_dictionary_complex_key_complex_attributes', (number, concat('id_key_', toString(number)))) FROM system.numbers LIMIT 4;
 SELECT * FROM 01682_database_for_cache_dictionary.cache_dictionary_complex_key_complex_attributes ORDER BY id;
+DROP DICTIONARY 01682_database_for_cache_dictionary.cache_dictionary_complex_key_complex_attributes;
+DROP TABLE 01682_database_for_cache_dictionary.complex_key_complex_attributes_source_table;
+DROP DATABASE 01682_database_for_cache_dictionary;

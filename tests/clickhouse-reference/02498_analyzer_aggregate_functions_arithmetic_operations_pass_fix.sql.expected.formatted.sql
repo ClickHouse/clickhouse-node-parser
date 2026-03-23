@@ -2,6 +2,8 @@ SET enable_analyzer = 1;
 
 SET optimize_arithmetic_operations_in_aggregate_functions = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,

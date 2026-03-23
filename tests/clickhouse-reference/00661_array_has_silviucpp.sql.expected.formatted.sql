@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS has_function;
+
 CREATE TABLE has_function
 (
     arr Array(Nullable(String))
@@ -12,3 +14,5 @@ SELECT
 FROM has_function;
 
 SELECT has([null, 'str1', 'str2'], 'str1');
+
+SYSTEM DROP  TABLE has_function;

@@ -1,3 +1,8 @@
+-- Tags: no-fasttest, no-ordinary-database, no-tsan
+-- no-tsan: generating data takes too long
+-- Tests correctness of vector similarity index with > 1 mark
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id Int32,
@@ -12,3 +17,5 @@ INSERT INTO tab SELECT
     number,
     [toFloat32(number), 0.0]
 FROM numbers(10000);
+
+SYSTEM DROP  TABLE tab;

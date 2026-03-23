@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1
 (
     dt Date,
@@ -48,3 +52,7 @@ FROM (
 GROUP BY
     dt,
     id;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;

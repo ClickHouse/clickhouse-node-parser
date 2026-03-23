@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS raw_data;
+DROP TABLE IF EXISTS raw_temporary_data;
+DROP TABLE IF EXISTS parameterized_view_one_param;
+DROP TABLE IF EXISTS parameterized_view_multiple_params;
+DROP TABLE IF EXISTS parameterized_view_one_param_temporary;
+DROP TABLE IF EXISTS parameterized_view_multiple_params_temporary;
 SELECT '-----------------------------------------';
 CREATE TABLE raw_data (id UInt32, data String) ENGINE = MergeTree ORDER BY id;
 CREATE VIEW parameterized_view_one_param AS SELECT * FROM raw_data WHERE id = {id:UInt32};
@@ -22,3 +28,9 @@ CREATE VIEW parameterized_view_multiple_params_temporary
 SELECT name, engine, parameterized_view_parameters
     FROM system.tables
     WHERE database = currentDatabase() and name = 'parameterized_view_multiple_params_temporary';
+DROP TABLE parameterized_view_one_param;
+DROP TABLE parameterized_view_multiple_params;
+DROP TABLE parameterized_view_one_param_temporary;
+DROP TABLE parameterized_view_multiple_params_temporary;
+DROP TABLE raw_temporary_data;
+DROP TABLE raw_data;

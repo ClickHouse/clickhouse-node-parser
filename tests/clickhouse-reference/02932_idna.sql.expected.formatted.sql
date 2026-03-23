@@ -222,6 +222,8 @@ SELECT
     idnaDecode(ascii_try) AS original_try
 FORMAT Vertical;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     idna String
@@ -238,6 +240,8 @@ SELECT
     idnaDecode(ascii) AS original,
     idnaDecode(ascii_try) AS original_try
 FROM tab;
+
+SYSTEM DROP  TABLE tab;
 
 INSERT INTO tab;
 

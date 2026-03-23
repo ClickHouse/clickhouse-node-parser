@@ -1,5 +1,8 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (a UInt8, b UInt8, c UInt16 ALIAS a + b) ENGINE = MergeTree ORDER BY a;
 SELECT b FROM test PREWHERE c = 1;
+DROP TABLE test;
+drop table if exists audience_local;
 create table audience_local
 (
  Date Date,

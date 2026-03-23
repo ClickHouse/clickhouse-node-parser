@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS 01753_dictionary_db;
+
 CREATE DATABASE `01753_dictionary_db`;
 
 CREATE TABLE `01753_dictionary_db`.simple_key_simple_attributes_source_table
@@ -56,6 +59,10 @@ SELECT *
 FROM `01753_dictionary_db`.direct_dictionary_simple_key_simple_attributes
 ORDER BY `ALL` ASC;
 
+SYSTEM DROP  DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_simple_attributes;
+
+SYSTEM DROP  TABLE 01753_dictionary_db.simple_key_simple_attributes_source_table;
+
 CREATE TABLE `01753_dictionary_db`.simple_key_complex_attributes_source_table
 (
     id UInt64,
@@ -112,6 +119,10 @@ SELECT *
 FROM `01753_dictionary_db`.direct_dictionary_simple_key_complex_attributes
 ORDER BY `ALL` ASC;
 
+SYSTEM DROP  DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_complex_attributes;
+
+SYSTEM DROP  TABLE 01753_dictionary_db.simple_key_complex_attributes_source_table;
+
 CREATE TABLE `01753_dictionary_db`.simple_key_hierarchy_table
 (
     id UInt64,
@@ -143,3 +154,9 @@ LIMIT 5;
 SELECT dictGetHierarchy('01753_dictionary_db.direct_dictionary_simple_key_hierarchy', toUInt64(1));
 
 SELECT dictGetHierarchy('01753_dictionary_db.direct_dictionary_simple_key_hierarchy', toUInt64(4));
+
+SYSTEM DROP  DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_hierarchy;
+
+SYSTEM DROP  TABLE 01753_dictionary_db.simple_key_hierarchy_table;
+
+SYSTEM DROP  DATABASE 01753_dictionary_db;

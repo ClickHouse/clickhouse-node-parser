@@ -1,4 +1,5 @@
 SET enable_full_text_index = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     s Array(String),
@@ -8,3 +9,4 @@ CREATE TABLE tab
 ENGINE = MergeTree() ORDER BY tuple();
 INSERT INTO TABLE tab (s) VALUES (['A']);
 INSERT INTO TABLE tab (s) VALUES (['B']);
+DROP TABLE tab;

@@ -1,3 +1,7 @@
+SYSTEM DROP  DICTIONARY IF EXISTS range_dictionary;
+
+SYSTEM DROP  TABLE IF EXISTS range_dictionary_nullable_source_table;
+
 CREATE TABLE range_dictionary_nullable_source_table
 (
     key UInt64,

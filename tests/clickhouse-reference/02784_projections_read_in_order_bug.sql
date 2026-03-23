@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS events;
 create table events (
     `organisation_id` UUID,
     `session_id` UUID,
@@ -39,3 +40,4 @@ create table events (
 insert into events values (reinterpretAsUUID(0), reinterpretAsUUID(1), reinterpretAsUUID(0), toDateTime('2022-02-02', 'UTC'), toString(0), reinterpretAsUUID(0), toString(0)), (reinterpretAsUUID(0), reinterpretAsUUID(1), reinterpretAsUUID(0), toDateTime('2022-02-02', 'UTC'), toString(0), reinterpretAsUUID(0), toString(0)), (reinterpretAsUUID(1), reinterpretAsUUID(0), reinterpretAsUUID(0), toDateTime('2022-02-02', 'UTC'), toString(0), reinterpretAsUUID(0), toString(0)), (reinterpretAsUUID(1), reinterpretAsUUID(0), reinterpretAsUUID(0), toDateTime('2022-02-02', 'UTC'), toString(0), reinterpretAsUUID(0), toString(0)), (reinterpretAsUUID(3), reinterpretAsUUID(2), reinterpretAsUUID(0), toDateTime('2022-02-02', 'UTC'), toString(0), reinterpretAsUUID(0), toString(0)), (reinterpretAsUUID(3), reinterpretAsUUID(2), reinterpretAsUUID(0), toDateTime('2022-02-02', 'UTC'), toString(0), reinterpretAsUUID(0), toString(0));
 set read_in_order_two_level_merge_threshold=1;
 SELECT id, timestamp, payload FROM events WHERE (organisation_id = reinterpretAsUUID(1)) AND (session_id = reinterpretAsUUID(0)) ORDER BY timestamp, payload, id ASC;
+DROP TABLE events;

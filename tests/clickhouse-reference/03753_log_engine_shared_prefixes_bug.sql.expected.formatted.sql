@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     c String
@@ -13,3 +15,5 @@ ORDER BY
     c ASC,
     c.size ASC
 FORMAT Null;
+
+SYSTEM DROP  TABLE test;

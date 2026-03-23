@@ -28,10 +28,14 @@ LIMIT arrayJoin([1, 2]); -- { serverError BAD_ARGUMENTS, INVALID_LIMIT_EXPRESSIO
 
 INSERT INTO rmt1;
 
+SYSTEM drop  table rmt1;
+
 SELECT lost_part_count
 FROM `system`.replicas
 WHERE database = currentDatabase()
     AND table = 'rmt2';
+
+SYSTEM drop  table rmt2;
 
 SELECT count()
 FROM `system`.text_log

@@ -1,4 +1,5 @@
 set compatibility_ignore_auto_increment_in_create_table=false;
+DROP TABLE IF EXISTS ignore_auto_increment SYNC;
 CREATE TABLE ignore_auto_increment (
     id int AUTO_INCREMENT
 ) ENGINE=MergeTree() ORDER BY tuple(); -- {serverError SYNTAX_ERROR}

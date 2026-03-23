@@ -2,6 +2,7 @@
 
 insert into function file(02458_data.jsonl) select NULL as x, 42 as y settings engine_file_truncate_on_insert=1;
 insert into function file(02458_data.jsoncompacteachrow) select NULL as x, 42 as y settings engine_file_truncate_on_insert=1;
+drop table if exists test;
 create table test (x Nullable(UInt32), y UInt32) engine=Memory();
 set use_structure_from_insertion_table_in_table_functions=2;
 set input_format_json_infer_incomplete_types_as_strings=0;
@@ -21,6 +22,7 @@ insert into test select x, y from input() format CSV 1,2 -- {serverError CANNOT_
 
 insert into test select x, y from input() format JSONEachRow {"x" : null, "y" : 42};
 select * from test order by y;
+drop table test;
 create table test (x Nullable(UInt32)) engine=Memory();
 insert into test select x from file(02458_data.jsonl);
 insert into test select y from file(02458_data.jsonl);

@@ -1,3 +1,7 @@
+-- Tags: stateful, long, no-parallel, no-asan, no-tsan, no-ubsan, no-msan
+-- no-*san: too long.
+SYSTEM DROP  TABLE IF EXISTS hits_text;
+
 CREATE TABLE hits_text
 (
     CounterID UInt32,
@@ -139,3 +143,5 @@ SELECT count()
 FROM hits_text
 WHERE hasAnyTokens(URL, ['market', 'shop'])
     OR hasAnyTokens(SearchPhrase, ['market', 'shop']);
+
+SYSTEM DROP  TABLE hits_text;

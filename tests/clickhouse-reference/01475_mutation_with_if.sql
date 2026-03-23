@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS mutation_table;
 CREATE TABLE mutation_table (
     id int,
     price Nullable(Int32)

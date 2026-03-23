@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_01279;
+
 CREATE TABLE data_01279
 (
     key String
@@ -17,3 +19,5 @@ SELECT *
 FROM data_01279
 GROUP BY key
 FORMAT Null;
+
+SYSTEM drop  table data_01279;

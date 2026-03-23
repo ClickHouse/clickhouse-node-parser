@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE t1 (
     time DateTime,
     foo String,

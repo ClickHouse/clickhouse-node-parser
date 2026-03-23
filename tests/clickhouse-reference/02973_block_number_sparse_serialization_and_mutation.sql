@@ -2,6 +2,7 @@
 
 -- we need exact block-numbers
 SET insert_keeper_fault_injection_probability=0;
+DROP TABLE IF EXISTS table_with_some_columns;
 CREATE TABLE table_with_some_columns(
     key UInt64,
     value0 UInt8

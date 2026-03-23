@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists t1;
+
 CREATE TABLE t
 (
     id UInt32
@@ -22,3 +26,7 @@ ARRAY JOIN (
         FROM t1
     ) AS _a
 SETTINGS optimize_trivial_count_query = 1;
+
+SYSTEM drop  table t;
+
+SYSTEM drop  table t1;

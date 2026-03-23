@@ -1,3 +1,11 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS db_1 SYNC;
+DROP DATABASE IF EXISTS db_2 SYNC;
+DROP DATABASE IF EXISTS db_3 SYNC;
+DROP DATABASE IF EXISTS db_4 SYNC;
+DROP DATABASE IF EXISTS db_5 SYNC;
+DROP DATABASE IF EXISTS db_6 SYNC;
 SELECT '-----------------------';
 CREATE DATABASE db_1 ENGINE = Replicated('/test/db_1', '{shard}', '{replica}');
 CREATE DATABASE db_2 ENGINE = Replicated('/test/db_2', '{shard}', '{replica}');
@@ -19,6 +27,7 @@ SELECT * FROM system.database_replicas WHERE database LIKE 'db_%' AND is_readonl
 SELECT * FROM system.database_replicas WHERE database LIKE 'db_%' AND is_readonly=1 ORDER BY database;
 SELECT is_readonly FROM system.database_replicas WHERE database='db_2' ORDER BY database;
 SELECT * FROM system.database_replicas WHERE database='db_11' ORDER BY database;
+DROP DATABASE db_1;
 SET distributed_ddl_output_mode='throw';
 CREATE TABLE db_2.test_table (n Int64) ENGINE=MergeTree ORDER BY n;
 SELECT database, max_log_ptr FROM system.database_replicas WHERE database LIKE 'db_%' AND max_log_ptr > 1;

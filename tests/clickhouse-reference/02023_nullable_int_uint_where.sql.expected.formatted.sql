@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t1;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE t1
@@ -13,3 +15,5 @@ INSERT INTO t1;
 SELECT *
 FROM t1
 WHERE id = 21585718595728998;
+
+SYSTEM drop  table t1;

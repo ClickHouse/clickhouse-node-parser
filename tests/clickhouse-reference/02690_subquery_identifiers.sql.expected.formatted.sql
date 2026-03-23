@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_str;
+
 CREATE TABLE t_str
 (
     creation_time String
@@ -33,3 +35,5 @@ FROM (
                 SELECT any('1970-01-01')
             )::Date > today()
     );
+
+SYSTEM DROP  TABLE t_str;

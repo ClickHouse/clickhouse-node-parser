@@ -1,3 +1,6 @@
+-- Tags: race
+SYSTEM drop  table if exists test_quantile;
+
 CREATE TABLE test_quantile
 (
     x AggregateFunction(quantileTiming(0.2), UInt64)
@@ -68,3 +71,5 @@ FROM (
         FROM test_quantile
     )
 ORDER BY y ASC;
+
+SYSTEM drop  table test_quantile;

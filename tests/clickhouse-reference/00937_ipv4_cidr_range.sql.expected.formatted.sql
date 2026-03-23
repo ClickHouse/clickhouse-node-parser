@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ipv4_range;
+
 CREATE TABLE ipv4_range
 (
     ip IPv4,
@@ -6,6 +8,8 @@ CREATE TABLE ipv4_range
 ENGINE = Memory;
 
 INSERT INTO ipv4_range (ip, cidr);
+
+SYSTEM DROP  TABLE ipv4_range;
 
 SELECT IPv4CIDRToRange(toIPv4('192.168.5.2'), 0);
 

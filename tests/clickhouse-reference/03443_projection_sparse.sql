@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_projection_sparse;
 CREATE TABLE t_projection_sparse
 (
     `id` String,
@@ -16,3 +17,4 @@ SETTINGS deduplicate_merge_projection_mode = 'rebuild', index_granularity = 1;
 INSERT INTO t_projection_sparse VALUES ('aa', initializeAggregation('sumState', 0::UInt64));
 INSERT INTO t_projection_sparse VALUES ('bb', initializeAggregation('sumState', 0::UInt64));
 SELECT count() FROM t_projection_sparse WHERE finalizeAggregation(val) = 0;
+DROP TABLE t_projection_sparse;

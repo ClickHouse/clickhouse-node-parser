@@ -2,6 +2,12 @@ SET joined_subquery_requires_alias = 0;
 
 SET any_join_distinct_right_table_keys = 0;
 
+SYSTEM drop  table if exists tab1;
+
+SYSTEM drop  table if exists tab2;
+
+SYSTEM drop  table if exists tab3;
+
 CREATE TABLE tab1
 (
     a1 Int32,
@@ -226,3 +232,9 @@ RIGHT JOIN tab3
 ORDER BY
     a3 ASC,
     b3 ASC;
+
+SYSTEM drop  table tab1;
+
+SYSTEM drop  table tab2;
+
+SYSTEM drop  table tab3;

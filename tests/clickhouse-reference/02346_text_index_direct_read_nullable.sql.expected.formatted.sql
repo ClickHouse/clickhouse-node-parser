@@ -1,6 +1,8 @@
 -- Test that text index direct read optimization works correctly with nullable needles.
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     key UInt64,
@@ -35,3 +37,5 @@ PREWHERE NOT hasAnyTokens(val, toNullable('FOO'));
 SELECT count()
 FROM tab
 PREWHERE and(key > 0, NOT hasAnyTokens(val, toNullable('FOO')));
+
+SYSTEM DROP  TABLE tab;

@@ -6,6 +6,8 @@ SET max_block_size = 65536;
 
 SET allow_experimental_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_limit_by_all;
+
 CREATE TABLE test_limit_by_all
 (
     id Int32,
@@ -195,6 +197,9 @@ SELECT count()
 FROM test_limit_by_all
 LIMIT 1 BY ALL; -- { serverError 62 }
 
+-- JOIN + ARRAY JOIN
+SYSTEM DROP  TABLE IF EXISTS test_limit_by_all_tags;
+
 CREATE TABLE test_limit_by_all_tags
 (
     id Int32,
@@ -217,6 +222,8 @@ ORDER BY
     tag ASC,
     value ASC
 LIMIT 1 BY ALL;
+
+SYSTEM DROP  TABLE test_limit_by_all_tags;
 
 SELECT
     id,
@@ -312,3 +319,5 @@ ORDER BY
     category ASC,
     value ASC
 LIMIT 1 BY ALL;
+
+SYSTEM DROP  TABLE test_limit_by_all;

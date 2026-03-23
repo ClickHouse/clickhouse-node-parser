@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test
 (
   id   UInt32,
@@ -9,3 +10,4 @@ INSERT INTO test FORMAT CSV 1,
 
 SELECT * FROM test ORDER BY code;
 SELECT * FROM test ORDER BY code;
+DROP TABLE test;

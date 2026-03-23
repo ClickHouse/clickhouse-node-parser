@@ -103,6 +103,8 @@ FROM (
             )
     );
 
+SYSTEM DROP  TABLE IF EXISTS test1;
+
 CREATE TABLE test1
 (
     year String,
@@ -145,6 +147,8 @@ FROM (
             uniqThetaMergeStateIf(uv, year = '2022') AS uv2022
         FROM test1
     );
+
+SYSTEM DROP  TABLE IF EXISTS test2;
 
 CREATE TABLE test2
 (

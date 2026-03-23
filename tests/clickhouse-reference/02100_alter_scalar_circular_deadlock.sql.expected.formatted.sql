@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS foo;
+
 CREATE TABLE foo
 (
     ts DateTime,
@@ -20,6 +22,8 @@ FROM foo;
 
 SELECT sum(x) == 9
 FROM foo;
+
+SYSTEM DROP  TABLE IF EXISTS bar;
 
 CREATE TABLE bar
 (

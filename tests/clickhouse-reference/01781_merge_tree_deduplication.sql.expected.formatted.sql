@@ -1,3 +1,7 @@
+-- Tags: no-replicated-database
+-- Tag no-replicated-database: Unsupported type of ALTER query
+SYSTEM DROP  TABLE IF EXISTS merge_tree_deduplication;
+
 CREATE TABLE merge_tree_deduplication
 (
     key UInt64,
@@ -90,6 +94,8 @@ SELECT *
 FROM merge_tree_deduplication
 WHERE part = 44
 ORDER BY key ASC;
+
+SYSTEM DROP  TABLE IF EXISTS merge_tree_no_deduplication;
 
 CREATE TABLE merge_tree_no_deduplication
 (

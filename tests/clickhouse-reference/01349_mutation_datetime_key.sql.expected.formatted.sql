@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS cdp_orders;
+
 CREATE TABLE cdp_orders
 (
     order_id String,
@@ -15,3 +17,5 @@ SELECT *
 FROM cdp_orders;
 
 SET mutations_sync = 1;
+
+SYSTEM DROP  TABLE cdp_orders;

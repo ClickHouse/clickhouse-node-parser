@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS subcolumns;
 CREATE TABLE subcolumns
 (
     t Tuple
@@ -32,3 +33,6 @@ CREATE TABLE subcolumns
     nested Nested(col1 String, col2 Nullable(UInt32))
 )
 ENGINE = MergeTree order by tuple() SETTINGS min_bytes_for_wide_part = 0;
+-- SELECT nested.col1, nested.col2, nested.size0, nested.size0, nested.col2.null FROM subcolumns;
+
+DROP TABLE subcolumns;

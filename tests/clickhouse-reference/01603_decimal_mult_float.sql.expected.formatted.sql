@@ -50,3 +50,5 @@ FROM test01603;
 
 SELECT round(sum(d * f32), 6)
 FROM test01603;
+
+SYSTEM DROP  TABLE IF EXISTS test01603;

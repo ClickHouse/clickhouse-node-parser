@@ -53,6 +53,10 @@ WHERE (a, b) NOT IN (
         FROM t1
     );
 
+SYSTEM DROP  TABLE t;
+
+SYSTEM DROP  TABLE t1;
+
 CREATE TABLE t
 (
     a DateTime,

@@ -2,6 +2,8 @@ SET enable_analyzer = 1;
 
 SET optimize_extract_common_expressions = 1;
 
+SYSTEM DROP  TABLE IF EXISTS x;
+
 CREATE TABLE x
 (
     x Int64,

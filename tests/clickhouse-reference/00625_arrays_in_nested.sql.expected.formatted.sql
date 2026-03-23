@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nested;
+
 CREATE TABLE nested
 (
     column Nested(name String, names Array(String), types Array(Enum8('PU' = 1, 'US' = 2, 'OTHER' = 3)))
@@ -39,3 +41,5 @@ CREATE TABLE nested
     column Nested(name String, names Array(String), types Array(Enum8('PU' = 1, 'US' = 2, 'OTHER' = 3)))
 )
 ENGINE = Memory;
+
+SYSTEM DROP  TABLE nested;

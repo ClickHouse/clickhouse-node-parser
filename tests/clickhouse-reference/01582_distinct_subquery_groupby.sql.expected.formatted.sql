@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS d;
+
 CREATE TABLE t
 (
     a String,
@@ -31,9 +35,13 @@ FROM (
     )
 ORDER BY b ASC;
 
+SYSTEM DROP  TABLE d;
+
 CREATE TABLE d
 (
     a String,
     b Int
 )
 ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), t);
+
+SYSTEM DROP  TABLE t;

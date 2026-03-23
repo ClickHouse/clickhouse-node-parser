@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tt_error_1373;
+
 CREATE TABLE tt_error_1373
 (
     a Int64,

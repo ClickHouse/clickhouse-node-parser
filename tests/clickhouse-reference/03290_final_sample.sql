@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_sample_final;
 CREATE TABLE t_sample_final
 (
     CounterID UInt32,
@@ -16,3 +17,4 @@ SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 0, split_i
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_intersecting_parts_ranges_into_layers_final = 0;
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_intersecting_parts_ranges_into_layers_final = 1;
 SELECT count() FROM t_sample_final FINAL SAMPLE 1 / 2 WHERE NOT ignore(*);
+DROP TABLE t_sample_final;

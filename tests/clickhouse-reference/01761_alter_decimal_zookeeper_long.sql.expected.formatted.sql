@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+SYSTEM DROP  TABLE IF EXISTS test_alter_decimal;
+
 CREATE TABLE test_alter_decimal
 (
     n UInt64,

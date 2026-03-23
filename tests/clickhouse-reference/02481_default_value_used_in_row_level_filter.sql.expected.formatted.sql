@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_rlp;
+
 CREATE TABLE test_rlp
 (
     a Int32,
@@ -20,6 +22,8 @@ FROM test_rlp
 WHERE c % 2 == 0
     AND b < 5;
 
+SYSTEM DROP  POLICY IF EXISTS test_rlp_policy ON test_rlp;
+
 CREATE ROW POLICY test_rlp_policy ON test_rlp USING c % 2 == 0 TO default;
 
 SELECT
@@ -34,3 +38,8 @@ SELECT
     c
 FROM test_rlp
 PREWHERE b < 5;
+
+-- { echoOff }
+SYSTEM DROP  POLICY test_rlp_policy ON test_rlp;
+
+SYSTEM DROP  TABLE test_rlp;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (i UInt64) Engine = MergeTree() order by i;
 INSERT INTO test SELECT number FROM numbers(100);
 INSERT INTO test SELECT number FROM numbers(10,100);
@@ -24,3 +25,4 @@ SELECT * FROM test ORDER BY i LIMIT 50 OFFSET 50; -- 10 rows
 SELECT * FROM test ORDER BY i LIMIT 50 OFFSET 190; -- 0 rows
 SELECT * FROM test ORDER BY i LIMIT 50 OFFSET 185; -- 5 rows
 SELECT * FROM test ORDER BY i LIMIT 18 OFFSET 5; -- 8 rows
+DROP TABLE test;

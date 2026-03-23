@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_long_statistics_name;
 CREATE TABLE t_long_statistics_name (
 `一个非常非常非常非常非常非常非常非常非常非常非常长的中文字符串` Int,
 )

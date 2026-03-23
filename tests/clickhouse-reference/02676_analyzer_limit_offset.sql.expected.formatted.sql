@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     i UInt64
@@ -96,3 +98,5 @@ FROM test
 ORDER BY i ASC
 LIMIT 18
 OFFSET 5; -- 8 rows
+
+SYSTEM DROP  TABLE test;

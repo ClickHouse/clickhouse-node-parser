@@ -1,3 +1,6 @@
+-- Tags: zookeeper, no-parallel
+SYSTEM DROP  TABLE IF EXISTS t_hardware_error NO DELAY;
+
 CREATE TABLE t_hardware_error
 (
     KeyID UInt32
@@ -11,3 +14,5 @@ INSERT INTO t_hardware_error;
 
 SELECT count()
 FROM t_hardware_error;
+
+SYSTEM DROP  TABLE t_hardware_error NO DELAY;

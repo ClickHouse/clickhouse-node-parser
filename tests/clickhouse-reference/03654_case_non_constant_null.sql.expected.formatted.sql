@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test1;
+
 CREATE TABLE test1
 (
     a Int,
@@ -12,3 +14,5 @@ INSERT INTO test1;
 
 SELECT caseWithExpression(a + b, c, 'c', d, 'd', NULL)
 FROM test1;
+
+SYSTEM DROP  TABLE test1;

@@ -1,5 +1,7 @@
 SET optimize_use_projections = 1, force_optimize_projection = 1;
 
+SYSTEM drop  table if exists tp;
+
 CREATE TABLE tp
 (
     type Int32,
@@ -14,3 +16,5 @@ INSERT INTO tp SELECT
     generateUUIDv4(),
     1
 FROM numbers(300);
+
+SYSTEM drop  table tp;

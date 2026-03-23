@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists fooL;
+
+SYSTEM drop  table if exists fooR;
+
 CREATE TABLE fooL
 (
     a Int32,
@@ -33,3 +37,7 @@ FROM
 LEFT JOIN fooR
     USING (a)
 ORDER BY a ASC;
+
+SYSTEM drop  table fooL;
+
+SYSTEM drop  table fooR;

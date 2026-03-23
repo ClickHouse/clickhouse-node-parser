@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS mt_compact;
+
 CREATE TABLE mt_compact
 (
     d Date,

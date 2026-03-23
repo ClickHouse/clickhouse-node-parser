@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tab;
+
 CREATE TABLE tab
 (
     id UInt32,

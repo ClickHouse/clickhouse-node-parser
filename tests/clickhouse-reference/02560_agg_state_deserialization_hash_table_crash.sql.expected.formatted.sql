@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     d Int64,
@@ -8,3 +10,5 @@ ENGINE = SummingMergeTree()
 ORDER BY d;
 
 INSERT INTO tab; -- { error TOO_LARGE_ARRAY_SIZE }
+
+SYSTEM DROP  TABLE tab;

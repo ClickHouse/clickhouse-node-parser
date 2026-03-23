@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     s Nullable(String)
@@ -13,3 +15,5 @@ SELECT
     s.`null`,
     s.size
 FROM t0;
+
+SYSTEM DROP  TABLE t0;

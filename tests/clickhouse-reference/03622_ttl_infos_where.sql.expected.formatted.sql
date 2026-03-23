@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS users;
+
 SET session_timezone = 'UTC';
 
 CREATE TABLE users

@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS numbers1;
+DROP TABLE IF EXISTS numbers2;
+DROP TABLE IF EXISTS numbers3;
+DROP TABLE IF EXISTS numbers4;
+DROP TABLE IF EXISTS numbers5;
 CREATE TABLE numbers1 ENGINE = StripeLog AS SELECT number FROM numbers(1000);
 CREATE TABLE numbers2 ENGINE = TinyLog AS SELECT number FROM numbers(1000);
 CREATE TABLE numbers3 ENGINE = Log AS SELECT number FROM numbers(1000);
@@ -15,3 +20,8 @@ SET max_threads = 10;
 SELECT count() FROM merge(currentDatabase(), '^numbers\\d+$') WHERE _table = 'numbers3';
 SET max_rows_to_read = 1;
 SELECT count() FROM merge(currentDatabase(), '^numbers\\d+$') WHERE _table = 'non_existing';
+DROP TABLE numbers1;
+DROP TABLE numbers2;
+DROP TABLE numbers3;
+DROP TABLE numbers4;
+DROP TABLE numbers5;

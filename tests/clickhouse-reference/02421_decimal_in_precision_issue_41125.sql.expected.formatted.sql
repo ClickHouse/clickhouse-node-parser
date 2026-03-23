@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS dtest;
+
 CREATE TABLE dtest
 (
     a Decimal(18, 0),

@@ -11,6 +11,10 @@ SELECT tupleElement((1, 2), negate(1e42)); -- { serverError ILLEGAL_TYPE_OF_ARGU
 
 SELECT tupleElement((1, 'hello'), -10, 2);
 
+SYSTEM drop  table if exists a1;
+
+SYSTEM drop  table if exists a2;
+
 CREATE TABLE a1
 (
     i int,
@@ -40,12 +44,20 @@ FROM (
     )
 ORDER BY `all` ASC;
 
+SYSTEM drop  table a1;
+
+SYSTEM drop  table a2;
+
 SET enable_analyzer = 1;
 
 SET optimize_functions_to_subcolumns = 1;
+
+SYSTEM drop  table if exists test;
 
 CREATE TABLE test
 (
     tuple Tuple(b UInt32, c Int32)
 )
 ENGINE = Memory;
+
+SYSTEM drop  table test;

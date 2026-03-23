@@ -3,6 +3,8 @@ SET mutations_sync = 1;
 
 SET check_query_single_value_result = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t_source_part_is_intact;
+
 CREATE TABLE t_source_part_is_intact
 (
     id UInt64,
@@ -21,3 +23,5 @@ SELECT
     1,
     count()
 FROM t_source_part_is_intact;
+
+SYSTEM DROP  TABLE t_source_part_is_intact;

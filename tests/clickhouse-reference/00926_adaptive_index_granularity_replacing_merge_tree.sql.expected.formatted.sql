@@ -1,3 +1,7 @@
+-- Tags: no-random-merge-tree-settings
+----- Group of very similar simple tests ------
+SYSTEM DROP  TABLE IF EXISTS zero_rows_per_granule;
+
 CREATE TABLE zero_rows_per_granule
 (
     p Date,
@@ -34,6 +38,8 @@ WHERE table = 'zero_rows_per_granule'
 
 SELECT '-----';
 
+SYSTEM DROP  TABLE IF EXISTS two_rows_per_granule;
+
 CREATE TABLE two_rows_per_granule
 (
     p Date,
@@ -58,6 +64,8 @@ WHERE table = 'two_rows_per_granule'
     AND active = 1;
 
 INSERT INTO two_rows_per_granule (p, k, v1, v2);
+
+SYSTEM DROP  TABLE IF EXISTS four_rows_per_granule;
 
 CREATE TABLE four_rows_per_granule
 (
@@ -90,6 +98,8 @@ FORMAT Null;
 SELECT COUNT(*)
 FROM four_rows_per_granule FINAL;
 
+SYSTEM DROP  TABLE IF EXISTS huge_granularity_small_blocks;
+
 CREATE TABLE huge_granularity_small_blocks
 (
     p Date,
@@ -117,6 +127,8 @@ INSERT INTO huge_granularity_small_blocks (p, k, v1, v2);
 
 SELECT COUNT(*)
 FROM huge_granularity_small_blocks FINAL;
+
+SYSTEM DROP  TABLE IF EXISTS adaptive_granularity_alter;
 
 CREATE TABLE adaptive_granularity_alter
 (

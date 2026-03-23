@@ -6,6 +6,8 @@ SELECT -1 IN (
         SELECT 1
     );
 
+SYSTEM DROP  TABLE IF EXISTS select_in_test;
+
 CREATE TABLE select_in_test
 (
     value UInt8
@@ -33,6 +35,8 @@ FROM select_in_test
 WHERE value IN (
         SELECT 1
     );
+
+SYSTEM DROP  TABLE select_in_test;
 
 CREATE TABLE select_in_test
 (

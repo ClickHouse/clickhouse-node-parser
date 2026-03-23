@@ -11,6 +11,7 @@ SET cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_local
 SET parallel_replicas_for_non_replicated_merge_tree = 1;
 SET parallel_replicas_local_plan = 1;
 SET parallel_replicas_min_number_of_rows_per_replica = 0;
+DROP TABLE IF EXISTS t_lazy_mat_prewhere_parallel;
 CREATE TABLE t_lazy_mat_prewhere_parallel (a UInt64, b UInt64, c UInt64, d UInt64)
 ENGINE = MergeTree() PARTITION BY b ORDER BY a;
 INSERT INTO t_lazy_mat_prewhere_parallel SELECT number, number % 2, number, number % 3 FROM numbers(0, 100);

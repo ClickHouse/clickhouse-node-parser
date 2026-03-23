@@ -1,5 +1,7 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table_72265_1;
+
 CREATE TABLE test_table_72265_1
 (
     a LowCardinality(Nullable(Int64)),
@@ -19,6 +21,8 @@ SELECT count()
 FROM test_table_72265_1
 WHERE (a > 100)
     AND ((a % 2) = toUInt128(0));
+
+SYSTEM DROP  TABLE IF EXISTS test_table_72265_2;
 
 CREATE TABLE test_table_72265_2
 (

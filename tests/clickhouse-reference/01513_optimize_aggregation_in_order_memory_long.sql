@@ -1,3 +1,7 @@
+-- Tags: long, no-random-merge-tree-settings
+--- FIXME no-random-merge-tree-settings requires investigation
+
+drop table if exists data_01513;
 create table data_01513 (key String) engine=MergeTree() order by key;
 -- 10e3 groups, 1e3 keys each
 insert into data_01513 select number%10e3 from numbers(2e6);
@@ -11,3 +15,4 @@ select key, groupArray(repeat('a', 200)), count() from data_01513 group by key f
 select key, groupArray(repeat('a', 200)), count() from data_01513 group by key format Null settings optimize_aggregation_in_order=1;
 -- for WITH TOTALS previous groups should be kept.
 select key, groupArray(repeat('a', 200)), count() from data_01513 group by key with totals format Null settings optimize_aggregation_in_order=1; -- { serverError MEMORY_LIMIT_EXCEEDED }
+drop table data_01513;

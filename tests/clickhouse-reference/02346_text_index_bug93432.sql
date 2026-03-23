@@ -1,4 +1,7 @@
 SET enable_full_text_index = 1;
+
+DROP TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
   col Array(String),
@@ -6,4 +9,7 @@ CREATE TABLE tab
 )
 ENGINE=MergeTree() ORDER BY tuple()
 AS SELECT [];
+
 SELECT * from tab WHERE hasAllTokens(col, 'abc');
+
+DROP TABLE tab;

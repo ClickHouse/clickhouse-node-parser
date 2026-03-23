@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data;
+
 CREATE TABLE data
 (
     key Int
@@ -10,3 +12,5 @@ INSERT INTO FUNCTION clusterAllReplicas(test_cluster_two_shards, currentDatabase
 SELECT *
 FROM data
 ORDER BY key ASC;
+
+SYSTEM drop  table data;

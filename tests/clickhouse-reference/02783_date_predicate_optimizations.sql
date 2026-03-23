@@ -11,6 +11,7 @@ SELECT * FROM source WHERE toYYYYMM(ts) = 202112;
 SELECT * FROM source WHERE toYear(ts) = 2021;
 SELECT * FROM source WHERE toYYYYMM(ts) = 202112 SETTINGS enable_analyzer=1;
 SELECT * FROM source WHERE toYear(ts) = 2021 SETTINGS enable_analyzer=1;
+DROP TABLE IF EXISTS source;
 CREATE TABLE source
 (
     `dt` Date,
@@ -123,3 +124,4 @@ SELECT count(*) FROM source WHERE toYear(ts_64) < 2023 SETTINGS enable_analyzer=
 SELECT count(*) FROM source WHERE toYear(ts_64) <= 2023 SETTINGS enable_analyzer=1;
 SELECT count(*) FROM source WHERE toYear(ts_64) > 2023 SETTINGS enable_analyzer=1;
 SELECT count(*) FROM source WHERE toYear(ts_64) >= 2023 SETTINGS enable_analyzer=1;
+DROP TABLE source;

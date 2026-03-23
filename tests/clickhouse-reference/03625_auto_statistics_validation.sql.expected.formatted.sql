@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS t_auto_statistics_validation;
+
 CREATE TABLE t_auto_statistics_validation
 (
     x UInt64
@@ -29,6 +32,8 @@ CREATE TABLE t_auto_statistics_validation
 ENGINE = MergeTree
 ORDER BY x
 SETTINGS auto_statistics_types = '';
+
+SYSTEM DROP  TABLE t_auto_statistics_validation;
 
 CREATE TABLE t_auto_statistics_validation
 (

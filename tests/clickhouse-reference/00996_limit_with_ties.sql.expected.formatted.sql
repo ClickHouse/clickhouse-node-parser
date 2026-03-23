@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ties;
+
 CREATE TABLE `ties`
 (
     a Int
@@ -121,3 +123,5 @@ FROM (
         ORDER BY eleven ASC
         LIMIT 8, 6 WITH TIES
     );
+
+SYSTEM DROP  TABLE ties;

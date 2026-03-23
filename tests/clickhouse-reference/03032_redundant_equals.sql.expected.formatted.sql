@@ -1,3 +1,6 @@
+-- add_minmax_index_for_numeric_columns=0: Different plan
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     k UInt64
@@ -150,3 +153,5 @@ FROM (
             OR (k IN (100) = 1))) = 1
     )
 WHERE like(`explain`, '%Granules: 1/%');
+
+SYSTEM DROP  TABLE test_table;

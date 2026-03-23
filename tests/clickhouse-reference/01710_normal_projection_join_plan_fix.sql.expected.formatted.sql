@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     id UInt32,
@@ -29,3 +33,7 @@ LEFT JOIN (
         WHERE id2 = 2
     ) AS rhs
     ON lhs.id = rhs.id2;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;

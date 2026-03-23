@@ -1,9 +1,13 @@
+SYSTEM DROP  TABLE IF EXISTS test_dictionary_source_table;
+
 CREATE TABLE test_dictionary_source_table
 (
     id UInt64,
     value String
 )
 ENGINE = TinyLog;
+
+SYSTEM DROP  TABLE IF EXISTS test_dictionary_view;
 
 CREATE VIEW test_dictionary_view (id UInt64, value String)
 AS
@@ -17,6 +21,8 @@ WHERE id = (
     );
 
 INSERT INTO test_dictionary_source_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary;
 
 CREATE DICTIONARY test_dictionary
 (
@@ -32,3 +38,9 @@ SELECT *
 FROM test_dictionary;
 
 INSERT INTO test_dictionary_source_table;
+
+SYSTEM DROP  DICTIONARY test_dictionary;
+
+SYSTEM DROP  VIEW test_dictionary_view;
+
+SYSTEM DROP  TABLE test_dictionary_source_table;

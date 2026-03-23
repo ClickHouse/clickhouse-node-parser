@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     a Int
@@ -14,3 +16,5 @@ FROM t
 PREWHERE a != 1
 WHERE rowNumberInBlock() % 2 = 0
 LIMIT 1;
+
+SYSTEM drop  table t;

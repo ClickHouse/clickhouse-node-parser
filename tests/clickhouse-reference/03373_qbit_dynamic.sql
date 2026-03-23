@@ -1,4 +1,5 @@
 SET allow_experimental_dynamic_type = 1;
+DROP TABLE IF EXISTS qbit_dynamic_test;
 CREATE TABLE qbit_dynamic_test (id UInt32, data Dynamic) ENGINE = Memory;
 INSERT INTO qbit_dynamic_test VALUES
     (1, [1.0, 2.0, 3.0, 4.0]::QBit(Float32, 4)),
@@ -9,3 +10,4 @@ INSERT INTO qbit_dynamic_test VALUES
     (4, 'string_value'),
     (5, 42),
     (6, [9.0, 10.0, 11.0, 12.0]::QBit(Float32, 4));
+DROP TABLE qbit_dynamic_test;

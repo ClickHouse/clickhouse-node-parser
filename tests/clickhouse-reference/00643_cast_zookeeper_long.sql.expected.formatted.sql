@@ -1,6 +1,10 @@
 -- Tags: long, zookeeper
 SET database_atomic_wait_for_drop_and_detach_synchronously = 1;
 
+SYSTEM DROP  TABLE IF EXISTS cast1;
+
+SYSTEM DROP  TABLE IF EXISTS cast2;
+
 CREATE TABLE cast1
 (
     x UInt8,
@@ -23,3 +27,7 @@ ORDER BY e;
 
 SELECT *
 FROM cast2;
+
+SYSTEM DROP  TABLE cast1;
+
+SYSTEM DROP  TABLE cast2;

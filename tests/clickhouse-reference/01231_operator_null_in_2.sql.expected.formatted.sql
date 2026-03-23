@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS null_in_subquery;
+
 CREATE TABLE null_in_subquery
 (
     dt DateTime,
@@ -134,6 +136,8 @@ WHERE i GLOBAL NOT IN (
         FROM null_in_subquery
         WHERE dt = 2
     );
+
+SYSTEM DROP  TABLE IF EXISTS null_in_tuple;
 
 CREATE TABLE null_in_tuple
 (

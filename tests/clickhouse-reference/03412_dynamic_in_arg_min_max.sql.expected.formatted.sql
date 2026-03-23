@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a UInt32,
@@ -59,3 +61,5 @@ ORDER BY
     x ASC,
     y ASC,
     z ASC;
+
+SYSTEM drop  table test;

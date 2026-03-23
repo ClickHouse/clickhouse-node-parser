@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     int UInt32,
@@ -29,3 +31,5 @@ WHERE database = currentDatabase()
     AND active;
 
 SELECT '-------------------------------------------------------------------------';
+
+SYSTEM DROP  TABLE test;

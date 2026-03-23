@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS segfault;
+
+SYSTEM DROP  TABLE IF EXISTS segfault_mv;
+
 CREATE TABLE segfault
 (
     id UInt32,

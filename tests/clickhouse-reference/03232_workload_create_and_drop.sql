@@ -4,3 +4,6 @@ CREATE OR REPLACE WORKLOAD all;
 SELECT name, parent, create_query FROM system.workloads ORDER BY name;
 CREATE WORKLOAD IF NOT EXISTS production IN all;
 CREATE WORKLOAD development IN all;
+DROP WORKLOAD IF EXISTS production;
+DROP WORKLOAD development;
+DROP WORKLOAD all;

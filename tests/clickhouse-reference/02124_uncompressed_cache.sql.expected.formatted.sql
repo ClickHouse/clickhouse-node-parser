@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_uncompressed_cache;
+
 CREATE TABLE t_uncompressed_cache
 (
     id UInt32,
@@ -31,3 +33,5 @@ PREWHERE id = 0
     OR id = 5
     OR id = 100
 SETTINGS use_uncompressed_cache = 1;
+
+SYSTEM DROP  TABLE t_uncompressed_cache;

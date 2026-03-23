@@ -51,6 +51,8 @@ SELECT count()
 FROM test.hits
 WHERE EventDate = concat('2014-0', '3-18');
 
+SYSTEM DROP  TABLE IF EXISTS hits_indexed_by_time;
+
 CREATE TABLE hits_indexed_by_time
 (
     EventDate Date,
@@ -117,3 +119,5 @@ WHERE EventTime IN (toDateTime('2014-03-18 01:02:03', 'Asia/Dubai'), toDateTime(
 SELECT count()
 FROM hits_indexed_by_time
 WHERE EventTime = concat('2014-03-18 ', '01:02:03');
+
+SYSTEM DROP  TABLE hits_indexed_by_time;

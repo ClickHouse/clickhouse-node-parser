@@ -1,3 +1,7 @@
+-- Tags: no-fasttest, no-ordinary-database
+-- Tests that vector similarity indexes reject INSERTs of Arrays with sizes != than the size specified in the index
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id Int32,
@@ -12,3 +16,5 @@ INSERT INTO tab; -- { serverError INCORRECT_DATA }
 
 -- Both wrong but of the same length
 INSERT INTO tab; -- { serverError INCORRECT_DATA }
+
+SYSTEM DROP  TABLE tab;

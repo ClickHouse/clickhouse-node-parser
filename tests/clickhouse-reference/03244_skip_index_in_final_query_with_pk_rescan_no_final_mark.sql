@@ -4,6 +4,7 @@
 SET use_skip_indexes = 1;
 SET use_skip_indexes_if_final = 1;
 SET use_skip_indexes_if_final_exact_mode = 1;
+DROP TABLE IF EXISTS tab1;
 -- The CREATE TABLE raises a warning due to index_granularity_bytes = 0
 SET send_logs_level = 'fatal';
 CREATE TABLE tab1
@@ -25,3 +26,4 @@ INSERT INTO tab1(valueDate, bb_ticker, ric)
     FROM numbers(1e4);
 -- No exception/assert & no rows.
 SELECT * FROM tab1 FINAL WHERE ric = 'BOWNU.O';
+DROP TABLE tab1;

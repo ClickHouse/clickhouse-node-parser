@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP TABLE IF EXISTS date_table;
 CREATE TABLE date_table
 (
   CountryID UInt64,
@@ -11,6 +14,7 @@ ORDER BY CountryID;
 INSERT INTO date_table VALUES(1, '1', toDate('2019-05-05'), toDate('2019-05-20'), 0.33);
 INSERT INTO date_table VALUES(1, '1', toDate('2019-05-21'), toDate('2019-05-30'), 0.42);
 INSERT INTO date_table VALUES(2, '2', toDate('2019-05-21'), toDate('2019-05-30'), 0.46);
+DROP DICTIONARY IF EXISTS range_dictionary;
 CREATE DICTIONARY range_dictionary
 (
   CountryID UInt64,
@@ -37,6 +41,8 @@ SELECT * FROM range_dictionary ORDER BY CountryID, StartDate, EndDate;
 SELECT 1 FROM range_dictionary ORDER BY CountryID, StartDate, EndDate;
 SELECT CountryID, StartDate, Tax FROM range_dictionary ORDER BY CountryID, StartDate, EndDate;
 SELECT Tax FROM range_dictionary ORDER BY CountryID, StartDate, EndDate;
+DROP DICTIONARY range_dictionary;
+DROP TABLE date_table;
 CREATE TABLE date_table
 (
   CountryID UInt64,
@@ -74,3 +80,4 @@ SELECT * FROM range_dictionary_nullable ORDER BY CountryID, StartDate, EndDate;
 SELECT 1 FROM range_dictionary_nullable ORDER BY CountryID, StartDate, EndDate;
 SELECT CountryID, StartDate, Tax FROM range_dictionary_nullable ORDER BY CountryID, StartDate, EndDate;
 SELECT Tax FROM range_dictionary_nullable ORDER BY CountryID, StartDate, EndDate;
+DROP DICTIONARY range_dictionary_nullable;

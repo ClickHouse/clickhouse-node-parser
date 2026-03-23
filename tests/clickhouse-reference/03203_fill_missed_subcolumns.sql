@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_missed_subcolumns;
 -- .null subcolumn
 
 CREATE TABLE t_missed_subcolumns (x UInt32) ENGINE = MergeTree ORDER BY tuple();
@@ -22,3 +23,4 @@ INSERT INTO t_missed_subcolumns VALUES (2, ('aaa', 'bbb'));
 INSERT INTO t_missed_subcolumns VALUES (3, ('ccc', 'ddd'), [4, 5, 6]);
 SELECT id, t, arr FROM t_missed_subcolumns ORDER BY id;
 SELECT id, t.a, t.b, arr.size0, arr.null FROM t_missed_subcolumns ORDER BY id;
+DROP TABLE t_missed_subcolumns;

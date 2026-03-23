@@ -1,3 +1,8 @@
+-- Tags: no-ordinary-database, no-fasttest, use-rocksdb
+-- Tag no-ordinary-database: Sometimes cannot lock file most likely due to concurrent or adjacent tests, but we don't care how it works in Ordinary database
+-- Tag no-fasttest: In fasttest, ENABLE_LIBRARIES=0, so rocksdb engine is not enabled by default
+SYSTEM DROP  TABLE IF EXISTS 01504_test;
+
 CREATE TABLE `01504_test`
 (
     key String,
@@ -64,6 +69,8 @@ FROM (
 SELECT SUM(value) == 1 + 99 + 900
 FROM `01504_test`
 WHERE key IN ('1_1', '99_1', '900_1');
+
+SYSTEM DROP  TABLE IF EXISTS 01504_test_memory;
 
 CREATE TABLE `01504_test`
 (

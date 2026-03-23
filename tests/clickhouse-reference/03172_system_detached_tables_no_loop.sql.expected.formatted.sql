@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 SELECT '-----------------------';
 
+SYSTEM DROP  DATABASE IF EXISTS test_no_loop;
+
 CREATE DATABASE IF NOT EXISTS test_no_loop;
 
 SET max_block_size = 8;
@@ -72,6 +74,10 @@ SELECT count(*)
 FROM `system`.detached_tables
 WHERE database = 'test_no_loop';
 
+SYSTEM DROP  DATABASE test_no_loop;
+
+SYSTEM DROP  DATABASE IF EXISTS test_no_loop_2;
+
 CREATE DATABASE test_no_loop_2;
 
 SET max_block_size = 3;
@@ -100,3 +106,5 @@ ORDER BY c0;
 SELECT count(*)
 FROM `system`.detached_tables
 WHERE database = 'test_no_loop_2';
+
+SYSTEM DROP  DATABASE test_no_loop_2;

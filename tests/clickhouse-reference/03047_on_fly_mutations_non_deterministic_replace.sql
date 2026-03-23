@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_lightweight_mut_5;
 SET apply_mutations_on_fly = 1;
 SET mutations_execute_subqueries_on_initiator = 1;
 SET mutations_execute_nondeterministic_on_initiator = 1;
@@ -9,6 +10,7 @@ SELECT id, v FROM t_lightweight_mut_5 ORDER BY id;
 SELECT command FROM system.mutations
 WHERE database = currentDatabase() AND table = 't_lightweight_mut_5' AND NOT is_done
 ORDER BY command;
+DROP TABLE t_lightweight_mut_5;
 -- SELECT groupArray(...)
 
 CREATE TABLE t_lightweight_mut_5 (id UInt64, v Array(UInt64)) ENGINE = MergeTree ORDER BY id;

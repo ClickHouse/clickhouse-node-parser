@@ -2,6 +2,7 @@
 -- ^ due to the usage of ON CLUSTER queries
 
 SET distributed_ddl_output_mode = 'none', enable_analyzer = true;
+drop table if exists source, mview;
 CREATE TABLE source
 (
     timestamp DateTime,
@@ -17,6 +18,7 @@ as SELECT
     card_id,
     count(*) AS card_view
 FROM source GROUP BY (day, card_id);
+DROP TABLE mview;
 CREATE MATERIALIZED VIEW mview on cluster test_shard_localhost
 (
     day Date,
@@ -29,3 +31,4 @@ as SELECT
     card_id,
     count(*) AS card_view
 FROM source GROUP BY (day, card_id);
+drop table if exists mview, source;

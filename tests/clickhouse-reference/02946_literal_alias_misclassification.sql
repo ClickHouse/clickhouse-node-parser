@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS literal_alias_misclassification;
 CREATE TABLE literal_alias_misclassification
 (
     `id` Int64,

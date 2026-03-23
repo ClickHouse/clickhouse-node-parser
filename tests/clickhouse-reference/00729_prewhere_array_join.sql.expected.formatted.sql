@@ -1,5 +1,7 @@
 SET send_logs_level = 'fatal';
 
+SYSTEM drop  table if exists t1_00729;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE t1_00729
@@ -48,6 +50,8 @@ FROM t1_00729
 PREWHERE notEmpty(toString(nameGroup6))
 GROUP BY nameGroup6
 ORDER BY nameGroup6 ASC; -- { serverError ILLEGAL_PREWHERE }
+
+SYSTEM drop  table t1_00729;
 
 CREATE TABLE t1_00729
 (

@@ -1,3 +1,9 @@
+-- Tags: no-fasttest, long, no-asan, no-ubsan, no-tsan, no-debug
+-- ^^ Disable test for slow builds: generating data takes time but a sufficiently large data set
+-- is necessary for different hnsw_candidate_list_size_for_search settings to make a difference
+-- Tests vector search with setting 'hnsw_candidate_list_size_for_search'
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id Int32,
@@ -15,6 +21,8 @@ INSERT INTO tab SELECT
     number,
     [sipHash64(number)/18446744073709551615, wyHash64(number)/18446744073709551615]
 FROM numbers(660000); -- 18446744073709551615 is the biggest UInt64
+
+SYSTEM DROP  TABLE IF EXISTS results;
 
 CREATE TABLE results
 (
@@ -38,3 +46,7 @@ SETTINGS hnsw_candidate_list_size_for_search = 1;
 -- Expect that matches are different
 SELECT countDistinct(*)
 FROM results;
+
+SYSTEM DROP  TABLE results;
+
+SYSTEM DROP  TABLE tab;

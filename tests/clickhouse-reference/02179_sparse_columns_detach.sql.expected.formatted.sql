@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_sparse_detach;
+
 CREATE TABLE t_sparse_detach
 (
     id UInt64,
@@ -24,3 +26,5 @@ WHERE table = 't_sparse_detach'
     AND database = currentDatabase()
     AND active
 ORDER BY column ASC;
+
+SYSTEM DROP  TABLE t_sparse_detach;

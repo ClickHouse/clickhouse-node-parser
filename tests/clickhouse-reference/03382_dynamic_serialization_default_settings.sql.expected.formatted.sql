@@ -1,5 +1,7 @@
 SET enable_json_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 JSON(max_dynamic_types = 0)
@@ -10,3 +12,5 @@ INSERT INTO t0 (c0) SETTINGS input_format_binary_read_json_as_string = 1, output
 
 SELECT *
 FROM t0;
+
+SYSTEM DROP  TABLE t0;

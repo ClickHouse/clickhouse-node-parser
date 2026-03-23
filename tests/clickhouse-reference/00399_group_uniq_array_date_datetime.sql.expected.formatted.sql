@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS grop_uniq_array_date;
+
 CREATE TABLE grop_uniq_array_date
 (
     d Date,

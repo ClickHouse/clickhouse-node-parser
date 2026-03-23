@@ -13,6 +13,8 @@ SET session_timezone = '';
 
 SET allow_suspicious_ttl_expressions = 1;
 
+SYSTEM drop  table if exists ttl_00933_1;
+
 -- Column TTL works only with wide parts, because it's very expensive to apply it for compact parts
 CREATE TABLE ttl_00933_1
 (

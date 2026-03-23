@@ -1,3 +1,7 @@
+-- Regression test for https://github.com/ClickHouse/ClickHouse/issues/85313
+-- SELECT * REPLACE should affect the WHERE clause when the analyzer is enabled.
+SYSTEM DROP  TABLE IF EXISTS t_replace_where;
+
 CREATE TABLE t_replace_where
 (
     app_id UInt64,
@@ -15,3 +19,5 @@ SELECT * REPLACE (if(app_id = 0, 1, app_id) AS app_id)
 FROM t_replace_where
 WHERE app_id != 0
 ORDER BY app_id ASC;
+
+SYSTEM DROP  TABLE t_replace_where;

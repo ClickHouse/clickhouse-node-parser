@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_with_dots;
+
 CREATE TABLE t_with_dots
 (
     id UInt32,
@@ -11,6 +13,8 @@ INSERT INTO t_with_dots;
 
 SELECT *
 FROM t_with_dots;
+
+SYSTEM DROP  TABLE t_with_dots;
 
 CREATE TABLE t_with_dots
 (

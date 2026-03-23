@@ -19,3 +19,5 @@ FROM parallel_replicas_final FINAL
 FORMAT Null;
 
 SET enable_parallel_replicas = 2;
+
+SYSTEM DROP  TABLE IF EXISTS parallel_replicas_final;

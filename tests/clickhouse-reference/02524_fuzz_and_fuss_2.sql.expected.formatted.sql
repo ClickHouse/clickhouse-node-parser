@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS data_a_02187;
+
 CREATE TABLE data_a_02187
 (
     a Nullable(Int64)
@@ -112,3 +114,5 @@ SETTINGS
     output_format_json_named_tuples_as_objects = '1',
     output_format_write_statistics = '0',
     output_format_pretty_row_numbers = '1';
+
+SYSTEM DROP  TABLE data_a_02187;

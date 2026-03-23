@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t_mem;
+
+SYSTEM DROP  TABLE IF EXISTS t_mt;
+
 CREATE TABLE t_mem
 (
     a Int32,
@@ -23,6 +27,8 @@ INSERT INTO t_mt SELECT
     number,
     sipHash64(number, 2)
 FROM numbers(5000);
+
+SYSTEM DROP  VIEW IF EXISTS t_view;
 
 CREATE VIEW t_view
 AS
@@ -63,6 +69,8 @@ WHERE t2.a < 2000
 SETTINGS log_comment = 'right_join'
 FORMAT Null;
 
+SYSTEM DROP  VIEW IF EXISTS left_joined_view;
+
 CREATE VIEW left_joined_view
 AS
 SELECT
@@ -78,6 +86,8 @@ FROM left_joined_view
 WHERE t1_a < 2000
 SETTINGS log_comment = 'left_join_view'
 FORMAT Null;
+
+SYSTEM DROP  VIEW IF EXISTS right_joined_view;
 
 CREATE VIEW right_joined_view
 AS

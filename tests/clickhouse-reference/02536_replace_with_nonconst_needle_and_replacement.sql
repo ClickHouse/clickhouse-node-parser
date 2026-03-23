@@ -1,3 +1,6 @@
+-- Tests that functions replaceOne(), replaceAll(), replaceRegexpOne(), replaceRegexpAll() work with with non-const pattern and replacement arguments
+
+DROP TABLE IF EXISTS test_tab;
 CREATE TABLE test_tab
   (id UInt32, haystack String, needle String, replacement String)
   engine = MergeTree()

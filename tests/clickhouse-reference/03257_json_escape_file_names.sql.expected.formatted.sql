@@ -1,5 +1,7 @@
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON
@@ -24,3 +26,5 @@ SELECT
     json.`a-b-c`.:Int64,
     json.`a-b/c-d/e`.:Int64
 FROM test;
+
+SYSTEM drop  table test;

@@ -1,6 +1,7 @@
 SET enable_json_type = 1;
 set enable_analyzer = 1;
 set output_format_native_write_json_as_string=0;
+drop table if exists test;
 create table test (json JSON(max_dynamic_paths=2, max_dynamic_types=2, a UInt32, b String, SKIP c)) engine=Memory;
 insert into test format JSONAsObject
 {"a" : 1, "b" : "str1", "k1" : 1, "k2" : 2, "k3" : 3, "k4" : 4},

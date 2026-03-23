@@ -1,3 +1,15 @@
+SYSTEM DROP  VIEW IF EXISTS v;
+
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  VIEW IF EXISTS mv;
+
+SYSTEM DROP  TABLE IF EXISTS tmp;
+
+SYSTEM DROP  TABLE IF EXISTS kcu1;
+
+SYSTEM DROP  TABLE IF EXISTS kcu2;
+
 CREATE TABLE t
 (
     n UInt64,
@@ -104,3 +116,13 @@ SELECT count()
 FROM information_schema.taBLES
 WHERE table_schema = currentDatabase()
     AND table_name = 't'; -- { serverError UNKNOWN_TABLE }
+
+SYSTEM DROP  VIEW mv;
+
+SYSTEM DROP  VIEW v;
+
+SYSTEM DROP  TABLE t;
+
+SYSTEM DROP  TABLE kcu1;
+
+SYSTEM DROP  TABLE kcu2;

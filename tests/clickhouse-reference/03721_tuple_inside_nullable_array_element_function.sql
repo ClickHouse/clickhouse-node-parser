@@ -160,6 +160,7 @@ FROM
     SELECT CAST([tuple(), tuple()] AS Array(Nullable(Tuple()))) AS arr, 3 AS idx
 ) ORDER BY tuple();
 SELECT arrayElementOrNull([(1, 'a'), (2, 'b')], 'x'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+DROP TABLE IF EXISTS test_array_tuple_mergetree;
 CREATE TABLE test_array_tuple_mergetree
 (
     id       UInt8,

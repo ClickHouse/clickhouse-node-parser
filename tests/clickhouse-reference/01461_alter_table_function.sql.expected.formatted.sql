@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS table_from_remote;
+
+SYSTEM DROP  TABLE IF EXISTS table_from_select;
+
+SYSTEM DROP  TABLE IF EXISTS table_from_numbers;
+
 CREATE TABLE table_from_remote AS remote('localhost', 'system', 'numbers');
 
 CREATE TABLE table_from_numbers AS numbers(1000);

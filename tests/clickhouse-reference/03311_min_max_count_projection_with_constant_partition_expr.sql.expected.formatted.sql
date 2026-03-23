@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Int
@@ -7,3 +9,5 @@ ORDER BY tuple()
 PARTITION BY (EXISTS((
     SELECT 1
 )));
+
+SYSTEM DROP  TABLE t0;

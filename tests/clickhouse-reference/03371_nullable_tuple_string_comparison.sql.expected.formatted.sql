@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     id UInt64,
@@ -62,3 +66,7 @@ WHERE (s1, null) = ('z', null);
 SELECT id
 FROM t2
 WHERE (s1, null) = '(''z'',null)';
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;

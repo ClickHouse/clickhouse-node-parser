@@ -1,3 +1,6 @@
+-- Tags: no-random-settings
+
+DROP TABLE IF EXISTS t_merge_tree_index;
 CREATE TABLE t_merge_tree_index (a UInt64 CODEC(LZ4), b UInt64 CODEC(LZ4), s String CODEC(LZ4))
 ENGINE = MergeTree ORDER BY (a, b)
 SETTINGS
@@ -12,6 +15,7 @@ SET output_format_pretty_named_tuples_as_json = 0;
 SELECT * FROM t_merge_tree_index ORDER BY _part, a, b;
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_merge_tree_index) ORDER BY part_name, mark_number FORMAT PrettyCompactNoEscapesMonoBlock;
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_merge_tree_index, with_marks = true) ORDER BY part_name, mark_number FORMAT PrettyCompactNoEscapesMonoBlock;
+DROP TABLE t_merge_tree_index;
 CREATE TABLE t_merge_tree_index (a UInt64 CODEC(LZ4), b UInt64 CODEC(LZ4), s String CODEC(LZ4))
 ENGINE = MergeTree ORDER BY (a, b)
 SETTINGS

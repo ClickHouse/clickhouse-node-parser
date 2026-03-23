@@ -6,6 +6,8 @@ SET enable_analyzer = 1;
 
 SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to force local plan for parallel replicas
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id Int32,
@@ -24,6 +26,9 @@ SELECT
     IF(value > 0, 'Good', 'Zero')
 FROM `system`.metrics
 WHERE like(name, '%VectorSimilarityIndexCacheBytes%');
+
+-- SYNC is important to drop the table/parts/caches immediately
+SYSTEM DROP  TABLE tab SYNC;
 
 -- Should be 0
 SELECT

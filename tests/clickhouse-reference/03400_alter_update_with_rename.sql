@@ -1,3 +1,10 @@
+-- Tags: no-replicated-database
+-- Test for issue #70678: ALTER UPDATE with RENAME unexpected behavior
+-- If the ALTER statement is atomic, both UPDATE and RENAME should either
+-- succeed together or fail together.
+-- The fix rejects UPDATE + RENAME on the same column early to ensure atomicity.
+
+DROP TABLE IF EXISTS test_alter_atomic;
 -- Test 1: Memory engine - UPDATE + RENAME on same column should be rejected
 CREATE TABLE test_alter_atomic (c0 Int32) ENGINE = Memory;
 INSERT INTO test_alter_atomic VALUES (0);
@@ -7,6 +14,7 @@ SELECT name FROM system.columns WHERE database = currentDatabase() AND table = '
 -- The INSERT should succeed since atomicity is preserved
 INSERT INTO test_alter_atomic VALUES (2);
 SELECT * FROM test_alter_atomic ORDER BY c0;
+DROP TABLE test_alter_atomic;
 -- Test 2: MergeTree engine - same behavior expected
 CREATE TABLE test_alter_atomic (key Int32, c0 Int32) ENGINE = MergeTree ORDER BY key;
 INSERT INTO test_alter_atomic VALUES (1, 0);

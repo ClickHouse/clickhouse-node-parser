@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS bool_test;
 CREATE TABLE bool_test (value Bool,f String) ENGINE = Memory;
 INSERT INTO bool_test (value,f) VALUES (false, 'test'), (true , 'test'), (0, 'test'), (1, 'test'), (FALSE, 'test'), (TRUE, 'test');
 INSERT INTO bool_test (value,f) FORMAT JSONEachRow {"value":false,"f":"test"}{"value":true,"f":"test"}{"value":0,"f":"test"}{"value":1,"f":"test"}

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_nested_default;
+
 CREATE TABLE test_nested_default
 (
     id String,
@@ -11,3 +13,5 @@ INSERT INTO test_nested_default (id, `with_dot.array`);
 
 SELECT *
 FROM test_nested_default;
+
+SYSTEM DROP  TABLE test_nested_default;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 JSON
@@ -7,7 +9,11 @@ ORDER BY (c0); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
 
 INSERT INTO t0 (c0); -- { serverError UNKNOWN_TABLE }
 
+SYSTEM DROP  TABLE t0; -- { serverError UNKNOWN_TABLE }
+
 SELECT '---';
+
+SYSTEM DROP  TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (
@@ -22,3 +28,5 @@ INSERT INTO t1 (c0); -- { serverError UNKNOWN_TABLE }
 SELECT c0
 FROM t1
 ORDER BY c0 ASC; -- { serverError UNKNOWN_TABLE }
+
+SYSTEM DROP  TABLE t1; -- { serverError UNKNOWN_TABLE }

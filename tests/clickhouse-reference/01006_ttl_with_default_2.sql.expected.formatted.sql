@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ttl_with_default;
+
 CREATE TABLE ttl_with_default
 (
     d DateTime,
@@ -14,3 +16,5 @@ FORMAT Null; -- wait if very fast merge happen
 SELECT a
 FROM ttl_with_default
 ORDER BY a ASC;
+
+SYSTEM DROP  TABLE ttl_with_default;

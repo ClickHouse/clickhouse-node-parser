@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS events0;
+
+SYSTEM DROP  TABLE IF EXISTS probe0;
+
 SET enable_analyzer = 1;
 
 SET join_algorithm = 'full_sorting_merge';

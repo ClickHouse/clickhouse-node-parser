@@ -1,5 +1,9 @@
 SET allow_reorder_prewhere_conditions = 0;
 
+SYSTEM drop  table if exists t1;
+
+SYSTEM drop  table if exists t2;
+
 CREATE TABLE t1
 (
     s1 String,

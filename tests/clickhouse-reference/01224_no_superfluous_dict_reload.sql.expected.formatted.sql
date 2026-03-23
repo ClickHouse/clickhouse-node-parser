@@ -1,6 +1,10 @@
 -- Tags: no-parallel
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  DATABASE IF EXISTS dict_db_01224;
+
+SYSTEM DROP  DATABASE IF EXISTS dict_db_01224_dictionary;
+
 SET allow_deprecated_database_ordinary = 1;
 
 -- Creation of a database with Ordinary engine emits a warning.
@@ -50,3 +54,9 @@ SELECT
 FROM `system`.`columns`
 WHERE database = 'dict_db_01224'
     AND table = 'dict';
+
+SYSTEM DROP  DICTIONARY dict_db_01224.dict;
+
+SYSTEM DROP  DATABASE dict_db_01224;
+
+SYSTEM DROP  DATABASE dict_db_01224_dictionary;

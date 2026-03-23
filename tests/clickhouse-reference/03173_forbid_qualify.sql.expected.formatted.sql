@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_qualify;
+
 CREATE TABLE test_qualify
 (
     number Int64

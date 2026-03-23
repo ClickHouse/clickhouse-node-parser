@@ -1,6 +1,8 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/48308
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS 03038_table;
+
 CREATE TABLE `03038_table`
 (
     time DateTime

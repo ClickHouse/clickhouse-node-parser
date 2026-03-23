@@ -1,5 +1,7 @@
 SET send_logs_level = 'fatal';
 
+SYSTEM drop  table if exists ttl;
+
 CREATE TABLE ttl
 (
     d Date,

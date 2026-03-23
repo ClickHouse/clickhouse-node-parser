@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS cool_table;
+
 CREATE TABLE IF NOT EXISTS cool_table
 (
     id UInt64,

@@ -12,6 +12,7 @@ SELECT 1 + x FROM tab where plus(1, x) <= 2 order by x;
 SELECT 1 + x FROM tab where plus(1::Nullable(UInt8), x) <= 2 order by x;
 SELECT 1 + x FROM tab where plus(1::LowCardinality(UInt8), x) <= 2 order by x;
 SELECT 1 + x FROM tab where plus(1::LowCardinality(Nullable(UInt8)), x) <= 2 order by x;
+drop table tab;
 set max_rows_to_read = 100;
 create table tab (x LowCardinality(UInt8)) engine = MergeTree order by x settings allow_nullable_key = 1, index_granularity = 2;
 create table tab (x UInt128) engine = MergeTree order by x settings allow_nullable_key = 1, index_granularity = 2;

@@ -1,3 +1,7 @@
+SYSTEM DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
+
+SYSTEM DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE_1:Identifier};
+
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier}
 ENGINE = Replicated('/test/02072/{database}_1', '{shard}', '{replica}_1');
 
@@ -11,3 +15,7 @@ ENGINE = Log;
 
 CREATE DATABASE {CLICKHOUSE_DATABASE_1:Identifier}
 ENGINE = Replicated('/test/02072/{database}', '{shard}', '{replica}_2');
+
+SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};
+
+SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE_1:Identifier};

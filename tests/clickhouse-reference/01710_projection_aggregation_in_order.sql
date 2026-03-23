@@ -1,3 +1,7 @@
+-- Test that check the correctness of the result for optimize_aggregation_in_order and projections,
+-- not that this optimization will take place.
+
+DROP TABLE IF EXISTS normal;
 CREATE TABLE normal
 (
     `key` UInt32,
@@ -23,6 +27,8 @@ SET force_optimize_projection=1;
 SET optimize_use_projections=1, optimize_aggregation_in_order=1, enable_parallel_replicas=0;
 SET optimize_aggregation_in_order=0;
 SET enable_parallel_replicas=1, parallel_replicas_local_plan=1, parallel_replicas_support_projection=1, parallel_replicas_for_non_replicated_merge_tree=1, max_parallel_replicas=3, cluster_for_parallel_replicas='test_cluster_one_shard_three_replicas_localhost';
+DROP TABLE normal;
+DROP TABLE IF EXISTS agg;
 CREATE TABLE agg
 (
     `key` UInt32,
@@ -44,3 +50,4 @@ INSERT INTO agg SELECT
     toDateTime('2021-12-06 00:00:00') + number,
     number
 FROM numbers(100000);
+DROP TABLE agg;

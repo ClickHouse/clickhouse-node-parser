@@ -25,6 +25,8 @@ SELECT toWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT toYearWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     d Date,
@@ -84,3 +86,5 @@ FROM tab; -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT toYearWeek(invalid)
 FROM tab; -- { serverError CANNOT_PARSE_DATETIME }
+
+SYSTEM DROP  TABLE tab;

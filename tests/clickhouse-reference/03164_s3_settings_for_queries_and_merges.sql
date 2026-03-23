@@ -6,6 +6,7 @@ SET max_threads = 1;
 SET remote_read_min_bytes_for_seek = 100000;
 -- Will affect INSERT, but not merge
 SET s3_check_objects_after_upload=1;
+DROP TABLE IF EXISTS t_compact_bytes_s3;
 CREATE TABLE t_compact_bytes_s3(c1 UInt32, c2 UInt32, c3 UInt32, c4 UInt32, c5 UInt32)
 ENGINE = MergeTree ORDER BY c1
 SETTINGS index_granularity = 512, min_bytes_for_wide_part = '10G', storage_policy = 's3_no_cache', write_marks_for_substreams_in_compact_parts=1;

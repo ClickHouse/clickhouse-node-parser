@@ -1,3 +1,8 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/448
+SYSTEM DROP  TABLE IF EXISTS a;
+
+SYSTEM DROP  TABLE iF EXISTS b;
+
 CREATE TABLE a
 (
     a UInt64,

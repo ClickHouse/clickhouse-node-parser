@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tp;
+
 CREATE TABLE tp
 (
     type Int32,
@@ -35,3 +37,5 @@ ORDER BY
     type ASC;
 
 SET optimize_use_projections = true, force_optimize_projection = true;
+
+SYSTEM DROP  TABLE tp;

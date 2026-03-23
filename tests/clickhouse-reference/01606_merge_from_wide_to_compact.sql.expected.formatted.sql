@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS wide_to_comp;
+
 CREATE TABLE wide_to_comp
 (
     a Int,
@@ -26,3 +28,5 @@ ORDER BY name ASC;
 SELECT count()
 FROM wide_to_comp
 WHERE NOT ignore(*);
+
+SYSTEM DROP  TABLE wide_to_comp;

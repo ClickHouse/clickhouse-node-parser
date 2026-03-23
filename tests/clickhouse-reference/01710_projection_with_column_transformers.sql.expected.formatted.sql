@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists foo;
+
 CREATE TABLE foo
 (
     bar String,
@@ -5,3 +7,5 @@ CREATE TABLE foo
 )
 ENGINE = MergeTree
 ORDER BY bar;
+
+SYSTEM drop  table foo;

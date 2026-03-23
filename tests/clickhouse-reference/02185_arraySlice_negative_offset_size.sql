@@ -4,6 +4,7 @@ select arraySlice(materialize([1, 2, 3, 4, 5, 6, 7, 8]), materialize(-2), materi
 select arraySlice([1, 2, 3, 4, 5, 6, 7, 8], -2, -1);
 select arraySlice(materialize([1, 2, 3, 4, 5, 6, 7, 8]), -2, -1);
 select arraySlice(materialize([1, 2, 3, 4, 5, 6, 7, 8]), materialize(-2), materialize(-1));
+drop table if exists t;
 create table t
 (
     s Array(Int),
@@ -15,3 +16,4 @@ select arraySlice(s, -2, -2) from t;
 select arraySlice(s, l, -2) from t;
 select arraySlice(s, -2, r) from t;
 select arraySlice(s, l, r) from t;
+drop table t;

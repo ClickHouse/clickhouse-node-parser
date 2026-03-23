@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS events;
+
 CREATE TABLE events
 (
     begin Float64,

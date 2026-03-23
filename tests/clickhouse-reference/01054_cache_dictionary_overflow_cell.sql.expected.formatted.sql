@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 CREATE DATABASE IF NOT EXISTS test_01054_overflow;
 
+SYSTEM drop  table if exists test_01054_overflow.ints;
+
 CREATE TABLE test_01054_overflow.ints
 (
     key UInt64,
@@ -81,3 +83,7 @@ SELECT arrayMap(x -> dictGet('one_cell_cache_ints_overflow', 'i8', toUInt64(x)),
 FROM (
         SELECT [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] AS `array`
     );
+
+SYSTEM DROP  TABLE if exists test_01054.ints;
+
+SYSTEM DROP  DATABASE test_01054_overflow;

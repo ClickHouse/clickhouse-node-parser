@@ -7,6 +7,8 @@ SET async_insert_busy_timeout_min_ms = 300000;
 
 SET async_insert_use_adaptive_busy_timeout = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t_async_insert_alter;
+
 CREATE TABLE t_async_insert_alter
 (
     id Int64,
@@ -37,3 +39,5 @@ FROM `system`.asynchronous_insert_log
 WHERE database = currentDatabase()
     AND table = 't_async_insert_alter'
 ORDER BY event_time_microseconds ASC;
+
+SYSTEM DROP  TABLE t_async_insert_alter;

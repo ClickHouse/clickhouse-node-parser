@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS tableCommon;
+
+SYSTEM DROP  TABLE IF EXISTS tableTrees;
+
+SYSTEM DROP  TABLE IF EXISTS tableFlowers;
+
 CREATE TABLE tableCommon
 (
     key FixedString(15),

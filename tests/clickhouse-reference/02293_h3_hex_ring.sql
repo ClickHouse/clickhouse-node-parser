@@ -4,9 +4,14 @@ SELECT h3HexRing(581276613233082367, toUInt16(0));
 SELECT h3HexRing(579205132326352334, toUInt16(1)) as hexRing; -- { serverError INCORRECT_DATA }
 SELECT h3HexRing(581276613233082367, -1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT h3HexRing(581276613233082367, toUInt16(-1)); -- { serverError PARAMETER_OUT_OF_BOUND }
+
+DROP TABLE IF EXISTS h3_indexes;
+
 -- Test h3 indices and k selected from original test fixture: https://github.com/uber/h3/blob/master/src/apps/testapps
 
 CREATE TABLE h3_indexes (h3_index UInt64, k UInt16) ENGINE = Memory;
+
+
 INSERT INTO h3_indexes VALUES (581276613233082367,1);
 INSERT INTO h3_indexes VALUES (581263419093549055,2);
 INSERT INTO h3_indexes VALUES (589753847883235327,3);
@@ -23,4 +28,8 @@ INSERT INTO h3_indexes VALUES (634600058503392255,13);
 INSERT INTO h3_indexes VALUES (635544851677385791,14);
 INSERT INTO h3_indexes VALUES (639763125756281263,15);
 INSERT INTO h3_indexes VALUES (644178757620501158,16);
+
+
 SELECT arraySort(h3HexRing(h3_index, k)) FROM h3_indexes ORDER BY h3_index;
+
+DROP TABLE h3_indexes;

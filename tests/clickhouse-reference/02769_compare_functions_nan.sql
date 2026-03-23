@@ -4,6 +4,7 @@ SELECT nan AS value, value = value, value = materialize(value), materialize(valu
 SELECT cast(nan, 'Float32') AS value, value = value, value = materialize(value), materialize(value) = value, materialize(value) = materialize(value);
 SELECT nan AS lhs, cast(nan, 'Float32') AS rhs, lhs = rhs, lhs = materialize(rhs), materialize(lhs) = rhs, materialize(lhs) = materialize(rhs);
 SELECT '--';
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt32,
@@ -12,6 +13,7 @@ CREATE TABLE test_table
 INSERT INTO test_table VALUES (76, 57);
 SELECT value FROM (SELECT stddevSamp(id) AS value FROM test_table) as subquery
 WHERE ((value = value) AND (NOT (value = value)));
+DROP TABLE test_table;
 SELECT nan AS value, value != value, value != materialize(value), materialize(value) != value, materialize(value) != materialize(value);
 SELECT cast(nan, 'Float32') AS value, value != value, value != materialize(value), materialize(value) != value, materialize(value) != materialize(value);
 SELECT nan AS lhs, cast(nan, 'Float32') AS rhs, lhs != rhs, lhs != materialize(rhs), materialize(lhs) != rhs, materialize(lhs) != materialize(rhs);

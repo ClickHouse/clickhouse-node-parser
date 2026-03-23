@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_lwu_merges SYNC;
 SET enable_lightweight_update = 1;
 CREATE TABLE t_lwu_merges (id UInt64, u UInt64, s String)
 ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_lwu_merges/', '1')
@@ -11,3 +12,4 @@ SETTINGS
 INSERT INTO t_lwu_merges SELECT number, number, 'c' || number FROM numbers(10000);
 SELECT sum(u), countIf(endsWith(s, '_foo')) FROM t_lwu_merges SETTINGS apply_patch_parts = 0;
 SELECT sum(u), countIf(endsWith(s, '_foo')) FROM t_lwu_merges SETTINGS apply_patch_parts = 1;
+DROP TABLE t_lwu_merges SYNC;

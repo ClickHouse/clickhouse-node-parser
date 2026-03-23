@@ -1,3 +1,7 @@
+-- Tags: no-parallel, no-replicated-database: Named collection is used
+--
+
+DROP NAMED COLLECTION IF EXISTS 02918_json_fuzzer;
 CREATE NAMED COLLECTION 02918_json_fuzzer AS json_str='{}';
 SELECT * FROM fuzzJSON(02918_json_fuzzer, random_seed=54321) LIMIT 10;
 SELECT * FROM fuzzJSON(02918_json_fuzzer, json_str='{"ClickHouse":"Is Fast"}', random_seed=1337) LIMIT 20;
@@ -23,6 +27,8 @@ SELECT * FROM fuzzJSON(02918_json_fuzzer,
     random_seed=6667,
     max_object_size=0,
     max_array_size=0) LIMIT 10;
+--
+DROP TABLE IF EXISTS 02918_table_str;
 CREATE TABLE 02918_table_str (json_str String) Engine=Memory;
 INSERT INTO 02918_table_str SELECT * FROM fuzzJSON(02918_json_fuzzer) limit 10;
 INSERT INTO 02918_table_str SELECT * FROM fuzzJSON(02918_json_fuzzer, random_seed=123, reuse_output=true) limit 10;

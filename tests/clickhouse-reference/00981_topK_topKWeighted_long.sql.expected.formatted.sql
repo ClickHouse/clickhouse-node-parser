@@ -1,3 +1,6 @@
+-- Tags: long
+SYSTEM DROP  TABLE IF EXISTS topk;
+
 CREATE TABLE topk
 (
     val1 String,
@@ -22,3 +25,5 @@ FROM topk;
 
 SELECT topKWeighted(10)(toString(number), number)
 FROM numbers(3000000);
+
+SYSTEM DROP  TABLE topk;

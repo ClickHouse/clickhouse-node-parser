@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     dt DateTime,
@@ -24,3 +27,5 @@ SELECT (
         SELECT minDistinct(dt)
         FROM x
     );
+
+SYSTEM drop  table x;

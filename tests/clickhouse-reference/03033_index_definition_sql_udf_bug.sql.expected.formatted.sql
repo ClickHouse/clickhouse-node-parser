@@ -1,4 +1,9 @@
+-- Tags: no-parallel
+SYSTEM DROP  FUNCTION IF EXISTS test_func_1;
+
 CREATE FUNCTION test_func_1 AS (a, b, c) -> ((a + b) + c);
+
+SYSTEM DROP  TABLE IF EXISTS t4_2;
 
 CREATE TABLE t4_2
 (

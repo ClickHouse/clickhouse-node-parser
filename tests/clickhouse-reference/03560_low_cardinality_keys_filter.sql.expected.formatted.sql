@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     s LowCardinality(String),
@@ -15,3 +17,5 @@ SELECT DISTINCT lowCardinalityKeys(s)
 FROM test
 PREWHERE client_name = 'client1'
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE test;

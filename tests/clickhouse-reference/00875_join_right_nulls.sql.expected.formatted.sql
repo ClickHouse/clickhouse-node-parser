@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
+SYSTEM DROP  TABLE IF EXISTS nt;
+
 CREATE TABLE t
 (
     x String
@@ -204,3 +208,7 @@ FROM
     nt AS t1
 FULL JOIN nt AS t2
     USING (x);
+
+SYSTEM DROP  TABLE t;
+
+SYSTEM DROP  TABLE nt;

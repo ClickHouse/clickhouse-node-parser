@@ -1,3 +1,11 @@
+SYSTEM DROP  TABLE IF EXISTS dst;
+
+SYSTEM DROP  TABLE IF EXISTS mv_dst;
+
+SYSTEM DROP  TABLE IF EXISTS mv_first;
+
+SYSTEM DROP  TABLE IF EXISTS mv_second;
+
 CREATE TABLE dst
 (
     key Int64,
@@ -49,6 +57,14 @@ SELECT
     _part
 FROM mv_dst
 ORDER BY `all` ASC;
+
+SYSTEM DROP  TABLE mv_second;
+
+SYSTEM DROP  TABLE mv_first;
+
+SYSTEM DROP  TABLE mv_dst;
+
+SYSTEM DROP  TABLE dst;
 
 CREATE MATERIALIZED VIEW mv_dst
 (

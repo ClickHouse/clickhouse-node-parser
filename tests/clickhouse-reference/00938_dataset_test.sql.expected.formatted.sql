@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE IF NOT EXISTS defaults
 (
     param1 Float64,
@@ -9,6 +11,8 @@ CREATE TABLE IF NOT EXISTS defaults
 ENGINE = Memory;
 
 INSERT INTO defaults;
+
+SYSTEM DROP  TABLE IF EXISTS model;
 
 CREATE TABLE model
 ENGINE = Memory AS
@@ -28,3 +32,7 @@ FROM (
         ORDER BY `all` ASC
         LIMIT 1
     );
+
+SYSTEM DROP  TABLE defaults;
+
+SYSTEM DROP  TABLE model;

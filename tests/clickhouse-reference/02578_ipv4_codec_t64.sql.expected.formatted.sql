@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ipv4_t64;
+
 CREATE TABLE ipv4_t64
 (
     uid Int16,

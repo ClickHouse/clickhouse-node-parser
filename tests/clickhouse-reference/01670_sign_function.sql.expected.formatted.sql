@@ -4,6 +4,8 @@ SELECT sign(1);
 
 SELECT sign(-1);
 
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     n1 Int32,
@@ -30,3 +32,5 @@ FROM test;
 
 SELECT sign(n5)
 FROM test;
+
+SYSTEM DROP  TABLE test;

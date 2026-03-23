@@ -1,5 +1,7 @@
 SET use_variant_as_common_type = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     json Nullable(JSON)
@@ -16,3 +18,5 @@ SELECT
     json.a.b.e.:Int64,
     json.`^a`
 FROM t0;
+
+SYSTEM DROP  TABLE t0;

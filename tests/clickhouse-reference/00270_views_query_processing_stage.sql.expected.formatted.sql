@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS view1_00270;
+
+SYSTEM DROP  TABLE IF EXISTS view2_00270;
+
+SYSTEM DROP  TABLE IF EXISTS merge_view_00270;
+
 CREATE VIEW view1_00270
 AS
 SELECT number
@@ -19,3 +25,9 @@ ENGINE = Merge(currentDatabase(), '^view');
 SELECT 'Hello, world!'
 FROM merge_view_00270
 LIMIT 5;
+
+SYSTEM DROP  TABLE view1_00270;
+
+SYSTEM DROP  TABLE view2_00270;
+
+SYSTEM DROP  TABLE merge_view_00270;

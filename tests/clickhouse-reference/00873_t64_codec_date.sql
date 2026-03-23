@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t64;
 CREATE TABLE t64
 (
     date16 Date,
@@ -12,3 +13,4 @@ INSERT INTO t64 values ('1950-01-01', '1950-01-01', '1950-01-01', '1950-01-01');
 SELECT * FROM t64 ORDER BY date_32;
 SELECT * FROM t64 WHERE date16 != t_date16;
 SELECT * FROM t64 WHERE date_32 != t_date32;
+DROP TABLE t64;

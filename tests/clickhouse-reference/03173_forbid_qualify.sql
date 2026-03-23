@@ -1,3 +1,4 @@
+drop table if exists test_qualify;
 create table test_qualify (number Int64) ENGINE = MergeTree ORDER BY (number);
 insert into test_qualify SELECT * FROM numbers(100);
 select count() from test_qualify; -- 100

@@ -1,3 +1,4 @@
+drop  table if exists order_test1;
 create table order_test1
 (
     timestamp DateTime64(3),
@@ -23,3 +24,4 @@ SELECT cast(color,'String') color, timestamp
 FROM order_test1
 GROUP BY color, timestamp
 ORDER BY color ASC, timestamp DESC;
+DROP TABLE order_test1;

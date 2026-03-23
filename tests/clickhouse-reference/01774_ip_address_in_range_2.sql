@@ -10,6 +10,7 @@ SELECT isIPAddressInRange(CAST(toIPv4('127.0.0.1'), 'Nullable(IPv4)'), '127.0.0.
 SELECT isIPAddressInRange(CAST(toIPv4('128.0.0.1'), 'Nullable(IPv4)'), '127.0.0.0/8');
 SELECT isIPAddressInRange(CAST(toIPv6('ffff::1'), 'Nullable(IPv6)'), 'ffff::/16');
 SELECT isIPAddressInRange(CAST(toIPv6('fffe::1'), 'Nullable(IPv6)'), 'ffff::/16');
+DROP TABLE IF EXISTS test_data_2;
 CREATE TABLE test_data_2 (cidr String) ENGINE = Memory;
 INSERT INTO test_data_2
 SELECT

@@ -1,3 +1,6 @@
+-- Tags: long
+SYSTEM drop  table if exists tab;
+
 CREATE TABLE tab
 (
     i8 Int8,

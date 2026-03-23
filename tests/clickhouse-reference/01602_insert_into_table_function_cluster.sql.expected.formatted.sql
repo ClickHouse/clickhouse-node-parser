@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS x;
+
+SYSTEM DROP  TABLE IF EXISTS y;
+
 CREATE TABLE x AS `system`.numbers
 ENGINE = MergeTree
 ORDER BY number;
@@ -33,3 +37,7 @@ ORDER BY number ASC;
 SELECT *
 FROM remote('127.0.0.{1,2}', currentDatabase(), y)
 ORDER BY number ASC;
+
+SYSTEM DROP  TABLE x;
+
+SYSTEM DROP  TABLE y;

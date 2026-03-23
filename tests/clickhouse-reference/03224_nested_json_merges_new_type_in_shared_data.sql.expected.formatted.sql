@@ -1,6 +1,8 @@
 -- Tags: no-azure-blob-storage
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 8)
@@ -43,3 +45,5 @@ SELECT DISTINCT
     isDynamicElementInSharedData(arrayJoin(json.`a[]`.d))
 FROM test
 ORDER BY type ASC;
+
+SYSTEM drop  table test;

@@ -1,5 +1,7 @@
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
+
 SET allow_deprecated_database_ordinary = 1;
 
 -- Creation of a database with Ordinary engine emits a warning.
@@ -22,3 +24,5 @@ FROM {CLICKHOUSE_DATABASE:Identifier}.my_table;
 
 SELECT *
 FROM {CLICKHOUSE_DATABASE:Identifier}.my_materialized_view;
+
+SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};

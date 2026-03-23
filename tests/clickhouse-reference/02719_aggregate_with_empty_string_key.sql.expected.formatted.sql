@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     str Nullable(String),
@@ -15,3 +17,5 @@ SELECT
 FROM test
 GROUP BY str
 ORDER BY str ASC;
+
+SYSTEM drop  table test;

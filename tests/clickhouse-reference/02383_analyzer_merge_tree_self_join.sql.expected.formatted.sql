@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table_join_1;
+
 CREATE TABLE test_table_join_1
 (
     id UInt64,
@@ -7,6 +9,8 @@ CREATE TABLE test_table_join_1
 )
 ENGINE = MergeTree
 ORDER BY id;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_join_2;
 
 CREATE TABLE test_table_join_2
 (
@@ -66,3 +70,8 @@ FULL JOIN test_table_join_2 AS t2
 ORDER BY
     t1.id ASC,
     t1.value ASC;
+
+-- { echoOff }
+SYSTEM DROP  TABLE test_table_join_1;
+
+SYSTEM DROP  TABLE test_table_join_2;

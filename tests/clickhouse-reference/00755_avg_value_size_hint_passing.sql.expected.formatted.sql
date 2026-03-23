@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+SYSTEM DROP  TABLE IF EXISTS size_hint;
+
 CREATE TABLE size_hint
 (
     s Array(String)
@@ -19,3 +22,5 @@ SELECT
     count(),
     sum(length(s))
 FROM size_hint;
+
+SYSTEM DROP  TABLE size_hint;

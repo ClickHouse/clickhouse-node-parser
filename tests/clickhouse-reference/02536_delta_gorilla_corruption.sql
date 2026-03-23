@@ -2,6 +2,7 @@
 -- no-asan: the flaky check complains that the test sometimes runs > 60 sec on asan builds
 
 set allow_suspicious_codecs=1;
+drop table if exists bug_delta_gorilla;
 create table bug_delta_gorilla
 (value_bug UInt64 codec (Delta, Gorilla))
 engine = MergeTree

@@ -1,3 +1,6 @@
+-- add_minmax_index_for_numeric_columns=0: Different plan
+SYSTEM DROP  TABLE IF EXISTS skip_table;
+
 CREATE TABLE skip_table
 (
     k UInt64,
@@ -23,3 +26,5 @@ FROM (
         SETTINGS per_part_index_stats = 1
     )
 WHERE like(`explain`, '%Name%');
+
+SYSTEM DROP  TABLE skip_table;

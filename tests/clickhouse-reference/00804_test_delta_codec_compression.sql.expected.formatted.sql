@@ -4,6 +4,10 @@ SET send_logs_level = 'fatal';
 
 SET joined_subquery_requires_alias = 0;
 
+SYSTEM DROP  TABLE IF EXISTS delta_codec_synthetic;
+
+SYSTEM DROP  TABLE IF EXISTS default_codec_synthetic;
+
 CREATE TABLE delta_codec_synthetic
 (
     id UInt64 CODEC(Delta, ZSTD(3))
@@ -68,6 +72,10 @@ INNER JOIN (
     )
     USING (key);
 
+SYSTEM DROP  TABLE IF EXISTS delta_codec_float;
+
+SYSTEM DROP  TABLE IF EXISTS default_codec_float;
+
 CREATE TABLE delta_codec_float
 (
     id Float64 CODEC(Delta, LZ4HC)
@@ -131,6 +139,10 @@ INNER JOIN (
         FROM default_codec_float
     )
     USING (key);
+
+SYSTEM DROP  TABLE IF EXISTS delta_codec_string;
+
+SYSTEM DROP  TABLE IF EXISTS default_codec_string;
 
 CREATE TABLE delta_codec_string
 (

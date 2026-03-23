@@ -1,4 +1,7 @@
+DROP TABLE IF EXISTS stored_aggregates;
+
 set max_insert_threads = 1;
+
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE stored_aggregates
 (
@@ -14,6 +17,7 @@ CREATE TABLE stored_aggregates
 	GroupArray	AggregateFunction(groupArray, String)
 )
 ENGINE = AggregatingMergeTree(d, (d, k1, k2), 8192);
+
 INSERT INTO stored_aggregates
 SELECT
 	toDate('2014-06-01') AS d,
@@ -32,6 +36,7 @@ FROM
 )
 GROUP BY d, k1, k2
 ORDER BY d, k1, k2;
+
 SELECT d, k1, k2,
 	sumMerge(Sum), avgMerge(Avg), uniqMerge(Uniq),
 	anyMerge(Any), anyIfMerge(AnyIf),
@@ -40,6 +45,7 @@ SELECT d, k1, k2,
 FROM stored_aggregates
 GROUP BY d, k1, k2
 ORDER BY d, k1, k2;
+
 SELECT d, k1,
 	sumMerge(Sum), avgMerge(Avg), uniqMerge(Uniq),
 	anyMerge(Any), anyIfMerge(AnyIf),
@@ -48,6 +54,7 @@ SELECT d, k1,
 FROM stored_aggregates
 GROUP BY d, k1
 ORDER BY d, k1;
+
 SELECT d,
 	sumMerge(Sum), avgMerge(Avg), uniqMerge(Uniq),
 	anyMerge(Any), anyIfMerge(AnyIf),
@@ -56,3 +63,5 @@ SELECT d,
 FROM stored_aggregates
 GROUP BY d
 ORDER BY d;
+
+DROP TABLE stored_aggregates;

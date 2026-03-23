@@ -1,3 +1,9 @@
+-- Tags: no-sanitizers, long, no-parallel
+-- no-sanitizers: too slow
+-- long: for flaky check
+-- no-parallel: Depends on the query condition cache content (queries executed in parallel may overflow the cache size or straight away call "clear cache")
+
+DROP TABLE IF EXISTS t;
 -- index_granularity: to be able to produce small blocks from reading
 CREATE TABLE t(key String, value UInt64) ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity=128;
 SET enable_parallel_replicas=0, automatic_parallel_replicas_mode=1, parallel_replicas_local_plan=1, parallel_replicas_index_analysis_only_on_coordinator=1,

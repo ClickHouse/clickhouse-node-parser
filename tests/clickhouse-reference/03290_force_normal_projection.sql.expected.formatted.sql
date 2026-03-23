@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS users;
+
 CREATE TABLE users
 (
     uid Int16,
@@ -23,3 +25,5 @@ ORDER BY age ASC
 SETTINGS
     optimize_use_projections = 1,
     force_optimize_projection = 1;
+
+SYSTEM DROP  TABLE users;

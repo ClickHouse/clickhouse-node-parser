@@ -7,6 +7,9 @@
 
 SET insert_quorum_parallel = false;
 SET select_sequential_consistency = 1;
+DROP TABLE IF EXISTS quorum1;
+DROP TABLE IF EXISTS quorum2;
+DROP TABLE IF EXISTS quorum3;
 CREATE TABLE quorum1(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum', '1') ORDER BY x PARTITION BY y;
 CREATE TABLE quorum2(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum', '2') ORDER BY x PARTITION BY y;
 -- insert_quorum = n/2 + 1 , so insert will be written to both replica
@@ -17,6 +20,8 @@ INSERT INTO quorum1 VALUES (2, '2018-11-15');
 INSERT INTO quorum1 VALUES (3, '2018-12-16');
 SELECT x FROM quorum1 ORDER BY x;
 SELECT x FROM quorum2 ORDER BY x;
+DROP TABLE quorum1;
+DROP TABLE quorum2;
 -- Create 3 replicas and stop sync 2 replicas
 CREATE TABLE quorum1(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum1', '1') ORDER BY x PARTITION BY y;
 CREATE TABLE quorum2(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum1', '2') ORDER BY x PARTITION BY y;
@@ -25,3 +30,4 @@ SELECT x FROM quorum3 ORDER BY x; -- {serverError REPLICA_IS_NOT_IN_QUORUM}
 SET insert_quorum_timeout = 5000;
 SET insert_quorum_timeout = 600000; -- set default value back
 INSERT INTO quorum1 VALUES (3, '2018-11-15');
+DROP TABLE quorum3;

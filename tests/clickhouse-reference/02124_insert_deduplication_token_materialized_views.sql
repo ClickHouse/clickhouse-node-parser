@@ -1,3 +1,7 @@
+drop table if exists test  sync;
+drop table if exists test_mv_a sync;
+drop table if exists test_mv_b sync;
+drop table if exists test_mv_c sync;
 set deduplicate_blocks_in_dependent_materialized_views=0;
 CREATE TABLE test (test String, A Int64, B Int64) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_02124/{table}', '1')
 ORDER BY tuple();
@@ -41,3 +45,7 @@ select
   (select sum(c) from test_mv_a where test='case4'),
   (select sum(c) from test_mv_b where test='case4'),
   (select sum(c) from test_mv_c where test='case4');
+drop table test sync;
+drop table test_mv_a sync;
+drop table test_mv_b sync;
+drop table test_mv_c sync;

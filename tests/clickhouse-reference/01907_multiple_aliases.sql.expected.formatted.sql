@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE t
@@ -8,3 +10,5 @@ CREATE TABLE t
 ENGINE = MergeTree(d, (z), 1);
 
 INSERT INTO t;
+
+SYSTEM DROP  TABLE t;

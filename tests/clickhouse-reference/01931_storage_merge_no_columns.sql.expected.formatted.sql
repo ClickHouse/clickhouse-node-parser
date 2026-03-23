@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data;
+
 CREATE TABLE data
 (
     key Int
@@ -12,3 +14,5 @@ PREWHERE _table IN (NULL); -- { serverError ILLEGAL_PREWHERE }
 SELECT 1
 FROM merge(currentDatabase(), '^data$')
 WHERE _table IN (NULL);
+
+SYSTEM drop  table data;

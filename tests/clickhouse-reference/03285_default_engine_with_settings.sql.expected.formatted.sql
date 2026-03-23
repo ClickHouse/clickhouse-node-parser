@@ -1,3 +1,9 @@
+-- Tags: memory-engine
+-- https://github.com/ClickHouse/ClickHouse/issues/73099
+SYSTEM DROP  TABLE IF EXISTS example_table;
+
+SYSTEM DROP  TABLE IF EXISTS example_table2;
+
 SET default_table_engine = 'MergeTree';
 
 CREATE TABLE example_table

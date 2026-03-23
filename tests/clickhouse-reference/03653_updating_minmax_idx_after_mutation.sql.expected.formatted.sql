@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     time DateTime
@@ -15,3 +17,5 @@ WHERE database = currentDatabase()
     AND active;
 
 SET mutations_sync = 1;
+
+SYSTEM DROP  TABLE test;

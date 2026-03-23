@@ -1,3 +1,10 @@
+-- Tags: no-replicated-database
+SYSTEM DROP  TABLE IF EXISTS data_null;
+
+SYSTEM DROP  TABLE IF EXISTS set_null;
+
+SYSTEM DROP  TABLE IF EXISTS cannot_be_nullable;
+
 SET data_type_default_nullable = 'false';
 
 CREATE TABLE data_null
@@ -69,3 +76,9 @@ CREATE TABLE cannot_be_nullable
     a Array(UInt8) NOT NULL
 )
 ENGINE = Memory;
+
+SYSTEM DROP  TABLE data_null;
+
+SYSTEM DROP  TABLE set_null;
+
+SYSTEM DROP  TABLE cannot_be_nullable;

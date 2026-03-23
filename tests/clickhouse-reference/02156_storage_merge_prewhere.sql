@@ -2,6 +2,13 @@ SET optimize_move_to_prewhere = 1;
 SET enable_multiple_prewhere_read_steps = 1;
 SET prefer_localhost_replica = 1; -- Make sure plan is reliable
 SET optimize_functions_to_subcolumns = 0;
+DROP TABLE IF EXISTS t_02156_mt1;
+DROP TABLE IF EXISTS t_02156_mt2;
+DROP TABLE IF EXISTS t_02156_log;
+DROP TABLE IF EXISTS t_02156_dist;
+DROP TABLE IF EXISTS t_02156_merge1;
+DROP TABLE IF EXISTS t_02156_merge2;
+DROP TABLE IF EXISTS t_02156_merge3;
 CREATE TABLE t_02156_mt1 (k UInt32, v String) ENGINE = MergeTree ORDER BY k SETTINGS min_bytes_for_wide_part=0;
 CREATE TABLE t_02156_mt2 (k UInt32, v String) ENGINE = MergeTree ORDER BY k SETTINGS min_bytes_for_wide_part=0;
 CREATE TABLE t_02156_log (k UInt32, v String) ENGINE = Log;

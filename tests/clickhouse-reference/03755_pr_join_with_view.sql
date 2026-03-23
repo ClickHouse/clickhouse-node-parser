@@ -1,3 +1,6 @@
+drop table if exists v;
+drop table if exists t0 sync;
+drop table if exists t1 sync;
 create table t0 (k UInt64, v String) engine ReplicatedMergeTree('/clickhouse/{database}/t0', '0') order by tuple();
 create table t1 (k UInt64, v String) engine ReplicatedMergeTree('/clickhouse/{database}/t1', '0') order by tuple();
 CREATE VIEW v AS SELECT * FROM t0;

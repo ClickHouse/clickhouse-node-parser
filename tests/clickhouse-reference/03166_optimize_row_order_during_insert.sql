@@ -3,6 +3,7 @@
 
 -- Below SELECTs intentionally only ORDER BY the table primary key and rely on read-in-order optimization
 SET optimize_read_in_order = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (
     name String,
     event Int8
@@ -11,6 +12,7 @@ ORDER BY name
 SETTINGS optimize_row_order = true;
 INSERT INTO tab VALUES ('Igor', 3), ('Egor', 1), ('Egor', 2), ('Igor', 2), ('Igor', 1);
 SELECT * FROM tab ORDER BY name SETTINGS max_threads=1;
+DROP TABLE tab;
 CREATE TABLE tab (
     name String,
     timestamp Int64,

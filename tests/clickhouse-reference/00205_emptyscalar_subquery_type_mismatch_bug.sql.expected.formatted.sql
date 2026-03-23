@@ -1,3 +1,6 @@
+-- Reported query
+SYSTEM drop  table if exists t_q1ht4gq_5;
+
 CREATE TABLE t_q1ht4gq_5
 (
     c_zeij INTEGER NOT NULL,

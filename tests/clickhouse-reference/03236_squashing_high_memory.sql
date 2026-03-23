@@ -3,6 +3,8 @@
 
 SET max_rows_to_read = '501G';
 SET enable_lazy_columns_replication = 0;
+DROP TABLE IF EXISTS id_values;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE id_values ENGINE MergeTree ORDER BY id1 AS
     SELECT arrayJoin(range(500000)) AS id1, arrayJoin(range(1000)) AS id2;
 SET max_memory_usage = '1G';

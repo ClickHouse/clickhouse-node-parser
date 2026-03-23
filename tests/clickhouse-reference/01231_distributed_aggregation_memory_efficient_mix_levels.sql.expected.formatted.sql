@@ -5,6 +5,12 @@ CREATE DATABASE IF NOT EXISTS shard_0;
 
 CREATE DATABASE IF NOT EXISTS shard_1;
 
+SYSTEM drop  table if exists shard_0.shard_01231_distributed_aggregation_memory_efficient;
+
+SYSTEM drop  table if exists shard_1.shard_01231_distributed_aggregation_memory_efficient;
+
+SYSTEM drop  table if exists ma_dist;
+
 CREATE TABLE shard_0.shard_01231_distributed_aggregation_memory_efficient
 (
     x UInt64
@@ -49,3 +55,9 @@ ORDER BY x ASC;
 SELECT arrayFilter(y -> y = x, [x]) AS f
 FROM ma_dist
 ORDER BY f ASC;
+
+SYSTEM drop  table ma_dist;
+
+SYSTEM drop  database shard_0;
+
+SYSTEM drop  database shard_1;

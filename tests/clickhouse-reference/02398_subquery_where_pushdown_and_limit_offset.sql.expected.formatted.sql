@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 ENGINE = Log AS
 SELECT *
@@ -23,3 +25,5 @@ FROM (
         LIMIT 5
     )
 WHERE number % 2;
+
+SYSTEM drop  table t;

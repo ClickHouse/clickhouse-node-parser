@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists data_r1;
+
+SYSTEM drop  table if exists data_r2;
+
 CREATE TABLE data_r1
 (
     key Int

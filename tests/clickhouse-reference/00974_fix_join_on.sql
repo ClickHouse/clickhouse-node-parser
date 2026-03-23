@@ -1,3 +1,6 @@
+drop table if exists t1;
+drop table if exists t2;
+drop table if exists t3;
 create table t1 (a UInt32, b String) engine = Memory;
 create table t2 (c UInt32, d String) engine = Memory;
 create table t3 (a UInt32) engine = Memory;
@@ -29,3 +32,6 @@ select t1.a, t3.a from t1 join t3 on t1.a = t3.a;
 select t1.a as t1_a, t3.a as t3_a from t1 join t3 on t1_a = t3_a;
 select table1.a as t1_a, table3.a as t3_a from t1 as table1 join t3 as table3 on t1_a = t3_a;
 set enable_optimize_predicate_expression = 1;
+drop table t1;
+drop table t2;
+drop table t3;

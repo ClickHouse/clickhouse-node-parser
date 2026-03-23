@@ -24,6 +24,8 @@ SELECT fromModifiedJulianDayOrNull(-678942);
 
 SELECT fromModifiedJulianDayOrNull(2973484);
 
+SYSTEM DROP  TABLE IF EXISTS fromModifiedJulianDay_test;
+
 CREATE TABLE fromModifiedJulianDay_test
 (
     d Int32
@@ -34,3 +36,5 @@ INSERT INTO fromModifiedJulianDay_test;
 
 SELECT fromModifiedJulianDay(d)
 FROM fromModifiedJulianDay_test;
+
+SYSTEM DROP  TABLE fromModifiedJulianDay_test;

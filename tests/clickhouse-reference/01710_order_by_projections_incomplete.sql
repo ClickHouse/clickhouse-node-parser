@@ -1,3 +1,4 @@
+drop table if exists  data_order_by_proj_incomp;
 create table data_order_by_proj_incomp (t UInt64) ENGINE MergeTree() order by t;
 insert into data_order_by_proj_incomp values (5);
 insert into data_order_by_proj_incomp values (6);

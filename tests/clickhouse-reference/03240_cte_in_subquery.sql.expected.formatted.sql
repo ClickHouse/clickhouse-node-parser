@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS subquery_cte_in;
+
 CREATE TABLE subquery_cte_in
 (
     date DateTime64(3),
@@ -31,3 +33,5 @@ FROM (
         FROM subquery_cte_in
         WHERE date IN (cte_1, cte_2)
     );
+
+SYSTEM DROP  TABLE subquery_cte_in;

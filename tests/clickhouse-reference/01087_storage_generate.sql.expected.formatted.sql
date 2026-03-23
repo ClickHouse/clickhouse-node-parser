@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     a Array(Int8),
@@ -12,6 +14,8 @@ FROM (
         FROM test_table
         LIMIT 100
     );
+
+SYSTEM DROP  TABLE IF EXISTS test_table_2;
 
 CREATE TABLE test_table_2
 (

@@ -10,6 +10,7 @@ SET allow_experimental_analyzer = 1;
 -- Tests that queries with enabled query condition cache correctly populate profile events
 
 SELECT '--- with move to PREWHERE';
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (a Int64, b Int64) ENGINE = MergeTree ORDER BY a SETTINGS add_minmax_index_for_numeric_columns=0;
 INSERT INTO tab SELECT number, number FROM numbers(1_000_000); -- 1 mio rows sounds like a lot but the QCC doesn't cache anything for less data
 SELECT count(*) FROM tab WHERE b = 10_000 FORMAT Null SETTINGS use_query_condition_cache = true;
@@ -60,3 +61,4 @@ WHERE
     AND query = 'SELECT * FROM tab WHERE b = 10_000 FORMAT Null SETTINGS use_query_condition_cache = true, optimize_move_to_prewhere = false;'
 ORDER BY
     event_time_microseconds;
+DROP TABLE tab;

@@ -1,3 +1,7 @@
+-- Tags: no-random-merge-tree-settings
+-- add_minmax_index_for_numeric_columns=0: Would use the index and not the projection that we want to test (id2 = 3)
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c1 Int64,
@@ -47,3 +51,5 @@ FROM (
         GROUP BY c1
     )
 WHERE like(`explain`, '%Granules%');
+
+SYSTEM DROP  TABLE t0;

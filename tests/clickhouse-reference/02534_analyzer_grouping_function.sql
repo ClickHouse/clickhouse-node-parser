@@ -1,4 +1,5 @@
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -15,3 +16,6 @@ SELECT grouping(id) AS grouping_id, grouping(value) AS grouping_value, id, value
 GROUP BY GROUPING SETS (id, value) ORDER BY grouping_id, grouping_value;
 SELECT grouping(id) AS grouping_id, grouping(value) AS grouping_value, id, value FROM test_table
 GROUP BY GROUPING SETS ((id), (value)) ORDER BY grouping_id, grouping_value;
+-- { echoOff }
+
+DROP TABLE test_table;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     stamp DateTime('UTC')
@@ -11,6 +13,8 @@ FROM numbers(1e3);
 SELECT count() AS result
 FROM test
 WHERE toHour(stamp, 'America/Montreal') = 7;
+
+SYSTEM DROP  TABLE test;
 
 CREATE TABLE test
 (

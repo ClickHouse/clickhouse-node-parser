@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tp;
+
 -- test regular merge tree
 CREATE TABLE tp
 (
@@ -15,6 +17,8 @@ INSERT INTO tp SELECT
     number % 3,
     1
 FROM numbers(3);
+
+SYSTEM DROP  TABLE tp;
 
 CREATE TABLE tp
 (

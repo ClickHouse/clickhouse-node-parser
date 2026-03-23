@@ -1,3 +1,6 @@
+-- Tags: shard, no-parallel
+SYSTEM DROP  DATABASE IF EXISTS test_01383;
+
 CREATE DATABASE test_01383;
 
 CREATE TABLE test_01383.fact
@@ -34,3 +37,5 @@ GROUP BY
     ID,
     Name
 ORDER BY ID ASC;
+
+SYSTEM DROP  DATABASE test_01383;

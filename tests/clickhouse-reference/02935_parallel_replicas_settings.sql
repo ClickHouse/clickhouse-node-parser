@@ -1,3 +1,6 @@
+-- Tags: no-random-settings
+
+DROP TABLE IF EXISTS test_parallel_replicas_settings;
 CREATE TABLE test_parallel_replicas_settings (n UInt64) ENGINE=MergeTree() ORDER BY tuple();
 INSERT INTO test_parallel_replicas_settings SELECT * FROM numbers(10);
 SET enable_parallel_replicas=2, max_parallel_replicas=3, parallel_replicas_for_non_replicated_merge_tree=1;
@@ -22,3 +25,4 @@ WHERE yesterday() <= event_date
       AND level = 'Warning'
       AND message ILIKE '%Setting ''use_hedged_requests'' explicitly with enabled ''enable_parallel_replicas'' has no effect%'
 SETTINGS enable_parallel_replicas=0;
+DROP TABLE test_parallel_replicas_settings;

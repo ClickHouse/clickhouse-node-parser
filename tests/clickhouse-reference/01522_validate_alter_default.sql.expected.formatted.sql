@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table2
 (
     EventDate Date,

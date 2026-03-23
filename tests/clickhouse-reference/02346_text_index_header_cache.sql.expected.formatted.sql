@@ -15,6 +15,8 @@ SET log_queries = 1;
 
 SET max_rows_to_read = 0;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -30,6 +32,8 @@ INSERT INTO tab SELECT
     number,
     concat('text_', leftPad(toString(number), 3, '0'))
 FROM numbers(512);
+
+SYSTEM DROP  VIEW IF EXISTS text_index_cache_stats;
 
 CREATE VIEW text_index_cache_stats
 AS
@@ -70,3 +74,7 @@ WHERE hasAnyTokens(message, 'text_510');
 
 SELECT *
 FROM text_index_cache_stats(filter = 'text_510');
+
+SYSTEM DROP  VIEW text_index_cache_stats;
+
+SYSTEM DROP  TABLE tab;

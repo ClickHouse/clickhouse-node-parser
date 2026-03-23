@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t64;
+
 CREATE TABLE t64
 (
     i8 Int8,
@@ -763,3 +765,5 @@ INSERT INTO t64 SELECT
     x,
     x
 FROM numbers(2049);
+
+SYSTEM DROP  TABLE t64;

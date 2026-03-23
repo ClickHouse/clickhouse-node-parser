@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists order_by_another;
+
 CREATE TABLE order_by_another
 (
     a Nullable(UInt64),

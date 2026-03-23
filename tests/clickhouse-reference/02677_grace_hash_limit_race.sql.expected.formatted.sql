@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_grace_hash;
+
 CREATE TABLE test_grace_hash
 (
     id UInt32,
@@ -22,3 +24,5 @@ FROM (
             ON f.id = d.id
         LIMIT 1000
     );
+
+SYSTEM DROP  TABLE test_grace_hash;

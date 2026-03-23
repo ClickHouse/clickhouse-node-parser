@@ -1,5 +1,7 @@
 SELECT tupleToNameValuePairs(tuple(1, 2, 3));
 
+SYSTEM DROP  TABLE IF EXISTS test02008;
+
 CREATE TABLE test02008
 (
     col Tuple(a Tuple(key1 int, key2 int), b Tuple(key1 int, key2 int))

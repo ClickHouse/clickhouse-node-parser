@@ -1,3 +1,5 @@
+drop table if exists X;
+drop table if exists Y;
 create table X (id Int32, x_a String, x_b Nullable(Int32)) engine MergeTree ORDER BY tuple();
 create table Y (id Int32, y_a String, y_b Nullable(String)) engine MergeTree ORDER BY tuple();
 insert into X (id, x_a, x_b) values (1, 'l1', 1), (2, 'l2', 2), (2, 'l3', 3), (3, 'l4', 4);
@@ -28,3 +30,8 @@ select X.*, s.* from X right join (select * from X) as s on X.id = s.x_b order b
 select X.*, s.* from X full join (select * from X) as s on X.id = s.id order by X.id, X.x_a, X.x_b, s.id, s.x_a, s.x_b;
 select X.*, s.* from X full join (select * from X) as s on X.x_b = s.x_b order by X.id, X.x_a, X.x_b, s.id, s.x_a, s.x_b;
 select X.*, s.* from X full join (select * from X) as s on X.id = s.x_b order by X.id, X.x_a, X.x_b, s.id, s.x_a, s.x_b;
+--select 'self full nullable vs not nullable 2';
+--select Y.*, s.* from Y full join (select * from Y) as s on concat('n', Y.y_a) = s.y_b order by id;
+
+drop table X;
+drop table Y;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02179_test_table;
+
 CREATE TABLE `02179_test_table`
 (
     id UInt64,
@@ -12,6 +14,8 @@ INSERT INTO `02179_test_table`;
 INSERT INTO `02179_test_table`;
 
 INSERT INTO `02179_test_table`;
+
+SYSTEM DROP  DICTIONARY IF EXISTS 02179_test_dictionary;
 
 CREATE DICTIONARY `02179_test_dictionary`
 (
@@ -37,3 +41,7 @@ SELECT dictHas('02179_test_dictionary', 0, 5);
 SELECT *
 FROM `02179_test_dictionary`
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  DICTIONARY 02179_test_dictionary;
+
+SYSTEM DROP  TABLE 02179_test_table;

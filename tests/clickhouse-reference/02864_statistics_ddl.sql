@@ -4,6 +4,7 @@
 -- Tests that DDL statements which create / drop / materialize statistics
 
 SET mutations_sync = 1;
+DROP TABLE IF EXISTS tab;
 SET allow_experimental_statistics = 0;
 -- Error case: Can't create statistics when allow_experimental_statistics = 0
 CREATE TABLE tab (col Float64 STATISTICS(tdigest)) Engine = MergeTree() ORDER BY tuple(); -- { serverError INCORRECT_QUERY }
@@ -18,6 +19,7 @@ SET allow_suspicious_low_cardinality_types = 1;
 --   tdigest requires data_type.isValueRepresentedByInteger
 --     These types work:
 CREATE TABLE tab (col UInt8 STATISTICS(tdigest)) Engine = MergeTree() ORDER BY tuple();
+DROP TABLE tab;
 CREATE TABLE tab (col UInt256 STATISTICS(tdigest)) Engine = MergeTree() ORDER BY tuple();
 CREATE TABLE tab (col Float32 STATISTICS(tdigest)) Engine = MergeTree() ORDER BY tuple();
 CREATE TABLE tab (col Decimal32(3) STATISTICS(tdigest)) Engine = MergeTree() ORDER BY tuple();

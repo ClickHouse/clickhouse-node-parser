@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_index_granularity;
 CREATE TABLE t_index_granularity (id UInt64, s String)
 ENGINE = MergeTree ORDER BY id
 SETTINGS min_bytes_for_wide_part = 0,
@@ -12,6 +13,7 @@ INSERT INTO t_index_granularity SELECT number, 'a' FROM numbers(15);
 INSERT INTO t_index_granularity SELECT number, repeat('a', 2048) FROM numbers(15, 15);
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_index_granularity) ORDER BY ALL;
 SELECT name, index_granularity_bytes_in_memory FROM system.parts WHERE database = currentDatabase() AND table = 't_index_granularity' AND active;
+DROP TABLE t_index_granularity;
 CREATE TABLE t_index_granularity (id UInt64, s String)
 ENGINE = MergeTree ORDER BY id
 SETTINGS min_bytes_for_wide_part = 0,

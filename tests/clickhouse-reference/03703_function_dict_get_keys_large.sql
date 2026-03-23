@@ -1,3 +1,5 @@
+DROP DICTIONARY IF EXISTS dict_big;
+DROP TABLE IF EXISTS dict_src_big;
 CREATE TABLE dict_src_big
 (
     id        UInt64,

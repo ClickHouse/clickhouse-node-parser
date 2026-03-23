@@ -1,3 +1,8 @@
+-- Tags: no-fasttest
+SYSTEM drop  table if exists test;
+
+SYSTEM drop  table if exists test_cluster;
+
 CREATE TABLE test
 (
     json JSON,
@@ -19,3 +24,7 @@ SELECT
     json.a,
     d.Int64
 FROM test_cluster;
+
+SYSTEM drop  table test_cluster;
+
+SYSTEM drop  table test;

@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+
+DROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier};
 CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc01 (x int) AS postgresql('127.121.0.1:5432', 'postgres_db', 'postgres_table', 'postgres_user', '124444');
 CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc02 (x int) AS mysql('127.123.0.1:3306', 'mysql_db', 'mysql_table', 'mysql_user','123123');

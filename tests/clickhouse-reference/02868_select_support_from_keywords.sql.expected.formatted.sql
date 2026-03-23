@@ -27,3 +27,7 @@ SELECT
     `from`,
     to
 FROM cte;
+
+SYSTEM drop  table test_view;
+
+SYSTEM drop  table test_table;

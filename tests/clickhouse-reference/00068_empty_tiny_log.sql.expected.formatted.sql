@@ -6,3 +6,5 @@ ENGINE = TinyLog;
 
 SELECT A
 FROM empty_tiny_log;
+
+SYSTEM DROP  TABLE empty_tiny_log;

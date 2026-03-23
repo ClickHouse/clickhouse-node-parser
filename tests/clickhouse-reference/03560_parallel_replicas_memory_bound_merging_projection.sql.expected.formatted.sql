@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists pr_t;
+
 CREATE TABLE pr_t
 (
     a UInt64,

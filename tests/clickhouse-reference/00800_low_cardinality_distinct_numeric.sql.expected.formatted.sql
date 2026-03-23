@@ -1,5 +1,7 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM drop  table if exists lc_00800_2;
+
 CREATE TABLE lc_00800_2
 (
     val LowCardinality(UInt64)

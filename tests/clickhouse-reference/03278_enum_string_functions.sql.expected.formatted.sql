@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM DROP  TABLE IF EXISTS test_enum_string_functions;
+
 CREATE TABLE test_enum_string_functions
 (
     e Enum('a' = 1, 'b' = 2)
@@ -41,6 +44,8 @@ FROM test_enum_string_functions;
 
 SELECT hasTokenOrNull(e, 'a')
 FROM test_enum_string_functions;
+
+SYSTEM DROP  TABLE IF EXISTS jsons;
 
 CREATE TABLE jsons
 (

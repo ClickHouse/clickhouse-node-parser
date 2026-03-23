@@ -1,3 +1,7 @@
+-- Tags: distributed
+
+DROP TABLE IF EXISTS local_00952;
+DROP TABLE IF EXISTS distributed_00952;
 SET insert_allow_materialized_columns=0;
 SET distributed_foreground_insert=0;
 set allow_deprecated_syntax_for_merge_tree=1;
@@ -8,6 +12,8 @@ SELECT * FROM distributed_00952;
 SELECT date, value FROM distributed_00952;
 SELECT * FROM local_00952;
 SELECT date, value FROM local_00952;
+DROP TABLE distributed_00952;
+DROP TABLE local_00952;
 SET distributed_foreground_insert=1;
 SET insert_allow_materialized_columns=1;
 INSERT INTO distributed_00952 (date, value) VALUES ('2018-08-01', '2019-08-01');

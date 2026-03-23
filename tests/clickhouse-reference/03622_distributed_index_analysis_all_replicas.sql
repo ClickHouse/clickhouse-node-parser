@@ -1,3 +1,9 @@
+-- Tags: long, no-parallel
+
+-- Generate many parts (partitions) to ensure that all replicas will be chosen for distributed index analysis
+-- even failed replica (that is included into parallel_replicas cluster), and ensure that the SELECT wont fail (parts should be analyzed locally).
+
+drop table if exists test_10m;
 create table test_10m (key Int, value Int) engine=MergeTree() order by key partition by key % 200 settings distributed_index_analysis_min_parts_to_activate=0, distributed_index_analysis_min_indexes_size_to_activate=0;
 insert into test_10m select number, number*100 from numbers(1e6) settings max_partitions_per_insert_block=200, max_block_size=1e6;
 set allow_experimental_parallel_reading_from_replicas=0;

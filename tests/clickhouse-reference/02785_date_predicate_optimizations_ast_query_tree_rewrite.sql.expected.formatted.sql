@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS date_t;
+
 CREATE TABLE date_t
 (
     id UInt32,
@@ -6,6 +8,10 @@ CREATE TABLE date_t
 )
 ENGINE = ReplacingMergeTree()
 ORDER BY id;
+
+SYSTEM DROP  TABLE date_t;
+
+SYSTEM DROP  TABLE IF EXISTS datetime_t;
 
 CREATE TABLE datetime_t
 (
@@ -16,6 +22,10 @@ CREATE TABLE datetime_t
 ENGINE = ReplacingMergeTree()
 ORDER BY id;
 
+SYSTEM DROP  TABLE datetime_t;
+
+SYSTEM DROP  TABLE IF EXISTS date32_t;
+
 CREATE TABLE date32_t
 (
     id UInt32,
@@ -25,6 +35,10 @@ CREATE TABLE date32_t
 ENGINE = ReplacingMergeTree()
 ORDER BY id;
 
+SYSTEM DROP  TABLE date32_t;
+
+SYSTEM DROP  TABLE IF EXISTS datetime64_t;
+
 CREATE TABLE datetime64_t
 (
     id UInt32,
@@ -33,3 +47,5 @@ CREATE TABLE datetime64_t
 )
 ENGINE = ReplacingMergeTree()
 ORDER BY id;
+
+SYSTEM DROP  TABLE datetime64_t;

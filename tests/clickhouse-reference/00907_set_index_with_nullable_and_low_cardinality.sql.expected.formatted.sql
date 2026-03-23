@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists nullable_set_index;
+
 CREATE TABLE nullable_set_index
 (
     a UInt64,

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_graphite;
+
 CREATE TABLE test_graphite
 (
     key UInt32,
@@ -11,3 +13,5 @@ ENGINE = GraphiteMergeTree('graphite_rollup')
 ORDER BY key;
 
 INSERT INTO test_graphite (key); -- { serverError BAD_ARGUMENTS }
+
+SYSTEM DROP  TABLE test_graphite;

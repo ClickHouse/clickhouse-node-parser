@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_ind_merge_2;
 CREATE TABLE t_ind_merge_2 (
     a UInt64,
     b UInt64,
@@ -22,3 +23,4 @@ ORDER BY a SETTINGS
     enable_block_offset_column = 0;
 INSERT INTO t_ind_merge_2 SELECT number, number, rand(), rand(), rand(), rand() FROM numbers(1000);
 SET max_rows_to_read = 0; -- system.text_log can be really big
+DROP TABLE t_ind_merge_2;

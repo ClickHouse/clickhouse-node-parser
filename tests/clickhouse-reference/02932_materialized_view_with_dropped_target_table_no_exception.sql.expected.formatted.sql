@@ -2,6 +2,12 @@ SET ignore_materialized_views_with_dropped_target_table = 1;
 
 SET send_logs_level = 'error';
 
+SYSTEM drop  table if exists from_table;
+
+SYSTEM drop  table if exists to_table;
+
+SYSTEM drop  table if exists mv;
+
 CREATE TABLE from_table
 (
     x UInt32
@@ -29,3 +35,9 @@ FROM from_table;
 
 SELECT *
 FROM to_table;
+
+SYSTEM drop  table to_table;
+
+SYSTEM drop  table from_table;
+
+SYSTEM drop  view mv;

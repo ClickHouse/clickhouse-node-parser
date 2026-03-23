@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_parallel_index;
+
 CREATE TABLE test_parallel_index
 (
     z UInt64,
@@ -17,3 +19,5 @@ WHERE z = 2
     OR z = 17
     OR z = 19
     OR z = 23;
+
+SYSTEM DROP  TABLE test_parallel_index;

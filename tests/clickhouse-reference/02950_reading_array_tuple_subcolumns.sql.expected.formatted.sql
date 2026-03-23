@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -18,3 +20,5 @@ SELECT
 FROM test
 ORDER BY id ASC
 FORMAT Null;
+
+SYSTEM DROP  TABLE test;

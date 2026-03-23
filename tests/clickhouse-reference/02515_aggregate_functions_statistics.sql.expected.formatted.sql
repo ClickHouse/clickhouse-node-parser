@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS fh;
+
 CREATE TABLE fh
 (
     a_value UInt32,

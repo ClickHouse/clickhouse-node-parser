@@ -1,6 +1,7 @@
 -- Tags: no-parallel
 
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS dict;
 create table dict engine=MergeTree() order by id as
 select 1 as id, 'one' as name union all
 select 2 as id, 'two' as name;
@@ -15,3 +16,5 @@ select udf_type_of_int(2)
 select udf_type_of_int(number) from numbers(5) order by number;
 select number as id, udf_type_of_int(id) from numbers(5) order by number;
 select number as id, udf_type_of_int(id or id = 1) from numbers(5) order by number;
+DROP FUNCTION udf_type_of_int;
+DROP TABLE dict;

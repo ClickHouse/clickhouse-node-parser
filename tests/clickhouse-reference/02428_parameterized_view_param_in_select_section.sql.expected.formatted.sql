@@ -47,6 +47,14 @@ FROM v2(m = 'test');
 SELECT *
 FROM v3(m = 'test');
 
+SYSTEM drop  table t;
+
+SYSTEM drop  view v1;
+
+SYSTEM drop  view v2;
+
+SYSTEM drop  view v3;
+
 CREATE TABLE t
 (
     z String,

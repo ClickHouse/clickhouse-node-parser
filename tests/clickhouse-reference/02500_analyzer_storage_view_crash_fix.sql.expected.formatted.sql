@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     f1 Int32,
@@ -16,6 +18,8 @@ INSERT INTO test_table SELECT
     number
 FROM numbers(10);
 
+SYSTEM DROP  VIEW IF EXISTS test_view;
+
 CREATE VIEW test_view
 AS
 SELECT
@@ -26,3 +30,7 @@ WHERE pk = 2;
 
 SELECT *
 FROM test_view;
+
+SYSTEM DROP  VIEW test_view;
+
+SYSTEM DROP  TABLE test_table;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS group_by_pk;
+
 CREATE TABLE group_by_pk
 (
     k UInt64,

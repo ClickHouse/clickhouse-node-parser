@@ -1,6 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/71415
 SELECT now() + CAST(toFixedString(materialize(toNullable('1')), 1), 'IPv6'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 SELECT CAST('2000-01-01', 'Date32') - CAST(0, 'IPv4');  -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+DROP TABLE IF EXISTS t0;
 CREATE TABLE t0 (c0 IPv4) ENGINE = Memory;
 SELECT (t0.c0, t0.c0) * t0.c0 FROM t0; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 SELECT materialize('1')::IPv6 + '2000-01-01 00:00:00'::DateTime;  -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}

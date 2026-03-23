@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS decimal;
+
 CREATE TABLE IF NOT EXISTS decimal
 (
     x DECIMAL(10, -2)

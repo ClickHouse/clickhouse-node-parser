@@ -15,6 +15,7 @@ SELECT space(['abc']); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT space(('abc')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT space(30303030303030303030303030303030::UInt64); -- { serverError TOO_LARGE_STRING_SIZE }
 SELECT space(NULL);
+DROP TABLE IF EXISTS defaults;
 CREATE TABLE defaults
 (
     u8 UInt8,
@@ -43,3 +44,4 @@ SELECT space(i8), length(space(i8)) FROM defaults;
 SELECT space(i16), length(space(i16)) FROM defaults;
 SELECT space(i32), length(space(i32)) from defaults;
 SELECT space(i64), length(space(i64)) FROM defaults;
+DROP TABLE defaults;

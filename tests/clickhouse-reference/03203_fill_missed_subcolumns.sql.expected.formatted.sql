@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_missed_subcolumns;
+
 -- .null subcolumn
 CREATE TABLE t_missed_subcolumns
 (
@@ -91,3 +93,5 @@ SELECT
     arr.`null`
 FROM t_missed_subcolumns
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE t_missed_subcolumns;

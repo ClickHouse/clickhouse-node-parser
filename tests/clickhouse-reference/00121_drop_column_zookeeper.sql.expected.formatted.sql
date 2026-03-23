@@ -1,3 +1,8 @@
+-- Tags: zookeeper, no-replicated-database, no-shared-merge-tree
+-- Tag no-replicated-database: Old syntax is not allowed
+-- no-shared-merge-tree: implemented replacement
+SYSTEM DROP  TABLE IF EXISTS alter_00121 SYNC;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE alter_00121
@@ -8,6 +13,8 @@ CREATE TABLE alter_00121
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test/alter_00121/t1', 'r1', d, (d), 8192);
 
 INSERT INTO alter_00121;
+
+SYSTEM DROP  TABLE alter_00121 SYNC;
 
 CREATE TABLE alter_00121
 (

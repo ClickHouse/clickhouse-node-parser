@@ -17,8 +17,10 @@ select sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{
 select sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(max_dynamic_types=0))])));
 select sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(a Int64))])));
 select sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(a Dynamic))])));
+drop table if exists test;
 create table test (json JSON) engine=Memory;
 insert into test values ('{"a" : 1}'), ('{"a" : 2}'), ('{}'), ('{"a" : null}'), ('{"b" : 1}');
 select json, sipHash64(json) from test;
+drop table test;
 create table test (json JSON(max_dynamic_types=0)) engine=Memory;
 create table test (json JSON(max_dynamic_paths=0)) engine=Memory;

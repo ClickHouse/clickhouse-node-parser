@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a String
@@ -22,3 +24,5 @@ SELECT *
 FROM test
 WHERE notLike(a, '1%2')
 ORDER BY a ASC;
+
+SYSTEM drop  table test;

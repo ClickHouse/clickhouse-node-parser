@@ -1,3 +1,6 @@
+-- Tests that min-max statistics created over negative values work
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     i8 Int8,
@@ -24,3 +27,5 @@ SELECT
 FROM `system`.parts_columns
 WHERE database = currentDatabase()
     AND table = 'tab';
+
+SYSTEM DROP  TABLE tab;

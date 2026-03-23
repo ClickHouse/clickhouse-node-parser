@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 String
@@ -10,3 +13,5 @@ INSERT INTO t0 (c0);
 
 SELECT c0.size
 FROM t0;
+
+SYSTEM DROP  TABLE t0;

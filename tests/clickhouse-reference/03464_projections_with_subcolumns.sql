@@ -3,6 +3,7 @@
 set enable_analyzer=1;
 set mutations_sync=1;
 set parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
+drop table if exists test;
 create table test (
     a UInt32,
     json JSON(a UInt32),
@@ -18,6 +19,7 @@ select trimLeft(*) from (explain indexes=1 select t from test where t.a = 1) whe
 select t from test where t.a = 1;
 select trimLeft(*) from (explain indexes=1 select json from test where json.c[].d.:Int64 = [1]) where explain like '%ReadFromMergeTree%';
 select json from test where json.c[].d.:Int64 = [1];
+drop table test;
 select '------------------------------------------------------------------';
 create table test (
     a UInt32,

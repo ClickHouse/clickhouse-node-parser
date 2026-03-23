@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS codecTest;
 SET cross_to_inner_join_rewrite = 1;
 CREATE TABLE codecTest (
     key      UInt64,

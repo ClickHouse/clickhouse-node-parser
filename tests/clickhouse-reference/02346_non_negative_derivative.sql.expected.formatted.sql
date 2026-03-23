@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nnd;
+
 CREATE TABLE nnd
 (
     id Int8,

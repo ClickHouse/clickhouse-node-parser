@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS testNullableStates;
+
+SYSTEM DROP  TABLE IF EXISTS testNullableStatesAgg;
+
 CREATE TABLE testNullableStates
 (
     ts DateTime,
@@ -402,3 +406,7 @@ SELECT
     sumMerge(int8Sum)
 FROM testNullableStatesAgg
 WHERE id = '-22';
+
+SYSTEM DROP  TABLE testNullableStates;
+
+SYSTEM DROP  TABLE testNullableStatesAgg;

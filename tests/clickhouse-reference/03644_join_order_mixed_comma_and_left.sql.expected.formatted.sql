@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS n1;
+
+SYSTEM DROP  TABLE IF EXISTS n2;
+
+SYSTEM DROP  TABLE IF EXISTS n3;
+
 SET query_plan_optimize_join_order_limit = 16;
 
 CREATE TABLE n1

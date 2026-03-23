@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+
+DROP TABLE IF EXISTS 03250_avoid_prefetch;
 CREATE table 03250_avoid_prefetch(id UInt64, string LowCardinality(String))
 ENGINE = MergeTree
 ORDER BY id

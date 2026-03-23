@@ -1,5 +1,7 @@
 SET force_primary_key = 1;
 
+SYSTEM DROP  TABLE IF EXISTS samples;
+
 CREATE TABLE samples
 (
     key UInt32,
@@ -54,3 +56,5 @@ WHERE value IN (range(3)); -- { serverError INDEX_NOT_USED }
 
 -- wrong type
 SELECT 123 IN (splitByChar('c', 'abcdef')); -- { serverError TYPE_MISMATCH }
+
+SYSTEM DROP  TABLE samples;

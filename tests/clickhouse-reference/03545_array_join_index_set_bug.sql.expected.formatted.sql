@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists right;
+
 CREATE TABLE `right`
 (
     array_in_index Array(String),

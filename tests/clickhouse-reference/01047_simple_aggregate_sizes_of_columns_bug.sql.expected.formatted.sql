@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS column_size_bug;
+
 CREATE TABLE column_size_bug
 (
     date_time DateTime,
@@ -12,3 +14,5 @@ INSERT INTO column_size_bug;
 
 -- wait for DELETE
 SELECT sleep(1);
+
+SYSTEM DROP  TABLE column_size_bug;

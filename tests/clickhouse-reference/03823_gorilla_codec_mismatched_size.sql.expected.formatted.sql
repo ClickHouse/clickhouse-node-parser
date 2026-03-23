@@ -3,6 +3,8 @@
 -- decompression should still work correctly.
 SET allow_suspicious_codecs = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_gorilla_mismatched;
+
 CREATE TABLE t_gorilla_mismatched
 (
     c0 Int16 CODEC(Gorilla(4))

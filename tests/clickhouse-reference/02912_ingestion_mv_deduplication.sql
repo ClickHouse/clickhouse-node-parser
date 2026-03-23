@@ -31,6 +31,8 @@ INSERT INTO landing VALUES ('2022-09-01 12:23:34', 42);
 INSERT INTO landing VALUES ('2022-09-01 12:23:34', 42),('2023-09-01 12:23:34', 42);
 SELECT * FROM landing FINAL ORDER BY time;
 SELECT * FROM mv FINAL ORDER BY hour;
+DROP TABLE IF EXISTS landing SYNC;
+DROP TABLE IF EXISTS mv SYNC;
 /*
 
     This is the unexpected behavior due to setting max_insert_delayed_streams_for_parallel_write > 1.
@@ -108,3 +110,4 @@ SELECT
 FROM ds
 GROUP BY pk1, pk2, pk4, pk3
 ORDER BY pk1, pk2, pk4, pk3;
+DROP TABLE IF EXISTS ds SYNC;

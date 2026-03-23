@@ -3,6 +3,7 @@
 
 SET insert_keeper_fault_injection_probability = 0.0;
 SET enable_lightweight_update = 1;
+DROP TABLE IF EXISTS t_shared SYNC;
 CREATE TABLE t_shared (id UInt64, c1 UInt64)
 ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_shared/', '1')
 ORDER BY id
@@ -18,3 +19,4 @@ SET mutations_sync = 2;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 1;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 0;
 SELECT name, rows FROM system.parts WHERE database = currentDatabase() AND table = 't_shared' AND active ORDER BY name;
+DROP TABLE t_shared SYNC;

@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t0
 (
     id INT UNSIGNED NOT NULL,
@@ -27,3 +31,7 @@ INNER JOIN t0 AS right_0
     ON t1.id = right_0.id
 INNER JOIN t1 AS right_1
     ON t1.id = right_1.id;
+
+SYSTEM DROP  TABLE t0;
+
+SYSTEM DROP  TABLE t1;

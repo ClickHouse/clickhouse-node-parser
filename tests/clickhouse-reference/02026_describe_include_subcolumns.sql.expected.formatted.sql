@@ -1,5 +1,7 @@
 SET output_format_pretty_fallback_to_vertical = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t_desc_subcolumns;
+
 CREATE TABLE t_desc_subcolumns
 (
     d Date,
@@ -10,3 +12,5 @@ CREATE TABLE t_desc_subcolumns
 )
 ENGINE = MergeTree
 ORDER BY d;
+
+SYSTEM DROP  TABLE t_desc_subcolumns;

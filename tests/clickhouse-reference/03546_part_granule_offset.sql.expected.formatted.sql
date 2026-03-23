@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM DROP  TABLE IF EXISTS test_part_granule_offset;
+
 CREATE TABLE test_part_granule_offset
 (
     n UInt64
@@ -25,3 +28,5 @@ SELECT *
 FROM test_part_granule_offset
 WHERE _part_granule_offset % 10 = 1
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE test_part_granule_offset;

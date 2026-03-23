@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tab;
+
 CREATE TABLE tab
 (
     x UInt64
@@ -21,3 +23,5 @@ SETTINGS max_block_size = 5;
 SELECT *
 FROM tab
 ORDER BY x ASC;
+
+SYSTEM drop  table tab;

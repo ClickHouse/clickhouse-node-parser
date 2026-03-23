@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS trend;
 CREATE TABLE trend
 (
     `event_date` Date,
@@ -25,3 +26,4 @@ GROUP BY level
 ORDER BY level ASC;
 SELECT '---';
 insert into trend values ('2019-01-28', 1, '2019-01-29 10:00:00', 1003, 'phone') ('2019-01-28', 1, '2019-01-29 10:00:00', 1004, 'phone') ('2019-01-28', 1, '2019-01-28 10:00:00', 1002, 'phone');
+DROP TABLE trend;

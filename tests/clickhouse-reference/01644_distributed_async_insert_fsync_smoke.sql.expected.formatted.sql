@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM drop  table if exists dist_01643;
+
+SYSTEM drop  table if exists data_01643;
+
 CREATE TABLE data_01643
 (
     key Int
@@ -13,6 +18,8 @@ SETTINGS prefer_localhost_replica = 0;
 
 SELECT sum(*)
 FROM dist_01643;
+
+SYSTEM drop  table dist_01643;
 
 CREATE TABLE dist_01643 AS data_01643
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01643, key)

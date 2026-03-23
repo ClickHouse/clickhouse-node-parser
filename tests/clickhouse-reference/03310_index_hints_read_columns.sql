@@ -4,6 +4,7 @@
 -- Does additional index analysis round that the test doesn't expect
 set automatic_parallel_replicas_mode=0;
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS t_index_hint;
 CREATE TABLE t_index_hint (a UInt64, b UInt64)
 ENGINE = MergeTree ORDER BY a
 SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, serialization_info_version = 'basic', add_minmax_index_for_numeric_columns=0;
@@ -42,3 +43,4 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND query LIKE '%SELECT count() FROM t_index_hint%'
 ORDER BY event_time_microseconds;
+DROP TABLE t_index_hint;

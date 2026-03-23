@@ -17,6 +17,8 @@ CREATE TEMPORARY TABLE times
     t DateTime
 );
 
+SYSTEM DROP  TABLE IF EXISTS t00156_max_execution_speed_sample_merge;
+
 CREATE TABLE t00156_max_execution_speed_sample_merge
 (
     v UInt64

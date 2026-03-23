@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Int,
@@ -6,3 +8,5 @@ CREATE TABLE t0
 
 INSERT INTO t0 (c0) SELECT number
 FROM numbers(28);
+
+SYSTEM DROP  TABLE t0;

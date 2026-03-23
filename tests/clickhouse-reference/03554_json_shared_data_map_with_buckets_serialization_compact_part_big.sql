@@ -1,3 +1,7 @@
+-- Tags: long
+-- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
+
+drop table if exists test_compact_map_with_buckets;
 create table test_compact_map_with_buckets (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings min_bytes_for_wide_part='200G', min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='map_with_buckets', object_shared_data_serialization_version_for_zero_level_parts='map_with_buckets', object_shared_data_buckets_for_compact_part=2;
 insert into test_compact_map_with_buckets select multiIf(
 number < 15000,
@@ -29,3 +33,4 @@ select json.^a, json.a.a1 from test_compact_map_with_buckets format Null;
 select json.a.a1, json.^a from test_compact_map_with_buckets format Null;
 select json.^a, json.a.a1, json.arr from test_compact_map_with_buckets format Null;
 select json.a.a1, json.arr, json.^a from test_compact_map_with_buckets format Null;
+drop table test_compact_map_with_buckets format Null;

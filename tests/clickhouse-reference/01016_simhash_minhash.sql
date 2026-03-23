@@ -19,6 +19,7 @@ SELECT wordShingleMinHash('what a cute cat.');
 SELECT wordShingleMinHashCaseInsensitive('what a cute cat.');
 SELECT wordShingleMinHashUTF8('what a cute cat.');
 SELECT wordShingleMinHashCaseInsensitiveUTF8('what a cute cat.');
+DROP TABLE IF EXISTS defaults;
 CREATE TABLE defaults
 (
    s String
@@ -85,3 +86,4 @@ SELECT arrayStringConcat(groupArray(s), '\n:::::::\n'), count(), wordShingleMinH
 SELECT wordShingleSimHash('foobar', 9223372036854775807); -- { serverError ARGUMENT_OUT_OF_BOUND }
 SELECT wordShingleSimHash('foobar', 1001); -- { serverError ARGUMENT_OUT_OF_BOUND }
 SELECT wordShingleSimHash('foobar', 0); -- { serverError ARGUMENT_OUT_OF_BOUND }
+DROP TABLE defaults;

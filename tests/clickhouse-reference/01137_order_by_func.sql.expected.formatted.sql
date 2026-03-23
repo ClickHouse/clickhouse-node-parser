@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS pk_func;
+
 CREATE TABLE pk_func
 (
     d DateTime,
@@ -29,6 +31,10 @@ ORDER BY
     ui ASC
 LIMIT 5;
 
+SYSTEM DROP  TABLE pk_func;
+
+SYSTEM DROP  TABLE IF EXISTS nORX;
+
 CREATE TABLE nORX
 (
     A Int64,
@@ -53,3 +59,5 @@ ORDER BY
     negate(B) ASC
 LIMIT 3
 SETTINGS max_threads = 1;
+
+SYSTEM DROP  TABLE nORX;

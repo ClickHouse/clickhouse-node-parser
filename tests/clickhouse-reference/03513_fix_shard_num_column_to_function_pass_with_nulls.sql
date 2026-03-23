@@ -1,4 +1,6 @@
 SET join_use_nulls = 1;
+DROP TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t1;
 CREATE TABLE t0 (c0 Int) ENGINE = Memory();
 INSERT INTO t0 SELECT number FROM numbers(3);
 CREATE TABLE t1 (c0 Int) ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), t0);

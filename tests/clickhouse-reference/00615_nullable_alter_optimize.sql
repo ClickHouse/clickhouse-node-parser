@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_00615;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE test_00615
 (
@@ -8,3 +9,4 @@ CREATE TABLE test_00615
 ) ENGINE = MergeTree(dt, (id, key, dt), 8192);
 INSERT INTO test_00615 (dt,id, key,data) VALUES ('2000-01-01', 100, 'key', 100500);
 SELECT * FROM test_00615 ORDER BY data NULLS FIRST;
+DROP TABLE test_00615;

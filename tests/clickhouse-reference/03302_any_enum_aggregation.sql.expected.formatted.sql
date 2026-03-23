@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS test_33602_t0a;
+
+SYSTEM DROP  TABLE IF EXISTS test_33602_t0b;
+
+SYSTEM DROP  TABLE IF EXISTS test_33602;
+
 CREATE TABLE test_33602
 (
     name String,
@@ -34,6 +40,8 @@ SELECT
     argMax(user_level, user_level)
 FROM test_33602;
 
+SYSTEM DROP  TABLE test_33602;
+
 CREATE TABLE test_33602_t0a
 (
     e Enum8('LOW' = 123, 'MEDIUM' = 12, 'HIGH' = 33)
@@ -61,6 +69,8 @@ FROM test_33602_t0a;
 
 INSERT INTO test_33602_t0a;
 
+SYSTEM DROP  TABLE test_33602_t0a;
+
 CREATE TABLE test_33602_t0b
 (
     e Enum16('LOW' = 123, 'MEDIUM' = 12, 'HIGH' = 33)
@@ -87,3 +97,5 @@ SELECT
 FROM test_33602_t0b;
 
 INSERT INTO test_33602_t0b;
+
+SYSTEM DROP  TABLE test_33602_t0b;

@@ -4,6 +4,9 @@
 
 SET query_plan_optimize_lazy_materialization = 1;
 SET query_plan_max_limit_for_lazy_materialization = 10;
+
+DROP TABLE IF EXISTS t_lm_replacing;
+
 CREATE TABLE t_lm_replacing
 (
     timestamp DateTime,
@@ -12,6 +15,7 @@ CREATE TABLE t_lm_replacing
     data String
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (domain, timestamp);
+
 INSERT INTO t_lm_replacing
 SELECT
     toDateTime('2025-01-01') + number,
@@ -19,6 +23,7 @@ SELECT
     [(toString(number), 'val')],
     repeat('x', 100)
 FROM numbers(300);
+
 -- This exact combination (WHERE + ORDER BY DESC + small LIMIT) was the failing pattern
 SELECT count() FROM (
     SELECT * FROM t_lm_replacing
@@ -26,3 +31,5 @@ SELECT count() FROM (
     ORDER BY timestamp DESC
     LIMIT 10
 );
+
+DROP TABLE t_lm_replacing;

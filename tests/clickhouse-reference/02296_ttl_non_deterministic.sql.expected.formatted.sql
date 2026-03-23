@@ -1,3 +1,6 @@
+-- Tags: replica
+SYSTEM DROP  TABLE IF EXISTS t_ttl_non_deterministic;
+
 CREATE TABLE t_ttl_non_deterministic
 (
     A Int64
@@ -20,6 +23,8 @@ CREATE TABLE t_ttl_non_deterministic
 )
 ENGINE = MergeTree
 ORDER BY A;
+
+SYSTEM DROP  TABLE t_ttl_non_deterministic;
 
 CREATE TABLE t_ttl_non_deterministic
 (

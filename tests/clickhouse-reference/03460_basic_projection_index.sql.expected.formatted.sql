@@ -7,6 +7,11 @@ SET optimize_aggregation_in_order = 0;
 
 SET min_table_rows_to_use_projection_index = 0;
 
+------------------------------------------------------------------------------
+-- 1. Basic projection index behavior (simple table)
+------------------------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS t_proj;
+
 CREATE TABLE t_proj
 (
     id UInt64,
@@ -89,6 +94,13 @@ WHERE region = 'asia'
     OR user_id = 101
 ORDER BY `ALL` ASC;
 
+SYSTEM DROP  TABLE t_proj;
+
+------------------------------------------------------------------------------
+-- 2. Granule edge cases (top/mid/bottom rows hit inside same granule)
+------------------------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS t_gran;
+
 CREATE TABLE t_gran
 (
     id UInt64,
@@ -166,6 +178,13 @@ FROM t_gran
 WHERE region = 'bot'
 ORDER BY `ALL` ASC;
 
+SYSTEM DROP  TABLE t_gran;
+
+------------------------------------------------------------------------------
+-- 3. Partial materialization (projection added after data exists)
+------------------------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS t_partial;
+
 CREATE TABLE t_partial
 (
     id UInt64,
@@ -211,6 +230,15 @@ FROM t_partial
 WHERE region = 'cn'
 ORDER BY `ALL` ASC;
 
+SYSTEM DROP  TABLE t_partial;
+
+------------------------------------------------------------------------------
+-- 4. (Replicated)MergeTree consistency test
+------------------------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS t_repl SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS t_repl2 SYNC;
+
 CREATE TABLE t_repl
 (
     id UInt64,
@@ -239,6 +267,15 @@ FROM `system`.projection_parts
 WHERE database = currentDatabase()
     AND table IN ('t_repl', 't_repl2')
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE t_repl SYNC;
+
+SYSTEM DROP  TABLE t_repl2 SYNC;
+
+------------------------------------------------------------------------------
+-- 5. BAD CASES
+------------------------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS t_bad SYNC;
 
 -- Unknown index type
 CREATE TABLE t_bad

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS nnd;
 CREATE TABLE nnd
 (
     id Int8, ts DateTime64(3, 'UTC'), metric Float64

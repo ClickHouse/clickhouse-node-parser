@@ -1,3 +1,6 @@
+-- Tags: no-parallel-replicas
+SYSTEM DROP  TABLE IF EXISTS null_in;
+
 CREATE TABLE null_in
 (
     dt DateTime,
@@ -102,6 +105,8 @@ SELECT count() == 3
 FROM null_in
 WHERE s GLOBAL NOT IN ('1', '3');
 
+SYSTEM DROP  TABLE IF EXISTS test_set;
+
 CREATE TABLE test_set
 (
     i Nullable(int)
@@ -168,3 +173,5 @@ WHERE i IN (test_set2);
 SELECT count() == 3
 FROM null_in
 WHERE i GLOBAL IN (test_set2);
+
+SYSTEM DROP  TABLE test_set2;

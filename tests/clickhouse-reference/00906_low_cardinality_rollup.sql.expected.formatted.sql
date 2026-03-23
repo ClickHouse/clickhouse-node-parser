@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE if exists lc;
+
 CREATE TABLE lc
 (
     a LowCardinality(Nullable(String)),

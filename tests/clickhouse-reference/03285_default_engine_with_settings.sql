@@ -1,3 +1,8 @@
+-- Tags: memory-engine
+-- https://github.com/ClickHouse/ClickHouse/issues/73099
+
+DROP TABLE IF EXISTS example_table;
+DROP TABLE IF EXISTS example_table2;
 set default_table_engine = 'MergeTree';
 CREATE TABLE example_table (id UInt32, data String) ORDER BY id SETTINGS max_part_loading_threads=8;
 SET default_table_engine = 'Memory';

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 03561_t0, 03561_t1, 03561_v0, 03561_v1;
+
 SET allow_materialized_view_with_bad_select = 1;
 
 CREATE TABLE `03561_t0`

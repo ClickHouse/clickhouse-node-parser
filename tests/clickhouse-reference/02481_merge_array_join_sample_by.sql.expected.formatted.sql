@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS 02481_mergetree;
+
+SYSTEM DROP  TABLE IF EXISTS 02481_merge;
+
 CREATE TABLE `02481_mergetree`
 (
     x UInt64,
@@ -35,3 +39,7 @@ FROM
     `02481_merge` SAMPLE 1/2
 ARRAY JOIN arr
 WHERE x != 0;
+
+SYSTEM DROP  TABLE 02481_mergetree;
+
+SYSTEM DROP  TABLE 02481_merge;

@@ -1,3 +1,8 @@
+-- Tags: no-replicated-database
+
+DROP TABLE IF EXISTS data_null;
+DROP TABLE IF EXISTS set_null;
+DROP TABLE IF EXISTS cannot_be_nullable;
 SET data_type_default_nullable='false';
 CREATE TABLE data_null (
     a INT NULL,
@@ -29,3 +34,6 @@ INSERT INTO set_null VALUES (NULL, 2, NULL, NULL, NULL);
 SELECT toTypeName(a), toTypeName(b), toTypeName(c), toTypeName(d), toTypeName(f) FROM set_null;
 CREATE TABLE cannot_be_nullable (n Int8, a Array(UInt8)) ENGINE=Memory; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 CREATE TABLE cannot_be_nullable (n Int8, a Array(UInt8) NOT NULL) ENGINE=Memory;
+DROP TABLE data_null;
+DROP TABLE set_null;
+DROP TABLE cannot_be_nullable;

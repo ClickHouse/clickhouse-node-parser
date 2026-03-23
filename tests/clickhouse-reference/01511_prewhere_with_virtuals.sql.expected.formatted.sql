@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS  test_not_found_column_nothing;
+
 CREATE TABLE test_not_found_column_nothing
 (
     col001 UInt8,
@@ -21,3 +23,5 @@ ORDER BY _part ASC;
 SELECT _part
 FROM test_not_found_column_nothing
 PREWHERE col001 = 0;
+
+SYSTEM DROP  TABLE test_not_found_column_nothing;

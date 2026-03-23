@@ -1,3 +1,10 @@
+-- Allow PREWHERE when Merge has DEFAULT and MergeTree has MATERIALIZED
+SYSTEM DROP  TABLE IF EXISTS m;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE m
 (
     a String,
@@ -51,3 +58,10 @@ SELECT *
 FROM m
 WHERE f = 0
 SETTINGS optimize_move_to_prewhere = 1;
+
+-- { echoOff }
+SYSTEM DROP  TABLE m;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;

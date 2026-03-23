@@ -181,6 +181,8 @@ SELECT scalarProduct((1, 2, 3), (4, 5, 6));
 
 SELECT arrayDotProduct([1, 2, 3], [4, 5, 6]); -- actually no alias but the internal function for arrays
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt64,
@@ -226,3 +228,5 @@ SELECT
     arrayDotProduct([5, 2, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2]::Array(UInt32), vec)
 FROM tab
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE tab;

@@ -1,4 +1,6 @@
 select '--- Data ---';
+DROP VIEW IF EXISTS V_DELTA;
+DROP TABLE IF EXISTS users;
 CREATE TABLE users (uid Int16, name String, age Int16) ENGINE=Memory;
 INSERT INTO users VALUES (1231, 'John', 33);
 INSERT INTO users VALUES (6666, 'Ksenia', 48);
@@ -44,3 +46,5 @@ select uid, name, age from users
 where age >= {a3: Int32} AND age <= {a4: Int32}
 )
 order by uid;
+DROP VIEW V_DELTA;
+DROP TABLE users;

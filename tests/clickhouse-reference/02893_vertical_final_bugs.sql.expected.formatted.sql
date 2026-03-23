@@ -1,3 +1,8 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/64543
+SYSTEM DROP  TABLE IF EXISTS foo;
+
+SYSTEM DROP  TABLE IF EXISTS bar;
+
 CREATE TABLE foo
 (
     id UInt64,
@@ -27,6 +32,9 @@ INNER JOIN foo
     USING (id)
 WHERE bar.seq > foo.seq
 SETTINGS final = 1;
+
+-- Same problem possible can happen with array join
+SYSTEM DROP  TABLE IF EXISTS t;
 
 CREATE TABLE t
 (

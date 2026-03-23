@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (
   n UInt32, x UInt32, y UInt32, z UInt32,
   projection p (

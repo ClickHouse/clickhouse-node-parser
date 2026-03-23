@@ -1,5 +1,7 @@
 SET optimize_trivial_insert_select = 1;
 
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     i int,
@@ -21,3 +23,5 @@ SELECT *
 FROM x
 PREWHERE _part_offset = 0
 SETTINGS max_bytes_to_read = 98312;
+
+SYSTEM drop  table x;

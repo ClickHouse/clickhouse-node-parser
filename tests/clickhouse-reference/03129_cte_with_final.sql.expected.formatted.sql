@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     key Int64,
@@ -10,3 +12,5 @@ ORDER BY key;
 INSERT INTO t;
 
 SET enable_analyzer = 1;
+
+SYSTEM DROP  TABLE t;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     n UInt32,
@@ -16,3 +18,5 @@ SELECT
 FROM t
 GROUP BY n
 ORDER BY n ASC;
+
+SYSTEM drop  table t;

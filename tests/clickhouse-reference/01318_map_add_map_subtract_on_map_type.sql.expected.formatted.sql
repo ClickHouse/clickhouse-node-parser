@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tab;
+
 CREATE TABLE tab
 ENGINE = Memory() AS
 (SELECT map(1, toInt32(2), number, 2) AS m
@@ -14,6 +16,9 @@ FROM tab;
 
 SELECT mapAdd(cast(m, 'Map(UInt8, UInt8)'), map(1, 1), map(2, 2))
 FROM tab;
+
+-- cleanup
+SYSTEM drop  table tab;
 
 -- check types
 SELECT

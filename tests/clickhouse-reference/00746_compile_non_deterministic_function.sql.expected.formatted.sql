@@ -2,6 +2,8 @@ SET compile_expressions = 1;
 
 SET min_count_to_compile_expression = 1;
 
+SYSTEM DROP  TABLE IF EXISTS time_table;
+
 CREATE TABLE time_table
 (
     timecol DateTime,

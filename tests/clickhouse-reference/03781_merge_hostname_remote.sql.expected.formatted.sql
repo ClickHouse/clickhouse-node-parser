@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS merge_host_remote_tab_a;
+
+SYSTEM DROP  TABLE IF EXISTS merge_host_remote_tab_b;
+
 CREATE TABLE merge_host_remote_tab_a
 (
     number UInt32
@@ -17,3 +21,7 @@ SELECT
 FROM merge(currentDatabase(), '^merge_host_remote_tab_')
 ORDER BY number ASC
 FORMAT Null;
+
+SYSTEM DROP  TABLE merge_host_remote_tab_a;
+
+SYSTEM DROP  TABLE merge_host_remote_tab_b;

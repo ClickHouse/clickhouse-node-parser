@@ -112,3 +112,13 @@ WHERE initial_query_id =
       )
 ORDER BY view_name
 FORMAT Vertical;
+-- TEARDOWN
+DROP TABLE matview_a_to_b;
+DROP TABLE matview_b_to_c;
+DROP TABLE matview_join_d_e;
+DROP TABLE table_f;
+DROP TABLE table_e;
+DROP TABLE table_d;
+DROP TABLE table_c;
+DROP TABLE table_b;
+DROP TABLE table_a;

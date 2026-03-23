@@ -2,6 +2,10 @@ SET enable_json_type = 1;
 
 SET enable_dynamic_type = 1;
 
+SYSTEM drop  table if exists src;
+
+SYSTEM drop  table if exists dst;
+
 CREATE TABLE src
 (
     d Dynamic
@@ -24,6 +28,10 @@ FROM remote('127.0.0.2', currentDatabase(), src);
 
 SELECT isDynamicElementInSharedData(d)
 FROM dst;
+
+SYSTEM drop  table src;
+
+SYSTEM drop  table dst;
 
 CREATE TABLE src
 (

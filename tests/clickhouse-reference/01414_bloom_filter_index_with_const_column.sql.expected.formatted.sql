@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_bloom_filter_index;
+
 CREATE TABLE test_bloom_filter_index
 (
     WatchID UInt64,

@@ -1,3 +1,4 @@
+drop table if exists geohash_test_data;
 create table geohash_test_data (
 	latitude  Float64,
 	longitude Float64,

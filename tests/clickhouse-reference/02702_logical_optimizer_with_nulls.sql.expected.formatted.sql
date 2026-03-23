@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS 02702_logical_optimizer;
+
 CREATE TABLE `02702_logical_optimizer`
 (
     a Int32,
@@ -23,6 +25,10 @@ WHERE a = 1
     OR 3 = a
     OR 2 = a
     OR a = NULL;
+
+SYSTEM DROP  TABLE 02702_logical_optimizer;
+
+SYSTEM DROP  TABLE IF EXISTS 02702_logical_optimizer_with_null_column;
 
 CREATE TABLE `02702_logical_optimizer_with_null_column`
 (
@@ -53,3 +59,5 @@ SELECT (k = 2)
 FROM (
         SELECT 1 AS k
     );
+
+SYSTEM DROP  TABLE 02702_logical_optimizer_with_null_column;

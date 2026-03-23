@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS test_move_partition_src;
+DROP TABLE IF EXISTS test_move_partition_dest;
 CREATE TABLE IF NOT EXISTS test_move_partition_src (
     pk UInt8,
     val UInt32
@@ -13,3 +15,5 @@ CREATE TABLE IF NOT EXISTS test_move_partition_dest (
 INSERT INTO test_move_partition_src SELECT number % 2, number FROM system.numbers LIMIT 10000000;
 SELECT count() FROM test_move_partition_src;
 SELECT count() FROM test_move_partition_dest;
+DROP TABLE test_move_partition_src;
+DROP TABLE test_move_partition_dest;

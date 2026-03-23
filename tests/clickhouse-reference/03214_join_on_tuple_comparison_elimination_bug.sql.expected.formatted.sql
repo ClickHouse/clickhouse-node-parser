@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS a;
+
+SYSTEM DROP  TABLE IF EXISTS b;
+
 CREATE TABLE a
 (
     key Nullable(String)

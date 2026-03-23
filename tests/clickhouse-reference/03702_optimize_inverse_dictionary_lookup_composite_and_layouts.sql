@@ -4,6 +4,16 @@
 SET enable_analyzer = 1;
 SET optimize_inverse_dictionary_lookup = 1;
 SET optimize_or_like_chain = 0;
+DROP DICTIONARY IF EXISTS dict_prices_ckh;
+DROP DICTIONARY IF EXISTS dict_prices_ch_array;
+DROP DICTIONARY IF EXISTS dict_prices_ck_sparse_hashed;
+DROP DICTIONARY IF EXISTS dict_items_flat;
+DROP DICTIONARY IF EXISTS dict_items_hashed;
+DROP DICTIONARY IF EXISTS dict_items_hashed_array;
+DROP DICTIONARY IF EXISTS dict_items_sparse_hashed;
+DROP TABLE IF EXISTS ref_prices_ckh;
+DROP TABLE IF EXISTS ref_items_flat;
+DROP TABLE IF EXISTS f;
 CREATE TABLE ref_prices_ckh
 (
     k1 UInt64,

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_byte_size_number0;
+
 CREATE TABLE test_byte_size_number0
 (
     key Int32,
@@ -63,6 +65,8 @@ SELECT
 FROM test_byte_size_number0
 ORDER BY key ASC;
 
+SYSTEM drop  table if exists test_byte_size_number1;
+
 CREATE TABLE test_byte_size_number1
 (
     key Int32,
@@ -124,6 +128,8 @@ SELECT
     toTypeName(generateUUIDv4()),
     byteSize(generateUUIDv4());
 
+SYSTEM drop  table if exists test_byte_size_string;
+
 CREATE TABLE test_byte_size_string
 (
     key Int32,
@@ -161,6 +167,9 @@ SELECT
     byteSize('a'),
     'abcde',
     byteSize('abcde');
+
+-- simple arrays --
+SYSTEM drop  table if exists test_byte_size_array;
 
 CREATE TABLE test_byte_size_array
 (
@@ -229,6 +238,9 @@ SELECT
     [toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'),toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0')],
     byteSize([toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'),toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0')]);
 
+-- complex arrays --
+SYSTEM drop  table if exists test_byte_size_complex_array;
+
 CREATE TABLE test_byte_size_complex_array
 (
     key Int32,
@@ -280,6 +292,9 @@ SELECT
     [[], [''], ['','a']],
     byteSize([[], [''], ['','a']]);
 
+-- others --
+SYSTEM drop  table if exists test_byte_size_other;
+
 CREATE TABLE test_byte_size_other
 (
     key Int32,
@@ -325,6 +340,9 @@ SELECT
     toLowCardinality('abced'),
     toTypeName(toLowCardinality('abced')),
     byteSize(toLowCardinality('abced'));
+
+-- more complex fields --
+SYSTEM drop  table if exists test_byte_size_more_complex;
 
 CREATE TABLE test_byte_size_more_complex
 (

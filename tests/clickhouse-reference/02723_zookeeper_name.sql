@@ -10,3 +10,5 @@ WHERE database = currentDatabase()
 GROUP BY table, zookeeper_name
 ORDER BY table, zookeeper_name
 FORMAT CSV;
+DROP TABLE t1;
+DROP TABLE t2;

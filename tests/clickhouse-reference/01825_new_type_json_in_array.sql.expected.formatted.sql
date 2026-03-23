@@ -9,6 +9,8 @@ SET allow_suspicious_types_in_group_by = 1;
 
 SET output_format_native_write_json_as_string = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t_json_array;
+
 CREATE TABLE t_json_array
 (
     id UInt32,
@@ -63,6 +65,8 @@ SELECT arr.k1
 FROM t_json_array
 GROUP BY arr.k1
 ORDER BY toString(arr.k1) ASC;
+
+SYSTEM DROP  TABLE t_json_array;
 
 SELECT *
 FROM values('arr Array(JSON)', '[''{"x" : 1}'']')

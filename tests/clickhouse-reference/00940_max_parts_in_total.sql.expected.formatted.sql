@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists max_parts_in_total;
+
 CREATE TABLE max_parts_in_total
 (
     x UInt64
@@ -15,3 +17,5 @@ FROM numbers(10);
 SELECT 1;
 
 INSERT INTO max_parts_in_total SELECT 123; -- { serverError TOO_MANY_PARTS }
+
+SYSTEM drop  table max_parts_in_total;

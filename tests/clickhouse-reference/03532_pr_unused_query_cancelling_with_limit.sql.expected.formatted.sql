@@ -1,3 +1,7 @@
+-- the test just execute simple select with limit with PR 
+-- to test concurrent query cancellation (1) because of limit and (2) because of reading assignment is completed by PR coordinator
+SYSTEM DROP  TABLE IF EXISTS pr_tt;
+
 CREATE TABLE pr_tt
 (
     k UInt64,
@@ -19,3 +23,5 @@ SELECT *
 FROM pr_tt
 LIMIT 10
 FORMAT Null;
+
+SYSTEM DROP  TABLE pr_tt;

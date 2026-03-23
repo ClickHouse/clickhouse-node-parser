@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS session;
+
+SYSTEM DROP  TABLE IF EXISTS queue;
+
+SYSTEM DROP  TABLE IF EXISTS forward;
+
 CREATE TABLE session
 (
     day Date,
@@ -33,3 +39,9 @@ FROM session;
 
 SELECT *
 FROM forward;
+
+SYSTEM DROP  TABLE session;
+
+SYSTEM DROP  TABLE queue;
+
+SYSTEM DROP  TABLE forward;

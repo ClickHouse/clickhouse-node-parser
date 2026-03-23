@@ -14,6 +14,8 @@ SELECT arraySort(arraySymmetricDifference([1, 2], [1, 2]));
 SELECT arraySort(arraySymmetricDifference([1, 2], [1, 2], [1, 2]));
 SELECT arraySort(arraySymmetricDifference([1, 2], [1, 2], [1, 3]));
 SELECT toTypeName(arraySymmetricDifference([(1, ['a', 'b']), (Null, ['c'])], [(2, ['c', Null]), (1, ['a', 'b'])]));
+-- Table with batch inserts
+DROP TABLE IF EXISTS test_arraySymmetricDifference;
 CREATE TABLE test_arraySymmetricDifference
 (
     `id` Int8,

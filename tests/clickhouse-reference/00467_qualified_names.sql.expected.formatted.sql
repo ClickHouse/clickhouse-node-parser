@@ -62,6 +62,8 @@ FROM one AS t;
 
 USE {CLICKHOUSE_DATABASE:Identifier};
 
+SYSTEM DROP  TABLE IF EXISTS nested;
+
 CREATE TABLE nested
 (
     nest Nested(a UInt8, b String)
@@ -79,6 +81,8 @@ SELECT
     t.nest.b,
     t.*
 FROM nested AS t;
+
+SYSTEM DROP  TABLE nested;
 
 SELECT number
 FROM numbers(2);

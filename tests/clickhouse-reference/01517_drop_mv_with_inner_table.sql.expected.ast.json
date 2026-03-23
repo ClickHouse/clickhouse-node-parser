@@ -16,6 +16,16 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "drop  database if exists db_01517_atomic",
+    "leadingComments": [
+      "--",
+      "-- Atomic no SYNC",
+      "-- (should go first to check that thread for DROP TABLE does not hang)",
+      "--"
+    ]
+  },
+  {
     "kind": "createDatabase",
     "name": "db_01517_atomic",
     "engine": {
@@ -67,6 +77,26 @@
     }
   },
   {
+    "kind": "system",
+    "body": "drop  table db_01517_atomic.mv"
+  },
+  {
+    "kind": "system",
+    "body": "drop  table db_01517_atomic.source sync",
+    "leadingComments": [
+      "-- ensure that the inner had been removed after sync drop"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "drop  database if exists db_01517_atomic_sync",
+    "leadingComments": [
+      "--",
+      "-- Atomic",
+      "--"
+    ]
+  },
+  {
     "kind": "createDatabase",
     "name": "db_01517_atomic_sync",
     "engine": {
@@ -116,6 +146,22 @@
         "table": "source"
       }
     }
+  },
+  {
+    "kind": "system",
+    "body": "drop  table db_01517_atomic_sync.mv sync",
+    "leadingComments": [
+      "-- drops it and hangs with Atomic engine, due to recursive DROP"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "drop  database if exists db_01517_ordinary",
+    "leadingComments": [
+      "--",
+      "-- Ordinary",
+      "---"
+    ]
   },
   {
     "kind": "set",
@@ -183,5 +229,32 @@
         "table": "source"
       }
     }
+  },
+  {
+    "kind": "system",
+    "body": "drop  table db_01517_ordinary.mv sync",
+    "leadingComments": [
+      "-- drops it and hangs with Atomic engine, due to recursive DROP"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "drop  table db_01517_atomic_sync.source"
+  },
+  {
+    "kind": "system",
+    "body": "drop  table db_01517_ordinary.source"
+  },
+  {
+    "kind": "system",
+    "body": "drop  database db_01517_atomic"
+  },
+  {
+    "kind": "system",
+    "body": "drop  database db_01517_atomic_sync"
+  },
+  {
+    "kind": "system",
+    "body": "drop  database db_01517_ordinary"
   }
 ]

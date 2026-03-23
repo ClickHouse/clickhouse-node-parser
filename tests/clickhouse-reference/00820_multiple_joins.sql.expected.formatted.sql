@@ -1,5 +1,15 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
+SYSTEM DROP  TABLE IF EXISTS table3;
+
+SYSTEM DROP  TABLE IF EXISTS table5;
+
+SYSTEM DROP  TABLE IF EXISTS table_set;
+
 CREATE TABLE table1
 (
     a UInt32
@@ -227,3 +237,13 @@ INNER JOIN table3 AS t3
 INNER JOIN table5 AS t5
     ON t3.c = t5.c
 WHERE t1.a IN (table_set);
+
+SYSTEM DROP  TABLE table_set;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;
+
+SYSTEM DROP  TABLE table3;
+
+SYSTEM DROP  TABLE table5;

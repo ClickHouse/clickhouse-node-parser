@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS db;
+
 CREATE TABLE tb
 (
     date Date,
@@ -22,3 +24,5 @@ SELECT *
 FROM tb
 WHERE idx >= 0
     AND idx <= 2;
+
+SYSTEM DROP  TABLE tb;

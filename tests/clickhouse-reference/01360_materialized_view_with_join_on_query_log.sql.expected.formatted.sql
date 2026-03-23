@@ -1,3 +1,9 @@
+-- Tags: no-parallel, memory-engine
+-- no-parallel: Slows down query_log
+SYSTEM DROP  TABLE IF EXISTS slow_log;
+
+SYSTEM DROP  TABLE IF EXISTS expected_times;
+
 CREATE TABLE expected_times
 (
     QUERY_GROUP_ID String,
@@ -52,3 +58,7 @@ FROM slow_log
 WHERE current_database = currentDatabase()
 GROUP BY QUERY_GROUP_ID
 ORDER BY QUERY_GROUP_ID ASC;
+
+SYSTEM DROP  TABLE slow_log;
+
+SYSTEM DROP  TABLE expected_times;

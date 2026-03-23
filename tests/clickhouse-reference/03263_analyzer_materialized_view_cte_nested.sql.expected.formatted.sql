@@ -1,5 +1,9 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
+SYSTEM DROP  VIEW IF EXISTS test_mv;
+
 CREATE TABLE test_table
 ENGINE = MergeTree
 ORDER BY tuple() AS
@@ -30,3 +34,7 @@ INSERT INTO test_table;
 
 SELECT *
 FROM test_mv;
+
+SYSTEM DROP  VIEW test_mv;
+
+SYSTEM DROP  TABLE test_table;

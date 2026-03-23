@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS temp;
+
 CREATE TABLE temp
 (
     x Decimal(38, 2),

@@ -1,3 +1,6 @@
+-- Tags: long, no-object-storage
+SYSTEM DROP  TABLE IF EXISTS mt;
+
 CREATE TABLE mt
 (
     x UInt64
@@ -17,3 +20,5 @@ SELECT
     count(),
     sum(x)
 FROM mt;
+
+SYSTEM DROP  TABLE mt;

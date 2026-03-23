@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS delta_table;
+
+SYSTEM DROP  TABLE IF EXISTS zstd_table;
+
+SYSTEM DROP  TABLE IF EXISTS lz4_table;
+
 CREATE TABLE delta_table
 (
     id UInt64 CODEC(Delta(tuple()))

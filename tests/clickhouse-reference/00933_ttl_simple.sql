@@ -11,6 +11,7 @@
 --     └─────────────────────┴───────────────────────────────────────────────┴────────────┘
 SET session_timezone = '';
 SET allow_suspicious_ttl_expressions = 1;
+drop table if exists ttl_00933_1;
 -- Column TTL works only with wide parts, because it's very expensive to apply it for compact parts
 
 create table ttl_00933_1 (d DateTime, a Int ttl d + interval 1 second, b Int ttl d + interval 1 second) engine = MergeTree order by tuple() partition by toMinute(d) settings min_bytes_for_wide_part = 0;

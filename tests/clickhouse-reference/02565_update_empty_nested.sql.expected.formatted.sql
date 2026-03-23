@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_update_empty_nested;
+
 CREATE TABLE t_update_empty_nested
 (
     id UInt32,
@@ -22,3 +24,5 @@ SELECT
     sum(length(nested.arr1)),
     sum(length(nested.arr2))
 FROM t_update_empty_nested;
+
+SYSTEM DROP  TABLE t_update_empty_nested;

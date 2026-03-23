@@ -30,6 +30,9 @@ SELECT third_column FROM {CLICKHOUSE_DATABASE:Identifier}.dict1 WHERE key_column
 SELECT dictGetFloat64({CLICKHOUSE_DATABASE:String} || '.dict1', 'fourth_column', toUInt64(14));
 SELECT fourth_column FROM {CLICKHOUSE_DATABASE:Identifier}.dict1 WHERE key_column = 14;
 SELECT count(distinct(dictGetUInt8({CLICKHOUSE_DATABASE:String} || '.dict1', 'second_column', toUInt64(number)))) from numbers(100);
+DROP DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1;
+-- SOURCE(CLICKHOUSE(...)) uses default params if not specified
+DROP DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict1;
 CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1
 (
   key_column UInt64 DEFAULT 0,
@@ -91,3 +94,4 @@ SELECT dictGet(default.dict3, 'some_column', toUInt64(12)); -- {serverError BAD_
 USE default;
 -- alias should be handled correctly
 SELECT {CLICKHOUSE_DATABASE:String} || '.dict3' as n, dictGet(n, 'some_column', toUInt64(12));
+DROP TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict;

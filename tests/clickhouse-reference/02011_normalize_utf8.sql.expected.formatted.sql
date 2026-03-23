@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS normalize_test;
+
 CREATE TABLE normalize_test
 (
     id int,

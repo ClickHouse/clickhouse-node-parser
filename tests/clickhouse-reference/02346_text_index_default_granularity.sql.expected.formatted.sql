@@ -2,6 +2,9 @@
 -- Tests that text search indexes use a (non-standard) index granularity of 64 by default.
 SET enable_full_text_index = 1;
 
+-- After CREATE TABLE
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     k UInt64,
@@ -16,6 +19,8 @@ FROM `system`.data_skipping_indices
 WHERE database = currentDatabase()
     AND table = 'tab'
     AND name = 'idx';
+
+SYSTEM DROP  TABLE tab;
 
 -- After CREATE + ALTER ADD TABLE
 CREATE TABLE tab

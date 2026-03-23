@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS dst;
+DROP TABLE IF EXISTS mv_dst;
+DROP TABLE IF EXISTS mv_first;
+DROP TABLE IF EXISTS mv_second;
 CREATE TABLE dst
 (
     `key` Int64,
@@ -40,6 +44,10 @@ SELECT
     _part
 FROM mv_dst
 ORDER by all;
+DROP TABLE mv_second;
+DROP TABLE mv_first;
+DROP TABLE mv_dst;
+DROP TABLE dst;
 CREATE MATERIALIZED VIEW mv_dst
 (
     `key` Int64,

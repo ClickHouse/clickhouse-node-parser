@@ -1,6 +1,9 @@
 -- Tags: no-parallel, no-fasttest
 
 SET send_logs_level = 'fatal';
+DROP DATABASE IF EXISTS memory_db;
+DROP DATABASE IF EXISTS db_01018;
+DROP DATABASE IF EXISTS database_for_dict_01018;
 CREATE DATABASE database_for_dict_01018;
 CREATE TABLE database_for_dict_01018.table_for_dict
 (
@@ -23,6 +26,7 @@ SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_fo
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(FLAT());
 SELECT database, name FROM system.dictionaries WHERE database='db_01018' AND name LIKE 'dict1';
+DROP DICTIONARY IF EXISTS db_01018.dict1;
 CREATE DATABASE memory_db ENGINE = Memory;
 CREATE DICTIONARY memory_db.dict2
 (
@@ -45,3 +49,5 @@ PRIMARY KEY key_column
 SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_for_dict' PASSWORD '' DB 'database_for_dict_01018'))
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(FLAT());
+DROP DICTIONARY memory_db.dict2;
+DROP TABLE IF EXISTS database_for_dict_01018.table_for_dict;

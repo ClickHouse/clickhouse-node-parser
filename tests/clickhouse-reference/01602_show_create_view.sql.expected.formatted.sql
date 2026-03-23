@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS test_1602;
+
 CREATE DATABASE test_1602;
 
 CREATE TABLE test_1602.tbl

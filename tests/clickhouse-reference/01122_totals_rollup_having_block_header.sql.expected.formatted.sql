@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS rollup_having;
+
 CREATE TABLE rollup_having
 (
     a Nullable(String),
@@ -35,3 +37,5 @@ WITH ROLLUP
 WITH TOTALS
 HAVING isNotNull(a)
     AND isNotNull(b); -- { serverError NOT_IMPLEMENTED }
+
+SYSTEM DROP  TABLE rollup_having;

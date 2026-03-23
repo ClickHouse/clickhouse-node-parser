@@ -1,3 +1,8 @@
+-- Regression test for https://github.com/ClickHouse/ClickHouse/issues/84856
+-- Skip index of type `set` should not throw `Bad get: has Null` when
+-- the indexed column contains NULL values.
+SYSTEM DROP  TABLE IF EXISTS t_skip_index_null;
+
 CREATE TABLE t_skip_index_null
 (
     id UInt64,
@@ -26,3 +31,5 @@ ORDER BY id ASC;
 SELECT count()
 FROM t_skip_index_null
 WHERE val = 'nonexistent';
+
+SYSTEM DROP  TABLE t_skip_index_null;

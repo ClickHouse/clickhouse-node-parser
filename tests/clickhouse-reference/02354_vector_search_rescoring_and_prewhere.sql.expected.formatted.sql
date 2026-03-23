@@ -4,6 +4,8 @@ SET enable_analyzer = 1;
 
 SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to force local plan for parallel replicas
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id Int32,
@@ -108,3 +110,5 @@ WHERE attr1 > 110
     AND attr2 > 50
 ORDER BY L2Distance(vec, [0.2, 0.3]) ASC
 LIMIT 4;
+
+SYSTEM DROP  TABLE tab;

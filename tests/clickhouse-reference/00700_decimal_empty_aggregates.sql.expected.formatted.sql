@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS decimal;
+
 CREATE TABLE decimal
 (
     a Decimal(6, 4),
@@ -413,3 +415,5 @@ FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT 1
 LIMIT 0;
+
+SYSTEM DROP  TABLE decimal;

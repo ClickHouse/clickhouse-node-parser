@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x Tuple(a UInt64, b String)
@@ -78,3 +80,5 @@ WHERE x.b = 'World'
 SETTINGS
     max_rows_to_read = 1,
     parallel_replicas_index_analysis_only_on_coordinator = 0;
+
+SYSTEM DROP  TABLE test;

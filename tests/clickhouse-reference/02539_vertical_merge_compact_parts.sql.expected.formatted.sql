@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_compact_vertical_merge;
+
 CREATE TABLE t_compact_vertical_merge
 (
     id UInt64,
@@ -13,3 +15,5 @@ INSERT INTO t_compact_vertical_merge SELECT
     toString(number),
     range(number % 10)
 FROM numbers(40);
+
+SYSTEM DROP  TABLE t_compact_vertical_merge;

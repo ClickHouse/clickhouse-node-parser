@@ -31,3 +31,9 @@ INSERT INTO test_table_default (data_1);
 
 SELECT *
 FROM test_table_default;
+
+SYSTEM DROP  TABLE test_table_default;
+
+SYSTEM DROP  DICTIONARY test_dictionary;
+
+SYSTEM DROP  TABLE test_table;

@@ -1,3 +1,6 @@
+-- Tags: shard
+SYSTEM DROP  TABLE IF EXISTS limit_by;
+
 CREATE TABLE limit_by
 (
     Num UInt32,

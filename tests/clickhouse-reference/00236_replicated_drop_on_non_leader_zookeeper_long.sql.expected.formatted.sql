@@ -3,6 +3,10 @@
 -- no-shared-merge-tree: implemented replacement
 SET replication_alter_partitions_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS attach_r1;
+
+SYSTEM DROP  TABLE IF EXISTS attach_r2;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE attach_r1
@@ -22,3 +26,7 @@ INSERT INTO attach_r1;
 SELECT d
 FROM attach_r1
 ORDER BY d ASC;
+
+SYSTEM DROP  TABLE attach_r1;
+
+SYSTEM DROP  TABLE attach_r2;

@@ -1,5 +1,11 @@
 SET joined_subquery_requires_alias = 0;
 
+SYSTEM drop  table if exists tab1;
+
+SYSTEM drop  table if exists tab2;
+
+SYSTEM drop  table if exists tab3;
+
 CREATE TABLE tab1
 (
     a1 Int32,
@@ -299,3 +305,9 @@ FULL JOIN tab2
 ORDER BY
     a2 ASC,
     b2 + 1 ASC;
+
+SYSTEM drop  table tab1;
+
+SYSTEM drop  table tab2;
+
+SYSTEM drop  table tab3;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     i UInt64,
@@ -37,6 +39,8 @@ WHERE i IN (
         FROM numbers(4)
     );
 
+SYSTEM drop  table x;
+
 -- Projection analysis should not break other IN constructs. See https://github.com/ClickHouse/ClickHouse/issues/35336
 CREATE TABLE IF NOT EXISTS flows
 (
@@ -58,3 +62,5 @@ SELECT if(SrcAS IN (
 FROM flows
 WHERE 2 == 2
 ORDER BY SrcAS ASC;
+
+SYSTEM drop  table flows;

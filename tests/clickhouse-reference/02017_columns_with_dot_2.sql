@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_nested;
 CREATE TABLE test_nested
 (
     `id` String,
@@ -8,3 +9,4 @@ ENGINE = MergeTree()
 ORDER BY id;
 INSERT INTO test_nested VALUES('123', 'asd', [1,2]);
 SELECT * FROM test_nested;
+DROP TABLE test_nested;

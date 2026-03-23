@@ -1,3 +1,6 @@
+-- Tags: zookeeper, no-parallel
+SYSTEM DROP  TABLE IF EXISTS test_temporary_table_02989;
+
 CREATE TEMPORARY TABLE test_temporary_table_02989
 (
     id UInt64,
@@ -12,6 +15,10 @@ SELECT
 FROM `system`.tables
 WHERE name = 'test_temporary_table_02989'
     AND is_temporary;
+
+SYSTEM DROP  TABLE test_temporary_table_02989;
+
+SYSTEM DROP  TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -30,6 +37,10 @@ FROM `system`.tables
 WHERE database = currentDatabase()
     AND name = 'test_table';
 
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_replicated;
+
 CREATE TABLE test_table_replicated
 (
     id UInt64,
@@ -44,3 +55,5 @@ SELECT
 FROM `system`.tables
 WHERE database = currentDatabase()
     AND name = 'test_table_replicated';
+
+SYSTEM DROP  TABLE test_table_replicated;

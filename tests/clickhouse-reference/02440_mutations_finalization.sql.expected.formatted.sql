@@ -45,3 +45,5 @@ SELECT
 FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'mut';
+
+SYSTEM drop  table tmp; -- btw, it will check that mutation can be cancelled between blocks on shutdown

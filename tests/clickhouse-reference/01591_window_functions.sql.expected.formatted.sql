@@ -495,6 +495,10 @@ SELECT
     max(number) OVER (ORDER BY number ASC)
 FROM numbers(2);
 
+-- optimize_read_in_order conflicts with sorting for window functions, check that
+-- it is disabled.
+SYSTEM drop  table if exists window_mt;
+
 CREATE TABLE window_mt
 ENGINE = MergeTree
 ORDER BY number AS
@@ -518,6 +522,8 @@ FROM window_mt
 ORDER BY number ASC
 LIMIT 10
 SETTINGS optimize_read_in_order = 1;
+
+SYSTEM drop  table window_mt;
 
 -- some true window functions -- rank and friends
 SELECT

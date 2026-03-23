@@ -1,5 +1,7 @@
 SELECT '-- check that partition key with ignore works correctly';
 
+SYSTEM DROP  TABLE IF EXISTS partition_by_ignore SYNC;
+
 CREATE TABLE partition_by_ignore
 (
     ts DateTime,

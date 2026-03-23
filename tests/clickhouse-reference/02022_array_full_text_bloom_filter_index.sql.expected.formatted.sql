@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS bf_tokenbf_array_test;
+
+SYSTEM DROP  TABLE IF EXISTS bf_ngram_array_test;
+
 CREATE TABLE bf_tokenbf_array_test
 (
     row_id UInt32,
@@ -85,3 +89,7 @@ SELECT *
 FROM bf_ngram_array_test
 WHERE has(array_fixed, 'K3')
 SETTINGS force_data_skipping_indices = 'array_fixed_ngram';
+
+SYSTEM DROP  TABLE bf_tokenbf_array_test;
+
+SYSTEM DROP  TABLE bf_ngram_array_test;

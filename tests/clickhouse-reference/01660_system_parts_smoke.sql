@@ -5,6 +5,8 @@
 SELECT * FROM system.parts FORMAT Null;
 SELECT *, _state FROM system.parts FORMAT Null;
 SELECT _state FROM system.parts FORMAT Null;
+-- Create one table and see some columns in system.parts
+DROP TABLE IF EXISTS data_01660;
 CREATE TABLE data_01660 (key Int) Engine=MergeTree() ORDER BY key;
 -- Empty
 SELECT _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660';
@@ -16,4 +18,5 @@ SELECT name, _state FROM system.parts WHERE database = currentDatabase() AND tab
 SELECT name, active FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' ORDER BY name;
 SELECT count(), _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' GROUP BY _state ORDER BY _state;
 SELECT if (count() > 0, 'HAVE PARTS', 'NO PARTS'), _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' GROUP BY _state ORDER BY _state;
+DROP TABLE data_01660;
 SELECT * FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660';

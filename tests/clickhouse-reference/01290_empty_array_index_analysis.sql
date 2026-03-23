@@ -1,3 +1,4 @@
+drop table if exists count_lc_test;
 CREATE TABLE count_lc_test
 (
     `s` LowCardinality(String),
@@ -16,6 +17,7 @@ select * from count_lc_test where arr > [];
 select * from count_lc_test where arr < [];
 select * from count_lc_test where arr >= [];
 select * from count_lc_test where arr <= [];
+DROP TABLE count_lc_test;
 CREATE TABLE count_lc_test
 (
     `s` LowCardinality(String),

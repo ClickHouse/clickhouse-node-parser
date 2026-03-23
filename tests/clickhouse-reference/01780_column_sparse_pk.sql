@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t_sparse_pk;
+DROP TABLE IF EXISTS t_full_pk;
 CREATE TABLE t_sparse_pk (k UInt64, s String)
 ENGINE = MergeTree ORDER BY k
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.0, index_granularity = 1;

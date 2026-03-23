@@ -235,6 +235,13 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "DROP  TABLE IF EXISTS tab",
+    "leadingComments": [
+      "-- Issue #69010: A system table name appears as a literal. That's okay and must not throw."
+    ]
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -296,6 +303,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "DROP  TABLE tab"
   },
   {
     "kind": "select",
@@ -377,6 +388,14 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "DROP  TABLE IF EXISTS system",
+    "leadingComments": [
+      "-- Note how in the previous query ^^ 'system.one' is also a literal. ClusterAllReplicas gets special handling.",
+      "-- Criminal edge case that a user creates a table named \"system\". The query cache must not reject queries against it."
+    ]
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -415,6 +434,17 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "DROP  TABLE system"
+  },
+  {
+    "kind": "system",
+    "body": "DROP  TABLE IF EXISTS system.system",
+    "leadingComments": [
+      "-- But queries against system.system are rejected."
     ]
   },
   {
@@ -462,5 +492,9 @@
     "trailingComments": [
       "-- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }"
     ]
+  },
+  {
+    "kind": "system",
+    "body": "DROP  TABLE system.system"
   }
 ]

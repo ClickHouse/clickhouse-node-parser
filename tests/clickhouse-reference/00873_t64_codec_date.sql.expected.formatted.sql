@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t64;
+
 CREATE TABLE t64
 (
     date16 Date,
@@ -27,3 +29,5 @@ WHERE date16 != t_date16;
 SELECT *
 FROM t64
 WHERE date_32 != t_date32;
+
+SYSTEM DROP  TABLE t64;

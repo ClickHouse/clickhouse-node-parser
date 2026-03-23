@@ -48,6 +48,7 @@ CREATE TABLE tab (
 ) ENGINE = MergeTree() ORDER BY id;
 INSERT INTO tab (id, str) VALUES (1, 'abc+ def-'), (2, 'hello: world/'), (3, 'xäöüx code;');
 SELECT tokens(str, 'splitByNonAlpha') AS tokenized, toTypeName(tokenized), isConstant(tokenized) FROM tab;
+DROP TABLE tab;
 INSERT INTO tab (id, str) VALUES (1, 'abc def'), (2, 'ClickHouse');
 SELECT tokens(str, 'ngrams', 3) AS tokenized, toTypeName(tokenized), isConstant(tokenized) FROM tab;
 INSERT INTO tab (id, str) VALUES (1, '()()a()bc()d'), (2, ',()a(),bc,(),d,');

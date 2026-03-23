@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS foo;
+DROP TABLE IF EXISTS foo_merge;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE foo(Id Int32, Val Int32) Engine=MergeTree PARTITION BY Val ORDER BY Id;
 INSERT INTO foo SELECT number, number%5 FROM numbers(100000);
 CREATE TABLE foo_merge as foo ENGINE=Merge(currentDatabase(), '^foo');

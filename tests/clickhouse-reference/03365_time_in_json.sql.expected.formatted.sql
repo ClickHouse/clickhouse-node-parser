@@ -1,6 +1,13 @@
 -- Test Time and Time64 types in JSON
 SET enable_time_time64_type = 1;
 
+-- Clean up
+SYSTEM DROP  TABLE IF EXISTS json_time_test;
+
+SYSTEM DROP  TABLE IF EXISTS json_time64_test;
+
+SYSTEM DROP  TABLE IF EXISTS json_splits;
+
 -- Time type in JSON
 CREATE TABLE json_time_test
 (

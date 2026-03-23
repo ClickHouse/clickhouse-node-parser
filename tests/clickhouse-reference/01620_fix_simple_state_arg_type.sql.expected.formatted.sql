@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists ay;
+
 CREATE TABLE ay
 ENGINE = AggregatingMergeTree
 ORDER BY i AS

@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS local_table_l;
+
+SYSTEM DROP  TABLE IF EXISTS local_table_r;
+
+SYSTEM DROP  TABLE IF EXISTS dis_table_r;
+
 CREATE TABLE local_table_l
 (
     c Int32
@@ -37,3 +43,9 @@ FROM
     local_table_l AS l
 RIGHT JOIN dis_table_r AS r
     ON l.c = r.c;
+
+SYSTEM DROP  TABLE local_table_l;
+
+SYSTEM DROP  TABLE local_table_r;
+
+SYSTEM DROP  TABLE dis_table_r;

@@ -1,7 +1,13 @@
+-- Tags: no-parallel
+-- CNF optimization uses QueryNodeHash to order conditions. We need fixed database.table.column identifier name to stabilize result
+SYSTEM DROP  DATABASE IF EXISTS db_memory_01625;
+
 CREATE DATABASE db_memory_01625
 ENGINE = Memory;
 
 USE db_memory_01625;
+
+SYSTEM DROP  TABLE IF EXISTS index_append_test_test;
 
 CREATE TABLE index_append_test_test
 (
@@ -113,3 +119,7 @@ FROM (
 WHERE like(`explain`, '%Prewhere%')
     OR like(`explain`, '%Filter column%')
 SETTINGS enable_analyzer = 1;
+
+SYSTEM DROP  TABLE index_append_test_test;
+
+SYSTEM DROP  DATABASE db_memory_01625;

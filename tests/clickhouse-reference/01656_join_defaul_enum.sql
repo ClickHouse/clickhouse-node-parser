@@ -11,3 +11,5 @@ SELECT keycol, enum_col FROM table_with_enum LEFT JOIN table_key USING (keycol) 
 SELECT keycol, enum_col FROM table_with_enum RIGHT JOIN table_key USING (keycol) ORDER BY keycol;
 SELECT keycol, enum_col FROM table_with_enum FULL JOIN table_key USING (keycol) ORDER BY keycol;
 SET join_algorithm = 'partial_merge';
+DROP TABLE table_key;
+DROP TABLE table_with_enum;

@@ -1,4 +1,8 @@
 set prefer_localhost_replica=1;
+drop table if exists data_02572;
+drop table if exists proxy_02572;
+drop table if exists push_to_proxy_mv_02572;
+drop table if exists receiver_02572;
 create table data_02572 (key Int) engine=Memory();
 create table proxy_02572 (key Int) engine=Distributed('test_shard_localhost', currentDatabase(), 'receiver_02572');
 -- ensure that insert fails

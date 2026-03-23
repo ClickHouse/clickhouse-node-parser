@@ -1,5 +1,16 @@
 [
   {
+    "kind": "system",
+    "body": "DROP  DATABASE IF EXISTS memory_db",
+    "leadingComments": [
+      "-- Tags: no-parallel, no-shared-merge-tree",
+      "-- no-parallel: creates own database",
+      "-- no-shared-merge-tree: doesn't support databases without UUID",
+      "-- Testcase for https://github.com/ClickHouse/ClickHouse/issues/92863",
+      "-- Tables/parts without UUID should not enter into the query condition cache."
+    ]
+  },
+  {
     "kind": "createDatabase",
     "name": "memory_db",
     "engine": {
@@ -208,5 +219,13 @@
     "trailingComments": [
       "-- 1 match"
     ]
+  },
+  {
+    "kind": "system",
+    "body": "DROP  TABLE tab"
+  },
+  {
+    "kind": "system",
+    "body": "DROP  DATABASE memory_db"
   }
 ]

@@ -1,3 +1,5 @@
+SYSTEM DROP  VIEW IF EXISTS audit_size_column;
+
 CREATE VIEW audit_size_column
 AS
 SELECT
@@ -16,3 +18,5 @@ GROUP BY
     database,
     table,
     column;
+
+SYSTEM DROP  TABLE audit_size_column;

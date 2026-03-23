@@ -28,6 +28,10 @@ ORDER BY
 WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC)
 SETTINGS max_block_size = 2;
 
+SYSTEM drop  table if exists product_groups;
+
+SYSTEM drop  table if exists products;
+
 CREATE TABLE product_groups
 (
     group_id Int64,
@@ -69,3 +73,7 @@ ORDER BY
     group_name ASC,
     price ASC,
     product_name ASC;
+
+SYSTEM drop  table product_groups;
+
+SYSTEM drop  table products;

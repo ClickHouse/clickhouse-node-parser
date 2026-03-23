@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS data2013;
+
+SYSTEM DROP  TABLE IF EXISTS data2014;
+
 CREATE TABLE data2013
 (
     name String,
@@ -35,3 +39,7 @@ FROM (
         WHERE name = 'Alice'
     )
 ORDER BY val ASC;
+
+SYSTEM DROP  TABLE data2013;
+
+SYSTEM DROP  TABLE data2014;

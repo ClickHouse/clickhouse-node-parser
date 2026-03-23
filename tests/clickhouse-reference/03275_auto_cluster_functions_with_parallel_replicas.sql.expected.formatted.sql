@@ -17,6 +17,8 @@ SET parallel_replicas_for_cluster_engines = true;
 SELECT count()
 FROM s3('http://localhost:11111/test/a.tsv', 'TSV');
 
+SYSTEM DROP  TABLE IF EXISTS dupe_test_with_auto_functions;
+
 CREATE TABLE dupe_test_with_auto_functions
 (
     n1 String,
@@ -31,6 +33,8 @@ FROM s3('http://localhost:11111/test/a.tsv', 'TSV');
 
 SELECT count()
 FROM dupe_test_with_auto_functions;
+
+SYSTEM DROP  TABLE IF EXISTS insert_with_url_function;
 
 CREATE TABLE insert_with_url_function
 (
@@ -49,6 +53,8 @@ FROM insert_with_url_function;
 
 SET parallel_replicas_for_cluster_engines = false;
 
+SYSTEM DROP  TABLE IF EXISTS dupe_test_without_cluster_functions;
+
 CREATE TABLE dupe_test_without_cluster_functions
 (
     n1 String,
@@ -63,6 +69,8 @@ FROM s3('http://localhost:11111/test/a.tsv', 'TSV');
 
 SELECT count()
 FROM dupe_test_without_cluster_functions;
+
+SYSTEM DROP  TABLE IF EXISTS dupe_test_with_cluster_function;
 
 CREATE TABLE dupe_test_with_cluster_function
 (

@@ -2,6 +2,8 @@ SET log_queries = 1;
 
 SET log_queries_min_type = 'QUERY_FINISH';
 
+SYSTEM DROP  TABLE IF EXISTS 02751_query_log_test_partitions;
+
 CREATE TABLE `02751_query_log_test_partitions`
 (
     a Int64,

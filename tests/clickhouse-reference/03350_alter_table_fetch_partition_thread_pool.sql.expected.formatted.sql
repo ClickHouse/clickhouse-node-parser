@@ -1,3 +1,10 @@
+-- Tags: no-parallel, no-replicated-database, no-shared-merge-tree
+-- Tag: no-parallel - to avoid polluting FETCH PARTITION thread pool with other fetches
+-- Tag: no-replicated-database - replica_path is different
+SYSTEM drop  table if exists data1;
+
+SYSTEM drop  table if exists data2;
+
 CREATE TABLE data1
 (
     key Int

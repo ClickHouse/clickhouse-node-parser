@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists local;
+
+SYSTEM drop  table if exists distr;
+
 CREATE TABLE local
 (
     a UInt64,

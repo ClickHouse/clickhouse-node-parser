@@ -158,6 +158,15 @@ ORDER BY
     val_middle ASC,
     val_right ASC;
 
+-- Quite exotic with Merge engine
+SYSTEM DROP  TABLE IF EXISTS table_to_merge_a;
+
+SYSTEM DROP  TABLE IF EXISTS table_to_merge_b;
+
+SYSTEM DROP  TABLE IF EXISTS table_to_merge_c;
+
+SYSTEM DROP  TABLE IF EXISTS merge_table;
+
 CREATE TABLE IF NOT EXISTS table_to_merge_a
 (
     id UInt64,

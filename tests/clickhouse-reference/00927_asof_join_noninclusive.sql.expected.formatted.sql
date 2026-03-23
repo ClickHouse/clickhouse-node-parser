@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS A;
+
+SYSTEM DROP  TABLE IF EXISTS B;
+
 CREATE TABLE A
 (
     k UInt32,
@@ -67,3 +71,7 @@ INNER JOIN B
 ORDER BY (A.k, A.t) ASC;
 
 SET join_algorithm = 'full_sorting_merge';
+
+SYSTEM DROP  TABLE A;
+
+SYSTEM DROP  TABLE B;

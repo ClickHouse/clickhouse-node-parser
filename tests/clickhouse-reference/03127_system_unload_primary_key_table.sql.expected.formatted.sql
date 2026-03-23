@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
+SYSTEM DROP  TABLE IF EXISTS test2;
+
 CREATE TABLE test
 (
     s String

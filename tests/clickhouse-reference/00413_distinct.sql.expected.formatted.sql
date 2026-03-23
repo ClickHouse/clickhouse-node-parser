@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS distinct;
+
 CREATE TABLE `distinct`
 (
     Num UInt32,

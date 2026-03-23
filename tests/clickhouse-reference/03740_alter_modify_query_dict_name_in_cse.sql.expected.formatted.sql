@@ -1,3 +1,11 @@
+SYSTEM drop  table if exists mv;
+
+SYSTEM drop  table if exists dst;
+
+SYSTEM drop  table if exists src;
+
+SYSTEM drop  dictionary if exists dict;
+
 CREATE TABLE src
 (
     key Int

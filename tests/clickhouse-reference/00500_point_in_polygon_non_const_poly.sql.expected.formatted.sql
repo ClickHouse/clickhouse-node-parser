@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS polygons;
+
 SELECT 'Const point; No holes';
 
 CREATE TABLE polygons
@@ -40,6 +42,8 @@ ORDER BY id ASC;
 SELECT pointInPolygon((4, 9), poly)
 FROM polygons
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE polygons;
 
 SELECT 'Non-const point; No holes';
 

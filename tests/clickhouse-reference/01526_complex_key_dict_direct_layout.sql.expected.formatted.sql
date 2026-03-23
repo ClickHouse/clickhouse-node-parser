@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS db_01526;
+
 CREATE DATABASE db_01526;
 
 CREATE TABLE db_01526.table_for_dict1
@@ -25,3 +28,9 @@ SELECT dictGet('db_01526.dict1', 'third_column', (number, number + 1))
 FROM numbers(4);
 
 SELECT dictHas('db_01526.dict1', (toUInt64(1), toUInt64(3)));
+
+SYSTEM DROP  DICTIONARY db_01526.dict1;
+
+SYSTEM DROP  TABLE db_01526.table_for_dict1;
+
+SYSTEM DROP  DATABASE db_01526;

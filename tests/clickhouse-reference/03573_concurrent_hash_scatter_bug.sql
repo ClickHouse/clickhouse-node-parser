@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS test_table_join_1;
+DROP TABLE IF EXISTS test_table_join_2;
 CREATE TABLE test_table_join_1 ( id UInt8, value String ) ENGINE = TinyLog;
 CREATE TABLE test_table_join_2 ( id UInt16, value String ) ENGINE = TinyLog;
 INSERT INTO test_table_join_1 VALUES (0,'Join_1_Value_0'),(1,'Join_1_Value_1'),(2,'Join_1_Value_2'),(0,'Join_1_Value_0'),(1,'Join_1_Value_1'),(2,'Join_1_Value_2');

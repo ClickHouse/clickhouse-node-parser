@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_create_as_tuple;
+
 CREATE TABLE t_create_as_tuple
 ENGINE = MergeTree()
 ORDER BY number AS
@@ -9,3 +11,5 @@ FROM numbers(3);
 SELECT *
 FROM t_create_as_tuple
 ORDER BY number ASC;
+
+SYSTEM DROP  TABLE t_create_as_tuple;

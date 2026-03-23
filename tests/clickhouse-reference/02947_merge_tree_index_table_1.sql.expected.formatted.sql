@@ -1,3 +1,6 @@
+-- Tags: no-random-settings
+SYSTEM DROP  TABLE IF EXISTS t_merge_tree_index;
+
 CREATE TABLE t_merge_tree_index
 (
     a UInt64 CODEC(LZ4),
@@ -42,6 +45,8 @@ ORDER BY
     part_name ASC,
     mark_number ASC
 FORMAT PrettyCompactNoEscapesMonoBlock;
+
+SYSTEM DROP  TABLE t_merge_tree_index;
 
 CREATE TABLE t_merge_tree_index
 (

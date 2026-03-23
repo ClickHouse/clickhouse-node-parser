@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_02187;
+
 CREATE TABLE test_02187
 (
     info String,

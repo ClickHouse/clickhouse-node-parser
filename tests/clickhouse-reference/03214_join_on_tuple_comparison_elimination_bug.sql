@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS a;
+DROP TABLE IF EXISTS b;
 CREATE TABLE a (key Nullable(String)) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO a VALUES (NULL), ('1');
 CREATE TABLE b (key Nullable(String)) ENGINE = MergeTree ORDER BY tuple();

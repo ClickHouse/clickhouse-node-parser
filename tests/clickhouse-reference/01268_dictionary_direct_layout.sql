@@ -1,4 +1,10 @@
+-- Tags: no-parallel, no-fasttest
+
+DROP DATABASE IF EXISTS database_for_dict_01268;
 CREATE DATABASE database_for_dict_01268;
+DROP TABLE IF EXISTS database_for_dict_01268.table_for_dict1;
+DROP TABLE IF EXISTS database_for_dict_01268.table_for_dict2;
+DROP TABLE IF EXISTS database_for_dict_01268.table_for_dict3;
 CREATE TABLE database_for_dict_01268.table_for_dict1
 (
   key_column UInt64,
@@ -34,7 +40,11 @@ INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (2, 1.6, 'Moscow');
 INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (3, 2.3, 'Center');
 INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (4, 0.2, 'Great Britain');
 INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (5, 4.9, 'London');
+DROP DATABASE IF EXISTS db_01268;
 CREATE DATABASE db_01268;
+DROP DICTIONARY IF EXISTS db_01268.dict1;
+DROP DICTIONARY IF EXISTS db_01268.dict2;
+DROP DICTIONARY IF EXISTS db_01268.dict3;
 CREATE DICTIONARY db_01268.dict1
 (
   key_column UInt64 DEFAULT 0,

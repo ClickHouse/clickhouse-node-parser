@@ -10,3 +10,5 @@ INSERT INTO tx (c0);
 
 SELECT c0
 FROM tx;
+
+SYSTEM DROP  TABLE tx;

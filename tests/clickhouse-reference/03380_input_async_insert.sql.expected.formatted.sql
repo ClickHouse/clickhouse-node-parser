@@ -34,6 +34,8 @@ SETTINGS
     async_insert = 1,
     allow_experimental_analyzer = 0;
 
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 (
     x Int,

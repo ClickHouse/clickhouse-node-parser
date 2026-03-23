@@ -1,3 +1,7 @@
+-- Tags: stateful, long, no-parallel, no-asan, no-tsan, no-ubsan, no-msan
+-- no-*san: too long.
+
+DROP TABLE IF EXISTS hits_text;
 CREATE TABLE hits_text
 (
     `CounterID` UInt32,
@@ -42,3 +46,4 @@ SELECT count() FROM hits_text WHERE hasAllTokens(URL, ['com', 'mail']) AND NOT h
 SELECT count() FROM hits_text WHERE hasAnyTokens(URL, ['facebook', 'twitter']);
 SELECT count() FROM hits_text WHERE hasToken(URL, 'auto') AND hasAnyTokens(SearchPhrase, ['bmw', 'audi', 'toyota']);
 SELECT count() FROM hits_text WHERE hasAnyTokens(URL, ['market', 'shop']) OR hasAnyTokens(SearchPhrase, ['market', 'shop']);
+DROP TABLE hits_text;

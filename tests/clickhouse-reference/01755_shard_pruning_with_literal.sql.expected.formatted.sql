@@ -1,6 +1,10 @@
 -- Tags: shard
 SET optimize_skip_unused_shards = 1;
 
+SYSTEM drop  table if exists data_01755;
+
+SYSTEM drop  table if exists dist_01755;
+
 CREATE TABLE data_01755
 (
     i Int

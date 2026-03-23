@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_01081;
+
 CREATE TABLE test_01081
 (
     key Int

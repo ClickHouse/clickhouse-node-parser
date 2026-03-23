@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x UInt8,
@@ -24,3 +26,5 @@ SELECT
 FROM `system`.parts_columns
 WHERE database = currentDatabase()
     AND table = 'test';
+
+SYSTEM DROP  TABLE test;

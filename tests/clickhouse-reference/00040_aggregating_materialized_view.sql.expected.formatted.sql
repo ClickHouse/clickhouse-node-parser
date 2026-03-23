@@ -1,3 +1,6 @@
+-- Tags: stateful
+SYSTEM DROP  TABLE IF EXISTS basic_00040;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE MATERIALIZED VIEW basic_00040
@@ -39,3 +42,5 @@ FROM test.visits
 WHERE CounterID = 942285
 GROUP BY StartDate
 ORDER BY StartDate ASC;
+
+SYSTEM DROP  TABLE basic_00040;

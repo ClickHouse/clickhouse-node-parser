@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a Array(UInt64),
@@ -19,3 +21,5 @@ SELECT
     a,
     a.size0
 FROM test;
+
+SYSTEM drop  table test;

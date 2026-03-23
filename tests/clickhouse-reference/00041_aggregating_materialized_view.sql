@@ -1,3 +1,6 @@
+-- Tags: stateful
+DROP TABLE IF EXISTS basic;
+DROP TABLE IF EXISTS visits_null;
 CREATE TABLE visits_null
 (
     CounterID UInt32,
@@ -45,3 +48,5 @@ FROM test.visits
 WHERE CounterID = 942285
 GROUP BY StartDate
 ORDER BY StartDate;
+DROP TABLE visits_null;
+DROP TABLE basic;

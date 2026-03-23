@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 -- Tests vertical merges for columns with text index
 SET enable_full_text_index = 1;
 
@@ -25,3 +27,5 @@ SELECT count()
 FROM tab
 WHERE hasAllTokens(c1, 'c11')
     AND hasAllTokens(c2, 'c21');
+
+SYSTEM DROP  TABLE tab;

@@ -1,6 +1,8 @@
 -- Tags: long, no-object-storage, no-random-merge-tree-settings
 SET output_format_pretty_row_numbers = 0;
 
+SYSTEM DROP  TABLE IF EXISTS check_system_tables;
+
 -- Check MergeTree declaration in new format
 CREATE TABLE check_system_tables
 (
@@ -98,6 +100,8 @@ WHERE name = 'check_system_tables'
 
 INSERT INTO check_system_tables;
 
+SYSTEM DROP  TABLE check_system_tables;
+
 CREATE TABLE check_system_tables
 (
     key UInt8
@@ -115,6 +119,8 @@ CREATE TABLE check_system_tables
     key UInt16
 )
 ENGINE = Memory();
+
+SYSTEM DROP  TABLE IF EXISTS check_system_tables_null;
 
 CREATE TABLE check_system_tables_null
 (
@@ -140,6 +146,8 @@ WHERE name = 'check_system_tables'
 
 INSERT INTO check_system_tables SELECT *
 FROM numbers_mt(101); -- direct block write (due to min_rows exceeded)
+
+SYSTEM DROP  TABLE check_system_tables_null;
 
 CREATE TABLE check_system_tables
 ENGINE = Set() AS
@@ -199,3 +207,5 @@ SELECT
 FROM `system`.tables
 WHERE name = 'check_system_tables_mv'
     AND database = currentDatabase();
+
+SYSTEM DROP  TABLE check_system_tables_mv;

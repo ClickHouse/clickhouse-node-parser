@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS n1_n2_join;
+DROP TABLE IF EXISTS n1;
+DROP TABLE IF EXISTS n2;
 CREATE TABLE n1 (key UInt64, value String) ENGINE = MergeTree ORDER BY key SETTINGS index_granularity=1;
 CREATE TABLE n2 (key UInt64, value Int64) ENGINE = MergeTree ORDER BY key SETTINGS index_granularity=1;
 CREATE TABLE n1_n2_join (k UInt64, v1 String, v2 Int64) ENGINE = MergeTree ORDER BY k;

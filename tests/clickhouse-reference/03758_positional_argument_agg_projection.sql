@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test
 (
     `a` UInt64,
@@ -7,3 +8,4 @@ ENGINE = MergeTree
 ORDER BY a;
 SET enable_positional_arguments_for_projections = 0;
 SET enable_positional_arguments_for_projections = 1;
+DROP TABLE test;

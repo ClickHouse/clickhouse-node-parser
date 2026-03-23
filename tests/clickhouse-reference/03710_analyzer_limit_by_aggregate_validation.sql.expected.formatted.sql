@@ -1,5 +1,7 @@
 SET allow_experimental_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_limit_by_validation;
+
 CREATE TABLE test_limit_by_validation
 (
     c0 Int32,
@@ -47,3 +49,5 @@ FROM test_limit_by_validation
 GROUP BY c0 + 1
 ORDER BY expr ASC
 LIMIT 1 BY expr;
+
+SYSTEM DROP  TABLE test_limit_by_validation;

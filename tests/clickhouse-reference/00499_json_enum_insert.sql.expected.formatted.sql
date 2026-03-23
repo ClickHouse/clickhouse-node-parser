@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS json;
+
 CREATE TABLE json
 (
     x Enum8('browser' = 1, 'mobile' = 2),
@@ -14,3 +17,5 @@ ORDER BY y ASC;
 INSERT INTO json (y);
 
 INSERT INTO json (x, y);
+
+SYSTEM DROP  TABLE json;

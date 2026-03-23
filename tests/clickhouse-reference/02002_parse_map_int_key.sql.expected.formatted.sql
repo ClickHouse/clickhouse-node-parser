@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_map_int_key;
+
 CREATE TABLE t_map_int_key
 (
     m1 Map(UInt32, UInt32),
@@ -6,3 +8,5 @@ CREATE TABLE t_map_int_key
 ENGINE = Memory;
 
 INSERT INTO t_map_int_key;
+
+SYSTEM DROP  TABLE t_map_int_key;

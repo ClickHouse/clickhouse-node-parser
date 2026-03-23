@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test__fuzz_22 SYNC;
+
 CREATE TABLE test__fuzz_22
 (
     k Float32,
@@ -31,3 +33,5 @@ LIMIT 100, 10
 SETTINGS
     optimize_read_in_order = 1,
     merge_tree_min_rows_for_concurrent_read = 9223372036854775806;
+
+SYSTEM DROP  TABLE test__fuzz_22 SYNC;

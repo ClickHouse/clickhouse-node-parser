@@ -4,6 +4,13 @@ SELECT dictGet('default.countryId', 'country', toUInt64(number)) AS country
 FROM numbers(2)
 GROUP BY country; -- { serverError BAD_ARGUMENTS }
 
+-- with real dictionary
+SYSTEM DROP  TABLE IF EXISTS dictdb_01376.table_for_dict;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dictdb_01376.dict_exists;
+
+SYSTEM DROP  DATABASE IF EXISTS dictdb_01376;
+
 CREATE DATABASE dictdb_01376;
 
 CREATE TABLE dictdb_01376.table_for_dict
@@ -28,3 +35,9 @@ LAYOUT(FLAT());
 SELECT dictGet('dictdb_01376.dict_exists', 'value', toUInt64(1)) AS val
 FROM numbers(2)
 GROUP BY val;
+
+SYSTEM DROP  DICTIONARY dictdb_01376.dict_exists;
+
+SYSTEM DROP  TABLE dictdb_01376.table_for_dict;
+
+SYSTEM DROP  DATABASE dictdb_01376;

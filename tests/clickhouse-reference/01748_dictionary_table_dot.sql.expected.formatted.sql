@@ -1,6 +1,13 @@
+-- Tags: no-parallel
+SYSTEM DROP  DATABASE IF EXISTS test_01748;
+
 CREATE DATABASE test_01748;
 
 USE test_01748;
+
+SYSTEM DROP  TABLE IF EXISTS `test.txt`;
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_dict;
 
 CREATE TABLE `test.txt`
 (
@@ -24,3 +31,5 @@ LAYOUT(COMPLEX_KEY_HASHED());
 INSERT INTO `test.txt`;
 
 SELECT dictGet(test_dict, 'value', (toUInt32(1), toUInt32(2)));
+
+SYSTEM DROP  DATABASE test_01748;

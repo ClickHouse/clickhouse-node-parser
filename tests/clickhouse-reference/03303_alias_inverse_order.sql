@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_alias_inverse_order;
 CREATE TABLE test_alias_inverse_order
 (
   x int,

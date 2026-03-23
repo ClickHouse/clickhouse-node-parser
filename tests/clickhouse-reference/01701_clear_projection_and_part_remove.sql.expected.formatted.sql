@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tp_1;
+
 -- In this test, we are going to create an old part with written projection which does not exist in table metadata
 CREATE TABLE tp_1
 (
@@ -24,3 +26,6 @@ INSERT INTO tp_1 SELECT
     number,
     number
 FROM numbers(4);
+
+-- Now, DROP TABLE triggers part removal
+SYSTEM drop  table tp_1;

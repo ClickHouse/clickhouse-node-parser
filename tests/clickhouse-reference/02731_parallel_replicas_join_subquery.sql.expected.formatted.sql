@@ -1,3 +1,6 @@
+-- Tags: zookeeper
+SYSTEM DROP  TABLE IF EXISTS join_inner_table SYNC;
+
 CREATE TABLE join_inner_table
 (
     id UUID,
@@ -100,6 +103,9 @@ LIMIT 10
 SETTINGS
     enable_parallel_replicas = 1,
     enable_analyzer = 1;
+
+---- Query with JOIN
+SYSTEM DROP  TABLE IF EXISTS join_outer_table SYNC;
 
 CREATE TABLE join_outer_table
 (

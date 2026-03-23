@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_parse_tuples;
 CREATE TABLE t_parse_tuples
 (
     id UInt32,

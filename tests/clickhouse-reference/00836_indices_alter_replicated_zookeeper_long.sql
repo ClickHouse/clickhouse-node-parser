@@ -1,3 +1,9 @@
+-- Tags: long, replica
+
+DROP TABLE IF EXISTS minmax_idx;
+DROP TABLE IF EXISTS minmax_idx_r;
+DROP TABLE IF EXISTS minmax_idx2;
+DROP TABLE IF EXISTS minmax_idx2_r;
 SET replication_alter_partitions_sync = 2;
 CREATE TABLE minmax_idx
 (
@@ -41,3 +47,7 @@ INSERT INTO minmax_idx2 VALUES (1, 2);
 INSERT INTO minmax_idx2_r VALUES (1, 3);
 SELECT * FROM minmax_idx2 WHERE u64 * i32 >= 2 ORDER BY (u64, i32);
 SELECT * FROM minmax_idx2_r WHERE u64 * i32 >= 2 ORDER BY (u64, i32);
+DROP TABLE minmax_idx;
+DROP TABLE minmax_idx_r;
+DROP TABLE minmax_idx2;
+DROP TABLE minmax_idx2_r;

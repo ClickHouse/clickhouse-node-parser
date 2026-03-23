@@ -1,5 +1,7 @@
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 1)
@@ -19,3 +21,5 @@ SELECT DISTINCT
     isDynamicElementInSharedData(json.b)
 FROM test
 ORDER BY type ASC;
+
+SYSTEM drop  table test;

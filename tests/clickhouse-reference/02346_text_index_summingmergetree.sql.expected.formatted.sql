@@ -1,5 +1,8 @@
 SET enable_full_text_index = 1;
 
+-- Tests text index with the 'SummingMergeTree' engine
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -33,3 +36,5 @@ WHERE hasToken(key, 'foo');
 SELECT value
 FROM tab
 WHERE hasToken(key, 'bar');
+
+SYSTEM DROP  TABLE tab;

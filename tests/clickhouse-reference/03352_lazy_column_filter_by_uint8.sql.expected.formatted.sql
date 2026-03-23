@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_filter;
+
 CREATE TABLE t_filter
 (
     s String,

@@ -89,6 +89,8 @@ FROM viewExplain('EXPLAIN AST', '', 1); -- { serverError BAD_ARGUMENTS }
 SELECT *
 FROM viewExplain('EXPLAIN AST', '', ''); -- { serverError BAD_ARGUMENTS }
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t1
 (
     a UInt64
@@ -112,6 +114,8 @@ FROM (
         SELECT sum(a)
         FROM t1
     );
+
+SYSTEM DROP  TABLE t1;
 
 SET enable_analyzer = 1;
 

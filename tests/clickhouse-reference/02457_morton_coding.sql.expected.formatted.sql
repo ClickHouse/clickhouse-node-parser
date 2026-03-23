@@ -1,5 +1,7 @@
 SELECT '----- START -----';
 
+SYSTEM drop  table if exists morton_numbers_02457;
+
 CREATE TABLE morton_numbers_02457
 (
     n1 UInt32,
@@ -45,6 +47,8 @@ CROSS JOIN numbers(256 - 4, 4) AS n5
 CROSS JOIN numbers(256 - 4, 4) AS n6
 CROSS JOIN numbers(256 - 4, 4) AS n7
 CROSS JOIN numbers(256 - 4, 4) AS n8;
+
+SYSTEM drop  table if exists morton_numbers_1_02457;
 
 CREATE TABLE morton_numbers_1_02457
 (
@@ -93,6 +97,8 @@ SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 INSERT INTO morton_numbers_2_02457 SELECT untuple(mortonDecode(4, mortonEncode(n1, n2, n3, n4)))
 FROM morton_numbers_02457;
 
+SYSTEM drop  table if exists morton_numbers_2_02457;
+
 INSERT INTO morton_numbers_02457 SELECT
     n1.number,
     n2.number,
@@ -107,6 +113,8 @@ FROM
 CROSS JOIN numbers(pow(2, 32) - 8, 8) AS n2
 CROSS JOIN numbers(pow(2, 32) - 8, 8) AS n3
 CROSS JOIN numbers(pow(2, 32) - 8, 8) AS n4;
+
+SYSTEM drop  table if exists morton_numbers_3_02457;
 
 CREATE TABLE morton_numbers_3_02457
 (

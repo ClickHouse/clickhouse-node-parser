@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_func_to_subcolumns_map;
+
 CREATE TABLE t_func_to_subcolumns_map
 (
     id UInt64,
@@ -20,3 +22,5 @@ FROM t_func_to_subcolumns_map;
 
 SELECT notEmpty(m)
 FROM t_func_to_subcolumns_map;
+
+SYSTEM DROP  TABLE t_func_to_subcolumns_map;

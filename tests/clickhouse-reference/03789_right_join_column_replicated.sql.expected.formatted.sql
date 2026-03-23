@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS locations;
+
+SYSTEM DROP  TABLE IF EXISTS location_tags;
+
 CREATE TABLE locations
 (
     location_id UInt32,

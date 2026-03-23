@@ -1,6 +1,7 @@
 -- Tags: no-parallel
 
 SET allow_suspicious_ttl_expressions = 1;
+drop table if exists ttl;
 create table ttl (d Date, a Int) engine = MergeTree order by a partition by toDayOfMonth(d);
 insert into ttl values (toDateTime('2000-10-10 00:00:00'), 1);
 insert into ttl values (toDateTime('2000-10-10 00:00:00'), 2);

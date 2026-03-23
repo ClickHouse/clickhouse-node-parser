@@ -110,6 +110,8 @@ SELECT 1 % CAST(materialize(1), 'Nullable(Float32)');
 
 SELECT materialize(1) % CAST(materialize(1), 'Nullable(Float32)');
 
+SYSTEM DROP  TABLE IF EXISTS nullable_division;
+
 CREATE TABLE nullable_division
 (
     x UInt32,
@@ -145,3 +147,5 @@ FROM nullable_division;
 
 SELECT if(b = 0, 0, x / b)
 FROM nullable_division;
+
+SYSTEM DROP  TABLE nullable_division;

@@ -1,4 +1,7 @@
 SET parallel_replicas_local_plan = 1;
+-- Test for issue #75523
+
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (
   id UInt64,
   col Float,
@@ -44,3 +47,4 @@ SELECT trimLeft(explain) AS explain FROM (
 )
 WHERE explain LIKE '%Description:%' OR explain LIKE '%Parts:%' OR explain LIKE '%Granules:%'
 LIMIT 2, 3; -- Skip the primary index parts and granules.
+DROP TABLE tab;

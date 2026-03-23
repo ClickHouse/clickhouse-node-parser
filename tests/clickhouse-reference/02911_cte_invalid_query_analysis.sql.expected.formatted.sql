@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists t0;
+
+SYSTEM drop  table if exists t1;
+
+SYSTEM drop  table if exists t3;
+
 CREATE TABLE t0
 (
     pkey UInt32,
@@ -21,3 +27,9 @@ CREATE TABLE t3
 ENGINE = MergeTree;
 
 INSERT INTO t1;
+
+SYSTEM drop  table t0;
+
+SYSTEM drop  table t1;
+
+SYSTEM drop  table t3;

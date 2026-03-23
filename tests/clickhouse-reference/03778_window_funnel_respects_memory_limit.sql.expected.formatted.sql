@@ -1,3 +1,6 @@
+-- Tags: no-random-mergetree-settings, no-random-settings, long, no-tsan, no-asan, no-ubsan, no-msan, no-debug
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     ts Date,
@@ -47,3 +50,5 @@ FROM (
 GROUP BY fun_res
 FORMAT Null
 SETTINGS log_queries = 1, max_memory_usage = '800Mi'; -- { serverError MEMORY_LIMIT_EXCEEDED }
+
+SYSTEM DROP  TABLE test;

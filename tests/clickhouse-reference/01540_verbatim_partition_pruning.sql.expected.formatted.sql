@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists xy;
+
 CREATE TABLE xy
 (
     x int,
@@ -29,6 +31,9 @@ SELECT *
 FROM xy
 WHERE x = 8;
 
+-- Test if we provide enough columns to generate a partition value
+SYSTEM drop  table if exists xyz;
+
 CREATE TABLE xyz
 (
     x int,
@@ -45,6 +50,9 @@ INSERT INTO xyz;
 SELECT *
 FROM xyz
 WHERE y = 2;
+
+-- Test if we obey strict rules when facing NOT contitions
+SYSTEM drop  table if exists test;
 
 CREATE TABLE test
 (
@@ -63,6 +71,11 @@ INSERT INTO test;
 SELECT *
 FROM test
 WHERE d != '2020-01-01';
+
+SYSTEM drop  table test;
+
+-- Test if single value partition pruning works correctly for Date = String
+SYSTEM drop  table if exists myTable;
 
 CREATE TABLE myTable
 (
@@ -83,3 +96,5 @@ INSERT INTO myTable (myDay, myOrder);
 SELECT *
 FROM myTable AS mt
 WHERE myDay = '2021-01-02';
+
+SYSTEM drop  table myTable;

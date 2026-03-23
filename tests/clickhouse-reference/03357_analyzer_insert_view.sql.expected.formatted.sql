@@ -1,6 +1,14 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/65981
 SET allow_experimental_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS input;
+
+SYSTEM DROP  TABLE IF EXISTS deduplicate;
+
+SYSTEM DROP  TABLE IF EXISTS deduplicate_mv;
+
+SYSTEM DROP  TABLE IF EXISTS event;
+
 CREATE TABLE input
 (
     json_message String

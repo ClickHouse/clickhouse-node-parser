@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists  data_order_by_proj_incomp;
+
 CREATE TABLE data_order_by_proj_incomp
 (
     t UInt64

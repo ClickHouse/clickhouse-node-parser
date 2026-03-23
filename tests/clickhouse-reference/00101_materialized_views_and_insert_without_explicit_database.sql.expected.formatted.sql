@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_view;
+
+SYSTEM DROP  TABLE IF EXISTS test_view_filtered;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE test_table
@@ -47,10 +53,34 @@ FROM test_view;
 SELECT *
 FROM test_view_filtered;
 
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE test_view;
+
+SYSTEM DROP  TABLE test_view_filtered;
+
 -- Check only sophisticated constructors and desctructors:
 CREATE DATABASE IF NOT EXISTS {CLICKHOUSE_DATABASE_1:Identifier};
 
 USE {CLICKHOUSE_DATABASE_1:Identifier};
+
+SYSTEM DROP  TABLE IF EXISTS tmp;
+
+SYSTEM DROP  TABLE IF EXISTS tmp_mv;
+
+SYSTEM DROP  TABLE IF EXISTS tmp_mv2;
+
+SYSTEM DROP  TABLE IF EXISTS tmp_mv3;
+
+SYSTEM DROP  TABLE IF EXISTS tmp_mv4;
+
+SYSTEM DROP  TABLE IF EXISTS `.inner.tmp_mv`;
+
+SYSTEM DROP  TABLE IF EXISTS `.inner.tmp_mv2`;
+
+SYSTEM DROP  TABLE IF EXISTS `.inner.tmp_mv3`;
+
+SYSTEM DROP  TABLE IF EXISTS `.inner.tmp_mv4`;
 
 CREATE TABLE tmp
 (
@@ -82,3 +112,17 @@ POPULATE
 AS
 SELECT DISTINCT *
 FROM tmp_mv;
+
+SYSTEM DROP  TABLE tmp_mv;
+
+SYSTEM DROP  TABLE tmp_mv2;
+
+SYSTEM DROP  TABLE tmp_mv3;
+
+SYSTEM DROP  TABLE tmp_mv4;
+
+SYSTEM DROP  TABLE tmp;
+
+SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};
+
+SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE_1:Identifier};

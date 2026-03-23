@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS short;
+DROP TABLE IF EXISTS long;
+DROP TABLE IF EXISTS merged;
 CREATE TABLE short (e Int64, t DateTime ) ENGINE = MergeTree PARTITION BY e ORDER BY t;
 CREATE TABLE long (e Int64, t DateTime ) ENGINE = MergeTree PARTITION BY (e, toStartOfMonth(t)) ORDER BY t;
 insert into short select number % 11, toDateTime('2021-01-01 00:00:00') + number from numbers(1000);

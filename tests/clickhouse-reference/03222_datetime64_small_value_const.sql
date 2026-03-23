@@ -8,6 +8,9 @@ select *, (select toDateTime64('1970-01-01 00:53:25.456789123', 9)) from remote(
 select *, (select toDateTime64(null,3)) from remote('127.0.0.1', system.one) settings prefer_localhost_replica=0;
 create database if not exists shard_0;
 create database if not exists shard_1;
+drop table if exists shard_0.dt64_03222;
+drop table if exists shard_1.dt64_03222;
+drop table if exists distr_03222_dt64;
 create table shard_0.dt64_03222(id UInt64, dt DateTime64(3)) engine = MergeTree order by id;
 create table shard_1.dt64_03222(id UInt64, dt DateTime64(3)) engine = MergeTree order by id;
 create table distr_03222_dt64 (id UInt64, dt DateTime64(3)) engine = Distributed(test_cluster_two_shards_different_databases, '', dt64_03222);
@@ -24,3 +27,5 @@ select id, dt from distr_03222_dt64 where dt < (select toDateTime64(5,3)) order 
 select count(*) from distr_03222_dt64 where dt > (select toDateTime64('2024-07-20 00:00:00',3));
 select count(*) from distr_03222_dt64 where dt > (select now());
 select count(*) from distr_03222_dt64 where dt < (select toDateTime64('2004-07-20 00:00:00',3));
+drop database shard_0;
+drop database shard_1;

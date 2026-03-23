@@ -3,8 +3,10 @@ SELECT firstNonDefault(NULL :: Nullable(UInt8), 0 :: Nullable(UInt8), 42 :: UInt
 SELECT firstNonDefault('', '0', 'hello') AS result;
 SELECT firstNonDefault(NULL::Nullable(UInt8), 0::UInt8) AS result;
 SELECT firstNonDefault(false, true) AS result;
+
 SELECT firstNonDefault([] :: Array(UInt8), [1, 2, 3] :: Array(UInt8)) AS result;
 SELECT firstNonDefault(NULL::Nullable(String), ''::String, 'foo') as result, toTypeName(result);
+
 SELECT firstNonDefault(0::UInt8, 0::UInt16, 42::UInt32) AS result, toTypeName(result);
 SELECT firstNonDefault(0::Int8, 0::Int16, 42::Int32) AS result, toTypeName(result);
 SELECT firstNonDefault(0::UInt32, 0::UInt64, 42::UInt128) AS result, toTypeName(result);
@@ -21,16 +23,20 @@ SELECT firstNonDefault([]::Array(Int32), [0]::Array(Int32), [1, 2, 3]::Array(Int
 SELECT firstNonDefault([]::Array(String), ['']::Array(String), ['hello']::Array(String)) AS result, toTypeName(result);
 SELECT firstNonDefault(NULL::Nullable(UInt8), 0::UInt8, 42::UInt8, 100::UInt8) AS result, toTypeName(result);
 SELECT firstNonDefault(NULL::Nullable(String), ''::String, '0'::String, 'hello'::String) AS result, toTypeName(result);
+
 SELECT firstNonDefault(NULL) AS result, toTypeName(result);
 SELECT firstNonDefault(0) AS result, toTypeName(result);
 SELECT firstNonDefault(''::String) AS result, toTypeName(result);
 SELECT firstNonDefault([]::Array(UInt8)) AS result, toTypeName(result);
+
 SELECT firstNonDefault(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
 SELECT firstNonDefault(0, 'hello'); -- { serverError NO_COMMON_TYPE }
 SELECT firstNonDefault([]::Array(UInt8), 42); -- { serverError NO_COMMON_TYPE }
 SELECT firstNonDefault([]::Array(UInt8), 'hello');  -- { serverError NO_COMMON_TYPE }
 SELECT firstNonDefault(0::UInt64, 1::Int64);  -- { serverError NO_COMMON_TYPE }
 SELECT firstNonDefault(NULL::Nullable(Array(UInt8)), []::Array(UInt8)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
 SELECT firstNonDefault(
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -39,6 +45,9 @@ SELECT firstNonDefault(
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     number
 ) FROM numbers(3);
+
+DROP TABLE IF EXISTS test_first_truthy;
+
 CREATE TABLE test_first_truthy
 (
     a Nullable(Int32),
@@ -46,6 +55,7 @@ CREATE TABLE test_first_truthy
     c Nullable(String),
     d Array(Int32)
 ) ENGINE = Memory;
+
 INSERT INTO test_first_truthy VALUES
 (NULL, 0, NULL, []),
 (0, NULL, '', []),
@@ -55,30 +65,35 @@ INSERT INTO test_first_truthy VALUES
 (0, 2, '', []),
 (0, 0, 'hello', []),
 (0, 0, '', [1, 2, 3]);
+
 SELECT
     a, b,
     firstNonDefault(a, b) AS result,
     toTypeName(firstNonDefault(a, b)) AS type
 FROM test_first_truthy
 ORDER BY ALL;
+
 SELECT
     c,
     firstNonDefault(c, 'default'::String) AS result,
     toTypeName(firstNonDefault(c, 'default'::String)) AS type
 FROM test_first_truthy
 ORDER BY ALL;
+
 SELECT
     d,
     firstNonDefault(d, [99, 100]::Array(Int32)) AS result,
     toTypeName(firstNonDefault(d, [99, 100]::Array(Int32))) AS type
 FROM test_first_truthy
 ORDER BY length(result);
+
 SELECT
     a, b,
     firstNonDefault(a + b, a * b, a - b) AS result,
     toTypeName(firstNonDefault(a + b, a * b, a - b)) AS type
 FROM test_first_truthy
 ORDER BY ALL;
+
 SELECT
     a, b,
     firstNonDefault(42, a, b) AS result1,
@@ -86,3 +101,5 @@ SELECT
     firstNonDefault(NULL, a, b) AS result3
 FROM test_first_truthy
 ORDER BY ALL;
+
+DROP TABLE test_first_truthy;

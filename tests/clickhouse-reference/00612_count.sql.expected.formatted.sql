@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS count;
+
 CREATE TABLE count
 (
     x UInt64
@@ -54,3 +56,5 @@ HAVING count() = 1234567;
 SELECT count()
 FROM count
 HAVING count() != 1234567;
+
+SYSTEM DROP  TABLE count;

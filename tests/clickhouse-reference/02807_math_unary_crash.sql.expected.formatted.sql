@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t10;
+
 CREATE TABLE t10
 (
     c0 Int32
@@ -14,3 +16,5 @@ GROUP BY erf(negate(sign(t10.c0)));
 SELECT 1
 FROM t10
 GROUP BY negate(sign(t10.c0));
+
+SYSTEM DROP  TABLE t10;

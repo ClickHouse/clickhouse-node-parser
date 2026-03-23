@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS checks SYNC;
+
 CREATE TABLE checks
 (
     check_name LowCardinality(String),
@@ -81,3 +83,5 @@ SETTINGS
     allow_experimental_parallel_reading_from_replicas = 1,
     cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
     max_parallel_replicas = 3;
+
+SYSTEM DROP  TABLE checks SYNC;

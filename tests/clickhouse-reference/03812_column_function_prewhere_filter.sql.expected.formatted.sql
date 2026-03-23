@@ -1,5 +1,7 @@
 SET enable_multiple_prewhere_read_steps = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_column_function_filter;
+
 CREATE TABLE test_column_function_filter
 (
     id UInt64,

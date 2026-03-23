@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS set;
+
+SYSTEM DROP  TABLE IF EXISTS set2;
+
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE `set`
 (
     x String
@@ -40,3 +46,7 @@ PREWHERE x IN (`set`)
 WHERE x IN (`set`)
 LIMIT 1
 SETTINGS enable_analyzer = 1;
+
+SYSTEM DROP  TABLE tab;
+
+SYSTEM DROP  TABLE set;

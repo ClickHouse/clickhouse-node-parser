@@ -1,3 +1,9 @@
+-- Tags: distributed
+-- NOTE: database = currentDatabase() is not mandatory
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1 AS `system`.`columns`
 ENGINE = Distributed('test_shard_localhost', `system`, `columns`);
 

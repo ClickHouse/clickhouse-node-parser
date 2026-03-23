@@ -2,6 +2,7 @@
 
 set allow_experimental_dynamic_type = 1;
 SET enable_json_type = 1;
+drop table if exists test;
 create table test (d Dynamic, json JSON) engine=MergeTree order by tuple() settings min_rows_for_wide_part=0, min_bytes_for_wide_part=0, vertical_merge_algorithm_min_rows_to_activate=1, vertical_merge_algorithm_min_columns_to_activate=0, object_serialization_version='v2', dynamic_serialization_version='v2';
 insert into test select number, '{"a" : 42, "b" : "Hello, World"}' from numbers(1000000);
 SELECT
@@ -14,3 +15,4 @@ FROM system.parts
 WHERE active AND (database = currentDatabase()) AND (`table` = 'test')
 GROUP BY `table`
 ORDER BY `table` ASC;
+drop table test;

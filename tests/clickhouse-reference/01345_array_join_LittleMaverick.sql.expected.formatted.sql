@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id Nullable(String),
@@ -30,3 +32,5 @@ WHERE (status IN (
     AND (id IN ('1', '2'))
 GROUP BY CUBE(status)
 LIMIT 100;
+
+SYSTEM DROP  TABLE test;

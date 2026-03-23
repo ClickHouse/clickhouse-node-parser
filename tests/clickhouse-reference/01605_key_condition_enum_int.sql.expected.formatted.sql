@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists enum;
+
 CREATE TABLE enum
 ENGINE = MergeTree
 ORDER BY enum AS

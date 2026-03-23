@@ -75,3 +75,5 @@ SELECT
     *
 FROM test
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE test SYNC;

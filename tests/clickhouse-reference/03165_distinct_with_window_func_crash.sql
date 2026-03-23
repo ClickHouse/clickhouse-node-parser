@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS atable;
+
 CREATE TABLE atable
 (
     cdu_date Int16,
@@ -6,11 +8,13 @@ CREATE TABLE atable
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
 -- disable parallelization after window function otherwise
 -- generated pipeline contains enormous number of transformers (should be fixed separately)
 SET query_plan_enable_multithreading_after_window_functions=0;
 -- max_threads is randomized, and can significantly increase number of parallel transformers after window func, so set to small value explicitly
 SET max_threads=3;
+
 SELECT DISTINCT
     loanx_id,
     rating_sp,
@@ -23,3 +27,5 @@ GROUP BY
     loanx_id,
     rating_sp
 SETTINGS query_plan_remove_redundant_distinct = 1;
+
+DROP TABLE atable;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_group_by_with_rollup_order;
+
 CREATE TABLE test_group_by_with_rollup_order
 (
     id Int64,

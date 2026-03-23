@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dict;
+
+SYSTEM DROP  TABLE IF EXISTS view;
+
 CREATE TABLE view
 (
     id UInt32,
@@ -29,9 +35,15 @@ ORDER BY tuple();
 SELECT *
 FROM dictionary('dict');
 
+SYSTEM DROP  TABLE view; -- {serverError HAVE_DEPENDENT_OBJECTS}
+
 -- check that table is not readonly
 INSERT INTO view;
+
+SYSTEM DROP  DICTIONARY dict; -- {serverError HAVE_DEPENDENT_OBJECTS}
 
 SELECT *
 FROM dictionary('dict')
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE table;

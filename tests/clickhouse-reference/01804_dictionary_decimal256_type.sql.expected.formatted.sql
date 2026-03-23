@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS dictionary_decimal_source_table;
+
 CREATE TABLE dictionary_decimal_source_table
 (
     id UInt64,
@@ -6,6 +9,8 @@ CREATE TABLE dictionary_decimal_source_table
 ENGINE = TinyLog;
 
 INSERT INTO dictionary_decimal_source_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS flat_dictionary;
 
 CREATE DICTIONARY flat_dictionary
 (
@@ -19,6 +24,10 @@ LAYOUT(FLAT());
 
 SELECT dictGet('flat_dictionary', 'decimal_value', toUInt64(1));
 
+SYSTEM DROP  DICTIONARY flat_dictionary;
+
+SYSTEM DROP  DICTIONARY IF EXISTS hashed_dictionary;
+
 CREATE DICTIONARY hashed_dictionary
 (
     id UInt64,
@@ -30,6 +39,10 @@ LIFETIME(MIN 1 MAX 1000)
 LAYOUT(HASHED());
 
 SELECT dictGet('hashed_dictionary', 'decimal_value', toUInt64(1));
+
+SYSTEM DROP  DICTIONARY hashed_dictionary;
+
+SYSTEM DROP  DICTIONARY IF EXISTS cache_dictionary;
 
 CREATE DICTIONARY cache_dictionary
 (
@@ -43,6 +56,10 @@ LAYOUT(CACHE(SIZE_IN_CELLS 10));
 
 SELECT dictGet('cache_dictionary', 'decimal_value', toUInt64(1));
 
+SYSTEM DROP  DICTIONARY cache_dictionary;
+
+SYSTEM DROP  DICTIONARY IF EXISTS direct_dictionary;
+
 CREATE DICTIONARY direct_dictionary
 (
     id UInt64,
@@ -54,6 +71,12 @@ LAYOUT(DIRECT());
 
 SELECT dictGet('direct_dictionary', 'decimal_value', toUInt64(1));
 
+SYSTEM DROP  DICTIONARY direct_dictionary;
+
+SYSTEM DROP  TABLE dictionary_decimal_source_table;
+
+SYSTEM DROP  TABLE IF EXISTS ip_trie_dictionary_decimal_source_table;
+
 CREATE TABLE ip_trie_dictionary_decimal_source_table
 (
     prefix String,
@@ -62,6 +85,8 @@ CREATE TABLE ip_trie_dictionary_decimal_source_table
 ENGINE = TinyLog;
 
 INSERT INTO ip_trie_dictionary_decimal_source_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS ip_trie_dictionary;
 
 CREATE DICTIONARY ip_trie_dictionary
 (
@@ -75,6 +100,12 @@ LAYOUT(IP_TRIE());
 
 SELECT dictGet('ip_trie_dictionary', 'decimal_value', tuple(IPv4StringToNum('127.0.0.0')));
 
+SYSTEM DROP  DICTIONARY ip_trie_dictionary;
+
+SYSTEM DROP  TABLE ip_trie_dictionary_decimal_source_table;
+
+SYSTEM DROP  TABLE IF EXISTS dictionary_decimal_polygons_source_table;
+
 CREATE TABLE dictionary_decimal_polygons_source_table
 (
     key Array(Array(Array(Tuple(Float64, Float64)))),
@@ -83,6 +114,8 @@ CREATE TABLE dictionary_decimal_polygons_source_table
 ENGINE = TinyLog;
 
 INSERT INTO dictionary_decimal_polygons_source_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS polygon_dictionary;
 
 CREATE DICTIONARY polygon_dictionary
 (
@@ -95,3 +128,7 @@ LIFETIME(MIN 0 MAX 1000)
 LAYOUT(POLYGON());
 
 SELECT dictGet('polygon_dictionary', 'decimal_value', tuple(0.5, 0.5));
+
+SYSTEM DROP  DICTIONARY polygon_dictionary;
+
+SYSTEM DROP  TABLE dictionary_decimal_polygons_source_table;

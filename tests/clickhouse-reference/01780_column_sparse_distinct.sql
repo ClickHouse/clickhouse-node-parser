@@ -1,4 +1,5 @@
 SET optimize_trivial_insert_select = 1;
+DROP TABLE IF EXISTS t_sparse_distinct;
 CREATE TABLE t_sparse_distinct (id UInt32, v UInt64)
 ENGINE = MergeTree
 ORDER BY id
@@ -10,3 +11,4 @@ FROM system.parts_columns
 WHERE table = 't_sparse_distinct' AND database = currentDatabase() AND column = 'v'
 ORDER BY name;
 SELECT DISTINCT v FROM t_sparse_distinct ORDER BY v;
+DROP TABLE t_sparse_distinct;

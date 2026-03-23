@@ -45,3 +45,7 @@ FROM
     foo_lc AS t1
 LEFT JOIN foo_lc AS t2
     ON t1.n == t2.n;
+
+SYSTEM DROP  TABLE foo;
+
+SYSTEM DROP  TABLE foo_lc;

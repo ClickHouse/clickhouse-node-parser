@@ -1,3 +1,7 @@
+SYSTEM DROP  DICTIONARY IF EXISTS id_value_dictionary;
+
+SYSTEM DROP  TABLE IF EXISTS source_table;
+
 CREATE TABLE source_table
 (
     id UInt64,
@@ -21,3 +25,5 @@ SELECT count()
 FROM `system`.dictionaries
 WHERE name == 'id_value_dictionary'
     AND database == currentDatabase();
+
+SYSTEM DROP  TABLE source_table;

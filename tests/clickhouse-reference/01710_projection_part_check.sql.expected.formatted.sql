@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tp;
+
 CREATE TABLE tp
 (
     x Int32,
@@ -20,6 +22,8 @@ INSERT INTO tp SELECT
     number,
     number
 FROM numbers(5);
+
+SYSTEM drop  table tp;
 
 CREATE TABLE tp
 (

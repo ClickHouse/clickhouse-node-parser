@@ -25,6 +25,8 @@ SELECT row_number() OVER (ORDER BY 1 ASC, a ASC)
 FROM order_by_const
 SETTINGS query_plan_enable_multithreading_after_window_functions = 0;
 
+SYSTEM drop  table order_by_const;
+
 -- expressions in window frame
 SELECT count() OVER (ROWS BETWEEN 1 + 1 PRECEDING AND 1 + 1 FOLLOWING)
 FROM numbers(10);

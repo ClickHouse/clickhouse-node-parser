@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS 03409_users;
 CREATE TABLE 03409_users
 (
     `uid` Int16,

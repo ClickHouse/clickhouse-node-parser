@@ -1,3 +1,8 @@
+-- Tags: global
+SYSTEM DROP  TABLE IF EXISTS test1;
+
+SYSTEM DROP  TABLE IF EXISTS test2;
+
 CREATE TABLE test1
 (
     a UInt8,
@@ -18,3 +23,7 @@ ARRAY JOIN arrayFilter(t -> (t GLOBAL IN (
         WHERE 1
     )), test2.b) AS test2_b
 WHERE 1;
+
+SYSTEM DROP  TABLE test1;
+
+SYSTEM DROP  TABLE test2;

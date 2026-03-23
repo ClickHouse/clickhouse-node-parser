@@ -2,6 +2,8 @@
 -- Below SELECTs intentionally only ORDER BY the table primary key and rely on read-in-order optimization
 SET optimize_read_in_order = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     name String,
@@ -17,6 +19,8 @@ SELECT *
 FROM tab
 ORDER BY name ASC
 SETTINGS max_threads = 1;
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

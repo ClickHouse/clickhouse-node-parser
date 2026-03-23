@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS X;
+
+SYSTEM DROP  TABLE IF EXISTS Y;
+
 CREATE TABLE X
 (
     id Int
@@ -56,3 +60,7 @@ FROM
 RIGHT JOIN `system`.one AS Y
     ON X.dummy = Y.dummy
 SETTINGS join_use_nulls = 1;
+
+SYSTEM DROP  TABLE X;
+
+SYSTEM DROP  TABLE Y;

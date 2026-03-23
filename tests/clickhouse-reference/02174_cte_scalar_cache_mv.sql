@@ -54,6 +54,7 @@ WHERE
   AND query LIKE '-- FIRST INSERT\nINSERT INTO t1\n%'
   AND event_date >= yesterday() AND event_time > now() - interval 10 minute;
 set enable_analyzer = 1;
+DROP TABLE mv1;
 CREATE TABLE t3 (z Int64) ENGINE = Memory;
 CREATE MATERIALIZED VIEW mv2 TO t3 AS
 SELECT
@@ -81,6 +82,7 @@ WHERE
   AND type = 'QueryFinish'
   AND query LIKE '-- SECOND INSERT\nINSERT INTO t1%'
   AND event_date >= yesterday() AND event_time > now() - interval 10 minute;
+DROP TABLE mv2;
 CREATE TABLE t4 (z Int64) ENGINE = Memory;
 CREATE MATERIALIZED VIEW mv3 TO t4 AS
 SELECT
@@ -108,3 +110,8 @@ WHERE
   AND type = 'QueryFinish'
   AND query LIKE '-- THIRD INSERT\nINSERT INTO t1%'
   AND event_date >= yesterday() AND event_time > now() - interval 10 minute;
+DROP TABLE mv3;
+DROP TABLE t1;
+DROP TABLE t2;
+DROP TABLE t3;
+DROP TABLE t4;

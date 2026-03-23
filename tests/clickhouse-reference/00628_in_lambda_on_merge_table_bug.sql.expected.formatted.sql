@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists test_in_tuple_1;
+
+SYSTEM drop  table if exists test_in_tuple_2;
+
+SYSTEM drop  table if exists test_in_tuple;
+
 CREATE TABLE test_in_tuple_1
 (
     key Int32,

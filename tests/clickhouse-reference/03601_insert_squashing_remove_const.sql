@@ -1,4 +1,7 @@
+DROP TABLE IF EXISTS tbl_x;
+
 CREATE TABLE tbl_x (col2  String) ENGINE = Memory;
+
 -- Produce Const and non-Const block in various SELECTs that may lead to UB w/o removing constness while squashing
 INSERT INTO tbl_x
 WITH

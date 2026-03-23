@@ -30,3 +30,5 @@ SELECT
     'groupArray: ',
     timeSeriesGroupArray(timestamp, value)
 FROM ts_raw_data;
+
+SYSTEM DROP  TABLE ts_raw_data;

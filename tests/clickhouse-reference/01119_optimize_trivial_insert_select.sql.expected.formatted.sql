@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     n int,
@@ -60,3 +62,5 @@ SELECT
     s
 FROM t
 ORDER BY n ASC;
+
+SYSTEM drop  table t;

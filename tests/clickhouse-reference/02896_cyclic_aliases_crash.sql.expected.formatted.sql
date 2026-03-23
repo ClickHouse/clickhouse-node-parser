@@ -45,6 +45,8 @@ GROUP BY time_stamp_utc
 ORDER BY Impressions DESC
 LIMIT 1000;
 
+SYSTEM drop  table test_table;
+
 CREATE TABLE test_table
 ENGINE = MergeTree
 ORDER BY sum AS

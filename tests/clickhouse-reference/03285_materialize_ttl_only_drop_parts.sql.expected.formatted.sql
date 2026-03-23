@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_03285_mat_ttl;
+
 CREATE TABLE test_03285_mat_ttl
 (
     id UInt64,
@@ -34,3 +36,5 @@ SELECT
     'Count',
     count()
 FROM test_03285_mat_ttl;
+
+SYSTEM DROP  TABLE test_03285_mat_ttl;

@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP TABLE IF EXISTS t_primary_index_cache;
 CREATE TABLE t_primary_index_cache (a UInt64, b UInt64)
 ENGINE = MergeTree ORDER BY a PARTITION BY a % 2
 SETTINGS use_primary_key_cache = 1, prewarm_primary_key_cache = 0, index_granularity = 64, index_granularity_bytes = '10M', min_bytes_for_wide_part = 0;
@@ -13,3 +16,4 @@ SELECT
 FROM system.query_log
 WHERE query LIKE 'SELECT count() FROM t_primary_index_cache%' AND current_database = currentDatabase() AND type = 'QueryFinish'
 ORDER BY event_time_microseconds;
+DROP TABLE t_primary_index_cache;

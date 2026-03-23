@@ -4,6 +4,8 @@ SET allow_experimental_dynamic_type = 1;
 
 SET allow_dynamic_type_in_join_keys = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Tuple(c1 Int, c2 Dynamic)
@@ -15,3 +17,5 @@ FROM
     t0 AS tx
 INNER JOIN t0 AS ty
     ON tx.c0 = ty.c0;
+
+SYSTEM DROP  TABLE t0;

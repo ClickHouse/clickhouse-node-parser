@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tbl_x;
+
 CREATE TABLE tbl_x
 (
     col2 String

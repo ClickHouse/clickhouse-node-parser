@@ -1,3 +1,22 @@
+-- Tags: no-replicated-database, memory-engine
+-- Tag no-replicated-database: Unsupported type of CREATE TABLE ... CLONE AS ... query
+
+DROP TABLE IF EXISTS foo_memory;
+DROP TABLE IF EXISTS clone_as_foo_memory;
+DROP TABLE IF EXISTS foo_file;
+DROP TABLE IF EXISTS clone_as_foo_file;
+DROP TABLE IF EXISTS foo_merge_tree;
+DROP TABLE IF EXISTS clone_as_foo_merge_tree;
+DROP TABLE IF EXISTS clone_as_foo_merge_tree_p_x;
+DROP TABLE IF EXISTS clone_as_foo_merge_tree_p_y;
+DROP TABLE IF EXISTS foo_replacing_merge_tree;
+DROP TABLE IF EXISTS clone_as_foo_replacing_merge_tree;
+DROP TABLE IF EXISTS clone_as_foo_replacing_merge_tree_p_x;
+DROP TABLE IF EXISTS clone_as_foo_replacing_merge_tree_p_y;
+DROP TABLE IF EXISTS foo_replicated_merge_tree;
+DROP TABLE IF EXISTS clone_as_foo_replicated_merge_tree;
+DROP TABLE IF EXISTS clone_as_foo_replicated_merge_tree_p_x;
+DROP TABLE IF EXISTS clone_as_foo_replicated_merge_tree_p_y;
 -- CLONE AS with a table of Memory engine
 CREATE TABLE foo_memory (x Int8, y String) ENGINE=Memory;
 INSERT INTO foo_memory VALUES (1, 'a'), (2, 'b');
@@ -34,5 +53,7 @@ CREATE TABLE clone_as_foo_replicated_merge_tree CLONE AS foo_replicated_merge_tr
 -- Specify ENGINE
 CREATE TABLE clone_as_foo_replicated_merge_tree_p_x CLONE AS foo_replicated_merge_tree ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/clone_as_foo_replicated_merge_tree_p_x', 'r1') PRIMARY KEY x;
 CREATE TABLE clone_as_foo_replicated_merge_tree_p_y CLONE AS foo_replicated_merge_tree ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/clone_as_foo_replicated_merge_tree_p_y', 'r1') PRIMARY KEY y; -- { serverError BAD_ARGUMENTS }
+-- CLONE AS with a Replicated database
+DROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE_1:Identifier};
 CREATE DATABASE {CLICKHOUSE_DATABASE_1:Identifier} ENGINE = Replicated('/test/databases/{database}/test_03231', 's1', 'r1');
 USE {CLICKHOUSE_DATABASE_1:Identifier};

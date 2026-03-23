@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test02315;
+
 CREATE TABLE test02315
 (
     a UInt64,
@@ -43,3 +45,6 @@ ORDER BY (amount, a, b) ASC
 SETTINGS
     force_grouping_standard_compatibility = 0,
     enable_analyzer = 1;
+
+-- { echoOff }
+SYSTEM DROP  TABLE test02315;

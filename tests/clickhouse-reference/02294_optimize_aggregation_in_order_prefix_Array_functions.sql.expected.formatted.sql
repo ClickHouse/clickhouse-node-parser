@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_02294;
+
 CREATE TABLE data_02294
 (
     a Int64,
@@ -26,3 +28,5 @@ GROUP BY
     a,
     b
 SETTINGS optimize_aggregation_in_order = 1;
+
+SYSTEM drop  table data_02294;

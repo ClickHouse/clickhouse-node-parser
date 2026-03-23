@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists order_by_nulls_first;
+
 CREATE TABLE order_by_nulls_first
 (
     diff Nullable(Int16),

@@ -1,5 +1,7 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
+SYSTEM DROP  TABLE IF EXISTS index_for_like;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE index_for_like
@@ -97,3 +99,5 @@ WHERE like(s, 'Hello, Worl_%');
 SELECT s
 FROM index_for_like
 WHERE like(s, 'Hello, Worl\\_%');
+
+SYSTEM DROP  TABLE index_for_like;

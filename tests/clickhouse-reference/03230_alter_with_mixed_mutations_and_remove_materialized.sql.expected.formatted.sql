@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS a SYNC;
+
 CREATE TABLE a
 (
     x String,

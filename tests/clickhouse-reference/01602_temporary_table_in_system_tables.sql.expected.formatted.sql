@@ -1,3 +1,8 @@
+-- Tags: memory-engine
+SYSTEM DROP  TEMPORARY TABLE IF EXISTS test_01602a;
+
+SYSTEM DROP  TEMPORARY TABLE IF EXISTS test_01602b;
+
 CREATE TEMPORARY TABLE test_01602a
 (
     x UInt32
@@ -38,3 +43,7 @@ WHERE database = '_temporary_and_external_tables';
 SELECT COUNT()
 FROM `system`.`columns`
 WHERE database = '_temporary_and_external_tables';
+
+SYSTEM DROP  TEMPORARY TABLE test_01602a;
+
+SYSTEM DROP  TEMPORARY TABLE test_01602b;

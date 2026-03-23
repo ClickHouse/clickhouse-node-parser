@@ -1,5 +1,8 @@
 SET enable_full_text_index = 1;
 
+-- Tests text index with the 'CollapsingMergeTree' engine
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -40,3 +43,5 @@ SELECT value
 FROM tab FINAL
 WHERE hasToken(key, 'bar')
 ORDER BY value ASC;
+
+SYSTEM DROP  TABLE tab;

@@ -48,6 +48,8 @@ SELECT reinterpret(concat(repeat('1�@1�@1�@1�@', 10), '�'), 'Array
 
 SELECT reinterpret(95, 'Array(FixedString(4))'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+SYSTEM DROP  TABLE IF EXISTS tab1;
+
 CREATE TABLE tab1
 (
     id Int32,
@@ -62,3 +64,5 @@ INSERT INTO tab1;
 SELECT reinterpret(s, 'Array(Float32)')
 FROM tab1
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE tab1;

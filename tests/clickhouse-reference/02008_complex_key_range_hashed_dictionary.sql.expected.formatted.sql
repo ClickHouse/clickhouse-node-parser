@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS date_table;
+
 CREATE TABLE date_table
 (
     CountryID UInt64,
@@ -14,6 +17,8 @@ INSERT INTO date_table;
 INSERT INTO date_table;
 
 INSERT INTO date_table;
+
+SYSTEM DROP  DICTIONARY IF EXISTS range_dictionary;
 
 CREATE DICTIONARY range_dictionary
 (
@@ -77,6 +82,10 @@ ORDER BY
     CountryID ASC,
     StartDate ASC,
     EndDate ASC;
+
+SYSTEM DROP  DICTIONARY range_dictionary;
+
+SYSTEM DROP  TABLE date_table;
 
 CREATE TABLE date_table
 (
@@ -153,3 +162,5 @@ ORDER BY
     CountryID ASC,
     StartDate ASC,
     EndDate ASC;
+
+SYSTEM DROP  DICTIONARY range_dictionary_nullable;

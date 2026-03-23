@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_alter_codec_pk;
+
 CREATE TABLE test_alter_codec_pk
 (
     id UInt64,

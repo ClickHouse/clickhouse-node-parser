@@ -1,3 +1,6 @@
+-- { echo }
+
+DROP TABLE IF EXISTS t;
 CREATE TABLE t (s String)
 ENGINE = MergeTree
 ORDER BY s;

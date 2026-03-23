@@ -1,3 +1,11 @@
+SYSTEM DROP  TABLE IF EXISTS test_01532_1;
+
+SYSTEM DROP  TABLE IF EXISTS test_01532_2;
+
+SYSTEM DROP  TABLE IF EXISTS test_01532_3;
+
+SYSTEM DROP  TABLE IF EXISTS test_01532_4;
+
 CREATE TABLE test_01532_1
 (
     a Tuple(key String, value String)
@@ -21,3 +29,11 @@ CREATE TABLE test_01532_4
     a Tuple(UInt8, Tuple(key String, value String))
 )
 ENGINE = Memory();
+
+SYSTEM DROP  TABLE test_01532_1;
+
+SYSTEM DROP  TABLE test_01532_2;
+
+SYSTEM DROP  TABLE test_01532_3;
+
+SYSTEM DROP  TABLE test_01532_4;

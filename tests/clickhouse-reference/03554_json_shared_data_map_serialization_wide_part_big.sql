@@ -1,3 +1,7 @@
+-- Tags: long
+-- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
+
+drop table if exists test_wide_map;
 create table test_wide_map (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings min_bytes_for_wide_part=1, min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='map', object_shared_data_serialization_version_for_zero_level_parts='map';
 insert into test_wide_map select multiIf(
 number < 15000,
@@ -23,6 +27,8 @@ select json.^a from test_wide_map format Null;
 select json, json.^a from test_wide_map format Null;
 select json.^a, json.a.a1 from test_wide_map format Null;
 select json.a.a1, json.^a from test_wide_map format Null;
+drop table test_wide_map;
+drop table if exists test_wide_map_tuple;
 create table test_wide_map_tuple (json Tuple(data JSON(max_dynamic_paths=8))) engine=MergeTree order by tuple() settings min_bytes_for_wide_part=1, min_rows_for_wide_part=1, write_marks_for_substreams_in_compact_parts=1, object_serialization_version='v3', object_shared_data_serialization_version='map', object_shared_data_serialization_version_for_zero_level_parts='map';
 insert into test_wide_map_tuple select tuple(multiIf(
 number < 15000,
@@ -49,3 +55,4 @@ select json.data, json.data.^a from test_wide_map_tuple format Null;
 select json.data.^a, json.data from test_wide_map_tuple format Null;
 select json.data, json.data.^a, json.data.b from test_wide_map_tuple format Null;
 select json.data.b, json.data.^a, json.data from test_wide_map_tuple format Null;
+drop table test_wide_map_tuple format Null;

@@ -1,3 +1,6 @@
+-- Tags: long
+
+DROP TABLE IF EXISTS normal;
 CREATE TABLE IF NOT EXISTS normal
 (
     `key` UInt32,
@@ -14,6 +17,8 @@ SELECT '---normal : contains both projections and parts ---';
 SELECT trimLeft(replaceRegexpAll(explain, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas')) FROM (explain SELECT sum(key) FROM normal WHERE key > 9999 AND key < 10010) WHERE explain LIKE '%ReadFromMergeTree%' OR explain LIKE '%ReadFromRemoteParallelReplicas%' SETTINGS enable_analyzer = 1;
 SELECT sum(key) FROM normal WHERE key > 9999 AND key < 10010;
 INSERT INTO normal select number as key, number as value from numbers(10100);
+DROP TABLE normal;
+DROP TABLE IF EXISTS agg;
 CREATE TABLE agg
 (
     `key` UInt32,
@@ -26,6 +31,8 @@ INSERT INTO agg SELECT number AS key, number AS value FROM numbers(100, 100);
 SELECT trimLeft(replaceRegexpAll(explain, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas')) FROM (explain SELECT sum(value) AS v FROM agg where key > 90 AND key < 110) WHERE explain LIKE '%ReadFromMergeTree%' OR explain LIKE '%ReadFromRemoteParallelReplicas%' SETTINGS enable_analyzer = 1;
 SELECT sum(value) AS v FROM agg where key > 90 AND key < 110;
 INSERT INTO agg SELECT number AS key, number AS value FROM numbers(200);
+DROP TABLE agg;
+DROP TABLE IF EXISTS x;
 CREATE TABLE x (i int) engine MergeTree ORDER BY i SETTINGS index_granularity = 3;
 INSERT INTO x SELECT * FROM numbers(10);
 SELECT trimLeft(replaceRegexpAll(explain, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas')) FROM (explain SELECT max(i) FROM x) WHERE explain LIKE '%ReadFromPreparedSource%' OR explain LIKE '%ReadFromRemoteParallelReplicas%' SETTINGS enable_analyzer = 1;

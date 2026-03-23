@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-encrypted-storage
+SYSTEM drop  table if exists txn_counters;
+
 CREATE TABLE txn_counters
 (
     n Int64,
@@ -125,3 +128,5 @@ WHERE tid IN (
     OR (database = currentDatabase()
     AND table = 'txn_counters')
 ORDER BY event_time ASC;
+
+SYSTEM drop  table txn_counters;

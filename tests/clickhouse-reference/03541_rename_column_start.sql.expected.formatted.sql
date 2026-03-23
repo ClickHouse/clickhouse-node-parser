@@ -8,3 +8,5 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/rmt', '1')
 ORDER BY a;
 
 INSERT INTO rmt;
+
+SYSTEM DROP  TABLE rmt SYNC;

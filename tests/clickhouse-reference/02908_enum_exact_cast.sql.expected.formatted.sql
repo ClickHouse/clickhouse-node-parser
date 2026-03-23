@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS enum_table;
+
 CREATE TABLE enum_table
 (
     id UInt64,
@@ -34,6 +36,10 @@ INSERT INTO enum_table SELECT
 
 SET check_conversion_from_numbers_to_enum = 1; -- default behavior
 
+SYSTEM DROP  TABLE enum_table;
+
+SYSTEM DROP  TABLE IF EXISTS nullable_enum_table;
+
 CREATE TABLE nullable_enum_table
 (
     id UInt64,
@@ -53,6 +59,8 @@ INSERT INTO nullable_enum_table;
 INSERT INTO nullable_enum_table;
 
 INSERT INTO nullable_enum_table;
+
+SYSTEM DROP  TABLE nullable_enum_table;
 
 SELECT (('first'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64;
 

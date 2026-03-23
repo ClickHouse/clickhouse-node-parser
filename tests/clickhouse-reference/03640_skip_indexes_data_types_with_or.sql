@@ -11,6 +11,7 @@ SET use_query_condition_cache = 0;
 SET use_skip_indexes_on_data_read = 0;
 SET use_skip_indexes = 1;
 SET enable_full_text_index = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     id UInt32,

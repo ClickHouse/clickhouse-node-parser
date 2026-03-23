@@ -3,6 +3,54 @@
 -- no-shared-merge-tree implemented another test
 SET optimize_on_insert = 0;
 
+SYSTEM DROP  TABLE IF EXISTS merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS collapsing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS versioned_collapsing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS summing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS summing_merge_tree_with_list_of_columns_to_sum;
+
+SYSTEM DROP  TABLE IF EXISTS aggregating_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS collapsing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS versioned_collapsing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS summing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS summing_merge_tree_with_sampling_with_list_of_columns_to_sum;
+
+SYSTEM DROP  TABLE IF EXISTS aggregating_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_collapsing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_versioned_collapsing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_summing_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_summing_merge_tree_with_list_of_columns_to_sum;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_aggregating_merge_tree;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_collapsing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_versioned_collapsing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_summing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_summing_merge_tree_with_sampling_with_list_of_columns_to_sum;
+
+SYSTEM DROP  TABLE IF EXISTS replicated_aggregating_merge_tree_with_sampling;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE merge_tree
@@ -316,3 +364,51 @@ INSERT INTO replicated_summing_merge_tree_with_sampling;
 INSERT INTO replicated_summing_merge_tree_with_sampling_with_list_of_columns_to_sum;
 
 INSERT INTO replicated_aggregating_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE merge_tree;
+
+SYSTEM DROP  TABLE collapsing_merge_tree;
+
+SYSTEM DROP  TABLE versioned_collapsing_merge_tree;
+
+SYSTEM DROP  TABLE summing_merge_tree;
+
+SYSTEM DROP  TABLE summing_merge_tree_with_list_of_columns_to_sum;
+
+SYSTEM DROP  TABLE aggregating_merge_tree;
+
+SYSTEM DROP  TABLE merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE collapsing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE versioned_collapsing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE summing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE summing_merge_tree_with_sampling_with_list_of_columns_to_sum;
+
+SYSTEM DROP  TABLE aggregating_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE replicated_merge_tree;
+
+SYSTEM DROP  TABLE replicated_collapsing_merge_tree;
+
+SYSTEM DROP  TABLE replicated_versioned_collapsing_merge_tree;
+
+SYSTEM DROP  TABLE replicated_summing_merge_tree;
+
+SYSTEM DROP  TABLE replicated_summing_merge_tree_with_list_of_columns_to_sum;
+
+SYSTEM DROP  TABLE replicated_aggregating_merge_tree;
+
+SYSTEM DROP  TABLE replicated_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE replicated_collapsing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE replicated_versioned_collapsing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE replicated_summing_merge_tree_with_sampling;
+
+SYSTEM DROP  TABLE replicated_summing_merge_tree_with_sampling_with_list_of_columns_to_sum;
+
+SYSTEM DROP  TABLE replicated_aggregating_merge_tree_with_sampling;

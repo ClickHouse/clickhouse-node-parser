@@ -1,3 +1,8 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/10894
+
+DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS mv;
 CREATE TABLE event (
     `event_time` DateTime,
     `event_name` String,

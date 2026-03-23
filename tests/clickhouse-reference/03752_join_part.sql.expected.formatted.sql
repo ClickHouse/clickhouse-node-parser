@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t0;
+
 CREATE TABLE t0
 (
     c0 Int
@@ -16,3 +18,5 @@ SETTINGS
     query_plan_use_logical_join_step = 0,
     use_join_disjunctions_push_down = 1,
     enable_analyzer = 1;
+
+SYSTEM DROP  TABLE t0;

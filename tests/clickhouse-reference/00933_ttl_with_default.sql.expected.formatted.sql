@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists ttl_00933_2;
+
 CREATE TABLE ttl_00933_2
 (
     d DateTime,

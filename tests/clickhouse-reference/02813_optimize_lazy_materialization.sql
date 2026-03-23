@@ -3,6 +3,7 @@ SET query_plan_max_limit_for_lazy_materialization = 10;
 SET allow_experimental_variant_type = 1;
 SET use_variant_as_common_type = 1;
 SET allow_experimental_dynamic_type = 1;
+DROP TABLE IF EXISTS optimize_lazy_materialization;
 CREATE TABLE optimize_lazy_materialization (a UInt64, b UInt64, c UInt64, d UInt64, n Nested(x String))
 ENGINE MergeTree() PARTITION BY b ORDER BY a;
 INSERT INTO optimize_lazy_materialization SELECT number, number % 2, number, number % 3, ['a', 'b', 'c'] FROM numbers(0, 100);
@@ -40,6 +41,10 @@ SELECT _part_index, _part_offset FROM optimize_lazy_materialization_with_compact
 -- queries with filter
 SELECT * FROM optimize_lazy_materialization_with_compact_mt WHERE d > 1 ORDER BY c LIMIT 3;
 SELECT * FROM optimize_lazy_materialization_with_compact_mt PREWHERE d > 1 ORDER BY c LIMIT 3;
+-- { echoOff }
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_compact_mt;
+-- queries with int data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_int_data_type;
 CREATE TABLE optimize_lazy_materialization_with_int_data_type
 (
     a UInt64,
@@ -55,6 +60,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_int_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with float data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_float_data_type;
 CREATE TABLE optimize_lazy_materialization_with_float_data_type
 (
     a UInt64,
@@ -69,6 +78,10 @@ SELECT
     number + 3.1 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_float_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with decimal data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_decimal_data_type;
 CREATE TABLE optimize_lazy_materialization_with_decimal_data_type
 (
     a UInt64,
@@ -84,6 +97,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_decimal_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with string data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_string_data_type;
 CREATE TABLE optimize_lazy_materialization_with_string_data_type
 (
     a UInt64,
@@ -99,6 +116,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_string_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with fixed string data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_fixed_string_data_type;
 CREATE TABLE optimize_lazy_materialization_with_fixed_string_data_type
 (
     a UInt64,
@@ -114,6 +135,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_fixed_string_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with fixed date data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_date_data_type;
 CREATE TABLE optimize_lazy_materialization_with_date_data_type
 (
     a UInt64,
@@ -129,6 +154,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_date_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with fixed date32 data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_date32_data_type;
 CREATE TABLE optimize_lazy_materialization_with_date32_data_type
 (
     a UInt64,
@@ -144,6 +173,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_date32_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with fixed datetime data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_datetime_data_type;
 CREATE TABLE optimize_lazy_materialization_with_datetime_data_type
 (
     a UInt64,
@@ -159,6 +192,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT a, b, toUInt64(c) FROM optimize_lazy_materialization_with_datetime_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with fixed datetime64 data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_datetime64_data_type;
 CREATE TABLE optimize_lazy_materialization_with_datetime64_data_type
 (
     a UInt64,
@@ -174,6 +211,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT a, b, toUInt64(c) FROM optimize_lazy_materialization_with_datetime64_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with fixed enum data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_enum_data_type;
 CREATE TABLE optimize_lazy_materialization_with_enum_data_type
 (
     a UInt64,
@@ -189,6 +230,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_enum_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with bool data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_bool_data_type;
 CREATE TABLE optimize_lazy_materialization_with_bool_data_type
 (
     a UInt64,
@@ -204,6 +249,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_bool_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with uuid data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_uuid_data_type;
 CREATE TABLE optimize_lazy_materialization_with_uuid_data_type
 (
     a UInt64,
@@ -218,6 +267,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT a, b, length(toString(c)) FROM optimize_lazy_materialization_with_uuid_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with ipv4 data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_ipv4_data_type;
 CREATE TABLE optimize_lazy_materialization_with_ipv4_data_type
 (
     a UInt64,
@@ -233,6 +286,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_ipv4_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with ipv6 data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_ipv6_data_type;
 CREATE TABLE optimize_lazy_materialization_with_ipv6_data_type
 (
     a UInt64,
@@ -248,6 +305,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_ipv6_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with array data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_array_data_type;
 CREATE TABLE optimize_lazy_materialization_with_array_data_type
 (
     a UInt64,
@@ -264,6 +325,10 @@ FROM numbers(0, 1000);
 -- { echoOn }
 SELECT a, b, c, c.size0 FROM optimize_lazy_materialization_with_array_data_type ORDER BY b LIMIT 10;
 SELECT a, b, c.field2 FROM optimize_lazy_materialization_with_array_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with tuple data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_tuple_data_type;
 CREATE TABLE optimize_lazy_materialization_with_tuple_data_type
 (
     a UInt64,
@@ -279,6 +344,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_tuple_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with map data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_map_data_type;
 CREATE TABLE optimize_lazy_materialization_with_map_data_type
 (
     a UInt64,
@@ -295,6 +364,10 @@ FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_map_data_type ORDER BY b LIMIT 10;
 SELECT a, b, c['key1'] FROM optimize_lazy_materialization_with_map_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with variant data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_variant_data_type;
 CREATE TABLE optimize_lazy_materialization_with_variant_data_type
 (
     a UInt64,
@@ -313,6 +386,10 @@ SELECT * FROM optimize_lazy_materialization_with_variant_data_type ORDER BY b LI
 -- queries with subcolumn of variant data type
 SELECT a, b, c.UInt64 FROM optimize_lazy_materialization_with_variant_data_type ORDER BY b LIMIT 10;
 SELECT a, b, c.UInt64.null FROM optimize_lazy_materialization_with_variant_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with low_cardinality data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_low_cardinality_data_type;
 CREATE TABLE optimize_lazy_materialization_with_low_cardinality_data_type
 (
     a UInt64,
@@ -328,6 +405,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_low_cardinality_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with nullable data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_nullable_data_type;
 CREATE TABLE optimize_lazy_materialization_with_nullable_data_type
 (
     a UInt64,
@@ -343,6 +424,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT * FROM optimize_lazy_materialization_with_nullable_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with nested data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_nested_data_type;
 CREATE TABLE optimize_lazy_materialization_with_nested_data_type
 (
     a UInt64,
@@ -363,6 +448,10 @@ SELECT
 FROM numbers(0, 1000);
 -- { echoOn }
 SELECT a, b, c.id, c.order FROM optimize_lazy_materialization_with_nested_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with dynamic data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_dynamic_data_type;
 CREATE TABLE optimize_lazy_materialization_with_dynamic_data_type
 (
     a UInt64,
@@ -380,6 +469,10 @@ FROM numbers(0, 1000);
 SELECT a, b, c FROM optimize_lazy_materialization_with_dynamic_data_type ORDER BY b LIMIT 10;
 -- queries with subcolumn of dynamic data type
 SELECT a, b, c.IPv4, c.String FROM optimize_lazy_materialization_with_dynamic_data_type ORDER BY b LIMIT 10;
+-- { echoOff }
+
+-- queries with sparse data type
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_sparse_data_type;
 CREATE TABLE optimize_lazy_materialization_with_sparse_data_type
 (
     a UInt64,

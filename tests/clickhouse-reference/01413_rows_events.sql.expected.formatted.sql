@@ -1,3 +1,8 @@
+-- Tags: no-async-insert
+-- The correct profile event appears in the secondary query with query_kind: AsyncInsertFlush
+-- add_minmax_index_for_numeric_columns=0: We are checking exact rows read, and that number will be different if we have an index on v
+SYSTEM DROP  TABLE IF EXISTS rows_events_test;
+
 CREATE TABLE rows_events_test
 (
     k UInt32,
@@ -52,3 +57,5 @@ WHERE current_database = currentDatabase()
     AND event_date >= yesterday()
 ORDER BY event_time DESC
 LIMIT 1;
+
+SYSTEM DROP  TABLE rows_events_test;

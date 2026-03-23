@@ -1,5 +1,9 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t0;
+
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t0
 (
     c0 Int32 DEFAULT 0,
@@ -22,3 +26,7 @@ FROM
     t1
 LEFT JOIN t0
     ON 1 = 1;
+
+SYSTEM DROP  TABLE t0;
+
+SYSTEM DROP  TABLE t1;

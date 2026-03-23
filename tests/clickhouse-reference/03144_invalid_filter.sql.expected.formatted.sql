@@ -11,3 +11,5 @@ SELECT
     number,
     number::String
 FROM numbers(10);
+
+SYSTEM DROP  TABLE test_table;

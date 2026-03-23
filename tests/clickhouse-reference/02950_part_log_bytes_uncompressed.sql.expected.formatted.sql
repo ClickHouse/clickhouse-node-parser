@@ -38,3 +38,5 @@ WHERE event_date >= yesterday()
 ORDER BY
     part_name ASC,
     event_type ASC;
+
+SYSTEM DROP  TABLE part_log_bytes_uncompressed;

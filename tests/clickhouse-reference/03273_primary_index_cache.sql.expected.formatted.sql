@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+SYSTEM DROP  TABLE IF EXISTS t_primary_index_cache;
+
 CREATE TABLE t_primary_index_cache
 (
     a UInt64,
@@ -45,3 +48,5 @@ WHERE like(query, 'SELECT count() FROM t_primary_index_cache%')
     AND current_database = currentDatabase()
     AND type = 'QueryFinish'
 ORDER BY event_time_microseconds ASC;
+
+SYSTEM DROP  TABLE t_primary_index_cache;

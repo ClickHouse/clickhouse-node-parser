@@ -1,3 +1,12 @@
+-- Tags: no-fasttest, no-parallel
+-- no-fasttest: json type needs rapidjson library, geo types need s2 geometry
+-- no-parallel: can't provide currentDatabase() to SHOW COLUMNS
+-- Tests the output of SHOW COLUMNS when called through the ClickHouse protocol.
+-- -----------------------------------------------------------------------------------
+-- Please keep this test in-sync with 02775_show_columns_called_from_clickhouse.expect
+-- -----------------------------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 SET enable_json_type = 1;
@@ -65,3 +74,5 @@ CREATE TABLE tab
     lnfs LowCardinality(Nullable(FixedString(3)))
 )
 ENGINE = Memory;
+
+SYSTEM DROP  TABLE tab;

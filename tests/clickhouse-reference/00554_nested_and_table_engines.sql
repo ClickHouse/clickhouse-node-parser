@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS nested;
 CREATE TABLE nested (x UInt8, n Nested(a UInt64, b String)) ENGINE = TinyLog;
 INSERT INTO nested VALUES (1, [2, 3], ['Hello', 'World']);
 INSERT INTO nested VALUES (4, [5], ['Goodbye']);
@@ -8,3 +9,4 @@ CREATE TABLE nested (x UInt8, n Nested(a UInt64, b String)) ENGINE = Log;
 CREATE TABLE nested (x UInt8, n Nested(a UInt64, b String)) ENGINE = StripeLog;
 CREATE TABLE nested (x UInt8, n Nested(a UInt64, b String)) ENGINE = Memory;
 CREATE TABLE nested (x UInt8, n Nested(a UInt64, b String)) ENGINE = MergeTree ORDER BY x;
+DROP TABLE nested;

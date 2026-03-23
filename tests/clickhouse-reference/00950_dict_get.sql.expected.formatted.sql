@@ -2,6 +2,12 @@
 -- Must use `default` database and these tables - they're configured in tests/*_dictionary.xml
 USE default;
 
+SYSTEM drop  table if exists ints;
+
+SYSTEM drop  table if exists strings;
+
+SYSTEM drop  table if exists decimals;
+
 CREATE TABLE ints
 (
     key UInt64,

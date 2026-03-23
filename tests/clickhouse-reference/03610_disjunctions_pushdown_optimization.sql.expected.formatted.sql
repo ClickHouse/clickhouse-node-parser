@@ -7,6 +7,10 @@ SET enable_analyzer = 1;
 
 SET enable_join_runtime_filters = 0;
 
+SYSTEM DROP  TABLE IF EXISTS tp1;
+
+SYSTEM DROP  TABLE IF EXISTS tp2;
+
 CREATE TABLE tp1
 (
     k Int32,
@@ -132,6 +136,15 @@ WHERE (t1.k IN (1, 2))
     OR (t1.k IN (3, 4))
 ORDER BY t1.k ASC;
 
+SYSTEM DROP  TABLE tp1;
+
+SYSTEM DROP  TABLE tp2;
+
+---------- CASE D ----------
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1
 (
     a UInt32,
@@ -187,6 +200,10 @@ ORDER BY
     a ASC,
     c ASC
 FORMAT TSV;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;
 
 SELECT
     n1.number,

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists proj;
+
 CREATE TABLE proj
 (
     date Date,
@@ -12,3 +14,5 @@ FROM numbers(1e2);
 SELECT max(date)
 FROM proj
 PREWHERE date != '2012-10-24';
+
+SYSTEM drop  table proj;

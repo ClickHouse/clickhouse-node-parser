@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists cc sync;
+
 CREATE TABLE cc
 (
     a UInt64,

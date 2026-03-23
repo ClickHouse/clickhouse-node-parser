@@ -5,6 +5,8 @@ SELECT sumArgMinState(number, number) AS a
 FROM numbers(3)
 FORMAT Null;
 
+SYSTEM DROP  TABLE IF EXISTS argmax_comb;
+
 CREATE TABLE argmax_comb
 (
     id UInt64,

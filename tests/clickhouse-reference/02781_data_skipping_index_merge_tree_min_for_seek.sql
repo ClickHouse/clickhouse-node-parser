@@ -1,3 +1,6 @@
+-- Tags: no-random-merge-tree-settings, no-random-settings
+
+DROP TABLE IF EXISTS data;
 CREATE TABLE data
 (
     key  Int,

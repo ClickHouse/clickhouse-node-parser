@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bug_13492;
+
 CREATE TABLE bug_13492
 (
     d DateTime
@@ -17,3 +19,5 @@ FROM
 CROSS JOIN numbers(1) AS n;
 
 SET max_threads = 2;
+
+SYSTEM DROP  TABLE bug_13492;

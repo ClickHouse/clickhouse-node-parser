@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS table1;
+
+SYSTEM DROP  TABLE IF EXISTS table2;
+
 CREATE TABLE table1
 (
     id String
@@ -21,3 +25,7 @@ LEFT JOIN table2
     ON table1.id = table2.parent_id;
 
 SET join_use_nulls = 1;
+
+SYSTEM DROP  TABLE table1;
+
+SYSTEM DROP  TABLE table2;

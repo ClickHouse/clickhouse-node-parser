@@ -1,6 +1,8 @@
 -- Tags: no-fasttest
 SET log_queries = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_async_insert_02193_1;
+
 CREATE TABLE t_async_insert_02193_1
 (
     id UInt32,

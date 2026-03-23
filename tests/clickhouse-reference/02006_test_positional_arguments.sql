@@ -1,6 +1,8 @@
 set group_by_two_level_threshold = 100000;
 set enable_positional_arguments = 1;
 set enable_analyzer = 1;
+drop table if exists test;
+drop table if exists test2;
 create table test(x1 Int, x2 Int, x3 Int) engine=Memory();
 insert into test values (1, 10, 100), (10, 1, 10), (100, 100, 1);
 -- { echo }
@@ -37,6 +39,7 @@ select substr('aaaaaaaaaaaaaa', 8) as a  group by substr('aaaaaaaaaaaaaa', 8) or
 select b from (select 5 as a, 'Hello' as b order by a);
 select b from (select 5 as a, 'Hello' as b group by a);
 select b from (select 5 as a, 'Hello' as b order by 1);
+drop table if exists tp2;
 create table tp2(first_col String, second_col Int32) engine = MergeTree() order by tuple();
 insert into tp2 select 'bbb', 1;
 insert into tp2 select 'aaa', 2;
@@ -54,3 +57,4 @@ index `time` (`time`) type minmax granularity 3
 ) engine = MergeTree()
 order by (`time`);
 select count(*) as `value`, 0 as `data` from test group by `data`;
+drop table test;

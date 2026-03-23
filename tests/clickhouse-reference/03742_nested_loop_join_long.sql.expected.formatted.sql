@@ -1,3 +1,6 @@
+-- Tags: long
+SYSTEM DROP  TABLE IF EXISTS events;
+
 CREATE TABLE events
 (
     Id Nullable(UInt64),
@@ -18,6 +21,8 @@ INSERT INTO events SELECT
     concat('Payload_NULL', toString(number)),
     toDateTime('2024-01-01 00:00:00') + toIntervalMinute(number)
 FROM numbers(10);
+
+SYSTEM DROP  TABLE IF EXISTS attributes;
 
 CREATE TABLE attributes
 (
@@ -52,6 +57,9 @@ INSERT INTO attributes SELECT
     concat('O_', toString(number)) AS Attribute
 FROM numbers(200000);
 
+-- More keys in left table and different data distribution, more distinct keys
+SYSTEM DROP  TABLE IF EXISTS events2;
+
 CREATE TABLE events2
 (
     Id UInt64,
@@ -66,6 +74,8 @@ INSERT INTO events2 SELECT
     concat('Payload_', toString(number)),
     toDateTime('2024-01-01 00:00:00') + toIntervalMinute(number)
 FROM numbers(1000000);
+
+SYSTEM DROP  TABLE IF EXISTS attributes2;
 
 CREATE TABLE attributes2
 (

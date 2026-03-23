@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS mv;
+
+SYSTEM DROP  TABLE IF EXISTS mv_source;
+
+SYSTEM DROP  TABLE IF EXISTS mv_target;
+
 CREATE TABLE mv_source
 (
     a UInt64
@@ -29,3 +35,9 @@ ORDER BY a ASC;
 SELECT *
 FROM mv_target
 ORDER BY a ASC;
+
+SYSTEM DROP  TABLE mv;
+
+SYSTEM DROP  TABLE mv_source;
+
+SYSTEM DROP  TABLE mv_target;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     item_id UInt64,
@@ -345,3 +347,5 @@ LEFT JOIN (
     ) AS r
     ON l.item_id = r.item_id
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE t;

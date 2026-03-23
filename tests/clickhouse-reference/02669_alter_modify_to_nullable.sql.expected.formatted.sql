@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_modify_to_nullable;
+
 CREATE TABLE t_modify_to_nullable
 (
     key UInt64,
@@ -48,3 +50,5 @@ WHERE database = currentDatabase()
     AND table = 't_modify_to_nullable'
     AND event_type = 'MutatePart'
 ORDER BY part_name ASC;
+
+SYSTEM DROP  TABLE t_modify_to_nullable;

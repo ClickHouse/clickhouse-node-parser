@@ -2,6 +2,7 @@
 
 set allow_experimental_parallel_reading_from_replicas=0;
 set enable_analyzer = 1;
+DROP TABLE IF EXISTS dist_vec;
 CREATE TABLE dist_vec
 (
    id UInt32,

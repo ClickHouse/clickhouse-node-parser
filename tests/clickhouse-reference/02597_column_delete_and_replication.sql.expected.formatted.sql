@@ -27,3 +27,5 @@ FROM numbers(3);
 SELECT *
 FROM test
 FORMAT Null;
+
+SYSTEM DROP  TABLE test;

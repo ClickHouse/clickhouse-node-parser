@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE IF NOT EXISTS defaults
 (
     vals String
@@ -56,3 +58,5 @@ FROM (
         SELECT entropy(vals) AS val
         FROM defaults
     );
+
+SYSTEM DROP  TABLE defaults;

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS local_table;
+DROP TABLE IF EXISTS other_table;
 CREATE TABLE local_table
 (
     id Int32,
@@ -36,3 +38,5 @@ select other_table.name from remote('127.0.0.2', currentDatabase(), 'local_table
 global left join other_table as t2
 on t1.oth_id = other_table.id
 order by other_table.name;
+DROP TABLE local_table;
+DROP TABLE other_table;

@@ -1,3 +1,6 @@
+-- Tags: no-debug, no-tsan, no-msan, no-asan, no-random-settings, no-random-merge-tree-settings
+SYSTEM DROP  TABLE IF EXISTS t_primary_index_memory;
+
 CREATE TABLE t_primary_index_memory
 (
     s String
@@ -16,3 +19,5 @@ SETTINGS
 
 SELECT count()
 FROM t_primary_index_memory;
+
+SYSTEM DROP  TABLE t_primary_index_memory;

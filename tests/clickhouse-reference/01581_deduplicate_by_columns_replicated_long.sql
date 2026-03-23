@@ -1,3 +1,12 @@
+-- Tags: long, replica
+
+--- See also tests/queries/0_stateless/01581_deduplicate_by_columns_local.sql
+
+--- replicated case
+
+-- Just in case if previous tests run left some stuff behind.
+DROP TABLE IF EXISTS replicated_deduplicate_by_columns_r1 SYNC;
+DROP TABLE IF EXISTS replicated_deduplicate_by_columns_r2 SYNC;
 SET replication_alter_partitions_sync = 2;
 -- IRL insert_replica_id were filled from hostname
 CREATE TABLE IF NOT EXISTS replicated_deduplicate_by_columns_r1 (
@@ -12,3 +21,6 @@ INSERT INTO replicated_deduplicate_by_columns_r1 VALUES (1, 1001), (1, 1001), (2
 INSERT INTO replicated_deduplicate_by_columns_r2 VALUES (1, 1001), (2, 2002), (3, 1003), (4, 1004), (5, 2005), (5, 2005);
 SELECT 'r1', id, val, count(), uniqExact(unique_value) FROM replicated_deduplicate_by_columns_r1 GROUP BY id, val ORDER BY id, val;
 SELECT 'r2', id, val, count(), uniqExact(unique_value) FROM replicated_deduplicate_by_columns_r2 GROUP BY id, val ORDER BY id, val;
+-- cleanup the mess
+DROP TABLE replicated_deduplicate_by_columns_r1;
+DROP TABLE replicated_deduplicate_by_columns_r2;

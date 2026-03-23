@@ -10,6 +10,8 @@ SET use_query_condition_cache = 0;
 
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -98,6 +100,11 @@ WHERE event_date >= yesterday()
     AND type = 'QueryFinish'
     AND log_comment = 'test_4';
 
+SYSTEM DROP  TABLE test;
+
+-- check partially materialized index, it should only affect related parts
+SYSTEM DROP  TABLE IF EXISTS test_partial_index;
+
 CREATE TABLE test_partial_index
 (
     id UInt64,
@@ -184,3 +191,5 @@ WHERE event_date >= yesterday()
     AND current_database = currentDatabase()
     AND type = 'QueryFinish'
     AND log_comment = 'test_partial_4';
+
+SYSTEM DROP  TABLE test_partial_index;

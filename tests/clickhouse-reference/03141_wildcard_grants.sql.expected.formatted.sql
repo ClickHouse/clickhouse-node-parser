@@ -1,3 +1,8 @@
+-- Tags: no-parallel
+SYSTEM DROP  USER IF EXISTS user_03141;
+
 CREATE USER user_03141;
 
 SELECT '---';
+
+SYSTEM DROP  USER user_03141;

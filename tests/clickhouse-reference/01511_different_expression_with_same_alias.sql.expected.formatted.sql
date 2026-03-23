@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS repro_hits;
+
 CREATE TABLE repro_hits
 (
     date Date,

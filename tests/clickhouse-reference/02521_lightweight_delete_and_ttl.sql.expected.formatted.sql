@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS lwd_test_02521;
+
 CREATE TABLE lwd_test_02521
 (
     id UInt64,
@@ -35,3 +37,6 @@ SELECT
     'Count',
     count()
 FROM lwd_test_02521;
+
+-- { echoOff }
+SYSTEM DROP  TABLE lwd_test_02521;

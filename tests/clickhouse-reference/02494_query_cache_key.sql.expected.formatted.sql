@@ -1,3 +1,7 @@
+SYSTEM DROP  DATABASE IF EXISTS db1;
+
+SYSTEM DROP  DATABASE IF EXISTS db2;
+
 CREATE DATABASE db1;
 
 CREATE DATABASE db2;
@@ -25,6 +29,10 @@ FROM tab
 SETTINGS use_query_cache = 1;
 
 USE db2;
+
+SYSTEM DROP  DATABASE db1;
+
+SYSTEM DROP  DATABASE db2;
 
 -- test with query-level settings
 SELECT 1

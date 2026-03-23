@@ -1,3 +1,6 @@
+-- Tags: no-parallel, no-random-merge-tree-settings, no-parallel-replicas
+
+drop table if exists test;
 create table test (i int) engine MergeTree order by tuple();
 insert into test select arrayJoin(range(10000));
 set exact_rows_before_limit = 1, output_format_write_statistics = 0, max_block_size = 100;

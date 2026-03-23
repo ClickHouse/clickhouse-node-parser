@@ -1,6 +1,7 @@
 -- Tags: no-parallel, no-fasttest, no-random-settings
 
 SET allow_suspicious_low_cardinality_types=1;
+DROP TABLE IF EXISTS t_03363_parquet, t_03363_csv, s3_table_half_schema_with_format;
 CREATE TABLE t_03363_parquet (year UInt16, country String, counter UInt8)
 ENGINE = S3(s3_conn, filename = 't_03363_parquet', format = Parquet, partition_strategy='hive')
 PARTITION BY (year, country);

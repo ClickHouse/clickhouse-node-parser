@@ -1,3 +1,6 @@
+-- Tags: no-parallel, log-engine
+
+DROP DATABASE IF EXISTS db_02097;
 CREATE DATABASE db_02097;
 USE db_02097;
 CREATE TABLE test_table
@@ -24,3 +27,6 @@ CREATE TABLE test_table_default
 )
 ENGINE=TinyLog;
 SELECT create_table_query FROM system.tables WHERE name = 'test_table_default' AND database = 'db_02097';
+DROP TABLE test_table_default;
+DROP DICTIONARY test_dictionary;
+DROP TABLE test_table;

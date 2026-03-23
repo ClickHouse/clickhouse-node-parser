@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS test_01676 SYNC;
 CREATE DATABASE test_01676;
 CREATE TABLE test_01676.dict_data (key UInt64, value UInt64) ENGINE=MergeTree ORDER BY tuple();
 INSERT INTO test_01676.dict_data VALUES (2,20), (3,30), (4,40), (5,50);
@@ -10,3 +13,4 @@ SELECT status FROM system.dictionaries WHERE database='test_01676' AND name='dic
 -- It can be not loaded, or not even finish attaching in case of asynchronous tables loading.
 SELECT COALESCE((SELECT status FROM system.dictionaries WHERE database='test_01676' AND name='dict')::Nullable(String), 'NOT_LOADED');
 INSERT INTO test_01676.table (x) VALUES (toInt64(4));
+DROP DATABASE test_01676;

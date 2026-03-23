@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS index_compact;
+
 CREATE TABLE index_compact
 (
     a UInt32,
@@ -21,3 +23,5 @@ FROM numbers(30);
 SELECT count()
 FROM index_compact
 WHERE b < 10;
+
+SYSTEM DROP  TABLE index_compact;

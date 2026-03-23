@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS collapsing_table;
+
 SET optimize_on_insert = 0;
 
 CREATE TABLE collapsing_table
@@ -20,6 +22,8 @@ SELECT
     sum(Sign),
     count()
 FROM collapsing_table;
+
+SYSTEM DROP  TABLE IF EXISTS collapsing_suspicious_granularity;
 
 CREATE TABLE collapsing_suspicious_granularity
 (

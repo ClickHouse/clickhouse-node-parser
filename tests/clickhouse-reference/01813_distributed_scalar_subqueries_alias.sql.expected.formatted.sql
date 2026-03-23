@@ -1,9 +1,14 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS data;
+
 CREATE TABLE data
 (
     a Int64,
     b Int64
 )
 ENGINE = TinyLog();
+
+SYSTEM DROP  TABLE IF EXISTS data_distributed;
 
 CREATE TABLE data_distributed
 (
@@ -28,3 +33,7 @@ SELECT a < (
 FROM data_distributed;
 
 SET prefer_localhost_replica = 0;
+
+SYSTEM DROP  TABLE data_distributed;
+
+SYSTEM DROP  TABLE data;

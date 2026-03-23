@@ -1,3 +1,6 @@
+-- Tags: no-random-merge-tree-settings
+SYSTEM drop  table if exists z;
+
 CREATE TABLE z
 (
     pk Int64,
@@ -33,3 +36,5 @@ GROUP BY
     name,
     `partition`
 ORDER BY size DESC;
+
+SYSTEM drop  table z;

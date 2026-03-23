@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS fct_rt_dc_shop_sku_vender_day;
+
 create table fct_rt_dc_shop_sku_vender_day
 (
     stat_year UInt16,
@@ -64,6 +66,8 @@ create table fct_rt_dc_shop_sku_vender_day
 )
 engine = MergeTree PARTITION BY toYYYYMM(stat_day) ORDER BY (stat_day, out_shop_id) SETTINGS index_granularity = 8192
 ;
+
+
 select stat_year,
        stat_month,
        out_buid,
@@ -140,3 +144,5 @@ group by stat_year,
          buntype,
          dctype,
          shopformid;
+
+DROP TABLE fct_rt_dc_shop_sku_vender_day;

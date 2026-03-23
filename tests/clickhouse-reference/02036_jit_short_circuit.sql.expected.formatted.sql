@@ -4,6 +4,8 @@ SET min_count_to_compile_expression = 0;
 
 SET short_circuit_function_evaluation = 'enable';
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     message String
@@ -19,3 +21,5 @@ FROM (
             cast(message, 'Float64') AS sport_amount
         FROM test_table
     );
+
+SYSTEM DROP  TABLE test_table;

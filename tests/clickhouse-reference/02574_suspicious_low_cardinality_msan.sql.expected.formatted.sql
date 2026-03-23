@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table1__fuzz_19;
+
 SET allow_suspicious_low_cardinality_types = 1;
 
 CREATE TABLE table1__fuzz_19
@@ -33,3 +35,5 @@ ORDER BY
     id % 2147483646 ASC,
     ((id % 1) = 9223372036854775807)
     OR ((id % NULL) = 257) DESC;
+
+SYSTEM DROP  TABLE table1__fuzz_19;

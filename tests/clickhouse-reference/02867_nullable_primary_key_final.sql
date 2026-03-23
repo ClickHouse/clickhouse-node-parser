@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t;
 CREATE TABLE t
 (
     `d` Nullable(Date),
@@ -21,6 +22,7 @@ FROM t
 FINAL
 WHERE f2 = 'x'
 GROUP BY 1;
+DROP TABLE t;
 CREATE TABLE t
 (
     `d` Nullable(Date),

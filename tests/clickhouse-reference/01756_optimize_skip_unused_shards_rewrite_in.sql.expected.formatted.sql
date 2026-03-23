@@ -1,3 +1,18 @@
+-- Tags: shard
+-- NOTE: this test cannot use 'current_database = currentDatabase()',
+-- because it does not propagated via remote queries,
+-- hence it uses 'with (select currentDatabase()) as X'
+-- (with subquery to expand it on the initiator).
+SYSTEM drop  table if exists dist_01756;
+
+SYSTEM drop  table if exists dist_01756_str;
+
+SYSTEM drop  table if exists dist_01756_column;
+
+SYSTEM drop  table if exists data_01756_str;
+
+SYSTEM drop  table if exists data_01756_signed;
+
 -- separate log entry for localhost queries
 SET prefer_localhost_replica = 0;
 
@@ -203,3 +218,14 @@ WHERE dummy IN (0, 2)
 SETTINGS
     optimize_skip_unused_shards_limit = 1,
     force_optimize_skip_unused_shards = 0;
+
+-- { echoOff }
+SYSTEM drop  table dist_01756;
+
+SYSTEM drop  table dist_01756_str;
+
+SYSTEM drop  table dist_01756_column;
+
+SYSTEM drop  table data_01756_str;
+
+SYSTEM drop  table data_01756_signed;

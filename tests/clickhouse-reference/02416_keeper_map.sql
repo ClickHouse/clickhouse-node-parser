@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-fasttest, long
+
+DROP TABLE IF EXISTS 02416_test SYNC;
 CREATE TABLE 02416_test (key String, value UInt32) Engine=KeeperMap('/' || currentDatabase() || '/test2416'); -- { serverError BAD_ARGUMENTS }
 CREATE TABLE 02416_test (key String, value UInt32) Engine=KeeperMap('/' || currentDatabase() || '/test2416') PRIMARY KEY(key2); -- { serverError UNKNOWN_IDENTIFIER }
 CREATE TABLE 02416_test (key String, value UInt32) Engine=KeeperMap('/' || currentDatabase() || '/test2416') PRIMARY KEY(key, value); -- { serverError BAD_ARGUMENTS }
@@ -10,6 +13,7 @@ INSERT INTO 02416_test SELECT concat(toString(number), '_1'), number FROM number
 SELECT COUNT(1) == 1000 FROM 02416_test;
 SELECT uniqExact(key) == 32 FROM (SELECT * FROM 02416_test LIMIT 32 SETTINGS max_block_size = 1);
 SELECT SUM(value) == 1 + 99 + 900 FROM 02416_test WHERE key IN ('1_1', '99_1', '900_1');
+DROP TABLE IF EXISTS 02416_test_memory;
 CREATE TABLE 02416_test (k UInt32, value UInt64, dummy Tuple(UInt32, Float64), bm AggregateFunction(groupBitmap, UInt64)) Engine=KeeperMap('/' || currentDatabase() || '/test2416') PRIMARY KEY(k);
 CREATE TABLE 02416_test_memory AS 02416_test Engine = Memory;
 INSERT INTO 02416_test SELECT number % 77 AS k, SUM(number) AS value, (1, 1.2), bitmapBuild(groupArray(number)) FROM numbers(10000) group by k;

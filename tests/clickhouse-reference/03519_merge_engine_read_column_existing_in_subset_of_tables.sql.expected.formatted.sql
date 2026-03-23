@@ -1,5 +1,13 @@
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists test1;
+
+SYSTEM drop  table if exists test2;
+
+SYSTEM drop  table if exists test3;
+
+SYSTEM drop  table if exists test_merge;
+
 CREATE TABLE test1
 (
     a UInt64,
@@ -238,3 +246,11 @@ SELECT
     _table
 FROM test_merge
 ORDER BY `all` ASC;
+
+SYSTEM drop  table test1;
+
+SYSTEM drop  table test2;
+
+SYSTEM drop  table test3;
+
+SYSTEM drop  table test_merge;

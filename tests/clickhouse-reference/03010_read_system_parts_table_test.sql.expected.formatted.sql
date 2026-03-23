@@ -1,3 +1,7 @@
+-- Tags: no-shared-merge-tree
+-- The parts might named differently with SMT
+SYSTEM DROP  TABLE IF EXISTS users;
+
 CREATE TABLE users
 (
     uid Int16,

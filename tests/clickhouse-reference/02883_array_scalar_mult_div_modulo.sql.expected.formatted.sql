@@ -50,6 +50,8 @@ SELECT values * 5
 FROM my_table
 WHERE arrayExists(x -> x > 5, values);
 
+SYSTEM DROP  TABLE my_table;
+
 SELECT [6, 6, 3] % 2;
 
 SELECT [6, 6, 3] / 2.5::Decimal(1, 1);

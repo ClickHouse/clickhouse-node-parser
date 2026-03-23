@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists h;
+
 CREATE TABLE h
 (
     EventDate Date,

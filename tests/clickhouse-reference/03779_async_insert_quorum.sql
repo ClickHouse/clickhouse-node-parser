@@ -1,3 +1,9 @@
+-- Tags: long, zookeeper, no-replicated-database, no-shared-merge-tree
+-- Tag no-replicated-database: Fails due to additional replicas or shards
+-- Tag no-shared-merge-tree: no-shared-merge-tree: No quorum
+
+DROP TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table2;
 CREATE TABLE table1(x UInt32) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_03779/table', '1') ORDER BY x;
 CREATE TABLE table2(x UInt32) ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_03779/table', '2') ORDER BY x;
 set insert_quorum=2;
@@ -30,3 +36,5 @@ WHERE
 ORDER BY event_time DESC FORMAT Vertical;
 set wait_for_async_insert=1, insert_quorum_timeout=1;
 INSERT INTO table2 VALUES (5); -- { serverError UNKNOWN_STATUS_OF_INSERT }
+DROP TABLE table1;
+DROP TABLE table2;

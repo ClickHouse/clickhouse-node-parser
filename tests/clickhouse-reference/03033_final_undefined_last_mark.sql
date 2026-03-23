@@ -1,3 +1,6 @@
+-- Tags: no-random-settings, no-random-merge-tree-settings
+
+DROP TABLE IF EXISTS account_test;
 CREATE TABLE account_test
 (
     `id` UInt64,

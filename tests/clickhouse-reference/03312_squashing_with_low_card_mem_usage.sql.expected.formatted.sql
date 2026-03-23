@@ -1,3 +1,8 @@
+-- Tags: no-tsan, no-asan, no-msan, no-ubsan, no-random-settings, no-random-merge-tree-settings
+-- no sanitizers -- memory consumption is unpredicatable with sanitizers
+-- no random settings -- it was quite hard to reproduce and I'm afraid that settings randomisation will make the test weaker
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     s LowCardinality(String)

@@ -1,3 +1,11 @@
+SYSTEM drop  table if exists test  sync;
+
+SYSTEM drop  table if exists test_mv_a sync;
+
+SYSTEM drop  table if exists test_mv_b sync;
+
+SYSTEM drop  table if exists test_mv_c sync;
+
 SET deduplicate_blocks_in_dependent_materialized_views = 0;
 
 CREATE TABLE test
@@ -228,3 +236,11 @@ SELECT
         FROM test_mv_c
         WHERE test = 'case4'
     );
+
+SYSTEM drop  table test sync;
+
+SYSTEM drop  table test_mv_a sync;
+
+SYSTEM drop  table test_mv_b sync;
+
+SYSTEM drop  table test_mv_c sync;

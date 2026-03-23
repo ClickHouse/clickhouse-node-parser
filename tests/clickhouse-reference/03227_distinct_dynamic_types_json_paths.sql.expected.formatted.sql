@@ -9,6 +9,8 @@ SET use_variant_as_common_type = 1;
 
 SET max_block_size = 10000;
 
+SYSTEM drop  table if exists test_json_dynamic_aggregate_functions;
+
 CREATE TABLE test_json_dynamic_aggregate_functions
 (
     json JSON(a1 String, max_dynamic_paths = 2, max_dynamic_types = 2)
@@ -152,3 +154,5 @@ FROM test_json_dynamic_aggregate_functions; -- {serverError NUMBER_OF_ARGUMENTS_
 
 SELECT distinctDynamicTypes(42)
 FROM test_json_dynamic_aggregate_functions; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+
+SYSTEM drop  table test_json_dynamic_aggregate_functions;

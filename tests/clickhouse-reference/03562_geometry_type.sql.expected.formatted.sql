@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS geom1;
+
 CREATE TABLE IF NOT EXISTS geom1
 (
     geom Geometry
@@ -14,6 +16,8 @@ INSERT INTO geom1;
 
 SELECT count(*)
 FROM geom1;
+
+SYSTEM DROP  TABLE IF EXISTS geo;
 
 CREATE TABLE IF NOT EXISTS geo
 (

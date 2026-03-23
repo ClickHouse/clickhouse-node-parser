@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists test_smt;
+
 CREATE TABLE test_smt
 (
     id UInt32,
@@ -25,6 +27,8 @@ SELECT
     sumMap(sMap),
     sumMapMerge(aMap)
 FROM test_smt;
+
+SYSTEM drop  table if exists simple_agf_summing_mt;
 
 CREATE TABLE simple_agf_summing_mt
 (

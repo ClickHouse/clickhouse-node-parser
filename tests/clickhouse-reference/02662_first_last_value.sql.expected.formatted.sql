@@ -1,3 +1,7 @@
+-- { echo }
+-- create table
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a Nullable(Int32),

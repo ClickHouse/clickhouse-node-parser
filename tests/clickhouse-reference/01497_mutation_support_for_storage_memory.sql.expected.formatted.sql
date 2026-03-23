@@ -1,3 +1,6 @@
+-- Tags: memory-engine
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     n Int32,
@@ -12,3 +15,5 @@ FROM defaults;
 
 SELECT count(*)
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS merge_tree;
+
 CREATE TABLE merge_tree
 (
     x UInt8
@@ -21,3 +23,5 @@ SET max_rows_to_read = 900000;
 SELECT count()
 FROM merge_tree
 WHERE NOT ignore(*); -- { serverError TOO_MANY_ROWS }
+
+SYSTEM DROP  TABLE merge_tree;

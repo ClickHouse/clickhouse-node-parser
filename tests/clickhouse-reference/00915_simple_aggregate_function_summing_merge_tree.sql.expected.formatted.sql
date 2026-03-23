@@ -1,5 +1,8 @@
 SET optimize_throw_if_noop = 1;
 
+-- basic test
+SYSTEM drop  table if exists simple;
+
 CREATE TABLE simple
 (
     id UInt64,
@@ -67,6 +70,10 @@ SELECT
 FROM simple
 LIMIT 1;
 
+SYSTEM drop  table simple;
+
+SYSTEM drop  table if exists with_overflow;
+
 CREATE TABLE with_overflow
 (
     id UInt64,
@@ -84,3 +91,5 @@ SELECT
     'with_overflow',
     *
 FROM with_overflow;
+
+SYSTEM drop  table with_overflow;

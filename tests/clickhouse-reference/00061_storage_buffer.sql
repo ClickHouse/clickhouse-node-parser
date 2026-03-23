@@ -1,3 +1,6 @@
+-- Tags: stateful
+DROP TABLE IF EXISTS hits_dst;
+DROP TABLE IF EXISTS hits_buffer;
 CREATE TABLE hits_dst AS test.hits
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(EventDate)
@@ -8,3 +11,5 @@ CREATE TABLE hits_buffer AS hits_dst ENGINE = Buffer(current_database(), hits_ds
 INSERT INTO hits_buffer SELECT * FROM test.hits WHERE CounterID = 800784;
 SELECT count() FROM hits_buffer;
 SELECT count() FROM hits_dst;
+DROP TABLE hits_dst;
+DROP TABLE hits_buffer;

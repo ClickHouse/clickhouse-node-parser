@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t_src;
+
+SYSTEM DROP  TABLE IF EXISTS t_dst;
+
 CREATE TABLE t_src
 (
     id UInt32,
@@ -29,3 +33,7 @@ SELECT
     _part
 FROM t_dst
 ORDER BY v ASC;
+
+SYSTEM DROP  TABLE t_src;
+
+SYSTEM DROP  TABLE t_dst;

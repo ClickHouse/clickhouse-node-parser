@@ -1,3 +1,20 @@
+/* Condition could be:
+ * - constant, true
+ * - constant, false
+ * - constant, NULL
+ * - non constant, non nullable_00431
+ * - non constant, nullable_00431
+ *
+ * Then and else could be:
+ * - constant, not NULL
+ * - constant, NULL
+ * - non constant, non nullable_00431
+ * - non constant, nullable_00431
+ *
+ * Thus we have 5 * 4 * 4 = 80 combinations.
+ */
+
+DROP TABLE IF EXISTS nullable_00431;
 CREATE VIEW nullable_00431
 AS SELECT
     1 AS constant_true,
@@ -93,3 +110,4 @@ SELECT cond_non_constant_nullable ? then_non_constant_nullable : else_constant A
 SELECT cond_non_constant_nullable ? then_non_constant_nullable : constant_null AS res FROM nullable_00431;
 SELECT cond_non_constant_nullable ? then_non_constant_nullable : else_non_constant AS res FROM nullable_00431;
 SELECT cond_non_constant_nullable ? then_non_constant_nullable : else_non_constant_nullable AS res FROM nullable_00431;
+DROP TABLE nullable_00431;

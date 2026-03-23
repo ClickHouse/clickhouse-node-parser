@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists ipv6_test26473;
+
 CREATE TABLE ipv6_test26473
 (
     ip String,
@@ -18,3 +20,5 @@ SELECT
     is_ipv6,
     cutIPv6(ipv6, 10, 1)
 FROM ipv6_test26473;
+
+SYSTEM drop  table ipv6_test26473;

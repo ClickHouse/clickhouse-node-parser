@@ -1,6 +1,8 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/27115
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists fill_ex;
+
 CREATE TABLE fill_ex
 (
     eventDate Date,

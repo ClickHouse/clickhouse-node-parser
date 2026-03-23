@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ms;
+
 CREATE TABLE ms
 (
     n Int32
@@ -11,3 +13,5 @@ FROM numbers(1000);
 
 SELECT COUNT(*)
 FROM ms;
+
+SYSTEM DROP  TABLE ms;

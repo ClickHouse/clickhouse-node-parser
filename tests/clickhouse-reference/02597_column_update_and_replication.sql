@@ -14,3 +14,4 @@ INSERT INTO test SELECT '1', '11', '111' FROM numbers(3);
 INSERT INTO test SELECT '2', '22', '22' FROM numbers(3);
 set mutations_sync=0;
 select * from test format Null;
+DROP TABLE test;

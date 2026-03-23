@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     i Int,
@@ -17,3 +19,5 @@ FROM t
 ORDER BY
     a ASC,
     i ASC;
+
+SYSTEM DROP  TABLE t;

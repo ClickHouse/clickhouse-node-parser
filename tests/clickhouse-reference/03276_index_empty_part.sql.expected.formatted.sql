@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_index_empty_part;
+
 CREATE TABLE t_index_empty_part
 (
     c0 Int,
@@ -15,3 +17,5 @@ SELECT
 FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 't_index_empty_part';
+
+SYSTEM DROP  TABLE t_index_empty_part;

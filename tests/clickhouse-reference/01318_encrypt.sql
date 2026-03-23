@@ -82,3 +82,4 @@ SELECT 'aes-256-gcm' as mode, hex(encrypt(mode, input, key32, iv)) FROM encrypti
 SELECT 'aes-128-gcm' as mode, hex(encrypt(mode, input, key16, iv, 'AAD')) FROM encryption_test;
 SELECT 'aes-192-gcm' as mode, hex(encrypt(mode, input, key24, iv, 'AAD')) FROM encryption_test;
 SELECT 'aes-256-gcm' as mode, hex(encrypt(mode, input, key32, iv, 'AAD')) FROM encryption_test;
+DROP TABLE encryption_test;

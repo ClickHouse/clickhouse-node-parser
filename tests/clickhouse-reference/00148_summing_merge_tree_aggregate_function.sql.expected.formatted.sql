@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists summing_merge_tree_aggregate_function;
+
+SYSTEM drop  table if exists summing_merge_tree_null;
+
 ---- partition merge
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -29,6 +33,8 @@ GROUP BY
 
 SELECT count()
 FROM summing_merge_tree_aggregate_function;
+
+SYSTEM drop  table summing_merge_tree_aggregate_function;
 
 CREATE TABLE summing_merge_tree_aggregate_function
 (
@@ -297,3 +303,5 @@ SELECT
 FROM summing_merge_tree_aggregate_function
 GROUP BY k
 ORDER BY k ASC;
+
+SYSTEM drop  table summing_merge_tree_null;

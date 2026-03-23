@@ -3,6 +3,7 @@
 
 SET mutations_sync = 2;
 SET allow_experimental_statistics = 1;
+DROP TABLE IF EXISTS t_alter_auto_statistics SYNC;
 CREATE TABLE t_alter_auto_statistics
 (
     a UInt64,

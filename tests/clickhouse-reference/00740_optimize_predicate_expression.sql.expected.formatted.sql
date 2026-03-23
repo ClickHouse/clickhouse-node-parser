@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS perf;
+
 CREATE TABLE perf
 (
     site String,
@@ -58,3 +60,5 @@ FROM (
             ) AS js2
             USING (site)
     );
+
+SYSTEM DROP  TABLE perf;

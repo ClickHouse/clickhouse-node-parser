@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS decimal_dt;
+
 CREATE TABLE decimal_dt
 (
     timestamp DateTime64(9)

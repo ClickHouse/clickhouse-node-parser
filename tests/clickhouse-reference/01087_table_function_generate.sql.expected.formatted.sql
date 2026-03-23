@@ -188,6 +188,8 @@ SELECT i
 FROM generateRandom('i String', 1, 10, 10)
 LIMIT 10;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     a Array(Int8),
@@ -206,6 +208,8 @@ ORDER BY
     a ASC,
     d ASC,
     c ASC;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_2;
 
 CREATE TABLE test_table_2
 (

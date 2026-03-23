@@ -1,5 +1,9 @@
 SET allow_experimental_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS AddedToCart;
+
+SYSTEM DROP  TABLE IF EXISTS Session;
+
 CREATE TABLE Session
 (
     id String,
@@ -49,3 +53,7 @@ ORDER BY
     site ASC,
     page_level ASC
 FORMAT JSONEachRow;
+
+SYSTEM DROP  TABLE AddedToCart;
+
+SYSTEM DROP  TABLE Session;

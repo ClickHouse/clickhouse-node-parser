@@ -36,6 +36,8 @@ SELECT wordShingleMinHashUTF8('what a cute cat.');
 
 SELECT wordShingleMinHashCaseInsensitiveUTF8('what a cute cat.');
 
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     s String
@@ -254,3 +256,5 @@ SELECT wordShingleSimHash('foobar', 9223372036854775807); -- { serverError ARGUM
 SELECT wordShingleSimHash('foobar', 1001); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT wordShingleSimHash('foobar', 0); -- { serverError ARGUMENT_OUT_OF_BOUND }
+
+SYSTEM DROP  TABLE defaults;

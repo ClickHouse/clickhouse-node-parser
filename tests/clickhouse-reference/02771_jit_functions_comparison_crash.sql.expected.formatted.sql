@@ -2,6 +2,8 @@ SET compile_expressions = 1;
 
 SET min_count_to_compile_expression = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_table_1;
+
 CREATE TABLE test_table_1
 (
     pkey UInt32,
@@ -13,6 +15,8 @@ CREATE TABLE test_table_1
 ENGINE = MergeTree
 ORDER BY pkey;
 
+SYSTEM DROP  TABLE IF EXISTS test_table_2;
+
 CREATE TABLE test_table_2
 (
     vkey UInt32,
@@ -21,3 +25,7 @@ CREATE TABLE test_table_2
 )
 ENGINE = MergeTree
 ORDER BY vkey;
+
+SYSTEM DROP  TABLE test_table_1;
+
+SYSTEM DROP  TABLE test_table_2;

@@ -12,6 +12,8 @@ SELECT *
 FROM test
 ORDER BY i ASC;
 
+SYSTEM DROP  TABLE test;
+
 CREATE TEMPORARY TABLE test
 (
     i Int64,

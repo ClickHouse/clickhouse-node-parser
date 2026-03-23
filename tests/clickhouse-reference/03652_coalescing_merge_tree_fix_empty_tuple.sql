@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t0;
 CREATE TABLE t0 (c0 Tuple(a Int32, b Nullable(Int32)), c1 Int32) ENGINE = SummingMergeTree() ORDER BY c1;
 INSERT INTO t0 VALUES ((1,2), 0);
 INSERT INTO t0 VALUES ((3,4), 0);

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS range_filter_custom_range_test;
+
 CREATE TABLE range_filter_custom_range_test
 (
     k UInt64
@@ -128,6 +130,10 @@ FROM (
             parallel_replicas_custom_key_range_upper = 13
     );
 
+SYSTEM DROP  TABLE range_filter_custom_range_test;
+
+SYSTEM DROP  TABLE IF EXISTS range_filter_custom_range_test_2;
+
 CREATE TABLE range_filter_custom_range_test_2
 (
     k UInt64
@@ -155,6 +161,10 @@ FROM (
             parallel_replicas_custom_key_range_upper = 13
     );
 
+SYSTEM DROP  TABLE range_filter_custom_range_test_2;
+
+SYSTEM DROP  TABLE IF EXISTS range_filter_custom_range_test_3;
+
 CREATE TABLE range_filter_custom_range_test_3
 (
     k UInt64
@@ -179,3 +189,5 @@ FROM (
             parallel_replicas_custom_key_range_lower = 0,
             parallel_replicas_custom_key_range_upper = 4
     );
+
+SYSTEM DROP  TABLE range_filter_custom_range_test_3;

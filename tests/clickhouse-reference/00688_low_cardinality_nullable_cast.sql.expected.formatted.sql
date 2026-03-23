@@ -2,6 +2,8 @@ SET allow_suspicious_low_cardinality_types = 1;
 
 SELECT CAST(NULL, 'LowCardinality(Nullable(Int8))');
 
+SYSTEM drop  table if exists lc_null_int8_defnull;
+
 CREATE TABLE lc_null_int8_defnull
 (
     val LowCardinality(Nullable(Int8)) DEFAULT NULL

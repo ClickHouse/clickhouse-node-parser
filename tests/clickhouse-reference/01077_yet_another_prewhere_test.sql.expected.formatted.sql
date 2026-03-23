@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t50;
+
 CREATE TABLE t50
 (
     a Int,
@@ -26,3 +28,5 @@ SELECT
 FROM t50
 PREWHERE b = 1
 ORDER BY a ASC;
+
+SYSTEM drop  table t50;

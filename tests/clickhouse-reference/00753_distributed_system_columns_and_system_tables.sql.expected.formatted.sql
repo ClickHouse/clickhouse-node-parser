@@ -24,3 +24,7 @@ SELECT
 FROM `system`.tables
 WHERE database = currentDatabase()
     AND name = 'check_system_tables';
+
+SYSTEM DROP  TABLE check_system_tables_null;
+
+SYSTEM DROP  TABLE check_system_tables;

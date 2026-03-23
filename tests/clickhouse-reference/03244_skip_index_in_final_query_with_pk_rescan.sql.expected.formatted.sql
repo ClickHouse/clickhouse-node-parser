@@ -3,6 +3,8 @@ SET use_skip_indexes = 1;
 
 SET use_skip_indexes_if_final = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_final_query_tbl;
+
 CREATE TABLE t_final_query_tbl
 (
     id UInt64,
@@ -61,6 +63,10 @@ SELECT count(id)
 FROM t_final_query_tbl FINAL
 WHERE v = 58889995
 SETTINGS use_skip_indexes_if_final_exact_mode = 1;
+
+SYSTEM DROP  TABLE t_final_query_tbl;
+
+SYSTEM DROP  TABLE IF EXISTS t_final_query_tbl2;
 
 CREATE TABLE t_final_query_tbl2
 (
@@ -132,3 +138,5 @@ SELECT count(id1)
 FROM t_final_query_tbl2 FINAL
 WHERE v = 58889995
 SETTINGS use_skip_indexes_if_final_exact_mode = 1;
+
+SYSTEM DROP  TABLE t_final_query_tbl2;

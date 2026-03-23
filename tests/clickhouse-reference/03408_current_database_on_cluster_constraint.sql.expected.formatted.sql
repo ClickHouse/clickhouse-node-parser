@@ -1,3 +1,6 @@
+-- Tags: replica, no-parallel
+SYSTEM DROP  DATABASE IF EXISTS shard_0;
+
 CREATE DATABASE shard_0;
 
 SET distributed_ddl_entry_format_version = 2;
@@ -11,3 +14,5 @@ CREATE TABLE shard_0.t0 ON CLUSTER `'test_cluster_two_shards_different_databases
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+
+SYSTEM DROP  DATABASE shard_0;

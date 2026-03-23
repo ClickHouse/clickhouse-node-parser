@@ -1,3 +1,7 @@
+SYSTEM drop  table if EXISTS test_bm;
+
+SYSTEM drop  table if EXISTS test_bm_join;
+
 CREATE TABLE test_bm
 (
     dim UInt64,
@@ -48,3 +52,7 @@ RIGHT JOIN (
     ) AS C
     USING (dim)
 GROUP BY dim;
+
+SYSTEM drop  table test_bm;
+
+SYSTEM drop  table test_bm_join;

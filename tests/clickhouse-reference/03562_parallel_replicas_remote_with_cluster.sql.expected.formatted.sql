@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tt;
+
 CREATE TABLE tt
 (
     n UInt64
@@ -51,3 +53,5 @@ WHERE type = 'QueryFinish'
             AND log_comment = '03562_152a0cc0-0811-46c9-839e-0f17426a1fc6'
     )
 SETTINGS parallel_replicas_for_non_replicated_merge_tree = 0;
+
+SYSTEM DROP  TABLE tt;

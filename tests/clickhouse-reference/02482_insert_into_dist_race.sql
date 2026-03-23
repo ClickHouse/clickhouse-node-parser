@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS tmp_02482;
+DROP TABLE IF EXISTS dist_02482;
 -- This test produces warning
 SET send_logs_level = 'error';
 SET prefer_localhost_replica=0;
@@ -8,3 +10,5 @@ INSERT INTO dist_02482 VALUES (1, '1'), (2, '2');
 INSERT INTO dist_02482 SELECT number, number FROM numbers(1000);
 SET distributed_foreground_insert=0;
 INSERT INTO dist_02482 VALUES (1, '1'),(2, '2');
+DROP TABLE tmp_02482;
+DROP TABLE dist_02482;

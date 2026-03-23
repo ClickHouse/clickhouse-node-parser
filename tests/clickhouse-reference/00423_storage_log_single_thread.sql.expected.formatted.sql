@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS log;
+
 CREATE TABLE log
 (
     s String
@@ -12,3 +14,5 @@ SELECT *
 FROM log;
 
 INSERT INTO log;
+
+SYSTEM DROP  TABLE log;

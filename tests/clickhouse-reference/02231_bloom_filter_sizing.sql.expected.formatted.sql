@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_sizing_pk;
+
 CREATE TABLE bloom_filter_sizing_pk
 (
     key UInt64,
@@ -24,6 +26,8 @@ WHERE database = currentDatabase()
     AND table = 'bloom_filter_sizing_pk'
     AND secondary_indices_uncompressed_bytes > 200
     AND active;
+
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_sizing_sec;
 
 CREATE TABLE bloom_filter_sizing_sec
 (

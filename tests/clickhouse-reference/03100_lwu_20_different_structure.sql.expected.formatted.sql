@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS testing;
+
 SET enable_lightweight_update = 1;
 
 CREATE TABLE testing
@@ -35,3 +37,6 @@ FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'testing'
     AND NOT is_done;
+
+-- { echoOff }
+SYSTEM DROP  TABLE testing;

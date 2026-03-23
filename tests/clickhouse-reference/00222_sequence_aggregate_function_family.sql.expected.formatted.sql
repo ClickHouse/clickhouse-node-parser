@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists sequence_test;
+
 CREATE TABLE sequence_test
 (
     time UInt32,
@@ -214,3 +216,5 @@ FROM sequence_test;
 
 SELECT [4,5] = sequenceMatchEvents('(?1)(?t==1)(?2)')(time, data = 1, data = 2)
 FROM sequence_test;
+
+SYSTEM drop  table sequence_test;

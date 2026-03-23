@@ -1,5 +1,9 @@
 SET enable_lazy_columns_replication = 0;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     id UInt32,

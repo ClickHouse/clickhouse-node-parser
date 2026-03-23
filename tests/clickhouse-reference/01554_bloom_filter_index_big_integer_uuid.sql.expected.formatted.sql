@@ -17,6 +17,8 @@ SELECT x
 FROM `01154_test`
 WHERE x IN (1, 2);
 
+SYSTEM DROP  TABLE 01154_test;
+
 CREATE TABLE `01154_test`
 (
     x Int256,

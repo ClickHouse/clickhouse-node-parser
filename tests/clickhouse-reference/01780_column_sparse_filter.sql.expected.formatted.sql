@@ -1,5 +1,7 @@
 SET optimize_trivial_insert_select = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_sparse;
+
 CREATE TABLE t_sparse
 (
     id UInt64,
@@ -39,3 +41,5 @@ INSERT INTO t_sparse SELECT
     number,
     toString(number)
 FROM numbers(1, 100000);
+
+SYSTEM DROP  TABLE t_sparse;

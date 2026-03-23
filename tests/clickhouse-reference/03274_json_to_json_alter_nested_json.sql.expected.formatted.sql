@@ -2,6 +2,8 @@ SET enable_json_type = 1;
 
 SET output_format_native_write_json_as_string = 0;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 8, max_dynamic_types = 4)
@@ -40,6 +42,8 @@ SELECT
     json.`k9[]`.`k9_2[]`.k9_2_1
 FROM test
 FORMAT JSONColumns;
+
+SYSTEM drop  table if exists test2;
 
 CREATE TABLE test2
 (
@@ -103,3 +107,11 @@ FROM test4;
 
 SELECT arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.`k9[]`)))
 FROM test4;
+
+SYSTEM drop  table test;
+
+SYSTEM drop  table test2;
+
+SYSTEM drop  table test3;
+
+SYSTEM drop  table test4;

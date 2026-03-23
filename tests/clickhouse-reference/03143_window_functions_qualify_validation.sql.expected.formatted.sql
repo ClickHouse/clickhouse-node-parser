@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS uk_price_paid;
+
 CREATE TABLE uk_price_paid
 (
     price UInt32,
@@ -29,3 +31,5 @@ SELECT count()
 FROM uk_price_paid
 WHERE toYear(date) = 2023
 QUALIFY price > (quantile(0.9)(price) OVER ()); -- { serverError NOT_AN_AGGREGATE }
+
+SYSTEM DROP  TABLE uk_price_paid;

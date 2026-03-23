@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS dst_sparse;
+
+SYSTEM DROP  TABLE IF EXISTS mytable_sparse;
+
 CREATE TABLE dst_sparse
 (
     id Int64,

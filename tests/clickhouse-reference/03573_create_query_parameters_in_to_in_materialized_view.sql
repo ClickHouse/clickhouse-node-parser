@@ -8,6 +8,9 @@ SET param_dst_table = 'dst_table';
 CREATE MATERIALIZED VIEW mv_table TO {dst_table:Identifier} AS SELECT * FROM src_table;
 INSERT INTO src_table SELECT 42;
 SELECT * FROM dst_table ORDER BY number;
+-- strange use case
+
+DROP TABLE mv_table, dst_table, src_table;
 CREATE TABLE dst_table (`number` UInt32) ENGINE = MergeTree ORDER BY number;
 SET param_src_table = 'src_table';
 CREATE MATERIALIZED VIEW mv_table TO {dst_table:Identifier}

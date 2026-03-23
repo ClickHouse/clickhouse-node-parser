@@ -1,3 +1,8 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS mergetree_00609;
+
+SYSTEM DROP  TABLE IF EXISTS distributed_00609;
+
 CREATE TABLE mergetree_00609
 (
     x UInt64,
@@ -28,3 +33,7 @@ FROM (
         SELECT caseWithExpression(x, 1, 'hello', 2, 'world', 'unknow')
         FROM distributed_00609
     );
+
+SYSTEM DROP  TABLE mergetree_00609;
+
+SYSTEM DROP  TABLE distributed_00609;

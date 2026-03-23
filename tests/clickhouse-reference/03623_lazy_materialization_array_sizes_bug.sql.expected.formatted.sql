@@ -2,6 +2,8 @@ SET query_plan_optimize_lazy_materialization = 1;
 
 SET query_plan_max_limit_for_lazy_materialization = 10;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt64,

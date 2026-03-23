@@ -18,6 +18,7 @@ SELECT arrayFold( acc,x -> x%2 ? (arrayPushBack(acc.1, x), acc.2): (acc.1, array
 SELECT arrayFold( acc,x -> acc+x,  range(number), number) FROM system.numbers LIMIT 5;
 SELECT arrayFold( acc,x -> arrayPushFront(acc,x),  range(number), emptyArrayUInt64()) FROM system.numbers LIMIT 5;
 SELECT arrayFold( acc,x -> x%2 ? arrayPushFront(acc,x) : arrayPushBack(acc,x),  range(number), emptyArrayUInt64()) FROM system.numbers LIMIT 5;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (line String, patterns Array(String)) ENGINE = MergeTree ORDER BY line;
 INSERT INTO tab VALUES ('abcdef', ['c']), ('ghijkl', ['h', 'k']), ('mnopqr', ['n']);
 SELECT
@@ -26,6 +27,7 @@ SELECT
     arrayFold(acc, pat -> position(line, pat), patterns, 0::UInt64)
 FROM tab
 ORDER BY line;
+DROP TABLE tab;
 CREATE TABLE tab (line String) ENGINE = Memory();
 INSERT INTO tab VALUES ('xxx..yyy..'), ('..........'), ('..xx..yyy.'), ('..........'), ('xxx.......');
 SELECT

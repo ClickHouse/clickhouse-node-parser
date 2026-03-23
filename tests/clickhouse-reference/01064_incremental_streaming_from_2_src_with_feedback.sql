@@ -5,6 +5,14 @@ SET max_bytes_before_external_sort = 0;
 SET max_bytes_ratio_before_external_sort = 0;
 SET max_bytes_before_external_group_by = 0;
 SET max_bytes_ratio_before_external_group_by = 0;
+-- incremental streaming usecase
+-- that has sense only if data filling order has guarantees of chronological order
+
+DROP TABLE IF EXISTS target_table;
+DROP TABLE IF EXISTS logins;
+DROP TABLE IF EXISTS mv_logins2target;
+DROP TABLE IF EXISTS checkouts;
+DROP TABLE IF EXISTS mv_checkouts2target;
 -- that is the final table, which is filled incrementally from 2 different sources
 
 CREATE TABLE target_table Engine=SummingMergeTree() ORDER BY id
@@ -108,3 +116,4 @@ FROM target_table
 where id in (1,2)
 GROUP BY id
 ORDER BY id;
+DROP TABLE target_table;

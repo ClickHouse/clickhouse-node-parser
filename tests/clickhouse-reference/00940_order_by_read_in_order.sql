@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS pk_order;
 SET optimize_read_in_order = 1;
 CREATE TABLE pk_order(a UInt64, b UInt64, c UInt64, d UInt64) ENGINE=MergeTree() ORDER BY (a, b);
 INSERT INTO pk_order(a, b, c, d) VALUES (1, 1, 101, 1), (1, 2, 102, 1), (1, 3, 103, 1), (1, 4, 104, 1);
@@ -31,6 +32,7 @@ SELECT d, b FROM pk_order ORDER BY d, b LIMIT 5;
 SELECT d, a FROM pk_order ORDER BY d DESC, a DESC LIMIT 5;
 SELECT d, a FROM pk_order ORDER BY d DESC, -a LIMIT 5;
 SELECT toStartOfHour(d) as d1 FROM pk_order ORDER BY d1 LIMIT 5;
+DROP TABLE pk_order;
 CREATE TABLE pk_order (a Int, b Int) ENGINE = MergeTree ORDER BY (a / b);
 INSERT INTO pk_order SELECT number % 10 + 1, number % 6 + 1 from numbers(100);
 SELECT * FROM pk_order ORDER BY (a / b), a LIMIT 5;

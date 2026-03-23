@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_startsWith;
+
 CREATE TABLE test_startsWith
 (
     a String
@@ -17,3 +19,5 @@ SELECT count()
 FROM test_startsWith
 WHERE startsWith(a, 'abc')
 SETTINGS force_primary_key = 1;
+
+SYSTEM DROP  TABLE test_startsWith;

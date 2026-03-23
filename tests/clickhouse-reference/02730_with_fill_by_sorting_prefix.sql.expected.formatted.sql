@@ -9,6 +9,9 @@ ORDER BY
     number DESC WITH FILL FROM 1
 SETTINGS enable_positional_arguments = 0;
 
+-- sensor table
+SYSTEM drop  table if exists ts;
+
 CREATE TABLE ts
 (
     sensor_id UInt64,

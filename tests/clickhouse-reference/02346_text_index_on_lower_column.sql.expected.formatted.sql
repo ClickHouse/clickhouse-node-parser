@@ -6,6 +6,9 @@ SET use_skip_indexes_on_data_read = 1;
 
 SET enable_full_text_index = 1;
 
+-- Tests text index creation on lower(col) and with lower-ed columns at search time
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     text String,
@@ -60,6 +63,8 @@ FROM (
     )
 WHERE like(`explain`, '%Filter column%')
     OR like(`explain`, '%Name: idx_text%');
+
+SYSTEM DROP  TABLE tab;
 
 -- --------------------------
 CREATE TABLE tab

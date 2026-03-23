@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_buffer_table;
+
 CREATE TABLE test_buffer_table
 (
     a Int64
@@ -11,3 +13,5 @@ WHERE name = 'test_buffer_table'
 
 INSERT INTO test_buffer_table SELECT number
 FROM numbers(1000);
+
+SYSTEM DROP  TABLE test_buffer_table;

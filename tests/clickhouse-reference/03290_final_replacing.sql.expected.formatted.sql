@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_final_replacing;
+
 CREATE TABLE t_final_replacing
 (
     a UInt64,
@@ -28,3 +30,5 @@ SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 0, split_i
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_intersecting_parts_ranges_into_layers_final = 0;
 
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_intersecting_parts_ranges_into_layers_final = 1;
+
+SYSTEM DROP  TABLE t_final_replacing;

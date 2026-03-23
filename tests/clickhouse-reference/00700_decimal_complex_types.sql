@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS decimal;
 CREATE TABLE decimal
 (
     a Array(Decimal32(3)),

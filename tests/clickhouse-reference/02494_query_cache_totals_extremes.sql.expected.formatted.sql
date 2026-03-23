@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tbl;
+
 CREATE TABLE tbl
 (
     key UInt64,

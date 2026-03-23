@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS tabc;
+
 CREATE TABLE tabc
 (
     a UInt32,
@@ -13,6 +15,8 @@ INSERT INTO tabc (a, s) SELECT
     concat('abc', toString(number))
 FROM numbers(4);
 
+SYSTEM DROP  TABLE IF EXISTS ta;
+
 CREATE TABLE ta
 (
     a Int32
@@ -22,6 +26,8 @@ ORDER BY tuple();
 
 INSERT INTO ta SELECT number
 FROM numbers(4);
+
+SYSTEM DROP  TABLE IF EXISTS tb;
 
 CREATE TABLE tb
 (
@@ -270,6 +276,9 @@ SETTINGS
     analyzer_compatibility_join_using_top_level_identifier = 0,
     enable_analyzer = 1;
 
+-- This is example where query may return different results with different `analyzer_compatibility_join_using_top_level_identifier`
+SYSTEM DROP  TABLE IF EXISTS users;
+
 CREATE TABLE users
 (
     uid Int16,
@@ -320,3 +329,5 @@ INNER JOIN users AS u2
 ORDER BY u1.uid ASC
 FORMAT TSVWithNamesAndTypes
 SETTINGS enable_analyzer = 0;
+
+SYSTEM DROP  TABLE IF EXISTS tc;

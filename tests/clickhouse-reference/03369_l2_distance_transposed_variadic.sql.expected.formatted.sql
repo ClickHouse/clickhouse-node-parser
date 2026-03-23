@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS qbit;
+
 CREATE TABLE qbit
 (
     id UInt32,
@@ -10,6 +12,8 @@ INSERT INTO qbit;
 INSERT INTO qbit;
 
 INSERT INTO qbit;
+
+SYSTEM DROP  TABLE qbit;
 
 CREATE TABLE qbit
 (

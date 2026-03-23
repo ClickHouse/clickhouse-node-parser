@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS ontime;
+
 CREATE TABLE ontime
 (
     FlightDate Date,
@@ -20,3 +22,5 @@ FROM (
             Carrier
         LIMIT 1
     );
+
+SYSTEM DROP  TABLE ontime;

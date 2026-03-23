@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS store;
+
+SYSTEM DROP  TABLE IF EXISTS location;
+
+SYSTEM DROP  TABLE IF EXISTS sales;
+
 CREATE TABLE store
 (
     id UInt32,
@@ -45,3 +51,9 @@ ORDER BY
     1 ASC,
     2 ASC,
     3 ASC;
+
+SYSTEM DROP  TABLE store;
+
+SYSTEM DROP  TABLE location;
+
+SYSTEM DROP  TABLE sales;

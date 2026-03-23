@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE t1 (id Int) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE t2 (id Int) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO t1 VALUES (1), (2);
@@ -104,3 +106,4 @@ SELECT * FROM empty_table JOIN t1 ON 1 = 1;
 SELECT * FROM empty_table LEFT JOIN t1 ON 1 = 1;
 SELECT * FROM empty_table JOIN t1 ON 1 = 2;
 SELECT * FROM empty_table LEFT JOIN t1 ON 1 = 2;
+DROP TABLE IF EXISTS empty_table;

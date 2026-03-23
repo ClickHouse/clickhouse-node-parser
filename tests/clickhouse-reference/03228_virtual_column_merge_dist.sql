@@ -1,5 +1,9 @@
 -- There is a bug in old analyzer with currentDatabase() and distributed query.
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS t_local_1;
+DROP TABLE IF EXISTS t_local_2;
+DROP TABLE IF EXISTS t_merge;
+DROP TABLE IF EXISTS t_distr;
 CREATE TABLE t_local_1 (a UInt32) ENGINE = MergeTree ORDER BY a;
 CREATE TABLE t_local_2 (a UInt32) ENGINE = MergeTree ORDER BY  a;
 INSERT INTO t_local_1 VALUES (1);

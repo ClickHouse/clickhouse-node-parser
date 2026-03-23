@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS table1;
+
 CREATE TABLE table1
 (
     lat1 Float64,
@@ -42,6 +45,8 @@ ORDER BY k ASC;
 SELECT round(h3PointDistRads(lat1, lon1, lat2, lon2), 5) AS k
 FROM table1
 ORDER BY k ASC;
+
+SYSTEM DROP  TABLE table1;
 
 SELECT round(h3PointDistRads(-10.0, 0.0, 10.0, arrayJoin([0.0])), 5) AS h3PointDistRads;
 

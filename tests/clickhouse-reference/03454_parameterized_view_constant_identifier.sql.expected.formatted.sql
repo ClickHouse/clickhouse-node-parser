@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS c;
+
 CREATE VIEW c
 AS
 SELECT 3 AS result
@@ -14,3 +16,5 @@ SELECT
     2,
     result
 FROM c(a = 3);
+
+SYSTEM DROP  TABLE c;

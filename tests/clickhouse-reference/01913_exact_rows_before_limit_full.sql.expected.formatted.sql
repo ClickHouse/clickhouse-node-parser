@@ -1,3 +1,6 @@
+-- Tags: no-parallel, no-random-merge-tree-settings, no-parallel-replicas
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     i int

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     i int,
@@ -14,3 +16,5 @@ SET alter_sync = 0;
 
 SELECT *
 FROM t;
+
+SYSTEM drop  table t;

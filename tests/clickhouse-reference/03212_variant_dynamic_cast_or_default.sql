@@ -7,6 +7,7 @@ select accurateCastOrDefault(variant, 'UInt32'), multiIf(number % 4 == 0, NULL, 
 select accurateCastOrNull(variant, 'UInt32'), multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, 'str_' || toString(number), range(number)) as variant from numbers(8);
 select accurateCastOrDefault(dynamic, 'UInt32'), multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, 'str_' || toString(number), range(number))::Dynamic as dynamic from numbers(8);
 select accurateCastOrNull(dynamic, 'UInt32'), multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, 'str_' || toString(number), range(number))::Dynamic as dynamic from numbers(8);
+drop table if exists t;
 create table t (id UInt64 DEFAULT generateSerialID('03212_variant_seq'), d Dynamic) engine=MergeTree order by id;
 -- Integer types: signed and unsigned integers (UInt8, UInt16, UInt32, UInt64, UInt128, UInt256, Int8, Int16, Int32, Int64, Int128, Int256)
 INSERT INTO t (d) VALUES (-128::Int8), (-127::Int8), (-1::Int8), (0::Int8), (1::Int8), (126::Int8), (127::Int8);
@@ -83,3 +84,4 @@ select distinct toIPv4OrDefault(d) as res from t order by res;
 select distinct toIPv6OrDefault(d) as res from t order by res;
 select distinct toUUIDOrDefault(d) as res from t order by res;
 SELECT d FROM t ORDER BY id;
+drop table t;

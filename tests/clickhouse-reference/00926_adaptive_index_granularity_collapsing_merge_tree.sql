@@ -1,3 +1,7 @@
+-- Tags: no-random-merge-tree-settings
+
+----- Group of very similar simple tests ------
+DROP TABLE IF EXISTS zero_rows_per_granule;
 CREATE TABLE zero_rows_per_granule (
   p Date,
   k UInt64,
@@ -19,6 +23,7 @@ INSERT INTO zero_rows_per_granule (p, k, v1, v2, Sign) VALUES ('2018-05-15', 5, 
 SELECT COUNT(*) FROM zero_rows_per_granule FINAL;
 SELECT sum(marks) from system.parts WHERE table = 'zero_rows_per_granule' and database=currentDatabase() and active=1;
 SELECT '-----';
+DROP TABLE IF EXISTS four_rows_per_granule;
 CREATE TABLE four_rows_per_granule (
   p Date,
   k UInt64,

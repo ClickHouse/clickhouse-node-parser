@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS data2013;
+
+SYSTEM DROP  TABLE IF EXISTS data2015;
+
 CREATE TABLE data2013
 (
     name String,
@@ -31,3 +35,7 @@ FROM (
         FROM data2015
     )
 ORDER BY name ASC;
+
+SYSTEM DROP  TABLE data2013;
+
+SYSTEM DROP  TABLE data2015;

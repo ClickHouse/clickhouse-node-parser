@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     id UInt64,
@@ -21,3 +23,5 @@ SETTINGS
     max_threads = 1025,
     max_streams_to_max_threads_ratio = -9223372036854775808,
     enable_analyzer = 0; -- { serverError PARAMETER_OUT_OF_BOUND }
+
+SYSTEM DROP  TABLE test_table;

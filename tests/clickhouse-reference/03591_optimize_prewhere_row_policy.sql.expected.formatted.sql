@@ -5,6 +5,10 @@ SET enable_parallel_replicas = 0;
 
 SET use_statistics = 0;
 
+SYSTEM DROP  TABLE IF EXISTS 03591_test;
+
+SYSTEM DROP  ROW POLICY IF EXISTS 03591_rp ON 03591_test;
+
 CREATE TABLE `03591_test`
 (
     a Int32,
@@ -29,6 +33,8 @@ SELECT *
 FROM `03591_test`
 WHERE throwIf(b = 1, 'Should not throw because b=1 is not visible to this user due to the b=2 row policy')
 SETTINGS optimize_move_to_prewhere = 1;
+
+SYSTEM DROP  ROW POLICY 03591_rp ON 03591_test;
 
 SELECT *
 FROM `03591_test`

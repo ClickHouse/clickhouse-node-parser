@@ -2,6 +2,8 @@ SET compile_expressions = 1;
 
 SET min_count_to_compile_expression = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     a UInt8,
@@ -18,6 +20,10 @@ SELECT
     or(a, b),
     xor(a, b)
 FROM test_table;
+
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_nullable;
 
 CREATE TABLE test_table_nullable
 (
@@ -41,3 +47,5 @@ SELECT
     or(b, b),
     xor(b, b)
 FROM test_table_nullable;
+
+SYSTEM DROP  TABLE test_table_nullable;

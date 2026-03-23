@@ -1,3 +1,4 @@
+drop table if exists smta;
 CREATE TABLE smta
 (
     `k` Int64,

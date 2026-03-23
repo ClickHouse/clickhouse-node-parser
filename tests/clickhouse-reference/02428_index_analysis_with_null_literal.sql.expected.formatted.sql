@@ -1,3 +1,6 @@
+-- From https://github.com/ClickHouse/ClickHouse/issues/41814
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     a UInt64,
@@ -25,6 +28,11 @@ SETTINGS
     enable_early_constant_folding = 0,
     force_primary_key = 1;
 
+SYSTEM drop  table test;
+
+-- From https://github.com/ClickHouse/ClickHouse/issues/34063
+SYSTEM drop  table if exists test_null_filter;
+
 CREATE TABLE test_null_filter
 (
     key UInt64,
@@ -44,3 +52,5 @@ FROM test_null_filter
 WHERE key = NULL
     AND value > 0
 SETTINGS force_primary_key = 1;
+
+SYSTEM drop  table test_null_filter;

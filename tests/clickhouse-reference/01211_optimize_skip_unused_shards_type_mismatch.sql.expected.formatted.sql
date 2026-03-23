@@ -1,6 +1,10 @@
 -- Tags: shard
 SET optimize_skip_unused_shards = 1;
 
+SYSTEM drop  table if exists data_02000;
+
+SYSTEM drop  table if exists dist_02000;
+
 CREATE TABLE data_02000
 (
     key Int
@@ -22,3 +26,7 @@ SETTINGS force_optimize_skip_unused_shards = 2; -- { serverError UNABLE_TO_SKIP_
 SELECT *
 FROM dist_02000
 WHERE key = 0xdeadbeafdeadbeaf;
+
+SYSTEM drop  table data_02000;
+
+SYSTEM drop  table dist_02000;

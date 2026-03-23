@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS sometable;
 CREATE TABLE sometable (
     date Date,
     time Int64,

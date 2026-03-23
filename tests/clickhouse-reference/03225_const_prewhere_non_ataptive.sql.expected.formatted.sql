@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_const_prewhere;
+
 CREATE TABLE t_const_prewhere
 (
     id Int16,

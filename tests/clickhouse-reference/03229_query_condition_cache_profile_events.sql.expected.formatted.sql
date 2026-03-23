@@ -12,6 +12,8 @@ SET allow_experimental_analyzer = 1;
 -- Tests that queries with enabled query condition cache correctly populate profile events
 SELECT '--- with move to PREWHERE';
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     a Int64,
@@ -89,3 +91,5 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND query = 'SELECT * FROM tab WHERE b = 10_000 FORMAT Null SETTINGS use_query_condition_cache = true, optimize_move_to_prewhere = false;'
 ORDER BY event_time_microseconds ASC;
+
+SYSTEM DROP  TABLE tab;

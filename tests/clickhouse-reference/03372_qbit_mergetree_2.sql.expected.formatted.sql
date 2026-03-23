@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS qbits;
+
 CREATE TABLE qbits
 (
     id UInt32,
@@ -14,6 +16,8 @@ INSERT INTO qbits;
 SELECT *
 FROM qbits
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE qbits;
 
 CREATE TABLE qbits
 (

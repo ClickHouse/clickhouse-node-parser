@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS rawtable;
+
+SYSTEM DROP  TABLE IF EXISTS raw_to_attributes_mv;
+
+SYSTEM DROP  TABLE IF EXISTS attributes;
+
 SET optimize_functions_to_subcolumns = 1;
 
 CREATE TABLE rawtable

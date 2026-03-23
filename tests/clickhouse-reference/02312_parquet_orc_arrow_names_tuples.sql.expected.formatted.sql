@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM drop  table if exists test_02312;
+
 CREATE TABLE test_02312
 (
     x Tuple(a UInt32, b UInt32)
@@ -8,6 +11,8 @@ INSERT INTO test_02312;
 
 SELECT *
 FROM test_02312;
+
+SYSTEM drop  table test_02312;
 
 CREATE TABLE test_02312
 (

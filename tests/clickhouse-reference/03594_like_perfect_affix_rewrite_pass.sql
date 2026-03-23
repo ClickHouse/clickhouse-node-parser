@@ -2,6 +2,7 @@
 
 SET enable_analyzer = 1;
 SET optimize_rewrite_like_perfect_affix = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (
     id UInt32,
     col_string String,
@@ -87,3 +88,4 @@ SELECT count() from tab WHERE col_lowcardinality_nullable_fixedstring LIKE 'a%';
 SELECT count() from tab WHERE col_lowcardinality_nullable_fixedstring LIKE 'a%' SETTINGS optimize_rewrite_like_perfect_affix = 0;
 SELECT count() from tab WHERE col_lowcardinality_nullable_fixedstring LIKE '%a\0';
 SELECT count() from tab WHERE col_lowcardinality_nullable_fixedstring LIKE '%a\0' SETTINGS optimize_rewrite_like_perfect_affix = 0;
+DROP TABLE tab;

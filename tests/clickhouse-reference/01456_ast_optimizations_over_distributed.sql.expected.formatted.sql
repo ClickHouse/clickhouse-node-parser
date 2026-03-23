@@ -17,6 +17,10 @@ FROM numbers(1);
 SELECT if(number > 0, 'censor.net', 'google')
 FROM numbers(1);
 
+SYSTEM DROP  TABLE IF EXISTS local_table;
+
+SYSTEM DROP  TABLE IF EXISTS dist;
+
 CREATE TABLE local_table
 (
     number UInt64
@@ -40,3 +44,7 @@ FROM dist;
 
 SELECT if(number > 0, 'censor.net', 'google')
 FROM dist;
+
+SYSTEM DROP  TABLE local_table;
+
+SYSTEM DROP  TABLE dist;

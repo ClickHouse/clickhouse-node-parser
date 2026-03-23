@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS series;
+
 CREATE TABLE series
 (
     i UInt32,
@@ -17,3 +19,5 @@ SELECT
     stddevPop(x),
     stddevPop(y)
 FROM series;
+
+SYSTEM DROP  TABLE series;

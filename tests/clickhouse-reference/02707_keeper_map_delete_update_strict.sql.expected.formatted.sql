@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-fasttest
+SYSTEM DROP  TABLE IF EXISTS 02707_keepermap_delete_update;
+
 SET keeper_map_strict_mode = 1;
 
 CREATE TABLE `02707_keepermap_delete_update`

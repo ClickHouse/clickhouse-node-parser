@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS Customers;
 CREATE TABLE Customers
 (
     FirstName Nullable(String),
@@ -8,7 +9,9 @@ CREATE TABLE Customers
 ) ENGINE = Memory;
 INSERT INTO Customers VALUES  ('Theodore','Diaz','Skilled Manual','Bachelors',28),('Stephanie','Cox','Management abcd defg','Bachelors',33),('Peter','Nara','Skilled Manual','Graduate Degree',26),('Latoya','Shen','Professional','Graduate Degree',25),('Apple','','Skilled Manual','Bachelors',28),(NULL,'why','Professional','Partial College',38);
 Select '-- test create table --' ;
+DROP TABLE IF EXISTS kql_table1;
 select LastName from kql_table1 limit 1;
+DROP TABLE IF EXISTS kql_table2;
 CREATE TABLE kql_table2
 (
     FirstName Nullable(String),

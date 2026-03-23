@@ -1,3 +1,6 @@
+-- Tags: no-ordinary-database, no-fasttest
+SYSTEM DROP  TABLE IF EXISTS 02418_test SYNC;
+
 CREATE TABLE `02418_test`
 (
     key UInt64,
@@ -33,3 +36,7 @@ FROM `02418_test_another`;
 INSERT INTO `02418_test`;
 
 INSERT INTO `02418_test`; -- { serverError LIMIT_EXCEEDED }
+
+SYSTEM DROP  TABLE 02418_test SYNC;
+
+SYSTEM DROP  TABLE 02418_test_another SYNC;

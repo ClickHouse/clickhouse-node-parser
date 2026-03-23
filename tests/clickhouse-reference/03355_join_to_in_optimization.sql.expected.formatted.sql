@@ -2,6 +2,10 @@ SET enable_analyzer = 1;
 
 SET join_algorithm = 'hash';
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     id Int32,
@@ -64,6 +68,8 @@ SETTINGS
 -- check type, modified from 02988_join_using_prewhere_pushdown
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     id UInt16,
@@ -87,6 +93,11 @@ INNER JOIN (
     USING (u)
 FORMAT Null
 SETTINGS query_plan_use_new_logical_join_step = true, query_plan_convert_join_to_in = true;
+
+-- check filter column remove, modified from 01852_multiple_joins_with_union_join
+SYSTEM DROP  TABLE IF EXISTS v1;
+
+SYSTEM DROP  TABLE IF EXISTS v2;
 
 CREATE TABLE v1
 (

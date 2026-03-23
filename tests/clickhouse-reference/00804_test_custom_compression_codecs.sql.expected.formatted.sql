@@ -2,6 +2,8 @@ SET send_logs_level = 'fatal';
 
 SET allow_suspicious_codecs = 1;
 
+SYSTEM DROP  TABLE IF EXISTS compression_codec;
+
 CREATE TABLE compression_codec
 (
     id UInt64 CODEC(LZ4),
@@ -30,6 +32,20 @@ SELECT count(*)
 FROM compression_codec
 WHERE id = 2
 GROUP BY id;
+
+SYSTEM DROP  TABLE IF EXISTS bad_codec;
+
+SYSTEM DROP  TABLE IF EXISTS params_when_no_params;
+
+SYSTEM DROP  TABLE IF EXISTS too_many_params;
+
+SYSTEM DROP  TABLE IF EXISTS codec_multiple_direct_specification_1;
+
+SYSTEM DROP  TABLE IF EXISTS codec_multiple_direct_specification_2;
+
+SYSTEM DROP  TABLE IF EXISTS delta_bad_params1;
+
+SYSTEM DROP  TABLE IF EXISTS delta_bad_params2;
 
 CREATE TABLE bad_codec
 (
@@ -80,6 +96,8 @@ CREATE TABLE delta_bad_params2
 ENGINE = MergeTree()
 ORDER BY tuple(); -- { serverError ILLEGAL_CODEC_PARAMETER }
 
+SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple;
+
 SET network_compression_method = 'lz4hc';
 
 CREATE TABLE compression_codec_multiple
@@ -118,6 +136,8 @@ FROM compression_codec_multiple;
 SELECT sum(cityHash64(*))
 FROM compression_codec_multiple;
 
+SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple_more_types;
+
 CREATE TABLE compression_codec_multiple_more_types
 (
     id Decimal128(13) CODEC(ZSTD, LZ4, ZSTD, ZSTD, Delta(2), Delta(4), Delta(1), LZ4HC),
@@ -143,6 +163,8 @@ INSERT INTO compression_codec_multiple_more_types;
 SELECT *
 FROM compression_codec_multiple_more_types
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple_with_key;
 
 SET network_compression_method = 'zstd';
 
@@ -184,6 +206,8 @@ SELECT data
 FROM compression_codec_multiple_with_key
 WHERE id = 2222;
 
+SYSTEM DROP  TABLE IF EXISTS test_default_delta;
+
 CREATE TABLE test_default_delta
 (
     id UInt64 CODEC(Delta),
@@ -197,3 +221,7 @@ CREATE TABLE test_default_delta
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+
+SYSTEM DROP  TABLE compression_codec_multiple;
+
+SYSTEM DROP  TABLE compression_codec_multiple_more_types;

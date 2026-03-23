@@ -1,3 +1,12 @@
+-- Tags: long, no-tsan
+SYSTEM drop  table if exists buffer_02231;
+
+SYSTEM drop  table if exists out_02231;
+
+SYSTEM drop  table if exists in_02231;
+
+SYSTEM drop  table if exists mv_02231;
+
 -- To reproduce leak of memory tracking of aggregate states,
 -- background flush is required.
 CREATE TABLE buffer_02231
@@ -33,3 +42,11 @@ FROM numbers(5e6)
 SETTINGS
     max_memory_usage = '400Mi',
     max_threads = 1;
+
+SYSTEM drop  table buffer_02231;
+
+SYSTEM drop  table out_02231;
+
+SYSTEM drop  table in_02231;
+
+SYSTEM drop  table mv_02231;

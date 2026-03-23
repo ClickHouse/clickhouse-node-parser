@@ -22,6 +22,8 @@ SELECT isIPAddressInRange(CAST(toIPv6('ffff::1'), 'Nullable(IPv6)'), 'ffff::/16'
 
 SELECT isIPAddressInRange(CAST(toIPv6('fffe::1'), 'Nullable(IPv6)'), 'ffff::/16');
 
+SYSTEM DROP  TABLE IF EXISTS test_data_2;
+
 CREATE TABLE test_data_2
 (
     cidr String

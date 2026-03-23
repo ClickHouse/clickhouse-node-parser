@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS bloom_filter_nullable_index;
+
 CREATE TABLE bloom_filter_nullable_index
 (
     order_key UInt64,
@@ -46,6 +48,8 @@ WHERE str IN (
     )
 SETTINGS transform_null_in = 1;
 
+SYSTEM DROP  TABLE IF EXISTS nullable_string_value;
+
 CREATE TABLE nullable_string_value
 (
     value Nullable(String)
@@ -69,3 +73,7 @@ WHERE str IN (
         FROM nullable_string_value
     )
 SETTINGS transform_null_in = 1;
+
+SYSTEM DROP  TABLE nullable_string_value;
+
+SYSTEM DROP  TABLE bloom_filter_nullable_index;

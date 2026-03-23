@@ -4,6 +4,10 @@ SET min_count_to_compile_expression = 1;
 
 SET optimize_move_to_prewhere = 0;
 
+SYSTEM DROP  TABLE IF EXISTS dt;
+
+SYSTEM DROP  TABLE IF EXISTS testx;
+
 CREATE TABLE dt
 (
     tkey Int32
@@ -30,5 +34,7 @@ WHERE NOT a
         SELECT tkey
         FROM dt
     );
+
+SYSTEM DROP  TABLE dt;
 
 INSERT INTO dt;

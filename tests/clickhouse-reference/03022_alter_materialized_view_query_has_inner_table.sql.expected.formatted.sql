@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS src_table;
+
+SYSTEM DROP  TABLE IF EXISTS mv;
+
 CREATE TABLE src_table
 (
     a UInt32,
@@ -22,3 +26,7 @@ SELECT *
 FROM mv;
 
 SET allow_experimental_alter_materialized_view_structure = 1;
+
+SYSTEM DROP  TABLE src_table;
+
+SYSTEM DROP  TABLE mv;

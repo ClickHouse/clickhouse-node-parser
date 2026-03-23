@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists set_index;
+
 CREATE TABLE set_index
 (
     a Int32,

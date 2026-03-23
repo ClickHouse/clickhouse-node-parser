@@ -38,6 +38,8 @@ SELECT toString(toDateTime('2017-11-05 08:07:47', 'Asia/Istanbul'), 'Asia/Kolkat
 
 SELECT '-- Test const timezone arguments --';
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     val Int64,
@@ -154,6 +156,9 @@ FROM tab
 WHERE snowflakeToDateTime64(val, tz) != toDateTime64('2023-06-11 14:14:14', 6)
 ORDER BY val ASC
 SETTINGS allow_nonconst_timezone_arguments = 1;
+
+-- test for a related bug:
+SYSTEM DROP  TABLE tab;
 
 SET allow_nonconst_timezone_arguments = 1;
 

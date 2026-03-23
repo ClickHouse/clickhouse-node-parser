@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t1_00816;
+
+SYSTEM drop  table if exists t2_00816;
+
 CREATE TABLE t1_00816
 (
     a Int8,
@@ -43,3 +47,7 @@ FROM
     t1_00816
 INNER JOIN t2_00816
     ON t1_00816.a = t2_00816.a;
+
+SYSTEM DROP  TABLE t1_00816;
+
+SYSTEM DROP  TABLE t2_00816;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_index_granularity;
+
 CREATE TABLE t_index_granularity
 (
     id UInt64,
@@ -28,6 +30,8 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 't_index_granularity'
     AND active;
+
+SYSTEM DROP  TABLE t_index_granularity;
 
 CREATE TABLE t_index_granularity
 (

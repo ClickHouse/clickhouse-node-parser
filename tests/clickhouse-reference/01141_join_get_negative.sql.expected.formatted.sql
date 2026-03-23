@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
 CREATE TABLE t1
 (
     s String,
@@ -19,3 +23,7 @@ FROM numbers(2); -- { serverError NO_SUCH_COLUMN_IN_TABLE }
 
 SELECT joinGet('t2', 's', number)
 FROM numbers(2); -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;

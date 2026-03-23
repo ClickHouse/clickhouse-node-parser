@@ -1,3 +1,8 @@
+-- Tags: global
+SYSTEM drop  table if exists xp;
+
+SYSTEM drop  table if exists xp_d;
+
 CREATE TABLE xp
 (
     A Date,

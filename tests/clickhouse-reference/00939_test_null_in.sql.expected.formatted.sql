@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS nullt;
+
 CREATE TABLE nullt
 (
     c1 Nullable(UInt32),

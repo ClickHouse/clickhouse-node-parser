@@ -3,6 +3,7 @@
 -- Tests vector search over vectors with a huge dimension (32k)
 
 SET parallel_replicas_local_plan = 1;
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab(
     id Int32,
     attr1 Int32,
@@ -30,3 +31,4 @@ SELECT id
 FROM tab
 ORDER BY L2Distance(vec, arrayWithConstant(32768, 0.9))
 LIMIT 3;
+DROP TABLE tab;

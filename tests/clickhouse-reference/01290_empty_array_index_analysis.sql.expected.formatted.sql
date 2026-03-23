@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists count_lc_test;
+
 CREATE TABLE count_lc_test
 (
     s LowCardinality(String),
@@ -42,6 +44,8 @@ WHERE arr >= [];
 SELECT *
 FROM count_lc_test
 WHERE arr <= [];
+
+SYSTEM DROP  TABLE count_lc_test;
 
 CREATE TABLE count_lc_test
 (

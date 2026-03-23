@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS moving_sum_num;
+
+SYSTEM DROP  TABLE IF EXISTS moving_sum_dec;
+
 CREATE TABLE moving_sum_num
 (
     k String,
@@ -104,3 +108,7 @@ SELECT
     dt,
     toDecimal64(v, 2) AS v
 FROM moving_sum_num;
+
+SYSTEM DROP  TABLE moving_sum_dec;
+
+SYSTEM DROP  TABLE moving_sum_num;

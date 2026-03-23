@@ -262,12 +262,16 @@ SELECT
     max(number) OVER (ORDER BY number ASC NULLS FIRST)
 FROM numbers(2)
 ;
+-- optimize_read_in_order conflicts with sorting for window functions, check that
+-- it is disabled.
+drop table if exists window_mt;
 create table window_mt engine MergeTree order by number
     as select number, mod(number, 3) p from numbers(100);
 select number, count(*) over (partition by p)
     from window_mt order by number limit 10 settings optimize_read_in_order = 0;
 select number, count(*) over (partition by p)
     from window_mt order by number limit 10 settings optimize_read_in_order = 1;
+drop table window_mt;
 -- some true window functions -- rank and friends
 select number, p, o,
     count(*) over w,

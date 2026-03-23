@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     x UInt64,
@@ -34,6 +37,8 @@ FROM `system`.projections
 WHERE database = currentDatabase()
     AND table = 't'
 ORDER BY name ASC;
+
+SYSTEM DROP  TABLE t;
 
 CREATE TABLE t
 (

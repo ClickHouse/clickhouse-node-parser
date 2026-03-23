@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table_with_pk_clear;
+
 CREATE TABLE table_with_pk_clear
 (
     key1 UInt64,

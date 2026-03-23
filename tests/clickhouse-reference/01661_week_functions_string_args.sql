@@ -7,6 +7,7 @@ SELECT toYearWeek(toDateTime('2016-06-15 23:00:00')), toYearWeek('2016-06-15'), 
 SELECT toDayOfWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 SELECT toWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 SELECT toYearWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab
 (
     d        Date,
@@ -27,3 +28,4 @@ SELECT toYearWeek(d), toYearWeek(dt), toYearWeek(dt64), toYearWeek(str_d), toYea
 SELECT toDayOfWeek(invalid) FROM `tab`; -- { serverError CANNOT_PARSE_DATETIME }
 SELECT toWeek(invalid) FROM `tab`; -- { serverError CANNOT_PARSE_DATETIME }
 SELECT toYearWeek(invalid) FROM `tab`; -- { serverError CANNOT_PARSE_DATETIME }
+DROP TABLE tab;

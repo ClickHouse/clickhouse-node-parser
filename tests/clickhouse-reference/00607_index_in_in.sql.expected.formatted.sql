@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS merge_tree;
+
 CREATE TABLE merge_tree
 (
     x UInt32
@@ -38,3 +40,5 @@ WHERE toUInt32(x) IN (0, 0);
 SELECT count()
 FROM merge_tree
 WHERE toUInt64(x) IN (0, 0);
+
+SYSTEM DROP  TABLE merge_tree;

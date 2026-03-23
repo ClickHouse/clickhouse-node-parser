@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS new_table_test;
+
+SYSTEM DROP  TABLE IF EXISTS check_table_test;
+
 CREATE TABLE new_table_test
 (
     name String
@@ -26,3 +30,7 @@ WHERE event = 'Merge';
 SELECT count()
 FROM check_table_test
 WHERE value2 > value1;
+
+SYSTEM DROP  TABLE new_table_test;
+
+SYSTEM DROP  TABLE check_table_test;

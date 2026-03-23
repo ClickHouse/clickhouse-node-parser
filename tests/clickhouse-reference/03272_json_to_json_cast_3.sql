@@ -1,6 +1,7 @@
 SET enable_json_type = 1;
 set enable_analyzer = 1;
 set output_format_native_write_json_as_string = 0;
+drop table if exists test;
 create table test (json JSON(max_dynamic_paths=2)) engine=Memory;
 insert into test format JSONAsObject
 {"a" : {"b" : 1}, "b" : 1, "c" : {"d" : 1}, "d" : 1}
@@ -40,3 +41,4 @@ select json::JSON(SKIP REGEXP '.*a.*', max_dynamic_paths=2) from test;
 select json::JSON(SKIP REGEXP '.*b.*', max_dynamic_paths=2) from test;
 select json::JSON(SKIP REGEXP '.*d.*', max_dynamic_paths=2) from test;
 select json::JSON(SKIP REGEXP '.*c.*', max_dynamic_paths=2) from test;
+drop table test;

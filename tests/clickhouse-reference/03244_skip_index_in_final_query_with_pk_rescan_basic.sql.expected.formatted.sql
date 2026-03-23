@@ -1,3 +1,7 @@
+-- Tags: no-random-settings
+-- Testcase from https://github.com/ClickHouse/ClickHouse/pull/34243
+SYSTEM DROP  TABLE IF EXISTS data_02201;
+
 CREATE TABLE data_02201
 (
     key Int,
@@ -49,3 +53,5 @@ SETTINGS
     use_skip_indexes = 1,
     use_skip_indexes_if_final = 1,
     use_skip_indexes_if_final_exact_mode = 1;
+
+SYSTEM DROP  TABLE data_02201;

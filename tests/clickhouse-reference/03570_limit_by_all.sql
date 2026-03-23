@@ -2,6 +2,7 @@ SET max_threads = 1;
 SET max_insert_threads = 1;
 SET max_block_size = 65536;
 SET allow_experimental_analyzer = 1;
+DROP TABLE IF EXISTS test_limit_by_all;
 CREATE TABLE test_limit_by_all (
     id Int32,
     category String,
@@ -94,6 +95,8 @@ LIMIT 2;
 SELECT count()
 FROM test_limit_by_all
 LIMIT 1 BY ALL; -- { serverError 62 }
+-- JOIN + ARRAY JOIN
+DROP TABLE IF EXISTS test_limit_by_all_tags;
 CREATE TABLE test_limit_by_all_tags (id Int32, tags Array(String)) ENGINE = Memory;
 INSERT INTO test_limit_by_all_tags VALUES (1, ['x','y']), (2, ['y']), (3, ['z']);
 SELECT t.id, tag
@@ -102,6 +105,7 @@ LEFT JOIN test_limit_by_all_tags AS g USING (id)
 ARRAY JOIN g.tags AS tag
 ORDER BY t.id, tag, value
 LIMIT 1 BY ALL;
+DROP TABLE test_limit_by_all_tags;
 SELECT id, category, value
 FROM test_limit_by_all
 ORDER BY id, category, value
@@ -139,3 +143,4 @@ SELECT id, category
 FROM test_limit_by_all
 ORDER BY id, category NULLS FIRST, value
 LIMIT 1 BY ALL;
+DROP TABLE test_limit_by_all;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     a Int,
@@ -25,3 +27,5 @@ SELECT *
 FROM test FINAL;
 
 SET max_threads = 2;
+
+SYSTEM DROP  TABLE test;

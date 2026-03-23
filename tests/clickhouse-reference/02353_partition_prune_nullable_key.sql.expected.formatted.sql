@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists n;
+
 CREATE TABLE n
 (
     nc Nullable(int)
@@ -12,3 +14,5 @@ INSERT INTO n;
 SELECT *
 FROM n
 WHERE isNull(nc);
+
+SYSTEM drop  table n;

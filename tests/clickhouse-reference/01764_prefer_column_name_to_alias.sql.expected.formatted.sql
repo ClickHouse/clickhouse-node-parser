@@ -41,6 +41,8 @@ FROM (
     ) AS ITBL
 SETTINGS prefer_column_name_to_alias = 1;
 
+SYSTEM DROP  TABLE IF EXISTS mytable;
+
 CREATE TABLE IF NOT EXISTS mytable
 (
     start_ts UInt32,
@@ -72,3 +74,5 @@ GROUP BY uuid
 HAVING max(end_ts) < 1620141001
 ORDER BY any(start_ts) DESC
 SETTINGS prefer_column_name_to_alias = 1;
+
+SYSTEM DROP  TABLE mytable;

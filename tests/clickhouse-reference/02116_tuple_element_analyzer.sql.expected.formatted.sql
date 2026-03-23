@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_tuple_element;
+
 CREATE TABLE t_tuple_element
 (
     t1 Tuple(a UInt32, s String),
@@ -58,3 +60,5 @@ FROM t_tuple_element; -- { serverError ARGUMENT_OUT_OF_BOUND, NOT_FOUND_COLUMN_I
 
 SELECT tupleElement(t2, materialize(1))
 FROM t_tuple_element; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+SYSTEM DROP  TABLE t_tuple_element;

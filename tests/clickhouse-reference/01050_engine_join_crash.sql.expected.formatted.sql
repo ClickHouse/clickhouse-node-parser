@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS testJoinTable;
+
 SET any_join_distinct_right_table_keys = 1;
 
 SET enable_optimize_predicate_expression = 0;
@@ -48,6 +50,12 @@ SELECT *
 FROM testJoinTable
 ORDER BY number ASC;
 
+SYSTEM DROP  TABLE testJoinTable;
+
+SYSTEM DROP  TABLE IF EXISTS master;
+
+SYSTEM DROP  TABLE IF EXISTS transaction;
+
 CREATE TABLE transaction
 (
     id Int32,
@@ -79,6 +87,14 @@ LEFT JOIN master AS m
     ON m.id = tx.master_id
 ORDER BY tx.id ASC;
 
+SYSTEM DROP  TABLE master;
+
+SYSTEM DROP  TABLE transaction;
+
+SYSTEM DROP  TABLE IF EXISTS some_join;
+
+SYSTEM DROP  TABLE IF EXISTS tbl;
+
 CREATE TABLE tbl
 (
     eventDate Date,
@@ -109,3 +125,8 @@ FROM
 LEFT JOIN some_join AS d
     USING (id)
 ORDER BY id ASC;
+
+-- TODO SELECT t.*, d.* FROM tbl AS t ANY LEFT JOIN some_join AS d USING (id);
+SYSTEM DROP  TABLE some_join;
+
+SYSTEM DROP  TABLE tbl;

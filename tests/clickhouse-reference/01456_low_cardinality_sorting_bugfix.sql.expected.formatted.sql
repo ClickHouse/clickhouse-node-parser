@@ -1,3 +1,5 @@
+SYSTEM drop   table if exists order_test1;
+
 CREATE TABLE order_test1
 (
     timestamp DateTime64(3),
@@ -57,3 +59,5 @@ GROUP BY
 ORDER BY
     color ASC,
     timestamp DESC;
+
+SYSTEM DROP  TABLE order_test1;

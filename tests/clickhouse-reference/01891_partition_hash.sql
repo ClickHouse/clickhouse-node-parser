@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (
     i8 Int8,
     i16 Int16,

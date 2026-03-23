@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS enum_table;
 CREATE TABLE enum_table (
   id UInt64,
   val Enum('first' = 1, 'second' = 2, 'third' = 3)
@@ -13,6 +14,8 @@ INSERT INTO enum_table SELECT 0, 'first';
 INSERT INTO enum_table SELECT 0, 'fifth'; -- { serverError UNKNOWN_ELEMENT_OF_ENUM }
 INSERT INTO enum_table SELECT 0, 0;
 SET check_conversion_from_numbers_to_enum = 1; -- default behavior
+DROP TABLE enum_table;
+DROP TABLE IF EXISTS nullable_enum_table;
 CREATE TABLE nullable_enum_table (
   id UInt64,
   val Nullable(Enum('first' = 1, 'second' = 2, 'third' = 3))
@@ -23,6 +26,7 @@ SELECT val FROM nullable_enum_table;
 INSERT INTO nullable_enum_table VALUES (0, 'first');
 INSERT INTO nullable_enum_table VALUES (0, NULL);
 INSERT INTO nullable_enum_table VALUES (0, 0);
+DROP TABLE nullable_enum_table;
 SELECT (('first'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64;
 SELECT (('second'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64;
 SELECT (('third'::String)::Enum('first' = 1, 'second' = 2, 'third' = 3))::UInt64;

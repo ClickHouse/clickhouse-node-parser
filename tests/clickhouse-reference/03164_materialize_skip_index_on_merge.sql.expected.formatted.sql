@@ -2,6 +2,8 @@
 -- add_minmax_index_for_numeric_columns=0: Different indices and plans on b
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     a UInt64,
@@ -60,3 +62,5 @@ WHERE current_database = currentDatabase()
     AND type = 'QueryFinish';
 
 SET mutations_sync = 2;
+
+SYSTEM DROP  TABLE tab;

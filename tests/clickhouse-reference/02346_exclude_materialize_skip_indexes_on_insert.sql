@@ -36,3 +36,5 @@ WHERE current_database = currentDatabase()
     AND query LIKE 'INSERT INTO tab SELECT%'
     AND type = 'QueryFinish';
 SET exclude_materialize_skip_indexes_on_insert='idx_a, `id,x_b`';
+DROP TABLE tab;
+DROP VIEW explain_indexes;

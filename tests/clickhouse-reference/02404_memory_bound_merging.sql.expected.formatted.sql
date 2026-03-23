@@ -1,3 +1,16 @@
+-- Tags: no-parallel, no-random-merge-tree-settings, long
+SYSTEM drop  table if exists pr_t;
+
+SYSTEM drop  table if exists dist_t_different_dbs;
+
+SYSTEM drop  table if exists shard_1.t_different_dbs;
+
+SYSTEM drop  table if exists t_different_dbs;
+
+SYSTEM drop  table if exists dist_t;
+
+SYSTEM drop  table if exists t;
+
 SET optimize_trivial_insert_select = 1;
 
 CREATE TABLE t

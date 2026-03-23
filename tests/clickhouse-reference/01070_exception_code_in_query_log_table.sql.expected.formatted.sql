@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table_for_01070_exception_code_in_query_log_table;
+
 SELECT *
 FROM test_table_for_01070_exception_code_in_query_log_table; -- { serverError UNKNOWN_TABLE }
 

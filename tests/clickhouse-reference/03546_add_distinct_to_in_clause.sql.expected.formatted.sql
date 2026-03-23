@@ -1,3 +1,12 @@
+-- Tags: shard, no-parallel
+SYSTEM drop  table if exists local_table_1;
+
+SYSTEM drop  table if exists local_table_2;
+
+SYSTEM drop  table if exists distributed_table_1;
+
+SYSTEM drop  table if exists distributed_table_2;
+
 SET prefer_localhost_replica = 0;
 
 SET allow_experimental_analyzer = 1;

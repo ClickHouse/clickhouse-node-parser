@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS table_with_defaults_on_aliases;
+
 CREATE TABLE table_with_defaults_on_aliases
 (
     col1 UInt32,

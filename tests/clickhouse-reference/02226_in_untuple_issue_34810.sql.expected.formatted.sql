@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS calendar;
+
+SYSTEM DROP  TABLE IF EXISTS events32;
+
 CREATE TABLE calendar
 (
     year Int64,

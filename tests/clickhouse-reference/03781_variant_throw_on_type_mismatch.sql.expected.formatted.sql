@@ -1,3 +1,13 @@
+-- Test that Variant throws exceptions on type mismatches like Dynamic does.
+-- This fixes issue https://github.com/ClickHouse/ClickHouse/issues/95839 where incompatible types caused LOGICAL_ERROR.
+-- Old behavior: returned NULL, causing logical errors in some cases.
+-- New behavior: throws proper exceptions on incompatible types.
+SYSTEM DROP  TABLE IF EXISTS test_variant_compatible;
+
+SYSTEM DROP  TABLE IF EXISTS test_variant_incompatible;
+
+SYSTEM DROP  TABLE IF EXISTS test_variant_array;
+
 SET enable_variant_type = 1;
 
 SET allow_suspicious_variant_types = 1;

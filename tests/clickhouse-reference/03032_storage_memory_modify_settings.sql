@@ -1,5 +1,6 @@
 -- Tags: memory-engine
 SET max_block_size = 65409; -- Default value
+DROP TABLE IF EXISTS memory;
 CREATE TABLE memory (i UInt32) ENGINE = Memory SETTINGS min_bytes_to_keep = 8192, max_bytes_to_keep = 32768;
 INSERT INTO memory SELECT * FROM numbers(0, 100); -- 1024 bytes
 INSERT INTO memory SELECT * FROM numbers(0, 3000); -- 16384 bytes
@@ -14,3 +15,4 @@ INSERT INTO memory SELECT * FROM numbers(0, 50); -- 50 rows
 INSERT INTO memory SELECT * FROM numbers(50, 950); -- 950 rows
 INSERT INTO memory SELECT * FROM numbers(2000, 70); -- 70 rows
 INSERT INTO memory SELECT * FROM numbers(3000, 1100); -- 1100 rows
+DROP TABLE memory;

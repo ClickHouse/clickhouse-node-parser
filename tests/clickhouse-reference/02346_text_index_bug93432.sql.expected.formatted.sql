@@ -1,5 +1,7 @@
 SET enable_full_text_index = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     col Array(String),
@@ -12,3 +14,5 @@ SELECT [];
 SELECT *
 FROM tab
 WHERE hasAllTokens(col, 'abc');
+
+SYSTEM DROP  TABLE tab;

@@ -1,3 +1,6 @@
+-- Use DateTime('UTC') to have a common rollup window
+SYSTEM drop  table if exists test_graphite;
+
 CREATE TABLE test_graphite
 (
     key UInt32,
@@ -220,3 +223,5 @@ ORDER BY
     key ASC,
     Path ASC,
     Time DESC;
+
+SYSTEM drop  table test_graphite;

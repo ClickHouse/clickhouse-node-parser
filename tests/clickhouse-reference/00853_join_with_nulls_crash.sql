@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS table_a;
+DROP TABLE IF EXISTS table_b;
 CREATE TABLE table_a (
     event_id UInt64,
     something String,
@@ -35,3 +37,5 @@ ALL FULL JOIN
     ( SELECT something, count() AS count_b FROM table_b GROUP BY something ) as s2
 ON s1.something = s2.something
 ORDER BY count_a DESC, something DESC;
+DROP TABLE table_a;
+DROP TABLE table_b;

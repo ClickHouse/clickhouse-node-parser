@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS all_valid;
+
 CREATE TABLE all_valid
 (
     id UInt64,
@@ -7,6 +9,8 @@ ENGINE = MergeTree
 ORDER BY id;
 
 INSERT INTO all_valid;
+
+SYSTEM DROP  TABLE IF EXISTS some_invalid;
 
 CREATE TABLE some_invalid
 (
@@ -107,3 +111,7 @@ SELECT
     formatQuerySingleLineOrNull(query)
 FROM some_invalid
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE all_valid;
+
+SYSTEM DROP  TABLE some_invalid;

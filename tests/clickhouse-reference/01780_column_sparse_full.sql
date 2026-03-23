@@ -1,3 +1,7 @@
+-- This test checks, that common SQL operations work
+-- with mixed columns (sparse and full) in table.
+
+DROP TABLE IF EXISTS t_sparse_full;
 CREATE TABLE t_sparse_full (id UInt64, u UInt64, s String)
 ENGINE = MergeTree ORDER BY id
 SETTINGS index_granularity = 32,
@@ -53,3 +57,4 @@ FULL JOIN t_sparse_full USING(u) ORDER BY id, u, s LIMIT 5;
 SELECT column, serialization_kind
 FROM system.parts_columns WHERE table = 't_sparse_full' AND database = currentDatabase() AND active
 ORDER BY name, column;
+DROP TABLE t_sparse_full;

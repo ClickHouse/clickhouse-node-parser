@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     time DateTime64(3)
@@ -21,3 +23,5 @@ SELECT
 FROM `system`.parts_columns
 WHERE table = 'test'
     AND database = currentDatabase();
+
+SYSTEM DROP  TABLE test;

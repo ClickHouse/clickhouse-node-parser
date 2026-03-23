@@ -5,6 +5,7 @@ set insert_keeper_max_retries=100;
 set insert_keeper_retry_max_backoff_ms=10;
 -- Testing basic functionality with compact parts
 set replication_alter_partitions_sync = 2;
+drop table if exists mt_compact;
 create table mt_compact(a UInt64, b UInt64 DEFAULT a * a, s String, n Nested(x UInt32, y String), lc LowCardinality(String))
 engine = ReplicatedMergeTree('/clickhouse/{database}/test_01201/mt_compact_replicated', '1')
 order by a partition by a % 10

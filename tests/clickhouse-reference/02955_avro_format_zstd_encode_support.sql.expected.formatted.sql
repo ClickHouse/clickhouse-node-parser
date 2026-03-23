@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     n1 Int32
@@ -10,3 +13,5 @@ FROM numbers(10);
 
 SELECT sum(n1)
 FROM t;
+
+SYSTEM DROP  TABLE t;

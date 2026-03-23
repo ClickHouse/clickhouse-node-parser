@@ -1,6 +1,8 @@
 -- Tags: no-s3-storage, long, no-msan, no-tsan, no-asan, no-ubsan
 SET output_format_json_quote_64bit_integers = 0;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 0)
@@ -20,3 +22,5 @@ INSERT INTO test SELECT toJSONString(arrayMap(x -> tuple(concat('key', x), x), r
 SELECT sipHash64(json::String)
 FROM test
 ORDER BY `all` ASC;
+
+SYSTEM drop  table test;

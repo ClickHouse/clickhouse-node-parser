@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS nums;
+
+SYSTEM DROP  TABLE IF EXISTS nums_buf;
+
 SET insert_allow_materialized_columns = 1;
 
 CREATE TABLE nums

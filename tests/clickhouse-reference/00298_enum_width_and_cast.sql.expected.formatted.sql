@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS enum;
+
 SET output_format_pretty_color = 1;
 
 CREATE TABLE enum
@@ -31,3 +33,5 @@ ORDER BY
     x ASC,
     y ASC
 FORMAT PrettyCompactMonoBlock;
+
+SYSTEM DROP  TABLE enum;

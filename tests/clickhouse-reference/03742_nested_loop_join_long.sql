@@ -1,3 +1,6 @@
+-- Tags: long
+
+DROP TABLE IF EXISTS events;
 CREATE TABLE events
 (
     `Id` Nullable(UInt64),
@@ -9,6 +12,7 @@ ORDER BY Time
 ;
 INSERT INTO events SELECT number % 3 + 2, concat('Payload_', toString(number)), toDateTime('2024-01-01 00:00:00') + INTERVAL number MINUTES FROM numbers(100);
 INSERT INTO events SELECT NULL, concat('Payload_NULL', toString(number)), toDateTime('2024-01-01 00:00:00') + INTERVAL number MINUTES FROM numbers(10);
+DROP TABLE IF EXISTS attributes;
 CREATE TABLE attributes
 (
     `EventId` UInt64,
@@ -21,6 +25,8 @@ INSERT INTO attributes SELECT 1 AS EventId, 1 AS AnotherId, concat('A_', toStrin
 INSERT INTO attributes SELECT 2 AS EventId, 2 AS AnotherId, concat('B_', toString(number)) AS Attribute FROM numbers(800_000);
 INSERT INTO attributes SELECT 3 AS EventId, 3 AS AnotherId, concat('C_', toString(number)) AS Attribute FROM numbers(300_000);
 INSERT INTO attributes SELECT 42 AS EventId, NULL AS AnotherId, concat('O_', toString(number)) AS Attribute FROM numbers(200_000);
+-- More keys in left table and different data distribution, more distinct keys
+DROP TABLE IF EXISTS events2;
 CREATE TABLE events2
 (
     `Id` UInt64,
@@ -31,6 +37,7 @@ ENGINE = MergeTree
 ORDER BY Time
 ;
 INSERT INTO events2 SELECT number, concat('Payload_', toString(number)), toDateTime('2024-01-01 00:00:00') + INTERVAL number MINUTES FROM numbers(1_000_000);
+DROP TABLE IF EXISTS attributes2;
 CREATE TABLE attributes2
 (
     `EventId` UInt64,

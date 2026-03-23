@@ -1,3 +1,11 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS t2;
+
+SYSTEM DROP  TABLE IF EXISTS tn1;
+
+SYSTEM DROP  TABLE IF EXISTS tn2;
+
 CREATE TABLE t1
 (
     key UInt32,
@@ -56,3 +64,11 @@ ORDER BY
 SET join_algorithm = 'full_sorting_merge';
 
 SET join_use_nulls = 1;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE t2;
+
+SYSTEM DROP  TABLE tn1;
+
+SYSTEM DROP  TABLE tn2;

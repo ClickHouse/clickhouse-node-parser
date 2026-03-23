@@ -1,6 +1,8 @@
 -- Tags: no-fasttest
 SET send_logs_level = 'fatal'; -- failed connection tries are ok, if it succeeded after retry.
 
+SYSTEM DROP  TABLE IF EXISTS foo;
+
 CREATE TABLE foo
 (
     key UInt32,
@@ -97,3 +99,5 @@ FROM mysql('[::1]:9004', currentDatabase(), foo, 'default', '' SETTINGS connecti
 
 SELECT count()
 FROM mysql('[::1]:9004', currentDatabase(), foo, 'default', '' SETTINGS connection_pool_size = 0); -- { serverError BAD_ARGUMENTS }
+
+SYSTEM DROP  TABLE foo;

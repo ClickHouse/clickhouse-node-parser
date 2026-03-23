@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_tuple_elem;
+
 SET enable_variant_type = 1;
 
 CREATE TABLE t_tuple_elem
@@ -25,3 +27,5 @@ ORDER BY `ALL` ASC;
 SELECT (variantElement(v, 'Array(UInt64)'), variantElement(v, 'Array(LowCardinality(String))'))
 FROM t_tuple_elem
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE t_tuple_elem;

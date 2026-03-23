@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists x;
+
 CREATE TABLE x
 ENGINE = MergeTree
 ORDER BY tuple() AS
@@ -28,6 +30,8 @@ ORDER BY tuple(); -- { serverError ILLEGAL_COLUMN }
 SET allow_experimental_nullable_tuple_type = 1;
 
 SET allow_experimental_nullable_tuple_type = DEFAULT;
+
+SYSTEM drop  table x;
 
 CREATE TABLE x
 (

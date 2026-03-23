@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists mv_02146;
+
 CREATE MATERIALIZED VIEW mv_02146
 ENGINE = MergeTree()
 ORDER BY number

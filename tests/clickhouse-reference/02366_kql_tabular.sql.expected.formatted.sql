@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS Customers;
+
 CREATE TABLE Customers
 (
     FirstName Nullable(String),

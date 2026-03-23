@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t1;
+
+SYSTEM drop  table if exists t2;
+
 CREATE TABLE t1
 (
     col UInt64,
@@ -22,3 +26,7 @@ FROM
     t1
 INNER JOIN t2
     USING (x);
+
+SYSTEM drop  table t1;
+
+SYSTEM drop  table t2;

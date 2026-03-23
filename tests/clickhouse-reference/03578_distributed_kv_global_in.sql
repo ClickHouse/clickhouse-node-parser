@@ -1,6 +1,7 @@
 -- Tags: no-fasttest, use-rocksdb
 
 SET prefer_localhost_replica = 0;
+DROP TABLE IF EXISTS 03578_rocksdb_local, 03578_rocksdb_dist;
 CREATE TABLE IF NOT EXISTS 03578_rocksdb_local
 (
     key UInt64,
@@ -33,6 +34,8 @@ WHERE current_database = currentDatabase()
   AND query LIKE '%FROM 03578_rocksdb_dist%'
   AND is_initial_query
 ORDER BY event_time_microseconds;
+DROP TABLE 03578_rocksdb_local, 03578_rocksdb_dist;
+DROP TABLE IF EXISTS 03578_keepermap_local, 03578_keepermap_dist;
 CREATE TABLE IF NOT EXISTS 03578_keepermap_local
 (
     key UInt64,

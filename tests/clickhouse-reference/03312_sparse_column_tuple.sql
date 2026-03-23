@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS dst_sparse;
+DROP TABLE IF EXISTS mytable_sparse;
 CREATE TABLE dst_sparse (
     `id` Int64,
     `budget` Tuple(currencyCode String)

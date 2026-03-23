@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS a1;
+
+SYSTEM DROP  TABLE IF EXISTS a2;
+
 SET send_logs_level = 'fatal';
 
 CREATE TABLE a1

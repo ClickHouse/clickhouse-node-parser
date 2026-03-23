@@ -1,3 +1,7 @@
+-- Tags: no-parallel-replicas
+-- Tests queries with duplicate tokens against a text index
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 SET enable_analyzer = 1;
 
 SET enable_full_text_index = 1;
@@ -35,6 +39,8 @@ FROM (
         SETTINGS use_skip_indexes_on_data_read = 1
     )
 WHERE like(`explain`, '%Filter column%');
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

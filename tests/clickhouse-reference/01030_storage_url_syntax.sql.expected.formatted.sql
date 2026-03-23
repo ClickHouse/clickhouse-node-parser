@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+-- no-fasttest: Timeout for the first query (CANNOT_DETECT_FORMAT) is too slow: https://github.com/ClickHouse/ClickHouse/issues/67939
+SYSTEM drop  table if exists test_table_url_syntax;
+
 CREATE TABLE test_table_url_syntax
 (
     id UInt32
@@ -10,6 +14,8 @@ CREATE TABLE test_table_url_syntax
 )
 ENGINE = URL('', '', '', ''); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
+SYSTEM drop  table if exists test_table_url;
+
 CREATE TABLE test_table_url
 (
     id UInt32
@@ -21,6 +27,8 @@ CREATE TABLE test_table_url
     id UInt32
 )
 ENGINE = URL('http://localhost/endpoint.json');
+
+SYSTEM drop  table test_table_url;
 
 CREATE TABLE test_table_url
 (

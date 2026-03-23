@@ -7,6 +7,7 @@ CREATE TABLE visits
     `Sign` Int8
 )
 ENGINE = Null;
+
 CREATE TABLE goal
 (
      `CounterID` UInt32,
@@ -15,6 +16,7 @@ CREATE TABLE goal
      `Visits` AggregateFunction(sumIf, Int8, UInt8),
      `GoalReaches` AggregateFunction(sum, Int8)
 ) ENGINE = AggregatingMergeTree PARTITION BY toStartOfMonth(StartDate) ORDER BY (CounterID, StartDate, GoalID) SETTINGS index_granularity = 256, index_granularity_bytes = '10Mi';
+
 CREATE MATERIALIZED VIEW goal_view TO goal
 (
     `CounterID` UInt32,
@@ -41,4 +43,9 @@ ORDER BY
     CounterID ASC,
     StartDate ASC,
     GoalID ASC;
+
 INSERT INTO visits (`CounterID`,`StartDate`,`StartTime`,`Sign`,`GoalsID`) VALUES (1, toDate('2000-01-01'), toDateTime(toDate('2000-01-01')), 1, [1]);
+
+DROP TABLE goal;
+DROP TABLE goal_view;
+DROP TABLE visits;

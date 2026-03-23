@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     val LowCardinality(Nullable(String))
@@ -12,3 +14,5 @@ FROM numbers(5);
 SELECT count(val)
 FROM test
 SETTINGS optimize_use_implicit_projections = 1;
+
+SYSTEM DROP  TABLE test;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS users_03094;
+
 CREATE TABLE users_03094
 (
     name String,

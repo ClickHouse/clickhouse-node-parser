@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists T;
+
 CREATE TABLE T
 (
     a Nullable(Int64)

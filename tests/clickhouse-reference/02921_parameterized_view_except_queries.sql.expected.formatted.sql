@@ -1,5 +1,9 @@
 SELECT '--- Data ---';
 
+SYSTEM DROP  VIEW IF EXISTS V_DELTA;
+
+SYSTEM DROP  TABLE IF EXISTS users;
+
 CREATE TABLE users
 (
     uid Int16,
@@ -97,3 +101,7 @@ EXCEPT
             AND age <= {a4:Int32}
     )
 ORDER BY uid ASC;
+
+SYSTEM DROP  VIEW V_DELTA;
+
+SYSTEM DROP  TABLE users;

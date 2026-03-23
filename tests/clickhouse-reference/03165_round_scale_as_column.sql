@@ -35,6 +35,7 @@ SELECT toInt64(number - 10) AS x, round(x, materialize(-2)), roundBankers(x, mat
 SELECT toFloat32(number - 10) AS x, round(x, materialize(-2)), roundBankers(x, materialize(-2)), floor(x, materialize(-2)), ceil(x, materialize(-2)), trunc(x, materialize(-2)) FROM system.numbers LIMIT 20;
 SELECT toFloat64(number - 10) AS x, round(x, materialize(-2)), roundBankers(x, materialize(-2)), floor(x, materialize(-2)), ceil(x, materialize(-2)), trunc(x, materialize(-2)) FROM system.numbers LIMIT 20;
 SELECT toString('CHECKPOINT1');
+DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (
     id Int32,
     scale Int16,
@@ -76,6 +77,7 @@ SELECT toString('id f32 scale round(u8, scale) roundBankers(x, scale) floor(x, s
 SELECT id, f32  AS x, scale, round(x, scale), roundBankers(x, scale), floor(x, scale), ceil(x, scale), trunc(x, scale) FROM tab ORDER BY id;
 SELECT toString('id f64 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
 SELECT id, f64  AS x, scale, round(x, scale), roundBankers(x, scale), floor(x, scale), ceil(x, scale), trunc(x, scale) FROM tab ORDER BY id;
+DROP TABLE tab;
 --
 SELECT toString('CHECKPOINT2');
 CREATE TABLE tab (

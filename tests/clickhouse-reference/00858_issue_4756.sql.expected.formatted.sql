@@ -2,6 +2,14 @@ SET enable_analyzer = 1;
 
 SET distributed_product_mode = 'local';
 
+SYSTEM drop  table if exists shard1;
+
+SYSTEM drop  table if exists shard2;
+
+SYSTEM drop  table if exists distr1;
+
+SYSTEM drop  table if exists distr2;
+
 CREATE TABLE shard1
 (
     id Int32
@@ -58,3 +66,11 @@ WHERE distr1.id IN (
             ON distr1.id = distr2.id
         WHERE distr1.id > 0
     );
+
+SYSTEM drop  table shard1;
+
+SYSTEM drop  table shard2;
+
+SYSTEM drop  table distr1;
+
+SYSTEM drop  table distr2;

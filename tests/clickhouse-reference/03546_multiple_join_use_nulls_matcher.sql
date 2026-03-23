@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS tableA;
+DROP TABLE IF EXISTS tableB;
+DROP TABLE IF EXISTS tableC;
 CREATE TABLE tableA ( key String ) ENGINE = MergeTree() ORDER BY tuple();
 CREATE TABLE tableB ( key String, value2 Int32 ) ENGINE = MergeTree() ORDER BY tuple();
 CREATE TABLE tableC ( key String ) ENGINE = MergeTree() ORDER BY tuple();

@@ -1,3 +1,8 @@
+-- { echoOn }
+SYSTEM DROP  TABLE IF EXISTS visits_order;
+
+SYSTEM DROP  TABLE IF EXISTS visits_order_dst;
+
 CREATE TABLE visits_order
 (
     user_id UInt64,

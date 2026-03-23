@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS minimum_sample_size_continuos;
+
 CREATE TABLE minimum_sample_size_continuos
 (
     baseline UInt64,
@@ -15,6 +17,8 @@ CREATE TABLE minimum_sample_size_continuos
     sigma Float64
 )
 ENGINE = Memory();
+
+SYSTEM DROP  TABLE IF EXISTS minimum_sample_size_conversion;
 
 CREATE TABLE minimum_sample_size_conversion
 (

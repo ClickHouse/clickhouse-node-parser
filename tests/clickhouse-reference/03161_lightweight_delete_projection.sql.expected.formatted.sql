@@ -2,6 +2,8 @@
 -- but for less redundancy, just let CI test the parameter.
 SET lightweight_deletes_sync = 2, alter_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS users_compact;
+
 CREATE TABLE users_compact
 (
     uid Int16,
@@ -56,6 +58,9 @@ WHERE (database = currentDatabase())
     AND (active = 1)
     AND like(parent_name, 'all_3_3%');
 
+-- { echoOff }
+SYSTEM DROP  TABLE users_compact;
+
 CREATE TABLE users_wide
 (
     uid Int16,
@@ -109,3 +114,6 @@ WHERE (database = currentDatabase())
     AND (table = 'users_wide')
     AND (active = 1)
     AND like(parent_name, 'all_3_3%');
+
+-- { echoOff }
+SYSTEM DROP  TABLE users_wide;

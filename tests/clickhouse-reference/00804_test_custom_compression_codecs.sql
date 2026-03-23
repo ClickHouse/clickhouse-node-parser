@@ -1,5 +1,6 @@
 SET send_logs_level = 'fatal';
 SET allow_suspicious_codecs = 1;
+DROP TABLE IF EXISTS compression_codec;
 CREATE TABLE compression_codec(
     id UInt64 CODEC(LZ4),
     data String CODEC(ZSTD),
@@ -14,6 +15,13 @@ INSERT INTO compression_codec VALUES(3, '!', toDate('2018-12-16'), 3.3, 'ccc', 7
 SELECT * FROM compression_codec ORDER BY id;
 INSERT INTO compression_codec VALUES(2, '', toDate('2018-12-13'), 4.4, 'ddd', 8);
 SELECT count(*) FROM compression_codec WHERE id = 2 GROUP BY id;
+DROP TABLE IF EXISTS bad_codec;
+DROP TABLE IF EXISTS params_when_no_params;
+DROP TABLE IF EXISTS too_many_params;
+DROP TABLE IF EXISTS codec_multiple_direct_specification_1;
+DROP TABLE IF EXISTS codec_multiple_direct_specification_2;
+DROP TABLE IF EXISTS delta_bad_params1;
+DROP TABLE IF EXISTS delta_bad_params2;
 CREATE TABLE bad_codec(id UInt64 CODEC(adssadads)) ENGINE = MergeTree() order by tuple(); -- { serverError UNKNOWN_CODEC }
 CREATE TABLE too_many_params(id UInt64 CODEC(ZSTD(2,3,4,5))) ENGINE = MergeTree() order by tuple(); -- { serverError ILLEGAL_SYNTAX_FOR_CODEC_TYPE }
 CREATE TABLE params_when_no_params(id UInt64 CODEC(LZ4(1))) ENGINE = MergeTree() ORDER BY tuple(); -- { serverError DATA_TYPE_CANNOT_HAVE_ARGUMENTS }
@@ -21,6 +29,7 @@ CREATE TABLE codec_multiple_direct_specification_1(id UInt64 CODEC(MULTIPLE(LZ4,
 CREATE TABLE codec_multiple_direct_specification_2(id UInt64 CODEC(multiple(LZ4, ZSTD))) ENGINE = MergeTree() ORDER BY tuple(); -- { serverError UNKNOWN_CODEC }
 CREATE TABLE delta_bad_params1(id UInt64 CODEC(Delta(3))) ENGINE = MergeTree() ORDER BY tuple(); -- { serverError ILLEGAL_CODEC_PARAMETER }
 CREATE TABLE delta_bad_params2(id UInt64 CODEC(Delta(16))) ENGINE = MergeTree() ORDER BY tuple(); -- { serverError ILLEGAL_CODEC_PARAMETER }
+DROP TABLE IF EXISTS compression_codec_multiple;
 SET network_compression_method = 'lz4hc';
 CREATE TABLE compression_codec_multiple (
     id UInt64 CODEC(LZ4, ZSTD, NONE, LZ4HC, Delta(4)),
@@ -35,6 +44,7 @@ SELECT count(*) FROM compression_codec_multiple;
 SELECT count(distinct data) FROM compression_codec_multiple;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple;
+DROP TABLE IF EXISTS compression_codec_multiple_more_types;
 CREATE TABLE compression_codec_multiple_more_types (
     id Decimal128(13) CODEC(ZSTD, LZ4, ZSTD, ZSTD, Delta(2), Delta(4), Delta(1), LZ4HC),
     data FixedString(12) CODEC(ZSTD, ZSTD, Delta, Delta, Delta, NONE, NONE, NONE, LZ4HC),
@@ -48,6 +58,7 @@ CREATE TABLE compression_codec_multiple_more_types (
 INSERT INTO compression_codec_multiple_more_types VALUES(1.5555555555555, 'hello world!', [77], ['John']);
 INSERT INTO compression_codec_multiple_more_types VALUES(7.1, 'xxxxxxxxxxxx', [127], ['Henry']);
 SELECT * FROM compression_codec_multiple_more_types order by id;
+DROP TABLE IF EXISTS compression_codec_multiple_with_key;
 SET network_compression_method = 'zstd';
 SET network_zstd_compression_level = 5;
 CREATE TABLE compression_codec_multiple_with_key (
@@ -62,6 +73,7 @@ SELECT COUNT(DISTINCT data) FROM compression_codec_multiple_with_key WHERE id < 
 SET network_zstd_compression_level = 7;
 INSERT INTO compression_codec_multiple_with_key VALUES(toDate('2018-10-13'), 100001, 'hello1'), (toDate('2018-10-14'), 100003, 'world1'), (toDate('2018-10-15'), 2222, '!ZSTD');
 SELECT data FROM compression_codec_multiple_with_key WHERE id = 2222;
+DROP TABLE IF EXISTS test_default_delta;
 CREATE TABLE test_default_delta(
     id UInt64 CODEC(Delta),
     data String CODEC(Delta(1)),
@@ -72,3 +84,5 @@ CREATE TABLE test_default_delta(
     yetothernum Float32 CODEC(Delta),
     ddd Nested (age UInt8, Name String, OName String, BName String) CODEC(Delta(1))
 ) ENGINE = MergeTree() ORDER BY tuple();
+DROP TABLE compression_codec_multiple;
+DROP TABLE compression_codec_multiple_more_types;

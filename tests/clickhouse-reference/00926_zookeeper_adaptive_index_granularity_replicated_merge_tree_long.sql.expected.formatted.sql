@@ -2,6 +2,10 @@
 ----- Group of very similar simple tests ------
 SELECT '----HORIZONTAL MERGE TESTS----';
 
+SYSTEM DROP  TABLE IF EXISTS zero_rows_per_granule1;
+
+SYSTEM DROP  TABLE IF EXISTS zero_rows_per_granule2;
+
 CREATE TABLE zero_rows_per_granule1
 (
     p Date,
@@ -51,6 +55,10 @@ INSERT INTO zero_rows_per_granule2 (p, k, v1, v2);
 SELECT sleep(0.7)
 FORMAT Null;
 
+SYSTEM DROP  TABLE IF EXISTS four_rows_per_granule1;
+
+SYSTEM DROP  TABLE IF EXISTS four_rows_per_granule2;
+
 CREATE TABLE four_rows_per_granule1
 (
     p Date,
@@ -96,6 +104,10 @@ WHERE table = 'four_rows_per_granule2'
     AND active = 1;
 
 INSERT INTO four_rows_per_granule2 (p, k, v1, v2);
+
+SYSTEM DROP  TABLE IF EXISTS adaptive_granularity_alter1;
+
+SYSTEM DROP  TABLE IF EXISTS adaptive_granularity_alter2;
 
 CREATE TABLE adaptive_granularity_alter1
 (

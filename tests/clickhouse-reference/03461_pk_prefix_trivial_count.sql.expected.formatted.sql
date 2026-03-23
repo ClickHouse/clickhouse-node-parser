@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     k String
@@ -13,3 +16,5 @@ WHERE like(k, 'dst_kkkk_1111%');
 SELECT count(*)
 FROM t
 WHERE like(k, 'dst%kkkk');
+
+SYSTEM DROP  TABLE t;

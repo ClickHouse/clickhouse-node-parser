@@ -2,6 +2,8 @@
 -- Looks like you cannot use the query parameter as a column name.
 -- https://github.com/ClickHouse/ClickHouse/issues/23194
 SET enable_analyzer = 1;
+DROP DATABASE IF EXISTS db1_03101;
+DROP DATABASE IF EXISTS db2_03101;
 CREATE DATABASE db1_03101;
 CREATE DATABASE db2_03101;
 USE db1_03101;

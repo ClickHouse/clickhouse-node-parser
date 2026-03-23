@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS dict_db_02179;
 CREATE DATABASE dict_db_02179;
 CREATE TABLE dict_db_02179.dict_data (key UInt64, val UInt64) Engine=Memory();
 CREATE DICTIONARY dict_db_02179.dict
@@ -15,4 +18,9 @@ SELECT dictGetUInt64('dict_db_02179.dict', 'val', toUInt64(0));
 SET distributed_ddl_output_mode='throw';
 SET distributed_ddl_output_mode='none';
 SELECT dictGetUInt64('dict_db_02179.dict', 'val', toUInt64(1));
+DROP DATABASE IF EXISTS empty_db_02179;
 CREATE DATABASE empty_db_02179;
+DROP DICTIONARY dict_db_02179.dict;
+DROP TABLE dict_db_02179.dict_data;
+DROP DATABASE dict_db_02179;
+DROP DATABASE empty_db_02179;

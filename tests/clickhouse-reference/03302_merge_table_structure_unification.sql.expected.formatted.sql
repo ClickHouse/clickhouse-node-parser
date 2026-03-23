@@ -1,5 +1,11 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test_a;
+
+SYSTEM DROP  TABLE IF EXISTS test_b;
+
+SYSTEM DROP  TABLE IF EXISTS test_merge;
+
 CREATE TABLE test_a
 (
     a UInt8,
@@ -35,4 +41,10 @@ SELECT *
 FROM merge('^test_')
 ORDER BY a ASC;
 
+SYSTEM DROP  TABLE test_merge;
+
 SET merge_table_max_tables_to_look_for_schema_inference = 1;
+
+SYSTEM DROP  TABLE test_a;
+
+SYSTEM DROP  TABLE test_b;

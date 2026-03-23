@@ -1,3 +1,8 @@
+-- Tags: shard
+SYSTEM drop  table if exists data_01072;
+
+SYSTEM drop  table if exists dist_01072;
+
 SET optimize_skip_unused_shards = 1;
 
 SET force_optimize_skip_unused_shards = 1;
@@ -67,6 +72,8 @@ FROM dist_01072
 WHERE key = toInt32(value)
 SETTINGS force_optimize_skip_unused_shards = 0;
 
+SYSTEM drop  table dist_01072;
+
 CREATE TABLE dist_01072
 (
     key Int,
@@ -92,6 +99,9 @@ CREATE TABLE dist_01072
     str String
 )
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01072, key % 2);
+
+-- check virtual columns
+SYSTEM drop  table data_01072;
 
 CREATE TABLE data_01072
 (

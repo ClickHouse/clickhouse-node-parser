@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t1
 (
     x UInt32,
@@ -27,3 +29,5 @@ SELECT *
 FROM
     t1
 ARRAY JOIN COLUMNS('nonexistent'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
+SYSTEM DROP  TABLE t1;

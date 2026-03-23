@@ -14,6 +14,8 @@ SET max_execution_time = 60;
 -- test rely on local execution, - force parallel replicas to genearate local plan
 SET parallel_replicas_local_plan = 1;
 
+SYSTEM DROP  TABLE IF EXISTS sc_core SYNC;
+
 CREATE TABLE sc_core
 (
     k UInt32,
@@ -27,6 +29,11 @@ INSERT INTO sc_core SELECT
     number,
     if(number % 20 = 0, NULL, toFloat64(rand()) / 4294967296.0)
 FROM numbers(60000);
+
+------------------------------------------------------------
+-- SUM() must not trigger statistics
+------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS sc_unused SYNC;
 
 CREATE TABLE sc_unused
 (
@@ -57,6 +64,11 @@ WHERE type = 'QueryFinish'
 ORDER BY event_time_microseconds DESC
 LIMIT 1;
 
+------------------------------------------------------------
+-- LowCardinality: CountMin https://github.com/ClickHouse/ClickHouse/issues/87886
+------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS st_cm_lc SYNC;
+
 CREATE TABLE st_cm_lc
 (
     k UInt32,
@@ -86,6 +98,13 @@ WHERE type = 'QueryFinish'
     AND log_comment = 'cm-lc-load'
 ORDER BY event_time_microseconds DESC
 LIMIT 1;
+
+------------------------------------------------------------
+-- JOIN with Uniq
+------------------------------------------------------------
+SYSTEM DROP  TABLE IF EXISTS sj_a SYNC;
+
+SYSTEM DROP  TABLE IF EXISTS sj_b SYNC;
 
 CREATE TABLE sj_a
 (

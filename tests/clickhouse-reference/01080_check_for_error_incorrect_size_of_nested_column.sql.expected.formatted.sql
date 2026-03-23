@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists {CLICKHOUSE_DATABASE:Identifier}.test_table_01080;
+
 CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.test_table_01080
 (
     dim_key Int64,
@@ -7,6 +9,8 @@ ENGINE = MergeTree
 ORDER BY (dim_key);
 
 INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.test_table_01080;
+
+SYSTEM drop  DICTIONARY if exists {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080;
 
 CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080
 (
@@ -57,3 +61,7 @@ SELECT dictGetString(concat({CLICKHOUSE_DATABASE:String}, '.test_dict_01080'), '
 FROM (
         SELECT tuple(toInt64(materialize(1))) AS x
     );
+
+SYSTEM drop  DICTIONARY   {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080;
+
+SYSTEM drop  table   {CLICKHOUSE_DATABASE:Identifier}.test_table_01080;

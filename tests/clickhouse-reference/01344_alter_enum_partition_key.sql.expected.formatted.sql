@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     x Enum('hello' = 1, 'world' = 2),
@@ -29,3 +31,5 @@ FROM test
 ORDER BY x ASC;
 
 INSERT INTO test;
+
+SYSTEM DROP  TABLE test;

@@ -1,5 +1,7 @@
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE IF EXISTS map_comb;
+
 CREATE TABLE map_comb
 (
     a int,
@@ -53,6 +55,8 @@ SELECT
 FROM map_comb
 GROUP BY a
 ORDER BY a ASC;
+
+SYSTEM DROP  TABLE map_comb;
 
 -- check different types
 SELECT minMap(val)
@@ -108,6 +112,8 @@ SELECT minMap([1,1,1]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT minMap(([1,1,1])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+SYSTEM DROP  TABLE IF EXISTS sum_map_decimal;
+
 CREATE TABLE sum_map_decimal
 (
     statusMap Map(UInt16, Decimal32(5))
@@ -121,3 +127,5 @@ FROM sum_map_decimal;
 
 SELECT sumWithOverflowMap(statusMap)
 FROM sum_map_decimal;
+
+SYSTEM DROP  TABLE sum_map_decimal;

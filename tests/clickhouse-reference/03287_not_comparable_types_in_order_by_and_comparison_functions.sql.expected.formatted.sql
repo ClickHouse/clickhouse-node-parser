@@ -1,5 +1,7 @@
 SET enable_json_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     agg1 AggregateFunction(sum, UInt64),
@@ -33,3 +35,5 @@ FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT agg1 != agg2
 FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+
+SYSTEM drop  table test;

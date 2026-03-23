@@ -1,5 +1,7 @@
 SET mutations_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS t_sparse_mutations_3;
+
 CREATE TABLE t_sparse_mutations_3
 (
     key UInt8,
@@ -57,3 +59,5 @@ SELECT
 FROM t_sparse_mutations_3;
 
 SET mutations_sync = 2;
+
+SYSTEM DROP  TABLE t_sparse_mutations_3;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS set;
+
 CREATE TABLE `set`
 (
     x String
@@ -10,11 +12,15 @@ SELECT
     ((arrayJoin(['hello', 'world']) AS s)) IN (`set`),
     s;
 
+SYSTEM DROP  TABLE set;
+
 CREATE TABLE `set`
 (
     x String
 )
 ENGINE = Set;
+
+SYSTEM DROP  TABLE IF EXISTS join;
 
 CREATE TABLE `join`
 (
@@ -35,6 +41,8 @@ FROM
 LEFT JOIN `join`
     USING (k)
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  TABLE join;
 
 CREATE TABLE `join`
 (

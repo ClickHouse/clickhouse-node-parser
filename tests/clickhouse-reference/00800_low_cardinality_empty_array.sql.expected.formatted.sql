@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists lc_00800_1;
+
 CREATE TABLE lc_00800_1
 (
     names Array(LowCardinality(String))

@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS src;
+
+SYSTEM DROP  TABLE IF EXISTS dst;
+
+SYSTEM DROP  TABLE IF EXISTS mv;
+
 CREATE TABLE src
 (
     x int
@@ -23,6 +29,12 @@ INSERT INTO src SETTINGS materialized_views_ignore_errors = 1;
 SELECT *
 FROM src
 WHERE x = 2;
+
+SYSTEM DROP  TABLE src;
+
+SYSTEM DROP  TABLE dst;
+
+SYSTEM DROP  TABLE mv;
 
 -- Ensure this still fails
 INSERT INTO FUNCTION url('http://127.0.0.1/foo.tsv', 'TabSeparated', 'key Int') SETTINGS http_max_tries = 1, materialized_views_ignore_errors = 1; -- { serverError POCO_EXCEPTION }

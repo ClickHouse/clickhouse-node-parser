@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_01593;
+
 CREATE TABLE data_01593
 (
     key Int
@@ -24,3 +26,5 @@ SETTINGS
 INSERT INTO data_01593 SETTINGS max_partitions_per_insert_block = 100 SELECT *
 FROM numbers_mt(10)
 SETTINGS max_partitions_per_insert_block = 1;
+
+SYSTEM drop  table data_01593;

@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     id Int32,
@@ -17,3 +19,5 @@ SELECT
     *,
     dt
 FROM t;
+
+SYSTEM DROP  TABLE t;

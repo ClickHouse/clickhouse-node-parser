@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS test_a;
+DROP TABLE IF EXISTS test_b;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE test_a
 (
@@ -22,3 +24,5 @@ INNER JOIN
 (SELECT OldColumn, NewColumn FROM test_b) s
 Using OldColumn
 PREWHERE NewColumn != '';
+DROP TABLE test_a;
+DROP TABLE test_b;

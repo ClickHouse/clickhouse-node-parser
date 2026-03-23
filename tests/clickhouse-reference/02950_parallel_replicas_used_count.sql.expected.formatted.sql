@@ -1,3 +1,6 @@
+-- Tags: no-azure-blob-storage
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     k UInt64,
@@ -85,3 +88,5 @@ WHERE type = 'QueryFinish'
             AND initial_query_id = query_id
     )
 SETTINGS enable_parallel_replicas = 0;
+
+SYSTEM DROP  TABLE test;

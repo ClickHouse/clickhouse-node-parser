@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS memory;
+
 CREATE TABLE memory
 (
     x UInt8
@@ -19,3 +21,5 @@ INSERT INTO memory (x);
 SELECT *
 FROM memory
 ORDER BY x ASC;
+
+SYSTEM DROP  TABLE memory;

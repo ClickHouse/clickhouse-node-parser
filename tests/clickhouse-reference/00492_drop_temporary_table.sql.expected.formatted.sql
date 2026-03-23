@@ -1,3 +1,5 @@
+SYSTEM DROP  TEMPORARY TABLE IF EXISTS temp_tab;
+
 CREATE TEMPORARY TABLE temp_tab
 (
     number UInt64
@@ -12,4 +14,8 @@ FROM temp_tab;
 
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE temp_tab;
+
 SET send_logs_level = 'warning';
+
+SYSTEM DROP  TEMPORARY TABLE temp_tab;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS sorted;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE sorted
@@ -26,3 +28,5 @@ ORDER BY x ASC;
 INSERT INTO sorted (x) SELECT (if(intHash64(number) % 1000 = 0, 999, intDiv(number, 100000))) AS x
 FROM `system`.numbers
 LIMIT 1000000;
+
+SYSTEM DROP  TABLE sorted;

@@ -45,6 +45,10 @@ select left_table.id,val_left, val_middle, val_right from left_table
                                                               inner join middle_table on left_table.id = middle_table.id
                                                               inner join (SELECT * FROM right_table WHERE id = 1) r on middle_table.id = r.id
 ORDER BY left_table.id, val_left, val_middle, val_right;
+-- distributed tables
+drop table if exists left_table;
+drop table if exists middle_table;
+drop table if exists right_table;
 create table if not exists right_table_local (id UInt64, val_right String) engine=ReplacingMergeTree() ORDER BY id;
 create table if not exists right_table engine=Distributed('test_shard_localhost', currentDatabase(), right_table_local) AS right_table_local;
 insert into right_table_local values (1,'a');
@@ -59,6 +63,11 @@ select left_table.*,middle_table.*, right_table.* from left_table
                                                            inner join right_table on middle_table.id = right_table.id
 ORDER BY left_table.id, val_left, val_middle, val_right;
 SET prefer_localhost_replica=1;
+-- Quite exotic with Merge engine
+DROP TABLE IF EXISTS table_to_merge_a;
+DROP TABLE IF EXISTS table_to_merge_b;
+DROP TABLE IF EXISTS table_to_merge_c;
+DROP TABLE IF EXISTS merge_table;
 create table if not exists table_to_merge_a (id UInt64, val String) engine=ReplacingMergeTree() ORDER BY id;
 create table if not exists table_to_merge_b (id UInt64, val String) engine=MergeTree() ORDER BY id;
 create table if not exists table_to_merge_c (id UInt64, val String) engine=ReplacingMergeTree() ORDER BY id;

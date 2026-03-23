@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table;
+
 CREATE TABLE test_table
 (
     key UInt64,
@@ -8,6 +10,8 @@ SELECT
     number,
     number
 FROM numbers(1e5);
+
+SYSTEM DROP  TABLE IF EXISTS test_table_nullable;
 
 CREATE TABLE test_table_nullable
 (
@@ -20,6 +24,8 @@ SELECT
     if(number % 2 == 0, NULL, number)
 FROM numbers(1e5);
 
+SYSTEM DROP  TABLE IF EXISTS test_table_string;
+
 CREATE TABLE test_table_string
 (
     key String,
@@ -30,6 +36,8 @@ SELECT
     concat('foo', number::String),
     number
 FROM numbers(1e5);
+
+SYSTEM DROP  TABLE IF EXISTS test_table_complex;
 
 CREATE TABLE test_table_complex
 (
@@ -43,6 +51,8 @@ SELECT
     number,
     number
 FROM numbers(1e5);
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_sparse_dictionary_load_factor;
 
 CREATE DICTIONARY test_sparse_dictionary_load_factor
 (
@@ -63,6 +73,10 @@ SELECT count()
 FROM test_table
 WHERE dictGet('test_sparse_dictionary_load_factor', 'value', key) != value;
 
+SYSTEM DROP  DICTIONARY test_sparse_dictionary_load_factor;
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_load_factor;
+
 CREATE DICTIONARY test_dictionary_load_factor
 (
     key UInt64,
@@ -82,6 +96,10 @@ SELECT count()
 FROM test_table
 WHERE dictGet('test_dictionary_load_factor', 'value', key) != value;
 
+SYSTEM DROP  DICTIONARY test_dictionary_load_factor;
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_load_factor_nullable;
+
 CREATE DICTIONARY test_dictionary_load_factor_nullable
 (
     key UInt64,
@@ -100,6 +118,10 @@ WHERE database = currentDatabase()
 SELECT count()
 FROM test_table_nullable
 WHERE dictGet('test_dictionary_load_factor_nullable', 'value', key) != value;
+
+SYSTEM DROP  DICTIONARY test_dictionary_load_factor_nullable;
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_complex_dictionary_load_factor;
 
 CREATE DICTIONARY test_complex_dictionary_load_factor
 (
@@ -121,6 +143,10 @@ SELECT count()
 FROM test_table_complex
 WHERE dictGet('test_complex_dictionary_load_factor', 'value', (key_1, key_2)) != value;
 
+SYSTEM DROP  DICTIONARY test_complex_dictionary_load_factor;
+
+SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_load_factor_string;
+
 CREATE DICTIONARY test_dictionary_load_factor_string
 (
     key String,
@@ -130,3 +156,13 @@ PRIMARY KEY key
 SOURCE(clickhouse(TABLE test_table_string))
 LIFETIME(0)
 LAYOUT(HASHED(MAX_LOAD_FACTOR 1));
+
+SYSTEM DROP  DICTIONARY test_dictionary_load_factor_string;
+
+SYSTEM DROP  TABLE test_table;
+
+SYSTEM DROP  TABLE test_table_nullable;
+
+SYSTEM DROP  TABLE test_table_string;
+
+SYSTEM DROP  TABLE test_table_complex;

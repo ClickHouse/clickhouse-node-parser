@@ -6,6 +6,10 @@ SET optimize_inverse_dictionary_lookup = 1;
 
 SET optimize_or_like_chain = 0;
 
+SYSTEM DROP  DICTIONARY IF EXISTS colors;
+
+SYSTEM DROP  TABLE IF EXISTS ref_colors;
+
 CREATE TABLE ref_colors
 (
     id UInt64,
@@ -27,6 +31,8 @@ PRIMARY KEY id
 SOURCE(clickhouse(TABLE 'ref_colors'))
 LIFETIME(0)
 LAYOUT(HASHED());
+
+SYSTEM DROP  TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -299,6 +305,8 @@ SELECT
     dictGetUInt16('dict', 'c0', t1.c0) = true
 FROM dict AS t1; -- { serverError BAD_ARGUMENTS }
 
+SYSTEM DROP  TABLE IF EXISTS t__fuzz_0;
+
 CREATE TABLE t__fuzz_0
 (
     color_id UInt64,
@@ -321,6 +329,12 @@ SELECT equals(materialize(9), CAST('red' AS Nullable(String)) = dictGetString('c
 FROM t__fuzz_0;
 
 SET allow_suspicious_low_cardinality_types = 1;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dictionary_all;
+
+SYSTEM DROP  TABLE IF EXISTS ref_table_all;
+
+SYSTEM DROP  TABLE IF EXISTS tab__fuzz_24;
 
 CREATE TABLE tab__fuzz_24
 (

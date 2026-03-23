@@ -1,3 +1,7 @@
+SYSTEM DROP  DICTIONARY IF EXISTS dict_big;
+
+SYSTEM DROP  TABLE IF EXISTS dict_src_big;
+
 CREATE TABLE dict_src_big
 (
     id UInt64,

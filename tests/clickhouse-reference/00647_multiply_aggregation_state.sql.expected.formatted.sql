@@ -56,6 +56,8 @@ FROM (
             )
     );
 
+SYSTEM DROP  TABLE IF EXISTS mult_aggregation;
+
 CREATE TABLE mult_aggregation
 (
     a UInt32,

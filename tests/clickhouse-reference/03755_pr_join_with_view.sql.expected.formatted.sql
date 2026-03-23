@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists v;
+
+SYSTEM drop  table if exists t0 sync;
+
+SYSTEM drop  table if exists t1 sync;
+
 CREATE TABLE t0
 (
     k UInt64,

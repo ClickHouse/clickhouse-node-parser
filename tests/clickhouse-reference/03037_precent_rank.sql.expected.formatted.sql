@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists product_groups;
+
+SYSTEM drop  table if exists products;
+
 CREATE TABLE product_groups
 (
     group_id Int64,
@@ -39,6 +43,10 @@ ORDER BY
     group_name ASC,
     price ASC,
     product_name ASC;
+
+SYSTEM drop  table product_groups;
+
+SYSTEM drop  table products;
 
 SELECT
     number,

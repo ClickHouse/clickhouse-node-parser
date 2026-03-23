@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_00808;
+
 CREATE TABLE test_00808
 (
     date Date,
@@ -23,3 +25,5 @@ FROM (
         FROM test_00808 FINAL
     )
 WHERE id = 1; -- { serverError SUPPORT_IS_DISABLED }
+
+SYSTEM DROP  TABLE test_00808;

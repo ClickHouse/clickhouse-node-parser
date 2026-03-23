@@ -18,3 +18,5 @@ FROM (
         SELECT *
         FROM table_name SAMPLE 50
     );
+
+SYSTEM DROP  TABLE table_name;

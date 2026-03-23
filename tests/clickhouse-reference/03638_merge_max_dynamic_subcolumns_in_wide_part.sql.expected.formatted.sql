@@ -1,3 +1,6 @@
+-- Tags: no-azure-blob-storage
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     json JSON(max_dynamic_paths = 4)
@@ -18,6 +21,8 @@ SELECT
     JSONSharedDataPaths(json)
 FROM test
 LIMIT 1;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

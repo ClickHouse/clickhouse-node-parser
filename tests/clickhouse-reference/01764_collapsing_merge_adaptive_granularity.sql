@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS collapsing_table;
 SET optimize_on_insert = 0;
 CREATE TABLE collapsing_table
 (
@@ -13,6 +14,7 @@ SETTINGS
     min_bytes_for_wide_part = 0;
 INSERT INTO collapsing_table SELECT if(number == 8192, 8191, number), 1, if(number == 8192, +1, -1) FROM numbers(8193);
 SELECT sum(Sign), count() from collapsing_table;
+DROP TABLE IF EXISTS collapsing_suspicious_granularity;
 CREATE TABLE collapsing_suspicious_granularity
 (
     key UInt64,

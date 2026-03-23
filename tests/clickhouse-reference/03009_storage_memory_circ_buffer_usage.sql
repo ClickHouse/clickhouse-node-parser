@@ -1,5 +1,6 @@
 -- Tags: memory-engine
 SET max_block_size = 65409; -- Default value
+DROP TABLE IF EXISTS memory;
 CREATE TABLE memory (i UInt32) ENGINE = Memory SETTINGS min_bytes_to_keep = 4096, max_bytes_to_keep = 16384;
 /* 1. testing oldest block doesn't get deleted because of min-threshold */
 INSERT INTO memory SELECT * FROM numbers(0, 1600);
@@ -23,3 +24,4 @@ INSERT INTO memory SELECT * FROM numbers(3000, 1100);
 CREATE TABLE memory (i UInt32) ENGINE = Memory;
 CREATE TABLE faulty_memory (i UInt32) ENGINE = Memory SETTINGS min_rows_to_keep = 100;  -- { serverError SETTING_CONSTRAINT_VIOLATION }
 CREATE TABLE faulty_memory (i UInt32) ENGINE = Memory SETTINGS min_bytes_to_keep = 100; -- { serverError SETTING_CONSTRAINT_VIOLATION }
+DROP TABLE memory;

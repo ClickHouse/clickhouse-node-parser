@@ -1,3 +1,6 @@
+-- Test for https://github.com/ClickHouse/ClickHouse/issues/83620
+SYSTEM DROP  TABLE IF EXISTS t;
+
 CREATE TABLE t
 (
     n Int
@@ -13,3 +16,5 @@ CREATE TABLE t
 ENGINE = MergeTree
 ORDER BY n
 SETTINGS merge_max_block_size = 1;
+
+SYSTEM DROP  TABLE t;

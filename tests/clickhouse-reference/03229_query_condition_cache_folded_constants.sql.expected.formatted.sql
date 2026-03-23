@@ -1,5 +1,7 @@
 SET prefer_localhost_replica = 0, use_query_condition_cache = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     key UInt64
@@ -22,3 +24,5 @@ WHERE (key >= (shardNum() * 10000))
     AND (key < ((shardNum() * 10000) + 10000))
 GROUP BY 1
 ORDER BY 1 ASC;
+
+SYSTEM DROP  TABLE tab;

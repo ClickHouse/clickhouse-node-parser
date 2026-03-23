@@ -1,3 +1,8 @@
+-- Tags: shard
+SYSTEM DROP  TABLE IF EXISTS report1;
+
+SYSTEM DROP  TABLE IF EXISTS report2;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE report1
@@ -41,3 +46,7 @@ FROM (
 ORDER BY
     id ASC,
     event_date ASC;
+
+SYSTEM DROP  TABLE report1;
+
+SYSTEM DROP  TABLE report2;

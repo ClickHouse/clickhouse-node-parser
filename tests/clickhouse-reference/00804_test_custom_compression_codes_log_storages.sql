@@ -1,5 +1,8 @@
 SET send_logs_level = 'fatal';
 SET allow_suspicious_codecs = 1;
+-- copy-paste for storage log
+
+DROP TABLE IF EXISTS compression_codec_log;
 CREATE TABLE compression_codec_log(
     id UInt64 CODEC(LZ4),
     data String CODEC(ZSTD),
@@ -14,6 +17,7 @@ INSERT INTO compression_codec_log VALUES(3, '!', toDate('2018-12-16'), 3.3, 'ccc
 SELECT * FROM compression_codec_log ORDER BY id;
 INSERT INTO compression_codec_log VALUES(2, '', toDate('2018-12-13'), 4.4, 'ddd', 8);
 SELECT count(*) FROM compression_codec_log WHERE id = 2 GROUP BY id;
+DROP TABLE IF EXISTS compression_codec_multiple_log;
 CREATE TABLE compression_codec_multiple_log (
     id UInt64 CODEC(LZ4, ZSTD, NONE, LZ4HC, Delta(4)),
     data String CODEC(ZSTD(2), NONE, Delta(2), LZ4HC, LZ4, LZ4, Delta(8)),
@@ -27,6 +31,8 @@ SELECT count(*) FROM compression_codec_multiple_log;
 SELECT count(distinct data) FROM compression_codec_multiple_log;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_log;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple_log;
+-- copy-paste for storage tiny log
+DROP TABLE IF EXISTS compression_codec_tiny_log;
 CREATE TABLE compression_codec_tiny_log(
     id UInt64 CODEC(LZ4),
     data String CODEC(ZSTD),
@@ -41,6 +47,7 @@ INSERT INTO compression_codec_tiny_log VALUES(3, '!', toDate('2018-12-16'), 3.3,
 SELECT * FROM compression_codec_tiny_log ORDER BY id;
 INSERT INTO compression_codec_tiny_log VALUES(2, '', toDate('2018-12-13'), 4.4, 'ddd', 8);
 SELECT count(*) FROM compression_codec_tiny_log WHERE id = 2 GROUP BY id;
+DROP TABLE IF EXISTS compression_codec_multiple_tiny_log;
 CREATE TABLE compression_codec_multiple_tiny_log (
     id UInt64 CODEC(LZ4, ZSTD, NONE, LZ4HC, Delta(4)),
     data String CODEC(ZSTD(2), NONE, Delta(2), LZ4HC, LZ4, LZ4, Delta(8)),
@@ -54,3 +61,5 @@ SELECT count(*) FROM compression_codec_multiple_tiny_log;
 SELECT count(distinct data) FROM compression_codec_multiple_tiny_log;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_tiny_log;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple_tiny_log;
+DROP TABLE compression_codec_multiple_log;
+DROP TABLE compression_codec_multiple_tiny_log;

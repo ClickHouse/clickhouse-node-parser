@@ -1,5 +1,7 @@
 SET allow_deprecated_error_prone_window_functions = 1;
 
+SYSTEM drop  table if exists largestTriangleThreeBucketsTestFloat64Float64;
+
 CREATE TABLE largestTriangleThreeBucketsTestFloat64Float64
 (
     x Float64,
@@ -22,6 +24,10 @@ FROM largestTriangleThreeBucketsTestFloat64Float64;
 SELECT largestTriangleThreeBuckets(4)(x, y) AS downsampled_data
 FROM largestTriangleThreeBucketsTestFloat64Float64;
 
+SYSTEM drop  table largestTriangleThreeBucketsTestFloat64Float64;
+
+SYSTEM drop  table if exists largestTriangleThreeBucketsTestDecimal64Decimal64;
+
 CREATE TABLE largestTriangleThreeBucketsTestDecimal64Decimal64
 (
     x Decimal64(2),
@@ -34,6 +40,10 @@ INSERT INTO largestTriangleThreeBucketsTestDecimal64Decimal64 (x, y);
 
 SELECT largestTriangleThreeBuckets(20)(x, y)
 FROM largestTriangleThreeBucketsTestDecimal64Decimal64;
+
+SYSTEM drop  table largestTriangleThreeBucketsTestDecimal64Decimal64;
+
+SYSTEM drop  table if exists largestTriangleThreeBucketsTestDateTime64Float64;
 
 CREATE TABLE largestTriangleThreeBucketsTestDateTime64Float64
 (
@@ -50,6 +60,8 @@ FROM largestTriangleThreeBucketsTestDateTime64Float64;
 
 SELECT lttb(5)(x, y)
 FROM largestTriangleThreeBucketsTestDateTime64Float64;
+
+SYSTEM drop  table largestTriangleThreeBucketsTestDateTime64Float64;
 
 CREATE TABLE largestTriangleTreeBucketsBucketSizeTest
 (
@@ -72,3 +84,5 @@ FROM largestTriangleTreeBucketsBucketSizeTest
 LIMIT 990, 10;
 
 SELECT largestTriangleThreeBuckets(1)(0, '1900-01-01 00:00:00'::DateTime64);
+
+SYSTEM DROP  TABLE largestTriangleTreeBucketsBucketSizeTest;

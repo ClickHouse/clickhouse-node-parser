@@ -19,3 +19,5 @@ select 4, n from rmt2 order by n;
 insert into rmt2 values (3);
 select 5, n, _part from rmt1 order by n;
 select 6, n, _part from rmt2 order by n;
+drop table rmt1;
+drop table rmt2;

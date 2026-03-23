@@ -18,3 +18,5 @@ SELECT
 FROM `system`.view_refreshes
 WHERE database = currentDatabase()
     AND view = '03221_rmv';
+
+SYSTEM DROP  TABLE 03221_rmv;

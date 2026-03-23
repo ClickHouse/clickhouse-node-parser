@@ -1,7 +1,9 @@
 -- Tags: no-fasttest
 
 set enable_json_type=1;
+drop table if exists test;
 create table test (json JSON) engine=Memory;
+drop table test;
 create table test (json JSON(max_dynamic_paths=10)) engine=Memory;
 create table test (json JSON(max_dynamic_types=10)) engine=Memory;
 create table test (json JSON(a UInt32)) engine=Memory;

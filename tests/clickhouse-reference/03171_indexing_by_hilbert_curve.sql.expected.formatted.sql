@@ -1,6 +1,8 @@
 -- Prevent remote replicas from skipping index analysis in Parallel Replicas. Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.
 SET parallel_replicas_index_analysis_only_on_coordinator = 0;
 
+SYSTEM DROP  TABLE IF EXISTS test_hilbert_encode_hilbert_encode;
+
 CREATE TABLE test_hilbert_encode
 (
     x UInt32,
@@ -27,6 +29,8 @@ WHERE x >= 10
     AND y <= 30;
 
 SET max_rows_to_read = 8192, force_primary_key = 1, analyze_index_with_space_filling_curves = 0;
+
+SYSTEM DROP  TABLE test_hilbert_encode;
 
 -- The same, but with more precise index
 CREATE TABLE test_hilbert_encode

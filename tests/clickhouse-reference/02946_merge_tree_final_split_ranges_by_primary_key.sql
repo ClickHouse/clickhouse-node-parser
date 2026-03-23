@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
     id UInt64,
@@ -11,3 +12,4 @@ SELECT id, value FROM test_table FINAL ORDER BY id;
 INSERT INTO test_table SELECT 5, '5';
 INSERT INTO test_table SELECT number + 8, number + 8 FROM numbers(8);
 INSERT INTO test_table SELECT number, number FROM numbers(32);
+DROP TABLE test_table;

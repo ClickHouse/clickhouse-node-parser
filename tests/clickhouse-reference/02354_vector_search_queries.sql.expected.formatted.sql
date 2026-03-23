@@ -17,6 +17,8 @@ SETTINGS index_granularity = 8192;
 
 INSERT INTO tab;
 
+SYSTEM DROP  TABLE tab;
+
 SELECT '12 rows, index_granularity = 3, GRANULARITY = 2 --> 4 granules, 2 indexed block';
 
 CREATE TABLE tab
@@ -44,6 +46,26 @@ ORDER BY id
 SETTINGS index_granularity = 3;
 
 INSERT INTO tab;
+
+SYSTEM DROP  TABLE IF EXISTS tab_l2_f64;
+
+SYSTEM DROP  TABLE IF EXISTS tab_l2_f32;
+
+SYSTEM DROP  TABLE IF EXISTS tab_l2_f16;
+
+SYSTEM DROP  TABLE IF EXISTS tab_l2_bf16;
+
+SYSTEM DROP  TABLE IF EXISTS tab_l2_i8;
+
+SYSTEM DROP  TABLE IF EXISTS tab_cos_f64;
+
+SYSTEM DROP  TABLE IF EXISTS tab_cos_f32;
+
+SYSTEM DROP  TABLE IF EXISTS tab_cos_f16;
+
+SYSTEM DROP  TABLE IF EXISTS tab_cos_bf16;
+
+SYSTEM DROP  TABLE IF EXISTS tab_cos_i8;
 
 CREATE TABLE tab_l2_f64
 (
@@ -164,6 +186,26 @@ INSERT INTO tab_cos_f16;
 INSERT INTO tab_cos_bf16;
 
 INSERT INTO tab_cos_i8;
+
+SYSTEM DROP  TABLE tab_l2_f64;
+
+SYSTEM DROP  TABLE tab_l2_f32;
+
+SYSTEM DROP  TABLE tab_l2_f16;
+
+SYSTEM DROP  TABLE tab_l2_bf16;
+
+SYSTEM DROP  TABLE tab_l2_i8;
+
+SYSTEM DROP  TABLE tab_cos_f64;
+
+SYSTEM DROP  TABLE tab_cos_f32;
+
+SYSTEM DROP  TABLE tab_cos_f16;
+
+SYSTEM DROP  TABLE tab_cos_bf16;
+
+SYSTEM DROP  TABLE tab_cos_i8;
 
 CREATE TABLE tab
 (

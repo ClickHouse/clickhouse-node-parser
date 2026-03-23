@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_table_join_1;
+
 CREATE TABLE test_table_join_1
 (
     id UInt64,
@@ -5,12 +7,16 @@ CREATE TABLE test_table_join_1
 )
 ENGINE = TinyLog;
 
+SYSTEM DROP  TABLE IF EXISTS test_table_join_2;
+
 CREATE TABLE test_table_join_2
 (
     id UInt64,
     value String
 )
 ENGINE = TinyLog;
+
+SYSTEM DROP  TABLE IF EXISTS test_table_join_3;
 
 CREATE TABLE test_table_join_3
 (
@@ -35,3 +41,9 @@ INNER JOIN test_table_join_2 AS t2
     ON t1.id = t2.id
 INNER JOIN test_table_join_3 AS t3
     ON t2.id = t3.id;
+
+SYSTEM DROP  TABLE test_table_join_1;
+
+SYSTEM DROP  TABLE test_table_join_2;
+
+SYSTEM DROP  TABLE test_table_join_3;

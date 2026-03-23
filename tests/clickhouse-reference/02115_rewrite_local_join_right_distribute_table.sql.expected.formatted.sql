@@ -3,6 +3,14 @@ CREATE DATABASE IF NOT EXISTS test_02115;
 
 USE test_02115;
 
+SYSTEM DROP  TABLE IF EXISTS t1_local;
+
+SYSTEM DROP  TABLE IF EXISTS t2_local;
+
+SYSTEM DROP  TABLE IF EXISTS t1_all;
+
+SYSTEM DROP  TABLE IF EXISTS t2_all;
+
 CREATE TABLE t1_local
 (
     a Int32
@@ -39,3 +47,13 @@ INNER JOIN t2_all AS t2
 ORDER BY t1.a ASC;
 
 SET distributed_product_mode = 'global';
+
+SYSTEM DROP  TABLE t1_local;
+
+SYSTEM DROP  TABLE t2_local;
+
+SYSTEM DROP  TABLE t1_all;
+
+SYSTEM DROP  TABLE t2_all;
+
+SYSTEM DROP  DATABASE test_02115;

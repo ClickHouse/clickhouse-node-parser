@@ -1,5 +1,7 @@
 SET mutations_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 SELECT '-- Compact parts';
 
 CREATE TABLE tab
@@ -17,6 +19,8 @@ INSERT INTO tab (id);
 SELECT *
 FROM tab
 ORDER BY id ASC;
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

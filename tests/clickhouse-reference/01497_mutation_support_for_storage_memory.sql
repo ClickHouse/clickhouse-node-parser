@@ -1,3 +1,5 @@
+-- Tags: memory-engine
+DROP TABLE IF EXISTS defaults;
 CREATE TABLE defaults
 (
 	n Int32,
@@ -6,3 +8,4 @@ CREATE TABLE defaults
 INSERT INTO defaults VALUES(1, '1') (2, '2') (3, '3') (4, '4') (5, '5');
 SELECT * FROM defaults;
 SELECT count(*) FROM defaults;
+DROP TABLE defaults;

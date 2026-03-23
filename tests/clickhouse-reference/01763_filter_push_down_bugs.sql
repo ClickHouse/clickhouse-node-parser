@@ -4,6 +4,7 @@ SELECT * FROM (SELECT col1, col2 FROM (select '1' as col1, '2' as col2) GROUP by
 SELECT * FROM (SELECT materialize('1') AS s1, materialize('2') AS s2 GROUP BY s1, s2) WHERE s2 = '2';
 SELECT * FROM (SELECT materialize([1]) AS s1, materialize('2') AS s2 GROUP BY s1, s2) WHERE s2 = '2';
 SELECT * FROM (SELECT materialize([[1]]) AS s1, materialize('2') AS s2 GROUP BY s1, s2) WHERE s2 = '2';
+DROP TABLE IF EXISTS Test;
 CREATE TABLE Test
 ENGINE = MergeTree()
 PRIMARY KEY (String1,String2)
@@ -32,9 +33,12 @@ FROM
   ) AS expr_qry
 WHERE  String4 ='String4_0';
 select x, y from (select [0, 1, 2] as y, 1 as a, 2 as b) array join y as x where a = 1 and b = 2 and (x = 1 or x != 1) and x = 1;
+DROP TABLE IF EXISTS t;
 create table t(a UInt8) engine=MergeTree order by a SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 insert into t select * from numbers(2);
 select a from t t1 join t t2 on t1.a = t2.a where t1.a;
+DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t2;
 CREATE TABLE t1 (id Int64, create_time DateTime) ENGINE = MergeTree ORDER BY id SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns=0;
 CREATE TABLE t2 (delete_time DateTime) ENGINE = MergeTree ORDER BY delete_time SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns=0;
 insert into t1 values (101, '2023-05-28 00:00:00'), (102, '2023-05-28 00:00:00');

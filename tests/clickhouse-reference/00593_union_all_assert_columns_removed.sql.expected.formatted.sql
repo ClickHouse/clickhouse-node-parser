@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS columns;
+
 CREATE TABLE `columns`
 (
     a UInt8,
@@ -33,3 +35,5 @@ FROM (
         SELECT *
         FROM `columns`
     );
+
+SYSTEM DROP  TABLE columns;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS data_01269;
+
 CREATE TABLE data_01269
 (
     key Int32,
@@ -15,3 +17,5 @@ FROM data_01269;
 
 SELECT any(alias)
 FROM data_01269;
+
+SYSTEM DROP  TABLE data_01269;

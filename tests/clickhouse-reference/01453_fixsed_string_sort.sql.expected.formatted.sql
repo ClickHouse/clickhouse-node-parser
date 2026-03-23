@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists badFixedStringSort;
+
 CREATE TABLE IF NOT EXISTS badFixedStringSort
 (
     uuid5_old FixedString(16),

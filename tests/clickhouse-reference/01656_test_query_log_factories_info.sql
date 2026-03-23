@@ -39,6 +39,7 @@ ORDER BY query_start_time DESC LIMIT 1 FORMAT TabSeparatedWithNames;
 SELECT arraySort(used_data_type_families)
 FROM system.query_log WHERE current_database = currentDatabase() AND type = 'QueryFinish' AND (query LIKE '%toDate(\'2000-12-05\')%')
 ORDER BY query_start_time DESC LIMIT 1 FORMAT TabSeparatedWithNames;
+DROP database IF EXISTS test_query_log_factories_info1;
 CREATE database test_query_log_factories_info1 ENGINE=Atomic;
 SELECT used_database_engines
 FROM system.query_log
@@ -49,3 +50,5 @@ SELECT arraySort(used_data_type_families), used_storages
 FROM system.query_log
 WHERE current_database = currentDatabase() AND type == 'QueryFinish' AND (query LIKE '%TABLE test%')
 ORDER BY query_start_time DESC LIMIT 1 FORMAT TabSeparatedWithNames;
+DROP TABLE test_query_log_factories_info1.memory_table;
+DROP DATABASE test_query_log_factories_info1;

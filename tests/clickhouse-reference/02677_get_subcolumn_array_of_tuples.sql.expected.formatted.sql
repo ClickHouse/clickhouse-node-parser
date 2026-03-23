@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS t_get_subcolumn;
+
 CREATE TABLE t_get_subcolumn
 (
     id UInt64,
@@ -18,3 +20,5 @@ FROM t_get_subcolumn;
 
 SELECT getSubcolumn(n, 'size0')
 FROM t_get_subcolumn;
+
+SYSTEM DROP  TABLE t_get_subcolumn;

@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists cardinality;
+
 CREATE TABLE cardinality
 (
     x String

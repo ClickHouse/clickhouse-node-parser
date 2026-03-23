@@ -1,6 +1,7 @@
 SET allow_deprecated_syntax_for_merge_tree = 1;
 SET compile_sort_description = 1;
 SET min_count_to_compile_sort_description = 0;
+DROP TABLE IF EXISTS test1_00395;
 CREATE TABLE test1_00395
 (
     col1 UInt64,
@@ -22,3 +23,4 @@ SELECT count(greatest(multiIf(1, 2, toNullable(NULL), 3, 4))) FROM test1_00395 W
 SELECT '--';
 SELECT multiIf(1, 2, NULL, 3, 4), count(greatest(multiIf(1, 2, NULL, toUInt256(3), 4), multiIf(1, 2, NULL, 3, 4))) FROM test1_00395 GROUP BY col1 WITH CUBE WITH TOTALS ORDER BY multiIf(27, 1, multiIf(materialize(1), toLowCardinality(2), 3, 1, 4), NULL, 4) ASC NULLS LAST;
 SELECT col1 FROM test1_00395 ORDER BY multiIf(27, 1, multiIf(materialize(1), toLowCardinality(2), 3, 1, 4), NULL, 4) ASC;
+DROP TABLE test1_00395;

@@ -1,5 +1,8 @@
+DROP TABLE IF EXISTS perf;
 CREATE TABLE perf (site String, user_id UInt64, z Float64) ENGINE = Log;
+
 SELECT * FROM (SELECT perf_1.z AS z_1 FROM perf AS perf_1);
+
 SELECT sum(mul)/sqrt(sum(sqr_dif_1) * sum(sqr_dif_2)) AS z_r
 FROM(
 SELECT
@@ -28,3 +31,5 @@ FROM (
             FROM perf AS perf_2
             WHERE user_id = 999
 ) js2 USING site);
+
+DROP TABLE perf;

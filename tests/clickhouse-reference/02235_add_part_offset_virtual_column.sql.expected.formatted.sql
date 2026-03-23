@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS t_1;
+
+SYSTEM DROP  TABLE IF EXISTS t_random_1;
+
 CREATE TABLE t_1
 (
     order_0 UInt64,

@@ -1,3 +1,9 @@
+SYSTEM drop  table if exists t1;
+
+SYSTEM drop  table if exists t2;
+
+SYSTEM drop  table if exists t3;
+
 CREATE TABLE t1
 (
     a UInt32,
@@ -207,3 +213,9 @@ INNER JOIN t3 AS table3
     ON t1_a = t3_a;
 
 SET enable_optimize_predicate_expression = 1;
+
+SYSTEM drop  table t1;
+
+SYSTEM drop  table t2;
+
+SYSTEM drop  table t3;

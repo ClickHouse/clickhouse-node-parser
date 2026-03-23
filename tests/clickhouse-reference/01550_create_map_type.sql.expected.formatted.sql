@@ -1,3 +1,6 @@
+-- String type
+SYSTEM drop  table if exists table_map;
+
 CREATE TABLE table_map
 (
     a Map(String, String)
@@ -57,6 +60,8 @@ INSERT INTO table_map;
 
 SELECT *
 FROM table_map;
+
+SYSTEM drop  table table_map;
 
 -- Integer type
 CREATE TABLE table_map

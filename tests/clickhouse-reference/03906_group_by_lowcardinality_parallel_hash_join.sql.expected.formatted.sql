@@ -3,6 +3,10 @@
 -- should produce deterministic and correct results.
 SET join_algorithm = 'parallel_hash';
 
+SYSTEM DROP  TABLE IF EXISTS t_lc_join_a;
+
+SYSTEM DROP  TABLE IF EXISTS t_lc_join_b;
+
 CREATE TABLE t_lc_join_a
 (
     key LowCardinality(String),
@@ -33,3 +37,7 @@ INNER JOIN t_lc_join_b AS b
     ON a.key = b.key
 GROUP BY a.key
 ORDER BY a.key ASC;
+
+SYSTEM DROP  TABLE t_lc_join_a;
+
+SYSTEM DROP  TABLE t_lc_join_b;

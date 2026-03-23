@@ -1,3 +1,5 @@
+-- Tags: no-parallel
+DROP TABLE IF EXISTS lc_table;
 CREATE TABLE lc_table
 (
     col LowCardinality(String)

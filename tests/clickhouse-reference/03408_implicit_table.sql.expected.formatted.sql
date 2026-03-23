@@ -1,6 +1,8 @@
 -- { echo }
 SET implicit_select = 1, implicit_table_at_top_level = 'test', enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS test;
+
 CREATE TABLE test
 (
     s String
@@ -23,3 +25,5 @@ FROM (
 SELECT *
 UNION ALL
 SELECT *;
+
+SYSTEM DROP  TABLE test;

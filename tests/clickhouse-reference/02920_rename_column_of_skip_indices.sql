@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t;
 CREATE TABLE t
 (
   key1 UInt64,
@@ -12,3 +13,4 @@ SET alter_sync = 0;
 SELECT * FROM t WHERE value11 = '000' SETTINGS max_rows_to_read = 0;
 -- Index works with mutation applied.
 SELECT * FROM t WHERE value12 = '000' SETTINGS max_rows_to_read = 0;
+DROP TABLE t;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS data_01269;
 CREATE TABLE data_01269
 (
     key     Int32,
@@ -10,3 +11,4 @@ INSERT INTO data_01269 VALUES (1, 0);
 -- after PR#10441
 SELECT toTypeName(alias) FROM data_01269;
 SELECT any(alias) FROM data_01269;
+DROP TABLE data_01269;

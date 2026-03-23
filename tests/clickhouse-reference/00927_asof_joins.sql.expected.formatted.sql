@@ -1,3 +1,7 @@
+SYSTEM DROP  TABLE IF EXISTS md;
+
+SYSTEM DROP  TABLE IF EXISTS tv;
+
 CREATE TABLE md
 (
     key UInt32,
@@ -49,3 +53,7 @@ LEFT JOIN md
     USING (key, t)
 ORDER BY (tv.key, tv.t) ASC
 SETTINGS join_algorithm = 'full_sorting_merge';
+
+SYSTEM DROP  TABLE md;
+
+SYSTEM DROP  TABLE tv;

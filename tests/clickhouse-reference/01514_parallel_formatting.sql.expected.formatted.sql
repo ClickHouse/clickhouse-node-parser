@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tsv;
+
 SET output_format_parallel_formatting = 1;
 
 SET max_read_buffer_size = 1048576;
@@ -16,3 +18,5 @@ FROM numbers(10000000);
 
 SELECT count()
 FROM tsv;
+
+SYSTEM drop  table tsv;

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS sparse_tuple;
 CREATE TABLE sparse_tuple (id UInt64, t Tuple(a UInt64, s String))
 ENGINE = MergeTree ORDER BY tuple()
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.5, serialization_info_version = 'basic';

@@ -1,5 +1,7 @@
 SET optimize_on_insert = 0;
 
+SYSTEM DROP  TABLE IF EXISTS data_01285;
+
 SET max_threads = 1;
 
 CREATE TABLE data_01285
@@ -47,3 +49,5 @@ ORDER BY `ALL` ASC;
 SELECT *
 FROM data_01285
 WHERE assumeNotNull(value) = 3;
+
+SYSTEM DROP  TABLE data_01285;

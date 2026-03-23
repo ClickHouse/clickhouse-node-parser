@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS null_subcolumns;
+
 CREATE TABLE null_subcolumns
 (
     id UInt32,
@@ -15,6 +17,10 @@ WHERE n.`null`;
 SELECT count()
 FROM null_subcolumns
 PREWHERE n.`null`;
+
+SYSTEM DROP  TABLE null_subcolumns;
+
+SYSTEM DROP  TABLE IF EXISTS map_subcolumns;
 
 CREATE TABLE map_subcolumns
 (
@@ -50,3 +56,5 @@ FROM map_subcolumns;
 SELECT count()
 FROM map_subcolumns
 WHERE m.size0 > 2;
+
+SYSTEM DROP  TABLE map_subcolumns;

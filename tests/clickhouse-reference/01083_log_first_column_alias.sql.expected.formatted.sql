@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_alias;
+
 CREATE TABLE test_alias
 (
     a UInt8 ALIAS b,
@@ -7,3 +9,5 @@ ENGINE = Log;
 
 SELECT count()
 FROM test_alias;
+
+SYSTEM DROP  TABLE test_alias;

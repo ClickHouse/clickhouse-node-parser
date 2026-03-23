@@ -1,3 +1,10 @@
+-- Tags: no-ordinary-database, no-fasttest, no-encrypted-storage
+SYSTEM DROP  TABLE IF EXISTS landing_to_target;
+
+SYSTEM DROP  TABLE IF EXISTS target;
+
+SYSTEM DROP  TABLE IF EXISTS landing;
+
 CREATE TABLE landing
 (
     n Int64

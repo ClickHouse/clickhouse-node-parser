@@ -1,3 +1,7 @@
+-- Tags: no-fasttest
+
+-- default settings.
+DROP TABLE IF EXISTS test_parquet;
 CREATE TABLE test_parquet (col1 int, col2 String) ENGINE=File(Parquet);
 INSERT INTO test_parquet SELECT number, toString(number) FROM numbers(100);
 SELECT col1, col2 FROM test_parquet;

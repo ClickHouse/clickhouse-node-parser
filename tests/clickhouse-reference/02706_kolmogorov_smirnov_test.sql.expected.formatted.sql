@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS kstest;
+
 CREATE TABLE kstest
 (
     `left` Float64,

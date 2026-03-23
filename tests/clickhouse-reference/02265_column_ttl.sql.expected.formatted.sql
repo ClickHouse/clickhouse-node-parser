@@ -1,3 +1,10 @@
+-- Tags: replica, long
+-- Regression test for possible CHECKSUM_DOESNT_MATCH due to per-column TTL bug.
+-- That had been fixed in https://github.com/ClickHouse/ClickHouse/pull/35820
+SYSTEM drop  table if exists ttl_02265;
+
+SYSTEM drop  table if exists ttl_02265_r2;
+
 -- The bug is appears only for Wide part.
 CREATE TABLE ttl_02265
 (

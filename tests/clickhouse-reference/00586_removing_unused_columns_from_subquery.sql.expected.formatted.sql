@@ -2,6 +2,10 @@ SET any_join_distinct_right_table_keys = 1;
 
 SET joined_subquery_requires_alias = 0;
 
+SYSTEM DROP  TABLE IF EXISTS local_statements;
+
+SYSTEM DROP  TABLE IF EXISTS statements;
+
 CREATE TABLE local_statements
 (
     statementId String,
@@ -52,3 +56,7 @@ CREATE TABLE statements
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), 'local_statements', sipHash64(learnerHash));
 
 INSERT INTO local_statements;
+
+SYSTEM DROP  TABLE local_statements;
+
+SYSTEM DROP  TABLE statements;

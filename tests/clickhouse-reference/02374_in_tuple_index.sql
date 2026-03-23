@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_in_tuple_index;
 CREATE TABLE t_in_tuple_index
 (
     `ID` String,

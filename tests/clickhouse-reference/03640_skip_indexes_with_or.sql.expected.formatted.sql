@@ -11,6 +11,8 @@ SET use_skip_indexes_on_data_read = 0;
 
 SET use_skip_indexes = 1;
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id UInt32,
@@ -121,6 +123,8 @@ WHERE (v1 = 1
     OR (v1 = 9000
     AND v2 = 1001)
 SETTINGS max_rows_to_read = 384;
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

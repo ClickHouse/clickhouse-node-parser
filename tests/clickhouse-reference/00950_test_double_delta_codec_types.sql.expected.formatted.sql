@@ -1,3 +1,6 @@
+-- Test for issue #80220
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 -- Codec DoubleDelta must not be used on FixedString columns
 CREATE TABLE tab
 (
@@ -38,6 +41,8 @@ ENGINE = MergeTree()
 ORDER BY tuple();
 
 INSERT INTO tab (c0);
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

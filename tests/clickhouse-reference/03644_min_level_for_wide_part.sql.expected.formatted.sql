@@ -1,5 +1,9 @@
 SET alter_sync = 2;
 
+SYSTEM DROP  TABLE IF EXISTS t_03644_min_level_for_wide_part;
+
+SYSTEM DROP  TABLE IF EXISTS t_03644_min_level_for_wide_part_rmt;
+
 -- Can produce initial parts with level 1
 SET optimize_on_insert = 0;
 
@@ -48,3 +52,7 @@ WHERE database = currentDatabase()
     AND active;
 
 INSERT INTO t_03644_min_level_for_wide_part_rmt;
+
+SYSTEM DROP  TABLE t_03644_min_level_for_wide_part;
+
+SYSTEM DROP  TABLE t_03644_min_level_for_wide_part_rmt;

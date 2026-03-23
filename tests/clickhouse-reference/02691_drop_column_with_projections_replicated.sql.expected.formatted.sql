@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS 02691_drop_column_replicated;
+
 CREATE TABLE `02691_drop_column_replicated`
 (
     col1 Int64,
@@ -9,3 +11,5 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test/02691_drop_colu
 ORDER BY col1;
 
 INSERT INTO `02691_drop_column_replicated`;
+
+SYSTEM DROP  TABLE 02691_drop_column_replicated;

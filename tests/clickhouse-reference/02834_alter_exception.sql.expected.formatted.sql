@@ -1,6 +1,10 @@
+SYSTEM DROP  TABLE IF EXISTS alter_02834;
+
 CREATE TABLE alter_02834
 (
     a UInt64
 )
 ENGINE = MergeTree()
 ORDER BY a;
+
+SYSTEM DROP  TABLE alter_02834;

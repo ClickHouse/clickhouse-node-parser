@@ -44,3 +44,5 @@ ORDER BY
     c5 ASC,
     c3 ASC
 FORMAT Null;
+
+SYSTEM DROP  TABLE table_test;

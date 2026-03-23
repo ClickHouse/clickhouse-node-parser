@@ -5,6 +5,8 @@ SET allow_experimental_analyzer = 1; -- needed by recursive CTEs
 
 SELECT '-- Prepare data';
 
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id String,
@@ -14,3 +16,5 @@ ENGINE = MergeTree
 ORDER BY tuple();
 
 INSERT INTO tab (id, parent);
+
+SYSTEM DROP  TABLE tab;

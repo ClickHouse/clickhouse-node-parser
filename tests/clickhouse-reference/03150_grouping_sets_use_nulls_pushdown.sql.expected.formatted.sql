@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_grouping_sets_predicate;
+
 CREATE TABLE test_grouping_sets_predicate
 (
     day_ Date,

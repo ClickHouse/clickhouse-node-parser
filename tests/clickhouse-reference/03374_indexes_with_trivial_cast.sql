@@ -1,5 +1,6 @@
 -- Tags: no-random-settings, no-parallel-replicas
 set enable_analyzer=1;
+DROP TABLE IF EXISTS test;
 CREATE TABLE test
 (
     `x` String,
@@ -9,6 +10,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity=1;
 INSERT INTO test SELECT number FROM numbers(1000);
+DROP TABLE test;
 CREATE TABLE test
 (
     `x` String,

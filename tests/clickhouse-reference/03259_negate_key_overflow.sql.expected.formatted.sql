@@ -11,6 +11,8 @@ SELECT *
 FROM a
 WHERE negate(x) = -42;
 
+SYSTEM drop  table a;
+
 CREATE TABLE a
 (
     x UInt128

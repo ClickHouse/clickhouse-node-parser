@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists insub;
+
 CREATE TABLE insub
 (
     i int,

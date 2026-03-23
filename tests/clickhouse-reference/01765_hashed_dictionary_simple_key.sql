@@ -1,3 +1,6 @@
+-- Tags: no-parallel
+
+DROP DATABASE IF EXISTS 01765_db;
 CREATE DATABASE 01765_db;
 CREATE TABLE 01765_db.simple_key_simple_attributes_source_table
 (
@@ -30,6 +33,7 @@ SELECT dictGetOrDefault('01765_db.hashed_dictionary_simple_key_simple_attributes
     dictGetOrDefault('01765_db.hashed_dictionary_simple_key_simple_attributes', 'value_second', number, toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01765_db.hashed_dictionary_simple_key_simple_attributes', number) FROM system.numbers LIMIT 4;
 SELECT * FROM 01765_db.hashed_dictionary_simple_key_simple_attributes ORDER BY id;
+DROP DICTIONARY 01765_db.hashed_dictionary_simple_key_simple_attributes;
 CREATE DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_simple_attributes
 (
    id UInt64,
@@ -50,6 +54,8 @@ SELECT dictGetOrDefault('01765_db.sparse_hashed_dictionary_simple_key_simple_att
     dictGetOrDefault('01765_db.sparse_hashed_dictionary_simple_key_simple_attributes', 'value_second', number, toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01765_db.sparse_hashed_dictionary_simple_key_simple_attributes', number) FROM system.numbers LIMIT 4;
 SELECT * FROM 01765_db.sparse_hashed_dictionary_simple_key_simple_attributes ORDER BY id;
+DROP DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_simple_attributes;
+DROP TABLE 01765_db.simple_key_simple_attributes_source_table;
 CREATE TABLE 01765_db.simple_key_complex_attributes_source_table
 (
    id UInt64,
@@ -80,6 +86,7 @@ SELECT dictGetOrDefault('01765_db.hashed_dictionary_simple_key_complex_attribute
     dictGetOrDefault('01765_db.hashed_dictionary_simple_key_complex_attributes', 'value_second', number, toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01765_db.hashed_dictionary_simple_key_complex_attributes', number) FROM system.numbers LIMIT 4;
 SELECT * FROM 01765_db.hashed_dictionary_simple_key_complex_attributes ORDER BY id;
+DROP DICTIONARY 01765_db.hashed_dictionary_simple_key_complex_attributes;
 CREATE DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_complex_attributes
 (
    id UInt64,
@@ -100,6 +107,8 @@ SELECT dictGetOrDefault('01765_db.sparse_hashed_dictionary_simple_key_complex_at
     dictGetOrDefault('01765_db.sparse_hashed_dictionary_simple_key_complex_attributes', 'value_second', number, toString('default')) as value_second FROM system.numbers LIMIT 4;
 SELECT dictHas('01765_db.sparse_hashed_dictionary_simple_key_complex_attributes', number) FROM system.numbers LIMIT 4;
 SELECT * FROM 01765_db.sparse_hashed_dictionary_simple_key_complex_attributes ORDER BY id;
+DROP DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_complex_attributes;
+DROP TABLE 01765_db.simple_key_complex_attributes_source_table;
 CREATE TABLE 01765_db.simple_key_hierarchy_table
 (
     id UInt64,
@@ -121,6 +130,7 @@ LAYOUT(HASHED());
 SELECT dictGet('01765_db.hashed_dictionary_simple_key_hierarchy', 'parent_id', number) FROM system.numbers LIMIT 5;
 SELECT dictGetHierarchy('01765_db.hashed_dictionary_simple_key_hierarchy', toUInt64(1));
 SELECT dictGetHierarchy('01765_db.hashed_dictionary_simple_key_hierarchy', toUInt64(4));
+DROP DICTIONARY 01765_db.hashed_dictionary_simple_key_hierarchy;
 CREATE DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_hierarchy
 (
    id UInt64,
@@ -133,3 +143,6 @@ LAYOUT(HASHED());
 SELECT dictGet('01765_db.sparse_hashed_dictionary_simple_key_hierarchy', 'parent_id', number) FROM system.numbers LIMIT 5;
 SELECT dictGetHierarchy('01765_db.sparse_hashed_dictionary_simple_key_hierarchy', toUInt64(1));
 SELECT dictGetHierarchy('01765_db.sparse_hashed_dictionary_simple_key_hierarchy', toUInt64(4));
+DROP DICTIONARY 01765_db.sparse_hashed_dictionary_simple_key_hierarchy;
+DROP TABLE 01765_db.simple_key_hierarchy_table;
+DROP DATABASE 01765_db;

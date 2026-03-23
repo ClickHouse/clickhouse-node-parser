@@ -1,3 +1,6 @@
+-- Tags: memory-engine
+SYSTEM drop  table if exists t_row_exists;
+
 CREATE TABLE t_row_exists
 (
     a int,
@@ -13,6 +16,8 @@ CREATE TABLE t_row_exists
 )
 ENGINE = MergeTree
 ORDER BY a;
+
+SYSTEM drop  table t_row_exists;
 
 CREATE TABLE t_row_exists
 (

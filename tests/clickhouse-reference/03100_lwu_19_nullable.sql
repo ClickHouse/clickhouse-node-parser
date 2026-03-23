@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS mutation_table;
 SET enable_lightweight_update = 1;
 CREATE TABLE mutation_table
 (

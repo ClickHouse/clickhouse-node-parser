@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_unexpected_cluster;
+
 CREATE TABLE test_unexpected_cluster
 (
     n UInt64
@@ -15,3 +17,5 @@ SET enable_parallel_replicas = 2, max_parallel_replicas = 2, cluster_for_paralle
 SELECT count()
 FROM test_unexpected_cluster
 WHERE NOT ignore(*); -- { serverError UNEXPECTED_CLUSTER }
+
+SYSTEM DROP  TABLE test_unexpected_cluster;

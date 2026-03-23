@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_8 (id
 CREATE TABLE IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_9 (id Int32, str String) Engine=Memory;
 CREATE TABLE IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_10 (id Int32, str String) Engine=Memory;
 CREATE TABLE IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_11 (id Int32, str String) Engine=Memory;
+
 CREATE VIEW IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_view_1 AS SELECT * FROM test_max_num_to_warn_02931.test_max_num_to_warn_1;
 CREATE VIEW IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_view_2 AS SELECT * FROM test_max_num_to_warn_02931.test_max_num_to_warn_2;
 CREATE VIEW IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_view_3 AS SELECT * FROM test_max_num_to_warn_02931.test_max_num_to_warn_3;
@@ -23,6 +24,7 @@ CREATE VIEW IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_view_8
 CREATE VIEW IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_view_9 AS SELECT * FROM test_max_num_to_warn_02931.test_max_num_to_warn_9;
 CREATE VIEW IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_view_10 AS SELECT * FROM test_max_num_to_warn_02931.test_max_num_to_warn_10;
 CREATE VIEW IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_view_11 AS SELECT * FROM test_max_num_to_warn_02931.test_max_num_to_warn_11;
+
 CREATE DICTIONARY IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_dict_1 (id Int32, str String) PRIMARY KEY id
 SOURCE(CLICKHOUSE(DB 'test_max_num_to_warn_02931' TABLE 'test_max_num_to_warn_1'))LAYOUT(FLAT()) LIFETIME(MIN 0 MAX 1000);
 CREATE DICTIONARY IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_dict_2 (id Int32, str String) PRIMARY KEY id
@@ -43,6 +45,7 @@ CREATE DICTIONARY IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_
 SOURCE(CLICKHOUSE(DB 'test_max_num_to_warn_02931' TABLE 'test_max_num_to_warn_9'))LAYOUT(FLAT()) LIFETIME(MIN 0 MAX 1000);
 CREATE DICTIONARY IF NOT EXISTS test_max_num_to_warn_02931.test_max_num_to_warn_dict_10 (id Int32, str String) PRIMARY KEY id
 SOURCE(CLICKHOUSE(DB 'test_max_num_to_warn_02931' TABLE 'test_max_num_to_warn_10'))LAYOUT(FLAT()) LIFETIME(MIN 0 MAX 1000);
+
 CREATE DATABASE IF NOT EXISTS test_max_num_to_warn_1;
 CREATE DATABASE IF NOT EXISTS test_max_num_to_warn_2;
 CREATE DATABASE IF NOT EXISTS test_max_num_to_warn_3;
@@ -54,6 +57,7 @@ CREATE DATABASE IF NOT EXISTS test_max_num_to_warn_8;
 CREATE DATABASE IF NOT EXISTS test_max_num_to_warn_9;
 CREATE DATABASE IF NOT EXISTS test_max_num_to_warn_10;
 CREATE DATABASE IF NOT EXISTS test_max_num_to_warn_11;
+
 INSERT INTO test_max_num_to_warn_02931.test_max_num_to_warn_1 VALUES (1, 'Hello');
 INSERT INTO test_max_num_to_warn_02931.test_max_num_to_warn_2 VALUES (1, 'Hello');
 INSERT INTO test_max_num_to_warn_02931.test_max_num_to_warn_3 VALUES (1, 'Hello');
@@ -65,4 +69,18 @@ INSERT INTO test_max_num_to_warn_02931.test_max_num_to_warn_8 VALUES (1, 'Hello'
 INSERT INTO test_max_num_to_warn_02931.test_max_num_to_warn_9 VALUES (1, 'Hello');
 INSERT INTO test_max_num_to_warn_02931.test_max_num_to_warn_10 VALUES (1, 'Hello');
 INSERT INTO test_max_num_to_warn_02931.test_max_num_to_warn_11 VALUES (1, 'Hello');
+
 SELECT replaceRegexpAll(message, '\(\d+\)', '_'), message_format_string FROM system.warnings WHERE message LIKE 'The number of%' ORDER BY message;
+
+DROP DATABASE IF EXISTS test_max_num_to_warn_02931;
+DROP DATABASE IF EXISTS test_max_num_to_warn_1;
+DROP DATABASE IF EXISTS test_max_num_to_warn_2;
+DROP DATABASE IF EXISTS test_max_num_to_warn_3;
+DROP DATABASE IF EXISTS test_max_num_to_warn_4;
+DROP DATABASE IF EXISTS test_max_num_to_warn_5;
+DROP DATABASE IF EXISTS test_max_num_to_warn_6;
+DROP DATABASE IF EXISTS test_max_num_to_warn_7;
+DROP DATABASE IF EXISTS test_max_num_to_warn_8;
+DROP DATABASE IF EXISTS test_max_num_to_warn_9;
+DROP DATABASE IF EXISTS test_max_num_to_warn_10;
+DROP DATABASE IF EXISTS test_max_num_to_warn_11;

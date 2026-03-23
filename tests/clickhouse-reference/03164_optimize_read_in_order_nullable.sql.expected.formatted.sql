@@ -1,3 +1,6 @@
+-- Reproducer from https://github.com/ClickHouse/ClickHouse/issues/63460
+SYSTEM DROP  TABLE IF EXISTS 03164_users;
+
 CREATE TABLE `03164_users`
 (
     uid Nullable(Int16),
@@ -21,6 +24,8 @@ FROM `03164_users`
 ORDER BY uid ASC
 LIMIT 10
 SETTINGS optimize_read_in_order = 1;
+
+SYSTEM DROP  TABLE IF EXISTS 03164_multi_key;
 
 CREATE TABLE `03164_multi_key`
 (

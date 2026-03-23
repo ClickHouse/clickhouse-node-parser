@@ -1,3 +1,6 @@
+-- Tags: no-parallel, no-fasttest
+SYSTEM DROP  TABLE IF EXISTS to_insert;
+
 CREATE TABLE to_insert
 (
     value UInt64

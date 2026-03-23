@@ -1,3 +1,5 @@
+SYSTEM DROP  DICTIONARY IF EXISTS example_simple_key_dictionary;
+
 CREATE DICTIONARY example_simple_key_dictionary
 (
     id UInt64,
@@ -13,6 +15,8 @@ SELECT
 FROM `system`.dictionaries
 WHERE name = 'example_simple_key_dictionary'
     AND database = currentDatabase();
+
+SYSTEM DROP  DICTIONARY IF EXISTS example_complex_key_dictionary;
 
 CREATE DICTIONARY example_complex_key_dictionary
 (
@@ -30,3 +34,7 @@ SELECT
 FROM `system`.dictionaries
 WHERE name = 'example_complex_key_dictionary'
     AND database = currentDatabase();
+
+SYSTEM DROP  DICTIONARY example_complex_key_dictionary;
+
+SYSTEM DROP  DICTIONARY example_simple_key_dictionary;

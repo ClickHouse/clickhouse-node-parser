@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS b;
+
 CREATE TABLE b
 (
     x Int64,
@@ -13,3 +15,5 @@ SELECT count()
 FROM b
 WHERE x = 1
     AND y = 'b';
+
+SYSTEM DROP  TABLE b;

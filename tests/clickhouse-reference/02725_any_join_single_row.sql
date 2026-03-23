@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS join_test;
+DROP TABLE IF EXISTS join_test_right;
 CREATE TABLE join_test ( `key` UInt64, `value` UInt64 ) ENGINE = Join(ANY, LEFT, key);
 -- Save table size before inserting any rows
 CREATE TEMPORARY TABLE initial_table_size AS

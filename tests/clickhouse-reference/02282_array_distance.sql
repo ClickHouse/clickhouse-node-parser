@@ -8,6 +8,10 @@ SELECT cosineDistance([1, 2, 3], [3, 5, 7]);
 SELECT L2Distance([1, 2, 3], NULL);
 SELECT L2SquaredDistance([1, 2, 3], NULL);
 SELECT cosineDistance([1, 2, 3], [0, 0, 0]);
+DROP TABLE IF EXISTS vec1;
+DROP TABLE IF EXISTS vec2;
+DROP TABLE IF EXISTS vec2f;
+DROP TABLE IF EXISTS vec2d;
 CREATE TABLE vec1 (id UInt64, v Array(UInt8)) ENGINE = Memory;
 CREATE TABLE vec2 (id UInt64, v Array(Int64)) ENGINE = Memory;
 CREATE TABLE vec2f (id UInt64, v Array(Float32)) ENGINE = Memory;
@@ -79,6 +83,10 @@ SELECT LpDistance([1, 2], [3,4]); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MA
 SELECT LpDistance([1, 2], [3,4], -1.); -- { serverError ARGUMENT_OUT_OF_BOUND }
 SELECT LpDistance([1, 2], [3,4], 'aaa'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT LpDistance([1, 2], [3,4], materialize(2.7)); -- { serverError ILLEGAL_COLUMN }
+DROP TABLE vec1;
+DROP TABLE vec2;
+DROP TABLE vec2f;
+DROP TABLE vec2d;
 -- Queries which trigger manually vectorized implementation
 
 SELECT L2Distance(

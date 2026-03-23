@@ -1,3 +1,21 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
+SYSTEM DROP  TABLE IF EXISTS any_left_join;
+
+SYSTEM DROP  TABLE IF EXISTS any_inner_join;
+
+SYSTEM DROP  TABLE IF EXISTS any_right_join;
+
+SYSTEM DROP  TABLE IF EXISTS any_full_join;
+
+SYSTEM DROP  TABLE IF EXISTS semi_left_join;
+
+SYSTEM DROP  TABLE IF EXISTS semi_right_join;
+
+SYSTEM DROP  TABLE IF EXISTS anti_left_join;
+
+SYSTEM DROP  TABLE IF EXISTS anti_right_join;
+
 CREATE TABLE t1
 (
     x UInt32,
@@ -146,3 +164,19 @@ ORDER BY
     x ASC,
     str ASC,
     s ASC;
+
+SYSTEM DROP  TABLE t1;
+
+SYSTEM DROP  TABLE any_left_join;
+
+SYSTEM DROP  TABLE any_inner_join;
+
+SYSTEM DROP  TABLE any_right_join;
+
+SYSTEM DROP  TABLE semi_left_join;
+
+SYSTEM DROP  TABLE semi_right_join;
+
+SYSTEM DROP  TABLE anti_left_join;
+
+SYSTEM DROP  TABLE anti_right_join;

@@ -1,5 +1,7 @@
 SET enable_analyzer = 1;
 
+SYSTEM drop  table if exists date_table_pv;
+
 CREATE TABLE date_table_pv
 (
     id Int32,
@@ -12,6 +14,8 @@ INSERT INTO date_table_pv;
 INSERT INTO date_table_pv;
 
 INSERT INTO date_table_pv;
+
+SYSTEM drop  view if exists date_pv;
 
 CREATE VIEW date_pv
 AS
@@ -47,6 +51,8 @@ FROM date_pv(dtparam = (
         WHERE id = 2
     ));
 
+SYSTEM drop  table if exists date32_table_pv;
+
 CREATE TABLE date32_table_pv
 (
     id Int32,
@@ -63,6 +69,8 @@ INSERT INTO date32_table_pv;
 INSERT INTO date32_table_pv;
 
 INSERT INTO date32_table_pv;
+
+SYSTEM drop  view if exists date32_pv;
 
 CREATE VIEW date32_pv
 AS
@@ -99,6 +107,8 @@ FROM date32_pv(dtparam = (
         WHERE id = 4
     ));
 
+SYSTEM drop  table if exists uuid_table_pv;
+
 CREATE TABLE uuid_table_pv
 (
     id Int32,
@@ -115,6 +125,8 @@ INSERT INTO uuid_table_pv;
 INSERT INTO uuid_table_pv SELECT
     4,
     serverUUID();
+
+SYSTEM drop  view if exists uuid_pv;
 
 CREATE VIEW uuid_pv
 AS
@@ -155,6 +167,8 @@ FROM uuid_pv(uuidparam = (
         SELECT generateUUIDv4()
     ));
 
+SYSTEM drop  view if exists date_pv2;
+
 CREATE VIEW date_pv2
 AS
 SELECT *
@@ -174,6 +188,8 @@ FROM date_pv2(dtparam = '1974-04-07', intparam = length('AAA'));
 SELECT id
 FROM date_pv2(dtparam = toDate('1974-04-07'), intparam = length('BBB'));
 
+SYSTEM drop  table if exists ipv4_table_pv;
+
 CREATE TABLE ipv4_table_pv
 (
     id Int32,
@@ -186,6 +202,8 @@ INSERT INTO ipv4_table_pv;
 INSERT INTO ipv4_table_pv;
 
 INSERT INTO ipv4_table_pv;
+
+SYSTEM drop  view if exists ipv4_pv;
 
 CREATE VIEW ipv4_pv
 AS
@@ -205,3 +223,21 @@ FROM ipv4_pv(ipv4param = (
         FROM ipv4_table_pv
         WHERE id = 3
     ));
+
+SYSTEM drop  view date_pv;
+
+SYSTEM drop  view date_pv2;
+
+SYSTEM drop  view date32_pv;
+
+SYSTEM drop  view uuid_pv;
+
+SYSTEM drop  view ipv4_pv;
+
+SYSTEM drop  table date_table_pv;
+
+SYSTEM drop  table date32_table_pv;
+
+SYSTEM drop  table uuid_table_pv;
+
+SYSTEM drop  table ipv4_table_pv;

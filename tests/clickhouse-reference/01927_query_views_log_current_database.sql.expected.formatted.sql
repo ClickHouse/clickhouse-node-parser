@@ -190,3 +190,22 @@ WHERE initial_query_id = (
     )
 ORDER BY view_name ASC
 FORMAT Vertical;
+
+-- TEARDOWN
+SYSTEM DROP  TABLE matview_a_to_b;
+
+SYSTEM DROP  TABLE matview_b_to_c;
+
+SYSTEM DROP  TABLE matview_join_d_e;
+
+SYSTEM DROP  TABLE table_f;
+
+SYSTEM DROP  TABLE table_e;
+
+SYSTEM DROP  TABLE table_d;
+
+SYSTEM DROP  TABLE table_c;
+
+SYSTEM DROP  TABLE table_b;
+
+SYSTEM DROP  TABLE table_a;

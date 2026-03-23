@@ -1,6 +1,8 @@
 -- Tags: no-fasttest
 SET allow_experimental_dynamic_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     x UInt64,
@@ -262,6 +264,8 @@ SELECT
     concat('str_', d, NULL) AS res,
     toTypeName(res)
 FROM test;
+
+SYSTEM drop  table test;
 
 CREATE TABLE test
 (

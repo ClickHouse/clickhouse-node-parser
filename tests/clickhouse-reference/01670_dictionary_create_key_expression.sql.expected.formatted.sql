@@ -23,6 +23,8 @@ SELECT *
 FROM database_dictionary_test_key_expression.test_query_log_dictionary_simple
 ORDER BY value_id ASC;
 
+SYSTEM DROP  DICTIONARY IF EXISTS database_dictionary_test_key_expression.test_query_log_dictionary_simple;
+
 CREATE DICTIONARY database_dictionary_test_key_expression.test_query_log_dictionary_complex
 (
     value_id UInt64 EXPRESSION cityHash64(value),
@@ -37,3 +39,9 @@ LAYOUT(COMPLEX_KEY_HASHED());
 SELECT *
 FROM database_dictionary_test_key_expression.test_query_log_dictionary_complex
 ORDER BY value_id ASC;
+
+SYSTEM DROP  DICTIONARY IF EXISTS database_dictionary_test_key_expression.test_query_log_dictionary_complex;
+
+SYSTEM DROP  TABLE IF EXISTS database_dictionary_test_key_expression.test_for_dictionary;
+
+SYSTEM DROP  DATABASE IF EXISTS database_dictionary_test_key_expression;

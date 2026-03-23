@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS defaults;
+
 CREATE TABLE defaults
 (
     a UInt8,
@@ -10,6 +12,10 @@ INSERT INTO defaults (a);
 
 SELECT *
 FROM defaults;
+
+SYSTEM DROP  TABLE defaults;
+
+SYSTEM DROP  TABLE IF EXISTS elog_cut;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -40,3 +46,5 @@ SELECT
     page_session,
     sample_key
 FROM elog_cut;
+
+SYSTEM DROP  TABLE elog_cut;

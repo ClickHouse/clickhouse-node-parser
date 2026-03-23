@@ -1,3 +1,10 @@
+-- Tags: distributed
+SYSTEM DROP  TABLE IF EXISTS realtimedrep;
+
+SYSTEM DROP  TABLE IF EXISTS realtimedistributed;
+
+SYSTEM DROP  TABLE IF EXISTS realtimebuff;
+
 CREATE TABLE realtimedrep
 (
     amount Int64,
@@ -71,3 +78,9 @@ FROM realtimebuff;
 
 SELECT sum(amount) = 200
 FROM realtimebuff;
+
+SYSTEM DROP  TABLE realtimedrep;
+
+SYSTEM DROP  TABLE realtimedistributed;
+
+SYSTEM DROP  TABLE realtimebuff;

@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test02313;
+
 CREATE TABLE test02313
 (
     a Enum('one' = 1, 'two' = 2),
@@ -52,3 +54,6 @@ ORDER BY
     a ASC,
     b ASC,
     c ASC;
+
+-- { echoOff }
+SYSTEM DROP  TABLE test02313;

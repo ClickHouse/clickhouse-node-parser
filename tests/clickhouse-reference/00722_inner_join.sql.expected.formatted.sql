@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS one;
+
 CREATE TABLE one
 (
     dummy UInt8
@@ -239,3 +241,5 @@ FROM
 INNER JOIN `system`.databases AS db
     ON db.name = t.database
 WHERE t.name = 'one';
+
+SYSTEM DROP  TABLE one;

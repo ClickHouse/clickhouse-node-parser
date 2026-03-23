@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists A1;
+
+SYSTEM drop  table if exists A_M;
+
 CREATE TABLE A1
 (
     a DateTime
@@ -23,3 +27,7 @@ WHERE (1, 1).1 = 1;
 SELECT arrayJoin([(1, 1)]).1
 FROM A1
 PREWHERE (1, 1).1 = 1;
+
+SYSTEM drop  table A1;
+
+SYSTEM drop  table A_M;

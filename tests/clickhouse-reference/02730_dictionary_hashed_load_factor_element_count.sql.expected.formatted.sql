@@ -1,3 +1,9 @@
+SYSTEM DROP  DICTIONARY IF EXISTS dict_sharded;
+
+SYSTEM DROP  DICTIONARY IF EXISTS dict_sharded_multi;
+
+SYSTEM DROP  TABLE IF EXISTS dict_data;
+
 CREATE TABLE dict_data
 (
     key UInt64,
@@ -36,6 +42,8 @@ FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_sharded';
 
+SYSTEM DROP  DICTIONARY dict_sharded;
+
 CREATE DICTIONARY dict_sharded_multi
 (
     key UInt64,
@@ -58,3 +66,7 @@ SELECT
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_sharded_multi';
+
+SYSTEM DROP  DICTIONARY dict_sharded_multi;
+
+SYSTEM DROP  TABLE dict_data;

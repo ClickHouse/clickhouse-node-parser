@@ -1,3 +1,7 @@
+-- Tags: long, no-parallel, no-msan, no-tsan, no-asan
+-- set no-parallel and no sanitizers tag is to prevent timeout of this test
+SYSTEM drop  table if exists t;
+
 CREATE TABLE t
 (
     c1 Int64,
@@ -37,3 +41,5 @@ SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, 
 SELECT c18
 FROM t
 WHERE c1 < 0;
+
+SYSTEM drop  table t;

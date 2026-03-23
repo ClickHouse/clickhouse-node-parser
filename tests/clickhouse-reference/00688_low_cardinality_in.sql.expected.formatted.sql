@@ -1,5 +1,7 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
+SYSTEM drop  table if exists lc_00688;
+
 CREATE TABLE lc_00688
 (
     str LowCardinality(String),
@@ -49,6 +51,8 @@ SELECT
         FROM lc_00688
     )
 FROM lc_00688;
+
+SYSTEM drop  table if exists ary_lc_null;
 
 CREATE TABLE ary_lc_null
 (

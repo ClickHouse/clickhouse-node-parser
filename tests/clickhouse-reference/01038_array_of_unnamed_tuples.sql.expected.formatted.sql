@@ -1,5 +1,7 @@
 SET send_logs_level = 'fatal';
 
+SYSTEM DROP  TABLE IF EXISTS array_of_tuples;
+
 CREATE TABLE array_of_tuples
 (
     f Array(Tuple(Float64, Float64)),
@@ -14,3 +16,5 @@ FROM array_of_tuples;
 
 SELECT s
 FROM array_of_tuples;
+
+SYSTEM DROP  TABLE array_of_tuples;

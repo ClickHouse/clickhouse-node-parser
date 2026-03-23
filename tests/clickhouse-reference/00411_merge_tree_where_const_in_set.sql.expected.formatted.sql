@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS const_in_const;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE const_in_const

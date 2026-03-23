@@ -1,4 +1,13 @@
+-- Tags: no-parallel, no-parallel-replicas, no-async-insert
+-- no-parallel-replicas -- https://github.com/ClickHouse/ClickHouse/issues/90063
+-- Tags: deduplication blocks have different values for sync and async inserts,
+-- async insert calculates it as a has of data in the block,
+-- sync insert uses MergeTreePartWriter's hash which covers only data in the partition.
+SYSTEM DROP  DATABASE IF EXISTS 03710_database;
+
 CREATE DATABASE `03710_database`;
+
+SYSTEM DROP  TABLE IF EXISTS 03710_database.03711_join_with;
 
 CREATE TABLE `03710_database`.`03711_join_with`
 (
@@ -13,6 +22,8 @@ INSERT INTO `03710_database`.`03711_join_with`;
 
 INSERT INTO `03710_database`.`03711_join_with`;
 
+SYSTEM DROP  TABLE IF EXISTS 03710_database.03711_table;
+
 CREATE TABLE `03710_database`.`03711_table`
 (
     id UInt32
@@ -20,6 +31,8 @@ CREATE TABLE `03710_database`.`03711_table`
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+
+SYSTEM DROP  TABLE IF EXISTS 03710_database.03711_mv_table_1;
 
 CREATE TABLE `03710_database`.`03711_mv_table_1`
 (
@@ -30,6 +43,8 @@ ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 
+SYSTEM DROP  TABLE IF EXISTS 03710_database.03711_mv_table_2;
+
 CREATE TABLE `03710_database`.`03711_mv_table_2`
 (
     id UInt32,
@@ -38,6 +53,8 @@ CREATE TABLE `03710_database`.`03711_mv_table_2`
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+
+SYSTEM DROP  TABLE IF EXISTS 03710_database.03711_mv_1;
 
 CREATE MATERIALIZED VIEW `03710_database`.`03711_mv_1`
 TO `03710_database`.`03711_mv_table_1`
@@ -50,6 +67,8 @@ FROM
 INNER JOIN `03710_database`.`03711_join_with` AS r
     ON l.id == r.id
     AND l.id = 1;
+
+SYSTEM DROP  TABLE IF EXISTS 03710_database.03711_mv_2;
 
 CREATE MATERIALIZED VIEW `03710_database`.`03711_mv_2`
 TO `03710_database`.`03711_mv_table_2`
@@ -88,3 +107,5 @@ GROUP BY
     table,
     name
 ORDER BY `ALL` ASC;
+
+SYSTEM DROP  DATABASE 03710_database;

@@ -27,3 +27,5 @@ SET mutations_sync = 0;
 SELECT *
 FROM test
 FORMAT Null;
+
+SYSTEM DROP  TABLE test;

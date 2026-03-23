@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t2;
 CREATE TABLE t1 (`b` Float64) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO t1 VALUES (1.0), (2.0), (3.0), (4.0), (5.0);
 CREATE TABLE t2 (`a` UInt32) ENGINE = MergeTree ORDER BY a;

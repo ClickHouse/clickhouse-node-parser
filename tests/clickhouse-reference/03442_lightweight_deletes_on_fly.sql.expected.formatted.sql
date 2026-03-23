@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS test_deletes;
+
 CREATE TABLE test_deletes
 (
     a UInt64
@@ -14,6 +16,8 @@ SET lightweight_deletes_sync = 0;
 SELECT a
 FROM test_deletes
 SETTINGS apply_mutations_on_fly = 1;
+
+SYSTEM DROP  TABLE test_deletes;
 
 CREATE TABLE test_deletes
 (

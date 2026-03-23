@@ -33,5 +33,6 @@
 -- { echoOn }
 
 SET enable_analyzer = 1;
+DROP TABLE IF EXISTS y;
 CREATE TABLE y (a UInt64) ENGINE=TinyLog;
 INSERT INTO y SELECT * FROM numbers(1, 10);

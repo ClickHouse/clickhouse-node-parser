@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS table_view;
+DROP TABLE IF EXISTS source_table;
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE source_table (
   date Date,

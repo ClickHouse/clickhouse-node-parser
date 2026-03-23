@@ -1,3 +1,7 @@
+-- Tags: zookeeper, no-parallel, no-shared-merge-tree
+-- no-shared-merge-tree: This failure injection is only RMT specific
+SYSTEM DROP  TABLE IF EXISTS t_hardware_error NO DELAY;
+
 CREATE TABLE t_hardware_error
 (
     KeyID UInt32
@@ -14,3 +18,5 @@ INSERT INTO t_hardware_error;
 -- All 3 commits have been written correctly. The unknown status is ok (since it failed after the operation)
 SELECT arraySort(groupArray(KeyID))
 FROM t_hardware_error;
+
+SYSTEM DROP  TABLE t_hardware_error NO DELAY;

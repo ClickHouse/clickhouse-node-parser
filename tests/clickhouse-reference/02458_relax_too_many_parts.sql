@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test;
 CREATE TABLE test (x UInt64, s String) ENGINE = MergeTree ORDER BY tuple() SETTINGS parts_to_throw_insert = 3, max_parts_to_merge_at_once = 1;
 -- The "too many parts" threshold works:
 SET max_block_size = 1, min_insert_block_size_rows = 1, min_insert_block_size_bytes = 1;
@@ -13,3 +14,4 @@ INSERT INTO test SELECT number, randomString(1000) FROM numbers(0, 10000);
 INSERT INTO test SELECT number, randomString(1000) FROM numbers(10000, 10000);
 INSERT INTO test SELECT number, randomString(1000) FROM numbers(20000, 10000);
 SELECT count(), round(avg(bytes), -6) FROM system.parts WHERE database = currentDatabase() AND table = 'test' AND active;
+DROP TABLE test;

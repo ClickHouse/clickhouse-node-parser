@@ -1,6 +1,7 @@
 SELECT sign(0);
 SELECT sign(1);
 SELECT sign(-1);
+DROP TABLE IF EXISTS test;
 CREATE TABLE test(
 	n1 Int32,
 	n2 UInt32,
@@ -14,3 +15,4 @@ SELECT sign(n2) FROM test;
 SELECT sign(n3) FROM test;
 SELECT sign(n4) FROM test;
 SELECT sign(n5) FROM test;
+DROP TABLE test;

@@ -1,3 +1,6 @@
+-- { echo ON }
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     s String
@@ -24,6 +27,8 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY column ASC;
 
+SYSTEM drop  table test;
+
 CREATE TABLE test
 (
     s String
@@ -45,6 +50,10 @@ SETTINGS serialization_info_version = 'basic', string_serialization_version = 'w
 SET query_plan_optimize_lazy_materialization = 1;
 
 SET query_plan_max_limit_for_lazy_materialization = 10;
+
+SYSTEM drop  table if exists test_old;
+
+SYSTEM drop  table if exists test_new;
 
 CREATE TABLE test_old
 (
@@ -109,6 +118,19 @@ FROM test_new
 WHERE y > 5
 ORDER BY y ASC
 LIMIT 2;
+
+SYSTEM drop  table test_old;
+
+SYSTEM drop  table test_new;
+
+-- Substreams cache test for Compact/Wide parts and inside Tuple
+SYSTEM drop  table if exists test_old_compact;
+
+SYSTEM drop  table if exists test_old_wide;
+
+SYSTEM drop  table if exists test_new_compact;
+
+SYSTEM drop  table if exists test_new_wide;
 
 CREATE TABLE test_old_compact
 (
@@ -262,12 +284,22 @@ ORDER BY `all` ASC
 LIMIT 2
 OFFSET 3;
 
+SYSTEM drop  table test_old_compact;
+
+SYSTEM drop  table test_old_wide;
+
+SYSTEM drop  table test_new_compact;
+
+SYSTEM drop  table test_new_wide;
+
 -- Test empty string comparison and .size subcolumn optimization
 SET enable_analyzer = 1;
 
 SET optimize_empty_string_comparisons = 1;
 
 SET optimize_functions_to_subcolumns = 0;
+
+SYSTEM drop  table if exists t_column_names;
 
 CREATE TABLE t_column_names
 (
@@ -281,3 +313,5 @@ SELECT s != ''
 FROM t_column_names;
 
 SET optimize_functions_to_subcolumns = 1;
+
+SYSTEM drop  table t_column_names;

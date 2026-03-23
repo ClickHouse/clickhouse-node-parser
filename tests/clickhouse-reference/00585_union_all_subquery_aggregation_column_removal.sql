@@ -1,7 +1,13 @@
+DROP TABLE IF EXISTS clicks;
+DROP TABLE IF EXISTS transactions;
+
 CREATE TABLE clicks (domain String) ENGINE = Memory;
 CREATE TABLE transactions (domain String) ENGINE = Memory;
+
 INSERT INTO clicks VALUES ('facebook.com'), ('meta.ua'), ('google.com');
 INSERT INTO transactions VALUES ('facebook.com'), ('meta.ua'), ('baidu.com');
+
+
 SELECT
     sum(total_count) AS total, 
     domain
@@ -25,6 +31,8 @@ GROUP BY domain
 ORDER BY domain
 LIMIT 10
 FORMAT JSONEachRow;
+
+
 SELECT
     sum(total_count) AS total, 
     domain
@@ -48,6 +56,8 @@ GROUP BY domain
 ORDER BY domain
 LIMIT 10
 FORMAT JSONEachRow;
+
+
 SELECT DISTINCT * FROM
 (
 SELECT
@@ -98,6 +108,8 @@ GROUP BY domain
 ORDER BY domain
 LIMIT 10
 );
+
+
 SELECT DISTINCT total, domain FROM
 (
 SELECT
@@ -151,6 +163,8 @@ ORDER BY domain
 LIMIT 10
 )
 ORDER BY domain, total;
+
+
 SELECT * FROM
 (
 SELECT
@@ -203,6 +217,8 @@ LIMIT 10
 ) js2
 USING (total, domain)
 ORDER BY total, domain;
+
+
 SELECT total FROM
 (
 SELECT
@@ -255,6 +271,8 @@ LIMIT 10
 ) js2
 USING (total, domain)
 ORDER BY total, domain;
+
+
 SELECT domain FROM
 (
 SELECT
@@ -307,3 +325,7 @@ LIMIT 10
 ) js2
 USING (total, domain)
 ORDER BY total, domain;
+
+
+DROP TABLE clicks;
+DROP TABLE transactions;

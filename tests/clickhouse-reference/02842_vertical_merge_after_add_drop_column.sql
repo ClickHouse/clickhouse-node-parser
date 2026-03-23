@@ -1,3 +1,6 @@
+-- In some versions vertical merges after DROP COLUMN was broken in some cases
+
+drop table if exists data;
 create table data (
     key Int,
     `legacy_features_Map.id` Array(UInt8),
@@ -11,3 +14,4 @@ settings
     vertical_merge_algorithm_min_columns_to_activate=0;
 insert into data (key) values (1);
 insert into data (key) values (2);
+DROP TABLE data;

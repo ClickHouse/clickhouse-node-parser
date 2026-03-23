@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t_map_lc;
+
 CREATE TABLE t_map_lc
 (
     id UInt64,
@@ -26,6 +28,8 @@ WHERE NOT ignore(*, t.m.values);
 SELECT *
 FROM t_map_lc
 WHERE mapContains(t.m, 'not_existing_key_1337');
+
+SYSTEM DROP  TABLE t_map_lc;
 
 CREATE TABLE t_map_lc
 (

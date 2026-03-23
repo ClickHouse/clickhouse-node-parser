@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS t1;
+
 CREATE TABLE t1
 (
     ID UInt64,
@@ -7,3 +9,5 @@ ENGINE = MergeTree
 ORDER BY ID;
 
 INSERT INTO t1 (ID, name);
+
+SYSTEM DROP  TABLE t1;

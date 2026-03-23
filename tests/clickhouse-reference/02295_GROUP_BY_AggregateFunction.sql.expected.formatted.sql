@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists data_02295;
+
 CREATE TABLE data_02295
 (
     b Int64,
@@ -105,3 +107,6 @@ ORDER BY
 SETTINGS
     optimize_aggregation_in_order = 1,
     max_threads = 1;
+
+-- { echoOff }
+SYSTEM drop  table data_02295;

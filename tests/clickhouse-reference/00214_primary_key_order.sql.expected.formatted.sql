@@ -1,3 +1,5 @@
+SYSTEM DROP  TABLE IF EXISTS primary_key;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE primary_key
@@ -36,3 +38,5 @@ SELECT
     negate(x)
 FROM primary_key
 WHERE negate(x) < toInt8(0);
+
+SYSTEM DROP  TABLE primary_key;

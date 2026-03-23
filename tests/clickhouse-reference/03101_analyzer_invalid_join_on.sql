@@ -1,3 +1,7 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/50271
+
+drop table if exists t1;
+drop table if exists t2;
 set enable_analyzer=1;
 create table t1 (c3 String, primary key(c3)) engine = MergeTree;
 create table t2 (c11 String, primary key(c11)) engine = MergeTree;

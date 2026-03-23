@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists tsv_raw;
+
 CREATE TABLE tsv_raw
 (
     strval String,

@@ -1,3 +1,6 @@
+-- Tags: no-fasttest, use-rocksdb
+
+DROP TABLE IF EXISTS 03578_rocksdb;
 CREATE TABLE IF NOT EXISTS 03578_rocksdb
 (
     key UInt16,
@@ -22,6 +25,8 @@ WHERE current_database = currentDatabase()
   AND query LIKE '%FROM 03578_rocksdb%'
   AND is_initial_query
 ORDER BY event_time_microseconds;
+DROP TABLE 03578_rocksdb;
+DROP TABLE IF EXISTS 03578_rocksdb_nullable;
 CREATE TABLE IF NOT EXISTS 03578_rocksdb_nullable
 (
     key Nullable(UInt16),
@@ -42,6 +47,8 @@ WHERE current_database = currentDatabase()
   AND query LIKE '%FROM 03578_rocksdb_nullable%'
   AND is_initial_query
 ORDER BY event_time_microseconds;
+DROP TABLE 03578_rocksdb_nullable;
+DROP TABLE IF EXISTS 03578_keepermap;
 CREATE TABLE IF NOT EXISTS 03578_keepermap
 (
     key UInt16,
@@ -65,6 +72,8 @@ WHERE current_database = currentDatabase()
   AND query LIKE '%FROM 03578_keepermap%'
   AND is_initial_query
 ORDER BY event_time_microseconds;
+DROP TABLE 03578_keepermap;
+DROP TABLE IF EXISTS 03578_keepermap_nullable;
 CREATE TABLE IF NOT EXISTS 03578_keepermap_nullable
 (
     key Nullable(UInt16),
@@ -85,3 +94,4 @@ WHERE current_database = currentDatabase()
   AND query LIKE '%FROM 03578_keepermap_nullable%'
   AND is_initial_query
 ORDER BY event_time_microseconds;
+DROP TABLE 03578_keepermap_nullable;

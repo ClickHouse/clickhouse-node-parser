@@ -1,3 +1,6 @@
+-- Tags: zookeeper
+SYSTEM DROP  TABLE IF EXISTS deduplication_by_partition;
+
 CREATE TABLE deduplication_by_partition
 (
     d Date,
@@ -22,3 +25,5 @@ ORDER BY
 INSERT INTO deduplication_by_partition;
 
 INSERT INTO deduplication_by_partition;
+
+SYSTEM DROP  TABLE deduplication_by_partition;

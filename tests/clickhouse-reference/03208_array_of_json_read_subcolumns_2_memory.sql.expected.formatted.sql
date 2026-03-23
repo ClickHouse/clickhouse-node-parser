@@ -6,6 +6,8 @@ SET allow_experimental_variant_type = 1;
 
 SET use_variant_as_common_type = 1;
 
+SYSTEM drop  table if exists test;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -318,3 +320,5 @@ SELECT
 FROM test
 ORDER BY id ASC
 FORMAT Null;
+
+SYSTEM drop  table test;

@@ -5,6 +5,12 @@ SET enable_analyzer = 1;
 
 SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to force local plan for parallel replicas
 
+SYSTEM DROP  TABLE IF EXISTS tab_f64;
+
+SYSTEM DROP  TABLE IF EXISTS tab_f32;
+
+SYSTEM DROP  TABLE IF EXISTS tab_bf16;
+
 CREATE TABLE tab_f64
 (
     id Int32,
@@ -41,9 +47,15 @@ SETTINGS index_granularity = 2;
 
 INSERT INTO tab_bf16;
 
+SYSTEM DROP  FUNCTION IF EXISTS constF64;
+
 CREATE FUNCTION constF64 AS () -> [toFloat64(0.0), toFloat64(2.0)];
 
+SYSTEM DROP  FUNCTION IF EXISTS constF32;
+
 CREATE FUNCTION constF32 AS () -> [toFloat32(0.0), toFloat32(2.0)];
+
+SYSTEM DROP  FUNCTION IF EXISTS constBF16;
 
 CREATE FUNCTION constBF16 AS () -> [toBFloat16(0.0), toBFloat16(2.0)];
 
@@ -182,6 +194,14 @@ FROM (
     )
 WHERE like(`explain`, '%vector_similarity%');
 
+SYSTEM DROP  FUNCTION constF64;
+
+SYSTEM DROP  FUNCTION constF32;
+
+SYSTEM DROP  FUNCTION constBF16;
+
+SYSTEM DROP  FUNCTION IF EXISTS nonConstF32;
+
 CREATE FUNCTION nonConstF32 AS arg1 -> (
     SELECT [toFloat32((arg1 % 10)/10), toFloat32((arg1 % 10)/10)]
 );
@@ -195,3 +215,11 @@ FROM (
         LIMIT 1
     )
 WHERE like(`explain`, '%vector_similarity%');
+
+SYSTEM DROP  FUNCTION nonConstF32;
+
+SYSTEM DROP  TABLE tab_f64;
+
+SYSTEM DROP  TABLE tab_f32;
+
+SYSTEM DROP  TABLE tab_bf16;

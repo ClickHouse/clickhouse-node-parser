@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+
+DROP TABLE IF EXISTS alter_default;
 CREATE TABLE alter_default
 (
   date Date,

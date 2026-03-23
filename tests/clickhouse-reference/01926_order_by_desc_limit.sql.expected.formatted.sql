@@ -1,3 +1,6 @@
+-- Tags: no-random-settings, no-azure-blob-storage
+SYSTEM DROP  TABLE IF EXISTS order_by_desc;
+
 SET enable_filesystem_cache = 0;
 
 SET read_through_distributed_cache = 0;

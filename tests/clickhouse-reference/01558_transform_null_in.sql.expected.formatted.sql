@@ -1,5 +1,7 @@
 SET transform_null_in = 1;
 
+SYSTEM DROP  TABLE IF EXISTS null_in_1;
+
 CREATE TABLE null_in_1
 (
     u UInt32,

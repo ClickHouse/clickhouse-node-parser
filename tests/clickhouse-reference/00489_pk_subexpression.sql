@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS pk;
 set allow_deprecated_syntax_for_merge_tree=1;
 -- NOTE: here the timezone is pinned to UTC, to avoid issues with "partial
 -- timezones" (timezones that does not starts from 00:00), like
@@ -26,3 +27,4 @@ SELECT toUInt32(x), y, z FROM pk WHERE x = toDateTime(1);
 SET max_rows_to_read = 4;
 SELECT toUInt32(x), y, z FROM pk WHERE (x BETWEEN toDateTime(60) AND toDateTime(119)) AND y = 11;
 SELECT toUInt32(x), y, z FROM pk WHERE (x BETWEEN toDateTime(60) AND toDateTime(120)) AND y = 11;
+DROP TABLE pk;

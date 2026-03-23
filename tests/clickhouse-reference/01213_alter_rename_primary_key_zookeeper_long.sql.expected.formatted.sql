@@ -1,3 +1,6 @@
+-- Tags: long, zookeeper
+SYSTEM DROP  TABLE IF EXISTS table_for_rename_pk;
+
 CREATE TABLE table_for_rename_pk
 (
     date Date,
@@ -27,6 +30,8 @@ FROM table_for_rename_pk
 WHERE key1 = 1
     AND key2 = 1
     AND key3 = 1;
+
+SYSTEM DROP  TABLE IF EXISTS table_for_rename_with_primary_key;
 
 CREATE TABLE table_for_rename_with_primary_key
 (

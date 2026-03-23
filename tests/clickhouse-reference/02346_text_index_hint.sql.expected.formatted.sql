@@ -9,6 +9,9 @@ SET query_plan_text_index_add_hint = 1;
 
 SET use_statistics = 0;
 
+-- Tests text search setting 'query_plan_text_index_add_hint' with different tokenizers
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 SELECT '-- splitByNonAlpha';
 
 CREATE TABLE tab
@@ -49,6 +52,8 @@ FROM (
         SETTINGS use_skip_indexes_on_data_read = 1
     )
 WHERE ilike(`explain`, '%filter column%');
+
+SYSTEM DROP  TABLE tab;
 
 CREATE TABLE tab
 (

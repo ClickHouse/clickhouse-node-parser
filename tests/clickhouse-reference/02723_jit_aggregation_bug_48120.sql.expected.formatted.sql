@@ -1,3 +1,6 @@
+-- Tags: no-fasttest, no-msan
+SYSTEM drop  table if exists dummy;
+
 CREATE TABLE dummy
 (
     num1 Int32,
@@ -20,3 +23,6 @@ GROUP BY num2;
 SELECT minIf(num1, num1 >= 5)
 FROM dummy
 GROUP BY num2;
+
+-- { echoOff }
+SYSTEM drop  table dummy;

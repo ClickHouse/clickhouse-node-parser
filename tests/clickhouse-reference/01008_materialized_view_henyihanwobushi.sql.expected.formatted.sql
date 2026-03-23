@@ -1,3 +1,9 @@
+SYSTEM DROP  TABLE IF EXISTS foo;
+
+SYSTEM DROP  TABLE IF EXISTS bar;
+
+SYSTEM DROP  TABLE IF EXISTS view_foo_bar;
+
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
 CREATE TABLE foo
@@ -47,3 +53,9 @@ LEFT JOIN (
 
 SELECT *
 FROM view_foo_bar;
+
+SYSTEM DROP  TABLE foo;
+
+SYSTEM DROP  TABLE bar;
+
+SYSTEM DROP  TABLE view_foo_bar;

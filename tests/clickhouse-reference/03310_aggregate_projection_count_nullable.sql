@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS log;
 CREATE TABLE log(
     collectorReceiptTime DateTime,
     eventId String,
@@ -29,6 +30,9 @@ FROM log
 WHERE (collectorReceiptTime >= '2025-01-01 00:00:00') AND (collectorReceiptTime <= '2025-01-01 23:59:59')
 GROUP BY time
 ORDER BY time DESC;
+-- Another similar case to verify that COUNT(NOT NULL) should be able to use aggregate projection.
+
+DROP TABLE log;
 CREATE TABLE log(
     collectorReceiptTime DateTime,
     eventId String,

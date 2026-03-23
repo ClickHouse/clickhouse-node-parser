@@ -6,6 +6,8 @@
 -- Also has good number of calls to reinterpret() to test conversion of native floats to Array(Float32)
 SET enable_analyzer = 1;
 
+SYSTEM DROP  TABLE IF EXISTS dbpedia;
+
 CREATE TABLE dbpedia
 (
     id String,
@@ -77,6 +79,11 @@ FROM `system`.data_skipping_indices
 WHERE database = currentDatabase()
     AND name = 'vec_idx';
 
+SYSTEM DROP  TABLE dbpedia;
+
+-- Now test that a rescoring multiplier > 1.0 helps with search accuracy
+SYSTEM DROP  TABLE IF EXISTS tab;
+
 CREATE TABLE tab
 (
     id Int32,
@@ -104,3 +111,5 @@ LIMIT 1
 SETTINGS
     vector_search_with_rescoring = 1,
     vector_search_index_fetch_multiplier = 4;
+
+SYSTEM DROP  TABLE tab;

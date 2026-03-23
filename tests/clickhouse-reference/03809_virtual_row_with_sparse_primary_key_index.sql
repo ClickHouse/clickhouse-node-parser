@@ -1,3 +1,18 @@
+-- Tags: no-random-merge-tree-settings
+
+-- Test that read_in_order_use_virtual_row optimization works correctly when
+-- the in-memory primary key index has fewer columns than expected due to
+-- optimizeIndexColumns dropping suffix columns with high cardinality.
+--
+-- The primary_key_ratio_of_unique_prefix_values_to_skip_suffix_columns setting
+-- (default 0.9) causes suffix columns to be dropped from the in-memory index
+-- when prefix columns have >= 90% unique values across mark boundaries.
+--
+-- Previously, this caused "Not found column in block" errors because the
+-- virtual_row_conversion expression expected all primary key columns, but
+-- the pk_block only contained the columns present in the optimized index.
+
+DROP TABLE IF EXISTS t_virtual_row_sparse_pk;
 -- Create table with composite primary key
 CREATE TABLE t_virtual_row_sparse_pk (a UInt64, b UInt64, c String)
 ENGINE = MergeTree()
@@ -16,3 +31,4 @@ SELECT a, b FROM t_virtual_row_sparse_pk PREWHERE a < 100000 ORDER BY (a, b) LIM
 SELECT a, b FROM t_virtual_row_sparse_pk ORDER BY (a, b) DESC LIMIT 5 SETTINGS read_in_order_use_virtual_row = 1;
 -- Verify the total count is correct
 SELECT count() FROM t_virtual_row_sparse_pk;
+DROP TABLE t_virtual_row_sparse_pk;

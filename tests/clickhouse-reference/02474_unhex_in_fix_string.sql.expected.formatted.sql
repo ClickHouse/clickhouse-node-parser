@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists unhex_in_fix_string_table;
+
 CREATE TABLE unhex_in_fix_string_table
 (
     dt Date,

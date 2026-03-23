@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS distinct;
 CREATE TABLE distinct (Num UInt32, Name String) ENGINE = Memory;
 INSERT INTO distinct (Num, Name) VALUES (1, 'John');
 INSERT INTO distinct (Num, Name) VALUES (3, 'Mary');

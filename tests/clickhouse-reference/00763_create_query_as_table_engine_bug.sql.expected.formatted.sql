@@ -1,3 +1,7 @@
+SYSTEM drop  table if exists t;
+
+SYSTEM drop  table if exists td;
+
 CREATE TABLE t
 (
     val UInt32

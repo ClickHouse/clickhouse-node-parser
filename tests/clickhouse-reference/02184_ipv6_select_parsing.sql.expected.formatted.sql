@@ -1,3 +1,5 @@
+SYSTEM drop  table if exists ips_v6;
+
 CREATE TABLE ips_v6
 (
     i IPv6
@@ -12,3 +14,5 @@ INSERT INTO ips_v6;
 
 SELECT *
 FROM ips_v6;
+
+SYSTEM drop  table ips_v6;

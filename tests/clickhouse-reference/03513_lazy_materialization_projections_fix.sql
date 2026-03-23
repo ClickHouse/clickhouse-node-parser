@@ -3,6 +3,7 @@ SET query_plan_optimize_lazy_materialization = 1;
 SET query_plan_max_limit_for_lazy_materialization = 10;
 SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 SET enable_analyzer=1;
+DROP TABLE IF EXISTS tt0;
 CREATE TABLE tt0 (k UInt64, v String, blob String, PROJECTION proj_v (select * order by v)) ENGINE=MergeTree() ORDER BY tuple();
 INSERT INTO tt0 SELECT number, toString(number), repeat('blob_', number % 10) FROM numbers(1_000_000);
 select '-- no projection';
@@ -11,6 +12,7 @@ SELECT * FROM tt0 ORDER BY k ASC LIMIT 10;
 select trimLeft(explain) as s from (EXPLAIN SELECT * FROM tt0 WHERE v = '3' ORDER BY v ASC LIMIT 10) where s ilike 'ReadFromMergeTree (proj_v)';
 select trimLeft(explain) as s from (EXPLAIN SELECT * FROM tt0 WHERE v = '3' ORDER BY v ASC LIMIT 10) where s ilike 'LazilyRead%';
 SELECT * FROM tt0 WHERE v = '3' ORDER BY v ASC LIMIT 10;
+DROP TABLE IF EXISTS tt1;
 CREATE TABLE tt1 (k UInt64, v String, blob String) ENGINE=MergeTree() ORDER BY tuple() settings index_granularity=10;
 INSERT INTO tt1 SELECT number, toString(number), repeat('blob_', number % 10) FROM numbers(1_000);
 INSERT INTO tt1 SELECT number, toString(number), repeat('blob_', number % 10) FROM numbers(1_000, 1_000);
@@ -20,3 +22,5 @@ select name, projections from system.parts where database = currentDatabase() an
 select 'Reading steps: '|| count() from (EXPLAIN SELECT * FROM tt1 WHERE v = '1001' ORDER BY v ASC LIMIT 10) where trimLeft(explain) ilike 'ReadFromMergeTree%';
 -- currently lazy materialization doesn't support such mixed reading
 select trimLeft(explain) as s from (EXPLAIN SELECT * FROM tt1 WHERE v = '1001' ORDER BY v ASC LIMIT 10) where s ilike 'LazilyRead%';
+DROP TABLE tt1;
+DROP TABLE tt0;
