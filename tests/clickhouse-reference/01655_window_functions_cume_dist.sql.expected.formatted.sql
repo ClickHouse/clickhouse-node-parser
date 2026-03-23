@@ -92,4 +92,4 @@ SELECT
     cume_dist() OVER (ORDER BY number ASC ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
 FROM numbers(5); -- { serverError BAD_ARGUMENTS }
 
-SYSTEM DROP  TABLE test_cume_dist;
+DROP TABLE test_cume_dist;

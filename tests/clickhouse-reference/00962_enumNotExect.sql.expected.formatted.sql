@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_enum8;
+DROP TABLE IF EXISTS t_enum8;
 
 CREATE TABLE t_enum8
 (
@@ -14,9 +14,9 @@ FROM t_enum8;
 SELECT CAST(x, 'Int8')
 FROM t_enum8;
 
-SYSTEM DROP  TABLE t_enum8;
+DROP TABLE t_enum8;
 
-SYSTEM DROP  TABLE IF EXISTS t_enum16;
+DROP TABLE IF EXISTS t_enum16;
 
 CREATE TABLE t_enum16
 (
@@ -32,7 +32,7 @@ FROM t_enum16;
 SELECT CAST(x, 'Int16')
 FROM t_enum16;
 
-SYSTEM DROP  TABLE t_enum16;
+DROP TABLE t_enum16;
 
 SELECT toTypeName(CAST('a', 'Enum(''a'' = 2, ''b'' = 128)'));
 

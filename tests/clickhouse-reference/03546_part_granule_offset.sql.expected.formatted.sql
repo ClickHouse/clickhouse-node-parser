@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS test_part_granule_offset;
+DROP TABLE IF EXISTS test_part_granule_offset;
 
 CREATE TABLE test_part_granule_offset
 (
@@ -29,4 +29,4 @@ FROM test_part_granule_offset
 WHERE _part_granule_offset % 10 = 1
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE test_part_granule_offset;
+DROP TABLE test_part_granule_offset;

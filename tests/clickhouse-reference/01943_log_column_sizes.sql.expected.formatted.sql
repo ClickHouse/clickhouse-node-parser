@@ -1,7 +1,7 @@
 -- Tags: log-engine
-SYSTEM DROP  TABLE IF EXISTS test_log;
+DROP TABLE IF EXISTS test_log;
 
-SYSTEM DROP  TABLE IF EXISTS test_tiny_log;
+DROP TABLE IF EXISTS test_tiny_log;
 
 CREATE TABLE test_log
 (
@@ -33,6 +33,6 @@ FROM `system`.`columns`
 WHERE table = 'test_tiny_log'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE test_log;
+DROP TABLE test_log;
 
-SYSTEM DROP  TABLE test_tiny_log;
+DROP TABLE test_tiny_log;

@@ -1,7 +1,7 @@
 -- Tags: global
-SYSTEM DROP  TABLE IF EXISTS test1;
+DROP TABLE IF EXISTS test1;
 
-SYSTEM DROP  TABLE IF EXISTS test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test1
 (
@@ -24,6 +24,6 @@ ARRAY JOIN arrayFilter(t -> (t GLOBAL IN (
     )), test2.b) AS test2_b
 WHERE 1;
 
-SYSTEM DROP  TABLE test1;
+DROP TABLE test1;
 
-SYSTEM DROP  TABLE test2;
+DROP TABLE test2;

@@ -1,5 +1,5 @@
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS test_enum_string_functions;
+DROP TABLE IF EXISTS test_enum_string_functions;
 
 CREATE TABLE test_enum_string_functions
 (
@@ -45,7 +45,7 @@ FROM test_enum_string_functions;
 SELECT hasTokenOrNull(e, 'a')
 FROM test_enum_string_functions;
 
-SYSTEM DROP  TABLE IF EXISTS jsons;
+DROP TABLE IF EXISTS jsons;
 
 CREATE TABLE jsons
 (

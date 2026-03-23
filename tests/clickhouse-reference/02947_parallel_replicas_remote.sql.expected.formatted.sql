@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -28,4 +28,4 @@ SETTINGS
     prefer_localhost_replica = 0,
     parallel_replicas_for_non_replicated_merge_tree = 1;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

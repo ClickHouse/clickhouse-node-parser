@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_nested_tuple;
+DROP TABLE IF EXISTS t_nested_tuple;
 
 CREATE TABLE t_nested_tuple
 (
@@ -41,4 +41,4 @@ SELECT endUserIDs._experience.aaid.primary
 FROM t_nested_tuple
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE t_nested_tuple;
+DROP TABLE t_nested_tuple;

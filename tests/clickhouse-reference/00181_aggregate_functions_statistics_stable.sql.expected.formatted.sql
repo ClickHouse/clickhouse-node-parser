@@ -2,7 +2,7 @@ SET any_join_distinct_right_table_keys = 1;
 
 SET joined_subquery_requires_alias = 0;
 
-SYSTEM DROP  TABLE IF EXISTS series;
+DROP TABLE IF EXISTS series;
 
 CREATE TABLE series
 (
@@ -234,4 +234,4 @@ FROM (
 SELECT round(abs(corrStable(x_value, y_value) - covarPopStable(x_value, y_value) / ((stddevPopStable(x_value) * stddevPopStable(y_value)))), 6)
 FROM series;
 
-SYSTEM DROP  TABLE series;
+DROP TABLE series;

@@ -3,7 +3,7 @@ SET compile_aggregate_expressions = 1;
 
 SET min_count_to_compile_aggregate_expression = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_unsigned_values;
+DROP TABLE IF EXISTS test_table_unsigned_values;
 
 CREATE TABLE test_table_unsigned_values
 (
@@ -36,9 +36,9 @@ FROM test_table_unsigned_values
 GROUP BY id
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_table_unsigned_values;
+DROP TABLE test_table_unsigned_values;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_signed_values;
+DROP TABLE IF EXISTS test_table_signed_values;
 
 CREATE TABLE test_table_signed_values
 (
@@ -71,9 +71,9 @@ FROM test_table_signed_values
 GROUP BY id
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_table_signed_values;
+DROP TABLE test_table_signed_values;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_float_values;
+DROP TABLE IF EXISTS test_table_float_values;
 
 CREATE TABLE test_table_float_values
 (
@@ -100,9 +100,9 @@ FROM test_table_float_values
 GROUP BY id
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_table_float_values;
+DROP TABLE test_table_float_values;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_nullable_unsigned_values;
+DROP TABLE IF EXISTS test_table_nullable_unsigned_values;
 
 CREATE TABLE test_table_nullable_unsigned_values
 (
@@ -135,9 +135,9 @@ FROM test_table_nullable_unsigned_values
 GROUP BY id
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_table_nullable_unsigned_values;
+DROP TABLE test_table_nullable_unsigned_values;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_nullable_signed_values;
+DROP TABLE IF EXISTS test_table_nullable_signed_values;
 
 CREATE TABLE test_table_nullable_signed_values
 (
@@ -170,9 +170,9 @@ FROM test_table_nullable_signed_values
 GROUP BY id
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_table_nullable_signed_values;
+DROP TABLE test_table_nullable_signed_values;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_nullable_float_values;
+DROP TABLE IF EXISTS test_table_nullable_float_values;
 
 CREATE TABLE test_table_nullable_float_values
 (
@@ -199,9 +199,9 @@ FROM test_table_nullable_float_values
 GROUP BY id
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_table_nullable_float_values;
+DROP TABLE test_table_nullable_float_values;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_null_specifics;
+DROP TABLE IF EXISTS test_table_null_specifics;
 
 CREATE TABLE test_table_null_specifics
 (

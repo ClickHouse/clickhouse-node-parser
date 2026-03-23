@@ -6,9 +6,9 @@ SET mutations_sync = 1;
 
 SET alter_sync = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_compact;
+DROP TABLE IF EXISTS test_compact;
 
-SYSTEM DROP  TABLE IF EXISTS test_wide;
+DROP TABLE IF EXISTS test_wide;
 
 CREATE TABLE test_compact
 (
@@ -54,6 +54,6 @@ WHERE table = 'test_wide'
     AND database = currentDatabase()
     AND name = 'idx_minmax';
 
-SYSTEM DROP  TABLE test_compact;
+DROP TABLE test_compact;
 
-SYSTEM DROP  TABLE test_wide;
+DROP TABLE test_wide;

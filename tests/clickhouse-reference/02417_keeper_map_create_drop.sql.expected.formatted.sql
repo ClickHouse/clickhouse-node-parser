@@ -1,5 +1,5 @@
 -- Tags: no-ordinary-database, no-fasttest
-SYSTEM DROP  TABLE IF EXISTS 02417_test SYNC;
+DROP TABLE IF EXISTS `02417_test`;
 
 CREATE TABLE `02417_test`
 (
@@ -31,6 +31,6 @@ SELECT *
 FROM `02417_test_another`
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE 02417_test SYNC;
+DROP TABLE `02417_test`;
 
-SYSTEM DROP  TABLE 02417_test_another SYNC;
+DROP TABLE `02417_test_another`;

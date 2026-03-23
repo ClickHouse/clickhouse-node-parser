@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mytable_local;
+DROP TABLE IF EXISTS mytable_local;
 
 CREATE TABLE mytable_local
 (
@@ -43,4 +43,4 @@ ENGINE = MergeTree()
 ORDER BY (eventday, user_id)
 PARTITION BY toYYYYMM(eventday);
 
-SYSTEM DROP  TABLE mytable_local;
+DROP TABLE mytable_local;

@@ -12,4 +12,4 @@ SELECT
     number::String
 FROM numbers(10);
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

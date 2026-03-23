@@ -1,7 +1,7 @@
 -- Tags: no-parallel
 SET allow_suspicious_ttl_expressions = 1;
 
-SYSTEM drop  table if exists ttl;
+DROP TABLE IF EXISTS ttl;
 
 CREATE TABLE ttl
 (

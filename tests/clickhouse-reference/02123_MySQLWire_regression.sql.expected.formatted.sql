@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_MySQLWire;
+DROP TABLE IF EXISTS table_MySQLWire;
 
 CREATE TABLE table_MySQLWire
 (
@@ -9,4 +9,4 @@ ENGINE = File(MySQLWire);
 INSERT INTO table_MySQLWire SELECT number
 FROM numbers(10);
 
-SYSTEM DROP  TABLE table_MySQLWire;
+DROP TABLE table_MySQLWire;

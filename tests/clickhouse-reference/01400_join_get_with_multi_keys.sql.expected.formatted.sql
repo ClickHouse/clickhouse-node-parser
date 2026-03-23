@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_joinGet;
+DROP TABLE IF EXISTS test_joinGet;
 
 CREATE TABLE test_joinGet
 (
@@ -24,6 +24,6 @@ INSERT INTO test_lc;
 
 SELECT joinGet(test_lc, 'c', 'ab', '1');
 
-SYSTEM DROP  TABLE test_joinGet;
+DROP TABLE test_joinGet;
 
-SYSTEM DROP  TABLE test_lc;
+DROP TABLE test_lc;

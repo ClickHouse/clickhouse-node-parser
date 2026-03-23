@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tmp;
+DROP TABLE IF EXISTS tmp;
 
 SET mutations_sync = 2;
 
@@ -19,4 +19,4 @@ SELECT
     arraySort(groupArray(s))
 FROM tmp;
 
-SYSTEM DROP  TABLE tmp;
+DROP TABLE tmp;

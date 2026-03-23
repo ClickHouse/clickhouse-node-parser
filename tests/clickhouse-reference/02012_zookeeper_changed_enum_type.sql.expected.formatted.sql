@@ -16,4 +16,4 @@ SELECT *
 FROM enum_alter_issue
 ORDER BY b ASC;
 
-SYSTEM drop  table enum_alter_issue;
+DROP TABLE enum_alter_issue;

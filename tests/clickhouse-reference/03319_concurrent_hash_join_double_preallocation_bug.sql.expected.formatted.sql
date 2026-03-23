@@ -1,7 +1,7 @@
 -- Tags: no-tsan, no-asan, no-msan, no-ubsan, no-parallel-replicas
-SYSTEM drop  table if exists lhs;
+DROP TABLE IF EXISTS lhs;
 
-SYSTEM drop  table if exists rhs;
+DROP TABLE IF EXISTS rhs;
 
 CREATE TABLE lhs
 (

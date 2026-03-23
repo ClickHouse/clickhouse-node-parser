@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_ind_merge_1;
+DROP TABLE IF EXISTS t_ind_merge_1;
 
 SET enable_analyzer = 1;
 
@@ -28,4 +28,4 @@ SETTINGS force_data_skipping_indices = 'idx_b';
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 
-SYSTEM DROP  TABLE t_ind_merge_1;
+DROP TABLE t_ind_merge_1;

@@ -1,7 +1,7 @@
 -- { echo }
 SET implicit_select = 1, implicit_table_at_top_level = 'test', enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -26,4 +26,4 @@ SELECT *
 UNION ALL
 SELECT *;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

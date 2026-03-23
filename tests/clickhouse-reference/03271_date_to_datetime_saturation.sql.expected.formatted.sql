@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -37,7 +37,7 @@ FROM test
 WHERE toDateTime(stamp) >= parseDateTimeBestEffort('2024-11-01')
 SETTINGS date_time_overflow_behavior = 'throw'; -- { serverError VALUE_IS_OUT_OF_RANGE_OF_DATA_TYPE }
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

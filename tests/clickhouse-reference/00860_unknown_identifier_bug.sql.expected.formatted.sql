@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS appointment_events;
+DROP TABLE IF EXISTS appointment_events;
 
 CREATE TABLE appointment_events
 (
@@ -44,4 +44,4 @@ LEFT JOIN (
 WHERE A._set_at = B.max_set_at
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE appointment_events;
+DROP TABLE appointment_events;

@@ -1,5 +1,5 @@
 -- Tags: memory-engine
-SYSTEM DROP  TABLE IF EXISTS defaults;
+DROP TABLE IF EXISTS defaults;
 
 CREATE TABLE defaults
 (
@@ -16,4 +16,4 @@ FROM defaults;
 SELECT count(*)
 FROM defaults;
 
-SYSTEM DROP  TABLE defaults;
+DROP TABLE defaults;

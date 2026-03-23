@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_max_rows_to_read;
+DROP TABLE IF EXISTS t_max_rows_to_read;
 
 CREATE TABLE t_max_rows_to_read
 (
@@ -45,4 +45,4 @@ FROM t_max_rows_to_read
 WHERE a > 50
 LIMIT 1; -- { serverError TOO_MANY_ROWS }
 
-SYSTEM DROP  TABLE t_max_rows_to_read;
+DROP TABLE t_max_rows_to_read;

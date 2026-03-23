@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS json;
+DROP TABLE IF EXISTS json;
 
 CREATE TABLE json
 (

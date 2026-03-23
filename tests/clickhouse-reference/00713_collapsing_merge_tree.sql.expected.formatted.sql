@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS collapsing;
+DROP TABLE IF EXISTS collapsing;
 
 CREATE TABLE collapsing
 (
@@ -22,4 +22,4 @@ SELECT *
 FROM collapsing
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE collapsing;
+DROP TABLE collapsing;

@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_1;
+DROP TABLE IF EXISTS test_table_join_1;
 
 CREATE TABLE test_table_join_1
 (
@@ -13,7 +13,7 @@ SAMPLE BY id;
 
 INSERT INTO test_table_join_1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_2;
+DROP TABLE IF EXISTS test_table_join_2;
 
 CREATE TABLE test_table_join_2
 (
@@ -37,6 +37,6 @@ INNER JOIN test_table_join_2 AS t2 SAMPLE 1/2
     ON t1.id = t2.id
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE test_table_join_1;
+DROP TABLE test_table_join_1;
 
-SYSTEM DROP  TABLE test_table_join_2;
+DROP TABLE test_table_join_2;

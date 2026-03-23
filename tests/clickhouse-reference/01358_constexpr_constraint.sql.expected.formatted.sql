@@ -7,7 +7,7 @@ CREATE TEMPORARY TABLE constrained
 
 INSERT INTO constrained;
 
-SYSTEM DROP  TEMPORARY TABLE constrained;
+DROP TEMPORARY TABLE constrained;
 
 CREATE TEMPORARY TABLE constrained
 (

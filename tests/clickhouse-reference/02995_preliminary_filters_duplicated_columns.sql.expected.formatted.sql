@@ -1,5 +1,5 @@
 -- It is special because actions cannot be reused for SimpleAggregateFunction (see https://github.com/ClickHouse/ClickHouse/pull/54436)
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (

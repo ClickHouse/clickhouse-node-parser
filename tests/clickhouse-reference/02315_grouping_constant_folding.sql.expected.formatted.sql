@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test02315;
+DROP TABLE IF EXISTS test02315;
 
 CREATE TABLE test02315
 (
@@ -47,4 +47,4 @@ SETTINGS
     enable_analyzer = 1;
 
 -- { echoOff }
-SYSTEM DROP  TABLE test02315;
+DROP TABLE test02315;

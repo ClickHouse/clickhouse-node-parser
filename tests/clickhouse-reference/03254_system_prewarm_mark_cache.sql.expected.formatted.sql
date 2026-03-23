@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS t_prewarm_cache;
+DROP TABLE IF EXISTS t_prewarm_cache;
 
 CREATE TABLE t_prewarm_cache
 (

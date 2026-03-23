@@ -1,7 +1,7 @@
 -- Tags: no-parallel, no-shared-merge-tree
-SYSTEM DROP  TABLE IF EXISTS t_prewarm_cache_rmt_1;
+DROP TABLE IF EXISTS t_prewarm_cache_rmt_1;
 
-SYSTEM DROP  TABLE IF EXISTS t_prewarm_cache_rmt_2;
+DROP TABLE IF EXISTS t_prewarm_cache_rmt_2;
 
 CREATE TABLE t_prewarm_cache_rmt_1
 (

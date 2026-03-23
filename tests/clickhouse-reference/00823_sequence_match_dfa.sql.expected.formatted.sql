@@ -1,5 +1,5 @@
 -- this test cannot pass without the new DFA matching algorithm of sequenceMatch
-SYSTEM DROP  TABLE IF EXISTS sequence;
+DROP TABLE IF EXISTS sequence;
 
 CREATE TABLE sequence
 (
@@ -40,4 +40,4 @@ FROM sequence
 GROUP BY userID
 HAVING sequenceMatch('(?1)(?t>=10000000000000)(?2)')(EventTime, eventType = 'C', eventType = 'D');
 
-SYSTEM DROP  TABLE sequence;
+DROP TABLE sequence;

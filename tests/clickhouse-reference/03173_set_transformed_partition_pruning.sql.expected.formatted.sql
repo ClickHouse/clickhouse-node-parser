@@ -2,7 +2,7 @@
 -- msan: too slow
 SELECT '-- Single partition by function';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_single_function;
+DROP TABLE IF EXISTS `03173_single_function`;
 
 CREATE TABLE `03173_single_function`
 (
@@ -29,7 +29,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_single_function';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_nested_function;
+DROP TABLE IF EXISTS `03173_nested_function`;
 
 CREATE TABLE `03173_nested_function`
 (
@@ -66,7 +66,7 @@ WHERE type = 'QueryFinish'
 
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM DROP  TABLE IF EXISTS 03173_nested_function_lc;
+DROP TABLE IF EXISTS `03173_nested_function_lc`;
 
 CREATE TABLE `03173_nested_function_lc`
 (
@@ -101,7 +101,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nested_function_subexpr_lc';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_nested_function_null;
+DROP TABLE IF EXISTS `03173_nested_function_null`;
 
 CREATE TABLE `03173_nested_function_null`
 (
@@ -137,7 +137,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nested_function_subexpr_null';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_nested_function_lc_null;
+DROP TABLE IF EXISTS `03173_nested_function_lc_null`;
 
 CREATE TABLE `03173_nested_function_lc_null`
 (
@@ -173,7 +173,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nested_function_subexpr_lc_null';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_nonsafe_cast;
+DROP TABLE IF EXISTS `03173_nonsafe_cast`;
 
 CREATE TABLE `03173_nonsafe_cast`
 (
@@ -201,7 +201,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nonsafe_cast';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_multiple_partition_cols;
+DROP TABLE IF EXISTS `03173_multiple_partition_cols`;
 
 CREATE TABLE `03173_multiple_partition_cols`
 (
@@ -242,7 +242,7 @@ WHERE type = 'QueryFinish'
     AND log_comment = '03173_multiple_columns_subexpr';
 
 -- Preparing base table for filtering by LowCardinality/Nullable sets
-SYSTEM DROP  TABLE IF EXISTS 03173_base_data_source;
+DROP TABLE IF EXISTS `03173_base_data_source`;
 
 CREATE TABLE `03173_base_data_source`
 (
@@ -255,7 +255,7 @@ PARTITION BY xxHash32(id) % 3;
 INSERT INTO `03173_base_data_source` SELECT number
 FROM numbers(100);
 
-SYSTEM DROP  TABLE IF EXISTS 03173_low_cardinality_set;
+DROP TABLE IF EXISTS `03173_low_cardinality_set`;
 
 CREATE TABLE `03173_low_cardinality_set`
 (
@@ -278,7 +278,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_low_cardinality_set';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_nullable_set;
+DROP TABLE IF EXISTS `03173_nullable_set`;
 
 CREATE TABLE `03173_nullable_set`
 (
@@ -301,7 +301,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_nullable_set';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_lc_nullable_set;
+DROP TABLE IF EXISTS `03173_lc_nullable_set`;
 
 CREATE TABLE `03173_lc_nullable_set`
 (
@@ -326,7 +326,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND log_comment = '03173_lc_nullable_set';
 
-SYSTEM DROP  TABLE IF EXISTS 03173_date_parsing;
+DROP TABLE IF EXISTS `03173_date_parsing`;
 
 CREATE TABLE `03173_date_parsing`
 (
@@ -347,7 +347,7 @@ SELECT count()
 FROM `03173_date_parsing`
 WHERE id IN ('not a date');
 
-SYSTEM DROP  TABLE IF EXISTS 03173_nested_date_parsing;
+DROP TABLE IF EXISTS `03173_nested_date_parsing`;
 
 CREATE TABLE `03173_nested_date_parsing`
 (
@@ -380,7 +380,7 @@ SELECT count()
 FROM `03173_nested_date_parsing`
 WHERE id IN ('not a date');
 
-SYSTEM DROP  TABLE IF EXISTS 03173_empty_transform;
+DROP TABLE IF EXISTS `03173_empty_transform`;
 
 CREATE TABLE `03173_empty_transform`
 (

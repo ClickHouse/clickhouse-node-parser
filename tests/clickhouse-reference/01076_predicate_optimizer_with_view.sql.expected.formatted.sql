@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
-SYSTEM DROP  TABLE IF EXISTS test_view;
+DROP TABLE IF EXISTS test_view;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

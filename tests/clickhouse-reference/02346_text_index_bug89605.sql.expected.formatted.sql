@@ -7,7 +7,7 @@ SET query_plan_direct_read_from_text_index = 0;
 
 SET max_threads = 2; -- make sure it's running multi-threaded
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -47,7 +47,7 @@ SELECT count()
 FROM tab
 WHERE hasAnyTokens(msg, sparseGrams('click'));
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

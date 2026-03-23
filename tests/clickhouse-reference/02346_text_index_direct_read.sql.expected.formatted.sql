@@ -14,7 +14,7 @@ SET max_rows_to_read = 0; -- system.text_log can be really big
 
 SET enable_analyzer = 0; -- To produce consistent explain outputs
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -192,4 +192,4 @@ FROM (
     )
 WHERE like(`explain`, '%Filter column:%');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

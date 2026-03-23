@@ -1,8 +1,8 @@
 -- Tags: no-encrypted-storage
 -- Tag: no-encrypted-storage: not support transactions
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE test_table
 (

@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Customers;
 
 CREATE TABLE Customers
 (
@@ -19,7 +19,7 @@ INSERT INTO Customers;
 --     '1.2.3',
 --     '1'
 -- ]
-SYSTEM DROP  TABLE IF EXISTS Versions;
+DROP TABLE IF EXISTS Versions;
 
 CREATE TABLE Versions
 (

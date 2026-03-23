@@ -1,6 +1,6 @@
 SET optimize_read_in_order = 1;
 
-SYSTEM DROP  TABLE IF EXISTS order_with_aggr;
+DROP TABLE IF EXISTS order_with_aggr;
 
 CREATE TABLE order_with_aggr
 (
@@ -16,4 +16,4 @@ SELECT sum(a) AS s
 FROM order_with_aggr
 ORDER BY s ASC;
 
-SYSTEM DROP  TABLE order_with_aggr;
+DROP TABLE order_with_aggr;

@@ -1,13 +1,13 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/65981
 SET allow_experimental_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS input;
+DROP TABLE IF EXISTS input;
 
-SYSTEM DROP  TABLE IF EXISTS deduplicate;
+DROP TABLE IF EXISTS deduplicate;
 
-SYSTEM DROP  TABLE IF EXISTS deduplicate_mv;
+DROP TABLE IF EXISTS deduplicate_mv;
 
-SYSTEM DROP  TABLE IF EXISTS event;
+DROP TABLE IF EXISTS event;
 
 CREATE TABLE input
 (

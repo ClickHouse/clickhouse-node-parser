@@ -4,7 +4,7 @@ SET compile_aggregate_expressions = 1;
 
 SET min_count_to_compile_aggregate_expression = 0;
 
-SYSTEM DROP  TABLE IF EXISTS lc_00906__fuzz_46;
+DROP TABLE IF EXISTS lc_00906__fuzz_46;
 
 CREATE TABLE lc_00906__fuzz_46
 (
@@ -28,4 +28,4 @@ SELECT
 FROM lc_00906__fuzz_46
 GROUP BY b;
 
-SYSTEM DROP  TABLE lc_00906__fuzz_46;
+DROP TABLE lc_00906__fuzz_46;

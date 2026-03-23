@@ -1,7 +1,7 @@
 -- Tags: long
 SET output_format_json_quote_64bit_integers = 0;
 
-SYSTEM drop  table if exists source;
+DROP TABLE IF EXISTS source;
 
 CREATE TABLE source
 (
@@ -11,7 +11,7 @@ ENGINE = Memory;
 
 INSERT INTO source;
 
-SYSTEM drop  table if exists test_compact_map_with_buckets;
+DROP TABLE IF EXISTS test_compact_map_with_buckets;
 
 CREATE TABLE test_compact_map_with_buckets
 (
@@ -100,9 +100,9 @@ SELECT
     json.`^a`
 FROM test_compact_map_with_buckets;
 
-SYSTEM drop  table test_compact_map_with_buckets;
+DROP TABLE test_compact_map_with_buckets;
 
-SYSTEM drop  table if exists test_compact_map_with_buckets_tuple;
+DROP TABLE IF EXISTS test_compact_map_with_buckets_tuple;
 
 CREATE TABLE test_compact_map_with_buckets_tuple
 (
@@ -168,9 +168,9 @@ SELECT
     json.data
 FROM test_compact_map_with_buckets_tuple;
 
-SYSTEM drop  table test_compact_map_with_buckets_tuple;
+DROP TABLE test_compact_map_with_buckets_tuple;
 
-SYSTEM drop  table if exists test_wide_map_with_buckets;
+DROP TABLE IF EXISTS test_wide_map_with_buckets;
 
 CREATE TABLE test_wide_map_with_buckets
 (
@@ -444,9 +444,9 @@ SELECT
 FROM test_wide_map_with_buckets
 SETTINGS max_block_size = 3;
 
-SYSTEM drop  table test_wide_map_with_buckets;
+DROP TABLE test_wide_map_with_buckets;
 
-SYSTEM drop  table if exists test_wide_map_with_buckets_tuple;
+DROP TABLE IF EXISTS test_wide_map_with_buckets_tuple;
 
 CREATE TABLE test_wide_map_with_buckets_tuple
 (
@@ -638,6 +638,6 @@ SELECT
 FROM test_wide_map_with_buckets_tuple
 SETTINGS max_block_size = 3;
 
-SYSTEM drop  table test_wide_map_with_buckets_tuple;
+DROP TABLE test_wide_map_with_buckets_tuple;
 
-SYSTEM drop  table source;
+DROP TABLE source;

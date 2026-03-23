@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tutorial;
+DROP TABLE IF EXISTS tutorial;
 
 CREATE TABLE tutorial
 (
@@ -12,4 +12,4 @@ FROM tutorial;
 
 INSERT INTO tutorial;
 
-SYSTEM DROP  TABLE tutorial;
+DROP TABLE tutorial;

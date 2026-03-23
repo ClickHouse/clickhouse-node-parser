@@ -1,6 +1,6 @@
 -- Tags: no-fasttest, no-ordinary-database
 -- Tests that multiple vector similarity indexes can be created on the same column (even if that makes no sense)
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -10,4 +10,4 @@ CREATE TABLE tab
     PRIMARY KEY(id)
 );
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

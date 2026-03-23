@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS float;
+DROP TABLE IF EXISTS float;
 
 CREATE TABLE float
 (
@@ -11,4 +11,4 @@ INSERT INTO float;
 SELECT *
 FROM float;
 
-SYSTEM DROP  TABLE float;
+DROP TABLE float;

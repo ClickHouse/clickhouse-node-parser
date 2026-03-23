@@ -9,4 +9,4 @@ SETTINGS old_parts_lifetime = 600;
 
 INSERT INTO data_02491;
 
-SYSTEM drop  table data_02491;
+DROP TABLE data_02491;

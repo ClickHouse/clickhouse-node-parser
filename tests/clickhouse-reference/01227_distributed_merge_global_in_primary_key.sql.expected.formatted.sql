@@ -1,13 +1,13 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/64211
-SYSTEM DROP  TABLE IF EXISTS test_merge;
+DROP TABLE IF EXISTS test_merge;
 
-SYSTEM DROP  TABLE IF EXISTS test_merge_distributed;
+DROP TABLE IF EXISTS test_merge_distributed;
 
-SYSTEM DROP  TABLE IF EXISTS test_distributed_merge;
+DROP TABLE IF EXISTS test_distributed_merge;
 
-SYSTEM DROP  TABLE IF EXISTS test_distributed;
+DROP TABLE IF EXISTS test_distributed;
 
-SYSTEM DROP  TABLE IF EXISTS test_local;
+DROP TABLE IF EXISTS test_local;
 
 CREATE TABLE test_local
 (
@@ -115,12 +115,12 @@ WHERE name GLOBAL IN (
         FROM remote('127.0.0.{1,2}', currentDatabase(), test_merge)
     );
 
-SYSTEM DROP  TABLE test_merge;
+DROP TABLE test_merge;
 
-SYSTEM DROP  TABLE test_merge_distributed;
+DROP TABLE test_merge_distributed;
 
-SYSTEM DROP  TABLE test_distributed_merge;
+DROP TABLE test_distributed_merge;
 
-SYSTEM DROP  TABLE test_distributed;
+DROP TABLE test_distributed;
 
-SYSTEM DROP  TABLE test_local;
+DROP TABLE test_local;

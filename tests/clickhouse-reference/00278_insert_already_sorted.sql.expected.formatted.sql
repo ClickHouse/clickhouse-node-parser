@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS sorted;
+DROP TABLE IF EXISTS sorted;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -29,4 +29,4 @@ INSERT INTO sorted (x) SELECT (if(intHash64(number) % 1000 = 0, 999, intDiv(numb
 FROM `system`.numbers
 LIMIT 1000000;
 
-SYSTEM DROP  TABLE sorted;
+DROP TABLE sorted;

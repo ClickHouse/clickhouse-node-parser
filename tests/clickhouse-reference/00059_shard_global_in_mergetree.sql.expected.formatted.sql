@@ -1,6 +1,6 @@
 -- Tags: shard
 -- test for #56790
-SYSTEM DROP  TABLE IF EXISTS test_local;
+DROP TABLE IF EXISTS test_local;
 
 CREATE TABLE test_local
 (
@@ -36,4 +36,4 @@ WHERE * IN (
 
 SET prefer_localhost_replica = 0;
 
-SYSTEM DROP  TABLE test_local;
+DROP TABLE test_local;

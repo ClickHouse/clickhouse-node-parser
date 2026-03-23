@@ -1,6 +1,6 @@
 -- Tags: zookeeper
 -- Check that settings are correctly passed through Distributed table
-SYSTEM DROP  TABLE IF EXISTS simple;
+DROP TABLE IF EXISTS simple;
 
 CREATE TABLE simple
 (
@@ -25,4 +25,4 @@ SELECT *
 FROM remote('127.0.0.2', currentDatabase(), 'simple')
 ORDER BY d ASC;
 
-SYSTEM DROP  TABLE simple;
+DROP TABLE simple;

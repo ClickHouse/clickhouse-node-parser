@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS data_a_02187;
+DROP TABLE IF EXISTS data_a_02187;
 
 CREATE TABLE data_a_02187
 (
@@ -115,4 +115,4 @@ SETTINGS
     output_format_write_statistics = '0',
     output_format_pretty_row_numbers = '1';
 
-SYSTEM DROP  TABLE data_a_02187;
+DROP TABLE data_a_02187;

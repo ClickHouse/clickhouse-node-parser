@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS memory;
+DROP TABLE IF EXISTS memory;
 
 CREATE TABLE memory
 (
@@ -22,4 +22,4 @@ SELECT *
 FROM memory
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE memory;
+DROP TABLE memory;

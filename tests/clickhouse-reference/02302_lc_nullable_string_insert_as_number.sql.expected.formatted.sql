@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS lc_nullable_string;
+DROP TABLE IF EXISTS lc_nullable_string;
 
 CREATE TABLE lc_nullable_string
 (
@@ -14,4 +14,4 @@ SELECT *
 FROM lc_nullable_string
 ORDER BY c1 ASC;
 
-SYSTEM DROP  TABLE lc_nullable_string;
+DROP TABLE lc_nullable_string;

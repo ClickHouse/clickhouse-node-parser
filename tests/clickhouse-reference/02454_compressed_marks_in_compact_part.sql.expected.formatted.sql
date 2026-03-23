@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists cc sync;
+DROP TABLE IF EXISTS cc;
 
 CREATE TABLE cc
 (

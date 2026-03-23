@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS agg_func_col;
+DROP TABLE IF EXISTS agg_func_col;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

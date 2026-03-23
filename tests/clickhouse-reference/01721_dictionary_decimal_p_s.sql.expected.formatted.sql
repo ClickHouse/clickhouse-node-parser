@@ -1,7 +1,7 @@
 -- Tags: no-parallel
-SYSTEM drop  table if exists table_decimal_dict;
+DROP TABLE IF EXISTS table_decimal_dict;
 
-SYSTEM drop  dictionary if exists decimal_dict;
+DROP DICTIONARY IF EXISTS decimal_dict;
 
 CREATE TABLE table_decimal_dict
 (

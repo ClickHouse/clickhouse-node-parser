@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists badFixedStringSort;
+DROP TABLE IF EXISTS badFixedStringSort;
 
 CREATE TABLE IF NOT EXISTS badFixedStringSort
 (

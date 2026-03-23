@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS compression_codec_on_alias;
+DROP TABLE IF EXISTS compression_codec_on_alias;
 
 CREATE TABLE compression_codec_on_alias
 (

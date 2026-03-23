@@ -1,10 +1,10 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
-SYSTEM DROP  TABLE IF EXISTS test1;
+DROP TABLE IF EXISTS test1;
 
-SYSTEM DROP  TABLE IF EXISTS test2;
+DROP TABLE IF EXISTS test2;
 
-SYSTEM DROP  TABLE IF EXISTS test3;
+DROP TABLE IF EXISTS test3;
 
 CREATE TABLE test1
 (
@@ -77,8 +77,8 @@ SETTINGS
     max_rows_to_read = 2,
     parallel_replicas_index_analysis_only_on_coordinator = 0;
 
-SYSTEM DROP  TABLE test1;
+DROP TABLE test1;
 
-SYSTEM DROP  TABLE test2;
+DROP TABLE test2;
 
-SYSTEM DROP  TABLE test3;
+DROP TABLE test3;

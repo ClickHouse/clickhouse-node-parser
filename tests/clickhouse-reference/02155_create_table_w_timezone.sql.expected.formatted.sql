@@ -10,6 +10,6 @@ CREATE TABLE t02155_t_tz
 )
 ENGINE = Memory;
 
-SYSTEM drop  table t02155_t64_tz;
+DROP TABLE t02155_t64_tz;
 
-SYSTEM drop  table t02155_t_tz;
+DROP TABLE t02155_t_tz;

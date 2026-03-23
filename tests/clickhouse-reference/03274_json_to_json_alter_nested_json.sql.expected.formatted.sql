@@ -2,7 +2,7 @@ SET enable_json_type = 1;
 
 SET output_format_native_write_json_as_string = 0;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -43,7 +43,7 @@ SELECT
 FROM test
 FORMAT JSONColumns;
 
-SYSTEM drop  table if exists test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test2
 (
@@ -108,10 +108,10 @@ FROM test4;
 SELECT arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.`k9[]`)))
 FROM test4;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
-SYSTEM drop  table test2;
+DROP TABLE test2;
 
-SYSTEM drop  table test3;
+DROP TABLE test3;
 
-SYSTEM drop  table test4;
+DROP TABLE test4;

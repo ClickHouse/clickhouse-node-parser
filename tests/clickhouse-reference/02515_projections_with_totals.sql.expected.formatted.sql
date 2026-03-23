@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -20,4 +20,4 @@ WITH TOTALS;
 
 SET optimize_aggregation_in_order = 1;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

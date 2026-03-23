@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists A1;
+DROP TABLE IF EXISTS A1;
 
-SYSTEM drop  table if exists A_M;
+DROP TABLE IF EXISTS A_M;
 
 CREATE TABLE A1
 (
@@ -28,6 +28,6 @@ SELECT arrayJoin([(1, 1)]).1
 FROM A1
 PREWHERE (1, 1).1 = 1;
 
-SYSTEM drop  table A1;
+DROP TABLE A1;
 
-SYSTEM drop  table A_M;
+DROP TABLE A_M;

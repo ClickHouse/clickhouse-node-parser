@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS partitions;
+DROP TABLE IF EXISTS partitions;
 
 CREATE TABLE partitions
 (
@@ -27,4 +27,4 @@ INSERT INTO partitions SELECT *
 FROM `system`.numbers
 LIMIT 2; -- { serverError TOO_MANY_PARTS }
 
-SYSTEM DROP  TABLE partitions;
+DROP TABLE partitions;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS arrays_test;
+DROP TABLE IF EXISTS arrays_test;
 
 CREATE TABLE arrays_test
 (

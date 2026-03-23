@@ -1,7 +1,7 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS t_local;
+DROP TABLE IF EXISTS t_local;
 
-SYSTEM DROP  TABLE IF EXISTS t_distr;
+DROP TABLE IF EXISTS t_distr;
 
 CREATE TABLE t_local
 (
@@ -23,6 +23,6 @@ SELECT *
 FROM t_distr
 WHERE a = 1;
 
-SYSTEM DROP  table t_local;
+DROP TABLE t_local;
 
-SYSTEM DROP  table t_distr;
+DROP TABLE t_distr;

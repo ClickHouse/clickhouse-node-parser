@@ -22,9 +22,9 @@ FROM (
             )
     );
 
-SYSTEM drop  table if exists lc_small_dict;
+DROP TABLE IF EXISTS lc_small_dict;
 
-SYSTEM drop  table if exists lc_big_dict;
+DROP TABLE IF EXISTS lc_big_dict;
 
 CREATE TABLE lc_small_dict
 (

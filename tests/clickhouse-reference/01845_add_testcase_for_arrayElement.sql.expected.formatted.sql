@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -10,7 +10,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY tuple();
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

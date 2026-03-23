@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS join_inner_table__fuzz_146_replicated;
+DROP TABLE IF EXISTS join_inner_table__fuzz_146_replicated;
 
 CREATE TABLE join_inner_table__fuzz_146_replicated
 (
@@ -22,4 +22,4 @@ SETTINGS
     enable_parallel_replicas = 1,
     inject_random_order_for_select_without_order_by = 1;
 
-SYSTEM DROP  TABLE join_inner_table__fuzz_146_replicated;
+DROP TABLE join_inner_table__fuzz_146_replicated;

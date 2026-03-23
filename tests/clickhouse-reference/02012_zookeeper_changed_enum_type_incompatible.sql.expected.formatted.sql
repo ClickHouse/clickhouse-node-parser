@@ -1,6 +1,6 @@
 -- Tags: zookeeper, no-replicated-database
 -- Tag no-replicated-database: Fails due to additional replicas or shards
-SYSTEM drop  table if exists enum_alter_issue;
+DROP TABLE IF EXISTS enum_alter_issue;
 
 CREATE TABLE enum_alter_issue
 (
@@ -15,4 +15,4 @@ INSERT INTO enum_alter_issue;
 SELECT *
 FROM enum_alter_issue;
 
-SYSTEM drop  table enum_alter_issue;
+DROP TABLE enum_alter_issue;

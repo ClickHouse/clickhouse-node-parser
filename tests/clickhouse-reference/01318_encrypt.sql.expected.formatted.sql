@@ -214,4 +214,4 @@ SELECT
     hex(encrypt(mode, input, key32, iv, 'AAD'))
 FROM encryption_test;
 
-SYSTEM DROP  TABLE encryption_test;
+DROP TABLE encryption_test;

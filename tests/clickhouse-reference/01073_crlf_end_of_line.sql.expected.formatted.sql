@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_01073_crlf_end_of_line;
+DROP TABLE IF EXISTS test_01073_crlf_end_of_line;
 
 CREATE TABLE test_01073_crlf_end_of_line
 (

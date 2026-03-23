@@ -1,8 +1,8 @@
 SET allow_suspicious_low_cardinality_types = 1, allow_experimental_dynamic_type = 1, allow_dynamic_type_in_join_keys = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t0
 (
@@ -29,6 +29,6 @@ FROM
 INNER JOIN t1
     ON t0.c0 = t1.c0;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;

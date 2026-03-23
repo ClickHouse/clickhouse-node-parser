@@ -1,6 +1,6 @@
 -- Tags: no-replicated-database
 -- no-replicated-database: It messes up the output and this test explicitly checks the replicated database
-SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};
+DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};
 
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier}
 ENGINE = Replicated('/clickhouse/03762_create_as_url_cluster/{database}_replicated', 'shard1', 'replica1')

@@ -1,7 +1,7 @@
 -- Tags: no-shared-catalog, no-parallel-replicas
 -- FIXME no-shared-catalog: STOP MERGES will only stop them on the current replica, the second one will continue to merge
 -- no-parallel-replicas: profile events may differ with parallel replicas.
-SYSTEM DROP  TABLE IF EXISTS t_lightweight_mut_7;
+DROP TABLE IF EXISTS t_lightweight_mut_7;
 
 SET apply_mutations_on_fly = 1;
 
@@ -49,4 +49,4 @@ WHERE current_database = currentDatabase()
     AND type = 'QueryFinish'
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE t_lightweight_mut_7;
+DROP TABLE t_lightweight_mut_7;

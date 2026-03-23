@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02898_parallel_replicas_final;
+DROP TABLE IF EXISTS `02898_parallel_replicas_final`;
 
 CREATE TABLE `02898_parallel_replicas_final`
 (
@@ -37,4 +37,4 @@ SETTINGS
     parallel_replicas_custom_key = 'cityHash64(y)',
     parallel_replicas_mode = 'custom_key_range';
 
-SYSTEM DROP  TABLE 02898_parallel_replicas_final;
+DROP TABLE `02898_parallel_replicas_final`;

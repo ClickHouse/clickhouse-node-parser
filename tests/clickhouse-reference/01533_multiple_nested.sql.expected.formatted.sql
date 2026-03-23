@@ -1,6 +1,6 @@
 -- Tags: no-object-storage, no-random-merge-tree-settings, no-parallel
 -- no-s3 because read FileOpen metric
-SYSTEM DROP  TABLE IF EXISTS nested;
+DROP TABLE IF EXISTS nested;
 
 SET flatten_nested = 0;
 
@@ -68,7 +68,7 @@ WHERE (type = 'QueryFinish')
     AND event_date >= yesterday()
     AND current_database = currentDatabase();
 
-SYSTEM DROP  TABLE nested;
+DROP TABLE nested;
 
 CREATE TABLE nested
 (

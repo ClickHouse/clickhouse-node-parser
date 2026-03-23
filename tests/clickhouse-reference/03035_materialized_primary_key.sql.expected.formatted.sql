@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -10,7 +10,7 @@ ORDER BY id;
 
 INSERT INTO test;
 
-SYSTEM DROP  VIEW IF EXISTS test_mv;
+DROP VIEW IF EXISTS test_mv;
 
 CREATE MATERIALIZED VIEW test_mv
 (
@@ -25,7 +25,7 @@ SELECT
     value
 FROM test;
 
-SYSTEM DROP  VIEW IF EXISTS test_mv_pk;
+DROP VIEW IF EXISTS test_mv_pk;
 
 CREATE MATERIALIZED VIEW test_mv_pk
 (

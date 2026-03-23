@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -23,4 +23,4 @@ SELECT
 FROM test_table
 SETTINGS optimize_aggregation_in_order = 1;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

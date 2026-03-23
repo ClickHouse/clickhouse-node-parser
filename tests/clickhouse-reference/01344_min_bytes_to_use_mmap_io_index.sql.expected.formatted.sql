@@ -1,5 +1,5 @@
 -- Tags: no-object-storage
-SYSTEM DROP  TABLE IF EXISTS test_01344;
+DROP TABLE IF EXISTS test_01344;
 
 CREATE TABLE test_01344
 (
@@ -27,4 +27,4 @@ WHERE current_database = currentDatabase()
 ORDER BY event_time DESC
 LIMIT 1;
 
-SYSTEM DROP  TABLE test_01344;
+DROP TABLE test_01344;

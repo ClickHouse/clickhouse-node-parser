@@ -1,6 +1,6 @@
 -- Tags: no-parallel
 -- (databases can be removed in background, so this test should not be run in parallel)
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -20,4 +20,4 @@ FROM merge(REGEXP('\0a'), '^t$'); -- { serverError UNKNOWN_IDENTIFIER }
 SELECT a
 FROM merge(REGEXP('\0a'), '^$'); -- { serverError CANNOT_EXTRACT_TABLE_STRUCTURE }
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

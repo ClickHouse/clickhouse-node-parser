@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mass_table_457;
+DROP TABLE IF EXISTS mass_table_457;
 
 CREATE TABLE mass_table_457
 (
@@ -15,4 +15,4 @@ LIMIT 10;
 SELECT *
 FROM mass_table_457;
 
-SYSTEM DROP  TABLE mass_table_457;
+DROP TABLE mass_table_457;

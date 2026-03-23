@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS unsorted;
+DROP TABLE IF EXISTS unsorted;
 
 CREATE TABLE unsorted
 (
@@ -18,9 +18,9 @@ INSERT INTO unsorted;
 SELECT *
 FROM unsorted;
 
-SYSTEM DROP  TABLE unsorted;
+DROP TABLE unsorted;
 
-SYSTEM DROP  TABLE IF EXISTS unsorted_replacing;
+DROP TABLE IF EXISTS unsorted_replacing;
 
 CREATE TABLE unsorted_replacing
 (
@@ -45,9 +45,9 @@ SELECT '---';
 SELECT *
 FROM unsorted_replacing;
 
-SYSTEM DROP  TABLE unsorted_replacing;
+DROP TABLE unsorted_replacing;
 
-SYSTEM DROP  TABLE IF EXISTS unsorted_collapsing;
+DROP TABLE IF EXISTS unsorted_collapsing;
 
 CREATE TABLE unsorted_collapsing
 (
@@ -70,4 +70,4 @@ FROM unsorted_collapsing FINAL;
 SELECT *
 FROM unsorted_collapsing;
 
-SYSTEM DROP  TABLE unsorted_collapsing;
+DROP TABLE unsorted_collapsing;

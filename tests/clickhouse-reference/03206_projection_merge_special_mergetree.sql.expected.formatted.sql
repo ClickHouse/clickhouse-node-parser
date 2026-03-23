@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tp;
+DROP TABLE IF EXISTS tp;
 
 -- test regular merge tree
 CREATE TABLE tp
@@ -18,7 +18,7 @@ INSERT INTO tp SELECT
     1
 FROM numbers(3);
 
-SYSTEM DROP  TABLE tp;
+DROP TABLE tp;
 
 CREATE TABLE tp
 (

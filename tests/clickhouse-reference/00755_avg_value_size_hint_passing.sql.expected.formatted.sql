@@ -1,5 +1,5 @@
 -- Tags: no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS size_hint;
+DROP TABLE IF EXISTS size_hint;
 
 CREATE TABLE size_hint
 (
@@ -23,4 +23,4 @@ SELECT
     sum(length(s))
 FROM size_hint;
 
-SYSTEM DROP  TABLE size_hint;
+DROP TABLE size_hint;

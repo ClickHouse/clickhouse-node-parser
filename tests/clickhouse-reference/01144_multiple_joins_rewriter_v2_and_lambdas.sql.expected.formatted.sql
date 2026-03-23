@@ -40,7 +40,7 @@ CROSS JOIN (
         SELECT 1 AS A
     ) AS check_single_query;
 
-SYSTEM drop  table if exists table;
+DROP TABLE IF EXISTS table;
 
 CREATE TABLE table
 (
@@ -121,4 +121,4 @@ CROSS JOIN (
         FROM table
     ) AS check_single_query;
 
-SYSTEM drop  table table;
+DROP TABLE table;

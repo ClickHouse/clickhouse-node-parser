@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -99,4 +99,4 @@ ORDER BY i ASC
 LIMIT 18
 OFFSET 5; -- 8 rows
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

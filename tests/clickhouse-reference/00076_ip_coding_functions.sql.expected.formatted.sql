@@ -48,7 +48,7 @@ SELECT IPv6StringToNum(materialize('not an ip string')) == toFixedString(materia
 SELECT hex(IPv4ToIPv6(1297626935));
 
 /* Тест с таблицей */
-SYSTEM DROP  TABLE IF EXISTS addresses;
+DROP TABLE IF EXISTS addresses;
 
 CREATE TABLE addresses
 (
@@ -215,4 +215,4 @@ SELECT cutIPv6(toFixedString(unhex(addr), 16), 0, 3)
 FROM addresses
 ORDER BY addr ASC;
 
-SYSTEM DROP  TABLE addresses;
+DROP TABLE addresses;

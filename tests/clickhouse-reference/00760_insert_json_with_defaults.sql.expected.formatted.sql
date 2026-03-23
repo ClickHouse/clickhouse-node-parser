@@ -1,7 +1,7 @@
 -- Tags: no-fasttest
 SET input_format_defaults_for_omitted_fields = 1;
 
-SYSTEM DROP  TABLE IF EXISTS defaults;
+DROP TABLE IF EXISTS defaults;
 
 CREATE TABLE defaults
 (
@@ -51,4 +51,4 @@ WHERE x > 7
 ORDER BY x ASC
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE defaults;
+DROP TABLE defaults;

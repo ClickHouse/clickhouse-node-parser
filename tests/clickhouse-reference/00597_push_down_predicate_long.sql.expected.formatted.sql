@@ -7,9 +7,9 @@ SET joined_subquery_requires_alias = 0;
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_00597;
+DROP TABLE IF EXISTS test_00597;
 
-SYSTEM DROP  TABLE IF EXISTS test_view_00597;
+DROP TABLE IF EXISTS test_view_00597;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

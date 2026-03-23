@@ -1,5 +1,5 @@
 -- Tags: no-replicated-database
-SYSTEM DROP  TABLE IF EXISTS index_test;
+DROP TABLE IF EXISTS index_test;
 
 CREATE TABLE index_test
 (
@@ -10,4 +10,4 @@ CREATE TABLE index_test
 ENGINE = MergeTree
 ORDER BY x;
 
-SYSTEM drop  table index_test;
+DROP TABLE index_test;

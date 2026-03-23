@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS test_insert_t1;
+DROP TABLE IF EXISTS test_insert_t1;
 
-SYSTEM DROP  TABLE IF EXISTS test_insert_t2;
+DROP TABLE IF EXISTS test_insert_t2;
 
-SYSTEM DROP  TABLE IF EXISTS test_insert_t3;
+DROP TABLE IF EXISTS test_insert_t3;
 
 CREATE TABLE test_insert_t1
 (
@@ -114,8 +114,8 @@ LEFT JOIN (
 SELECT count(*)
 FROM test_insert_t3;
 
-SYSTEM DROP  TABLE test_insert_t1;
+DROP TABLE test_insert_t1;
 
-SYSTEM DROP  TABLE test_insert_t2;
+DROP TABLE test_insert_t2;
 
-SYSTEM DROP  TABLE test_insert_t3;
+DROP TABLE test_insert_t3;

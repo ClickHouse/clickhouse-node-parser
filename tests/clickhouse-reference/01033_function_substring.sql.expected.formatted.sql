@@ -32,7 +32,7 @@ SELECT substring(toFixedString(toString(number), 4), 1 + number % 5, 1 + number 
 FROM `system`.numbers
 LIMIT 995, 10;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -76,7 +76,7 @@ SELECT
     substring(CAST('foo', 'Enum8(''foo'' = 1)'), 1, 1),
     substring(CAST('foo', 'Enum16(''foo'' = 1111)'), 1, 2);
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 SELECT substring('abc', number - 5)
 FROM `system`.numbers
@@ -180,7 +180,7 @@ SELECT substring(materialize(CAST('abcdefgh' AS FixedString(8))), -2, -1);
 
 SELECT substring(materialize(CAST('abcdefgh' AS FixedString(8))), materialize(-2), materialize(-1));
 
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (

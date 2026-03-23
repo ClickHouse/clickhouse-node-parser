@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists prewhere_column_missing;
+DROP TABLE IF EXISTS prewhere_column_missing;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -78,4 +78,4 @@ PREWHERE hash_x = intHash64(x)
     AND length(arr) = 0
     AND arraySum(arr) = 0;
 
-SYSTEM drop  table prewhere_column_missing;
+DROP TABLE prewhere_column_missing;

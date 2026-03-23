@@ -12,7 +12,7 @@
 --     'Apple', '', 'Skilled Manual', 'Bachelors', 28, 
 --     dynamic(null), 'why', 'Professional', 'Partial College', 38
 -- ]
-SYSTEM DROP  TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Customers;
 
 CREATE TABLE Customers
 (
@@ -26,7 +26,7 @@ ENGINE = Memory;
 
 INSERT INTO Customers;
 
-SYSTEM drop  table if exists EventLog;
+DROP TABLE IF EXISTS EventLog;
 
 CREATE TABLE EventLog
 (
@@ -37,7 +37,7 @@ ENGINE = Memory;
 
 INSERT INTO EventLog;
 
-SYSTEM drop  table if exists Dates;
+DROP TABLE IF EXISTS Dates;
 
 CREATE TABLE Dates
 (

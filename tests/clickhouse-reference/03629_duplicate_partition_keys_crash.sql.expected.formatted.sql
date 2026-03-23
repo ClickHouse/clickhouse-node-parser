@@ -1,6 +1,6 @@
 -- Test for issue #86540: Out of bounds access with duplicate partition keys
 -- This test verifies that duplicate partition field names don't cause crashes
-SYSTEM DROP  TABLE IF EXISTS test_duplicate_partition_keys;
+DROP TABLE IF EXISTS test_duplicate_partition_keys;
 
 -- Test case 1: Duplicate column names in partition expression
 CREATE TABLE test_duplicate_partition_keys
@@ -28,7 +28,7 @@ FROM test_duplicate_partition_keys
 WHERE c1 = 2
 ORDER BY c0 ASC;
 
-SYSTEM DROP  TABLE test_duplicate_partition_keys;
+DROP TABLE test_duplicate_partition_keys;
 
 -- Test case 2: More complex duplicate partition expression
 CREATE TABLE test_duplicate_partition_keys2
@@ -48,7 +48,7 @@ SELECT count()
 FROM test_duplicate_partition_keys2
 WHERE b = 10;
 
-SYSTEM DROP  TABLE test_duplicate_partition_keys2;
+DROP TABLE test_duplicate_partition_keys2;
 
 -- Test case 3: Simple table with duplicate keys in different positions
 CREATE TABLE test_triple_duplicate
@@ -67,7 +67,7 @@ SELECT count()
 FROM test_triple_duplicate
 WHERE x = 1;
 
-SYSTEM DROP  TABLE test_triple_duplicate;
+DROP TABLE test_triple_duplicate;
 
 -- Test case 4: Mixed expression duplicates with date functions
 CREATE TABLE test_mixed_duplicates
@@ -86,7 +86,7 @@ SELECT count()
 FROM test_mixed_duplicates
 WHERE id = 1;
 
-SYSTEM DROP  TABLE test_mixed_duplicates;
+DROP TABLE test_mixed_duplicates;
 
 -- Test case 5: Different data types with duplicates
 CREATE TABLE test_type_duplicates
@@ -105,7 +105,7 @@ SELECT count()
 FROM test_type_duplicates
 WHERE uint_col = 100;
 
-SYSTEM DROP  TABLE test_type_duplicates;
+DROP TABLE test_type_duplicates;
 
 -- Test case 6: Complex hash function duplicates
 CREATE TABLE test_hash_duplicates
@@ -123,7 +123,7 @@ SELECT count()
 FROM test_hash_duplicates
 WHERE data = 'sample1';
 
-SYSTEM DROP  TABLE test_hash_duplicates;
+DROP TABLE test_hash_duplicates;
 
 -- Test case 7: Extreme case - single field repeated many times
 CREATE TABLE test_extreme_repeats
@@ -140,7 +140,7 @@ SELECT count()
 FROM test_extreme_repeats
 WHERE x = 1;
 
-SYSTEM DROP  TABLE test_extreme_repeats;
+DROP TABLE test_extreme_repeats;
 
 -- Test case 8: Performance test with moderate data
 CREATE TABLE test_performance_duplicates
@@ -161,4 +161,4 @@ SELECT count()
 FROM test_performance_duplicates
 WHERE category = 5;
 
-SYSTEM DROP  TABLE test_performance_duplicates;
+DROP TABLE test_performance_duplicates;

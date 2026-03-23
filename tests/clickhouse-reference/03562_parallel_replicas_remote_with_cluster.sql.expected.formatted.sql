@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tt;
+DROP TABLE IF EXISTS tt;
 
 CREATE TABLE tt
 (
@@ -54,4 +54,4 @@ WHERE type = 'QueryFinish'
     )
 SETTINGS parallel_replicas_for_non_replicated_merge_tree = 0;
 
-SYSTEM DROP  TABLE tt;
+DROP TABLE tt;

@@ -5,7 +5,7 @@
 -- -----------------------------------------------------------------------------------
 -- Please keep this test in-sync with 02775_show_columns_called_from_clickhouse.expect
 -- -----------------------------------------------------------------------------------
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 SET allow_suspicious_low_cardinality_types = 1;
 
@@ -75,4 +75,4 @@ CREATE TABLE tab
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -10,4 +10,4 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY (id, dt, uuid);
 
-SYSTEM drop  table test;
+DROP TABLE test;

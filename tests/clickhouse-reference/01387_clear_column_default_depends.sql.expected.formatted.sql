@@ -1,6 +1,6 @@
 -- It's Ok to CLEAR column when there are columns with default expression depending on it.
 -- But it's not Ok to DROP such column.
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -18,7 +18,7 @@ ORDER BY
     x ASC,
     y ASC;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

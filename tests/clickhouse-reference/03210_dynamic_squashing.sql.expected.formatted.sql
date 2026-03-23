@@ -4,7 +4,7 @@ SET allow_experimental_dynamic_type = 1;
 
 SET max_block_size = 1000;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -22,7 +22,7 @@ SELECT DISTINCT
 FROM test
 ORDER BY type ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

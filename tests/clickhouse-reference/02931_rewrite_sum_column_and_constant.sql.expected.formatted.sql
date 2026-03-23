@@ -14,7 +14,7 @@ SELECT sum(1 - number)
 FROM numbers(10);
 
 -- { echoOff }
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (

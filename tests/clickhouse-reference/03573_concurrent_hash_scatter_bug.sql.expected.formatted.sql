@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_1;
+DROP TABLE IF EXISTS test_table_join_1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_2;
+DROP TABLE IF EXISTS test_table_join_2;
 
 CREATE TABLE test_table_join_1
 (

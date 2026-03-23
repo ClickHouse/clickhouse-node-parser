@@ -47,9 +47,9 @@ SELECT toTime('12:34:56', '+03:00'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT
 SELECT toTime64('12:34:56.789', 3, '+03:00'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 -- 7. Test for a table creation where columns are Time[64] with timezone
-SYSTEM DROP  TABLE IF EXISTS test_time;
+DROP TABLE IF EXISTS test_time;
 
-SYSTEM DROP  TABLE IF EXISTS test_time64;
+DROP TABLE IF EXISTS test_time64;
 
 CREATE TABLE test_time
 (

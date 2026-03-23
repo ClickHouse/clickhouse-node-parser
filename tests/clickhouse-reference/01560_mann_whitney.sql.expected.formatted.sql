@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mann_whitney_test;
+DROP TABLE IF EXISTS mann_whitney_test;
 
 CREATE TABLE mann_whitney_test
 (

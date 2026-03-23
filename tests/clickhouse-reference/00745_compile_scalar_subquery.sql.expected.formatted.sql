@@ -4,9 +4,9 @@ SET min_count_to_compile_expression = 1;
 
 SET optimize_move_to_prewhere = 0;
 
-SYSTEM DROP  TABLE IF EXISTS dt;
+DROP TABLE IF EXISTS dt;
 
-SYSTEM DROP  TABLE IF EXISTS testx;
+DROP TABLE IF EXISTS testx;
 
 CREATE TABLE dt
 (
@@ -35,6 +35,6 @@ WHERE NOT a
         FROM dt
     );
 
-SYSTEM DROP  TABLE dt;
+DROP TABLE dt;
 
 INSERT INTO dt;

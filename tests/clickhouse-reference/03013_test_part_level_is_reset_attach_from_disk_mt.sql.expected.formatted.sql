@@ -2,7 +2,7 @@
 SET alter_sync = 2;
 
 -- {echoOn}
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

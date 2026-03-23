@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nested;
+DROP TABLE IF EXISTS nested;
 
 CREATE TABLE nested
 (
@@ -34,4 +34,4 @@ FROM nested
 PREWHERE filter
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE nested;
+DROP TABLE nested;

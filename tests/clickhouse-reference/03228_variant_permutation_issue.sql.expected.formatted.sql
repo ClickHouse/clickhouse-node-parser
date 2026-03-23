@@ -1,6 +1,6 @@
 SET enable_json_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_new_json_type;
+DROP TABLE IF EXISTS test_new_json_type;
 
 CREATE TABLE test_new_json_type
 (
@@ -25,7 +25,7 @@ INSERT INTO test_new_json_type SELECT
 FROM test_new_json_type
 WHERE id = 2;
 
-SYSTEM DROP  TABLE test_new_json_type;
+DROP TABLE test_new_json_type;
 
 CREATE TABLE test_new_json_type
 (

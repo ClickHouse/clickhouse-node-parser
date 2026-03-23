@@ -1,6 +1,6 @@
 -- Test TTL GROUP BY with LowCardinality columns in SET expression
 -- This verifies the fix for type mismatch crash when using LowCardinality types
-SYSTEM DROP  TABLE IF EXISTS ttl_group_by__fuzz_13;
+DROP TABLE IF EXISTS ttl_group_by__fuzz_13;
 
 CREATE TABLE ttl_group_by__fuzz_13
 (
@@ -34,4 +34,4 @@ ORDER BY
     d ASC,
     v ASC;
 
-SYSTEM DROP  TABLE ttl_group_by__fuzz_13;
+DROP TABLE ttl_group_by__fuzz_13;

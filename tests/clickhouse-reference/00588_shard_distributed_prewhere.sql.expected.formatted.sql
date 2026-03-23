@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS mergetree_00588;
+DROP TABLE IF EXISTS mergetree_00588;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_00588;
+DROP TABLE IF EXISTS distributed_00588;
 
 CREATE TABLE mergetree_00588
 (
@@ -40,6 +40,6 @@ ORDER BY
     x ASC,
     s ASC;
 
-SYSTEM DROP  TABLE mergetree_00588;
+DROP TABLE mergetree_00588;
 
-SYSTEM DROP  TABLE distributed_00588;
+DROP TABLE distributed_00588;

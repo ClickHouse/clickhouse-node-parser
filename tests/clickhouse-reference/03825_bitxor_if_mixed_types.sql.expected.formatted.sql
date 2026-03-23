@@ -1,7 +1,7 @@
 -- Test for issue #70016
 -- bitXor with IF expression mixing Int32 and Int64
 -- This used to cause LOGICAL_ERROR: Arguments of 'bitXor' have incorrect data types
-SYSTEM DROP  TABLE IF EXISTS test_bitxor_if;
+DROP TABLE IF EXISTS test_bitxor_if;
 
 CREATE TABLE test_bitxor_if
 (
@@ -30,4 +30,4 @@ SELECT
 FROM test_bitxor_if
 LIMIT 1;
 
-SYSTEM DROP  TABLE test_bitxor_if;
+DROP TABLE test_bitxor_if;

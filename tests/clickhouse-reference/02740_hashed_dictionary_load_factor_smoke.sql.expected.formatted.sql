@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -11,7 +11,7 @@ SELECT
     number
 FROM numbers(1e5);
 
-SYSTEM DROP  TABLE IF EXISTS test_table_nullable;
+DROP TABLE IF EXISTS test_table_nullable;
 
 CREATE TABLE test_table_nullable
 (
@@ -24,7 +24,7 @@ SELECT
     if(number % 2 == 0, NULL, number)
 FROM numbers(1e5);
 
-SYSTEM DROP  TABLE IF EXISTS test_table_string;
+DROP TABLE IF EXISTS test_table_string;
 
 CREATE TABLE test_table_string
 (
@@ -37,7 +37,7 @@ SELECT
     number
 FROM numbers(1e5);
 
-SYSTEM DROP  TABLE IF EXISTS test_table_complex;
+DROP TABLE IF EXISTS test_table_complex;
 
 CREATE TABLE test_table_complex
 (
@@ -52,7 +52,7 @@ SELECT
     number
 FROM numbers(1e5);
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_sparse_dictionary_load_factor;
+DROP DICTIONARY IF EXISTS test_sparse_dictionary_load_factor;
 
 CREATE DICTIONARY test_sparse_dictionary_load_factor
 (
@@ -73,9 +73,9 @@ SELECT count()
 FROM test_table
 WHERE dictGet('test_sparse_dictionary_load_factor', 'value', key) != value;
 
-SYSTEM DROP  DICTIONARY test_sparse_dictionary_load_factor;
+DROP DICTIONARY test_sparse_dictionary_load_factor;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_load_factor;
+DROP DICTIONARY IF EXISTS test_dictionary_load_factor;
 
 CREATE DICTIONARY test_dictionary_load_factor
 (
@@ -96,9 +96,9 @@ SELECT count()
 FROM test_table
 WHERE dictGet('test_dictionary_load_factor', 'value', key) != value;
 
-SYSTEM DROP  DICTIONARY test_dictionary_load_factor;
+DROP DICTIONARY test_dictionary_load_factor;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_load_factor_nullable;
+DROP DICTIONARY IF EXISTS test_dictionary_load_factor_nullable;
 
 CREATE DICTIONARY test_dictionary_load_factor_nullable
 (
@@ -119,9 +119,9 @@ SELECT count()
 FROM test_table_nullable
 WHERE dictGet('test_dictionary_load_factor_nullable', 'value', key) != value;
 
-SYSTEM DROP  DICTIONARY test_dictionary_load_factor_nullable;
+DROP DICTIONARY test_dictionary_load_factor_nullable;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_complex_dictionary_load_factor;
+DROP DICTIONARY IF EXISTS test_complex_dictionary_load_factor;
 
 CREATE DICTIONARY test_complex_dictionary_load_factor
 (
@@ -143,9 +143,9 @@ SELECT count()
 FROM test_table_complex
 WHERE dictGet('test_complex_dictionary_load_factor', 'value', (key_1, key_2)) != value;
 
-SYSTEM DROP  DICTIONARY test_complex_dictionary_load_factor;
+DROP DICTIONARY test_complex_dictionary_load_factor;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_load_factor_string;
+DROP DICTIONARY IF EXISTS test_dictionary_load_factor_string;
 
 CREATE DICTIONARY test_dictionary_load_factor_string
 (
@@ -157,12 +157,12 @@ SOURCE(clickhouse(TABLE test_table_string))
 LIFETIME(0)
 LAYOUT(HASHED(MAX_LOAD_FACTOR 1));
 
-SYSTEM DROP  DICTIONARY test_dictionary_load_factor_string;
+DROP DICTIONARY test_dictionary_load_factor_string;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  TABLE test_table_nullable;
+DROP TABLE test_table_nullable;
 
-SYSTEM DROP  TABLE test_table_string;
+DROP TABLE test_table_string;
 
-SYSTEM DROP  TABLE test_table_complex;
+DROP TABLE test_table_complex;

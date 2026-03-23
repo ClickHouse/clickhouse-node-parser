@@ -1,9 +1,9 @@
 -- Prohibit PREWHERE when Merge and MergeTree has different default type of the column
-SYSTEM DROP  TABLE IF EXISTS m;
+DROP TABLE IF EXISTS m;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE m
 (

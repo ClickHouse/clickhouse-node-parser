@@ -1,6 +1,6 @@
 -- Tags: no-random-settings, no-random-merge-tree-settings, no-msan, no-tsan, no-asan, no-debug, no-object-storage
 -- small number of insert threads can make insert terribly slow, especially with some build like msan
-SYSTEM DROP  TABLE IF EXISTS mt;
+DROP TABLE IF EXISTS mt;
 
 CREATE TABLE mt
 (
@@ -22,4 +22,4 @@ SELECT
     sum(x)
 FROM mt;
 
-SYSTEM DROP  TABLE mt;
+DROP TABLE mt;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mt_01451;
+DROP TABLE IF EXISTS mt_01451;
 
 CREATE TABLE mt_01451
 (
@@ -31,4 +31,4 @@ WHERE table = 'mt_01451'
     AND active
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE mt_01451;
+DROP TABLE mt_01451;

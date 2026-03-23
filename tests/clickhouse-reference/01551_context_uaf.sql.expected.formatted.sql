@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS f;
+DROP TABLE IF EXISTS f;
 
-SYSTEM DROP  TABLE IF EXISTS v;
+DROP TABLE IF EXISTS v;
 
 CREATE TABLE f
 (
@@ -19,6 +19,6 @@ FROM v; -- was failing long time ago
 SELECT *
 FROM merge('', 'f'); -- was failing long time ago
 
-SYSTEM DROP  TABLE f;
+DROP TABLE f;
 
-SYSTEM DROP  TABLE v;
+DROP TABLE v;

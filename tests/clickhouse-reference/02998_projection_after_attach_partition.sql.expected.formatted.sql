@@ -1,7 +1,7 @@
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS visits_order;
+DROP TABLE IF EXISTS visits_order;
 
-SYSTEM DROP  TABLE IF EXISTS visits_order_dst;
+DROP TABLE IF EXISTS visits_order_dst;
 
 CREATE TABLE visits_order
 (

@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_tuple_filter;
+DROP TABLE IF EXISTS test_tuple_filter;
 
 CREATE TABLE test_tuple_filter
 (

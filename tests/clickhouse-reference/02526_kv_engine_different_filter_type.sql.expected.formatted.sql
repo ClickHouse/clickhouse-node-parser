@@ -1,7 +1,7 @@
 -- Tags: zookeeper, no-ordinary-database, use-rocksdb
-SYSTEM DROP  TABLE IF EXISTS 02526_keeper_map;
+DROP TABLE IF EXISTS `02526_keeper_map`;
 
-SYSTEM DROP  TABLE IF EXISTS 02526_rocksdb;
+DROP TABLE IF EXISTS `02526_rocksdb`;
 
 CREATE TABLE `02526_keeper_map`
 (
@@ -23,7 +23,7 @@ WHERE key IN (
     )
 FORMAT Null;
 
-SYSTEM DROP  TABLE 02526_keeper_map;
+DROP TABLE `02526_keeper_map`;
 
 CREATE TABLE `02526_rocksdb`
 (
@@ -45,4 +45,4 @@ WHERE key IN (
     )
 FORMAT Null;
 
-SYSTEM DROP  TABLE 02526_rocksdb;
+DROP TABLE `02526_rocksdb`;

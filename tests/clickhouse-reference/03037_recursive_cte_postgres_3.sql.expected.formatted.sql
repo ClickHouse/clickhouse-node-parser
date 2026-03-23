@@ -36,7 +36,7 @@ SET join_algorithm = 'hash';
 --
 -- different tree example
 --
-SYSTEM DROP  TABLE IF EXISTS tree;
+DROP TABLE IF EXISTS tree;
 
 CREATE TABLE tree
 (

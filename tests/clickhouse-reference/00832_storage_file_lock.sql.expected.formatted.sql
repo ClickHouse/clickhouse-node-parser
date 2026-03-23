@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS file;
+DROP TABLE IF EXISTS file;
 
 CREATE TABLE file
 (
@@ -11,4 +11,4 @@ FROM file; -- { serverError FILE_DOESNT_EXIST }
 
 INSERT INTO file;
 
-SYSTEM DROP  TABLE file;
+DROP TABLE file;

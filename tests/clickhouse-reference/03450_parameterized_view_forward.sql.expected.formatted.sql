@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS inner_view, outer_view_hardcoded_ok, outer_view_parameterized_ko;
+DROP TABLE IF EXISTS inner_view, outer_view_hardcoded_ok, outer_view_parameterized_ko;
 
 CREATE VIEW inner_view
 AS
@@ -20,4 +20,4 @@ FROM inner_view(inner_a = {a:Int32}, inner_b = {b:Int32});
 SELECT *
 FROM outer_view_parameterized_ko(a = 1, b = 2);
 
-SYSTEM DROP  TABLE inner_view, outer_view_hardcoded_ok, outer_view_parameterized_ko;
+DROP TABLE inner_view, outer_view_hardcoded_ok, outer_view_parameterized_ko;

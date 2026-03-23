@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS reserved_word_table;
+DROP TABLE IF EXISTS reserved_word_table;
 
 CREATE TABLE reserved_word_table
 (
@@ -7,4 +7,4 @@ CREATE TABLE reserved_word_table
 ENGINE = MergeTree
 ORDER BY index;
 
-SYSTEM DROP  TABLE reserved_word_table;
+DROP TABLE reserved_word_table;

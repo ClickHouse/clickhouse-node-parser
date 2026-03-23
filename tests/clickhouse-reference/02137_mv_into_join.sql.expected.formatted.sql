@@ -50,12 +50,12 @@ SELECT *
 FROM destination_join
 WHERE key IN (destination_set);
 
-SYSTEM DROP  TABLE mv_to_set;
+DROP TABLE mv_to_set;
 
-SYSTEM DROP  TABLE destination_set;
+DROP TABLE destination_set;
 
-SYSTEM DROP  TABLE mv_to_join;
+DROP TABLE mv_to_join;
 
-SYSTEM DROP  TABLE destination_join;
+DROP TABLE destination_join;
 
-SYSTEM DROP  TABLE main;
+DROP TABLE main;

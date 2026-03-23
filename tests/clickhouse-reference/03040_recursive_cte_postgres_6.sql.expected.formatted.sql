@@ -31,7 +31,7 @@
 -- { echoOn }
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS y;
+DROP TABLE IF EXISTS y;
 
 CREATE TABLE y
 (

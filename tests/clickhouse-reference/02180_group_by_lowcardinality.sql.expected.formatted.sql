@@ -30,4 +30,4 @@ SETTINGS
     group_by_overflow_mode = 'any'
 FORMAT JSONEachRow;
 
-SYSTEM drop  table if exists t_group_by_lowcardinality;
+DROP TABLE IF EXISTS t_group_by_lowcardinality;

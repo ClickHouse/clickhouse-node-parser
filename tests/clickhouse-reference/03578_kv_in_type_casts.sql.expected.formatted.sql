@@ -1,5 +1,5 @@
 -- Tags: no-fasttest, use-rocksdb
-SYSTEM DROP  TABLE IF EXISTS 03578_rocksdb;
+DROP TABLE IF EXISTS `03578_rocksdb`;
 
 CREATE TABLE IF NOT EXISTS `03578_rocksdb`
 (
@@ -96,9 +96,9 @@ WHERE current_database = currentDatabase()
     AND is_initial_query
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE 03578_rocksdb;
+DROP TABLE `03578_rocksdb`;
 
-SYSTEM DROP  TABLE IF EXISTS 03578_rocksdb_nullable;
+DROP TABLE IF EXISTS `03578_rocksdb_nullable`;
 
 CREATE TABLE IF NOT EXISTS `03578_rocksdb_nullable`
 (
@@ -163,9 +163,9 @@ WHERE current_database = currentDatabase()
     AND is_initial_query
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE 03578_rocksdb_nullable;
+DROP TABLE `03578_rocksdb_nullable`;
 
-SYSTEM DROP  TABLE IF EXISTS 03578_keepermap;
+DROP TABLE IF EXISTS `03578_keepermap`;
 
 CREATE TABLE IF NOT EXISTS `03578_keepermap`
 (
@@ -260,9 +260,9 @@ WHERE current_database = currentDatabase()
     AND is_initial_query
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE 03578_keepermap;
+DROP TABLE `03578_keepermap`;
 
-SYSTEM DROP  TABLE IF EXISTS 03578_keepermap_nullable;
+DROP TABLE IF EXISTS `03578_keepermap_nullable`;
 
 CREATE TABLE IF NOT EXISTS `03578_keepermap_nullable`
 (
@@ -327,4 +327,4 @@ WHERE current_database = currentDatabase()
     AND is_initial_query
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE 03578_keepermap_nullable;
+DROP TABLE `03578_keepermap_nullable`;

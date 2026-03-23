@@ -43,7 +43,7 @@ HAVING 1
 ORDER BY `ALL` ASC
 SETTINGS enable_optimize_predicate_expression = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE t2
 (

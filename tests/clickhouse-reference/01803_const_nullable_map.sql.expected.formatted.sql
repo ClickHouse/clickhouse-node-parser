@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_map_null;
+DROP TABLE IF EXISTS t_map_null;
 
 CREATE TABLE t_map_null
 (
@@ -14,4 +14,4 @@ SELECT count()
 FROM t_map_null
 WHERE a = map('name', NULL, '', NULL);
 
-SYSTEM DROP  TABLE t_map_null;
+DROP TABLE t_map_null;

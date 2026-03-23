@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM drop  table if exists lc_lambda;
+DROP TABLE IF EXISTS lc_lambda;
 
 CREATE TABLE lc_lambda
 (
@@ -15,7 +15,7 @@ LIMIT 10;
 SELECT arrayFilter(x -> x % 2 == 0, arr)
 FROM lc_lambda;
 
-SYSTEM drop  table if exists test_array;
+DROP TABLE IF EXISTS test_array;
 
 CREATE TABLE test_array
 (

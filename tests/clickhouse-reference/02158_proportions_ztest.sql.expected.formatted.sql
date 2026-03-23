@@ -1,6 +1,6 @@
 SELECT proportionsZTest(10, 11, 100, 101, 0.95, 'unpooled');
 
-SYSTEM DROP  TABLE IF EXISTS proportions_ztest;
+DROP TABLE IF EXISTS proportions_ztest;
 
 CREATE TABLE proportions_ztest
 (

@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -26,4 +26,4 @@ SETTINGS
     enable_analyzer = 1,
     enable_shared_storage_snapshot_in_query = 1;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

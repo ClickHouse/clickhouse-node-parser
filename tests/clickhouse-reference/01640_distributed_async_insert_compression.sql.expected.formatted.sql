@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS local;
+DROP TABLE IF EXISTS local;
 
-SYSTEM DROP  TABLE IF EXISTS distributed;
+DROP TABLE IF EXISTS distributed;
 
 CREATE TABLE local
 (
@@ -23,6 +23,6 @@ FROM local;
 SELECT count()
 FROM distributed;
 
-SYSTEM DROP  TABLE local;
+DROP TABLE local;
 
-SYSTEM DROP  TABLE distributed;
+DROP TABLE distributed;

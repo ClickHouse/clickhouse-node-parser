@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS null_before SYNC;
+DROP TABLE IF EXISTS null_before;
 
 CREATE TABLE null_before
 (

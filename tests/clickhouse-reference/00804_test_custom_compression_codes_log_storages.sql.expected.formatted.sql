@@ -3,7 +3,7 @@ SET send_logs_level = 'fatal';
 SET allow_suspicious_codecs = 1;
 
 -- copy-paste for storage log
-SYSTEM DROP  TABLE IF EXISTS compression_codec_log;
+DROP TABLE IF EXISTS compression_codec_log;
 
 CREATE TABLE compression_codec_log
 (
@@ -33,7 +33,7 @@ FROM compression_codec_log
 WHERE id = 2
 GROUP BY id;
 
-SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple_log;
+DROP TABLE IF EXISTS compression_codec_multiple_log;
 
 CREATE TABLE compression_codec_multiple_log
 (
@@ -71,7 +71,7 @@ SELECT sum(cityHash64(*))
 FROM compression_codec_multiple_log;
 
 -- copy-paste for storage tiny log
-SYSTEM DROP  TABLE IF EXISTS compression_codec_tiny_log;
+DROP TABLE IF EXISTS compression_codec_tiny_log;
 
 CREATE TABLE compression_codec_tiny_log
 (
@@ -101,7 +101,7 @@ FROM compression_codec_tiny_log
 WHERE id = 2
 GROUP BY id;
 
-SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple_tiny_log;
+DROP TABLE IF EXISTS compression_codec_multiple_tiny_log;
 
 CREATE TABLE compression_codec_multiple_tiny_log
 (
@@ -138,6 +138,6 @@ FROM compression_codec_multiple_tiny_log;
 SELECT sum(cityHash64(*))
 FROM compression_codec_multiple_tiny_log;
 
-SYSTEM DROP  TABLE compression_codec_multiple_log;
+DROP TABLE compression_codec_multiple_log;
 
-SYSTEM DROP  TABLE compression_codec_multiple_tiny_log;
+DROP TABLE compression_codec_multiple_tiny_log;

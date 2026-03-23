@@ -1,6 +1,6 @@
 SET optimize_use_projections = 1, force_optimize_projection = 1;
 
-SYSTEM drop  table if exists tp;
+DROP TABLE IF EXISTS tp;
 
 CREATE TABLE tp
 (
@@ -17,4 +17,4 @@ INSERT INTO tp SELECT
     1
 FROM numbers(300);
 
-SYSTEM drop  table tp;
+DROP TABLE tp;

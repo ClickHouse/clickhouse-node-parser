@@ -1,9 +1,9 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS partslost_0;
+DROP TABLE IF EXISTS partslost_0;
 
-SYSTEM DROP  TABLE IF EXISTS partslost_1;
+DROP TABLE IF EXISTS partslost_1;
 
-SYSTEM DROP  TABLE IF EXISTS partslost_2;
+DROP TABLE IF EXISTS partslost_2;
 
 CREATE TABLE partslost_0
 (

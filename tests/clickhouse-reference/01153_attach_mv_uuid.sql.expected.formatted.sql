@@ -1,9 +1,9 @@
 -- Tags: no-ordinary-database, no-parallel
-SYSTEM DROP  TABLE IF EXISTS src;
+DROP TABLE IF EXISTS src;
 
-SYSTEM DROP  TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS mv;
 
-SYSTEM DROP  TABLE IF EXISTS ".inner_id.e15f3ab5-6cae-4df3-b879-f40deafd82c2";
+DROP TABLE IF EXISTS `.inner_id.e15f3ab5-6cae-4df3-b879-f40deafd82c2`;
 
 CREATE TABLE src
 (
@@ -34,7 +34,7 @@ ORDER BY n ASC;
 
 INSERT INTO src;
 
-SYSTEM DROP  TABLE mv SYNC;
+DROP TABLE mv;
 
 SET database_replicated_allow_explicit_uuid = 3;
 
@@ -58,4 +58,4 @@ ENGINE = MergeTree
 ORDER BY n
 PARTITION BY n % 10;
 
-SYSTEM DROP  TABLE src;
+DROP TABLE src;

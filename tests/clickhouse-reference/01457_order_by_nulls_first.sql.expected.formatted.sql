@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists order_by_nulls_first;
+DROP TABLE IF EXISTS order_by_nulls_first;
 
 CREATE TABLE order_by_nulls_first
 (

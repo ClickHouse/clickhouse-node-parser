@@ -1,5 +1,5 @@
 -- Reported query
-SYSTEM drop  table if exists t_q1ht4gq_5;
+DROP TABLE IF EXISTS t_q1ht4gq_5;
 
 CREATE TABLE t_q1ht4gq_5
 (

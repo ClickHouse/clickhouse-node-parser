@@ -1,7 +1,7 @@
 -- Tags: no-object-storage, no-random-settings, no-parallel
 SET use_uncompressed_cache = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t_arr;
+DROP TABLE IF EXISTS t_arr;
 
 CREATE TABLE t_arr
 (
@@ -22,7 +22,7 @@ WHERE (type = 'QueryFinish')
     AND (like(lower(query), lower('SELECT a.size0 FROM %t_arr%')))
     AND current_database = currentDatabase();
 
-SYSTEM DROP  TABLE IF EXISTS t_tup;
+DROP TABLE IF EXISTS t_tup;
 
 CREATE TABLE t_tup
 (
@@ -46,7 +46,7 @@ WHERE (type = 'QueryFinish')
     AND (like(lower(query), lower('SELECT t._ FROM %t_tup%')))
     AND current_database = currentDatabase();
 
-SYSTEM DROP  TABLE IF EXISTS t_nul;
+DROP TABLE IF EXISTS t_nul;
 
 CREATE TABLE t_nul
 (
@@ -67,7 +67,7 @@ WHERE (type = 'QueryFinish')
     AND (like(lower(query), lower('SELECT n.null FROM %t_nul%')))
     AND current_database = currentDatabase();
 
-SYSTEM DROP  TABLE IF EXISTS t_map;
+DROP TABLE IF EXISTS t_map;
 
 CREATE TABLE t_map
 (
@@ -91,10 +91,10 @@ WHERE (type = 'QueryFinish')
     AND (like(lower(query), lower('SELECT m.% FROM %t_map%')))
     AND current_database = currentDatabase();
 
-SYSTEM DROP  TABLE t_arr;
+DROP TABLE t_arr;
 
-SYSTEM DROP  TABLE t_nul;
+DROP TABLE t_nul;
 
-SYSTEM DROP  TABLE t_tup;
+DROP TABLE t_tup;
 
-SYSTEM DROP  TABLE t_map;
+DROP TABLE t_map;

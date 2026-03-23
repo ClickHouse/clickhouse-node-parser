@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_3 SYNC;
+DROP TABLE IF EXISTS table_3;
 
 CREATE TABLE table_3
 (
@@ -25,4 +25,4 @@ SETTINGS
     cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
     parallel_replicas_local_plan = 1;
 
-SYSTEM DROP  TABLE table_3 SYNC;
+DROP TABLE table_3;

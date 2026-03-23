@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS date_datetime_key_condition;
+DROP TABLE IF EXISTS date_datetime_key_condition;
 
 CREATE TABLE date_datetime_key_condition
 (
@@ -56,4 +56,4 @@ FROM date_datetime_key_condition
 WHERE dt < toDate('2019-01-02')
     OR dt > toDate('2021-01-02');
 
-SYSTEM DROP  TABLE date_datetime_key_condition;
+DROP TABLE date_datetime_key_condition;

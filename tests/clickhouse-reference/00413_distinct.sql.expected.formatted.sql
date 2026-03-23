@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS distinct;
+DROP TABLE IF EXISTS `distinct`;
 
 CREATE TABLE `distinct`
 (

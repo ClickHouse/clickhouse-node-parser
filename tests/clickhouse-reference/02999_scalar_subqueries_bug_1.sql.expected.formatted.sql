@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t_table_select;
+DROP TABLE IF EXISTS t_table_select;
 
 CREATE TABLE t_table_select
 (

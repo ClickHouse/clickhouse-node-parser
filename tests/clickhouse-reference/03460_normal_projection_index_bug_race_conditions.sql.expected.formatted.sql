@@ -5,7 +5,7 @@ SET max_projection_rows_to_use_projection_index = 102400000;
 
 SET min_table_rows_to_use_projection_index = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

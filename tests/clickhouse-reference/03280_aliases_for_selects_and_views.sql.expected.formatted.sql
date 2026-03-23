@@ -32,7 +32,7 @@ FROM (
         FROM numbers(2)
     ) AS x (a, b); -- { serverError UNKNOWN_IDENTIFIER }
 
-SYSTEM DROP  VIEW IF EXISTS test_view_03280;
+DROP VIEW IF EXISTS test_view_03280;
 
 CREATE VIEW test_view_03280 (a, b)
 AS

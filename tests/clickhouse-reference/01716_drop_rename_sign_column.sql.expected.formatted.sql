@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS signed_table;
+DROP TABLE IF EXISTS signed_table;
 
 CREATE TABLE signed_table
 (

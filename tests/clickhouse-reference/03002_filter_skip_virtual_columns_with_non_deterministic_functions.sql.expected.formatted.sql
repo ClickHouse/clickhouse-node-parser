@@ -20,4 +20,4 @@ SELECT count() > 0
 FROM test
 WHERE RAND() > 4292390314;
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (
@@ -18,4 +18,4 @@ ORDER BY
     x + y ASC,
     s ASC;
 
-SYSTEM DROP  TABLE data;
+DROP TABLE data;

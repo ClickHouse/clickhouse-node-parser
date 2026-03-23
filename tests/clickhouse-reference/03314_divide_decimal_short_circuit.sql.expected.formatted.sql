@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 03314_divide_decimal_short_circuit;
+DROP TABLE IF EXISTS `03314_divide_decimal_short_circuit`;
 
 CREATE TABLE `03314_divide_decimal_short_circuit`
 (

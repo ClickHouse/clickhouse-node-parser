@@ -8,7 +8,7 @@ SELECT abs(NULL);
 
 SELECT NULL + NULL;
 
-SYSTEM DROP  TABLE IF EXISTS test1_00395;
+DROP TABLE IF EXISTS test1_00395;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -115,7 +115,7 @@ CREATE TABLE test1_00395
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE IF EXISTS test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test2
 (
@@ -625,4 +625,4 @@ ENGINE = TinyLog;
 
 INSERT INTO test1_00395 (col1, col2);
 
-SYSTEM DROP  TABLE test2;
+DROP TABLE test2;

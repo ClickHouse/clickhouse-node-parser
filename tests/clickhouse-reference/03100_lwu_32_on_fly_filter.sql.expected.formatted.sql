@@ -1,6 +1,6 @@
 SET enable_lightweight_update = 1;
 
-SYSTEM DROP  TABLE IF EXISTS lwu_on_fly;
+DROP TABLE IF EXISTS lwu_on_fly;
 
 CREATE TABLE lwu_on_fly
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02919_test_table_noarg;
+DROP TABLE IF EXISTS `02919_test_table_noarg`;
 
 CREATE TABLE `02919_test_table_noarg`
 (
@@ -14,7 +14,7 @@ FROM (
     );
 
 --
-SYSTEM DROP  TABLE IF EXISTS 02919_test_table_valid_args;
+DROP TABLE IF EXISTS `02919_test_table_valid_args`;
 
 CREATE TABLE `02919_test_table_valid_args`
 (
@@ -30,7 +30,7 @@ FROM (
     );
 
 --
-SYSTEM DROP  TABLE IF EXISTS 02919_test_table_reuse_args;
+DROP TABLE IF EXISTS `02919_test_table_reuse_args`;
 
 CREATE TABLE `02919_test_table_reuse_args`
 (
@@ -65,7 +65,7 @@ FROM (
     );
 
 --
-SYSTEM DROP  TABLE IF EXISTS 02919_test_table_invalid_col_type;
+DROP TABLE IF EXISTS `02919_test_table_invalid_col_type`;
 
 CREATE TABLE `02919_test_table_invalid_col_type`
 (
@@ -74,7 +74,7 @@ CREATE TABLE `02919_test_table_invalid_col_type`
 ENGINE = FuzzJSON('{"pet":"rat"}', NULL); -- { serverError BAD_ARGUMENTS }
 
 --
-SYSTEM DROP  TABLE IF EXISTS 02919_test_multi_col;
+DROP TABLE IF EXISTS `02919_test_multi_col`;
 
 CREATE TABLE `02919_test_multi_col`
 (

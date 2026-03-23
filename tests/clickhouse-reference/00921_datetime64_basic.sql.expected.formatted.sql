@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS A;
+DROP TABLE IF EXISTS A;
 
 SELECT CAST(1 AS DateTime64('abc')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Invalid scale parameter type
 
@@ -51,4 +51,4 @@ ORDER BY t ASC;
 
 SELECT toDateTime64('2019-09-16 19:20:11.234', 3, 'Europe/Minsk');
 
-SYSTEM DROP  TABLE A;
+DROP TABLE A;

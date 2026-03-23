@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -9,7 +9,7 @@ ENGINE = TinyLog;
 
 INSERT INTO test_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary;
+DROP DICTIONARY IF EXISTS test_dictionary;
 
 CREATE DICTIONARY test_dictionary
 (
@@ -26,6 +26,6 @@ SELECT dictHas('test_dictionary', toUInt64(0));
 
 SELECT dictHas('test_dictionary', toUInt64(1));
 
-SYSTEM DROP  DICTIONARY test_dictionary;
+DROP DICTIONARY test_dictionary;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

@@ -1,8 +1,8 @@
 -- Tags: no-parallel, no-fasttest, no-flaky-check, no-encrypted-storage
 -- Because we are creating a backup with fixed path.
-SYSTEM DROP  TABLE IF EXISTS t0 SYNC;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS t1 SYNC;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t0
 (

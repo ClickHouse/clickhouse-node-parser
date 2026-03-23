@@ -52,7 +52,7 @@ FROM (
         FROM numbers(20)
     );
 
-SYSTEM DROP  TABLE IF EXISTS `02919_ddsketch_quantile`;
+DROP TABLE IF EXISTS `02919_ddsketch_quantile`;
 
 CREATE TABLE `02919_ddsketch_quantile`
 ENGINE = Log AS

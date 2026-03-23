@@ -18,4 +18,4 @@ ORDER BY d::String ASC
 LIMIT 32213
 FORMAT Null;
 
-SYSTEM drop  table test;
+DROP TABLE test;

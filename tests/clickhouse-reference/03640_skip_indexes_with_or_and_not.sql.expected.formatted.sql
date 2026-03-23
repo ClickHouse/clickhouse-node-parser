@@ -4,7 +4,7 @@ SET use_skip_indexes = 1;
 
 SET use_skip_indexes_for_disjunctions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

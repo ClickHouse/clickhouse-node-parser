@@ -1,4 +1,4 @@
-SYSTEM DROP  DATABASE IF EXISTS 02988_ordinary;
+DROP DATABASE IF EXISTS `02988_ordinary`;
 
 SET send_logs_level = 'fatal';
 

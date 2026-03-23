@@ -1,5 +1,5 @@
 -- Tags: long
-SYSTEM DROP  TABLE IF EXISTS normal;
+DROP TABLE IF EXISTS normal;
 
 CREATE TABLE IF NOT EXISTS normal
 (
@@ -50,9 +50,9 @@ INSERT INTO normal SELECT
     number AS value
 FROM numbers(10100);
 
-SYSTEM DROP  TABLE normal;
+DROP TABLE normal;
 
-SYSTEM DROP  TABLE IF EXISTS agg;
+DROP TABLE IF EXISTS agg;
 
 CREATE TABLE agg
 (
@@ -95,9 +95,9 @@ INSERT INTO agg SELECT
     number AS value
 FROM numbers(200);
 
-SYSTEM DROP  TABLE agg;
+DROP TABLE agg;
 
-SYSTEM DROP  TABLE IF EXISTS x;
+DROP TABLE IF EXISTS x;
 
 CREATE TABLE x
 (

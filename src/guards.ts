@@ -329,6 +329,11 @@ export function isInsertStatement(node: ASTNode | undefined): node is ASTNodeKin
   return node !== undefined && node.kind === 'insert';
 }
 
+/** Type guard for {@link import('./ast').DropStatement | DropStatement} nodes. */
+export function isDropStatement(node: ASTNode | undefined): node is ASTNodeKindMap['drop'] {
+  return node !== undefined && node.kind === 'drop';
+}
+
 /** Type guard for {@link import('./ast').ColumnDef | ColumnDef} nodes. */
 export function isColumnDef(node: ASTNode | undefined): node is ASTNodeKindMap['columnDef'] {
   return node !== undefined && node.kind === 'columnDef';

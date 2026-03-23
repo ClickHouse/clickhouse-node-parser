@@ -19,7 +19,7 @@ SETTINGS allow_deprecated_snowflake_conversion_functions = 0; -- { serverError D
 SELECT snowflakeToDateTime64(123::Int64)
 SETTINGS allow_deprecated_snowflake_conversion_functions = 0; -- { serverError DEPRECATED_FUNCTION }
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -40,4 +40,4 @@ FROM tab
 WHERE snowflakeToDateTime64(42::Int64, tz) != now()
 SETTINGS allow_nonconst_timezone_arguments = 1;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,9 +1,9 @@
 -- Tags: no-parallel, no-fasttest
-SYSTEM DROP  DATABASE IF EXISTS database_for_dict;
+DROP DATABASE IF EXISTS database_for_dict;
 
 CREATE DATABASE database_for_dict;
 
-SYSTEM DROP  TABLE IF EXISTS database_for_dict.dict_source;
+DROP TABLE IF EXISTS database_for_dict.dict_source;
 
 CREATE TABLE database_for_dict.dict_source
 (
@@ -15,7 +15,7 @@ ENGINE = Memory;
 
 INSERT INTO database_for_dict.dict_source;
 
-SYSTEM DROP  DICTIONARY IF EXISTS database_for_dict.dictionary_with_hierarchy;
+DROP DICTIONARY IF EXISTS database_for_dict.dictionary_with_hierarchy;
 
 CREATE DICTIONARY database_for_dict.dictionary_with_hierarchy
 (
@@ -76,8 +76,8 @@ SOURCE(clickhouse(host 'localhost' port tcpPort() user 'default' db 'database_fo
 LIFETIME(MIN 1 MAX 1)
 LAYOUT(CACHE(SIZE_IN_CELLS 10));
 
-SYSTEM DROP  DICTIONARY database_for_dict.dictionary_with_hierarchy;
+DROP DICTIONARY database_for_dict.dictionary_with_hierarchy;
 
-SYSTEM DROP  TABLE database_for_dict.dict_source;
+DROP TABLE database_for_dict.dict_source;
 
-SYSTEM DROP  DATABASE database_for_dict;
+DROP DATABASE database_for_dict;

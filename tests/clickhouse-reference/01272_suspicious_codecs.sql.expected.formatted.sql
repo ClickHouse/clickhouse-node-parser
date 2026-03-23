@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS codecs;
+DROP TABLE IF EXISTS codecs;
 
 CREATE TABLE codecs
 (
@@ -15,7 +15,7 @@ CREATE TABLE codecs
 ENGINE = MergeTree
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE codecs;
+DROP TABLE codecs;
 
 -- test what should not work
 CREATE TABLE codecs
@@ -110,27 +110,27 @@ ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 
 -- test that sanity check is not performed in ATTACH query
-SYSTEM DROP  TABLE IF EXISTS codecs1;
+DROP TABLE IF EXISTS codecs1;
 
-SYSTEM DROP  TABLE IF EXISTS codecs2;
+DROP TABLE IF EXISTS codecs2;
 
-SYSTEM DROP  TABLE IF EXISTS codecs3;
+DROP TABLE IF EXISTS codecs3;
 
-SYSTEM DROP  TABLE IF EXISTS codecs4;
+DROP TABLE IF EXISTS codecs4;
 
-SYSTEM DROP  TABLE IF EXISTS codecs5;
+DROP TABLE IF EXISTS codecs5;
 
-SYSTEM DROP  TABLE IF EXISTS codecs6;
+DROP TABLE IF EXISTS codecs6;
 
-SYSTEM DROP  TABLE IF EXISTS codecs7;
+DROP TABLE IF EXISTS codecs7;
 
-SYSTEM DROP  TABLE IF EXISTS codecs8;
+DROP TABLE IF EXISTS codecs8;
 
-SYSTEM DROP  TABLE IF EXISTS codecs9;
+DROP TABLE IF EXISTS codecs9;
 
-SYSTEM DROP  TABLE IF EXISTS codecs10;
+DROP TABLE IF EXISTS codecs10;
 
-SYSTEM DROP  TABLE IF EXISTS codecs11;
+DROP TABLE IF EXISTS codecs11;
 
 SET allow_suspicious_codecs = 1;
 
@@ -246,24 +246,24 @@ FROM codecs10;
 SELECT *
 FROM codecs11;
 
-SYSTEM DROP  TABLE codecs1;
+DROP TABLE codecs1;
 
-SYSTEM DROP  TABLE codecs2;
+DROP TABLE codecs2;
 
-SYSTEM DROP  TABLE codecs3;
+DROP TABLE codecs3;
 
-SYSTEM DROP  TABLE codecs4;
+DROP TABLE codecs4;
 
-SYSTEM DROP  TABLE codecs5;
+DROP TABLE codecs5;
 
-SYSTEM DROP  TABLE codecs6;
+DROP TABLE codecs6;
 
-SYSTEM DROP  TABLE codecs7;
+DROP TABLE codecs7;
 
-SYSTEM DROP  TABLE codecs8;
+DROP TABLE codecs8;
 
-SYSTEM DROP  TABLE codecs9;
+DROP TABLE codecs9;
 
-SYSTEM DROP  TABLE codecs10;
+DROP TABLE codecs10;
 
-SYSTEM DROP  TABLE codecs11;
+DROP TABLE codecs11;

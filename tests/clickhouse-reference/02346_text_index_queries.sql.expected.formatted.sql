@@ -9,7 +9,7 @@ SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injectio
 -- Affects the number of read rows.
 SET use_skip_indexes_on_data_read = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -76,7 +76,7 @@ WHERE query_kind = 'Select'
     AND result_rows == 4
 LIMIT 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab_x;
+DROP TABLE IF EXISTS tab_x;
 
 CREATE TABLE tab_x
 (

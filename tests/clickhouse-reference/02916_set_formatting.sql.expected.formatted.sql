@@ -2,9 +2,9 @@ SELECT formatQuerySingleLine('set additional_table_filters = {''kjsnckjn'': ''ks
 
 SELECT formatQuerySingleLine('SELECT v FROM t1 SETTINGS additional_table_filters = {''default.t1'': ''s''}');
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  VIEW IF EXISTS v1;
+DROP VIEW IF EXISTS v1;
 
 CREATE TABLE t1
 (
@@ -20,6 +20,6 @@ SELECT v
 FROM t1
 SETTINGS additional_table_filters = map('default.t1', 's != ''s1%''');
 
-SYSTEM DROP  VIEW v1;
+DROP VIEW v1;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;

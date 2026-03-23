@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS decimal;
+DROP TABLE IF EXISTS decimal;
 
 CREATE TABLE IF NOT EXISTS decimal
 (
@@ -24,4 +24,4 @@ SELECT
 FROM decimal
 LIMIT 1;
 
-SYSTEM DROP  TABLE decimal;
+DROP TABLE decimal;

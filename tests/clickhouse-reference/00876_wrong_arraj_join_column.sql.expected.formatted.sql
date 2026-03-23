@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS visits;
+DROP TABLE IF EXISTS visits;
 
 CREATE TABLE visits
 (
@@ -13,4 +13,4 @@ FROM
 ARRAY JOIN arrayFilter(t -> 1, arrayMap(x -> tuple(x), [42])) AS i
 WHERE ((str, i.1) IN ('x', 0));
 
-SYSTEM DROP  TABLE visits;
+DROP TABLE visits;

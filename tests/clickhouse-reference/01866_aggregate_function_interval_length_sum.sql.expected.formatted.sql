@@ -1,10 +1,10 @@
-SYSTEM DROP  TABLE IF EXISTS interval;
+DROP TABLE IF EXISTS `interval`;
 
-SYSTEM DROP  TABLE IF EXISTS fl_interval;
+DROP TABLE IF EXISTS fl_interval;
 
-SYSTEM DROP  TABLE IF EXISTS dt_interval;
+DROP TABLE IF EXISTS dt_interval;
 
-SYSTEM DROP  TABLE IF EXISTS date_interval;
+DROP TABLE IF EXISTS date_interval;
 
 CREATE TABLE `interval`
 (
@@ -83,10 +83,10 @@ FROM date_interval
 GROUP BY id
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE interval;
+DROP TABLE `interval`;
 
-SYSTEM DROP  TABLE fl_interval;
+DROP TABLE fl_interval;
 
-SYSTEM DROP  TABLE dt_interval;
+DROP TABLE dt_interval;
 
-SYSTEM DROP  TABLE date_interval;
+DROP TABLE date_interval;

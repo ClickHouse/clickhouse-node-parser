@@ -1,7 +1,7 @@
 -- Tags: no-ordinary-database
 -- Tests that various conditions are checked during creation of 'ssd_cache' and 'complex_key_ssd_cache' dictionaries
 -- Github issue #78314
-SYSTEM DROP  DICTIONARY IF EXISTS dict;
+DROP DICTIONARY IF EXISTS dict;
 
 CREATE DICTIONARY dict
 (

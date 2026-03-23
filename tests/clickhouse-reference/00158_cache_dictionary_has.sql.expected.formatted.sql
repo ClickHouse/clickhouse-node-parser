@@ -1,5 +1,5 @@
 -- Tags: stateful
-SYSTEM DROP  DICTIONARY IF EXISTS cache_hits;
+DROP DICTIONARY IF EXISTS cache_hits;
 
 CREATE DICTIONARY cache_hits
 (

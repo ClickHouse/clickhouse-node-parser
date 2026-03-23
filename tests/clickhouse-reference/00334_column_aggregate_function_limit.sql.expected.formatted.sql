@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ontime;
+DROP TABLE IF EXISTS ontime;
 
 CREATE TABLE ontime
 (
@@ -23,4 +23,4 @@ FROM (
         LIMIT 1
     );
 
-SYSTEM DROP  TABLE ontime;
+DROP TABLE ontime;

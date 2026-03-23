@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_map_with_key_integer;
+DROP TABLE IF EXISTS table_map_with_key_integer;
 
 CREATE TABLE table_map_with_key_integer
 (

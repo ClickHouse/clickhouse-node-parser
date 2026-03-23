@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -32,9 +32,9 @@ INNER JOIN (
 ORDER BY s ASC
 SETTINGS optimize_use_projections = 0;
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table if exists mt;
+DROP TABLE IF EXISTS mt;
 
 CREATE TABLE mt
 (
@@ -82,9 +82,9 @@ INNER JOIN (
 ORDER BY id1 ASC
 SETTINGS optimize_use_projections = 1;
 
-SYSTEM drop  table mt;
+DROP TABLE mt;
 
-SYSTEM drop  table if exists j;
+DROP TABLE IF EXISTS j;
 
 CREATE TABLE j
 (
@@ -124,4 +124,4 @@ WHERE id2 IN (2, 3, 4)
 ORDER BY id1 ASC
 SETTINGS optimize_use_projections = 1;
 
-SYSTEM drop  table j;
+DROP TABLE j;

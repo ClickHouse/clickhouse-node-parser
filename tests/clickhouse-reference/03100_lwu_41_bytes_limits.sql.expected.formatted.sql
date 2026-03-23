@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_bytes_limits;
+DROP TABLE IF EXISTS t_lwu_bytes_limits;
 
 CREATE TABLE t_lwu_bytes_limits
 (
@@ -21,7 +21,7 @@ FROM t_lwu_bytes_limits
 WHERE s = 'foo'
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_lwu_bytes_limits;
+DROP TABLE t_lwu_bytes_limits;
 
 CREATE TABLE t_lwu_bytes_limits
 (

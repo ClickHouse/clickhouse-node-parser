@@ -1,5 +1,5 @@
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS test_has_skip_minmax;
+DROP TABLE IF EXISTS test_has_skip_minmax;
 
 CREATE TABLE test_has_skip_minmax
 (
@@ -26,7 +26,7 @@ SELECT count()
 FROM test_has_skip_minmax
 WHERE key_col IN ([5432, 7432, 9999]);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_skip_set;
+DROP TABLE IF EXISTS test_has_skip_set;
 
 CREATE TABLE test_has_skip_set
 (
@@ -51,7 +51,7 @@ SELECT count()
 FROM test_has_skip_set
 WHERE user_id IN (10, 20, 30);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_skip_bloom;
+DROP TABLE IF EXISTS test_has_skip_bloom;
 
 CREATE TABLE test_has_skip_bloom
 (

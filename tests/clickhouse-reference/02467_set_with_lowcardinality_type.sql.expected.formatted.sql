@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/42460
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_nullable_index__fuzz_0;
+DROP TABLE IF EXISTS bloom_filter_nullable_index__fuzz_0;
 
 CREATE TABLE bloom_filter_nullable_index__fuzz_0
 (
@@ -15,7 +15,7 @@ INSERT INTO bloom_filter_nullable_index__fuzz_0;
 
 INSERT INTO bloom_filter_nullable_index__fuzz_0;
 
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_nullable_index__fuzz_1;
+DROP TABLE IF EXISTS bloom_filter_nullable_index__fuzz_1;
 
 CREATE TABLE bloom_filter_nullable_index__fuzz_1
 (
@@ -27,7 +27,7 @@ ENGINE = MergeTree
 ORDER BY order_key
 SETTINGS index_granularity = 6, index_granularity_bytes = '10Mi';
 
-SYSTEM DROP  TABLE IF EXISTS nullable_string_value__fuzz_2;
+DROP TABLE IF EXISTS nullable_string_value__fuzz_2;
 
 CREATE TABLE nullable_string_value__fuzz_2
 (

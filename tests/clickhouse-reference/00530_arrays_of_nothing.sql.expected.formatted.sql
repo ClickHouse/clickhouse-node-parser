@@ -10,7 +10,7 @@ SELECT
     arrayPushBack([], 1),
     arrayPushFront([[]], []);
 
-SYSTEM DROP  TABLE IF EXISTS arr;
+DROP TABLE IF EXISTS arr;
 
 CREATE TABLE arr
 (
@@ -28,4 +28,4 @@ INSERT INTO arr SELECT
 SELECT *
 FROM arr;
 
-SYSTEM DROP  TABLE arr;
+DROP TABLE arr;

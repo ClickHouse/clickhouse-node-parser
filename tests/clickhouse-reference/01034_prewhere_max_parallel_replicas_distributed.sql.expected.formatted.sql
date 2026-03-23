@@ -1,5 +1,5 @@
 -- Tags: replica, distributed
-SYSTEM drop  table if exists test_max_parallel_replicas_lr;
+DROP TABLE IF EXISTS test_max_parallel_replicas_lr;
 
 -- If you wonder why the table is named with "_lr" suffix in this test.
 -- No reason. Actually it is the name of the table in our customer and they provided this test case for us.
@@ -29,4 +29,4 @@ SELECT count()
 FROM remote('127.0.0.{2|3}', currentDatabase(), test_max_parallel_replicas_lr)
 PREWHERE timestamp > 0;
 
-SYSTEM drop  table test_max_parallel_replicas_lr;
+DROP TABLE test_max_parallel_replicas_lr;

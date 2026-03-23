@@ -156,11 +156,11 @@ ORDER BY
     val_right ASC;
 
 -- distributed tables
-SYSTEM drop  table if exists left_table;
+DROP TABLE IF EXISTS left_table;
 
-SYSTEM drop  table if exists middle_table;
+DROP TABLE IF EXISTS middle_table;
 
-SYSTEM drop  table if exists right_table;
+DROP TABLE IF EXISTS right_table;
 
 CREATE TABLE IF NOT EXISTS right_table_local
 (
@@ -203,13 +203,13 @@ ORDER BY
 SET prefer_localhost_replica = 1;
 
 -- Quite exotic with Merge engine
-SYSTEM DROP  TABLE IF EXISTS table_to_merge_a;
+DROP TABLE IF EXISTS table_to_merge_a;
 
-SYSTEM DROP  TABLE IF EXISTS table_to_merge_b;
+DROP TABLE IF EXISTS table_to_merge_b;
 
-SYSTEM DROP  TABLE IF EXISTS table_to_merge_c;
+DROP TABLE IF EXISTS table_to_merge_c;
 
-SYSTEM DROP  TABLE IF EXISTS merge_table;
+DROP TABLE IF EXISTS merge_table;
 
 CREATE TABLE IF NOT EXISTS table_to_merge_a
 (

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists x;
+DROP TABLE IF EXISTS x;
 
 CREATE TABLE x
 ENGINE = MergeTree
@@ -31,7 +31,7 @@ SET allow_experimental_nullable_tuple_type = 1;
 
 SET allow_experimental_nullable_tuple_type = DEFAULT;
 
-SYSTEM drop  table x;
+DROP TABLE x;
 
 CREATE TABLE x
 (

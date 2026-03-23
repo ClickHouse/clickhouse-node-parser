@@ -1,6 +1,6 @@
 -- Tags: no-parallel
 -- modified from test_01155_ordinary, to test special optimization path for virtual row
-SYSTEM DROP  DATABASE IF EXISTS test_03031;
+DROP DATABASE IF EXISTS test_03031;
 
 CREATE DATABASE test_03031;
 
@@ -31,8 +31,8 @@ ORDER BY
     _table ASC,
     s ASC;
 
-SYSTEM DROP  TABLE src;
+DROP TABLE src;
 
-SYSTEM DROP  TABLE dist;
+DROP TABLE dist;
 
-SYSTEM DROP  DATABASE test_03031;
+DROP DATABASE test_03031;

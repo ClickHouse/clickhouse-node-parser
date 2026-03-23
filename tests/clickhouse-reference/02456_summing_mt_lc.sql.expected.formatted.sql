@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_summing_lc;
+DROP TABLE IF EXISTS t_summing_lc;
 
 CREATE TABLE t_summing_lc
 (
@@ -18,4 +18,4 @@ SELECT *
 FROM t_summing_lc
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE t_summing_lc;
+DROP TABLE t_summing_lc;

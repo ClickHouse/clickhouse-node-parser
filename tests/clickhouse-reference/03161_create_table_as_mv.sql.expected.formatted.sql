@@ -1,14 +1,14 @@
-SYSTEM DROP  TABLE IF EXISTS base_table;
+DROP TABLE IF EXISTS base_table;
 
-SYSTEM DROP  TABLE IF EXISTS target_table;
+DROP TABLE IF EXISTS target_table;
 
-SYSTEM DROP  TABLE IF EXISTS mv_from_base_to_target;
+DROP TABLE IF EXISTS mv_from_base_to_target;
 
-SYSTEM DROP  TABLE IF EXISTS mv_with_storage;
+DROP TABLE IF EXISTS mv_with_storage;
 
-SYSTEM DROP  TABLE IF EXISTS other_table_1;
+DROP TABLE IF EXISTS other_table_1;
 
-SYSTEM DROP  TABLE IF EXISTS other_table_2;
+DROP TABLE IF EXISTS other_table_2;
 
 CREATE TABLE base_table
 (

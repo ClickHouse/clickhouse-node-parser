@@ -1,10 +1,10 @@
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_flat;
+DROP DICTIONARY IF EXISTS dict_flat;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_hashed;
+DROP DICTIONARY IF EXISTS dict_hashed;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_complex_cache;
+DROP DICTIONARY IF EXISTS dict_complex_cache;
 
 CREATE TABLE t1
 (
@@ -314,10 +314,10 @@ SET join_algorithm = 'auto';
 
 SET join_algorithm = 'partial_merge';
 
-SYSTEM DROP  DICTIONARY dict_flat;
+DROP DICTIONARY dict_flat;
 
-SYSTEM DROP  DICTIONARY dict_hashed;
+DROP DICTIONARY dict_hashed;
 
-SYSTEM DROP  DICTIONARY dict_complex_cache;
+DROP DICTIONARY dict_complex_cache;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;

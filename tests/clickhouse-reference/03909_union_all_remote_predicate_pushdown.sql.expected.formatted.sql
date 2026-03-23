@@ -1,7 +1,7 @@
 -- Regression test for https://github.com/ClickHouse/ClickHouse/issues/81636
 -- UNION ALL with remote() and an outer WHERE clause should not fail with
 -- UNKNOWN_DATABASE when predicate pushdown tries to resolve the remote database locally.
-SYSTEM DROP  TABLE IF EXISTS t_union_remote;
+DROP TABLE IF EXISTS t_union_remote;
 
 CREATE TABLE t_union_remote
 (
@@ -22,4 +22,4 @@ FROM (
     )
 WHERE key = 1;
 
-SYSTEM DROP  TABLE t_union_remote;
+DROP TABLE t_union_remote;

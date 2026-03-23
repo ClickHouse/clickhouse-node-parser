@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -50,4 +50,4 @@ WHERE current_database = currentDatabase()
     AND `Settings`['force_optimize_projection_name'] = 'projection_name'
     AND type = 'ExceptionBeforeStart';
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

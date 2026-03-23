@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS Bin_at_test;
+DROP TABLE IF EXISTS Bin_at_test;
 
 CREATE TABLE Bin_at_test
 (

@@ -1,7 +1,7 @@
 -- Tags: long
 SET max_rows_to_read = '55M';
 
-SYSTEM DROP  TABLE IF EXISTS group_uniq_arr_int;
+DROP TABLE IF EXISTS group_uniq_arr_int;
 
 CREATE TABLE group_uniq_arr_int
 ENGINE = Memory AS

@@ -39,4 +39,4 @@ ORDER BY
     part_name ASC,
     event_type ASC;
 
-SYSTEM DROP  TABLE part_log_bytes_uncompressed;
+DROP TABLE part_log_bytes_uncompressed;

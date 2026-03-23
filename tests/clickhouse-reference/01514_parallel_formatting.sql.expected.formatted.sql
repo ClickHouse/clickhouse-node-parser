@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tsv;
+DROP TABLE IF EXISTS tsv;
 
 SET output_format_parallel_formatting = 1;
 
@@ -19,4 +19,4 @@ FROM numbers(10000000);
 SELECT count()
 FROM tsv;
 
-SYSTEM drop  table tsv;
+DROP TABLE tsv;

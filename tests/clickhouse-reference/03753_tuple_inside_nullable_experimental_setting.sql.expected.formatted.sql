@@ -1,7 +1,7 @@
 -- { echoOn }
 SET allow_experimental_nullable_tuple_type = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (

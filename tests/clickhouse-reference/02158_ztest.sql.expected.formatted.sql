@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mean_ztest;
+DROP TABLE IF EXISTS mean_ztest;
 
 CREATE TABLE mean_ztest
 (

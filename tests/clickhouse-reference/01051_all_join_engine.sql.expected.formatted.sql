@@ -1,12 +1,12 @@
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS left_join;
+DROP TABLE IF EXISTS left_join;
 
-SYSTEM DROP  TABLE IF EXISTS inner_join;
+DROP TABLE IF EXISTS inner_join;
 
-SYSTEM DROP  TABLE IF EXISTS right_join;
+DROP TABLE IF EXISTS right_join;
 
-SYSTEM DROP  TABLE IF EXISTS full_join;
+DROP TABLE IF EXISTS full_join;
 
 CREATE TABLE t1
 (
@@ -97,13 +97,13 @@ ORDER BY
 
 SET join_use_nulls = 1;
 
-SYSTEM DROP  TABLE left_join;
+DROP TABLE left_join;
 
-SYSTEM DROP  TABLE inner_join;
+DROP TABLE inner_join;
 
-SYSTEM DROP  TABLE right_join;
+DROP TABLE right_join;
 
-SYSTEM DROP  TABLE full_join;
+DROP TABLE full_join;
 
 CREATE TABLE left_join
 (
@@ -137,4 +137,4 @@ CREATE TABLE full_join
 ENGINE = Join(`ALL`, `FULL`, x)
 SETTINGS join_use_nulls = 1;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;

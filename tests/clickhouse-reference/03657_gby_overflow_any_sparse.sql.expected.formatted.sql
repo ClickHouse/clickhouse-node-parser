@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 03657_gby_overflow;
+DROP TABLE IF EXISTS `03657_gby_overflow`;
 
 CREATE TABLE `03657_gby_overflow`
 (
@@ -27,4 +27,4 @@ SETTINGS
     group_by_two_level_threshold = 1000000000,
     group_by_two_level_threshold_bytes = 1000000000;
 
-SYSTEM DROP  TABLE 03657_gby_overflow;
+DROP TABLE `03657_gby_overflow`;

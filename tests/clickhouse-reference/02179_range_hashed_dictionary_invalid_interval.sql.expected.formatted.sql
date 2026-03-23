@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02179_test_table;
+DROP TABLE IF EXISTS `02179_test_table`;
 
 CREATE TABLE `02179_test_table`
 (
@@ -15,7 +15,7 @@ INSERT INTO `02179_test_table`;
 
 INSERT INTO `02179_test_table`;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02179_test_dictionary;
+DROP DICTIONARY IF EXISTS `02179_test_dictionary`;
 
 CREATE DICTIONARY `02179_test_dictionary`
 (
@@ -42,6 +42,6 @@ SELECT *
 FROM `02179_test_dictionary`
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  DICTIONARY 02179_test_dictionary;
+DROP DICTIONARY `02179_test_dictionary`;
 
-SYSTEM DROP  TABLE 02179_test_table;
+DROP TABLE `02179_test_table`;

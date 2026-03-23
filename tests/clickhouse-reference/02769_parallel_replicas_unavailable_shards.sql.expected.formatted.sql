@@ -1,6 +1,6 @@
 -- Tags: no-parallel
 -- - no-parallel - due to usage of fail points
-SYSTEM DROP  TABLE IF EXISTS test_parallel_replicas_unavailable_shards;
+DROP TABLE IF EXISTS test_parallel_replicas_unavailable_shards;
 
 CREATE TABLE test_parallel_replicas_unavailable_shards
 (
@@ -39,4 +39,4 @@ WHERE yesterday() <= event_date
     AND type = 'QueryFinish'
     AND query_id == initial_query_id;
 
-SYSTEM DROP  TABLE test_parallel_replicas_unavailable_shards;
+DROP TABLE test_parallel_replicas_unavailable_shards;

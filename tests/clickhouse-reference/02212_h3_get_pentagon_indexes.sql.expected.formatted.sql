@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
 CREATE TABLE table1
 (
@@ -45,7 +45,7 @@ ORDER BY indexes ASC;
 
 SELECT h3GetPentagonIndexes(20) AS indexes; -- { serverError ARGUMENT_OUT_OF_BOUND }
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;
 
 -- tests for const cols
 SELECT '-- test for const cols';

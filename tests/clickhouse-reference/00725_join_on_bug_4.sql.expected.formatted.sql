@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists t_00725_4;
+DROP TABLE IF EXISTS t_00725_4;
 
-SYSTEM drop  table if exists s_00725_4;
+DROP TABLE IF EXISTS s_00725_4;
 
 CREATE TABLE t_00725_4
 (

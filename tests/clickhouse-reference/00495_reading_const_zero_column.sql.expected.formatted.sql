@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists one_table;
+DROP TABLE IF EXISTS one_table;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

@@ -1,7 +1,7 @@
 -- check ALTER MODIFY COLUMN with partitions
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE IF EXISTS alter_column;
+DROP TABLE IF EXISTS alter_column;
 
 CREATE TABLE alter_column
 (
@@ -22,4 +22,4 @@ SELECT *
 FROM alter_column
 ORDER BY _part ASC;
 
-SYSTEM DROP  TABLE alter_column;
+DROP TABLE alter_column;

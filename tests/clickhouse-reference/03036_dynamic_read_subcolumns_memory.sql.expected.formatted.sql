@@ -5,7 +5,7 @@ SET use_variant_as_common_type = 1;
 
 SET allow_experimental_dynamic_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -166,4 +166,4 @@ SELECT
 FROM test
 FORMAT Null;
 
-SYSTEM drop  table test;
+DROP TABLE test;

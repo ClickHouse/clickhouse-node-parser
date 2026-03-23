@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists mt;
+DROP TABLE IF EXISTS mt;
 
-SYSTEM drop  table if exists m;
+DROP TABLE IF EXISTS m;
 
 CREATE TABLE mt
 (
@@ -27,7 +27,7 @@ SELECT
 FROM mt
 ORDER BY _part ASC;
 
-SYSTEM drop  table m;
+DROP TABLE m;
 
 SELECT
     mutation_id,
@@ -44,4 +44,4 @@ ORDER BY
     p ASC,
     n ASC;
 
-SYSTEM drop  table mt;
+DROP TABLE mt;

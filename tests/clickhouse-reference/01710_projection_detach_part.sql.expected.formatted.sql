@@ -1,6 +1,6 @@
 SET optimize_use_projections = 1;
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -21,4 +21,4 @@ WHERE database = currentDatabase()
     AND table = 't'
     AND active;
 
-SYSTEM drop  table t;
+DROP TABLE t;

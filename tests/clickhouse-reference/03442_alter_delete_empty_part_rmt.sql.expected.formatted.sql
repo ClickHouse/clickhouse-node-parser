@@ -1,6 +1,6 @@
 -- Tags: no-replicated-database
 -- no-replicated-database: test relies on system.part_log but mutation can be executed on the second replica
-SYSTEM DROP  TABLE IF EXISTS t_delete_empty_part_rmt;
+DROP TABLE IF EXISTS t_delete_empty_part_rmt;
 
 CREATE TABLE t_delete_empty_part_rmt
 (
@@ -44,4 +44,4 @@ WHERE database = currentDatabase()
     AND event_type = 'MutatePart'
 ORDER BY part_name ASC;
 
-SYSTEM DROP  TABLE t_delete_empty_part_rmt;
+DROP TABLE t_delete_empty_part_rmt;

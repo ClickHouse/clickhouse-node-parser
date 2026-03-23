@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS local_00952;
+DROP TABLE IF EXISTS local_00952;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_00952;
+DROP TABLE IF EXISTS distributed_00952;
 
 SET insert_allow_materialized_columns = 0;
 
@@ -37,9 +37,9 @@ SELECT
     value
 FROM local_00952;
 
-SYSTEM DROP  TABLE distributed_00952;
+DROP TABLE distributed_00952;
 
-SYSTEM DROP  TABLE local_00952;
+DROP TABLE local_00952;
 
 SET distributed_foreground_insert = 1;
 

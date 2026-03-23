@@ -2,11 +2,11 @@
 -- from https://github.com/ClickHouse/ClickHouse/issues/5142
 SET distributed_foreground_insert = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM DROP  TABLE IF EXISTS t_d;
+DROP TABLE IF EXISTS t_d;
 
-SYSTEM DROP  TABLE IF EXISTS t_v;
+DROP TABLE IF EXISTS t_v;
 
 CREATE TABLE t
 (

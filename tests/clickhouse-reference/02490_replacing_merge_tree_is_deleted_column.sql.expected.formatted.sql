@@ -3,7 +3,7 @@
 SET allow_deprecated_syntax_for_merge_tree = 0;
 
 -- Test the bahaviour without the is_deleted column
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -74,7 +74,7 @@ FROM test
 WHERE is_deleted = 0
 ORDER BY uid ASC;
 
-SYSTEM DROP  TABLE IF EXISTS testCleanupR1;
+DROP TABLE IF EXISTS testCleanupR1;
 
 CREATE TABLE testCleanupR1
 (
@@ -97,7 +97,7 @@ FROM testCleanupR1
 ORDER BY uid ASC;
 
 ------------------------------
-SYSTEM DROP  TABLE IF EXISTS testSettingsR1;
+DROP TABLE IF EXISTS testSettingsR1;
 
 CREATE TABLE testSettingsR1
 (
@@ -150,7 +150,7 @@ SELECT
 FROM test
 ORDER BY uid ASC;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

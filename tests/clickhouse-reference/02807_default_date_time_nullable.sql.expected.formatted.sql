@@ -10,7 +10,7 @@ INSERT INTO test (data) SELECT 1;
 SELECT *
 FROM test;
 
-SYSTEM drop  temporary table test;
+DROP TEMPORARY TABLE test;
 
 CREATE TEMPORARY TABLE test
 (

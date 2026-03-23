@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS h3_indexes;
+DROP TABLE IF EXISTS h3_indexes;
 
 CREATE TABLE h3_indexes
 (
@@ -70,4 +70,4 @@ SELECT h3Distance(stringToH3(start), stringToH3(`end`))
 FROM h3_indexes
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE h3_indexes;
+DROP TABLE h3_indexes;

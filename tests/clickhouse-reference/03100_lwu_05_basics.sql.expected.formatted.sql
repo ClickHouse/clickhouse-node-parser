@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lightweight;
+DROP TABLE IF EXISTS t_lightweight;
 
 SET enable_lightweight_update = 1;
 
@@ -27,4 +27,4 @@ WHERE database = currentDatabase()
     AND table = 't_lightweight'
 ORDER BY name ASC;
 
-SYSTEM DROP  TABLE t_lightweight;
+DROP TABLE t_lightweight;

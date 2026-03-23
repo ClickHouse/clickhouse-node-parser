@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -45,4 +45,4 @@ ARRAY JOIN [1048577] AS elem
 ARRAY JOIN arrayMap(x -> splitByChar(x, elem), ['']) AS unused; -- { serverError ILLEGAL_COLUMN }
 
 -- { echoOff }
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

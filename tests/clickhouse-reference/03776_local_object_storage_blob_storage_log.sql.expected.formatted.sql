@@ -1,6 +1,6 @@
 -- Tags: no-fasttest, no-distributed-cache
 -- Test blob_storage_log for LocalObjectStorage
-SYSTEM DROP  TABLE IF EXISTS test_local_blob_log;
+DROP TABLE IF EXISTS test_local_blob_log;
 
 CREATE TABLE test_local_blob_log
 (
@@ -30,7 +30,7 @@ WHERE event_type = 'Upload'
     AND event_time > now() - toIntervalMinute(5);
 
 -- Drop table to trigger delete events
-SYSTEM DROP  TABLE test_local_blob_log SYNC;
+DROP TABLE test_local_blob_log;
 
 -- Check that delete events were logged
 SELECT

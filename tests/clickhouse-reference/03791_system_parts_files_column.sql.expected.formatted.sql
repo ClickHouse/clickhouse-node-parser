@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_parts_files;
+DROP TABLE IF EXISTS test_parts_files;
 
 CREATE TABLE test_parts_files
 (
@@ -22,4 +22,4 @@ WHERE database = currentDatabase()
     AND active
 LIMIT 1;
 
-SYSTEM DROP  TABLE test_parts_files;
+DROP TABLE test_parts_files;

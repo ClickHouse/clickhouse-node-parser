@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_nullable_index;
+DROP TABLE IF EXISTS bloom_filter_nullable_index;
 
 CREATE TABLE bloom_filter_nullable_index
 (
@@ -48,7 +48,7 @@ WHERE str IN (
     )
 SETTINGS transform_null_in = 1;
 
-SYSTEM DROP  TABLE IF EXISTS nullable_string_value;
+DROP TABLE IF EXISTS nullable_string_value;
 
 CREATE TABLE nullable_string_value
 (
@@ -74,6 +74,6 @@ WHERE str IN (
     )
 SETTINGS transform_null_in = 1;
 
-SYSTEM DROP  TABLE nullable_string_value;
+DROP TABLE nullable_string_value;
 
-SYSTEM DROP  TABLE bloom_filter_nullable_index;
+DROP TABLE bloom_filter_nullable_index;

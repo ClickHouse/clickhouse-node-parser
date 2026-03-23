@@ -5422,7 +5422,7 @@ SELECT multiIf((number % 2) = 0, [toFloat64(1), toFloat64(2)], (number % 3) = 0,
 FROM `system`.numbers
 LIMIT 10;
 
-SYSTEM DROP  TABLE IF EXISTS multi_if_check;
+DROP TABLE IF EXISTS multi_if_check;
 
 CREATE TABLE multi_if_check
 (

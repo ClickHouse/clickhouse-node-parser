@@ -1,8 +1,8 @@
-SYSTEM DROP  TEMPORARY TABLE IF EXISTS temporary_table;
+DROP TEMPORARY TABLE IF EXISTS temporary_table;
 
-SYSTEM DROP  TABLE IF EXISTS test_merge_1;
+DROP TABLE IF EXISTS test_merge_1;
 
-SYSTEM DROP  TABLE IF EXISTS test_merge_2;
+DROP TABLE IF EXISTS test_merge_2;
 
 CREATE TABLE test_merge_1
 (

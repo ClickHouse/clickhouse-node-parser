@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS decimal;
+DROP TABLE IF EXISTS decimal;
 
 CREATE TABLE IF NOT EXISTS decimal
 (
@@ -58,4 +58,4 @@ FROM decimal
 WHERE d1 IN (1, 3)
 ORDER BY d2 ASC;
 
-SYSTEM DROP  TABLE decimal;
+DROP TABLE decimal;

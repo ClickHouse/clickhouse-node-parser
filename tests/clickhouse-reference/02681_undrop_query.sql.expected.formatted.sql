@@ -1,7 +1,7 @@
 -- Tags: no-ordinary-database, no-replicated-database, distributed, zookeeper
 SET database_atomic_wait_for_drop_and_detach_synchronously = 0;
 
-SYSTEM drop  table if exists 02681_undrop_mergetree sync;
+DROP TABLE IF EXISTS `02681_undrop_mergetree`;
 
 CREATE TABLE `02681_undrop_mergetree`
 (
@@ -12,7 +12,7 @@ ORDER BY id;
 
 INSERT INTO `02681_undrop_mergetree`;
 
-SYSTEM drop  table 02681_undrop_mergetree;
+DROP TABLE `02681_undrop_mergetree`;
 
 SELECT table
 FROM `system`.dropped_tables
@@ -23,9 +23,9 @@ SELECT *
 FROM `02681_undrop_mergetree`
 ORDER BY id ASC;
 
-SYSTEM drop  table 02681_undrop_mergetree sync;
+DROP TABLE `02681_undrop_mergetree`;
 
-SYSTEM drop  table if exists 02681_undrop_detach sync;
+DROP TABLE IF EXISTS `02681_undrop_detach`;
 
 CREATE TABLE `02681_undrop_detach`
 (
@@ -43,9 +43,9 @@ WHERE table = '02681_undrop_detach'
     AND database = currentDatabase()
 LIMIT 1;
 
-SYSTEM drop  table 02681_undrop_detach sync;
+DROP TABLE `02681_undrop_detach`;
 
-SYSTEM drop  table if exists 02681_undrop_uuid_on_cluster on cluster test_shard_localhost sync format Null;
+DROP TABLE IF EXISTS `02681_undrop_uuid_on_cluster` ON CLUSTER test_shard_localhost FORMAT Null;
 
 CREATE TABLE `02681_undrop_uuid_on_cluster` ON CLUSTER test_shard_localhost
 (
@@ -57,7 +57,7 @@ FORMAT Null;
 
 INSERT INTO `02681_undrop_uuid_on_cluster`;
 
-SYSTEM drop  table 02681_undrop_uuid_on_cluster on cluster test_shard_localhost format Null;
+DROP TABLE `02681_undrop_uuid_on_cluster` ON CLUSTER test_shard_localhost FORMAT Null;
 
 SELECT table
 FROM `system`.dropped_tables
@@ -68,9 +68,9 @@ SELECT *
 FROM `02681_undrop_uuid_on_cluster`
 ORDER BY id ASC;
 
-SYSTEM drop  table 02681_undrop_uuid_on_cluster sync;
+DROP TABLE `02681_undrop_uuid_on_cluster`;
 
-SYSTEM drop  table if exists 02681_undrop_no_uuid_on_cluster on cluster test_shard_localhost sync format Null;
+DROP TABLE IF EXISTS `02681_undrop_no_uuid_on_cluster` ON CLUSTER test_shard_localhost FORMAT Null;
 
 CREATE TABLE `02681_undrop_no_uuid_on_cluster` ON CLUSTER test_shard_localhost
 (
@@ -82,7 +82,7 @@ FORMAT Null;
 
 INSERT INTO `02681_undrop_no_uuid_on_cluster`;
 
-SYSTEM drop  table 02681_undrop_no_uuid_on_cluster on cluster test_shard_localhost format Null;
+DROP TABLE `02681_undrop_no_uuid_on_cluster` ON CLUSTER test_shard_localhost FORMAT Null;
 
 SELECT table
 FROM `system`.dropped_tables
@@ -93,9 +93,9 @@ SELECT *
 FROM `02681_undrop_no_uuid_on_cluster`
 ORDER BY id ASC;
 
-SYSTEM drop  table 02681_undrop_no_uuid_on_cluster on cluster test_shard_localhost sync format Null;
+DROP TABLE `02681_undrop_no_uuid_on_cluster` ON CLUSTER test_shard_localhost FORMAT Null;
 
-SYSTEM drop  table if exists 02681_undrop_replicatedmergetree sync;
+DROP TABLE IF EXISTS `02681_undrop_replicatedmergetree`;
 
 CREATE TABLE `02681_undrop_replicatedmergetree`
 (
@@ -106,7 +106,7 @@ ORDER BY id;
 
 INSERT INTO `02681_undrop_replicatedmergetree`;
 
-SYSTEM drop  table 02681_undrop_replicatedmergetree;
+DROP TABLE `02681_undrop_replicatedmergetree`;
 
 SELECT table
 FROM `system`.dropped_tables
@@ -117,9 +117,9 @@ SELECT *
 FROM `02681_undrop_replicatedmergetree`
 ORDER BY id ASC;
 
-SYSTEM drop  table 02681_undrop_replicatedmergetree sync;
+DROP TABLE `02681_undrop_replicatedmergetree`;
 
-SYSTEM drop  table if exists 02681_undrop_log sync;
+DROP TABLE IF EXISTS `02681_undrop_log`;
 
 CREATE TABLE `02681_undrop_log`
 (
@@ -129,7 +129,7 @@ ENGINE = Log();
 
 INSERT INTO `02681_undrop_log`;
 
-SYSTEM drop  table 02681_undrop_log;
+DROP TABLE `02681_undrop_log`;
 
 SELECT table
 FROM `system`.dropped_tables
@@ -140,9 +140,9 @@ SELECT *
 FROM `02681_undrop_log`
 ORDER BY id ASC;
 
-SYSTEM drop  table 02681_undrop_log sync;
+DROP TABLE `02681_undrop_log`;
 
-SYSTEM drop  table if exists 02681_undrop_distributed sync;
+DROP TABLE IF EXISTS `02681_undrop_distributed`;
 
 CREATE TABLE `02681_undrop_distributed`
 (
@@ -150,16 +150,16 @@ CREATE TABLE `02681_undrop_distributed`
 )
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), `02681_undrop`, rand());
 
-SYSTEM drop  table 02681_undrop_distributed;
+DROP TABLE `02681_undrop_distributed`;
 
 SELECT table
 FROM `system`.dropped_tables
 WHERE table = '02681_undrop_distributed'
 LIMIT 1;
 
-SYSTEM drop  table 02681_undrop_distributed sync;
+DROP TABLE `02681_undrop_distributed`;
 
-SYSTEM drop  table if exists 02681_undrop_multiple sync;
+DROP TABLE IF EXISTS `02681_undrop_multiple`;
 
 CREATE TABLE `02681_undrop_multiple`
 (
@@ -170,7 +170,7 @@ ORDER BY id;
 
 INSERT INTO `02681_undrop_multiple`;
 
-SYSTEM drop  table 02681_undrop_multiple;
+DROP TABLE `02681_undrop_multiple`;
 
 INSERT INTO `02681_undrop_multiple`;
 
@@ -185,4 +185,4 @@ SELECT *
 FROM `02681_undrop_multiple`
 ORDER BY id ASC;
 
-SYSTEM drop  table 02681_undrop_multiple sync;
+DROP TABLE `02681_undrop_multiple`;

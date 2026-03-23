@@ -7,7 +7,7 @@ SET use_variant_as_common_type = 1;
 
 SET session_timezone = 'UTC';
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -615,4 +615,4 @@ FROM test
 ORDER BY id ASC
 FORMAT JSONColumns;
 
-SYSTEM drop  table test;
+DROP TABLE test;

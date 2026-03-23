@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ttl_sparse_repro;
+DROP TABLE IF EXISTS ttl_sparse_repro;
 
 CREATE TABLE ttl_sparse_repro
 (

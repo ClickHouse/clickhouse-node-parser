@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS nested;
+DROP TABLE IF EXISTS nested;
 
 CREATE TABLE nested
 (
@@ -14,7 +14,7 @@ FROM
     remote('127.0.0.2', currentDatabase(), nested)
 ARRAY JOIN n.x;
 
-SYSTEM DROP  TABLE nested;
+DROP TABLE nested;
 
 SELECT
     dummy AS dummy,

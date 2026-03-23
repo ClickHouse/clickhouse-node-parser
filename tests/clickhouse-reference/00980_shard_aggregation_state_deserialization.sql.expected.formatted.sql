@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS numbers500k;
+DROP TABLE IF EXISTS numbers500k;
 
 CREATE VIEW numbers500k
 AS
@@ -16,4 +16,4 @@ WHERE bitmapContains((
         FROM numbers500k
     ), toUInt32(number));
 
-SYSTEM DROP  TABLE numbers500k;
+DROP TABLE numbers500k;

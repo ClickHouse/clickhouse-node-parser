@@ -113,7 +113,7 @@ FROM (
         SELECT arrayJoin([[], ['a'], ['a', NULL, 'b'], []]) AS x
     );
 
-SYSTEM DROP  TABLE IF EXISTS decimal;
+DROP TABLE IF EXISTS decimal;
 
 CREATE TABLE decimal
 (
@@ -137,13 +137,13 @@ INSERT INTO decimal (a, b, c) SELECT
 FROM `system`.numbers
 LIMIT 101;
 
-SYSTEM DROP  TABLE decimal;
+DROP TABLE decimal;
 
 SET optimize_injective_functions_inside_uniq = 1;
 
 SET optimize_injective_functions_inside_uniq = 0;
 
-SYSTEM DROP  TABLE IF EXISTS stored_aggregates;
+DROP TABLE IF EXISTS stored_aggregates;
 
 -- simple
 SET allow_deprecated_syntax_for_merge_tree = 1;
@@ -179,7 +179,7 @@ FROM stored_aggregates
 GROUP BY d
 ORDER BY d ASC;
 
-SYSTEM DROP  TABLE stored_aggregates;
+DROP TABLE stored_aggregates;
 
 -- complex
 CREATE TABLE stored_aggregates
@@ -242,9 +242,9 @@ ORDER BY
     k1 ASC;
 
 ---- sum + uniq with more data
-SYSTEM drop  table if exists summing_merge_tree_null;
+DROP TABLE IF EXISTS summing_merge_tree_null;
 
-SYSTEM drop  table if exists summing_merge_tree_aggregate_function;
+DROP TABLE IF EXISTS summing_merge_tree_aggregate_function;
 
 CREATE TABLE summing_merge_tree_null
 (
@@ -292,6 +292,6 @@ FROM summing_merge_tree_aggregate_function
 GROUP BY k
 ORDER BY k ASC;
 
-SYSTEM drop  table summing_merge_tree_aggregate_function;
+DROP TABLE summing_merge_tree_aggregate_function;
 
-SYSTEM drop  table summing_merge_tree_null;
+DROP TABLE summing_merge_tree_null;

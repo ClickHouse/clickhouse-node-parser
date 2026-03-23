@@ -3,9 +3,9 @@ SET max_block_size = 10;
 
 SET min_insert_block_size_rows = 10;
 
-SYSTEM drop  table if exists testX;
+DROP TABLE IF EXISTS testX;
 
-SYSTEM drop  table if exists testXA;
+DROP TABLE IF EXISTS testXA;
 
 CREATE TABLE testX
 (
@@ -38,6 +38,6 @@ FROM numbers(20)
 SETTINGS materialized_views_ignore_errors = 1; -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 
 -- { echoOff }
-SYSTEM drop  table testX;
+DROP TABLE testX;
 
-SYSTEM drop  view testXA;
+DROP VIEW testXA;

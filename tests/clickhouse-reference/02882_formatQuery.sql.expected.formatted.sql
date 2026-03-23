@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS all_valid;
+DROP TABLE IF EXISTS all_valid;
 
 CREATE TABLE all_valid
 (
@@ -10,7 +10,7 @@ ORDER BY id;
 
 INSERT INTO all_valid;
 
-SYSTEM DROP  TABLE IF EXISTS some_invalid;
+DROP TABLE IF EXISTS some_invalid;
 
 CREATE TABLE some_invalid
 (
@@ -112,6 +112,6 @@ SELECT
 FROM some_invalid
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE all_valid;
+DROP TABLE all_valid;
 
-SYSTEM DROP  TABLE some_invalid;
+DROP TABLE some_invalid;

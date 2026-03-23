@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -19,7 +19,7 @@ FROM tab FINAL SAMPLE 1/2
 ORDER BY x ASC
 LIMIT 5;
 
-SYSTEM drop  table tab;
+DROP TABLE tab;
 
 SELECT sipHash64(x)
 FROM tab SAMPLE 1/2

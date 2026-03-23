@@ -1,6 +1,6 @@
 SET enable_json_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -76,4 +76,4 @@ FROM test
 GROUP BY json
 ORDER BY toString(json) ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

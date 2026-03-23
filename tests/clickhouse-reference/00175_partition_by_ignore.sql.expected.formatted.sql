@@ -1,6 +1,6 @@
 SELECT '-- check that partition key with ignore works correctly';
 
-SYSTEM DROP  TABLE IF EXISTS partition_by_ignore SYNC;
+DROP TABLE IF EXISTS partition_by_ignore;
 
 CREATE TABLE partition_by_ignore
 (

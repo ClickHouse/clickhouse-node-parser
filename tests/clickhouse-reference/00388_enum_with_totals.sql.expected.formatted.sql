@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS enum_totals;
+DROP TABLE IF EXISTS enum_totals;
 
 CREATE TABLE enum_totals
 (
@@ -16,4 +16,4 @@ GROUP BY e
 WITH TOTALS
 ORDER BY e ASC;
 
-SYSTEM DROP  TABLE enum_totals;
+DROP TABLE enum_totals;

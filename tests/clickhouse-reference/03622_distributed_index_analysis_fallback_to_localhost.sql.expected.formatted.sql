@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_1m;
+DROP TABLE IF EXISTS test_1m;
 
 -- -min_bytes_for_wide_part -- wide parts are different (they respect index_granularity completely, unlike compact parts) -- FIXME
 -- -merge_selector_base = 1000 -- disable merges

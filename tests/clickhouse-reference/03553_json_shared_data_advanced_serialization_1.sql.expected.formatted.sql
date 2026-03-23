@@ -1,7 +1,7 @@
 -- Tags: long, no-azure-blob-storage
 SET output_format_json_quote_64bit_integers = 0;
 
-SYSTEM drop  table if exists source;
+DROP TABLE IF EXISTS source;
 
 CREATE TABLE source
 (
@@ -11,7 +11,7 @@ ENGINE = Memory;
 
 INSERT INTO source;
 
-SYSTEM drop  table if exists test_compact_without_substreams_advanced;
+DROP TABLE IF EXISTS test_compact_without_substreams_advanced;
 
 CREATE TABLE test_compact_without_substreams_advanced
 (
@@ -27,9 +27,9 @@ FROM source;
 SELECT json
 FROM test_compact_without_substreams_advanced;
 
-SYSTEM drop  table test_compact_without_substreams_advanced;
+DROP TABLE test_compact_without_substreams_advanced;
 
-SYSTEM drop  table if exists test_compact_advanced;
+DROP TABLE IF EXISTS test_compact_advanced;
 
 CREATE TABLE test_compact_advanced
 (
@@ -249,9 +249,9 @@ SELECT
     json
 FROM test_compact_advanced;
 
-SYSTEM drop  table test_compact_advanced;
+DROP TABLE test_compact_advanced;
 
-SYSTEM drop  table if exists test_compact_advanced_tuple;
+DROP TABLE IF EXISTS test_compact_advanced_tuple;
 
 CREATE TABLE test_compact_advanced_tuple
 (
@@ -317,6 +317,6 @@ SELECT
     json.data
 FROM test_compact_advanced_tuple;
 
-SYSTEM drop  table test_compact_advanced_tuple;
+DROP TABLE test_compact_advanced_tuple;
 
-SYSTEM drop  table source;
+DROP TABLE source;

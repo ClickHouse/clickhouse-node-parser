@@ -1,14 +1,14 @@
 -- { echo }
 -- Tags: long
-SYSTEM DROP  TABLE IF EXISTS source_table;
+DROP TABLE IF EXISTS source_table;
 
-SYSTEM DROP  TABLE IF EXISTS alias_1;
+DROP TABLE IF EXISTS alias_1;
 
-SYSTEM DROP  TABLE IF EXISTS alias_2;
+DROP TABLE IF EXISTS alias_2;
 
-SYSTEM DROP  TABLE IF EXISTS alias_3;
+DROP TABLE IF EXISTS alias_3;
 
-SYSTEM DROP  TABLE IF EXISTS alias_4;
+DROP TABLE IF EXISTS alias_4;
 
 SET allow_experimental_alias_table_engine = 1;
 
@@ -64,9 +64,9 @@ SELECT *
 FROM alias_3
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE alias_2;
+DROP TABLE alias_2;
 
-SYSTEM DROP  TABLE alias_3;
+DROP TABLE alias_3;
 
 CREATE TABLE alias_4
 ENGINE = Alias('source_table');
@@ -101,9 +101,9 @@ SELECT count()
 FROM source_table
 WHERE id = 2;
 
-SYSTEM DROP  TABLE IF EXISTS source_partitioned;
+DROP TABLE IF EXISTS source_partitioned;
 
-SYSTEM DROP  TABLE IF EXISTS alias_part;
+DROP TABLE IF EXISTS alias_part;
 
 CREATE TABLE source_partitioned
 (
@@ -135,13 +135,13 @@ FROM source_table
 WHERE id > 100;
 
 -- Test: EXCHANGE TABLES
-SYSTEM DROP  TABLE IF EXISTS table_a_exchange;
+DROP TABLE IF EXISTS table_a_exchange;
 
-SYSTEM DROP  TABLE IF EXISTS table_b_exchange;
+DROP TABLE IF EXISTS table_b_exchange;
 
-SYSTEM DROP  TABLE IF EXISTS alias_a_exchange;
+DROP TABLE IF EXISTS alias_a_exchange;
 
-SYSTEM DROP  TABLE IF EXISTS alias_b_exchange;
+DROP TABLE IF EXISTS alias_b_exchange;
 
 CREATE TABLE table_a_exchange
 (
@@ -175,17 +175,17 @@ SELECT *
 FROM alias_b_exchange
 ORDER BY value ASC;
 
-SYSTEM DROP  TABLE alias_a_exchange;
+DROP TABLE alias_a_exchange;
 
-SYSTEM DROP  TABLE alias_b_exchange;
+DROP TABLE alias_b_exchange;
 
-SYSTEM DROP  TABLE table_a_exchange;
+DROP TABLE table_a_exchange;
 
-SYSTEM DROP  TABLE table_b_exchange;
+DROP TABLE table_b_exchange;
 
-SYSTEM DROP  TABLE IF EXISTS source_attach;
+DROP TABLE IF EXISTS source_attach;
 
-SYSTEM DROP  TABLE IF EXISTS alias_attach;
+DROP TABLE IF EXISTS alias_attach;
 
 CREATE TABLE source_attach
 (
@@ -211,9 +211,9 @@ ORDER BY id ASC;
 -- Insert through alias after ATTACH
 INSERT INTO alias_attach;
 
-SYSTEM DROP  TABLE alias_attach;
+DROP TABLE alias_attach;
 
-SYSTEM DROP  TABLE source_attach;
+DROP TABLE source_attach;
 
 CREATE TABLE self_ref_test
 ENGINE = Alias('self_ref_test'); -- { serverError BAD_ARGUMENTS }
@@ -265,13 +265,13 @@ SELECT
 FROM metadata_alias
 WHERE id = 5;
 
-SYSTEM DROP  TABLE metadata_alias;
+DROP TABLE metadata_alias;
 
-SYSTEM DROP  TABLE metadata_target;
+DROP TABLE metadata_target;
 
-SYSTEM DROP  TABLE IF EXISTS alias_with_missing_target;
+DROP TABLE IF EXISTS alias_with_missing_target;
 
-SYSTEM DROP  TABLE IF EXISTS temp_target;
+DROP TABLE IF EXISTS temp_target;
 
 CREATE TABLE temp_target
 (
@@ -290,7 +290,7 @@ SELECT *
 FROM alias_with_missing_target
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE temp_target;
+DROP TABLE temp_target;
 
 SELECT
     name,
@@ -327,20 +327,20 @@ FROM `system`.tables
 WHERE database = currentDatabase()
     AND name = 'alias_with_missing_target';
 
-SYSTEM DROP  TABLE alias_with_missing_target;
+DROP TABLE alias_with_missing_target;
 
 -- Test: Materialized views on both Alias and target table
-SYSTEM DROP  TABLE IF EXISTS mv_test_from_alias;
+DROP TABLE IF EXISTS mv_test_from_alias;
 
-SYSTEM DROP  TABLE IF EXISTS mv_test_from_target;
+DROP TABLE IF EXISTS mv_test_from_target;
 
-SYSTEM DROP  TABLE IF EXISTS mv_test_alias_dest;
+DROP TABLE IF EXISTS mv_test_alias_dest;
 
-SYSTEM DROP  TABLE IF EXISTS mv_test_target_dest;
+DROP TABLE IF EXISTS mv_test_target_dest;
 
-SYSTEM DROP  TABLE IF EXISTS mv_test_alias;
+DROP TABLE IF EXISTS mv_test_alias;
 
-SYSTEM DROP  TABLE IF EXISTS mv_test_source;
+DROP TABLE IF EXISTS mv_test_source;
 
 -- Create source table and alias
 CREATE TABLE mv_test_source
@@ -403,14 +403,14 @@ ORDER BY id ASC;
 -- Test: Insert into mv_test_source should trigger only target MV
 INSERT INTO mv_test_source;
 
-SYSTEM DROP  TABLE mv_test_from_alias;
+DROP TABLE mv_test_from_alias;
 
-SYSTEM DROP  TABLE mv_test_from_target;
+DROP TABLE mv_test_from_target;
 
-SYSTEM DROP  TABLE mv_test_alias_dest;
+DROP TABLE mv_test_alias_dest;
 
-SYSTEM DROP  TABLE mv_test_target_dest;
+DROP TABLE mv_test_target_dest;
 
-SYSTEM DROP  TABLE mv_test_alias;
+DROP TABLE mv_test_alias;
 
-SYSTEM DROP  TABLE mv_test_source;
+DROP TABLE mv_test_source;

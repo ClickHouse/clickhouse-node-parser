@@ -1,5 +1,5 @@
 -- Tags: no-fasttest, long, no-azure-blob-storage
-SYSTEM DROP  TABLE IF EXISTS test_table_1;
+DROP TABLE IF EXISTS test_table_1;
 
 CREATE TABLE test_table_1
 (
@@ -8,7 +8,7 @@ CREATE TABLE test_table_1
 ENGINE = MergeTree
 ORDER BY number;
 
-SYSTEM DROP  TABLE IF EXISTS dist_test_table_1;
+DROP TABLE IF EXISTS dist_test_table_1;
 
 CREATE TABLE dist_test_table_1
 (
@@ -20,7 +20,7 @@ INSERT INTO dist_test_table_1 SELECT number
 FROM numbers_mt(10000)
 SETTINGS distributed_foreground_insert = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_2;
+DROP TABLE IF EXISTS test_table_2;
 
 CREATE TABLE test_table_2
 (
@@ -29,7 +29,7 @@ CREATE TABLE test_table_2
 ENGINE = MergeTree
 ORDER BY number;
 
-SYSTEM DROP  TABLE IF EXISTS dist_test_table_2;
+DROP TABLE IF EXISTS dist_test_table_2;
 
 CREATE TABLE dist_test_table_2
 (
@@ -41,7 +41,7 @@ INSERT INTO dist_test_table_2 SELECT number
 FROM numbers_mt(10000)
 SETTINGS distributed_foreground_insert = 1;
 
-SYSTEM DROP  TABLE IF EXISTS merge_test_table;
+DROP TABLE IF EXISTS merge_test_table;
 
 CREATE TABLE merge_test_table
 ENGINE = Merge(currentDatabase(), '^dist_test_table_(1|2)$');
@@ -54,12 +54,12 @@ GROUP BY 1
 FORMAT Null
 SETTINGS distributed_aggregation_memory_efficient = 1, max_threads = 4, optimize_aggregation_in_order = 0, prefer_localhost_replica = 1, async_socket_for_remote = 1, enable_analyzer = 0, enable_producing_buckets_out_of_order_in_aggregation = 0, enable_memory_bound_merging_of_aggregation_results = 0, max_memory_usage = '500Mi', group_by_two_level_threshold = 1e6, group_by_two_level_threshold_bytes = '500Mi';
 
-SYSTEM DROP  TABLE merge_test_table;
+DROP TABLE merge_test_table;
 
-SYSTEM DROP  TABLE dist_test_table_1;
+DROP TABLE dist_test_table_1;
 
-SYSTEM DROP  TABLE dist_test_table_2;
+DROP TABLE dist_test_table_2;
 
-SYSTEM DROP  TABLE test_table_1;
+DROP TABLE test_table_1;
 
-SYSTEM DROP  TABLE test_table_2;
+DROP TABLE test_table_2;

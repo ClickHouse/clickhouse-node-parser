@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -13,9 +13,9 @@ SELECT b
 FROM test
 PREWHERE c = 1;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
-SYSTEM drop  table if exists audience_local;
+DROP TABLE IF EXISTS audience_local;
 
 CREATE TABLE audience_local
 (

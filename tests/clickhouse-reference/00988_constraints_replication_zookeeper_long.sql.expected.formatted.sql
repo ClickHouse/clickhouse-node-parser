@@ -1,7 +1,7 @@
 -- Tags: long, replica
-SYSTEM DROP  TABLE IF EXISTS replicated_constraints1;
+DROP TABLE IF EXISTS replicated_constraints1;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_constraints2;
+DROP TABLE IF EXISTS replicated_constraints2;
 
 CREATE TABLE replicated_constraints1
 (
@@ -33,6 +33,6 @@ INSERT INTO replicated_constraints1; -- { serverError VIOLATED_CONSTRAINT }
 
 INSERT INTO replicated_constraints2; -- { serverError VIOLATED_CONSTRAINT }
 
-SYSTEM DROP  TABLE replicated_constraints1;
+DROP TABLE replicated_constraints1;
 
-SYSTEM DROP  TABLE replicated_constraints2;
+DROP TABLE replicated_constraints2;

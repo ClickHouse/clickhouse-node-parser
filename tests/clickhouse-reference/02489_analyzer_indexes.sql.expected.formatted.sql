@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -184,4 +184,4 @@ SETTINGS
     force_primary_key = 1,
     force_data_skipping_indices = 'value_1_idx, value_2_idx, value_3_idx';
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

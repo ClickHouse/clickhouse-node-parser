@@ -41,7 +41,7 @@ FROM (
         LIMIT 1001
     );
 
-SYSTEM DROP  TABLE IF EXISTS numbers_1001;
+DROP TABLE IF EXISTS numbers_1001;
 
 CREATE TABLE numbers_1001
 (
@@ -75,4 +75,4 @@ FROM remote('127.0.0.{2,3}', currentDatabase(), numbers_1001);
 SELECT quantilesTimingWeighted(0, 0.001, 0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99, 0.999, 1)(number, number)
 FROM remote('127.0.0.{2,3}', currentDatabase(), numbers_1001);
 
-SYSTEM DROP  TABLE numbers_1001;
+DROP TABLE numbers_1001;

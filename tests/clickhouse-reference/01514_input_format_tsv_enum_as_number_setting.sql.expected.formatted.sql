@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_with_enum_column_for_tsv_insert;
+DROP TABLE IF EXISTS table_with_enum_column_for_tsv_insert;
 
 CREATE TABLE table_with_enum_column_for_tsv_insert
 (

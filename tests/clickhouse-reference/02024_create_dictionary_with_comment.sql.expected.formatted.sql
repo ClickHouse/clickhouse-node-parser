@@ -15,7 +15,7 @@ INSERT INTO source_table;
 
 INSERT INTO source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 2024_dictionary_with_comment;
+DROP DICTIONARY IF EXISTS `2024_dictionary_with_comment`;
 
 CREATE DICTIONARY `2024_dictionary_with_comment`
 (

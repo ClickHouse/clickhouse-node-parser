@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists ttl_00933_2;
+DROP TABLE IF EXISTS ttl_00933_2;
 
 CREATE TABLE ttl_00933_2
 (

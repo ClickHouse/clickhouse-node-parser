@@ -3,7 +3,7 @@
 -- no-parallel-replicas: EXPLAIN output differs for parallel replicas.
 -- add_minmax_index_for_numeric_columns=0: Different plan
 -- { echo }
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

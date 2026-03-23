@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_wide_nested;
+DROP TABLE IF EXISTS test_wide_nested;
 
 CREATE TABLE test_wide_nested
 (
@@ -28,9 +28,9 @@ ORDER BY id ASC;
 SELECT *
 FROM test_wide_nested;
 
-SYSTEM DROP  TABLE test_wide_nested;
+DROP TABLE test_wide_nested;
 
-SYSTEM DROP  TABLE IF EXISTS test_wide_not_nested;
+DROP TABLE IF EXISTS test_wide_not_nested;
 
 CREATE TABLE test_wide_not_nested
 (
@@ -54,4 +54,4 @@ SELECT *
 FROM test_wide_not_nested
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_wide_not_nested;
+DROP TABLE test_wide_not_nested;

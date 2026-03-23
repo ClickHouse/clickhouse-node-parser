@@ -125,6 +125,7 @@ TopLevelStatement
   / UseStatement
   / SystemStatement
   / InsertStatement
+  / DropStatement
   / OpaqueStatement
   / query:UnionQuery intoOutfile:( _ IntoOutfileClause )? preSettings:( _ SettingsClause )? format:( _ FormatClause )? postSettings:( _ SettingsClause )* {
       let result = query;
@@ -175,10 +176,55 @@ UseStatement
 SystemStatement
   = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return loc({ kind: 'system', body: body.trim() }); }
 
-// OpaqueStatement: statements we recognize but don't fully parse (DROP, ALTER, TRUNCATE, etc.)
+// OpaqueStatement: statements we recognize but don't fully parse (ALTER, TRUNCATE, etc.)
 // The body is consumed as raw text until end of statement.
 OpaqueStatement
-  = keyword:( "DROP"i / "ALTER"i / "RENAME"i / "ATTACH"i / "DETACH"i / "OPTIMIZE"i / "CHECK"i / "DESCRIBE"i / "DESC"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "EXCHANGE"i / "KILL"i / "UNDO"i / "DELETE"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i / "TRUNCATE"i ) ![a-zA-Z0-9_] body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
+  = keyword:( "ALTER"i / "RENAME"i / "ATTACH"i / "DETACH"i / "OPTIMIZE"i / "CHECK"i / "DESCRIBE"i / "DESC"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "EXCHANGE"i / "KILL"i / "UNDO"i / "DELETE"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i / "TRUNCATE"i ) ![a-zA-Z0-9_] body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
+
+// ── DROP statements ─────────────────────────────────────────────────────────
+
+// DropIndexStatement: DROP INDEX [IF EXISTS] name ON [db.]table
+DropIndexStatement
+  = "DROP"i ![a-zA-Z0-9_] _ "INDEX"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ indexName:AliasName _ "ON"i ![a-zA-Z0-9_] _ table:TableRef {
+      return loc({ kind: 'drop', targetType: 'INDEX', table, indexName });
+    }
+
+// DropStatement: DROP [TEMPORARY] TABLE/VIEW/DICTIONARY/DATABASE/FUNCTION [IF EXISTS|IF EMPTY] [db.]name [, ...] [ON CLUSTER ...] [SYNC|NO DELAY] [SETTINGS ...] [FORMAT ...]
+// For access control objects (USER, ROLE, etc.), falls back to opaque parsing with specific label.
+DropStatement
+  = DropIndexStatement
+  / "DROP"i ![a-zA-Z0-9_] temp:( _ "TEMPORARY"i ![a-zA-Z0-9_] )?
+    _ targetType:DropTargetType
+    ifClause:( _ "IF"i ![a-zA-Z0-9_] _ ( "EXISTS"i / "EMPTY"i ) ![a-zA-Z0-9_] )?
+    _ head:TableRef tail:( _ "," _ TableRef )*
+    cluster:( _ OnClusterClause )?
+    sync:( _ ( "SYNC"i / "NO"i ![a-zA-Z0-9_] _ "DELAY"i ) ![a-zA-Z0-9_] )?
+    settings:( _ SettingsClause )?
+    format:( _ FormatClause )? {
+      const tables = [head, ...tail.map(t => t[3])];
+      const result = { kind: 'drop', targetType };
+      if (tables.length === 1) {
+        result.table = tables[0];
+      } else {
+        result.tables = tables;
+      }
+      if (temp !== null) result.temporary = true;
+      if (ifClause !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (settings !== null) result.settings = settings[1];
+      if (format !== null) result.format = format[1];
+      return loc(result);
+    }
+  / body:$( "DROP"i ![a-zA-Z0-9_] ( "'" ( "''" / "\\'" / "\\\\" / !"'" ( [\n\r] / . ) )* "'" / !";" ( [\n\r] / . ) )* ) { return loc({ kind: 'system', body: body.trim() }); }
+
+DropTargetType
+  = "TABLE"i ![a-zA-Z0-9_] { return 'TABLE'; }
+  / "VIEW"i ![a-zA-Z0-9_] { return 'VIEW'; }
+  / "DICTIONARY"i ![a-zA-Z0-9_] { return 'DICTIONARY'; }
+  / "DATABASE"i ![a-zA-Z0-9_] { return 'DATABASE'; }
+  / "FUNCTION"i ![a-zA-Z0-9_] { return 'FUNCTION'; }
 
 // ── INSERT statements ────────────────────────────────────────────────────────
 
@@ -248,6 +294,7 @@ ParallelWithStatement
 
 ParallelWithItem
   = InsertStatement
+  / DropStatement
   / TruncateStatement
 
 // TruncateStatement: TRUNCATE [TABLE] [IF EXISTS] [db.]table — minimal parsing for PARALLEL WITH support

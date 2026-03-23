@@ -1,6 +1,6 @@
 SET use_variant_as_common_type = 0;
 
-SYSTEM DROP  TABLE IF EXISTS alter_table;
+DROP TABLE IF EXISTS alter_table;
 
 CREATE TABLE alter_table
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS with_fill_date;
+DROP TABLE IF EXISTS with_fill_date;
 
 CREATE TABLE with_fill_date
 (
@@ -85,7 +85,7 @@ FROM with_fill_date
 GROUP BY d32
 ORDER BY d32 ASC WITH FILL FROM toDate('2020-01-01') TO toDate('2021-01-01') STEP toIntervalMonth(3);
 
-SYSTEM DROP  TABLE with_fill_date;
+DROP TABLE with_fill_date;
 
 CREATE TABLE with_fill_date
 (

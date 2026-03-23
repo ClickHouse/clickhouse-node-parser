@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_index;
+DROP TABLE IF EXISTS t_index;
 
 CREATE TABLE t_index
 (

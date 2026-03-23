@@ -1,8 +1,8 @@
 SET max_bytes_in_join = 0, join_algorithm = 'full_sorting_merge', max_block_size = 10240;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE t1
 (
@@ -43,6 +43,6 @@ PREWHERE 10
 WHERE t2.key != 0
 WITH TOTALS;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;
 
-SYSTEM DROP  TABLE t2;
+DROP TABLE t2;

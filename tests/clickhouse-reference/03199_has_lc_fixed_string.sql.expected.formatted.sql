@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 03199_fixedstring_array;
+DROP TABLE IF EXISTS `03199_fixedstring_array`;
 
 CREATE TABLE `03199_fixedstring_array`
 (
@@ -11,4 +11,4 @@ INSERT INTO `03199_fixedstring_array`;
 SELECT has(arr, toFixedString(materialize('a'), 1))
 FROM `03199_fixedstring_array`;
 
-SYSTEM DROP  TABLE 03199_fixedstring_array;
+DROP TABLE `03199_fixedstring_array`;

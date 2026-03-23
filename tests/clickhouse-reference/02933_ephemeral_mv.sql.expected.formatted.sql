@@ -30,8 +30,8 @@ SELECT
     num
 FROM parsed_eph;
 
-SYSTEM DROP  VIEW parse_mv_eph;
+DROP VIEW parse_mv_eph;
 
-SYSTEM DROP  TABLE parsed_eph;
+DROP TABLE parsed_eph;
 
-SYSTEM DROP  TABLE raw;
+DROP TABLE raw;

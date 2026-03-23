@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nums;
+DROP TABLE IF EXISTS nums;
 
 CREATE TABLE nums
 (
@@ -14,4 +14,4 @@ FROM nums;
 SELECT quantilesExactInclusive(0, 1)(n)
 FROM nums;
 
-SYSTEM DROP  TABLE nums;
+DROP TABLE nums;

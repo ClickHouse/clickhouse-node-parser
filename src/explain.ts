@@ -1960,6 +1960,12 @@ function parallelWithQueryNode(stmt: ParallelWithStatement): ExplainNode {
   if (first?.kind === 'insert') {
     kindPrefix = 'InsertQuery_';
     firstTable = '';
+  } else if (first?.kind === 'drop') {
+    kindPrefix = 'DropQuery_';
+    firstTable = first.table?.table ?? '';
+  } else if (first?.kind === 'truncate') {
+    kindPrefix = 'TruncateQuery_';
+    firstTable = first.table.table;
   } else {
     kindPrefix = 'CreateQuery';
     firstTable = first?.kind === 'createTable' ? first.table.table : '';
@@ -2036,7 +2042,32 @@ function stmtNode(stmt: Statement): ExplainNode {
   if (stmt.kind === 'set') {
     return n('Set');
   }
-  if (stmt.kind === 'system') return n('SYSTEM query');
+  if (stmt.kind === 'system') {
+    // Opaque DROP statements produce specific labels based on the DROP target type
+    if (/^DROP\s/i.test(stmt.body)) {
+      const dropAliases: Record<string, string> = {
+        USER: 'DROP USER query',
+        ROLE: 'DROP ROLE query',
+        'ROW POLICY': 'DROP ROW POLICY query',
+        POLICY: 'DROP ROW POLICY query',
+        'SETTINGS PROFILE': 'DROP SETTINGS PROFILE query',
+        PROFILE: 'DROP SETTINGS PROFILE query',
+        QUOTA: 'DROP QUOTA query',
+        'NAMED COLLECTION': 'DropNamedCollectionQuery',
+        WORKLOAD: 'DropWorkloadQuery',
+        RESOURCE: 'DropResourceQuery',
+      };
+      const m = stmt.body.match(
+        /^DROP\s+(USER|ROLE|ROW\s+POLICY|POLICY|SETTINGS\s+PROFILE|PROFILE|QUOTA|NAMED\s+COLLECTION|WORKLOAD|RESOURCE)\b/i,
+      );
+      if (m) {
+        const key = m[1].toUpperCase().replace(/\s+/g, ' ');
+        return n(dropAliases[key] || 'SYSTEM query');
+      }
+      return n('SYSTEM query');
+    }
+    return n('SYSTEM query');
+  }
   if (stmt.kind === 'use')
     return n(`UseQuery ${stmt.database}`, [n(`Identifier ${stmt.database}`)]);
   if (stmt.kind === 'createTable') return createTableQueryNode(stmt);
@@ -2078,6 +2109,58 @@ function stmtNode(stmt: Statement): ExplainNode {
     const children = [n(`Identifier ${t.table}`)];
     if (t.database) children.unshift(n(`Identifier ${t.database}`));
     return n(`TruncateQuery  ${tableName}`, children);
+  }
+  if (stmt.kind === 'drop') {
+    // DROP FUNCTION and DROP INDEX have their own label formats
+    if (stmt.targetType === 'FUNCTION') return n('DropFunctionQuery');
+    if (stmt.targetType === 'INDEX' && stmt.table) {
+      const t = stmt.table;
+      const tableName = t.database ? `${t.database}.${t.table}` : ` ${t.table}`;
+      const children: ExplainNode[] = [];
+      children.push(n(`Identifier ${stmt.indexName}`));
+      if (t.database) children.push(n(`Identifier ${t.database}`));
+      children.push(n(`Identifier ${t.table}`));
+      return n(`DropIndexQuery ${tableName}`, children);
+    }
+
+    const children: ExplainNode[] = [];
+    let label: string;
+
+    if (stmt.tables && stmt.tables.length > 0) {
+      // Multi-table DROP: DropQuery  (with ExpressionList of TableIdentifiers)
+      const tableNodes = stmt.tables.map((t) => {
+        const name = t.database ? `${t.database}.${t.table}` : t.table;
+        return n(`TableIdentifier ${name}`);
+      });
+      children.push(n('ExpressionList', tableNodes));
+      label = 'DropQuery  ';
+    } else if (stmt.table) {
+      const t = stmt.table;
+      if (stmt.targetType === 'DATABASE') {
+        children.push(n(`Identifier ${t.table}`));
+        label = `DropQuery ${t.table} `;
+      } else if (t.database) {
+        children.push(n(`Identifier ${t.database}`));
+        children.push(n(`Identifier ${t.table}`));
+        label = `DropQuery ${t.database} ${t.table}`;
+      } else {
+        children.push(n(`Identifier ${t.table}`));
+        label = `DropQuery  ${t.table}`;
+      }
+    } else {
+      label = 'DropQuery  ';
+    }
+
+    // SETTINGS → Set child
+    if (stmt.settings && stmt.settings.length > 0) {
+      children.push(n('Set'));
+    }
+    // FORMAT → Identifier child
+    if (stmt.format) {
+      children.push(n(`Identifier ${stmt.format}`));
+    }
+
+    return n(label, children);
   }
 
   const format = stmt.format;

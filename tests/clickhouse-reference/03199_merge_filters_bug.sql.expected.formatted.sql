@@ -1,8 +1,8 @@
 SET allow_reorder_prewhere_conditions = 0;
 
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM drop  table if exists t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE t1
 (

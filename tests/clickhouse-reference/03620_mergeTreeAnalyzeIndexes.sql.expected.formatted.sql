@@ -1,7 +1,7 @@
 -- Tags: no-random-merge-tree-settings
 -- - no-random-merge-tree-settings -- may change amount of granulas
 -- add_minmax_index_for_numeric_columns=0: Changes the plan (the index on value would filter out value = 0)
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (

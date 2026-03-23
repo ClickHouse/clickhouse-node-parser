@@ -36,7 +36,7 @@ SELECT sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{
 
 SELECT sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(a Dynamic))])));
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -51,7 +51,7 @@ SELECT
     sipHash64(json)
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

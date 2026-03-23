@@ -18,4 +18,4 @@ SETTINGS
 
 SET mutations_sync = 2, alter_sync = 2;
 
-SYSTEM drop  table hardlink_cycle sync;
+DROP TABLE hardlink_cycle;

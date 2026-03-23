@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS qbit_nullable_test;
+DROP TABLE IF EXISTS qbit_nullable_test;
 
 CREATE TABLE qbit_nullable_test
 (
@@ -15,4 +15,4 @@ SELECT
 FROM qbit_nullable_test
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE qbit_nullable_test;
+DROP TABLE qbit_nullable_test;

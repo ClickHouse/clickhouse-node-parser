@@ -119,6 +119,6 @@ SELECT timeSeriesDerivToGrid(100, 150, 10, 30)([1, 2, 3]::Array(UInt32), 1.); --
 
 SELECT timeSeriesPredictLinearToGrid(100, 150, 10, 30, 60)([1, 2, 3]::Array(UInt32), 1.); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SYSTEM DROP  TABLE ts_data;
+DROP TABLE ts_data;
 
-SYSTEM DROP  TABLE ts_data_nullable;
+DROP TABLE ts_data_nullable;

@@ -2,7 +2,7 @@
 -- ^^ Disable test for slow builds: generating data takes time but a sufficiently large data set
 -- is necessary for different hnsw_candidate_list_size_for_search settings to make a difference
 -- Tests vector search with setting 'hnsw_candidate_list_size_for_search'
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -22,7 +22,7 @@ INSERT INTO tab SELECT
     [sipHash64(number)/18446744073709551615, wyHash64(number)/18446744073709551615]
 FROM numbers(660000); -- 18446744073709551615 is the biggest UInt64
 
-SYSTEM DROP  TABLE IF EXISTS results;
+DROP TABLE IF EXISTS results;
 
 CREATE TABLE results
 (
@@ -47,6 +47,6 @@ SETTINGS hnsw_candidate_list_size_for_search = 1;
 SELECT countDistinct(*)
 FROM results;
 
-SYSTEM DROP  TABLE results;
+DROP TABLE results;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

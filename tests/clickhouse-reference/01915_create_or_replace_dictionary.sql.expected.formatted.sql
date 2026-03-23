@@ -1,10 +1,10 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS test_01915_db;
+DROP DATABASE IF EXISTS test_01915_db;
 
 CREATE DATABASE test_01915_db
 ENGINE = Atomic;
 
-SYSTEM DROP  TABLE IF EXISTS test_01915_db.test_source_table_1;
+DROP TABLE IF EXISTS test_01915_db.test_source_table_1;
 
 CREATE TABLE test_01915_db.test_source_table_1
 (
@@ -15,7 +15,7 @@ ENGINE = TinyLog;
 
 INSERT INTO test_01915_db.test_source_table_1;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_01915_db.test_dictionary;
+DROP DICTIONARY IF EXISTS test_01915_db.test_dictionary;
 
 CREATE OR REPLACE DICTIONARY test_01915_db.test_dictionary
 (
@@ -29,7 +29,7 @@ LAYOUT(DIRECT());
 SELECT *
 FROM test_01915_db.test_dictionary;
 
-SYSTEM DROP  TABLE IF EXISTS test_01915_db.test_source_table_2;
+DROP TABLE IF EXISTS test_01915_db.test_source_table_2;
 
 CREATE TABLE test_01915_db.test_source_table_2
 (
@@ -50,10 +50,10 @@ SOURCE(clickhouse(DB 'test_01915_db' TABLE 'test_source_table_2'))
 LIFETIME(0)
 LAYOUT(HASHED());
 
-SYSTEM DROP  DICTIONARY test_01915_db.test_dictionary;
+DROP DICTIONARY test_01915_db.test_dictionary;
 
-SYSTEM DROP  TABLE test_01915_db.test_source_table_1;
+DROP TABLE test_01915_db.test_source_table_1;
 
-SYSTEM DROP  TABLE test_01915_db.test_source_table_2;
+DROP TABLE test_01915_db.test_source_table_2;
 
-SYSTEM DROP  DATABASE test_01915_db;
+DROP DATABASE test_01915_db;

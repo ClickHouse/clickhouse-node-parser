@@ -2,11 +2,11 @@
 -- TODO: correct testing with real unique shards
 SET optimize_distributed_group_by_sharding_key = 1;
 
-SYSTEM drop  table if exists dist_01247;
+DROP TABLE IF EXISTS dist_01247;
 
-SYSTEM drop  table if exists dist_layer_01247;
+DROP TABLE IF EXISTS dist_layer_01247;
 
-SYSTEM drop  table if exists data_01247;
+DROP TABLE IF EXISTS data_01247;
 
 CREATE TABLE data_01247 AS `system`.numbers
 ENGINE = Memory();
@@ -63,8 +63,8 @@ LIMIT 1;
 CREATE TABLE dist_layer_01247 AS data_01247
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01247, rand());
 
-SYSTEM drop  table dist_01247;
+DROP TABLE dist_01247;
 
-SYSTEM drop  table dist_layer_01247;
+DROP TABLE dist_layer_01247;
 
-SYSTEM drop  table data_01247;
+DROP TABLE data_01247;

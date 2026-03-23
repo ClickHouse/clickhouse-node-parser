@@ -2,9 +2,9 @@ SET compile_expressions = 1;
 
 SET min_count_to_compile_expression = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_1;
+DROP TABLE IF EXISTS test_table_1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_2;
+DROP TABLE IF EXISTS test_table_2;
 
 CREATE TABLE test_table_1
 (
@@ -34,9 +34,9 @@ RIGHT JOIN test_table_2 AS t2
 WHERE (acos(t2.id) <> atan(t1.id))
     AND (NOT acos(t2.id) <> atan(t1.id));
 
-SYSTEM DROP  TABLE test_table_1;
+DROP TABLE test_table_1;
 
-SYSTEM DROP  TABLE test_table_2;
+DROP TABLE test_table_2;
 
 SELECT '--';
 

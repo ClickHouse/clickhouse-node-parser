@@ -18,13 +18,13 @@ SELECT L2SquaredDistance([1, 2, 3], NULL);
 
 SELECT cosineDistance([1, 2, 3], [0, 0, 0]);
 
-SYSTEM DROP  TABLE IF EXISTS vec1;
+DROP TABLE IF EXISTS vec1;
 
-SYSTEM DROP  TABLE IF EXISTS vec2;
+DROP TABLE IF EXISTS vec2;
 
-SYSTEM DROP  TABLE IF EXISTS vec2f;
+DROP TABLE IF EXISTS vec2f;
 
-SYSTEM DROP  TABLE IF EXISTS vec2d;
+DROP TABLE IF EXISTS vec2d;
 
 CREATE TABLE vec1
 (
@@ -160,13 +160,13 @@ SELECT LpDistance([1, 2], [3,4], 'aaa'); -- { serverError ILLEGAL_TYPE_OF_ARGUME
 
 SELECT LpDistance([1, 2], [3,4], materialize(2.7)); -- { serverError ILLEGAL_COLUMN }
 
-SYSTEM DROP  TABLE vec1;
+DROP TABLE vec1;
 
-SYSTEM DROP  TABLE vec2;
+DROP TABLE vec2;
 
-SYSTEM DROP  TABLE vec2f;
+DROP TABLE vec2f;
 
-SYSTEM DROP  TABLE vec2d;
+DROP TABLE vec2d;
 
 -- Queries which trigger manually vectorized implementation
 SELECT L2Distance([toFloat32(0.0), toFloat32(1.0), toFloat32(2.0), toFloat32(3.0), toFloat32(4.0), toFloat32(5.0), toFloat32(6.0), toFloat32(7.0), toFloat32(8.0), toFloat32(9.0), toFloat32(10.0), toFloat32(11.0), toFloat32(12.0), toFloat32(13.0), toFloat32(14.0), toFloat32(15.0), toFloat32(16.0), toFloat32(17.0), toFloat32(18.0), toFloat32(19.0), toFloat32(20.0), toFloat32(21.0), toFloat32(22.0), toFloat32(23.0), toFloat32(24.0), toFloat32(25.0), toFloat32(26.0), toFloat32(27.0), toFloat32(28.0), toFloat32(29.0), toFloat32(30.0), toFloat32(31.0), toFloat32(32.0), toFloat32(33.0)], materialize([toFloat32(1.0), toFloat32(2.0), toFloat32(3.0), toFloat32(4.0), toFloat32(5.0), toFloat32(6.0), toFloat32(7.0), toFloat32(8.0), toFloat32(9.0), toFloat32(10.0), toFloat32(11.0), toFloat32(12.0), toFloat32(13.0), toFloat32(14.0), toFloat32(15.0), toFloat32(16.0), toFloat32(17.0), toFloat32(18.0), toFloat32(19.0), toFloat32(20.0), toFloat32(21.0), toFloat32(22.0), toFloat32(23.0), toFloat32(24.0), toFloat32(25.0), toFloat32(26.0), toFloat32(27.0), toFloat32(28.0), toFloat32(29.0), toFloat32(30.0), toFloat32(31.0), toFloat32(32.0), toFloat32(33.0), toFloat32(34.0)]));

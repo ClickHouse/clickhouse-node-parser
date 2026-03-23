@@ -1,6 +1,6 @@
 SET optimize_on_insert = 0;
 
-SYSTEM DROP  TABLE IF EXISTS replacing_table;
+DROP TABLE IF EXISTS replacing_table;
 
 CREATE TABLE replacing_table
 (

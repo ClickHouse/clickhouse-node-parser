@@ -1,7 +1,7 @@
 -- Tags: no-ordinary-database, no-fasttest, no-parallel-replicas, use-rocksdb
 -- Tag no-ordinary-database: Sometimes cannot lock file most likely due to concurrent or adjacent tests, but we don't care how it works in Ordinary database
 -- Tag no-fasttest: In fasttest, ENABLE_LIBRARIES=0, so rocksdb engine is not enabled by default
-SYSTEM DROP  TABLE IF EXISTS 03720_test;
+DROP TABLE IF EXISTS `03720_test`;
 
 CREATE TABLE `03720_test`
 (
@@ -49,10 +49,10 @@ WHERE ((k1 IN (1, 3, 5)
     OR k1 IN (2, 3, 4, 5, 6)))
     AND k2 IN (11, 13, 15, 12, 14, 16);
 
-SYSTEM DROP  TABLE 03720_test;
+DROP TABLE `03720_test`;
 
 -- Tuple equality
-SYSTEM DROP  TABLE IF EXISTS 03720_tuple_equality;
+DROP TABLE IF EXISTS `03720_tuple_equality`;
 
 CREATE TABLE `03720_tuple_equality`
 (
@@ -84,10 +84,10 @@ FROM `03720_tuple_equality`
 WHERE k1 = 1
     AND k2 IN (tuple());
 
-SYSTEM DROP  TABLE 03720_tuple_equality;
+DROP TABLE `03720_tuple_equality`;
 
 -- Tuple IN syntax
-SYSTEM DROP  TABLE IF EXISTS 03720_tuple_in;
+DROP TABLE IF EXISTS `03720_tuple_in`;
 
 CREATE TABLE `03720_tuple_in`
 (
@@ -109,10 +109,10 @@ SELECT COUNT(*)
 FROM `03720_tuple_in`
 WHERE (k1, k2) IN ((1, 10), (5, 50)); -- partial match
 
-SYSTEM DROP  TABLE 03720_tuple_in;
+DROP TABLE `03720_tuple_in`;
 
 -- Three-column primary key
-SYSTEM DROP  TABLE IF EXISTS 03720_three_columns;
+DROP TABLE IF EXISTS `03720_three_columns`;
 
 CREATE TABLE `03720_three_columns`
 (
@@ -151,10 +151,10 @@ WHERE (k1 = 1
     AND k2 = 2
     AND k3 = 1); -- OR with all 3 keys specified
 
-SYSTEM DROP  TABLE 03720_three_columns;
+DROP TABLE `03720_three_columns`;
 
 -- Four-column
-SYSTEM DROP  TABLE IF EXISTS 03720_four_columns;
+DROP TABLE IF EXISTS `03720_four_columns`;
 
 CREATE TABLE `03720_four_columns`
 (
@@ -180,10 +180,10 @@ WHERE k1 = 1
     AND k3 = 3
     AND k4 IN (4, 5);
 
-SYSTEM DROP  TABLE 03720_four_columns;
+DROP TABLE `03720_four_columns`;
 
 -- String type
-SYSTEM DROP  TABLE IF EXISTS 03720_string_keys;
+DROP TABLE IF EXISTS `03720_string_keys`;
 
 CREATE TABLE `03720_string_keys`
 (
@@ -211,10 +211,10 @@ SELECT COUNT(*)
 FROM `03720_string_keys`
 WHERE (k1, k2) IN (('foo', 'bar'), ('qux', 'bar'));
 
-SYSTEM DROP  TABLE 03720_string_keys;
+DROP TABLE `03720_string_keys`;
 
 -- Mixed types
-SYSTEM DROP  TABLE IF EXISTS 03720_mixed_types;
+DROP TABLE IF EXISTS `03720_mixed_types`;
 
 CREATE TABLE `03720_mixed_types`
 (
@@ -238,10 +238,10 @@ WHERE k1 = 100
     AND k2 IN ('a', 'b')
 ORDER BY val ASC;
 
-SYSTEM DROP  TABLE 03720_mixed_types;
+DROP TABLE `03720_mixed_types`;
 
 -- DateTime
-SYSTEM DROP  TABLE IF EXISTS 03720_datetime;
+DROP TABLE IF EXISTS `03720_datetime`;
 
 CREATE TABLE `03720_datetime`
 (
@@ -258,10 +258,10 @@ SELECT val
 FROM `03720_datetime`
 WHERE (k1, k2) = (1, '2024-01-01 00:00:00');
 
-SYSTEM DROP  TABLE 03720_datetime;
+DROP TABLE `03720_datetime`;
 
 -- Enum types
-SYSTEM DROP  TABLE IF EXISTS 03720_enum;
+DROP TABLE IF EXISTS `03720_enum`;
 
 CREATE TABLE `03720_enum`
 (
@@ -278,10 +278,10 @@ SELECT val
 FROM `03720_enum`
 WHERE (k1, k2) = ('a', 1);
 
-SYSTEM DROP  TABLE 03720_enum;
+DROP TABLE `03720_enum`;
 
 -- Single column key (backward compatibility)
-SYSTEM DROP  TABLE IF EXISTS 03720_single_column;
+DROP TABLE IF EXISTS `03720_single_column`;
 
 CREATE TABLE `03720_single_column`
 (
@@ -303,10 +303,10 @@ FROM `03720_single_column`
 WHERE k1 IN (1, 3)
 ORDER BY val ASC;
 
-SYSTEM DROP  TABLE 03720_single_column;
+DROP TABLE `03720_single_column`;
 
 -- Cartesian product: 5x3 = 15 lookups
-SYSTEM DROP  TABLE IF EXISTS 03720_cartesian;
+DROP TABLE IF EXISTS `03720_cartesian`;
 
 CREATE TABLE `03720_cartesian`
 (
@@ -329,10 +329,10 @@ FROM `03720_cartesian`
 WHERE k1 = 5
     AND k2 IN (0, 1, 2, 3, 4);
 
-SYSTEM DROP  TABLE 03720_cartesian;
+DROP TABLE `03720_cartesian`;
 
 -- Large Cartesian product
-SYSTEM DROP  TABLE IF EXISTS 03720_large_cartesian;
+DROP TABLE IF EXISTS `03720_large_cartesian`;
 
 CREATE TABLE `03720_large_cartesian`
 (
@@ -354,10 +354,10 @@ FROM `03720_large_cartesian`
 WHERE k1 IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
     AND k2 IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-SYSTEM DROP  TABLE 03720_large_cartesian;
+DROP TABLE `03720_large_cartesian`;
 
 -- Empty result sets
-SYSTEM DROP  TABLE IF EXISTS 03720_empty_results;
+DROP TABLE IF EXISTS `03720_empty_results`;
 
 CREATE TABLE `03720_empty_results`
 (
@@ -383,10 +383,10 @@ FROM `03720_empty_results`
 WHERE k1 = 1
     AND k2 = 2;
 
-SYSTEM DROP  TABLE 03720_empty_results;
+DROP TABLE `03720_empty_results`;
 
 -- OR conditions
-SYSTEM DROP  TABLE IF EXISTS 03720_complex_or;
+DROP TABLE IF EXISTS `03720_complex_or`;
 
 CREATE TABLE `03720_complex_or`
 (
@@ -410,10 +410,10 @@ SELECT COUNT(*)
 FROM `03720_complex_or`
 WHERE (k1, k2) IN ((1, 1), (2, 2));
 
-SYSTEM DROP  TABLE 03720_complex_or;
+DROP TABLE `03720_complex_or`;
 
 -- Update and upsert operations with multi-column keys
-SYSTEM DROP  TABLE IF EXISTS 03720_mutations;
+DROP TABLE IF EXISTS `03720_mutations`;
 
 CREATE TABLE `03720_mutations`
 (
@@ -434,10 +434,10 @@ FROM `03720_mutations`
 WHERE (k1, k2) = (1, 1)
 ORDER BY val ASC;
 
-SYSTEM DROP  TABLE 03720_mutations;
+DROP TABLE `03720_mutations`;
 
 -- Partial key filter (should trigger full scan)
-SYSTEM DROP  TABLE IF EXISTS 03720_partial_key;
+DROP TABLE IF EXISTS `03720_partial_key`;
 
 CREATE TABLE `03720_partial_key`
 (
@@ -461,10 +461,10 @@ SELECT COUNT(*)
 FROM `03720_partial_key`
 WHERE k1 = 1;
 
-SYSTEM DROP  TABLE 03720_partial_key;
+DROP TABLE `03720_partial_key`;
 
 -- DELETE operations with multi-column primary keys
-SYSTEM DROP  TABLE IF EXISTS 03720_deletes;
+DROP TABLE IF EXISTS `03720_deletes`;
 
 CREATE TABLE `03720_deletes`
 (
@@ -494,10 +494,10 @@ SELECT val
 FROM `03720_deletes`
 ORDER BY val ASC; -- Should be 'c'
 
-SYSTEM DROP  TABLE 03720_deletes;
+DROP TABLE `03720_deletes`;
 
 -- DELETE with three-column primary key
-SYSTEM DROP  TABLE IF EXISTS 03720_deletes_three_col;
+DROP TABLE IF EXISTS `03720_deletes_three_col`;
 
 CREATE TABLE `03720_deletes_three_col`
 (
@@ -518,10 +518,10 @@ SELECT val
 FROM `03720_deletes_three_col`
 ORDER BY val ASC; -- Should be 'c'
 
-SYSTEM DROP  TABLE 03720_deletes_three_col;
+DROP TABLE `03720_deletes_three_col`;
 
 -- DELETE with string keys
-SYSTEM DROP  TABLE IF EXISTS 03720_deletes_string;
+DROP TABLE IF EXISTS `03720_deletes_string`;
 
 CREATE TABLE `03720_deletes_string`
 (
@@ -542,10 +542,10 @@ FROM `03720_deletes_string`
 WHERE k1 = 'foo'
 ORDER BY val ASC; -- Should be 2
 
-SYSTEM DROP  TABLE 03720_deletes_string;
+DROP TABLE `03720_deletes_string`;
 
 -- UPDATE operations using ALTER TABLE
-SYSTEM DROP  TABLE IF EXISTS 03720_updates;
+DROP TABLE IF EXISTS `03720_updates`;
 
 CREATE TABLE `03720_updates`
 (
@@ -573,10 +573,10 @@ WHERE (k1, k2) = (2, 1); -- Should be 'test'
 SELECT COUNT(*)
 FROM `03720_updates`; -- Should be 3
 
-SYSTEM DROP  TABLE 03720_updates;
+DROP TABLE `03720_updates`;
 
 -- UPDATE with three-column primary key
-SYSTEM DROP  TABLE IF EXISTS 03720_updates_three_col;
+DROP TABLE IF EXISTS `03720_updates_three_col`;
 
 CREATE TABLE `03720_updates_three_col`
 (
@@ -597,10 +597,10 @@ WHERE (k1, k2, k3) = (1, 1, 1); -- Should be 'updated_v1'
 SELECT COUNT(*)
 FROM `03720_updates_three_col`; -- Should be 3
 
-SYSTEM DROP  TABLE 03720_updates_three_col;
+DROP TABLE `03720_updates_three_col`;
 
 -- UPDATE with string keys
-SYSTEM DROP  TABLE IF EXISTS 03720_updates_string;
+DROP TABLE IF EXISTS `03720_updates_string`;
 
 CREATE TABLE `03720_updates_string`
 (
@@ -620,10 +620,10 @@ WHERE (k1, k2) = ('foo', 'bar'); -- Should be 999
 SELECT COUNT(*)
 FROM `03720_updates_string`; -- Should be 2
 
-SYSTEM DROP  TABLE 03720_updates_string;
+DROP TABLE `03720_updates_string`;
 
 -- UPSERT operations (INSERT for new + update existing via INSERT)
-SYSTEM DROP  TABLE IF EXISTS 03720_upsert;
+DROP TABLE IF EXISTS `03720_upsert`;
 
 CREATE TABLE `03720_upsert`
 (
@@ -650,14 +650,14 @@ WHERE (k1, k2) = (2, 2); -- Should be 'new'
 SELECT COUNT(*)
 FROM `03720_upsert`; -- Should be 3
 
-SYSTEM DROP  TABLE 03720_upsert;
+DROP TABLE `03720_upsert`;
 
 -- JOIN operations with multi-column primary keys
 SET join_algorithm = 'direct, hash';
 
-SYSTEM DROP  TABLE IF EXISTS 03720_join_left;
+DROP TABLE IF EXISTS `03720_join_left`;
 
-SYSTEM DROP  TABLE IF EXISTS 03720_join_right;
+DROP TABLE IF EXISTS `03720_join_right`;
 
 CREATE TABLE `03720_join_left`
 (
@@ -711,14 +711,14 @@ INNER JOIN `03720_join_right` AS r
     ON l.k1 = r.k1
     AND l.k2 = r.k2;
 
-SYSTEM DROP  TABLE 03720_join_left;
+DROP TABLE `03720_join_left`;
 
-SYSTEM DROP  TABLE 03720_join_right;
+DROP TABLE `03720_join_right`;
 
 -- JOIN with three-column primary keys
-SYSTEM DROP  TABLE IF EXISTS 03720_join_three_left;
+DROP TABLE IF EXISTS `03720_join_three_left`;
 
-SYSTEM DROP  TABLE IF EXISTS 03720_join_three_right;
+DROP TABLE IF EXISTS `03720_join_three_right`;
 
 CREATE TABLE `03720_join_three_left`
 (
@@ -763,14 +763,14 @@ LEFT JOIN `03720_join_three_right` AS r
     AND l.k2 = r.k2
     AND l.k3 = r.k3;
 
-SYSTEM DROP  TABLE 03720_join_three_left;
+DROP TABLE `03720_join_three_left`;
 
-SYSTEM DROP  TABLE 03720_join_three_right;
+DROP TABLE `03720_join_three_right`;
 
 -- JOIN with string keys
-SYSTEM DROP  TABLE IF EXISTS 03720_join_str_left;
+DROP TABLE IF EXISTS `03720_join_str_left`;
 
-SYSTEM DROP  TABLE IF EXISTS 03720_join_str_right;
+DROP TABLE IF EXISTS `03720_join_str_right`;
 
 CREATE TABLE `03720_join_str_left`
 (
@@ -811,14 +811,14 @@ LEFT JOIN `03720_join_str_right` AS r
     ON l.k1 = r.k1
     AND l.k2 = r.k2;
 
-SYSTEM DROP  TABLE 03720_join_str_left;
+DROP TABLE `03720_join_str_left`;
 
-SYSTEM DROP  TABLE 03720_join_str_right;
+DROP TABLE `03720_join_str_right`;
 
 -- JOIN with mixed table types (RocksDB + MergeTree)
-SYSTEM DROP  TABLE IF EXISTS 03720_join_rocks;
+DROP TABLE IF EXISTS `03720_join_rocks`;
 
-SYSTEM DROP  TABLE IF EXISTS 03720_join_merge;
+DROP TABLE IF EXISTS `03720_join_merge`;
 
 CREATE TABLE `03720_join_rocks`
 (
@@ -859,6 +859,6 @@ LEFT JOIN `03720_join_merge` AS m
     ON r.k1 = m.k1
     AND r.k2 = m.k2;
 
-SYSTEM DROP  TABLE 03720_join_rocks;
+DROP TABLE `03720_join_rocks`;
 
-SYSTEM DROP  TABLE 03720_join_merge;
+DROP TABLE `03720_join_merge`;

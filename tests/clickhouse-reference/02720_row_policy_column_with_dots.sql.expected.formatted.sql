@@ -22,4 +22,4 @@ CREATE ROW POLICY IF NOT EXISTS row_policy ON table_with_dot_column USING toDate
 SELECT count(*)
 FROM table_with_dot_column;
 
-SYSTEM DROP  TABLE table_with_dot_column;
+DROP TABLE table_with_dot_column;

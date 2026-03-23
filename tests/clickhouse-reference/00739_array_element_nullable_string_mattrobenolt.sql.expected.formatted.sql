@@ -1,4 +1,4 @@
-SYSTEM drop  temporary table if exists wups;
+DROP TEMPORARY TABLE IF EXISTS wups;
 
 CREATE TEMPORARY TABLE wups
 (
@@ -22,7 +22,7 @@ FROM wups
 GROUP BY a[1]
 ORDER BY a[1] ASC;
 
-SYSTEM drop  temporary table wups;
+DROP TEMPORARY TABLE wups;
 
 SELECT a[1]
 FROM wups;

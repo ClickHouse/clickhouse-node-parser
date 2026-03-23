@@ -1,5 +1,5 @@
 -- Tags: no-parallel, no-fasttest, no-random-settings
-SYSTEM DROP  TABLE IF EXISTS t_s3_events_02496;
+DROP TABLE IF EXISTS t_s3_events_02496;
 
 CREATE TABLE t_s3_events_02496
 (
@@ -29,4 +29,4 @@ WHERE current_database = currentDatabase()
     AND type = 'QueryFinish'
     AND ilike(query, 'SELECT count() FROM s3%test_02496%');
 
-SYSTEM DROP  TABLE t_s3_events_02496;
+DROP TABLE t_s3_events_02496;

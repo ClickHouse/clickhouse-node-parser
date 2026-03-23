@@ -77,9 +77,9 @@ ORDER BY
     StartDate ASC,
     EndDate ASC;
 
-SYSTEM DROP  DICTIONARY range_dictionary;
+DROP DICTIONARY range_dictionary;
 
-SYSTEM DROP  TABLE date_table;
+DROP TABLE date_table;
 
 CREATE TABLE date_table
 (
@@ -155,4 +155,4 @@ ORDER BY
     StartDate ASC,
     EndDate ASC;
 
-SYSTEM DROP  DICTIONARY range_dictionary_nullable;
+DROP DICTIONARY range_dictionary_nullable;

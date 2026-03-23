@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/53640
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -20,4 +20,4 @@ FROM (
         ORDER BY i ASC WITH FILL INTERPOLATE (col1 AS col1 + col2, col2)
     );
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

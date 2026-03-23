@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS Test_00584;
+DROP TABLE IF EXISTS Test_00584;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -37,6 +37,6 @@ SELECT *
 FROM TestView
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE TestView;
+DROP TABLE TestView;
 
-SYSTEM DROP  TABLE Test_00584;
+DROP TABLE Test_00584;

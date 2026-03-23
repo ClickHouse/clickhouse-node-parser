@@ -58,7 +58,7 @@ SETTINGS
     enable_software_prefetch_in_aggregation = 1,
     compile_aggregate_expressions = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -203,4 +203,4 @@ SETTINGS
     enable_software_prefetch_in_aggregation = 1,
     compile_aggregate_expressions = 1;
 
-SYSTEM drop  table test;
+DROP TABLE test;

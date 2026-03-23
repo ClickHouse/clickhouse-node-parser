@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS skip_idx_comp_parts;
+DROP TABLE IF EXISTS skip_idx_comp_parts;
 
 CREATE TABLE skip_idx_comp_parts
 (
@@ -19,4 +19,4 @@ SELECT count()
 FROM skip_idx_comp_parts
 WHERE b > 100;
 
-SYSTEM DROP  TABLE skip_idx_comp_parts;
+DROP TABLE skip_idx_comp_parts;

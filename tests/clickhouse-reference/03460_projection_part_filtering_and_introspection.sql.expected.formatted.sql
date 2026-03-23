@@ -1,6 +1,6 @@
 -- add_minmax_index_for_numeric_columns=0: Implicit indices will filter before projections
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS test_simple_projection;
+DROP TABLE IF EXISTS test_simple_projection;
 
 CREATE TABLE test_simple_projection
 (
@@ -85,4 +85,4 @@ FROM (
 WHERE like(`explain`, '%ReadFromMergeTree%')
     OR match(`explain`, '^\\s+[A-Z][a-z]+(\\s+[A-Z][a-z]+)*:');
 
-SYSTEM DROP  TABLE test_simple_projection;
+DROP TABLE test_simple_projection;

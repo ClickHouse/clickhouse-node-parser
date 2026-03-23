@@ -2,7 +2,7 @@
 -- These queries almost exhaustively exercise multiple parts of multi-stream distributed processing.
 -- If pipeline scheduling or port handling is incorrect, they will most likely fail with `Pipeline stuck`
 -- instead of completing successfully.
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

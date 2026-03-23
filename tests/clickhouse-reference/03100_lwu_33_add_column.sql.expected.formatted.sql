@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_add_column;
+DROP TABLE IF EXISTS t_lwu_add_column;
 
 SET enable_lightweight_update = 1;
 

@@ -1,6 +1,6 @@
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS t_projections_lwd;
+DROP TABLE IF EXISTS t_projections_lwd;
 
 CREATE TABLE t_projections_lwd
 (
@@ -20,4 +20,4 @@ FROM numbers(100);
 SELECT count()
 FROM t_projections_lwd;
 
-SYSTEM DROP  TABLE t_projections_lwd;
+DROP TABLE t_projections_lwd;

@@ -9,7 +9,7 @@ SELECT COLUMNS(dummy);
 
 SELECT COLUMNS('d');
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -52,11 +52,11 @@ SELECT
     test_table.COLUMNS('v')
 FROM test_table;
 
-SYSTEM DROP  DATABASE IF EXISTS 02339_db;
+DROP DATABASE IF EXISTS `02339_db`;
 
 CREATE DATABASE `02339_db`;
 
-SYSTEM DROP  TABLE IF EXISTS 02339_db.test_table;
+DROP TABLE IF EXISTS `02339_db`.test_table;
 
 CREATE TABLE `02339_db`.test_table
 (
@@ -83,9 +83,9 @@ SELECT
     `02339_db.test_table`.COLUMNS('v')
 FROM `02339_db`.test_table;
 
-SYSTEM DROP  TABLE 02339_db.test_table;
+DROP TABLE `02339_db`.test_table;
 
-SYSTEM DROP  DATABASE 02339_db;
+DROP DATABASE `02339_db`;
 
 SELECT * APPLY(toString)
 FROM test_table;

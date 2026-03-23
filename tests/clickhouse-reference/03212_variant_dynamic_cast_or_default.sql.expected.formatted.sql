@@ -28,7 +28,7 @@ SELECT
     multiIf(number % 4 == 0, NULL, number % 4 == 1, number, number % 4 == 2, concat('str_', toString(number)), range(number))::Dynamic AS dynamic
 FROM numbers(8);
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -224,4 +224,4 @@ SELECT d
 FROM t
 ORDER BY id ASC;
 
-SYSTEM drop  table t;
+DROP TABLE t;

@@ -8,4 +8,4 @@ FROM VALUES(('Vasya'), ('Petya'));
 SELECT *
 FROM test_02327;
 
-SYSTEM DROP  TABLE test_02327;
+DROP TABLE test_02327;

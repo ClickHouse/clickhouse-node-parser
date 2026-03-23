@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -12,7 +12,7 @@ INSERT INTO test SELECT
     1,
     tuple(1);
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

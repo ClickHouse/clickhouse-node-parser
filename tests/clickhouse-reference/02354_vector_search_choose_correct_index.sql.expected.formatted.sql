@@ -2,7 +2,7 @@
 SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to have local plan for parallel replicas
 
 -- Test for issue #77978
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -44,4 +44,4 @@ WHERE ilike(`explain`, '%Skip%')
     OR ilike(`explain`, '%Name: idx%')
     OR ilike(`explain`, '%vector_similarity%');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

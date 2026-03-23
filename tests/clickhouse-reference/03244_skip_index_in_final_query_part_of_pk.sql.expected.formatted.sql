@@ -5,7 +5,7 @@ SET use_skip_indexes_if_final = 1;
 
 SET use_skip_indexes_if_final_exact_mode = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -49,10 +49,10 @@ FROM (
     )
 WHERE ilike(`explain`, '%PrimaryKeyExpand%');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 -- Test from fuzzer : https://github.com/ClickHouse/ClickHouse/issues/89387
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -71,4 +71,4 @@ FROM t0 FINAL
 WHERE t0.c0 > 0.1
 FORMAT null;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

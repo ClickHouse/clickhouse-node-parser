@@ -4,7 +4,7 @@ SET enable_analyzer = 1;
 
 SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to have local plan for parallel replicas
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -165,4 +165,4 @@ ORDER BY L2Distance(vec, [1.0, 1.0]) ASC
 LIMIT 3
 SETTINGS vector_search_index_fetch_multiplier = 1001.0; -- { serverError INVALID_SETTING_VALUE }
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

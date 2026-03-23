@@ -7,7 +7,7 @@ SET max_parallel_replicas = 2;
 
 SET parallel_replicas_for_non_replicated_merge_tree = 1;
 
-SYSTEM DROP  TABLE IF EXISTS report;
+DROP TABLE IF EXISTS report;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -33,4 +33,4 @@ FROM (
     )
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE report;
+DROP TABLE report;

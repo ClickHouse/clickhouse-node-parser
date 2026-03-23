@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_transform_or;
+DROP TABLE IF EXISTS t_transform_or;
 
 CREATE TABLE t_transform_or
 (
@@ -24,4 +24,4 @@ SELECT uniqMergeIf(B, (A = '1')
 FROM cluster(test_cluster_two_shards, currentDatabase(), t_transform_or)
 SETTINGS legacy_column_name_of_tuple_literal = 1;
 
-SYSTEM DROP  TABLE t_transform_or;
+DROP TABLE t_transform_or;

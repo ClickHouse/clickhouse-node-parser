@@ -3,7 +3,7 @@
 -- If the ALTER statement is atomic, both UPDATE and RENAME should either
 -- succeed together or fail together.
 -- The fix rejects UPDATE + RENAME on the same column early to ensure atomicity.
-SYSTEM DROP  TABLE IF EXISTS test_alter_atomic;
+DROP TABLE IF EXISTS test_alter_atomic;
 
 -- Test 1: Memory engine - UPDATE + RENAME on same column should be rejected
 CREATE TABLE test_alter_atomic
@@ -30,7 +30,7 @@ SELECT *
 FROM test_alter_atomic
 ORDER BY c0 ASC;
 
-SYSTEM DROP  TABLE test_alter_atomic;
+DROP TABLE test_alter_atomic;
 
 -- Test 2: MergeTree engine - same behavior expected
 CREATE TABLE test_alter_atomic

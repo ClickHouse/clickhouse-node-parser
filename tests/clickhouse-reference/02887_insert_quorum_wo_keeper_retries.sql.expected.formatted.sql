@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS quorum2;
+DROP TABLE IF EXISTS quorum2;
 
 CREATE TABLE quorum1
 (
@@ -27,6 +27,6 @@ INSERT INTO quorum1;
 SELECT count()
 FROM quorum1;
 
-SYSTEM DROP  TABLE quorum1 NO DELAY;
+DROP TABLE quorum1;
 
-SYSTEM DROP  TABLE quorum2 NO DELAY;
+DROP TABLE quorum2;

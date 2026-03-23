@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS segfault;
+DROP TABLE IF EXISTS segfault;
 
-SYSTEM DROP  TABLE IF EXISTS segfault_mv;
+DROP TABLE IF EXISTS segfault_mv;
 
 CREATE TABLE segfault
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS aggregates;
+DROP TABLE IF EXISTS aggregates;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -46,4 +46,4 @@ SELECT
     toDate('2016-12-03') AS d,
     uniqState(toUInt64(arrayJoin(range(100)))) AS s;
 
-SYSTEM DROP  TABLE aggregates;
+DROP TABLE aggregates;

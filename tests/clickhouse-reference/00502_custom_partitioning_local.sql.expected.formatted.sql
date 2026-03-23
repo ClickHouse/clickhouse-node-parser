@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS not_partitioned;
+DROP TABLE IF EXISTS not_partitioned;
 
 CREATE TABLE not_partitioned
 (
@@ -28,9 +28,9 @@ FROM `system`.detached_parts
 WHERE database = currentDatabase()
     AND table = 'not_partitioned';
 
-SYSTEM DROP  TABLE not_partitioned;
+DROP TABLE not_partitioned;
 
-SYSTEM DROP  TABLE IF EXISTS partitioned_by_week;
+DROP TABLE IF EXISTS partitioned_by_week;
 
 CREATE TABLE partitioned_by_week
 (
@@ -58,9 +58,9 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM partitioned_by_week;
 
-SYSTEM DROP  TABLE partitioned_by_week;
+DROP TABLE partitioned_by_week;
 
-SYSTEM DROP  TABLE IF EXISTS partitioned_by_tuple;
+DROP TABLE IF EXISTS partitioned_by_tuple;
 
 CREATE TABLE partitioned_by_tuple
 (
@@ -88,9 +88,9 @@ ORDER BY name ASC;
 SELECT sum(y)
 FROM partitioned_by_tuple;
 
-SYSTEM DROP  TABLE partitioned_by_tuple;
+DROP TABLE partitioned_by_tuple;
 
-SYSTEM DROP  TABLE IF EXISTS partitioned_by_string;
+DROP TABLE IF EXISTS partitioned_by_string;
 
 CREATE TABLE partitioned_by_string
 (
@@ -117,9 +117,9 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM partitioned_by_string;
 
-SYSTEM DROP  TABLE partitioned_by_string;
+DROP TABLE partitioned_by_string;
 
-SYSTEM DROP  TABLE IF EXISTS without_fixed_size_columns;
+DROP TABLE IF EXISTS without_fixed_size_columns;
 
 CREATE TABLE without_fixed_size_columns
 (
@@ -145,4 +145,4 @@ SELECT *
 FROM without_fixed_size_columns
 ORDER BY s ASC;
 
-SYSTEM DROP  TABLE without_fixed_size_columns;
+DROP TABLE without_fixed_size_columns;

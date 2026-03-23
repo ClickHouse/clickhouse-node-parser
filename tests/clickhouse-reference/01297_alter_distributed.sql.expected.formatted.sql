@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM drop  table if exists merge_distributed;
+DROP TABLE IF EXISTS merge_distributed;
 
-SYSTEM drop  table if exists merge_distributed1;
+DROP TABLE IF EXISTS merge_distributed1;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -47,6 +47,6 @@ FROM merge_distributed
 WHERE dummy1 <> ''
 LIMIT 10; -- { serverError UNKNOWN_IDENTIFIER }
 
-SYSTEM drop  table merge_distributed;
+DROP TABLE merge_distributed;
 
-SYSTEM drop  table merge_distributed1;
+DROP TABLE merge_distributed1;

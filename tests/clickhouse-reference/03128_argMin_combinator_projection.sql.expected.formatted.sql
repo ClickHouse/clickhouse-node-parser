@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS combinator_argMin_table_r1 SYNC;
+DROP TABLE IF EXISTS combinator_argMin_table_r1;
 
-SYSTEM DROP  TABLE IF EXISTS combinator_argMin_table_r2 SYNC;
+DROP TABLE IF EXISTS combinator_argMin_table_r2;
 
 CREATE TABLE combinator_argMin_table_r1
 (

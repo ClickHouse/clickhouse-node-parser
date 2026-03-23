@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test, src;
+DROP TABLE IF EXISTS test, src;
 
 SELECT
     count(),

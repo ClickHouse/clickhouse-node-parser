@@ -1,11 +1,11 @@
 -- Tags: long, no-asan, no-msan
 SET use_statistics = 0;
 
-SYSTEM drop  table if exists tab_l;
+DROP TABLE IF EXISTS tab_l;
 
-SYSTEM drop  table if exists tab_m;
+DROP TABLE IF EXISTS tab_m;
 
-SYSTEM drop  table if exists tab_r;
+DROP TABLE IF EXISTS tab_r;
 
 CREATE TABLE tab_l
 (

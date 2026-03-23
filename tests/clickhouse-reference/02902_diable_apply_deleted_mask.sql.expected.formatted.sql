@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_apply_deleted_mask;
+DROP TABLE IF EXISTS test_apply_deleted_mask;
 
 CREATE TABLE test_apply_deleted_mask
 (
@@ -34,4 +34,4 @@ INSERT INTO test_apply_deleted_mask SELECT
     number::String
 FROM numbers(5, 1);
 
-SYSTEM DROP  TABLE test_apply_deleted_mask;
+DROP TABLE test_apply_deleted_mask;

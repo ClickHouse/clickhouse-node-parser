@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_02559;
+DROP TABLE IF EXISTS t_02559;
 
 CREATE TABLE t_02559
 (
@@ -41,4 +41,4 @@ PREWHERE sin(a) < b
     AND sin(a) > negate(a);
 
 -- {echoOff}
-SYSTEM DROP  TABLE t_02559;
+DROP TABLE t_02559;

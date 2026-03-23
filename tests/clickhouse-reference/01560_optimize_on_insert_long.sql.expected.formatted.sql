@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS replacing_merge_tree;
+DROP TABLE IF EXISTS replacing_merge_tree;
 
 CREATE TABLE replacing_merge_tree
 (
@@ -15,9 +15,9 @@ SELECT *
 FROM replacing_merge_tree
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE replacing_merge_tree;
+DROP TABLE replacing_merge_tree;
 
-SYSTEM DROP  TABLE IF EXISTS collapsing_merge_tree;
+DROP TABLE IF EXISTS collapsing_merge_tree;
 
 CREATE TABLE collapsing_merge_tree
 (
@@ -35,9 +35,9 @@ SELECT *
 FROM collapsing_merge_tree
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE collapsing_merge_tree;
+DROP TABLE collapsing_merge_tree;
 
-SYSTEM DROP  TABLE IF EXISTS versioned_collapsing_merge_tree;
+DROP TABLE IF EXISTS versioned_collapsing_merge_tree;
 
 CREATE TABLE versioned_collapsing_merge_tree
 (
@@ -56,9 +56,9 @@ SELECT *
 FROM versioned_collapsing_merge_tree
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE versioned_collapsing_merge_tree;
+DROP TABLE versioned_collapsing_merge_tree;
 
-SYSTEM DROP  TABLE IF EXISTS summing_merge_tree;
+DROP TABLE IF EXISTS summing_merge_tree;
 
 CREATE TABLE summing_merge_tree
 (
@@ -76,9 +76,9 @@ SELECT *
 FROM summing_merge_tree
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE summing_merge_tree;
+DROP TABLE summing_merge_tree;
 
-SYSTEM DROP  TABLE IF EXISTS aggregating_merge_tree;
+DROP TABLE IF EXISTS aggregating_merge_tree;
 
 CREATE TABLE aggregating_merge_tree
 (
@@ -96,9 +96,9 @@ SELECT *
 FROM aggregating_merge_tree
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE aggregating_merge_tree;
+DROP TABLE aggregating_merge_tree;
 
-SYSTEM DROP  TABLE IF EXISTS empty;
+DROP TABLE IF EXISTS empty;
 
 CREATE TABLE empty
 (
@@ -125,4 +125,4 @@ WHERE table = 'empty'
     AND active = 1
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE empty;
+DROP TABLE empty;

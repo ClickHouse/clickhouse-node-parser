@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS t_cache_sparse;
+DROP TABLE IF EXISTS t_cache_sparse;
 
 CREATE TABLE t_cache_sparse
 (
@@ -33,4 +33,4 @@ SELECT count()
 FROM `system`.query_cache
 WHERE like(query, 'SELECT v FROM t_cache_sparse%');
 
-SYSTEM DROP  TABLE t_cache_sparse;
+DROP TABLE t_cache_sparse;

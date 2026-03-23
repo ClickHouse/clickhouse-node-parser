@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS source, destination, source_to_destination_mv;
+DROP TABLE IF EXISTS source, destination, source_to_destination_mv;
 
 CREATE OR REPLACE TABLE destination
 (

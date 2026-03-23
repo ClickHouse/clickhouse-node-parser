@@ -1,5 +1,5 @@
 -- Tags: no-tsan, no-asan, no-ubsan, no-msan, no-debug
-SYSTEM drop  table if exists tab_lc;
+DROP TABLE IF EXISTS tab_lc;
 
 CREATE TABLE tab_lc
 (

@@ -1,6 +1,6 @@
 -- Tags: no-shared-catalog
 -- no-shared-catalog: standard MergeTree is not supported
-SYSTEM drop  table if exists trunc;
+DROP TABLE IF EXISTS trunc;
 
 SET default_table_engine = 'ReplicatedMergeTree';
 
@@ -20,7 +20,7 @@ SELECT
     sum(n)
 FROM trunc;
 
-SYSTEM drop  table trunc;
+DROP TABLE trunc;
 
 SET default_table_engine = 'MergeTree';
 

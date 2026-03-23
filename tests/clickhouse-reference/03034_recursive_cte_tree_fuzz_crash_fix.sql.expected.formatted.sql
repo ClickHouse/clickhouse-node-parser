@@ -4,7 +4,7 @@ SET enable_global_with_statement = 1;
 
 SET session_timezone = 'Etc/UTC';
 
-SYSTEM DROP  TABLE IF EXISTS department__fuzz_1;
+DROP TABLE IF EXISTS department__fuzz_1;
 
 CREATE TABLE department__fuzz_1
 (
@@ -30,7 +30,7 @@ INSERT INTO department__fuzz_1;
 
 INSERT INTO department__fuzz_1;
 
-SYSTEM DROP  TABLE IF EXISTS department__fuzz_3;
+DROP TABLE IF EXISTS department__fuzz_3;
 
 CREATE TABLE department__fuzz_3
 (
@@ -86,6 +86,6 @@ ORDER BY
     parent_department DESC,
     name ASC;
 
-SYSTEM DROP  TABLE department__fuzz_1;
+DROP TABLE department__fuzz_1;
 
-SYSTEM DROP  TABLE department__fuzz_3;
+DROP TABLE department__fuzz_3;

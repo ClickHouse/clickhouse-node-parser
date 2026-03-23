@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS table2;
+DROP TABLE IF EXISTS table2;
 
-SYSTEM DROP  TABLE IF EXISTS table3;
+DROP TABLE IF EXISTS table3;
 
 CREATE TABLE table2 AS numbers(5);
 
@@ -16,6 +16,6 @@ SELECT
     sum(number)
 FROM table3;
 
-SYSTEM DROP  TABLE table2;
+DROP TABLE table2;
 
-SYSTEM DROP  TABLE table3;
+DROP TABLE table3;

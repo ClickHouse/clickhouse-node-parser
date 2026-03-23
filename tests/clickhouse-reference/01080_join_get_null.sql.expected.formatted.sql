@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_joinGet;
+DROP TABLE IF EXISTS test_joinGet;
 
 CREATE TABLE test_joinGet
 (
@@ -16,4 +16,4 @@ WHERE joinGet(test_joinGet, 'name', user_id) != '';
 SELECT CAST(NULL AS Nullable(Int32)) AS user_id
 WHERE joinGet(test_joinGet, 'name', user_id) != '';
 
-SYSTEM DROP  TABLE test_joinGet;
+DROP TABLE test_joinGet;

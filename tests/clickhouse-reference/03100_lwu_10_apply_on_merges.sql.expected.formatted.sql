@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_merges SYNC;
+DROP TABLE IF EXISTS t_lwu_merges;
 
 SET enable_lightweight_update = 1;
 
@@ -31,4 +31,4 @@ SELECT
 FROM t_lwu_merges
 SETTINGS apply_patch_parts = 1;
 
-SYSTEM DROP  TABLE t_lwu_merges SYNC;
+DROP TABLE t_lwu_merges;

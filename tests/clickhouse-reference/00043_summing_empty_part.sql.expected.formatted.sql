@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS empty_summing;
+DROP TABLE IF EXISTS empty_summing;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -23,4 +23,4 @@ INSERT INTO empty_summing;
 
 INSERT INTO empty_summing;
 
-SYSTEM DROP  TABLE empty_summing;
+DROP TABLE empty_summing;

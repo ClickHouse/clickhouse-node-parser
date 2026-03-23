@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_key_condition_float;
+DROP TABLE IF EXISTS t_key_condition_float;
 
 CREATE TABLE t_key_condition_float
 (
@@ -25,7 +25,7 @@ SELECT count()
 FROM t_key_condition_float
 WHERE a > 0::Float64;
 
-SYSTEM DROP  TABLE t_key_condition_float;
+DROP TABLE t_key_condition_float;
 
 CREATE TABLE t_key_condition_float
 (

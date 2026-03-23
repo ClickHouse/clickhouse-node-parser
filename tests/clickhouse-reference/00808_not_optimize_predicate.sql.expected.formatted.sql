@@ -4,7 +4,7 @@ SET convert_query_to_cnf = 0;
 
 SET allow_deprecated_error_prone_window_functions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_00808;
+DROP TABLE IF EXISTS test_00808;
 
 CREATE TABLE test_00808
 (
@@ -100,7 +100,7 @@ FROM (
 WHERE z = 'a'
 GROUP BY z;
 
-SYSTEM DROP  TABLE IF EXISTS test_00808_push_down_with_finalizeAggregation;
+DROP TABLE IF EXISTS test_00808_push_down_with_finalizeAggregation;
 
 CREATE TABLE test_00808_push_down_with_finalizeAggregation
 ENGINE = AggregatingMergeTree

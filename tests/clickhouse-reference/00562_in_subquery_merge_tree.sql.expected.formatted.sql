@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS merge_tree_in_subqueries;
+DROP TABLE IF EXISTS merge_tree_in_subqueries;
 
 CREATE TABLE merge_tree_in_subqueries
 (

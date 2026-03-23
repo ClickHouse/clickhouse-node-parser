@@ -1,9 +1,9 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01785_db;
+DROP DATABASE IF EXISTS `01785_db`;
 
 CREATE DATABASE `01785_db`;
 
-SYSTEM DROP  TABLE IF EXISTS 01785_db.simple_key_source_table;
+DROP TABLE IF EXISTS `01785_db`.simple_key_source_table;
 
 CREATE TABLE `01785_db`.simple_key_source_table
 (
@@ -14,7 +14,7 @@ ENGINE = TinyLog();
 
 INSERT INTO `01785_db`.simple_key_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 01785_db.simple_key_flat_dictionary;
+DROP DICTIONARY IF EXISTS `01785_db`.simple_key_flat_dictionary;
 
 CREATE DICTIONARY `01785_db`.simple_key_flat_dictionary
 (
@@ -37,7 +37,7 @@ FROM `system`.dictionaries
 WHERE database = '01785_db'
     AND name = 'simple_key_flat_dictionary';
 
-SYSTEM DROP  DICTIONARY 01785_db.simple_key_flat_dictionary;
+DROP DICTIONARY `01785_db`.simple_key_flat_dictionary;
 
 CREATE DICTIONARY `01785_db`.simple_key_hashed_dictionary
 (
@@ -60,7 +60,7 @@ FROM `system`.dictionaries
 WHERE database = '01785_db'
     AND name = 'simple_key_hashed_dictionary';
 
-SYSTEM DROP  DICTIONARY 01785_db.simple_key_hashed_dictionary;
+DROP DICTIONARY `01785_db`.simple_key_hashed_dictionary;
 
 CREATE DICTIONARY `01785_db`.simple_key_cache_dictionary
 (
@@ -84,11 +84,11 @@ FROM `system`.dictionaries
 WHERE database = '01785_db'
     AND name = 'simple_key_cache_dictionary';
 
-SYSTEM DROP  DICTIONARY 01785_db.simple_key_cache_dictionary;
+DROP DICTIONARY `01785_db`.simple_key_cache_dictionary;
 
-SYSTEM DROP  TABLE 01785_db.simple_key_source_table;
+DROP TABLE `01785_db`.simple_key_source_table;
 
-SYSTEM DROP  TABLE IF EXISTS 01785_db.complex_key_source_table;
+DROP TABLE IF EXISTS `01785_db`.complex_key_source_table;
 
 CREATE TABLE `01785_db`.complex_key_source_table
 (
@@ -122,8 +122,8 @@ FROM `system`.dictionaries
 WHERE database = '01785_db'
     AND name = 'complex_key_hashed_dictionary';
 
-SYSTEM DROP  DICTIONARY 01785_db.complex_key_hashed_dictionary;
+DROP DICTIONARY `01785_db`.complex_key_hashed_dictionary;
 
-SYSTEM DROP  TABLE 01785_db.complex_key_source_table;
+DROP TABLE `01785_db`.complex_key_source_table;
 
-SYSTEM DROP  DATABASE 01785_db;
+DROP DATABASE `01785_db`;

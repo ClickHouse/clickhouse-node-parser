@@ -69,7 +69,7 @@ ORDER BY
     c2 ASC,
     c3 ASC;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -85,4 +85,4 @@ FROM urlCluster('test_cluster_one_shard_three_replicas_localhost', 'http://local
 SELECT *
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

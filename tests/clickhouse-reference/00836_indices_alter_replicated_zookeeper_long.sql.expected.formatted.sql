@@ -1,11 +1,11 @@
 -- Tags: long, replica
-SYSTEM DROP  TABLE IF EXISTS minmax_idx;
+DROP TABLE IF EXISTS minmax_idx;
 
-SYSTEM DROP  TABLE IF EXISTS minmax_idx_r;
+DROP TABLE IF EXISTS minmax_idx_r;
 
-SYSTEM DROP  TABLE IF EXISTS minmax_idx2;
+DROP TABLE IF EXISTS minmax_idx2;
 
-SYSTEM DROP  TABLE IF EXISTS minmax_idx2_r;
+DROP TABLE IF EXISTS minmax_idx2_r;
 
 SET replication_alter_partitions_sync = 2;
 
@@ -91,10 +91,10 @@ FROM minmax_idx2_r
 WHERE u64 * i32 >= 2
 ORDER BY (u64, i32) ASC;
 
-SYSTEM DROP  TABLE minmax_idx;
+DROP TABLE minmax_idx;
 
-SYSTEM DROP  TABLE minmax_idx_r;
+DROP TABLE minmax_idx_r;
 
-SYSTEM DROP  TABLE minmax_idx2;
+DROP TABLE minmax_idx2;
 
-SYSTEM DROP  TABLE minmax_idx2_r;
+DROP TABLE minmax_idx2_r;

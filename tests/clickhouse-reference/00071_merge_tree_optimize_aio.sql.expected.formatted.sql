@@ -1,5 +1,5 @@
 -- Tags: stateful
-SYSTEM DROP  TABLE IF EXISTS hits_snippet;
+DROP TABLE IF EXISTS hits_snippet;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -72,4 +72,4 @@ ORDER BY
     URL ASC,
     Referer ASC;
 
-SYSTEM DROP  TABLE hits_snippet;
+DROP TABLE hits_snippet;

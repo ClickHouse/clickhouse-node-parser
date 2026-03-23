@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS hierarchy_source_table;
+DROP TABLE IF EXISTS hierarchy_source_table;
 
 CREATE TABLE hierarchy_source_table
 (
@@ -9,7 +9,7 @@ ENGINE = TinyLog;
 
 INSERT INTO hierarchy_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS hierarchy_flat_dictionary;
+DROP DICTIONARY IF EXISTS hierarchy_flat_dictionary;
 
 CREATE DICTIONARY hierarchy_flat_dictionary
 (
@@ -75,6 +75,6 @@ SELECT dictGetDescendants('hierarchy_flat_dictionary', 4, 1);
 
 SELECT dictGetDescendants('hierarchy_flat_dictionary', 5, 1);
 
-SYSTEM DROP  DICTIONARY hierarchy_flat_dictionary;
+DROP DICTIONARY hierarchy_flat_dictionary;
 
-SYSTEM DROP  TABLE hierarchy_source_table;
+DROP TABLE hierarchy_source_table;

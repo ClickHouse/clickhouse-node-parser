@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_multistep;
+DROP TABLE IF EXISTS t_lwu_multistep;
 
 SET enable_multiple_prewhere_read_steps = 1;
 

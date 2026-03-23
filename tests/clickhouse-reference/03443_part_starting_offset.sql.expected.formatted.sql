@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 -- disable merge
 CREATE TABLE test
@@ -71,4 +71,4 @@ PREWHERE (8 = (_part_starting_offset * _part_offset))
     AND 3
 WHERE 8 = (_part_starting_offset + _part_offset);
 
-SYSTEM drop  table test;
+DROP TABLE test;

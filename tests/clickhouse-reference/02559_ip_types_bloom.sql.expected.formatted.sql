@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ip_bloom;
+DROP TABLE IF EXISTS ip_bloom;
 
 CREATE TABLE ip_bloom
 (
@@ -16,4 +16,4 @@ INSERT INTO ip_bloom;
 SELECT *
 FROM ip_bloom;
 
-SYSTEM DROP  TABLE ip_bloom;
+DROP TABLE ip_bloom;

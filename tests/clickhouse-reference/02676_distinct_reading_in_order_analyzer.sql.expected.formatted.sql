@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 SET enable_analyzer = 1;
 

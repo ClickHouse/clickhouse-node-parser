@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -16,4 +16,4 @@ ORDER BY
     c.size ASC
 FORMAT Null;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

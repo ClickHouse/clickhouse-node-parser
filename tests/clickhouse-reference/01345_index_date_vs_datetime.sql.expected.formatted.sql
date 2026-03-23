@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS index;
+DROP TABLE IF EXISTS index;
 
 CREATE TABLE index
 (
@@ -17,4 +17,4 @@ SELECT *
 FROM index
 WHERE identity(d > toDateTime('2020-04-06 23:59:59'));
 
-SYSTEM DROP  TABLE index;
+DROP TABLE index;

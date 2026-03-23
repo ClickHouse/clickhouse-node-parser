@@ -258,4 +258,4 @@ SELECT
 FROM decrypt_null
 ORDER BY user_id ASC;
 
-SYSTEM DROP  TABLE encryption_test;
+DROP TABLE encryption_test;

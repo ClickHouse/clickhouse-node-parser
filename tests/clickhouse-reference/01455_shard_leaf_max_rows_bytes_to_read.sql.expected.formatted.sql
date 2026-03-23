@@ -70,9 +70,9 @@ FROM (
     )
 SETTINGS max_bytes_to_read_leaf = 1000;
 
-SYSTEM DROP  TABLE IF EXISTS test_local;
+DROP TABLE IF EXISTS test_local;
 
-SYSTEM DROP  TABLE IF EXISTS test_distributed;
+DROP TABLE IF EXISTS test_distributed;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_serialization;
+DROP TABLE IF EXISTS test_serialization;
 
 CREATE TABLE test_serialization
 (

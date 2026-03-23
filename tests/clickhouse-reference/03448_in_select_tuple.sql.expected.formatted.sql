@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
-SYSTEM DROP  TABLE IF EXISTS table2;
+DROP TABLE IF EXISTS table2;
 
 CREATE TABLE table1
 (
@@ -30,6 +30,6 @@ WHERE (id1, id2) IN (
         FROM table2
     );
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;
 
-SYSTEM DROP  TABLE table2;
+DROP TABLE table2;

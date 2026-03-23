@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01766_db;
+DROP DATABASE IF EXISTS `01766_db`;
 
 CREATE DATABASE `01766_db`;
 
@@ -62,9 +62,9 @@ SELECT *
 FROM `01766_db`.hashed_dictionary_complex_key_simple_attributes
 ORDER BY (id, id_key) ASC;
 
-SYSTEM DROP  DICTIONARY 01766_db.hashed_dictionary_complex_key_simple_attributes;
+DROP DICTIONARY `01766_db`.hashed_dictionary_complex_key_simple_attributes;
 
-SYSTEM DROP  TABLE 01766_db.complex_key_simple_attributes_source_table;
+DROP TABLE `01766_db`.complex_key_simple_attributes_source_table;
 
 CREATE TABLE `01766_db`.complex_key_complex_attributes_source_table
 (
@@ -125,8 +125,8 @@ SELECT *
 FROM `01766_db`.hashed_dictionary_complex_key_complex_attributes
 ORDER BY (id, id_key) ASC;
 
-SYSTEM DROP  DICTIONARY 01766_db.hashed_dictionary_complex_key_complex_attributes;
+DROP DICTIONARY `01766_db`.hashed_dictionary_complex_key_complex_attributes;
 
-SYSTEM DROP  TABLE 01766_db.complex_key_complex_attributes_source_table;
+DROP TABLE `01766_db`.complex_key_complex_attributes_source_table;
 
-SYSTEM DROP  DATABASE 01766_db;
+DROP DATABASE `01766_db`;

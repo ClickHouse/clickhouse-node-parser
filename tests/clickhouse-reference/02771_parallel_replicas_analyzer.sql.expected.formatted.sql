@@ -1,5 +1,5 @@
 -- Tags: zookeeper
-SYSTEM DROP  TABLE IF EXISTS join_inner_table__fuzz_146_replicated SYNC;
+DROP TABLE IF EXISTS join_inner_table__fuzz_146_replicated;
 
 CREATE TABLE join_inner_table__fuzz_146_replicated
 (
@@ -46,4 +46,4 @@ WHERE event_date >= yesterday()
             AND like(query, '-- Simple query with analyzer and pure parallel replicas%')
     );
 
-SYSTEM DROP  TABLE join_inner_table__fuzz_146_replicated SYNC;
+DROP TABLE join_inner_table__fuzz_146_replicated;

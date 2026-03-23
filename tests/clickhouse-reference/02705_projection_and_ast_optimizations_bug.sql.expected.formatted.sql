@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (
@@ -20,4 +20,4 @@ GROUP BY
     t1.c0,
     pow((erf((negate((t1.c0))))), t1.c0);
 
-SYSTEM drop  table t1;
+DROP TABLE t1;

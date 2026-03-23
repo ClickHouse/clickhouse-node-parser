@@ -1,6 +1,6 @@
 -- Tags: no-replicated-database
 -- Tag no-replicated-database: ON CLUSTER is not allowed
-SYSTEM drop  table if exists local_t_l5ydey;
+DROP TABLE IF EXISTS local_t_l5ydey;
 
 CREATE TABLE local_t_l5ydey ON CLUSTER test_shard_localhost
 (
@@ -27,4 +27,4 @@ ORDER BY c_qv5rv ASC;
 CREATE DATABASE local_t_l5ydey
 ENGINE = Replicated(concat('/clickhouse/tables/test_', currentDatabase(), '/{shard}/local_t_l5ydey'), '1', '1'); -- { serverError BAD_ARGUMENTS }
 
-SYSTEM drop  table local_t_l5ydey;
+DROP TABLE local_t_l5ydey;

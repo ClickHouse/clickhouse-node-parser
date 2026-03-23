@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_multiple_array_join;
+DROP TABLE IF EXISTS test_multiple_array_join;
 
 CREATE TABLE test_multiple_array_join
 (
@@ -22,4 +22,4 @@ ARRAY JOIN person
 ARRAY JOIN properties
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE test_multiple_array_join;
+DROP TABLE test_multiple_array_join;

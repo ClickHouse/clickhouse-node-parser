@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_reload;
+DROP TABLE IF EXISTS t_sparse_reload;
 
 CREATE TABLE t_sparse_reload
 (
@@ -18,4 +18,4 @@ SELECT count()
 FROM t_sparse_reload
 WHERE NOT ignore(*);
 
-SYSTEM DROP  TABLE t_sparse_reload;
+DROP TABLE t_sparse_reload;

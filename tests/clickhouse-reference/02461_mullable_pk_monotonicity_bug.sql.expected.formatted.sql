@@ -56,7 +56,7 @@ FROM tab
 WHERE plus(1::LowCardinality(Nullable(UInt8)), x) <= 2
 ORDER BY x ASC;
 
-SYSTEM drop  table tab;
+DROP TABLE tab;
 
 SET max_rows_to_read = 100;
 

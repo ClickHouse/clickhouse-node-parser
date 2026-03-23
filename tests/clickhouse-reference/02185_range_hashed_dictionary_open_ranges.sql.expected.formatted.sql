@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02185_range_dictionary_source_table;
+DROP TABLE IF EXISTS `02185_range_dictionary_source_table`;
 
 CREATE TABLE `02185_range_dictionary_source_table`
 (
@@ -14,7 +14,7 @@ INSERT INTO `02185_range_dictionary_source_table`;
 SELECT *
 FROM `02185_range_dictionary_source_table`;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02185_range_dictionary;
+DROP DICTIONARY IF EXISTS `02185_range_dictionary`;
 
 CREATE DICTIONARY `02185_range_dictionary`
 (
@@ -44,7 +44,7 @@ SELECT dictHas('02185_range_dictionary', 0, 5001);
 
 SELECT dictHas('02185_range_dictionary', 0, 10001);
 
-SYSTEM DROP  DICTIONARY 02185_range_dictionary;
+DROP DICTIONARY `02185_range_dictionary`;
 
 CREATE DICTIONARY `02185_range_dictionary`
 (
@@ -59,4 +59,4 @@ LIFETIME(0)
 RANGE(MIN start MAX `end`)
 LAYOUT(RANGE_HASHED(convert_null_range_bound_to_open 0));
 
-SYSTEM DROP  TABLE 02185_range_dictionary_source_table;
+DROP TABLE `02185_range_dictionary_source_table`;

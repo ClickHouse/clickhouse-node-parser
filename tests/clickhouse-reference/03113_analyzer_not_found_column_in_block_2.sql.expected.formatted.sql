@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/pull/62457
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (

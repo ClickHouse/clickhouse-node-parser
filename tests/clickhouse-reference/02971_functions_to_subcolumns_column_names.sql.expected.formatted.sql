@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_column_names;
+DROP TABLE IF EXISTS t_column_names;
 
 CREATE TABLE t_column_names
 (
@@ -19,4 +19,4 @@ SELECT
 FROM t_column_names
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE t_column_names;
+DROP TABLE t_column_names;

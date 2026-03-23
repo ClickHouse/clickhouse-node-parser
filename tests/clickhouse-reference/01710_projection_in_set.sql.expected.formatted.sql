@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists x;
+DROP TABLE IF EXISTS x;
 
 CREATE TABLE x
 (
@@ -39,7 +39,7 @@ WHERE i IN (
         FROM numbers(4)
     );
 
-SYSTEM drop  table x;
+DROP TABLE x;
 
 -- Projection analysis should not break other IN constructs. See https://github.com/ClickHouse/ClickHouse/issues/35336
 CREATE TABLE IF NOT EXISTS flows
@@ -63,4 +63,4 @@ FROM flows
 WHERE 2 == 2
 ORDER BY SrcAS ASC;
 
-SYSTEM drop  table flows;
+DROP TABLE flows;

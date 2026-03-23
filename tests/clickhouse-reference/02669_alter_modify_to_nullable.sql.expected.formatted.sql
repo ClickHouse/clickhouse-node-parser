@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_modify_to_nullable;
+DROP TABLE IF EXISTS t_modify_to_nullable;
 
 CREATE TABLE t_modify_to_nullable
 (
@@ -51,4 +51,4 @@ WHERE database = currentDatabase()
     AND event_type = 'MutatePart'
 ORDER BY part_name ASC;
 
-SYSTEM DROP  TABLE t_modify_to_nullable;
+DROP TABLE t_modify_to_nullable;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -170,9 +170,9 @@ WHERE arrayMap(day -> day + 1, [1,2,3])[1] = 2
 
 SET max_rows_to_read = 0;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  TABLE IF EXISTS test_index;
+DROP TABLE IF EXISTS test_index;
 
 CREATE TABLE test_index
 (
@@ -200,9 +200,9 @@ FROM test_index
 WHERE toUInt32(key_string) = 1;
 
 -- check alias column can be used to match projections
-SYSTEM drop  table if exists pd;
+DROP TABLE IF EXISTS pd;
 
-SYSTEM drop  table if exists pl;
+DROP TABLE IF EXISTS pl;
 
 CREATE TABLE pd
 (
@@ -233,11 +233,11 @@ SETTINGS
     optimize_use_projections = 1,
     force_optimize_projection = 1;
 
-SYSTEM drop  table pd;
+DROP TABLE pd;
 
-SYSTEM drop  table pl;
+DROP TABLE pl;
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TEMPORARY TABLE t
 (
@@ -252,4 +252,4 @@ SELECT
     sum(y)
 FROM t;
 
-SYSTEM drop  table t;
+DROP TABLE t;

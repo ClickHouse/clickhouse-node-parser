@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM DROP  TABLE IF EXISTS d;
+DROP TABLE IF EXISTS d;
 
 CREATE TABLE t
 (
@@ -25,7 +25,7 @@ ENGINE = Distributed(test_shard_localhost, currentDatabase(), t);
 SELECT *
 FROM d;
 
-SYSTEM DROP  TABLE d;
+DROP TABLE d;
 
 CREATE TABLE d
 (
@@ -39,4 +39,4 @@ CREATE TABLE d
 )
 ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), t);
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

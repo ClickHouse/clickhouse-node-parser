@@ -1,8 +1,8 @@
 -- Tags: no-fasttest
 -- We test only that parsing of the endpoint works in this test.
-SYSTEM DROP  TABLE IF EXISTS tablefunc01;
+DROP TABLE IF EXISTS tablefunc01;
 
-SYSTEM DROP  TABLE IF EXISTS tablefunc02;
+DROP TABLE IF EXISTS tablefunc02;
 
 CREATE TABLE tablefunc01
 (

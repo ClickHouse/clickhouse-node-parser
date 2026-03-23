@@ -102,4 +102,4 @@ WHERE like(query, '%SELECT ''SLEEP #6 TEST''%')
     AND event_date >= yesterday()
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE sleep_view;
+DROP TABLE sleep_view;

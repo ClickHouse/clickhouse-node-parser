@@ -1,4 +1,4 @@
-SYSTEM DROP  TEMPORARY TABLE IF EXISTS temp_tab;
+DROP TEMPORARY TABLE IF EXISTS temp_tab;
 
 CREATE TEMPORARY TABLE temp_tab
 (
@@ -14,8 +14,8 @@ FROM temp_tab;
 
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE temp_tab;
+DROP TABLE temp_tab;
 
 SET send_logs_level = 'warning';
 
-SYSTEM DROP  TEMPORARY TABLE temp_tab;
+DROP TEMPORARY TABLE temp_tab;

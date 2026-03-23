@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -21,7 +21,7 @@ SELECT *
 FROM test
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE test SYNC;
+DROP TABLE test;
 
 SELECT
     event_type,

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_alter_codec_pk;
+DROP TABLE IF EXISTS test_alter_codec_pk;
 
 CREATE TABLE test_alter_codec_pk
 (

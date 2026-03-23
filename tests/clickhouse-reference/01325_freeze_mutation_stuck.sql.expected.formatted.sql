@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mt;
+DROP TABLE IF EXISTS mt;
 
 CREATE TABLE mt
 (
@@ -16,4 +16,4 @@ FROM mt;
 
 SET mutations_sync = 1;
 
-SYSTEM DROP  TABLE mt;
+DROP TABLE mt;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -28,4 +28,4 @@ FROM test FINAL;
 
 SET max_threads = 2;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

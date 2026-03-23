@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test1;
+DROP TABLE IF EXISTS test1;
 
 CREATE TABLE test1
 (
@@ -35,11 +35,11 @@ FROM test1
 WHERE i NOT IN (1, 2, 3, 4, 5)
 ORDER BY i ASC;
 
-SYSTEM drop  table test1;
+DROP TABLE test1;
 
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM drop  table if exists t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE t1
 (
@@ -109,6 +109,6 @@ WHERE (date, a, b) NOT IN (
         FROM t1
     );
 
-SYSTEM drop  table t1;
+DROP TABLE t1;
 
-SYSTEM drop  table t2;
+DROP TABLE t2;

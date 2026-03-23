@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table_join_1;
+DROP TABLE IF EXISTS test_table_join_1;
 
 CREATE TABLE test_table_join_1
 (
@@ -7,7 +7,7 @@ CREATE TABLE test_table_join_1
 )
 ENGINE = TinyLog;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_2;
+DROP TABLE IF EXISTS test_table_join_2;
 
 CREATE TABLE test_table_join_2
 (
@@ -16,7 +16,7 @@ CREATE TABLE test_table_join_2
 )
 ENGINE = TinyLog;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_3;
+DROP TABLE IF EXISTS test_table_join_3;
 
 CREATE TABLE test_table_join_3
 (
@@ -42,8 +42,8 @@ INNER JOIN test_table_join_2 AS t2
 INNER JOIN test_table_join_3 AS t3
     ON t2.id = t3.id;
 
-SYSTEM DROP  TABLE test_table_join_1;
+DROP TABLE test_table_join_1;
 
-SYSTEM DROP  TABLE test_table_join_2;
+DROP TABLE test_table_join_2;
 
-SYSTEM DROP  TABLE test_table_join_3;
+DROP TABLE test_table_join_3;

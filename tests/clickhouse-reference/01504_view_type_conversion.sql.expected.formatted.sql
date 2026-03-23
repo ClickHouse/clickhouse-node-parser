@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS testv;
+DROP TABLE IF EXISTS testv;
 
 CREATE VIEW testv (a UInt32)
 AS
@@ -8,7 +8,7 @@ FROM numbers(10);
 SELECT groupArray(a)
 FROM testv;
 
-SYSTEM DROP  TABLE testv;
+DROP TABLE testv;
 
 CREATE VIEW testv (a String)
 AS

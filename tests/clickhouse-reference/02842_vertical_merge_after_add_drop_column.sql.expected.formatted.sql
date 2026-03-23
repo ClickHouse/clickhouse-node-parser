@@ -1,5 +1,5 @@
 -- In some versions vertical merges after DROP COLUMN was broken in some cases
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (
@@ -15,4 +15,4 @@ INSERT INTO data (key);
 
 INSERT INTO data (key);
 
-SYSTEM DROP  TABLE data;
+DROP TABLE data;

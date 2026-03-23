@@ -14,6 +14,6 @@ CREATE TABLE `03364_delta`
 ENGINE = MergeTree()
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE 03364_gorilla;
+DROP TABLE `03364_gorilla`;
 
-SYSTEM DROP  TABLE 03364_delta;
+DROP TABLE `03364_delta`;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS userid_test;
+DROP TABLE IF EXISTS userid_test;
 
 SET use_index_for_in_with_subqueries = 1;
 
@@ -13,7 +13,7 @@ SETTINGS index_granularity = 8192;
 
 INSERT INTO userid_test;
 
-SYSTEM DROP  TABLE IF EXISTS userid_set;
+DROP TABLE IF EXISTS userid_set;
 
 CREATE TABLE userid_set
 (
@@ -35,6 +35,6 @@ SELECT *
 FROM userid_test
 WHERE userid IN (userid_set);
 
-SYSTEM DROP  TABLE userid_test;
+DROP TABLE userid_test;
 
-SYSTEM DROP  TABLE userid_set;
+DROP TABLE userid_set;

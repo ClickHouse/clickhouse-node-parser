@@ -1,6 +1,6 @@
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS t_sparse_mutations_4;
+DROP TABLE IF EXISTS t_sparse_mutations_4;
 
 CREATE TABLE t_sparse_mutations_4
 (
@@ -26,4 +26,4 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
-SYSTEM DROP  TABLE t_sparse_mutations_4;
+DROP TABLE t_sparse_mutations_4;

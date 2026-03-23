@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -39,4 +39,4 @@ ORDER BY
     string_value ASC
 SETTINGS max_threads = 1;
 
-SYSTEM drop  table test_table;
+DROP TABLE test_table;

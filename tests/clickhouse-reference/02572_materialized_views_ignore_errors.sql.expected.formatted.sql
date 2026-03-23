@@ -1,12 +1,12 @@
 SET prefer_localhost_replica = 1;
 
-SYSTEM drop  table if exists data_02572;
+DROP TABLE IF EXISTS data_02572;
 
-SYSTEM drop  table if exists proxy_02572;
+DROP TABLE IF EXISTS proxy_02572;
 
-SYSTEM drop  table if exists push_to_proxy_mv_02572;
+DROP TABLE IF EXISTS push_to_proxy_mv_02572;
 
-SYSTEM drop  table if exists receiver_02572;
+DROP TABLE IF EXISTS receiver_02572;
 
 CREATE TABLE data_02572
 (

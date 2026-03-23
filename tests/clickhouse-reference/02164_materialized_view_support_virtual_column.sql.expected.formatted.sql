@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_tb;
+DROP TABLE IF EXISTS test_tb;
 
 CREATE TABLE test_tb
 (
@@ -8,7 +8,7 @@ CREATE TABLE test_tb
 ENGINE = MergeTree()
 ORDER BY a;
 
-SYSTEM DROP  VIEW IF EXISTS test_view_tb;
+DROP VIEW IF EXISTS test_view_tb;
 
 CREATE MATERIALIZED VIEW test_view_tb
 ENGINE = MergeTree()

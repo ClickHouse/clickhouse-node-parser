@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS rename_table_multiple;
+DROP TABLE IF EXISTS rename_table_multiple;
 
 CREATE TABLE rename_table_multiple
 (
@@ -25,7 +25,7 @@ FORMAT TSVWithNames;
 
 INSERT INTO rename_table_multiple;
 
-SYSTEM DROP  TABLE IF EXISTS rename_table_multiple_compact;
+DROP TABLE IF EXISTS rename_table_multiple_compact;
 
 CREATE TABLE rename_table_multiple_compact
 (

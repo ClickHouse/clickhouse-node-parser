@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nulls;
+DROP TABLE IF EXISTS `nulls`;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -19,4 +19,4 @@ SELECT count()
 FROM `nulls`
 WHERE isNull(x);
 
-SYSTEM DROP  TABLE nulls;
+DROP TABLE `nulls`;

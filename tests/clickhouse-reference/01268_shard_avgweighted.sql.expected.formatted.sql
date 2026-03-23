@@ -25,4 +25,4 @@ FROM remote('127.0.0.{2,3}', currentDatabase(), dummy);
 SELECT avgWeighted(toInt8(100), -1)
 FROM remote('127.0.0.{2,3}', currentDatabase(), dummy);
 
-SYSTEM DROP  TABLE dummy;
+DROP TABLE dummy;

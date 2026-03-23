@@ -3,7 +3,7 @@ SET enable_analyzer = 1;
 
 SET optimize_rewrite_like_perfect_affix = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -314,4 +314,4 @@ FROM tab
 WHERE like(col_lowcardinality_nullable_fixedstring, '%a\0')
 SETTINGS optimize_rewrite_like_perfect_affix = 0;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

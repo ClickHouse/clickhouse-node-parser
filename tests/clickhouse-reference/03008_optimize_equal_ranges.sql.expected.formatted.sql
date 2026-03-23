@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_optimize_equal_ranges;
+DROP TABLE IF EXISTS t_optimize_equal_ranges;
 
 CREATE TABLE t_optimize_equal_ranges
 (
@@ -81,4 +81,4 @@ ORDER BY
     func ASC,
     threads ASC;
 
-SYSTEM DROP  TABLE t_optimize_equal_ranges;
+DROP TABLE t_optimize_equal_ranges;

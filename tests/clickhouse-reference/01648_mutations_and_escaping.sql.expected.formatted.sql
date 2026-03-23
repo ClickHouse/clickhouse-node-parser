@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mutations_and_escaping_1648;
+DROP TABLE IF EXISTS mutations_and_escaping_1648;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -17,4 +17,4 @@ SELECT e
 FROM mutations_and_escaping_1648
 ORDER BY d ASC;
 
-SYSTEM DROP  TABLE mutations_and_escaping_1648;
+DROP TABLE mutations_and_escaping_1648;

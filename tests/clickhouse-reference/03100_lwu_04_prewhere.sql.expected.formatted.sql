@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_shared SYNC;
+DROP TABLE IF EXISTS t_shared;
 
 SET enable_lightweight_update = 1;
 
@@ -39,4 +39,4 @@ FROM t_shared
 PREWHERE c2 = 'aaa'
 WHERE c1 = 111;
 
-SYSTEM DROP  TABLE t_shared SYNC;
+DROP TABLE t_shared;

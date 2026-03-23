@@ -5,7 +5,7 @@ SET use_skip_indexes = 1;
 
 SET use_query_condition_cache = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

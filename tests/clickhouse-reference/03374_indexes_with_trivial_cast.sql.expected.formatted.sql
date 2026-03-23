@@ -1,7 +1,7 @@
 -- Tags: no-random-settings, no-parallel-replicas
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -15,7 +15,7 @@ SETTINGS index_granularity = 1;
 INSERT INTO test SELECT number
 FROM numbers(1000);
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

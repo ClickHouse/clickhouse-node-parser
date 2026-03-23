@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_lwd;
+DROP TABLE IF EXISTS test_lwd;
 
 CREATE TABLE test_lwd
 (

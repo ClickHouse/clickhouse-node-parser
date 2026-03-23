@@ -1,7 +1,7 @@
 -- Tags: long
-SYSTEM DROP  TABLE IF EXISTS replicated_table_r1 SYNC;
+DROP TABLE IF EXISTS replicated_table_r1;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_table_r2 SYNC;
+DROP TABLE IF EXISTS replicated_table_r2;
 
 CREATE TABLE replicated_table_r1
 (
@@ -32,9 +32,9 @@ FROM replicated_table_r1;
 SELECT COUNT()
 FROM replicated_table_r2;
 
-SYSTEM DROP  TABLE IF EXISTS t_light_r1 SYNC;
+DROP TABLE IF EXISTS t_light_r1;
 
-SYSTEM DROP  TABLE IF EXISTS t_light_r2 SYNC;
+DROP TABLE IF EXISTS t_light_r2;
 
 CREATE TABLE t_light_r1
 (
@@ -111,6 +111,6 @@ SELECT *
 FROM t_light_sync_r2
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE IF EXISTS t_light_sync_r1 SYNC;
+DROP TABLE IF EXISTS t_light_sync_r1;
 
-SYSTEM DROP  TABLE IF EXISTS t_light_sync_r2 SYNC;
+DROP TABLE IF EXISTS t_light_sync_r2;

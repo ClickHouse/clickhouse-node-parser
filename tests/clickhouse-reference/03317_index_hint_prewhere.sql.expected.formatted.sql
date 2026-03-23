@@ -1,5 +1,5 @@
 -- Tags: no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS test_indexHint_prewhere;
+DROP TABLE IF EXISTS test_indexHint_prewhere;
 
 CREATE TABLE test_indexHint_prewhere
 (
@@ -43,4 +43,4 @@ FROM (
     )
 WHERE like(`explain`, '%Prewhere filter column%colA%colB%');
 
-SYSTEM DROP  TABLE test_indexHint_prewhere;
+DROP TABLE test_indexHint_prewhere;

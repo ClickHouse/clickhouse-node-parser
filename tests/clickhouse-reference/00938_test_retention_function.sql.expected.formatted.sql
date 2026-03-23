@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS retention_test;
+DROP TABLE IF EXISTS retention_test;
 
 CREATE TABLE retention_test
 (

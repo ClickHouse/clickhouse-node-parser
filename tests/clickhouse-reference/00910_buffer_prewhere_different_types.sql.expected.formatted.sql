@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS buffer_table1__fuzz_28;
+DROP TABLE IF EXISTS buffer_table1__fuzz_28;
 
-SYSTEM DROP  TABLE IF EXISTS merge_tree_table1;
+DROP TABLE IF EXISTS merge_tree_table1;
 
 CREATE TABLE merge_tree_table1
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS summing;
+DROP TABLE IF EXISTS summing;
 
 CREATE TABLE summing
 (
@@ -22,4 +22,4 @@ SELECT
     e
 FROM summing;
 
-SYSTEM DROP  TABLE summing;
+DROP TABLE summing;

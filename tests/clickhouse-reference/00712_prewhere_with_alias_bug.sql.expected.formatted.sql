@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists prewhere_alias;
+DROP TABLE IF EXISTS prewhere_alias;
 
 CREATE TABLE prewhere_alias
 (
@@ -18,4 +18,4 @@ SELECT
 FROM prewhere_alias
 PREWHERE ((c + toInt32(1))) * 2 = 6;
 
-SYSTEM drop  table prewhere_alias;
+DROP TABLE prewhere_alias;

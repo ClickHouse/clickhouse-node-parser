@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists limit_by;
+DROP TABLE IF EXISTS limit_by;
 
 CREATE TABLE limit_by
 (
@@ -41,4 +41,4 @@ LIMIT 1, 2 BY id
 LIMIT 3
 OFFSET 1;
 
-SYSTEM drop  table limit_by;
+DROP TABLE limit_by;

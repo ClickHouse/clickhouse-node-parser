@@ -1,6 +1,6 @@
 -- add_minmax_index_for_numeric_columns=0: Disable minmax index to not interfere with the indexHint tests. With it it would filter out more rows (correctly)
 -- { echo }
-SYSTEM drop  table if exists tbl;
+DROP TABLE IF EXISTS tbl;
 
 CREATE TABLE tbl
 (
@@ -45,9 +45,9 @@ WHERE indexHint(p IN (
     ))
 ORDER BY t ASC;
 
-SYSTEM drop  table tbl;
+DROP TABLE tbl;
 
-SYSTEM drop  table if exists XXXX;
+DROP TABLE IF EXISTS XXXX;
 
 CREATE TABLE XXXX
 (
@@ -81,7 +81,7 @@ FROM XXXX
 WHERE indexHint(t = toDateTime(0))
 SETTINGS optimize_use_implicit_projections = 1;
 
-SYSTEM drop  table XXXX;
+DROP TABLE XXXX;
 
 CREATE TABLE XXXX
 (

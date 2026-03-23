@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS trend;
+DROP TABLE IF EXISTS trend;
 
 CREATE TABLE trend
 (
@@ -31,4 +31,4 @@ SELECT '---';
 
 INSERT INTO trend;
 
-SYSTEM DROP  TABLE trend;
+DROP TABLE trend;

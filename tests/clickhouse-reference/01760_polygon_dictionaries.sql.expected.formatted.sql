@@ -1,9 +1,9 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01760_db;
+DROP DATABASE IF EXISTS `01760_db`;
 
 CREATE DATABASE `01760_db`;
 
-SYSTEM DROP  TABLE IF EXISTS 01760_db.polygons;
+DROP TABLE IF EXISTS `01760_db`.polygons;
 
 CREATE TABLE `01760_db`.polygons
 (
@@ -22,7 +22,7 @@ INSERT INTO `01760_db`.polygons;
 
 INSERT INTO `01760_db`.polygons;
 
-SYSTEM DROP  TABLE IF EXISTS 01760_db.points;
+DROP TABLE IF EXISTS `01760_db`.points;
 
 CREATE TABLE `01760_db`.points
 (
@@ -43,7 +43,7 @@ INSERT INTO `01760_db`.points;
 
 INSERT INTO `01760_db`.points;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 01760_db.dict_array;
+DROP DICTIONARY IF EXISTS `01760_db`.dict_array;
 
 CREATE DICTIONARY `01760_db`.dict_array
 (
@@ -104,10 +104,10 @@ SELECT
     tuple(inf, inf) AS key,
     dictGet('01760_db.dict_array', 'name', key); --{serverError BAD_ARGUMENTS}
 
-SYSTEM DROP  DICTIONARY 01760_db.dict_array;
+DROP DICTIONARY `01760_db`.dict_array;
 
-SYSTEM DROP  TABLE 01760_db.points;
+DROP TABLE `01760_db`.points;
 
-SYSTEM DROP  TABLE 01760_db.polygons;
+DROP TABLE `01760_db`.polygons;
 
-SYSTEM DROP  DATABASE 01760_db;
+DROP DATABASE `01760_db`;

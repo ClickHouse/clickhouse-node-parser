@@ -1,6 +1,6 @@
 -- Test for parsing EPHEMERAL columns with Enum types (no default expression)
 -- This used to cause undefined behavior due to null pointer dereference in parser
-SYSTEM DROP  TABLE IF EXISTS t_ephemeral_enum;
+DROP TABLE IF EXISTS t_ephemeral_enum;
 
 CREATE TABLE t_ephemeral_enum
 (
@@ -9,7 +9,7 @@ CREATE TABLE t_ephemeral_enum
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE t_ephemeral_enum;
+DROP TABLE t_ephemeral_enum;
 
 CREATE TABLE t_ephemeral_enum
 (

@@ -1,6 +1,6 @@
 SET allow_experimental_dynamic_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -19,4 +19,4 @@ SELECT d.UInt64
 FROM test
 SETTINGS enable_analyzer = 0;
 
-SYSTEM drop  table test;
+DROP TABLE test;

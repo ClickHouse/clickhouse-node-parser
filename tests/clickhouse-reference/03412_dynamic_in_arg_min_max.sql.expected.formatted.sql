@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -62,4 +62,4 @@ ORDER BY
     y ASC,
     z ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

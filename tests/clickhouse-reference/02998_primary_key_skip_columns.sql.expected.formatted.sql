@@ -1,6 +1,6 @@
 -- Tags: no-asan, no-tsan, no-msan, no-ubsan, no-random-settings, no-debug, no-fasttest
 -- no-fasttest: Low index granularity and too many parts makes the test slow
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -73,4 +73,4 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'test';
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

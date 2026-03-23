@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM drop  table if exists `test_table with spaces`;
+DROP TABLE IF EXISTS `test_table with spaces`;
 
 CREATE TABLE IF NOT EXISTS `test_table with spaces`
 (
@@ -25,13 +25,13 @@ FROM `test_table with spaces`;
 
 INSERT INTO `test_table with spaces`;
 
-SYSTEM drop  table `test_table with spaces`;
+DROP TABLE `test_table with spaces`;
 
-SYSTEM drop  database if exists `this.is.a.valid.databasename`;
+DROP DATABASE IF EXISTS `this.is.a.valid.databasename`;
 
 CREATE DATABASE `this.is.a.valid.databasename`;
 
-SYSTEM drop  table if exists `this.is.a.valid.databasename`.`test_table with spaces`;
+DROP TABLE IF EXISTS `this.is.a.valid.databasename`.`test_table with spaces`;
 
 CREATE TABLE `this.is.a.valid.databasename`.`test_table with spaces`
 (
@@ -49,6 +49,6 @@ SELECT
     count()
 FROM `this.is.a.valid.databasename`.`test_table with spaces`;
 
-SYSTEM drop  table `this.is.a.valid.databasename`.`test_table with spaces`;
+DROP TABLE `this.is.a.valid.databasename`.`test_table with spaces`;
 
-SYSTEM drop  database `this.is.a.valid.databasename`;
+DROP DATABASE `this.is.a.valid.databasename`;

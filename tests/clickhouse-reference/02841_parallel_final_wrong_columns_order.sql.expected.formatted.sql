@@ -1,6 +1,6 @@
 -- Tags: no-random-merge-tree-settings
 -- Because we insert one million rows, it shouldn't choose too low index granularity.
-SYSTEM drop  table if exists tab2;
+DROP TABLE IF EXISTS tab2;
 
 CREATE TABLE tab2
 (
@@ -27,4 +27,4 @@ SET max_threads = 2;
 SELECT count()
 FROM tab2 FINAL;
 
-SYSTEM DROP  TABLE tab2;
+DROP TABLE tab2;

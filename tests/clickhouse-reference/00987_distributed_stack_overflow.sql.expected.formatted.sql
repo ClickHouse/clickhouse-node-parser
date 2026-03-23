@@ -1,9 +1,9 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS distr0;
+DROP TABLE IF EXISTS distr0;
 
-SYSTEM DROP  TABLE IF EXISTS distr1;
+DROP TABLE IF EXISTS distr1;
 
-SYSTEM DROP  TABLE IF EXISTS distr2;
+DROP TABLE IF EXISTS distr2;
 
 CREATE TABLE distr
 (
@@ -29,4 +29,4 @@ CREATE TABLE distr2
 )
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), distr1); -- { serverError INFINITE_LOOP }
 
-SYSTEM DROP  TABLE distr1;
+DROP TABLE distr1;

@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

@@ -17,7 +17,7 @@ FROM `system`.parts
 FORMAT Null;
 
 -- Create one table and see some columns in system.parts
-SYSTEM DROP  TABLE IF EXISTS data_01660;
+DROP TABLE IF EXISTS data_01660;
 
 CREATE TABLE data_01660
 (
@@ -84,7 +84,7 @@ WHERE database = currentDatabase()
 GROUP BY _state
 ORDER BY _state ASC;
 
-SYSTEM DROP  TABLE data_01660;
+DROP TABLE data_01660;
 
 SELECT *
 FROM `system`.parts

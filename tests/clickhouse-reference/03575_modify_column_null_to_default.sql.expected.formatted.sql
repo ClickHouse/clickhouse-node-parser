@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nullable_test;
+DROP TABLE IF EXISTS nullable_test;
 
 CREATE TABLE nullable_test
 (

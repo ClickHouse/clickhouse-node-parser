@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 -- Tests text index with the 'ReplacingMergeTree' engine
 SET enable_full_text_index = 1;
@@ -45,4 +45,4 @@ SELECT count()
 FROM tab
 WHERE text = 'v54320_updated';
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

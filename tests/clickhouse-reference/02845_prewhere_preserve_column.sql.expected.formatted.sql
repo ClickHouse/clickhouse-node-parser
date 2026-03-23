@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02845_prewhere;
+DROP TABLE IF EXISTS `02845_prewhere`;
 
 SET move_all_conditions_to_prewhere = 1;
 

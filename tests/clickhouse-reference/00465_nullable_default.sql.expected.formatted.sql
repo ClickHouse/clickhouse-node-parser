@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nullable_00465;
+DROP TABLE IF EXISTS nullable_00465;
 
 CREATE TABLE nullable_00465
 (
@@ -12,4 +12,4 @@ INSERT INTO nullable_00465 (cat);
 SELECT *
 FROM nullable_00465;
 
-SYSTEM DROP  TABLE nullable_00465;
+DROP TABLE nullable_00465;

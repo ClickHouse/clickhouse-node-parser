@@ -1,6 +1,6 @@
 -- Test that check the correctness of the result for optimize_aggregation_in_order and projections,
 -- not that this optimization will take place.
-SYSTEM DROP  TABLE IF EXISTS normal;
+DROP TABLE IF EXISTS normal;
 
 CREATE TABLE normal
 (
@@ -32,9 +32,9 @@ SET optimize_aggregation_in_order = 0;
 
 SET enable_parallel_replicas = 1, parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, parallel_replicas_for_non_replicated_merge_tree = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
 
-SYSTEM DROP  TABLE normal;
+DROP TABLE normal;
 
-SYSTEM DROP  TABLE IF EXISTS agg;
+DROP TABLE IF EXISTS agg;
 
 CREATE TABLE agg
 (
@@ -58,4 +58,4 @@ INSERT INTO agg SELECT
     number
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE agg;
+DROP TABLE agg;

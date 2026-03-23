@@ -6,7 +6,7 @@ SET enable_filesystem_cache_on_write_operations = 0;
 
 SET max_rows_to_read = '30M';
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (

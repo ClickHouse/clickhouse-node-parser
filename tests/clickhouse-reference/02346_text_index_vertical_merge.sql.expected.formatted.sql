@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 -- Tests vertical merges for columns with text index
 SET enable_full_text_index = 1;
@@ -28,4 +28,4 @@ FROM tab
 WHERE hasAllTokens(c1, 'c11')
     AND hasAllTokens(c2, 'c21');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

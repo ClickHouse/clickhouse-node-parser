@@ -2,7 +2,7 @@
 -- no-asan: the flaky check complains that the test sometimes runs > 60 sec on asan builds
 SET allow_suspicious_codecs = 1;
 
-SYSTEM drop  table if exists bug_delta_gorilla;
+DROP TABLE IF EXISTS bug_delta_gorilla;
 
 CREATE TABLE bug_delta_gorilla
 (

@@ -19,4 +19,4 @@ FROM (
         FROM table_name SAMPLE 50
     );
 
-SYSTEM DROP  TABLE table_name;
+DROP TABLE table_name;

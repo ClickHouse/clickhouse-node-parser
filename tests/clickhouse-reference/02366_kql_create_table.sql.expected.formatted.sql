@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Customers;
 
 CREATE TABLE Customers
 (
@@ -14,13 +14,13 @@ INSERT INTO Customers;
 
 SELECT '-- test create table --';
 
-SYSTEM DROP  TABLE IF EXISTS kql_table1;
+DROP TABLE IF EXISTS kql_table1;
 
 SELECT LastName
 FROM kql_table1
 LIMIT 1;
 
-SYSTEM DROP  TABLE IF EXISTS kql_table2;
+DROP TABLE IF EXISTS kql_table2;
 
 CREATE TABLE kql_table2
 (

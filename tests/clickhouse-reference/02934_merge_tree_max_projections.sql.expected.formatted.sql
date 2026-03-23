@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_max_mt_projections_alter;
+DROP TABLE IF EXISTS test_max_mt_projections_alter;
 
 CREATE TABLE test_max_mt_projections_alter
 (
@@ -10,7 +10,7 @@ ENGINE = MergeTree
 ORDER BY c1
 SETTINGS max_projections = 3;
 
-SYSTEM DROP  TABLE IF EXISTS test_max_mt_projections_create;
+DROP TABLE IF EXISTS test_max_mt_projections_create;
 
 CREATE TABLE test_max_mt_projections_create
 (

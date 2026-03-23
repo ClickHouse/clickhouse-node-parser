@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/91380
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -23,7 +23,7 @@ FULL JOIN t0 AS ty
 WHERE t.a.size = 1
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
 CREATE TABLE t0
 (

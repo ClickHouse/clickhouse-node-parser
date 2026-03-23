@@ -2,7 +2,7 @@ SET output_format_pretty_squash_consecutive_ms = 0;
 
 SET output_format_pretty_max_column_name_width_cut_to = 0;
 
-SYSTEM DROP  TABLE IF EXISTS unicode;
+DROP TABLE IF EXISTS unicode;
 
 CREATE TABLE unicode
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS e;
+DROP TABLE IF EXISTS e;
 
 -- https://github.com/ClickHouse/ClickHouse/issues/36891
 CREATE TABLE e

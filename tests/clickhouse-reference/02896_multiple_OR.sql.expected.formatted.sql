@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/pull/52653
-SYSTEM DROP  TABLE IF EXISTS or_bug;
+DROP TABLE IF EXISTS or_bug;
 
 CREATE TABLE or_bug
 (
@@ -28,7 +28,7 @@ WHERE (key = 1);
 
 -- { echoOff }
 -- https://github.com/ClickHouse/ClickHouse/issues/55288
-SYSTEM DROP  TABLE IF EXISTS forms;
+DROP TABLE IF EXISTS forms;
 
 CREATE TABLE forms
 (

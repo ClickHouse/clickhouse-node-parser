@@ -1,6 +1,6 @@
 SELECT '----- START -----';
 
-SYSTEM drop  table if exists hilbert_numbers_03131;
+DROP TABLE IF EXISTS hilbert_numbers_03131;
 
 CREATE TABLE hilbert_numbers_03131
 (
@@ -24,7 +24,7 @@ FROM
     numbers(pow(2, 32) - 8, 8) AS n1
 CROSS JOIN numbers(pow(2, 32) - 8, 8) AS n2;
 
-SYSTEM drop  table if exists hilbert_numbers_1_03131;
+DROP TABLE IF EXISTS hilbert_numbers_1_03131;
 
 CREATE TABLE hilbert_numbers_1_03131
 (

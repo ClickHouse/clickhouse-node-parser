@@ -1,5 +1,5 @@
 -- Tags: zookeeper
-SYSTEM DROP  TABLE IF EXISTS default_table SYNC;
+DROP TABLE IF EXISTS default_table;
 
 CREATE TABLE default_table
 (

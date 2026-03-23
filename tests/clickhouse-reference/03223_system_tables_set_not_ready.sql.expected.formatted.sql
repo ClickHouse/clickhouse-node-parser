@@ -1,9 +1,9 @@
 -- Tags: no-fasttest, no-shared-merge-tree, use-rocksdb
 -- Tag no-fasttest -- due to EmbeddedRocksDB
 -- Tag no-shared-merge-tree -- due to system.replication_queue
-SYSTEM drop  table if exists null;
+DROP TABLE IF EXISTS `null`;
 
-SYSTEM drop  table if exists dist;
+DROP TABLE IF EXISTS dist;
 
 CREATE TABLE `null` AS `system`.one
 ENGINE = Null;
@@ -22,7 +22,7 @@ WHERE exists((
     ))
     AND database = currentDatabase();
 
-SYSTEM drop  table if exists rocksdb;
+DROP TABLE IF EXISTS rocksdb;
 
 CREATE TABLE rocksdb
 (
@@ -51,7 +51,7 @@ WHERE exists((
     ))
     AND database = currentDatabase();
 
-SYSTEM drop  table if exists mt;
+DROP TABLE IF EXISTS mt;
 
 CREATE TABLE mt
 (
@@ -69,9 +69,9 @@ WHERE exists((
     ))
     AND database = currentDatabase();
 
-SYSTEM drop  table if exists rep1;
+DROP TABLE IF EXISTS rep1;
 
-SYSTEM drop  table if exists rep2;
+DROP TABLE IF EXISTS rep2;
 
 CREATE TABLE rep1
 (

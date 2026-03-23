@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -22,4 +22,4 @@ SELECT
     a.size0
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_map_lc;
+DROP TABLE IF EXISTS t_map_lc;
 
 CREATE TABLE t_map_lc
 (
@@ -29,7 +29,7 @@ SELECT *
 FROM t_map_lc
 WHERE mapContains(t.m, 'not_existing_key_1337');
 
-SYSTEM DROP  TABLE t_map_lc;
+DROP TABLE t_map_lc;
 
 CREATE TABLE t_map_lc
 (

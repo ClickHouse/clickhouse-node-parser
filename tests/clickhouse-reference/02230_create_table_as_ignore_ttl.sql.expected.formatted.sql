@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists data_02230_ttl;
+DROP TABLE IF EXISTS data_02230_ttl;
 
-SYSTEM drop  table if exists null_02230_ttl;
+DROP TABLE IF EXISTS null_02230_ttl;
 
 CREATE TABLE data_02230_ttl
 (
@@ -14,13 +14,13 @@ TTL date + 14;
 CREATE TABLE null_02230_ttl AS data_02230_ttl
 ENGINE = Null();
 
-SYSTEM drop  table data_02230_ttl;
+DROP TABLE data_02230_ttl;
 
-SYSTEM drop  table null_02230_ttl;
+DROP TABLE null_02230_ttl;
 
-SYSTEM drop  table if exists data_02230_column_ttl;
+DROP TABLE IF EXISTS data_02230_column_ttl;
 
-SYSTEM drop  table if exists null_02230_column_ttl;
+DROP TABLE IF EXISTS null_02230_column_ttl;
 
 CREATE TABLE data_02230_column_ttl
 (
@@ -35,6 +35,6 @@ TTL date + 14;
 CREATE TABLE null_02230_column_ttl AS data_02230_column_ttl
 ENGINE = Null();
 
-SYSTEM drop  table data_02230_column_ttl;
+DROP TABLE data_02230_column_ttl;
 
-SYSTEM drop  table null_02230_column_ttl;
+DROP TABLE null_02230_column_ttl;

@@ -53,9 +53,9 @@ WHERE (a, b) NOT IN (
         FROM t1
     );
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;
 
 CREATE TABLE t
 (

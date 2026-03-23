@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02500_nested;
+DROP TABLE IF EXISTS `02500_nested`;
 
 SET flatten_nested = 1;
 
@@ -11,7 +11,7 @@ ORDER BY tuple();
 
 INSERT INTO `02500_nested` (nes.a, nes.b);
 
-SYSTEM DROP  TABLE 02500_nested;
+DROP TABLE `02500_nested`;
 
 CREATE TABLE `02500_nested`
 (

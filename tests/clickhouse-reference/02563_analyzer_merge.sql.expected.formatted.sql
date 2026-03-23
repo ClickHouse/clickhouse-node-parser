@@ -1,11 +1,11 @@
 -- Tags: no-parallel
 SET enable_analyzer = 1;
 
-SYSTEM DROP  DATABASE IF EXISTS 02563_db;
+DROP DATABASE IF EXISTS `02563_db`;
 
 CREATE DATABASE `02563_db`;
 
-SYSTEM DROP  TABLE IF EXISTS 02563_db.test_merge_table_1;
+DROP TABLE IF EXISTS `02563_db`.test_merge_table_1;
 
 CREATE TABLE `02563_db`.test_merge_table_1
 (
@@ -17,7 +17,7 @@ ORDER BY id;
 
 INSERT INTO `02563_db`.test_merge_table_1;
 
-SYSTEM DROP  TABLE IF EXISTS 02563_db.test_merge_table_2;
+DROP TABLE IF EXISTS `02563_db`.test_merge_table_2;
 
 CREATE TABLE `02563_db`.test_merge_table_2
 (
@@ -29,7 +29,7 @@ ORDER BY id;
 
 INSERT INTO `02563_db`.test_merge_table_2;
 
-SYSTEM DROP  TABLE IF EXISTS 02563_db.test_merge_table;
+DROP TABLE IF EXISTS `02563_db`.test_merge_table;
 
 CREATE TABLE `02563_db`.test_merge_table
 (
@@ -46,11 +46,11 @@ SELECT
 FROM `02563_db`.test_merge_table
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE 02563_db.test_merge_table;
+DROP TABLE `02563_db`.test_merge_table;
 
-SYSTEM DROP  TABLE 02563_db.test_merge_table_1;
+DROP TABLE `02563_db`.test_merge_table_1;
 
-SYSTEM DROP  TABLE 02563_db.test_merge_table_2;
+DROP TABLE `02563_db`.test_merge_table_2;
 
 CREATE TABLE `02563_db`.t_1
 (
@@ -96,10 +96,10 @@ SELECT
     count()
 FROM `02563_db`.m;
 
-SYSTEM DROP  TABLE 02563_db.t_1;
+DROP TABLE `02563_db`.t_1;
 
-SYSTEM DROP  TABLE 02563_db.dist_t_1;
+DROP TABLE `02563_db`.dist_t_1;
 
-SYSTEM DROP  TABLE 02563_db.m;
+DROP TABLE `02563_db`.m;
 
-SYSTEM DROP  DATABASE 02563_db;
+DROP DATABASE `02563_db`;

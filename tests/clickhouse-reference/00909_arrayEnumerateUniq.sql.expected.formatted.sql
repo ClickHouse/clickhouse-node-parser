@@ -101,7 +101,7 @@ SELECT arrayEnumerateDenseRanked(1, [[[1,2,3],[1,2,3],[1,2,3]],[[1,2,3],[1,2,3],
 
 SELECT arrayEnumerateDenseRanked(1, [[[1,2,3],[1,2,3],[1,2,3]],[[1,2,3],[1,2,3],[1,2,3]],[[1,2]]], 1);
 
-SYSTEM DROP  TABLE IF EXISTS arrays_test;
+DROP TABLE IF EXISTS arrays_test;
 
 CREATE TABLE arrays_test
 (
@@ -228,7 +228,7 @@ ORDER BY
     a1 ASC,
     a2 ASC;
 
-SYSTEM DROP  TABLE arrays_test;
+DROP TABLE arrays_test;
 
 CREATE TABLE arrays_test
 (
@@ -527,7 +527,7 @@ ORDER BY
     a1 ASC,
     a2 ASC;
 
-SYSTEM DROP  TABLE IF EXISTS arr_tests_visits;
+DROP TABLE IF EXISTS arr_tests_visits;
 
 CREATE TABLE arr_tests_visits
 (
@@ -566,7 +566,7 @@ FROM
     arr_tests_visits
 ARRAY JOIN Test.BannerID AS BannerID, Test.Load AS Load, Test.PuidKey AS PuidKeyArr, Test.PuidVal AS PuidValArr;
 
-SYSTEM DROP  TABLE arr_tests_visits;
+DROP TABLE arr_tests_visits;
 
 SELECT arrayEnumerateUniqRanked([['a'], [], ['a']]);
 

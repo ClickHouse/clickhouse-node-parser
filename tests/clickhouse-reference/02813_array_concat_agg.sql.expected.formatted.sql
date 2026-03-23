@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -19,4 +19,4 @@ FROM t
 GROUP BY n
 ORDER BY n ASC;
 
-SYSTEM drop  table t;
+DROP TABLE t;

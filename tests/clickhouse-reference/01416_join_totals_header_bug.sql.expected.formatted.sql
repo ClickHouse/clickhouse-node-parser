@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS tableCommon;
+DROP TABLE IF EXISTS tableCommon;
 
-SYSTEM DROP  TABLE IF EXISTS tableTrees;
+DROP TABLE IF EXISTS tableTrees;
 
-SYSTEM DROP  TABLE IF EXISTS tableFlowers;
+DROP TABLE IF EXISTS tableFlowers;
 
 CREATE TABLE tableCommon
 (

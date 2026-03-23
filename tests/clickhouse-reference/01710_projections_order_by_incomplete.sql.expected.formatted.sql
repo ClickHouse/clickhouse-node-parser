@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists  data_proj_order_by_incomp;
+DROP TABLE IF EXISTS data_proj_order_by_incomp;
 
 CREATE TABLE data_proj_order_by_incomp
 (

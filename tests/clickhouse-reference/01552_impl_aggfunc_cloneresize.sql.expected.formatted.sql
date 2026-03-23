@@ -1,6 +1,6 @@
-SYSTEM drop  table if EXISTS test_bm;
+DROP TABLE IF EXISTS test_bm;
 
-SYSTEM drop  table if EXISTS test_bm_join;
+DROP TABLE IF EXISTS test_bm_join;
 
 CREATE TABLE test_bm
 (
@@ -53,6 +53,6 @@ RIGHT JOIN (
     USING (dim)
 GROUP BY dim;
 
-SYSTEM drop  table test_bm;
+DROP TABLE test_bm;
 
-SYSTEM drop  table test_bm_join;
+DROP TABLE test_bm_join;

@@ -4,7 +4,7 @@
 -- But the key_condition_rpn_template and index conditions have the full RPN,
 -- which can exceed 32 elements, leading to out-of-bounds writes in the callback.
 -- The disjunction feature requires at least 2 useful skip indexes and OR conditions.
-SYSTEM DROP  TABLE IF EXISTS t_skip_index_disj_oob;
+DROP TABLE IF EXISTS t_skip_index_disj_oob;
 
 CREATE TABLE t_skip_index_disj_oob
 (
@@ -52,4 +52,4 @@ SETTINGS
     use_query_condition_cache = 0,
     optimize_min_equality_disjunction_chain_length = 100;
 
-SYSTEM DROP  TABLE t_skip_index_disj_oob;
+DROP TABLE t_skip_index_disj_oob;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test1;
+DROP TABLE IF EXISTS test1;
 
 CREATE TABLE test1
 (
@@ -15,4 +15,4 @@ INSERT INTO test1;
 SELECT caseWithExpression(a + b, c, 'c', d, 'd', NULL)
 FROM test1;
 
-SYSTEM DROP  TABLE test1;
+DROP TABLE test1;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tt;
+DROP TABLE IF EXISTS tt;
 
 CREATE TABLE tt
 (
@@ -25,4 +25,4 @@ FROM clusterAllReplicas(test_cluster_one_shard_three_replicas_localhost, current
 ORDER BY k ASC
 LIMIT 3;
 
-SYSTEM DROP  TABLE tt;
+DROP TABLE tt;

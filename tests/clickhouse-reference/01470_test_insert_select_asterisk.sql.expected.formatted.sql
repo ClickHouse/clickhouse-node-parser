@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS insert_select_dst;
+DROP TABLE IF EXISTS insert_select_dst;
 
-SYSTEM DROP  TABLE IF EXISTS insert_select_src;
+DROP TABLE IF EXISTS insert_select_src;
 
 CREATE TABLE insert_select_dst
 (

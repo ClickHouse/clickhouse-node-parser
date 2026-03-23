@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_final_replacing;
+DROP TABLE IF EXISTS t_final_replacing;
 
 CREATE TABLE t_final_replacing
 (
@@ -31,4 +31,4 @@ SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_i
 
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_intersecting_parts_ranges_into_layers_final = 1;
 
-SYSTEM DROP  TABLE t_final_replacing;
+DROP TABLE t_final_replacing;

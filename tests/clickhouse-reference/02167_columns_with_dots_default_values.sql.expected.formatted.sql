@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_nested_default;
+DROP TABLE IF EXISTS test_nested_default;
 
 CREATE TABLE test_nested_default
 (
@@ -14,4 +14,4 @@ INSERT INTO test_nested_default (id, `with_dot.array`);
 SELECT *
 FROM test_nested_default;
 
-SYSTEM DROP  TABLE test_nested_default;
+DROP TABLE test_nested_default;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 -- this queries does not have to pass, but they works historically
 -- let's support this while can, see #31687
@@ -28,4 +28,4 @@ FROM test;
 SELECT if(cast(cast(0, 'UInt8'), 'UInt8'), y, 42)
 FROM test;
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;

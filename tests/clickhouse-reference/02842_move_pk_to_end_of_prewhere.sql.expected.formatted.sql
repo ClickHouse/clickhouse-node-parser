@@ -6,9 +6,9 @@ SET optimize_functions_to_subcolumns = 0;
 
 SET use_statistics = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t_02848_mt1;
+DROP TABLE IF EXISTS t_02848_mt1;
 
-SYSTEM DROP  TABLE IF EXISTS t_02848_mt2;
+DROP TABLE IF EXISTS t_02848_mt2;
 
 CREATE TABLE t_02848_mt1
 (
@@ -136,6 +136,6 @@ WHERE a = 3
     AND b == '3'
     AND like(d, '%es%');
 
-SYSTEM DROP  TABLE t_02848_mt1;
+DROP TABLE t_02848_mt1;
 
-SYSTEM DROP  TABLE t_02848_mt2;
+DROP TABLE t_02848_mt2;

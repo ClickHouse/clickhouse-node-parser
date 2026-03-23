@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -15,9 +15,9 @@ SELECT *
 FROM test_table
 WHERE isNull(B);
 
-SYSTEM drop  table test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  TABLE IF EXISTS dm_metric_small2;
+DROP TABLE IF EXISTS dm_metric_small2;
 
 CREATE TABLE dm_metric_small2
 (
@@ -37,4 +37,4 @@ WHERE (x = 1)
     AND (y = 1)
     AND isNull(z);
 
-SYSTEM DROP  TABLE dm_metric_small2;
+DROP TABLE dm_metric_small2;

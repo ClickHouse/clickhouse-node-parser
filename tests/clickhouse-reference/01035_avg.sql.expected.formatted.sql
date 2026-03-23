@@ -57,7 +57,7 @@ FROM test_01035_avg;
 SELECT avg(d128 - d64)
 FROM test_01035_avg;
 
-SYSTEM DROP  TABLE IF EXISTS test_01035_avg;
+DROP TABLE IF EXISTS test_01035_avg;
 
 -- Checks that the internal SUM does not overflow Int8
 SELECT

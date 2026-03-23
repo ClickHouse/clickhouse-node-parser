@@ -1,7 +1,7 @@
 -- Test for Bug 47393
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -26,4 +26,4 @@ FROM tab
 WHERE like(str, '%inverted%')
 SETTINGS force_data_skipping_indices = 'idx';
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -2,31 +2,31 @@ SET enable_variant_type = 1;
 
 SET allow_suspicious_variant_types = 1;
 
-SYSTEM DROP  TABLE IF EXISTS vf_null_only;
+DROP TABLE IF EXISTS vf_null_only;
 
-SYSTEM DROP  TABLE IF EXISTS vf_one_variant_no_nulls;
+DROP TABLE IF EXISTS vf_one_variant_no_nulls;
 
-SYSTEM DROP  TABLE IF EXISTS vf_one_variant_with_nulls;
+DROP TABLE IF EXISTS vf_one_variant_with_nulls;
 
-SYSTEM DROP  TABLE IF EXISTS vf_multi_variant;
+DROP TABLE IF EXISTS vf_multi_variant;
 
-SYSTEM DROP  TABLE IF EXISTS vf_array_one_variant_no_nulls;
+DROP TABLE IF EXISTS vf_array_one_variant_no_nulls;
 
-SYSTEM DROP  TABLE IF EXISTS vf_array_one_variant_with_nulls;
+DROP TABLE IF EXISTS vf_array_one_variant_with_nulls;
 
-SYSTEM DROP  TABLE IF EXISTS vf_array_multi_variant;
+DROP TABLE IF EXISTS vf_array_multi_variant;
 
-SYSTEM DROP  TABLE IF EXISTS vf_equals;
+DROP TABLE IF EXISTS vf_equals;
 
-SYSTEM DROP  TABLE IF EXISTS vf_variant_nullable;
+DROP TABLE IF EXISTS vf_variant_nullable;
 
-SYSTEM DROP  TABLE IF EXISTS vf_two_variants_all_nulls;
+DROP TABLE IF EXISTS vf_two_variants_all_nulls;
 
-SYSTEM DROP  TABLE IF EXISTS vf_two_variants_single_no_nulls;
+DROP TABLE IF EXISTS vf_two_variants_single_no_nulls;
 
-SYSTEM DROP  TABLE IF EXISTS vf_two_variants_single_with_nulls;
+DROP TABLE IF EXISTS vf_two_variants_single_with_nulls;
 
-SYSTEM DROP  TABLE IF EXISTS vf_two_variants_multiple;
+DROP TABLE IF EXISTS vf_two_variants_multiple;
 
 CREATE TABLE vf_null_only
 (
@@ -238,28 +238,28 @@ SELECT toTypeName(v1 + v2)
 FROM vf_two_variants_multiple
 LIMIT 1;
 
-SYSTEM DROP  TABLE vf_null_only;
+DROP TABLE vf_null_only;
 
-SYSTEM DROP  TABLE vf_one_variant_no_nulls;
+DROP TABLE vf_one_variant_no_nulls;
 
-SYSTEM DROP  TABLE vf_one_variant_with_nulls;
+DROP TABLE vf_one_variant_with_nulls;
 
-SYSTEM DROP  TABLE vf_multi_variant;
+DROP TABLE vf_multi_variant;
 
-SYSTEM DROP  TABLE vf_array_one_variant_no_nulls;
+DROP TABLE vf_array_one_variant_no_nulls;
 
-SYSTEM DROP  TABLE vf_array_one_variant_with_nulls;
+DROP TABLE vf_array_one_variant_with_nulls;
 
-SYSTEM DROP  TABLE vf_array_multi_variant;
+DROP TABLE vf_array_multi_variant;
 
-SYSTEM DROP  TABLE vf_equals;
+DROP TABLE vf_equals;
 
-SYSTEM DROP  TABLE vf_variant_nullable;
+DROP TABLE vf_variant_nullable;
 
-SYSTEM DROP  TABLE vf_two_variants_all_nulls;
+DROP TABLE vf_two_variants_all_nulls;
 
-SYSTEM DROP  TABLE vf_two_variants_single_no_nulls;
+DROP TABLE vf_two_variants_single_no_nulls;
 
-SYSTEM DROP  TABLE vf_two_variants_single_with_nulls;
+DROP TABLE vf_two_variants_single_with_nulls;
 
-SYSTEM DROP  TABLE vf_two_variants_multiple;
+DROP TABLE vf_two_variants_multiple;

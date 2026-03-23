@@ -1,6 +1,6 @@
 -- { echo }
 -- create table
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

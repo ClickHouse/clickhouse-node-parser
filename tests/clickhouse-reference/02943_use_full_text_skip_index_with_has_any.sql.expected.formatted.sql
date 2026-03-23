@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS tokenbf_v1_hasany_test;
+DROP TABLE IF EXISTS tokenbf_v1_hasany_test;
 
-SYSTEM DROP  TABLE IF EXISTS ngrambf_v1_hasany_test;
+DROP TABLE IF EXISTS ngrambf_v1_hasany_test;
 
 CREATE TABLE tokenbf_v1_hasany_test
 (
@@ -102,6 +102,6 @@ WHERE hasAll(`array`, ['another example', 'example.com'])
 ORDER BY id ASC
 SETTINGS force_data_skipping_indices = 'idx_array_ngrambf_v1';
 
-SYSTEM DROP  TABLE tokenbf_v1_hasany_test;
+DROP TABLE tokenbf_v1_hasany_test;
 
-SYSTEM DROP  TABLE ngrambf_v1_hasany_test;
+DROP TABLE ngrambf_v1_hasany_test;

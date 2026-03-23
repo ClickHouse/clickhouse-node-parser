@@ -4,7 +4,7 @@ SET allow_statistics_optimize = 1;
 
 SET mutations_sync = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -21,7 +21,7 @@ SELECT count(*)
 FROM tab
 WHERE a < '10';
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

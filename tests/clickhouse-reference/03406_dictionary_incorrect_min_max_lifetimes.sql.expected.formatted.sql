@@ -1,9 +1,9 @@
 -- Tags: no-ordinary-database
 -- Tests that various lifetime conditions are checked during creation of a dictionary
 -- Github issue #78314
-SYSTEM DROP  DICTIONARY IF EXISTS dict;
+DROP DICTIONARY IF EXISTS dict;
 
-SYSTEM DROP  TABLE IF EXISTS tbl;
+DROP TABLE IF EXISTS tbl;
 
 CREATE TABLE tbl
 (
@@ -20,4 +20,4 @@ SOURCE(clickhouse(TABLE 'tbl'))
 LIFETIME(MIN 1 MAX 0)
 LAYOUT(HASHED_ARRAY()); -- { serverError BAD_ARGUMENTS }
 
-SYSTEM DROP  TABLE tbl;
+DROP TABLE tbl;

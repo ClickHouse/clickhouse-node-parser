@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS t_primary_index_cache;
+DROP TABLE IF EXISTS t_primary_index_cache;
 
 CREATE TABLE t_primary_index_cache
 (
@@ -49,4 +49,4 @@ WHERE like(query, 'SELECT count() FROM t_primary_index_cache%')
     AND type = 'QueryFinish'
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE t_primary_index_cache;
+DROP TABLE t_primary_index_cache;

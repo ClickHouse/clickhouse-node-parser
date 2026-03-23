@@ -1,5 +1,5 @@
 -- Tags: stateful
-SYSTEM DROP  TABLE IF EXISTS view;
+DROP TABLE IF EXISTS view;
 
 CREATE VIEW view
 AS
@@ -30,4 +30,4 @@ FROM view SAMPLE 0.1
 ORDER BY c DESC
 LIMIT 10;
 
-SYSTEM DROP  TABLE view;
+DROP TABLE view;

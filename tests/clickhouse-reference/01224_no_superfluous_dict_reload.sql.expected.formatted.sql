@@ -1,9 +1,9 @@
 -- Tags: no-parallel
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  DATABASE IF EXISTS dict_db_01224;
+DROP DATABASE IF EXISTS dict_db_01224;
 
-SYSTEM DROP  DATABASE IF EXISTS dict_db_01224_dictionary;
+DROP DATABASE IF EXISTS dict_db_01224_dictionary;
 
 SET allow_deprecated_database_ordinary = 1;
 
@@ -55,8 +55,8 @@ FROM `system`.`columns`
 WHERE database = 'dict_db_01224'
     AND table = 'dict';
 
-SYSTEM DROP  DICTIONARY dict_db_01224.dict;
+DROP DICTIONARY dict_db_01224.dict;
 
-SYSTEM DROP  DATABASE dict_db_01224;
+DROP DATABASE dict_db_01224;
 
-SYSTEM DROP  DATABASE dict_db_01224_dictionary;
+DROP DATABASE dict_db_01224_dictionary;

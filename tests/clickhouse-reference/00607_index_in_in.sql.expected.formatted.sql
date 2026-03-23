@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS merge_tree;
+DROP TABLE IF EXISTS merge_tree;
 
 CREATE TABLE merge_tree
 (
@@ -41,4 +41,4 @@ SELECT count()
 FROM merge_tree
 WHERE toUInt64(x) IN (0, 0);
 
-SYSTEM DROP  TABLE merge_tree;
+DROP TABLE merge_tree;

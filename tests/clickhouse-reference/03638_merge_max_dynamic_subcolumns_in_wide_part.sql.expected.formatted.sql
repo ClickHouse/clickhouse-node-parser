@@ -1,5 +1,5 @@
 -- Tags: no-azure-blob-storage
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -22,7 +22,7 @@ SELECT
 FROM test
 LIMIT 1;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

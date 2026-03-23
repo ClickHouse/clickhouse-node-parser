@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS source_table;
+DROP TABLE IF EXISTS source_table;
 
 CREATE TABLE source_table
 (
@@ -10,7 +10,7 @@ INSERT INTO source_table SELECT *
 FROM `system`.numbers
 LIMIT 10;
 
-SYSTEM DROP  TABLE IF EXISTS dest_view;
+DROP TABLE IF EXISTS dest_view;
 
 CREATE VIEW dest_view (x UInt64)
 AS
@@ -24,6 +24,6 @@ FROM dest_view
 GROUP BY x
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE dest_view;
+DROP TABLE dest_view;
 
-SYSTEM DROP  TABLE source_table;
+DROP TABLE source_table;

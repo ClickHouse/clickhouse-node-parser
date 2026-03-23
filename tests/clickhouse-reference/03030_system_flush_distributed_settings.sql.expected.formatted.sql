@@ -1,12 +1,12 @@
-SYSTEM drop  table if exists ephemeral;
+DROP TABLE IF EXISTS ephemeral;
 
-SYSTEM drop  table if exists dist_in;
+DROP TABLE IF EXISTS dist_in;
 
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
-SYSTEM drop  table if exists mv;
+DROP TABLE IF EXISTS mv;
 
-SYSTEM drop  table if exists dist_out;
+DROP TABLE IF EXISTS dist_out;
 
 CREATE TABLE ephemeral
 (

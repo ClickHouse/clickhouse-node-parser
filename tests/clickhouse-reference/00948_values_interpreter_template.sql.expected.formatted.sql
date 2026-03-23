@@ -1,10 +1,10 @@
-SYSTEM DROP  TABLE IF EXISTS type_names;
+DROP TABLE IF EXISTS type_names;
 
-SYSTEM DROP  TABLE IF EXISTS values_template;
+DROP TABLE IF EXISTS values_template;
 
-SYSTEM DROP  TABLE IF EXISTS values_template_nullable;
+DROP TABLE IF EXISTS values_template_nullable;
 
-SYSTEM DROP  TABLE IF EXISTS values_template_fallback;
+DROP TABLE IF EXISTS values_template_fallback;
 
 SET input_format_null_as_default = 0;
 
@@ -90,10 +90,10 @@ SELECT *
 FROM values_template_fallback
 ORDER BY n ASC;
 
-SYSTEM DROP  TABLE type_names;
+DROP TABLE type_names;
 
-SYSTEM DROP  TABLE values_template;
+DROP TABLE values_template;
 
-SYSTEM DROP  TABLE values_template_nullable;
+DROP TABLE values_template_nullable;
 
-SYSTEM DROP  TABLE values_template_fallback;
+DROP TABLE values_template_fallback;

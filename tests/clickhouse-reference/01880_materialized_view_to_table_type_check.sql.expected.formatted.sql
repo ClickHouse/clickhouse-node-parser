@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS test_mv;
+DROP TABLE IF EXISTS test_mv;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
-SYSTEM DROP  TABLE IF EXISTS test_input;
+DROP TABLE IF EXISTS test_input;
 
 CREATE TABLE test_input
 (
@@ -56,8 +56,8 @@ GROUP BY id;
 INSERT INTO test_input SELECT toInt32(number % 1000) AS id
 FROM numbers(100, 3);
 
-SYSTEM DROP  TABLE test_mv;
+DROP TABLE test_mv;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
-SYSTEM DROP  TABLE test_input;
+DROP TABLE test_input;

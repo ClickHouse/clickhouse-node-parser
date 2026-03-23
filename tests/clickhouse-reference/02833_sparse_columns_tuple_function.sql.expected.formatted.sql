@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t_tuple_sparse;
+DROP TABLE IF EXISTS t_tuple_sparse;
 
 CREATE TABLE t_tuple_sparse
 (

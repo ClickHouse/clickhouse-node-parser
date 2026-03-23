@@ -1,9 +1,9 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS collate_test1;
+DROP TABLE IF EXISTS collate_test1;
 
-SYSTEM DROP  TABLE IF EXISTS collate_test2;
+DROP TABLE IF EXISTS collate_test2;
 
-SYSTEM DROP  TABLE IF EXISTS collate_test3;
+DROP TABLE IF EXISTS collate_test3;
 
 CREATE TABLE collate_test1
 (
@@ -68,8 +68,8 @@ ORDER BY
     x ASC,
     s ASC COLLATE 'ru';
 
-SYSTEM DROP  TABLE collate_test1;
+DROP TABLE collate_test1;
 
-SYSTEM DROP  TABLE collate_test2;
+DROP TABLE collate_test2;
 
-SYSTEM DROP  TABLE collate_test3;
+DROP TABLE collate_test3;

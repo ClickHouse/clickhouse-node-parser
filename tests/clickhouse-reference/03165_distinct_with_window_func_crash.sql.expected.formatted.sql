@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS atable;
+DROP TABLE IF EXISTS atable;
 
 CREATE TABLE atable
 (
@@ -29,4 +29,4 @@ GROUP BY
     rating_sp
 SETTINGS query_plan_remove_redundant_distinct = 1;
 
-SYSTEM DROP  TABLE atable;
+DROP TABLE atable;

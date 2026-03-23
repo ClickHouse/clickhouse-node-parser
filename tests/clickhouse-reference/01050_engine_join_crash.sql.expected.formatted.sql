@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS testJoinTable;
+DROP TABLE IF EXISTS testJoinTable;
 
 SET any_join_distinct_right_table_keys = 1;
 
@@ -50,11 +50,11 @@ SELECT *
 FROM testJoinTable
 ORDER BY number ASC;
 
-SYSTEM DROP  TABLE testJoinTable;
+DROP TABLE testJoinTable;
 
-SYSTEM DROP  TABLE IF EXISTS master;
+DROP TABLE IF EXISTS master;
 
-SYSTEM DROP  TABLE IF EXISTS transaction;
+DROP TABLE IF EXISTS transaction;
 
 CREATE TABLE transaction
 (
@@ -87,13 +87,13 @@ LEFT JOIN master AS m
     ON m.id = tx.master_id
 ORDER BY tx.id ASC;
 
-SYSTEM DROP  TABLE master;
+DROP TABLE master;
 
-SYSTEM DROP  TABLE transaction;
+DROP TABLE transaction;
 
-SYSTEM DROP  TABLE IF EXISTS some_join;
+DROP TABLE IF EXISTS some_join;
 
-SYSTEM DROP  TABLE IF EXISTS tbl;
+DROP TABLE IF EXISTS tbl;
 
 CREATE TABLE tbl
 (
@@ -127,6 +127,6 @@ LEFT JOIN some_join AS d
 ORDER BY id ASC;
 
 -- TODO SELECT t.*, d.* FROM tbl AS t ANY LEFT JOIN some_join AS d USING (id);
-SYSTEM DROP  TABLE some_join;
+DROP TABLE some_join;
 
-SYSTEM DROP  TABLE tbl;
+DROP TABLE tbl;

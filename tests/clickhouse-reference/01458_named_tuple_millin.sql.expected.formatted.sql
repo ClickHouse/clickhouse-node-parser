@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tuple;
+DROP TABLE IF EXISTS tuple;
 
 CREATE TABLE tuple
 (
@@ -6,7 +6,7 @@ CREATE TABLE tuple
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE tuple;
+DROP TABLE tuple;
 
 CREATE TABLE tuple
 ENGINE = Memory AS

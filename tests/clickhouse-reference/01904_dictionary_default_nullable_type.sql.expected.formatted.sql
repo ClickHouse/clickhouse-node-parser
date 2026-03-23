@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS dictionary_nullable_source_table;
+DROP TABLE IF EXISTS dictionary_nullable_source_table;
 
 CREATE TABLE dictionary_nullable_source_table
 (
@@ -8,7 +8,7 @@ CREATE TABLE dictionary_nullable_source_table
 )
 ENGINE = TinyLog;
 
-SYSTEM DROP  TABLE IF EXISTS dictionary_nullable_default_source_table;
+DROP TABLE IF EXISTS dictionary_nullable_default_source_table;
 
 CREATE TABLE dictionary_nullable_default_source_table
 (
@@ -21,7 +21,7 @@ INSERT INTO dictionary_nullable_source_table;
 
 INSERT INTO dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS flat_dictionary;
+DROP DICTIONARY IF EXISTS flat_dictionary;
 
 CREATE DICTIONARY flat_dictionary
 (
@@ -46,9 +46,9 @@ SELECT dictGetOrDefault('flat_dictionary', 'value', toUInt64(2), NULL);
 SELECT dictGetOrDefault('flat_dictionary', 'value', id, value)
 FROM dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY flat_dictionary;
+DROP DICTIONARY flat_dictionary;
 
-SYSTEM DROP  DICTIONARY IF EXISTS hashed_dictionary;
+DROP DICTIONARY IF EXISTS hashed_dictionary;
 
 CREATE DICTIONARY hashed_dictionary
 (
@@ -73,9 +73,9 @@ SELECT dictGetOrDefault('hashed_dictionary', 'value', toUInt64(2), NULL);
 SELECT dictGetOrDefault('hashed_dictionary', 'value', id, value)
 FROM dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY hashed_dictionary;
+DROP DICTIONARY hashed_dictionary;
 
-SYSTEM DROP  DICTIONARY IF EXISTS cache_dictionary;
+DROP DICTIONARY IF EXISTS cache_dictionary;
 
 CREATE DICTIONARY cache_dictionary
 (
@@ -100,9 +100,9 @@ SELECT dictGetOrDefault('cache_dictionary', 'value', toUInt64(2), NULL);
 SELECT dictGetOrDefault('cache_dictionary', 'value', id, value)
 FROM dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY cache_dictionary;
+DROP DICTIONARY cache_dictionary;
 
-SYSTEM DROP  DICTIONARY IF EXISTS direct_dictionary;
+DROP DICTIONARY IF EXISTS direct_dictionary;
 
 CREATE DICTIONARY direct_dictionary
 (
@@ -126,9 +126,9 @@ SELECT dictGetOrDefault('direct_dictionary', 'value', toUInt64(2), NULL);
 SELECT dictGetOrDefault('direct_dictionary', 'value', id, value)
 FROM dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY direct_dictionary;
+DROP DICTIONARY direct_dictionary;
 
-SYSTEM DROP  DICTIONARY IF EXISTS ip_trie_dictionary;
+DROP DICTIONARY IF EXISTS ip_trie_dictionary;
 
 CREATE DICTIONARY ip_trie_dictionary
 (
@@ -142,13 +142,13 @@ LAYOUT(IP_TRIE());
 
 SELECT dictGet('ip_trie_dictionary', 'value', tuple(IPv4StringToNum('127.0.0.0'))); --{serverError UNSUPPORTED_METHOD}
 
-SYSTEM DROP  DICTIONARY ip_trie_dictionary;
+DROP DICTIONARY ip_trie_dictionary;
 
-SYSTEM DROP  TABLE dictionary_nullable_source_table;
+DROP TABLE dictionary_nullable_source_table;
 
-SYSTEM DROP  TABLE dictionary_nullable_default_source_table;
+DROP TABLE dictionary_nullable_default_source_table;
 
-SYSTEM DROP  TABLE IF EXISTS polygon_dictionary_nullable_source_table;
+DROP TABLE IF EXISTS polygon_dictionary_nullable_source_table;
 
 CREATE TABLE polygon_dictionary_nullable_source_table
 (
@@ -157,7 +157,7 @@ CREATE TABLE polygon_dictionary_nullable_source_table
 )
 ENGINE = TinyLog;
 
-SYSTEM DROP  TABLE IF EXISTS polygon_dictionary_nullable_default_source_table;
+DROP TABLE IF EXISTS polygon_dictionary_nullable_default_source_table;
 
 CREATE TABLE polygon_dictionary_nullable_default_source_table
 (
@@ -170,7 +170,7 @@ INSERT INTO polygon_dictionary_nullable_source_table;
 
 INSERT INTO polygon_dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS polygon_dictionary;
+DROP DICTIONARY IF EXISTS polygon_dictionary;
 
 CREATE DICTIONARY polygon_dictionary
 (
@@ -195,13 +195,13 @@ SELECT dictGetOrDefault('polygon_dictionary', 'value', tuple(2.0, 2.0), NULL);
 SELECT dictGetOrDefault('polygon_dictionary', 'value', key, value)
 FROM polygon_dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY polygon_dictionary;
+DROP DICTIONARY polygon_dictionary;
 
-SYSTEM DROP  TABLE polygon_dictionary_nullable_source_table;
+DROP TABLE polygon_dictionary_nullable_source_table;
 
-SYSTEM DROP  TABLE polygon_dictionary_nullable_default_source_table;
+DROP TABLE polygon_dictionary_nullable_default_source_table;
 
-SYSTEM DROP  TABLE IF EXISTS range_dictionary_nullable_source_table;
+DROP TABLE IF EXISTS range_dictionary_nullable_source_table;
 
 CREATE TABLE range_dictionary_nullable_source_table
 (
@@ -212,7 +212,7 @@ CREATE TABLE range_dictionary_nullable_source_table
 )
 ENGINE = TinyLog;
 
-SYSTEM DROP  TABLE IF EXISTS range_dictionary_nullable_default_source_table;
+DROP TABLE IF EXISTS range_dictionary_nullable_default_source_table;
 
 CREATE TABLE range_dictionary_nullable_default_source_table
 (
@@ -225,7 +225,7 @@ INSERT INTO range_dictionary_nullable_source_table;
 
 INSERT INTO range_dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS range_dictionary;
+DROP DICTIONARY IF EXISTS range_dictionary;
 
 CREATE DICTIONARY range_dictionary
 (
@@ -253,8 +253,8 @@ SELECT dictGetOrDefault('range_dictionary', 'value', toUInt64(2), toDate('2019-0
 SELECT dictGetOrDefault('range_dictionary', 'value', key, toDate('2019-05-15'), value)
 FROM range_dictionary_nullable_default_source_table;
 
-SYSTEM DROP  DICTIONARY range_dictionary;
+DROP DICTIONARY range_dictionary;
 
-SYSTEM DROP  TABLE range_dictionary_nullable_source_table;
+DROP TABLE range_dictionary_nullable_source_table;
 
-SYSTEM DROP  TABLE range_dictionary_nullable_default_source_table;
+DROP TABLE range_dictionary_nullable_default_source_table;

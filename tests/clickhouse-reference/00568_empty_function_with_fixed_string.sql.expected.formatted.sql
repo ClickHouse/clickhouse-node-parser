@@ -6,7 +6,7 @@ SELECT
     toFixedString('\0abc', 4) AS str,
     empty(str) AS is_empty;
 
-SYSTEM DROP  TABLE IF EXISTS defaulted;
+DROP TABLE IF EXISTS defaulted;
 
 CREATE TABLE defaulted
 (
@@ -24,4 +24,4 @@ SELECT
 FROM defaulted
 GROUP BY e;
 
-SYSTEM DROP  TABLE defaulted;
+DROP TABLE defaulted;

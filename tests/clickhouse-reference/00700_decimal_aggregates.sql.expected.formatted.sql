@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS decimal;
+DROP TABLE IF EXISTS decimal;
 
 CREATE TABLE decimal
 (
@@ -551,4 +551,4 @@ FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT 1
 LIMIT 0;
 
-SYSTEM DROP  TABLE decimal;
+DROP TABLE decimal;

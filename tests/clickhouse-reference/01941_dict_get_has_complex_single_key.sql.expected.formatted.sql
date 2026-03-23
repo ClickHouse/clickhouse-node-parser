@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_dictionary_source;
+DROP TABLE IF EXISTS test_dictionary_source;
 
 CREATE TABLE test_dictionary_source
 (
@@ -9,7 +9,7 @@ ENGINE = TinyLog;
 
 INSERT INTO test_dictionary_source;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary;
+DROP DICTIONARY IF EXISTS test_dictionary;
 
 CREATE DICTIONARY test_dictionary
 (
@@ -37,6 +37,6 @@ SELECT dictHas('test_dictionary', 'Key');
 
 SELECT dictHas('test_dictionary', materialize('Key'));
 
-SYSTEM DROP  DICTIONARY test_dictionary;
+DROP DICTIONARY test_dictionary;
 
-SYSTEM DROP  TABLE test_dictionary_source;
+DROP TABLE test_dictionary_source;

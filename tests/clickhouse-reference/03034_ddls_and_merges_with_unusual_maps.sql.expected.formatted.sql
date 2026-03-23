@@ -1,7 +1,7 @@
 -- Tests maps with "unusual" key types (Float32, Nothing, LowCardinality(String))
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 SELECT 'Map(Nothing, ...) is non-comparable --> not usable as primary key';
 
@@ -21,7 +21,7 @@ ORDER BY tuple();
 
 -- INSERT INTO tab VALUES (map('', 'd')); -- { serverError NOT_IMPLEMENTED } -- The client can't serialize the data and fails. The query
 -- doesn't reach the server and we can't check via 'serverError' :-/
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

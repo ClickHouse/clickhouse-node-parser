@@ -9,7 +9,7 @@ SELECT one.dummy;
 
 SELECT `system`.one.dummy;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -53,13 +53,13 @@ SELECT
     test.value
 FROM test_table AS test;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  DATABASE IF EXISTS 02337_db;
+DROP DATABASE IF EXISTS `02337_db`;
 
 CREATE DATABASE `02337_db`;
 
-SYSTEM DROP  TABLE IF EXISTS 02337_db.test_table;
+DROP TABLE IF EXISTS `02337_db`.test_table;
 
 CREATE TABLE `02337_db`.test_table
 (
@@ -85,6 +85,6 @@ SELECT
     test_table.value
 FROM `02337_db`.test_table AS test_table;
 
-SYSTEM DROP  TABLE 02337_db.test_table;
+DROP TABLE `02337_db`.test_table;
 
-SYSTEM DROP  DATABASE 02337_db;
+DROP DATABASE `02337_db`;

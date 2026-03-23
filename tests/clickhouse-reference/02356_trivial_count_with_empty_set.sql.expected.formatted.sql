@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -12,4 +12,4 @@ SET optimize_trivial_count_query = 1, empty_result_for_aggregation_by_empty_set 
 SELECT count()
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

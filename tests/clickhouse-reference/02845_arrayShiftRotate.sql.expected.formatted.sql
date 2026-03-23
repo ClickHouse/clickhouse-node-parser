@@ -58,7 +58,7 @@ SELECT arrayShiftRight([[1, 2], [3, 4], [5, 6]], 2, [7, 8]);
 
 SELECT arrayShiftRight(CAST('[1, 2, 3, 4, 5, 6]', 'Array(UInt16)'), 1, 1000);
 
-SYSTEM drop  table if exists t02845;
+DROP TABLE IF EXISTS t02845;
 
 CREATE TABLE t02845
 (

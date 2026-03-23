@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/89599
-SYSTEM DROP  TABLE IF EXISTS opentelemetry_span_log_9997438610282160742;
+DROP TABLE IF EXISTS opentelemetry_span_log_9997438610282160742;
 
 CREATE TABLE opentelemetry_span_log_9997438610282160742
 (
@@ -26,7 +26,7 @@ PARTITION BY toYYYYMM(finish_date)
 SETTINGS index_granularity = 8192, old_parts_lifetime = 60;
 
 -- attribute.values column (due to it comes first in the definition) will conflict with subcolumn "values" of attribute map
-SYSTEM DROP  TABLE IF EXISTS opentelemetry_span_log_compact;
+DROP TABLE IF EXISTS opentelemetry_span_log_compact;
 
 CREATE TABLE opentelemetry_span_log_compact
 (

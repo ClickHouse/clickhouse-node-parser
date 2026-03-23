@@ -3,4 +3,4 @@ CREATE FUNCTION `02099_lambda_function` AS x -> arrayMap(array_element -> array_
 
 SELECT `02099_lambda_function`([1,2,3]);
 
-SYSTEM DROP  FUNCTION 02099_lambda_function;
+DROP FUNCTION `02099_lambda_function`;

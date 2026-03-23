@@ -1,4 +1,4 @@
-SYSTEM drop  view if exists slow_view1;
+DROP VIEW IF EXISTS slow_view1;
 
 CREATE VIEW slow_view1
 AS

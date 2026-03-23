@@ -53,10 +53,10 @@ WHERE key_column = 14;
 SELECT countDistinct((dictGetUInt8(concat({CLICKHOUSE_DATABASE:String}, '.dict1'), 'second_column', toUInt64(number))))
 FROM numbers(100);
 
-SYSTEM DROP  DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1;
+DROP DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1;
 
 -- SOURCE(CLICKHOUSE(...)) uses default params if not specified
-SYSTEM DROP  DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict1;
+DROP DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict1;
 
 CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1
 (
@@ -151,4 +151,4 @@ SELECT
     concat({CLICKHOUSE_DATABASE:String}, '.dict3') AS n,
     dictGet(n, 'some_column', toUInt64(12));
 
-SYSTEM DROP  TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict;
+DROP TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict;

@@ -1,5 +1,5 @@
 -- Tags: no-parallel, log-engine
-SYSTEM DROP  DATABASE IF EXISTS db_02097;
+DROP DATABASE IF EXISTS db_02097;
 
 CREATE DATABASE db_02097;
 
@@ -36,8 +36,8 @@ FROM `system`.tables
 WHERE name = 'test_table_default'
     AND database = 'db_02097';
 
-SYSTEM DROP  TABLE test_table_default;
+DROP TABLE test_table_default;
 
-SYSTEM DROP  DICTIONARY test_dictionary;
+DROP DICTIONARY test_dictionary;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

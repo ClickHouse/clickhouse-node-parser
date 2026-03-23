@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS b_customers;
+DROP TABLE IF EXISTS b_customers;
 
 CREATE TABLE b_customers
 (
@@ -20,7 +20,7 @@ INSERT INTO b_customers SELECT
 FROM `system`.numbers
 LIMIT 2; -- will work without this line or LIMIT 1
 
-SYSTEM DROP  TABLE IF EXISTS b_orders;
+DROP TABLE IF EXISTS b_orders;
 
 CREATE TABLE b_orders
 (
@@ -42,7 +42,7 @@ INSERT INTO b_orders SELECT
 FROM b_customers
 GROUP BY first_order_id;
 
-SYSTEM DROP  TABLE IF EXISTS b_addresses;
+DROP TABLE IF EXISTS b_addresses;
 
 CREATE TABLE b_addresses
 (

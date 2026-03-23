@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists nested_smt;
+DROP TABLE IF EXISTS nested_smt;
 
 CREATE TABLE nested_smt
 (
@@ -24,4 +24,4 @@ FROM nested_smt FINAL;
 SELECT *
 FROM nested_smt;
 
-SYSTEM drop  table nested_smt;
+DROP TABLE nested_smt;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_create_as_tuple;
+DROP TABLE IF EXISTS t_create_as_tuple;
 
 CREATE TABLE t_create_as_tuple
 ENGINE = MergeTree()
@@ -12,4 +12,4 @@ SELECT *
 FROM t_create_as_tuple
 ORDER BY number ASC;
 
-SYSTEM DROP  TABLE t_create_as_tuple;
+DROP TABLE t_create_as_tuple;

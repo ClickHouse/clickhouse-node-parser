@@ -1,6 +1,6 @@
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE IF EXISTS array_of_tuples;
+DROP TABLE IF EXISTS array_of_tuples;
 
 CREATE TABLE array_of_tuples
 (
@@ -17,4 +17,4 @@ FROM array_of_tuples;
 SELECT s
 FROM array_of_tuples;
 
-SYSTEM DROP  TABLE array_of_tuples;
+DROP TABLE array_of_tuples;

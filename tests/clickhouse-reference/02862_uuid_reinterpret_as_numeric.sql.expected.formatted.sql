@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_uuid;
+DROP TABLE IF EXISTS t_uuid;
 
 CREATE TABLE t_uuid
 (

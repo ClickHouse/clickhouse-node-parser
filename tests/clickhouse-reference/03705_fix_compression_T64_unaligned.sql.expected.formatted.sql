@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS compression_estimate_example;
+DROP TABLE IF EXISTS compression_estimate_example;
 
 CREATE TABLE IF NOT EXISTS compression_estimate_example
 (

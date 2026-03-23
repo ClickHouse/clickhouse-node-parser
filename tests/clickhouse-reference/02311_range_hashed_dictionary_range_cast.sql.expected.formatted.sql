@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS dictionary_source_table;
+DROP TABLE IF EXISTS dictionary_source_table;
 
 CREATE TABLE dictionary_source_table
 (
@@ -11,7 +11,7 @@ ENGINE = TinyLog;
 
 INSERT INTO dictionary_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS range_hashed_dictionary;
+DROP DICTIONARY IF EXISTS range_hashed_dictionary;
 
 CREATE DICTIONARY range_hashed_dictionary
 (
@@ -30,6 +30,6 @@ SELECT dictGet('range_hashed_dictionary', 'value', toUInt64(1), toUInt64(1844674
 
 SELECT dictGet('range_hashed_dictionary', 'value', toUInt64(1), toUInt64(-1));
 
-SYSTEM DROP  DICTIONARY range_hashed_dictionary;
+DROP DICTIONARY range_hashed_dictionary;
 
-SYSTEM DROP  TABLE dictionary_source_table;
+DROP TABLE dictionary_source_table;

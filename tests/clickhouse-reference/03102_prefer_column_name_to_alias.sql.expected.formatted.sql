@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/54954
-SYSTEM DROP  TABLE IF EXISTS loans;
+DROP TABLE IF EXISTS loans;
 
 CREATE TABLE loans
 (

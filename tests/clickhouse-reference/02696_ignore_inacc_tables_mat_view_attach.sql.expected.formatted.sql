@@ -26,7 +26,7 @@ SELECT
     n * n AS n2
 FROM test_table;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
 INSERT INTO test_table;
 

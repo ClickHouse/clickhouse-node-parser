@@ -10,7 +10,7 @@
 -- Previously, this caused "Not found column in block" errors because the
 -- virtual_row_conversion expression expected all primary key columns, but
 -- the pk_block only contained the columns present in the optimized index.
-SYSTEM DROP  TABLE IF EXISTS t_virtual_row_sparse_pk;
+DROP TABLE IF EXISTS t_virtual_row_sparse_pk;
 
 -- Create table with composite primary key
 CREATE TABLE t_virtual_row_sparse_pk
@@ -65,4 +65,4 @@ SETTINGS read_in_order_use_virtual_row = 1;
 SELECT count()
 FROM t_virtual_row_sparse_pk;
 
-SYSTEM DROP  TABLE t_virtual_row_sparse_pk;
+DROP TABLE t_virtual_row_sparse_pk;

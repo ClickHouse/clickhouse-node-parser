@@ -1,9 +1,9 @@
 -- Tags: long, replica, no-replicated-database, no-parallel, no-object-storage
 -- Tag no-replicated-database: Fails due to additional replicas or shards
 -- Tag no-parallel: static zk path
-SYSTEM DROP  TABLE IF EXISTS execute_on_single_replica_r1 SYNC;
+DROP TABLE IF EXISTS execute_on_single_replica_r1;
 
-SYSTEM DROP  TABLE IF EXISTS execute_on_single_replica_r2 SYNC;
+DROP TABLE IF EXISTS execute_on_single_replica_r2;
 
 /* that test requires fixed zookeeper path, so we cannot use ReplicatedMergeTree({database}) */
 CREATE TABLE execute_on_single_replica_r1
@@ -66,6 +66,6 @@ GROUP BY part_name
 ORDER BY part_name ASC
 FORMAT Vertical;
 
-SYSTEM DROP  TABLE execute_on_single_replica_r1 SYNC;
+DROP TABLE execute_on_single_replica_r1;
 
-SYSTEM DROP  TABLE execute_on_single_replica_r2 SYNC;
+DROP TABLE execute_on_single_replica_r2;

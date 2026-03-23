@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists table_01323_many_parts;
+DROP TABLE IF EXISTS table_01323_many_parts;
 
 SET remote_filesystem_read_method = 'read';
 

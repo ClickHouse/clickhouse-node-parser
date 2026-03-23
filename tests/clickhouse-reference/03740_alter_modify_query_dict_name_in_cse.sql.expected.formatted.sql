@@ -1,10 +1,10 @@
-SYSTEM drop  table if exists mv;
+DROP TABLE IF EXISTS mv;
 
-SYSTEM drop  table if exists dst;
+DROP TABLE IF EXISTS dst;
 
-SYSTEM drop  table if exists src;
+DROP TABLE IF EXISTS src;
 
-SYSTEM drop  dictionary if exists dict;
+DROP DICTIONARY IF EXISTS dict;
 
 CREATE TABLE src
 (

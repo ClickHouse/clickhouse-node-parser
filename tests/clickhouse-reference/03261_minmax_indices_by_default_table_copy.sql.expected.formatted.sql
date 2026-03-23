@@ -1,5 +1,5 @@
 -- Test for issue #75677
-SYSTEM DROP  TABLE IF EXISTS tab1;
+DROP TABLE IF EXISTS tab1;
 
 CREATE TABLE tab1
 (
@@ -13,6 +13,6 @@ SETTINGS add_minmax_index_for_numeric_columns = 1, add_minmax_index_for_string_c
 
 CREATE TABLE tab2 AS tab1;
 
-SYSTEM DROP  TABLE tab1;
+DROP TABLE tab1;
 
-SYSTEM DROP  TABLE tab2;
+DROP TABLE tab2;

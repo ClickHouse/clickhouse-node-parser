@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ttl_where;
+DROP TABLE IF EXISTS ttl_where;
 
 CREATE TABLE ttl_where
 (
@@ -27,9 +27,9 @@ ORDER BY
     d ASC,
     i ASC;
 
-SYSTEM DROP  TABLE ttl_where;
+DROP TABLE ttl_where;
 
-SYSTEM DROP  TABLE IF EXISTS ttl_group_by;
+DROP TABLE IF EXISTS ttl_group_by;
 
 CREATE TABLE ttl_group_by
 (
@@ -60,4 +60,4 @@ ORDER BY
     d ASC,
     i ASC;
 
-SYSTEM DROP  TABLE ttl_group_by;
+DROP TABLE ttl_group_by;

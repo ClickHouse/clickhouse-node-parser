@@ -11,7 +11,7 @@ ORDER BY
     number ASC,
     value ASC;
 
-SYSTEM drop  table if exists wt;
+DROP TABLE IF EXISTS wt;
 
 CREATE TABLE wt
 (

@@ -1,6 +1,6 @@
 -- Tags: no-parallel-replicas, no-parallel
 -- Test depends on mark cache, don't run with others in parallel
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (

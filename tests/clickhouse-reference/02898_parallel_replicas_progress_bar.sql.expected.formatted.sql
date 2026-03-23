@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS t1 SYNC;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t2 SYNC;
+DROP TABLE IF EXISTS t2;
 
-SYSTEM DROP  TABLE IF EXISTS t3 SYNC;
+DROP TABLE IF EXISTS t3;
 
 CREATE TABLE t1
 (
@@ -100,8 +100,8 @@ WHERE query_id IN (
     AND like(message, '%Updated total rows to read: added % rows, total 3000 rows%')
     AND event_date >= yesterday();
 
-SYSTEM DROP  TABLE t1 SYNC;
+DROP TABLE t1;
 
-SYSTEM DROP  TABLE t2 SYNC;
+DROP TABLE t2;
 
-SYSTEM DROP  TABLE t3 SYNC;
+DROP TABLE t3;

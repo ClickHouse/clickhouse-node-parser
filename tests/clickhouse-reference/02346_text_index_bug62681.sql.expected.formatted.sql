@@ -1,6 +1,6 @@
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -49,4 +49,4 @@ WHERE database = currentDatabase()
     AND `partition` = 'tuple()'
 FORMAT Vertical;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

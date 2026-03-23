@@ -1,10 +1,10 @@
 SET enable_json_type = 1;
 
-SYSTEM drop  table if exists src;
+DROP TABLE IF EXISTS src;
 
-SYSTEM drop  table if exists dst;
+DROP TABLE IF EXISTS dst;
 
-SYSTEM drop  view if exists view;
+DROP VIEW IF EXISTS view;
 
 CREATE TABLE src
 (
@@ -37,8 +37,8 @@ INSERT INTO src SELECT
 SELECT *
 FROM dst;
 
-SYSTEM drop  view view;
+DROP VIEW view;
 
-SYSTEM drop  table dst;
+DROP TABLE dst;
 
-SYSTEM drop  table src;
+DROP TABLE src;

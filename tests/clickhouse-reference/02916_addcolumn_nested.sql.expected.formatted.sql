@@ -1,6 +1,6 @@
 SET flatten_nested = 0;
 
-SYSTEM DROP  TABLE IF EXISTS nested_table;
+DROP TABLE IF EXISTS nested_table;
 
 CREATE TABLE nested_table
 (
@@ -12,4 +12,4 @@ ORDER BY id;
 
 SET flatten_nested = 1;
 
-SYSTEM DROP  TABLE nested_table;
+DROP TABLE nested_table;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS fct_rt_dc_shop_sku_vender_day;
+DROP TABLE IF EXISTS fct_rt_dc_shop_sku_vender_day;
 
 CREATE TABLE fct_rt_dc_shop_sku_vender_day
 (
@@ -148,4 +148,4 @@ GROUP BY
     dctype,
     shopformid;
 
-SYSTEM DROP  TABLE fct_rt_dc_shop_sku_vender_day;
+DROP TABLE fct_rt_dc_shop_sku_vender_day;

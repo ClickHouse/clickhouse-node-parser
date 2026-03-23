@@ -3,9 +3,9 @@ SET send_logs_level = 'fatal';
 
 SET allow_deprecated_database_ordinary = 1;
 
-SYSTEM DROP  DATABASE IF EXISTS 02265_atomic_db;
+DROP DATABASE IF EXISTS `02265_atomic_db`;
 
-SYSTEM DROP  DATABASE IF EXISTS 02265_ordinary_db;
+DROP DATABASE IF EXISTS `02265_ordinary_db`;
 
 CREATE DATABASE `02265_atomic_db`
 ENGINE = Atomic;

@@ -1,7 +1,7 @@
 -- Tags: no-random-settings
-SYSTEM DROP  TABLE IF EXISTS buf_dest;
+DROP TABLE IF EXISTS buf_dest;
 
-SYSTEM DROP  TABLE IF EXISTS buf;
+DROP TABLE IF EXISTS buf;
 
 CREATE TABLE buf_dest
 (

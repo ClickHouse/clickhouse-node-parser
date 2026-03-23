@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -15,7 +15,7 @@ SELECT *
 FROM test
 ORDER BY x ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

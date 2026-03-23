@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS src;
+DROP TABLE IF EXISTS src;
 
-SYSTEM DROP  TABLE IF EXISTS dst;
+DROP TABLE IF EXISTS dst;
 
-SYSTEM DROP  TABLE IF EXISTS matview;
+DROP TABLE IF EXISTS matview;
 
 SET use_async_executor_for_materialized_views = 1;
 

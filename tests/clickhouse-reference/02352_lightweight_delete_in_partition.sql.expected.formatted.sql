@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS t_merge_tree SYNC;
+DROP TABLE IF EXISTS t_merge_tree;
 
-SYSTEM DROP  TABLE IF EXISTS t_replicated_merge_tree SYNC;
+DROP TABLE IF EXISTS t_replicated_merge_tree;
 
 CREATE TABLE t_merge_tree
 (
@@ -52,6 +52,6 @@ FROM t_merge_tree;
 SELECT COUNT()
 FROM t_replicated_merge_tree;
 
-SYSTEM DROP  TABLE t_merge_tree SYNC;
+DROP TABLE t_merge_tree;
 
-SYSTEM DROP  TABLE t_replicated_merge_tree SYNC;
+DROP TABLE t_replicated_merge_tree;

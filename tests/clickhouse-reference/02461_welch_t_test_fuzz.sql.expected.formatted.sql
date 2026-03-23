@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS welch_ttest__fuzz_7;
+DROP TABLE IF EXISTS welch_ttest__fuzz_7;
 
 CREATE TABLE welch_ttest__fuzz_7
 (

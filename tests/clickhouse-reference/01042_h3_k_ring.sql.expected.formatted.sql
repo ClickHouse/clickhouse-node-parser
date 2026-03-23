@@ -11,7 +11,7 @@ SELECT arraySort(h3kRing(581276613233082367, 1));
 
 SELECT h3kRing(581276613233082367, 0);
 
-SYSTEM DROP  TABLE IF EXISTS h3_indexes;
+DROP TABLE IF EXISTS h3_indexes;
 
 -- Test h3 indices and k selected from original test fixture: https://github.com/uber/h3/blob/master/src/apps/testapps
 CREATE TABLE h3_indexes
@@ -57,4 +57,4 @@ SELECT arraySort(h3kRing(h3_index, k))
 FROM h3_indexes
 ORDER BY h3_index ASC;
 
-SYSTEM DROP  TABLE h3_indexes;
+DROP TABLE h3_indexes;

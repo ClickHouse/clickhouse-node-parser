@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS abc;
+DROP TABLE IF EXISTS abc;
 
 CREATE TABLE abc
 (
@@ -31,4 +31,4 @@ FROM merge(currentDatabase(), '^abc$')
 PREWHERE f1 = 'a'
 WHERE _table = 'abc';
 
-SYSTEM DROP  TABLE abc;
+DROP TABLE abc;

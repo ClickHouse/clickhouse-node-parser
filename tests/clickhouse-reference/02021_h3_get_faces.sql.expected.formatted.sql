@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS h3_indexes;
+DROP TABLE IF EXISTS h3_indexes;
 
 CREATE TABLE h3_indexes
 (
@@ -20,4 +20,4 @@ SELECT arraySort(h3GetFaces(h3_index))
 FROM h3_indexes
 ORDER BY h3_index ASC;
 
-SYSTEM DROP  TABLE h3_indexes;
+DROP TABLE h3_indexes;

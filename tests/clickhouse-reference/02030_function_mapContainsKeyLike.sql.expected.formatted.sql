@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS map_containsKeyLike_test;
+DROP TABLE IF EXISTS map_containsKeyLike_test;
 
 CREATE TABLE map_containsKeyLike_test
 (
@@ -28,7 +28,7 @@ FROM map_containsKeyLike_test
 WHERE mapContainsKeyLike(map, '3-%') = 0
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE map_containsKeyLike_test;
+DROP TABLE map_containsKeyLike_test;
 
 SELECT mapContainsKeyLike(map('aa', 1, 'bb', 2), 'a%');
 

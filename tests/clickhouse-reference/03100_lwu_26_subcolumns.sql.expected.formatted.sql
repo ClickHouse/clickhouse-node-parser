@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_subcolumns;
+DROP TABLE IF EXISTS t_lwu_subcolumns;
 
 SET enable_json_type = 1;
 
@@ -37,4 +37,4 @@ SET apply_patch_parts = 1;
 
 SET optimize_throw_if_noop = 1;
 
-SYSTEM DROP  TABLE t_lwu_subcolumns;
+DROP TABLE t_lwu_subcolumns;

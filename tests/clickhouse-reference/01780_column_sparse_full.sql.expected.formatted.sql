@@ -1,6 +1,6 @@
 -- This test checks, that common SQL operations work
 -- with mixed columns (sparse and full) in table.
-SYSTEM DROP  TABLE IF EXISTS t_sparse_full;
+DROP TABLE IF EXISTS t_sparse_full;
 
 CREATE TABLE t_sparse_full
 (
@@ -242,4 +242,4 @@ ORDER BY
     name ASC,
     column ASC;
 
-SYSTEM DROP  TABLE t_sparse_full;
+DROP TABLE t_sparse_full;

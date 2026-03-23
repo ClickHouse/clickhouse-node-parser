@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t_rio;
+DROP TABLE IF EXISTS t_rio;
 
 SET optimize_read_in_order = 1;
 

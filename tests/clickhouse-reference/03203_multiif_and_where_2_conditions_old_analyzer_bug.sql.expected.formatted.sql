@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS bugcheck1;
+DROP TABLE IF EXISTS bugcheck1;
 
 CREATE TABLE bugcheck1
 ENGINE = MergeTree
@@ -54,4 +54,4 @@ WHERE (condition_1 IN ('yes'))
     AND (condition_2 IN ('true'))
 SETTINGS enable_analyzer = 1;
 
-SYSTEM DROP  TABLE bugcheck1;
+DROP TABLE bugcheck1;

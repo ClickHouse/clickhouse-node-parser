@@ -77,6 +77,6 @@ ORDER BY keycol ASC;
 
 SET join_algorithm = 'partial_merge';
 
-SYSTEM DROP  TABLE table_key;
+DROP TABLE table_key;
 
-SYSTEM DROP  TABLE table_with_enum;
+DROP TABLE table_with_enum;

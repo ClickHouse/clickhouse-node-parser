@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_filter;
+DROP TABLE IF EXISTS test_filter;
 
 -- { echoOn }
 CREATE TABLE test_filter
@@ -54,4 +54,4 @@ PREWHERE b != 0
 WHERE intDiv(b, c) > 0;
 
 -- { echoOff }
-SYSTEM DROP  TABLE test_filter;
+DROP TABLE test_filter;

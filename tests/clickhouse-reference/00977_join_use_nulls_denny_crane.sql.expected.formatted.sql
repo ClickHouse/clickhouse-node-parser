@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM drop  table if exists s;
+DROP TABLE IF EXISTS s;
 
 CREATE TABLE t
 (
@@ -70,9 +70,9 @@ RIGHT JOIN s
     AND s.b = t.b)
 SETTINGS join_use_nulls = 1;
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table s;
+DROP TABLE s;
 
 CREATE TABLE t
 (

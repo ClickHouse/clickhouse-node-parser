@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_tuple_element;
+DROP TABLE IF EXISTS test_tuple_element;
 
 CREATE TABLE test_tuple_element
 (
@@ -17,4 +17,4 @@ SELECT
     tupleElement(tuple, 'k2', NULL) AS k2_with_null
 FROM test_tuple_element;
 
-SYSTEM DROP  TABLE test_tuple_element;
+DROP TABLE test_tuple_element;

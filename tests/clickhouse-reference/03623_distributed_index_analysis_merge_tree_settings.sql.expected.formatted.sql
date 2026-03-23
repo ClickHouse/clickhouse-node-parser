@@ -3,7 +3,7 @@ SET allow_experimental_parallel_reading_from_replicas = 0;
 
 SET cluster_for_parallel_replicas = 'test_cluster_one_shard_two_replicas';
 
-SYSTEM drop  table if exists dist_idx;
+DROP TABLE IF EXISTS dist_idx;
 
 CREATE TABLE dist_idx
 (
@@ -24,9 +24,9 @@ FROM dist_idx
 SETTINGS distributed_index_analysis = 1
 FORMAT Null;
 
-SYSTEM drop  table dist_idx;
+DROP TABLE dist_idx;
 
-SYSTEM drop  table if exists no_dist_idx_not_enough_indexes;
+DROP TABLE IF EXISTS no_dist_idx_not_enough_indexes;
 
 CREATE TABLE no_dist_idx_not_enough_indexes
 (
@@ -47,9 +47,9 @@ FROM no_dist_idx_not_enough_indexes
 SETTINGS distributed_index_analysis = 1
 FORMAT Null;
 
-SYSTEM drop  table no_dist_idx_not_enough_indexes;
+DROP TABLE no_dist_idx_not_enough_indexes;
 
-SYSTEM drop  table if exists no_dist_idx_min_not_enough_parts;
+DROP TABLE IF EXISTS no_dist_idx_min_not_enough_parts;
 
 CREATE TABLE no_dist_idx_min_not_enough_parts
 (
@@ -70,9 +70,9 @@ FROM no_dist_idx_min_not_enough_parts
 SETTINGS distributed_index_analysis = 1
 FORMAT Null;
 
-SYSTEM drop  table no_dist_idx_min_not_enough_parts;
+DROP TABLE no_dist_idx_min_not_enough_parts;
 
-SYSTEM drop  table if exists no_dist_idx;
+DROP TABLE IF EXISTS no_dist_idx;
 
 CREATE TABLE no_dist_idx
 (
@@ -93,9 +93,9 @@ FROM no_dist_idx
 SETTINGS distributed_index_analysis = 1
 FORMAT Null;
 
-SYSTEM drop  table no_dist_idx;
+DROP TABLE no_dist_idx;
 
-SYSTEM drop  table if exists dist_idx_parts;
+DROP TABLE IF EXISTS dist_idx_parts;
 
 CREATE TABLE dist_idx_parts
 (
@@ -120,9 +120,9 @@ FROM dist_idx_parts
 SETTINGS distributed_index_analysis = 1
 FORMAT Null;
 
-SYSTEM drop  table dist_idx_parts;
+DROP TABLE dist_idx_parts;
 
-SYSTEM drop  table if exists dist_idx_pk_size;
+DROP TABLE IF EXISTS dist_idx_pk_size;
 
 CREATE TABLE dist_idx_pk_size
 (
@@ -151,9 +151,9 @@ FROM dist_idx_pk_size
 SETTINGS distributed_index_analysis = 1
 FORMAT Null;
 
-SYSTEM drop  table dist_idx_pk_size;
+DROP TABLE dist_idx_pk_size;
 
-SYSTEM drop  table if exists dist_idx_skipping_idx_size;
+DROP TABLE IF EXISTS dist_idx_skipping_idx_size;
 
 CREATE TABLE dist_idx_skipping_idx_size
 (
@@ -182,7 +182,7 @@ FROM dist_idx_skipping_idx_size
 SETTINGS distributed_index_analysis = 1
 FORMAT Null;
 
-SYSTEM drop  table dist_idx_skipping_idx_size;
+DROP TABLE dist_idx_skipping_idx_size;
 
 SELECT
     tables,

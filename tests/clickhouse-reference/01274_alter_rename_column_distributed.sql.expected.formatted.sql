@@ -1,9 +1,9 @@
 -- Tags: distributed
 SET distributed_foreground_insert = 1;
 
-SYSTEM DROP  TABLE IF EXISTS visits;
+DROP TABLE IF EXISTS visits;
 
-SYSTEM DROP  TABLE IF EXISTS visits_dist;
+DROP TABLE IF EXISTS visits_dist;
 
 CREATE TABLE visits
 (
@@ -26,6 +26,6 @@ ORDER BY
     StartDate ASC,
     Name2 ASC;
 
-SYSTEM DROP  TABLE visits;
+DROP TABLE visits;
 
-SYSTEM DROP  TABLE visits_dist;
+DROP TABLE visits_dist;

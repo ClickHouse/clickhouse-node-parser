@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists a;
+DROP TABLE IF EXISTS a;
 
 CREATE TABLE a
 (
@@ -20,4 +20,4 @@ WHERE i > 0
     AND j = 4
 SETTINGS force_index_by_date = 1;
 
-SYSTEM drop  table a;
+DROP TABLE a;

@@ -1,6 +1,6 @@
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -16,4 +16,4 @@ INSERT INTO tab (s);
 
 INSERT INTO tab (s);
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

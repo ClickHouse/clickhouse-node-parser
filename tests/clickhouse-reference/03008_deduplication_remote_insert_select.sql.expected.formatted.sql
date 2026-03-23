@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS src;
+DROP TABLE IF EXISTS src;
 
 CREATE TABLE src
 (
@@ -37,7 +37,7 @@ SELECT count()
 FROM remote('127.0.0.{1..2}', currentDatabase(), src);
 
 -- { echoOff }
-SYSTEM DROP  TABLE IF EXISTS dst_null;
+DROP TABLE IF EXISTS dst_null;
 
 CREATE TABLE dst_null
 (
@@ -46,7 +46,7 @@ CREATE TABLE dst_null
 )
 ENGINE = Null;
 
-SYSTEM DROP  TABLE IF EXISTS mv_dst;
+DROP TABLE IF EXISTS mv_dst;
 
 CREATE MATERIALIZED VIEW mv_dst
 ENGINE = AggregatingMergeTree()
@@ -74,8 +74,8 @@ GROUP BY a
 ORDER BY a ASC;
 
 -- { echoOff }
-SYSTEM DROP  TABLE src;
+DROP TABLE src;
 
-SYSTEM DROP  TABLE mv_dst;
+DROP TABLE mv_dst;
 
-SYSTEM DROP  TABLE dst_null;
+DROP TABLE dst_null;

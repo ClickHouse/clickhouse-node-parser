@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS A;
+DROP TABLE IF EXISTS A;
 
 CREATE TABLE A
 (
@@ -26,4 +26,4 @@ FORMAT Null;
 
 SET join_algorithm = 'grace_hash', grace_hash_join_initial_buckets = 128, grace_hash_join_max_buckets = 128;
 
-SYSTEM DROP  TABLE A;
+DROP TABLE A;

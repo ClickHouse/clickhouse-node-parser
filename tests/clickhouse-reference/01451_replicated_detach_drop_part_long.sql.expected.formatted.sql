@@ -3,9 +3,9 @@
 -- no-shared-merge-tree: depends on max_replicated_merges_in_queue
 SET replication_alter_partitions_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS replica1 SYNC;
+DROP TABLE IF EXISTS replica1;
 
-SYSTEM DROP  TABLE IF EXISTS replica2 SYNC;
+DROP TABLE IF EXISTS replica2;
 
 CREATE TABLE replica1
 (
@@ -46,6 +46,6 @@ WHERE table = 'replica2'
     AND active
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE replica1 SYNC;
+DROP TABLE replica1;
 
-SYSTEM DROP  TABLE replica2 SYNC;
+DROP TABLE replica2;

@@ -49,7 +49,7 @@ FROM (
             )
     );
 
-SYSTEM DROP  TABLE IF EXISTS sensor_value;
+DROP TABLE IF EXISTS sensor_value;
 
 CREATE TABLE sensor_value
 (
@@ -86,7 +86,7 @@ FROM (
 GROUP BY time
 ORDER BY time ASC;
 
-SYSTEM DROP  TABLE sensor_value;
+DROP TABLE sensor_value;
 
 SELECT
     s.a,

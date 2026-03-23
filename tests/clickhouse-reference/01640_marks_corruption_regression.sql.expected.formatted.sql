@@ -1,5 +1,5 @@
 -- Tags: no-random-merge-tree-settings
-SYSTEM DROP  TABLE IF EXISTS adaptive_table;
+DROP TABLE IF EXISTS adaptive_table;
 
 CREATE TABLE adaptive_table
 (
@@ -61,4 +61,4 @@ SETTINGS
     max_threads = 100
 FORMAT CSV;
 
-SYSTEM DROP  TABLE adaptive_table;
+DROP TABLE adaptive_table;

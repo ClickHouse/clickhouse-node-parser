@@ -2,7 +2,7 @@ SET optimize_on_insert = 0;
 
 SELECT '-- SummingMergeTree with Nullable column without duplicates.';
 
-SYSTEM drop  table if exists tst;
+DROP TABLE IF EXISTS tst;
 
 CREATE TABLE tst
 (
@@ -76,4 +76,4 @@ ENGINE = SummingMergeTree
 ORDER BY (timestamp)
 PARTITION BY toYYYYMM(timestamp);
 
-SYSTEM drop  table tst;
+DROP TABLE tst;

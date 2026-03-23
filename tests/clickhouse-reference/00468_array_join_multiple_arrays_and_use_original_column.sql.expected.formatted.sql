@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nested;
+DROP TABLE IF EXISTS nested;
 
 CREATE TABLE nested
 (
@@ -50,4 +50,4 @@ FROM
     nested
 ARRAY JOIN nest.x AS nx, nest.y AS ny;
 
-SYSTEM DROP  TABLE nested;
+DROP TABLE nested;

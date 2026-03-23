@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists ay;
+DROP TABLE IF EXISTS ay;
 
 CREATE TABLE ay
 ENGINE = AggregatingMergeTree

@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists local;
+DROP TABLE IF EXISTS local;
 
-SYSTEM drop  table if exists distr;
+DROP TABLE IF EXISTS distr;
 
 CREATE TABLE local
 (

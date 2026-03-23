@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists smta;
+DROP TABLE IF EXISTS smta;
 
 CREATE TABLE smta
 (

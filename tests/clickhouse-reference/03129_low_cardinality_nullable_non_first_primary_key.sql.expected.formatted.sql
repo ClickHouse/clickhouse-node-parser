@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS small;
+DROP TABLE IF EXISTS small;
 
 CREATE TABLE small
 (
@@ -18,4 +18,4 @@ SELECT SUM(dt::int)
 FROM small
 WHERE isNull(user_email);
 
-SYSTEM DROP  TABLE small;
+DROP TABLE small;

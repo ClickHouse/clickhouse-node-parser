@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -25,4 +25,4 @@ WHERE value IN (
         FROM numbers(1000000000)
     );
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

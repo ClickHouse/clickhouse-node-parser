@@ -1,6 +1,6 @@
 SET allow_suspicious_primary_key = 0;
 
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (
@@ -54,7 +54,7 @@ ORDER BY (value, key); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
 
 SET allow_suspicious_primary_key = 1;
 
-SYSTEM drop  table data;
+DROP TABLE data;
 
 -- ALTER AggregatingMergeTree
 CREATE TABLE data
@@ -72,4 +72,4 @@ CREATE TABLE data_rep
 ENGINE = ReplicatedAggregatingMergeTree('/tables/{database}', 'r1')
 ORDER BY (key);
 
-SYSTEM drop  table data_rep;
+DROP TABLE data_rep;

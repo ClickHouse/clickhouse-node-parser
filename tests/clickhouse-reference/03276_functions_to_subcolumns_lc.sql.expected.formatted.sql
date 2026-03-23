@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_map_lc;
+DROP TABLE IF EXISTS t_map_lc;
 
 CREATE TABLE t_map_lc
 (
@@ -16,4 +16,4 @@ SELECT
 FROM t_map_lc
 SETTINGS optimize_functions_to_subcolumns = 1;
 
-SYSTEM DROP  TABLE t_map_lc;
+DROP TABLE t_map_lc;

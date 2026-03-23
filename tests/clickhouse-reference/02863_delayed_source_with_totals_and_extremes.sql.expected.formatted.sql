@@ -1,6 +1,6 @@
 -- Tags: no-parallel
 -- Tag no-parallel: failpoint is used which can force DelayedSource on other tests
-SYSTEM DROP  TABLE IF EXISTS 02863_delayed_source;
+DROP TABLE IF EXISTS `02863_delayed_source`;
 
 CREATE TABLE `02863_delayed_source`
 (
@@ -33,4 +33,4 @@ LIMIT 1
 FORMAT JSON
 SETTINGS output_format_write_statistics = 0;
 
-SYSTEM DROP  TABLE 02863_delayed_source;
+DROP TABLE `02863_delayed_source`;

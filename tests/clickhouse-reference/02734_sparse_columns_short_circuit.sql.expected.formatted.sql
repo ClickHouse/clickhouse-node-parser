@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_short_circuit;
+DROP TABLE IF EXISTS t_sparse_short_circuit;
 
 SET short_circuit_function_evaluation = 'force_enable';
 
@@ -19,4 +19,4 @@ FROM numbers(100000);
 SELECT sum(if(a % 10 = 0, CAST(b, 'UInt8'), 0))
 FROM t_sparse_short_circuit;
 
-SYSTEM DROP  TABLE t_sparse_short_circuit;
+DROP TABLE t_sparse_short_circuit;

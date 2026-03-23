@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table;
+DROP TABLE IF EXISTS table;
 
 CREATE TABLE table
 (
@@ -32,4 +32,4 @@ ORDER BY
     uid ASC,
     date ASC;
 
-SYSTEM DROP  TABLE table;
+DROP TABLE table;

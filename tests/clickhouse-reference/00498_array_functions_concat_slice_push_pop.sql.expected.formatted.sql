@@ -125,7 +125,7 @@ SELECT arrayPopFront([0.1, 0.2, 0.3]);
 
 SELECT arrayPopFront(['a', 'b', 'c']);
 
-SYSTEM DROP  TABLE if exists array_functions;
+DROP TABLE IF EXISTS array_functions;
 
 CREATE TABLE array_functions
 (

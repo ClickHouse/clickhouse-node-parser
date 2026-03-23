@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS parameterized_view_without_renaming, parameterized_view_with_renaming;
+DROP TABLE IF EXISTS parameterized_view_without_renaming, parameterized_view_with_renaming;
 
 CREATE VIEW parameterized_view_without_renaming
 AS
@@ -14,4 +14,4 @@ SELECT {test:Int32} * 2 AS result;
 SELECT *
 FROM parameterized_view_with_renaming(test = 42);
 
-SYSTEM DROP  TABLE parameterized_view_without_renaming, parameterized_view_with_renaming;
+DROP TABLE parameterized_view_without_renaming, parameterized_view_with_renaming;

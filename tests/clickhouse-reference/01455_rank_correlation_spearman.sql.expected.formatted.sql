@@ -3,9 +3,9 @@ CREATE DATABASE IF NOT EXISTS db_01455_rank_correlation;
 
 USE db_01455_rank_correlation;
 
-SYSTEM DROP  TABLE IF EXISTS moons;
+DROP TABLE IF EXISTS moons;
 
-SYSTEM DROP  TABLE IF EXISTS circles;
+DROP TABLE IF EXISTS circles;
 
 SELECT rankCorr(number, number)
 FROM numbers(100);
@@ -40,4 +40,4 @@ INSERT INTO circles;
 SELECT roundBankers(rankCorr(a, b), 3)
 FROM circles;
 
-SYSTEM DROP  DATABASE IF EXISTS db_01455_rank_correlation;
+DROP DATABASE IF EXISTS db_01455_rank_correlation;

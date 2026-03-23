@@ -1,6 +1,6 @@
 -- Tags: no-random-merge-tree-settings
 -- add_minmax_index_for_numeric_columns=0: More files
-SYSTEM DROP  TABLE IF EXISTS test_00961;
+DROP TABLE IF EXISTS test_00961;
 
 CREATE TABLE test_00961
 (
@@ -28,4 +28,4 @@ FROM `system`.parts
 WHERE table = 'test_00961'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE test_00961;
+DROP TABLE test_00961;

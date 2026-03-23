@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS t_async_inserts_flush;
+DROP TABLE IF EXISTS t_async_inserts_flush;
 
 CREATE TABLE t_async_inserts_flush
 (
@@ -50,4 +50,4 @@ SELECT *
 FROM t_async_inserts_flush
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE t_async_inserts_flush;
+DROP TABLE t_async_inserts_flush;

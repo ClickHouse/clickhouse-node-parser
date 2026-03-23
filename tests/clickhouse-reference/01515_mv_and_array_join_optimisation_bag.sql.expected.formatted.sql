@@ -51,8 +51,8 @@ ORDER BY
 
 INSERT INTO visits (CounterID, StartDate, StartTime, Sign, GoalsID);
 
-SYSTEM DROP  TABLE goal;
+DROP TABLE goal;
 
-SYSTEM DROP  TABLE goal_view;
+DROP TABLE goal_view;
 
-SYSTEM DROP  TABLE visits;
+DROP TABLE visits;

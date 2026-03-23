@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS v;
+DROP TABLE IF EXISTS v;
 
 CREATE VIEW v (s LowCardinality(String), n UInt8)
 AS
@@ -19,4 +19,4 @@ FROM v
 GROUP BY s
 FORMAT Null;
 
-SYSTEM DROP  TABLE v;
+DROP TABLE v;

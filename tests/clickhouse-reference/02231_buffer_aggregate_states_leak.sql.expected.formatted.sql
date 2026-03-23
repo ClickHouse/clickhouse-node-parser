@@ -1,11 +1,11 @@
 -- Tags: long, no-tsan
-SYSTEM drop  table if exists buffer_02231;
+DROP TABLE IF EXISTS buffer_02231;
 
-SYSTEM drop  table if exists out_02231;
+DROP TABLE IF EXISTS out_02231;
 
-SYSTEM drop  table if exists in_02231;
+DROP TABLE IF EXISTS in_02231;
 
-SYSTEM drop  table if exists mv_02231;
+DROP TABLE IF EXISTS mv_02231;
 
 -- To reproduce leak of memory tracking of aggregate states,
 -- background flush is required.
@@ -43,10 +43,10 @@ SETTINGS
     max_memory_usage = '400Mi',
     max_threads = 1;
 
-SYSTEM drop  table buffer_02231;
+DROP TABLE buffer_02231;
 
-SYSTEM drop  table out_02231;
+DROP TABLE out_02231;
 
-SYSTEM drop  table in_02231;
+DROP TABLE in_02231;
 
-SYSTEM drop  table mv_02231;
+DROP TABLE mv_02231;

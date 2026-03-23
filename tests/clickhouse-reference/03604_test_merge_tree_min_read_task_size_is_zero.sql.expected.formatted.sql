@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS `03604_test`;
+DROP TABLE IF EXISTS `03604_test`;
 
 SET allow_experimental_lightweight_update = 1;
 
@@ -15,4 +15,4 @@ SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 
 INSERT INTO `03604_test` (c0);
 
-SYSTEM DROP  TABLE `03604_test`;
+DROP TABLE `03604_test`;

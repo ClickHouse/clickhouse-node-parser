@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -26,4 +26,4 @@ SELECT *
 FROM loop(remote('localhost:9000', currentDatabase(), 't0')) AS tx
 LIMIT 11;
 
-SYSTEM DROP  TABLE t0 SYNC;
+DROP TABLE t0;

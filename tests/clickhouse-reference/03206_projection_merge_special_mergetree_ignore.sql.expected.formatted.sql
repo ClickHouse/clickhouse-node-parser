@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tp;
+DROP TABLE IF EXISTS tp;
 
 CREATE TABLE tp
 (
@@ -38,4 +38,4 @@ ORDER BY
 
 SET optimize_use_projections = true, force_optimize_projection = true;
 
-SYSTEM DROP  TABLE tp;
+DROP TABLE tp;

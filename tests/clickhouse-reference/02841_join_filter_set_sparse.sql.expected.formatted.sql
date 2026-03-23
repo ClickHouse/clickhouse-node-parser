@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE t1
 (
@@ -32,6 +32,6 @@ INNER JOIN t2
 
 SET join_algorithm = 'full_sorting_merge', max_rows_in_set_to_optimize_join = 100000;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;
 
-SYSTEM DROP  TABLE t2;
+DROP TABLE t2;

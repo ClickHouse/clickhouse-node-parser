@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists test1_00863;
+DROP TABLE IF EXISTS test1_00863;
 
-SYSTEM drop  table if exists test2_00863;
+DROP TABLE IF EXISTS test2_00863;
 
-SYSTEM drop  table if exists test3_00863;
+DROP TABLE IF EXISTS test3_00863;
 
 CREATE TABLE test1_00863
 (
@@ -58,8 +58,8 @@ WHERE test1_00863.code IN ('1', '2', '3')
     AND test2_00863.test3_id = test3_00863.id
 ORDER BY `all` ASC;
 
-SYSTEM drop  table test1_00863;
+DROP TABLE test1_00863;
 
-SYSTEM drop  table test2_00863;
+DROP TABLE test2_00863;
 
-SYSTEM drop  table test3_00863;
+DROP TABLE test3_00863;

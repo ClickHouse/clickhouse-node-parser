@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -13,4 +13,4 @@ INSERT INTO t;
 SELECT *
 FROM merge('', 't');
 
-SYSTEM drop  table t;
+DROP TABLE t;

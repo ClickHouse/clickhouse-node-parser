@@ -1,5 +1,5 @@
 -- Tags: zookeeper
-SYSTEM DROP  TABLE IF EXISTS test_table_replicated;
+DROP TABLE IF EXISTS test_table_replicated;
 
 CREATE TABLE test_table_replicated
 (
@@ -22,7 +22,7 @@ WHERE path = (
     AND name = 'metadata'
 FORMAT Vertical;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_replicated_second;
+DROP TABLE IF EXISTS test_table_replicated_second;
 
 CREATE TABLE test_table_replicated_second
 (
@@ -33,7 +33,7 @@ CREATE TABLE test_table_replicated_second
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_table_replicated', '2_replica')
 ORDER BY id;
 
-SYSTEM DROP  TABLE test_table_replicated;
+DROP TABLE test_table_replicated;
 
 SELECT '--';
 
@@ -50,4 +50,4 @@ WHERE path = (
     AND name = 'metadata_version'
 FORMAT Vertical;
 
-SYSTEM DROP  TABLE test_table_replicated_second;
+DROP TABLE test_table_replicated_second;

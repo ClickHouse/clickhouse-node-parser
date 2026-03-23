@@ -2,11 +2,11 @@
 -- no-parallel: Heavy usage
 SET check_query_single_value_result = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test.hits_log;
+DROP TABLE IF EXISTS test.hits_log;
 
-SYSTEM DROP  TABLE IF EXISTS test.hits_tinylog;
+DROP TABLE IF EXISTS test.hits_tinylog;
 
-SYSTEM DROP  TABLE IF EXISTS test.hits_stripelog;
+DROP TABLE IF EXISTS test.hits_stripelog;
 
 CREATE TABLE test.hits_log
 (
@@ -82,8 +82,8 @@ SELECT
     sum(cityHash64(*))
 FROM test.hits_stripelog;
 
-SYSTEM DROP  TABLE test.hits_log;
+DROP TABLE test.hits_log;
 
-SYSTEM DROP  TABLE test.hits_tinylog;
+DROP TABLE test.hits_tinylog;
 
-SYSTEM DROP  TABLE test.hits_stripelog;
+DROP TABLE test.hits_stripelog;

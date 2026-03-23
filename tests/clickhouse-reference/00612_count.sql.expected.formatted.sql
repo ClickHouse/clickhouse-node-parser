@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS count;
+DROP TABLE IF EXISTS count;
 
 CREATE TABLE count
 (
@@ -57,4 +57,4 @@ SELECT count()
 FROM count
 HAVING count() != 1234567;
 
-SYSTEM DROP  TABLE count;
+DROP TABLE count;

@@ -1,6 +1,6 @@
 SET enable_variant_type = 1, allow_suspicious_variant_types = 1, enable_json_type = 1, allow_suspicious_types_in_order_by = 1, type_json_skip_duplicated_paths = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -15,4 +15,4 @@ FROM t0
 ORDER BY t0.c0 DESC
 FORMAT Null;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

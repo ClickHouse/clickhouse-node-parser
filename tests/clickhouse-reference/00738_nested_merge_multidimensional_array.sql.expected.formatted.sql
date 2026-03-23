@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS sites;
+DROP TABLE IF EXISTS sites;
 
 CREATE TABLE sites
 (
@@ -20,4 +20,4 @@ SELECT
     countArrayArray(Users.Dates)
 FROM sites;
 
-SYSTEM DROP  TABLE sites;
+DROP TABLE sites;

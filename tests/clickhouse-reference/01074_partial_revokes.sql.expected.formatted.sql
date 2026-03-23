@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  USER IF EXISTS test_user_01074;
+DROP USER IF EXISTS test_user_01074;
 
 CREATE USER test_user_01074;
 
@@ -11,4 +11,4 @@ WHERE user_name = 'test_user_01074'
 SETTINGS output_format_pretty_color = 1
 FORMAT Pretty;
 
-SYSTEM DROP  USER test_user_01074;
+DROP USER test_user_01074;

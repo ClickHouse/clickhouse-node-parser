@@ -4,7 +4,7 @@
 -- Tests that SYSTEM CLEAR QUERY CONDITION CACHE works
 SET allow_experimental_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -28,4 +28,4 @@ FORMAT Null;
 SELECT count(*)
 FROM `system`.query_condition_cache;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

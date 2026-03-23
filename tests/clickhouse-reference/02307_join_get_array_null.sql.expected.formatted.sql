@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists id_val;
+DROP TABLE IF EXISTS id_val;
 
 CREATE TABLE id_val
 (
@@ -11,4 +11,4 @@ SETTINGS join_use_nulls = 1;
 SELECT joinGet(id_val, 'val', toInt32(number))
 FROM numbers(1);
 
-SYSTEM drop  table id_val;
+DROP TABLE id_val;

@@ -8,7 +8,7 @@ SELECT concat(NULLIF(1, materialize(toLowCardinality(1))), concat(NULLIF(1, 1)))
 FROM remote('127.0.0.{1,2}', `system`, one)
 GROUP BY concat(NULLIF(1, 1));
 
-SYSTEM DROP  TABLE IF EXISTS test__fuzz_21;
+DROP TABLE IF EXISTS test__fuzz_21;
 
 CREATE TABLE test__fuzz_21
 (

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists proj;
+DROP TABLE IF EXISTS proj;
 
 CREATE TABLE proj
 (
@@ -24,4 +24,4 @@ PARTITION BY toDate(datetime_value);
 
 INSERT INTO proj;
 
-SYSTEM drop  table proj;
+DROP TABLE proj;

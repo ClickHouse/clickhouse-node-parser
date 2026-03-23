@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_enum_array;
+DROP TABLE IF EXISTS alter_enum_array;
 
 CREATE TABLE alter_enum_array
 (

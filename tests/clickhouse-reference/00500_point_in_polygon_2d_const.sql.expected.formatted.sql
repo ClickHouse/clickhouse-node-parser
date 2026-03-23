@@ -1,6 +1,6 @@
 SELECT pointInPolygon((0, 0), [[(0, 0), (10, 0), (10, 10), (0, 10)]]);
 
-SYSTEM DROP  TABLE IF EXISTS s;
+DROP TABLE IF EXISTS s;
 
 CREATE TABLE s
 (
@@ -10,7 +10,7 @@ CREATE TABLE s
 )
 ENGINE = Memory();
 
-SYSTEM DROP  TABLE IF EXISTS p;
+DROP TABLE IF EXISTS p;
 
 CREATE TABLE p
 (
@@ -33,6 +33,6 @@ WHERE pointInPolygon((lng,lat), (
         WHERE polygon_id = 8
     ));
 
-SYSTEM DROP  TABLE s;
+DROP TABLE s;
 
-SYSTEM DROP  TABLE p;
+DROP TABLE p;

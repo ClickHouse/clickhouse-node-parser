@@ -404,7 +404,7 @@ SELECT hex(sipHash64Keyed());
 
 SELECT hex(sipHash128Keyed());
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -428,7 +428,7 @@ FROM tab;
 SELECT hex(sipHash128Keyed(key, 4::UInt64))
 FROM tab;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 SELECT sipHash64Keyed((2::UInt64, toUInt64(2)), 4)
 GROUP BY toUInt64(2);
@@ -441,7 +441,7 @@ GROUP BY
 SELECT sipHash64Keyed((toUInt64(9223372036854775806), 9223372036854775808::UInt64), char(2))
 GROUP BY toUInt64(9223372036854775806);
 
-SYSTEM DROP  TABLE IF EXISTS sipHashKeyed_test;
+DROP TABLE IF EXISTS sipHashKeyed_test;
 
 CREATE TABLE sipHashKeyed_test
 ENGINE = Memory() AS
@@ -471,9 +471,9 @@ FROM sipHashKeyed_test;
 SELECT hex(sipHash128Keyed((toUInt64(0), toUInt64(0)), a, b))
 FROM sipHashKeyed_test;
 
-SYSTEM DROP  TABLE sipHashKeyed_test;
+DROP TABLE sipHashKeyed_test;
 
-SYSTEM DROP  TABLE IF EXISTS sipHashKeyed_keys;
+DROP TABLE IF EXISTS sipHashKeyed_keys;
 
 CREATE TABLE sipHashKeyed_keys
 (
@@ -494,7 +494,7 @@ SELECT hex(sipHash128Keyed(key, val))
 FROM sipHashKeyed_keys
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE sipHashKeyed_keys;
+DROP TABLE sipHashKeyed_keys;
 
 CREATE TABLE sipHashKeyed_keys
 (

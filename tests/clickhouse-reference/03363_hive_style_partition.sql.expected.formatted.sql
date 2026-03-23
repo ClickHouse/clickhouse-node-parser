@@ -1,7 +1,7 @@
 -- Tags: no-parallel, no-fasttest, no-random-settings
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_03363_parquet, t_03363_csv, s3_table_half_schema_with_format;
+DROP TABLE IF EXISTS t_03363_parquet, t_03363_csv, s3_table_half_schema_with_format;
 
 CREATE TABLE t_03363_parquet
 (

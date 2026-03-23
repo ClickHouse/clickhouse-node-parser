@@ -1,5 +1,5 @@
 -- Tags: no-ordinary-database, no-fasttest
-SYSTEM DROP  TABLE IF EXISTS 02577_keepermap_delete_update;
+DROP TABLE IF EXISTS `02577_keepermap_delete_update`;
 
 CREATE TABLE `02577_keepermap_delete_update`
 (

@@ -1,7 +1,7 @@
 -- Tests delayed materialization of statistics in merge instead of during insert (setting 'materialize_statistics_on_insert = 0').
 -- (The concrete statistics type, column data type and predicate type don't matter)
 -- Checks by the predicate evaluation order in EXPLAIN. This is quite fragile, a better approach would be helpful (maybe 'send_logs_level'?)
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 SET allow_experimental_statistics = 1;
 
@@ -38,4 +38,4 @@ WHERE like(`explain`, '%Prewhere%'); -- checks b first, then a (statistics not u
 
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,7 +1,7 @@
 -- Tags: no-parallel, no-random-settings, no-random-merge-tree-settings
 -- no-parallel -- enables failpoint
 -- no-random-settings -- depend on type of part, should always fail
-SYSTEM drop  table if exists prefetched_table;
+DROP TABLE IF EXISTS prefetched_table;
 
 CREATE TABLE prefetched_table
 (

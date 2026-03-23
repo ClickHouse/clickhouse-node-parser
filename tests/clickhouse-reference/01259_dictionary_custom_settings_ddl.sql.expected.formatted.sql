@@ -10,11 +10,11 @@ ORDER BY key_column;
 
 INSERT INTO table_for_dict;
 
-SYSTEM DROP  DATABASE IF EXISTS ordinary_db;
+DROP DATABASE IF EXISTS ordinary_db;
 
 CREATE DATABASE ordinary_db;
 
-SYSTEM DROP  DICTIONARY IF EXISTS ordinary_db.dict1;
+DROP DICTIONARY IF EXISTS ordinary_db.dict1;
 
 CREATE DICTIONARY ordinary_db.dict1
 (
@@ -30,4 +30,4 @@ SETTINGS(max_result_bytes = 1);
 
 SELECT dictGetUInt64('ordinary_db.dict1', 'second_column', toUInt64(100500)); -- { serverError TOO_MANY_ROWS_OR_BYTES }
 
-SYSTEM DROP  TABLE IF EXISTS table_for_dict;
+DROP TABLE IF EXISTS table_for_dict;

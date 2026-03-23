@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t_distinct_limit;
+DROP TABLE IF EXISTS t_distinct_limit;
 
 CREATE TABLE t_distinct_limit
 (

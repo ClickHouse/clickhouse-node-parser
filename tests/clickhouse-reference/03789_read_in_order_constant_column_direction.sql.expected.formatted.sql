@@ -5,7 +5,7 @@ SET optimize_read_in_order = 1;
 -- Ensure plan stabiliity with parallel replicas
 SET parallel_replicas_local_plan = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_03789;
+DROP TABLE IF EXISTS test_03789;
 
 CREATE TABLE test_03789
 (
@@ -46,4 +46,4 @@ FROM (
     )
 WHERE like(`explain`, '%InReverseOrder%');
 
-SYSTEM DROP  TABLE test_03789;
+DROP TABLE test_03789;

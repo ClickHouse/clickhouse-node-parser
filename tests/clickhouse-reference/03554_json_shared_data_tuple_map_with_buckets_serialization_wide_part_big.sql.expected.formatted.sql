@@ -1,6 +1,6 @@
 -- Tags: long
 -- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
-SYSTEM drop  table if exists test_wide_map_with_buckets_tuple;
+DROP TABLE IF EXISTS test_wide_map_with_buckets_tuple;
 
 CREATE TABLE test_wide_map_with_buckets_tuple
 (
@@ -76,4 +76,4 @@ SELECT
 FROM test_wide_map_with_buckets_tuple
 FORMAT Null;
 
-SYSTEM drop  table test_wide_map_with_buckets_tuple;
+DROP TABLE test_wide_map_with_buckets_tuple;

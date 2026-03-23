@@ -1,6 +1,6 @@
 -- Tags: no-parallel, no-object-storage
 -- With s3 policy TTL TO DISK 'default' doesn't work (because we have no default, only 's3')
-SYSTEM drop  table if exists ttl;
+DROP TABLE IF EXISTS ttl;
 
 SET mutations_sync = 2;
 
@@ -20,7 +20,7 @@ SELECT *
 FROM ttl
 ORDER BY i ASC;
 
-SYSTEM drop  table ttl;
+DROP TABLE ttl;
 
 -- check that skip index is updated after column was modified by ttl.
 CREATE TABLE ttl

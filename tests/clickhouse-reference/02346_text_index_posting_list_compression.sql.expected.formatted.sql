@@ -14,9 +14,9 @@ SET use_skip_indexes_on_data_read = 1;
 
 SET use_query_condition_cache = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tab_bitpacking;
+DROP TABLE IF EXISTS tab_bitpacking;
 
-SYSTEM DROP  TABLE IF EXISTS tab_uncompressed;
+DROP TABLE IF EXISTS tab_uncompressed;
 
 CREATE TABLE tab_bitpacking
 (
@@ -167,6 +167,6 @@ SELECT
     (count_bitpacking = 5) AS ok_rare5,
     (count_bitpacking = count_uncompressec) AS ok_rare5_eq;
 
-SYSTEM DROP  TABLE tab_bitpacking;
+DROP TABLE tab_bitpacking;
 
-SYSTEM DROP  TABLE tab_uncompressed;
+DROP TABLE tab_uncompressed;

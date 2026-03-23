@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_03444_lazy;
+DROP TABLE IF EXISTS test_03444_lazy;
 
 CREATE TABLE test_03444_lazy
 (
@@ -34,4 +34,4 @@ FROM (
     )
 WHERE ilike(s, 'LazilyRead%');
 
-SYSTEM DROP  TABLE test_03444_lazy;
+DROP TABLE test_03444_lazy;

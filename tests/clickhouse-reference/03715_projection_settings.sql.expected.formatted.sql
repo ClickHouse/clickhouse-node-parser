@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -38,7 +38,7 @@ WHERE database = currentDatabase()
     AND table = 't'
 ORDER BY name ASC;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;
 
 CREATE TABLE t
 (

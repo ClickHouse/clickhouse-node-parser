@@ -139,7 +139,7 @@ SELECT
     isConstant(tokenized)
 FROM tab;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 INSERT INTO tab (id, str);
 

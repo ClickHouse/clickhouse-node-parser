@@ -15,4 +15,4 @@ INSERT INTO t (d, s, c);
 SELECT *
 FROM t;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

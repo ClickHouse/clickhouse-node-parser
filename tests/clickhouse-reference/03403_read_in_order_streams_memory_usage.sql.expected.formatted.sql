@@ -1,6 +1,6 @@
 SET enable_parallel_blocks_marshalling = 0;
 
-SYSTEM DROP  TABLE IF EXISTS 03403_data;
+DROP TABLE IF EXISTS `03403_data`;
 
 CREATE TABLE `03403_data`
 (
@@ -27,4 +27,4 @@ WHERE `Settings`['max_streams_to_max_threads_ratio'] = '10000000'
     AND memory_usage > 20000000
     AND current_database = currentDatabase();
 
-SYSTEM DROP  TABLE 03403_data;
+DROP TABLE `03403_data`;

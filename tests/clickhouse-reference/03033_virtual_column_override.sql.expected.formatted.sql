@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS override_test;
+DROP TABLE IF EXISTS override_test;
 
 CREATE TABLE override_test
 (

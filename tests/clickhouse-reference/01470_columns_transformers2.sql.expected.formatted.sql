@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS columns_transformers;
+DROP TABLE IF EXISTS columns_transformers;
 
 CREATE TABLE columns_transformers
 (

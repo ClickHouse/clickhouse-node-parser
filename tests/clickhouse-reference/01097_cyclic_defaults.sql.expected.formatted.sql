@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_with_cyclic_defaults;
+DROP TABLE IF EXISTS table_with_cyclic_defaults;
 
 CREATE TABLE table_with_cyclic_defaults
 (

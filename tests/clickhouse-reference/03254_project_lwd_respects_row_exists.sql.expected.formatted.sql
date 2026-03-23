@@ -1,5 +1,5 @@
 -- compact test
-SYSTEM DROP  TABLE IF EXISTS users_compact;
+DROP TABLE IF EXISTS users_compact;
 
 CREATE TABLE users_compact
 (
@@ -30,7 +30,7 @@ SETTINGS
     optimize_aggregation_in_order = 0;
 
 -- wide test
-SYSTEM DROP  TABLE IF EXISTS users_wide;
+DROP TABLE IF EXISTS users_wide;
 
 CREATE TABLE users_wide
 (

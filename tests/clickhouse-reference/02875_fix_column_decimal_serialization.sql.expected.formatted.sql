@@ -22,4 +22,4 @@ SELECT
 FROM max_length_alias_14053__fuzz_45
 GROUP BY b;
 
-SYSTEM DROP  TABLE max_length_alias_14053__fuzz_45;
+DROP TABLE max_length_alias_14053__fuzz_45;

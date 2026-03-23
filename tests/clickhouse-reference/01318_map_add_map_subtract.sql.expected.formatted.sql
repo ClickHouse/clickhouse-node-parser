@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 ENGINE = Memory() AS
@@ -26,7 +26,7 @@ SELECT mapAdd(cast(map, 'Tuple(Array(UInt8), Array(UInt8))'), ([1], [1]), ([2],[
 FROM tab;
 
 -- cleanup
-SYSTEM drop  table tab;
+DROP TABLE tab;
 
 -- check types
 SELECT

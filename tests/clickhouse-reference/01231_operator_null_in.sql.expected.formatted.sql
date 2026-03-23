@@ -1,5 +1,5 @@
 -- Tags: no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS null_in;
+DROP TABLE IF EXISTS null_in;
 
 CREATE TABLE null_in
 (
@@ -105,7 +105,7 @@ SELECT count() == 3
 FROM null_in
 WHERE s GLOBAL NOT IN ('1', '3');
 
-SYSTEM DROP  TABLE IF EXISTS test_set;
+DROP TABLE IF EXISTS test_set;
 
 CREATE TABLE test_set
 (
@@ -174,4 +174,4 @@ SELECT count() == 3
 FROM null_in
 WHERE i GLOBAL IN (test_set2);
 
-SYSTEM DROP  TABLE test_set2;
+DROP TABLE test_set2;

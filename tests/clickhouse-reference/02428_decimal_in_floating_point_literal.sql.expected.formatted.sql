@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS decimal_in_float_test;
+DROP TABLE IF EXISTS decimal_in_float_test;
 
 CREATE TABLE decimal_in_float_test
 (

@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS dictionary_primary_key_source_table;
+DROP TABLE IF EXISTS dictionary_primary_key_source_table;
 
 CREATE TABLE dictionary_primary_key_source_table
 (
@@ -10,7 +10,7 @@ ENGINE = TinyLog;
 
 INSERT INTO dictionary_primary_key_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS flat_dictionary;
+DROP DICTIONARY IF EXISTS flat_dictionary;
 
 CREATE DICTIONARY flat_dictionary
 (
@@ -25,6 +25,6 @@ LAYOUT(FLAT());
 SELECT *
 FROM flat_dictionary;
 
-SYSTEM DROP  DICTIONARY flat_dictionary;
+DROP DICTIONARY flat_dictionary;
 
-SYSTEM DROP  TABLE dictionary_primary_key_source_table;
+DROP TABLE dictionary_primary_key_source_table;

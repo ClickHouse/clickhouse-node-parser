@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS rename_table;
+DROP TABLE IF EXISTS rename_table;
 
 CREATE TABLE rename_table
 (
@@ -25,7 +25,7 @@ FORMAT TSVWithNames;
 
 SELECT '---polymorphic---';
 
-SYSTEM DROP  TABLE IF EXISTS rename_table_polymorphic;
+DROP TABLE IF EXISTS rename_table_polymorphic;
 
 CREATE TABLE rename_table_polymorphic
 (

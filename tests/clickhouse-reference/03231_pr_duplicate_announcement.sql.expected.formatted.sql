@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table SYNC;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -10,7 +10,7 @@ ORDER BY tuple();
 
 INSERT INTO test_table;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_for_in SYNC;
+DROP TABLE IF EXISTS test_table_for_in;
 
 CREATE TABLE test_table_for_in
 (
@@ -35,6 +35,6 @@ WHERE id IN (
         FROM test_table_for_in
     );
 
-SYSTEM DROP  TABLE test_table SYNC;
+DROP TABLE test_table;
 
-SYSTEM DROP  TABLE test_table_for_in SYNC;
+DROP TABLE test_table_for_in;

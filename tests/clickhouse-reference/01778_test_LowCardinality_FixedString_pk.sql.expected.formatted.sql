@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_01778;
+DROP TABLE IF EXISTS test_01778;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -31,4 +31,4 @@ SELECT count()
 FROM test_01778
 WHERE toString(key) = 'xxx';
 
-SYSTEM DROP  TABLE test_01778;
+DROP TABLE test_01778;

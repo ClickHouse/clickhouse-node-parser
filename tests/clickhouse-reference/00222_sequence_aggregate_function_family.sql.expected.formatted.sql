@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists sequence_test;
+DROP TABLE IF EXISTS sequence_test;
 
 CREATE TABLE sequence_test
 (
@@ -217,4 +217,4 @@ FROM sequence_test;
 SELECT [4,5] = sequenceMatchEvents('(?1)(?t==1)(?2)')(time, data = 1, data = 2)
 FROM sequence_test;
 
-SYSTEM drop  table sequence_test;
+DROP TABLE sequence_test;

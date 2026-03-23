@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS topk_test;
+DROP TABLE IF EXISTS topk_test;
 
 CREATE TABLE topk_test
 (
@@ -65,4 +65,4 @@ ORDER BY
     `top`.count DESC,
     `top`.item ASC;
 
-SYSTEM DROP  TABLE topk_test;
+DROP TABLE topk_test;

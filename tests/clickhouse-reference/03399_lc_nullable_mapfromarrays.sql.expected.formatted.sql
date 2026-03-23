@@ -21,7 +21,7 @@ GROUP BY 1; -- { serverError BAD_ARGUMENTS }
 -- Run tests on tables
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM DROP  TABLE IF EXISTS 03399_lc_nullable_int_simple;
+DROP TABLE IF EXISTS `03399_lc_nullable_int_simple`;
 
 CREATE TABLE `03399_lc_nullable_int_simple`
 (
@@ -40,7 +40,7 @@ SELECT mapFromArrays(k, v)
 FROM `03399_lc_nullable_int_simple`
 GROUP BY 1;
 
-SYSTEM DROP  TABLE IF EXISTS 03399_lc_nullable_int_mixed;
+DROP TABLE IF EXISTS `03399_lc_nullable_int_mixed`;
 
 CREATE TABLE `03399_lc_nullable_int_mixed`
 (
@@ -63,7 +63,7 @@ SELECT mapFromArrays(k, v)
 FROM `03399_lc_nullable_int_mixed`
 GROUP BY 1; -- { serverError BAD_ARGUMENTS }
 
-SYSTEM DROP  TABLE IF EXISTS 03399_lc_nullable_string_simple;
+DROP TABLE IF EXISTS `03399_lc_nullable_string_simple`;
 
 CREATE TABLE `03399_lc_nullable_string_simple`
 (
@@ -82,7 +82,7 @@ SELECT mapFromArrays(k, v)
 FROM `03399_lc_nullable_string_simple`
 GROUP BY 1;
 
-SYSTEM DROP  TABLE IF EXISTS 03399_lc_nullable_string_mixed;
+DROP TABLE IF EXISTS `03399_lc_nullable_string_mixed`;
 
 CREATE TABLE `03399_lc_nullable_string_mixed`
 (

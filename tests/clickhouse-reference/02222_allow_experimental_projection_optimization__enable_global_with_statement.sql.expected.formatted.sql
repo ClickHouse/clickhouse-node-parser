@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS data_02222;
+DROP TABLE IF EXISTS data_02222;
 
 CREATE TABLE data_02222
 ENGINE = MergeTree()
@@ -7,4 +7,4 @@ SELECT *
 FROM `system`.one;
 
 -- { echoOff }
-SYSTEM DROP  TABLE data_02222;
+DROP TABLE data_02222;

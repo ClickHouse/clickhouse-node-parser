@@ -1,5 +1,5 @@
 -- Tags: long, zookeeper
-SYSTEM DROP  TABLE IF EXISTS modify_sample;
+DROP TABLE IF EXISTS modify_sample;
 
 SET min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0;
 
@@ -68,8 +68,8 @@ CREATE TABLE modify_sample_old
 )
 ENGINE = MergeTree(d, (x, y), 8192);
 
-SYSTEM DROP  TABLE modify_sample;
+DROP TABLE modify_sample;
 
-SYSTEM DROP  TABLE modify_sample_replicated;
+DROP TABLE modify_sample_replicated;
 
-SYSTEM DROP  TABLE modify_sample_old;
+DROP TABLE modify_sample_old;

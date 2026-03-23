@@ -6,25 +6,25 @@ SET optimize_inverse_dictionary_lookup = 1;
 
 SET optimize_or_like_chain = 0;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_prices_ckh;
+DROP DICTIONARY IF EXISTS dict_prices_ckh;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_prices_ch_array;
+DROP DICTIONARY IF EXISTS dict_prices_ch_array;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_prices_ck_sparse_hashed;
+DROP DICTIONARY IF EXISTS dict_prices_ck_sparse_hashed;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_items_flat;
+DROP DICTIONARY IF EXISTS dict_items_flat;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_items_hashed;
+DROP DICTIONARY IF EXISTS dict_items_hashed;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_items_hashed_array;
+DROP DICTIONARY IF EXISTS dict_items_hashed_array;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_items_sparse_hashed;
+DROP DICTIONARY IF EXISTS dict_items_sparse_hashed;
 
-SYSTEM DROP  TABLE IF EXISTS ref_prices_ckh;
+DROP TABLE IF EXISTS ref_prices_ckh;
 
-SYSTEM DROP  TABLE IF EXISTS ref_items_flat;
+DROP TABLE IF EXISTS ref_items_flat;
 
-SYSTEM DROP  TABLE IF EXISTS f;
+DROP TABLE IF EXISTS f;
 
 CREATE TABLE ref_prices_ckh
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_compact_vertical_merge;
+DROP TABLE IF EXISTS t_compact_vertical_merge;
 
 CREATE TABLE t_compact_vertical_merge
 (
@@ -16,4 +16,4 @@ INSERT INTO t_compact_vertical_merge SELECT
     range(number % 10)
 FROM numbers(40);
 
-SYSTEM DROP  TABLE t_compact_vertical_merge;
+DROP TABLE t_compact_vertical_merge;

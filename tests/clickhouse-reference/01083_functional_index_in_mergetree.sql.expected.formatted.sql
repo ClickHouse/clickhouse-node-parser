@@ -80,4 +80,4 @@ WHERE NOT or(NOT x, toUInt64(x)
     AND NOT floor(x) > 6, x >= 7.42
     AND round(x) <= 7);
 
-SYSTEM DROP  TABLE functional_index_mergetree;
+DROP TABLE functional_index_mergetree;

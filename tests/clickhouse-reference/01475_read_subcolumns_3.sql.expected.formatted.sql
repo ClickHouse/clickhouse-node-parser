@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS null_subcolumns;
+DROP TABLE IF EXISTS null_subcolumns;
 
 CREATE TABLE null_subcolumns
 (
@@ -18,9 +18,9 @@ SELECT count()
 FROM null_subcolumns
 PREWHERE n.`null`;
 
-SYSTEM DROP  TABLE null_subcolumns;
+DROP TABLE null_subcolumns;
 
-SYSTEM DROP  TABLE IF EXISTS map_subcolumns;
+DROP TABLE IF EXISTS map_subcolumns;
 
 CREATE TABLE map_subcolumns
 (
@@ -57,4 +57,4 @@ SELECT count()
 FROM map_subcolumns
 WHERE m.size0 > 2;
 
-SYSTEM DROP  TABLE map_subcolumns;
+DROP TABLE map_subcolumns;

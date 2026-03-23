@@ -1,9 +1,9 @@
 -- Tags: long, replica, no-replicated-database, no-shared-merge-tree
 -- Tag no-replicated-database: Old syntax is not allowed
 -- no-shared-merge-tree: implemented another test
-SYSTEM DROP  TABLE IF EXISTS replicated_alter1;
+DROP TABLE IF EXISTS replicated_alter1;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_alter2;
+DROP TABLE IF EXISTS replicated_alter2;
 
 SET replication_alter_partitions_sync = 2;
 
@@ -41,6 +41,6 @@ INSERT INTO replicated_alter1;
 
 INSERT INTO replicated_alter1;
 
-SYSTEM DROP  TABLE replicated_alter1;
+DROP TABLE replicated_alter1;
 
-SYSTEM DROP  TABLE replicated_alter2;
+DROP TABLE replicated_alter2;

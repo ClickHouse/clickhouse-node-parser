@@ -19,7 +19,7 @@ SET enable_analyzer = 1;
 -- With small index granularity, the amount of rows left to read after the index analysis might be too small to utilize parallel replicas. So, we set it to 0.
 SET parallel_replicas_min_number_of_rows_per_replica = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -67,4 +67,4 @@ WHERE ((current_database = currentDatabase()
     AND like(query, '%SELECT%tab%hasAnyTokens%')
     AND type = 'QueryFinish';
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

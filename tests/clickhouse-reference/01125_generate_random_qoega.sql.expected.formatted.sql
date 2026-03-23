@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mass_table_117;
+DROP TABLE IF EXISTS mass_table_117;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -19,4 +19,4 @@ SELECT
     sum(cityHash64(*))
 FROM mass_table_117;
 
-SYSTEM DROP  TABLE mass_table_117;
+DROP TABLE mass_table_117;

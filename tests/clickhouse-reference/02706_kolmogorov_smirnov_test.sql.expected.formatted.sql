@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS kstest;
+DROP TABLE IF EXISTS kstest;
 
 CREATE TABLE kstest
 (

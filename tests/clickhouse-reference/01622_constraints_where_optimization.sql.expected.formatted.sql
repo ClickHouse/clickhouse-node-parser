@@ -4,7 +4,7 @@ SET optimize_using_constraints = 1;
 
 SET optimize_append_index = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t_constraints_where;
+DROP TABLE IF EXISTS t_constraints_where;
 
 CREATE TABLE t_constraints_where
 (
@@ -17,7 +17,7 @@ ENGINE = Memory;
 
 INSERT INTO t_constraints_where;
 
-SYSTEM DROP  TABLE t_constraints_where;
+DROP TABLE t_constraints_where;
 
 CREATE TABLE t_constraints_where
 (

@@ -1,18 +1,18 @@
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
-SYSTEM DROP  TABLE IF EXISTS truncate_test_log;
+DROP TABLE IF EXISTS truncate_test_log;
 
-SYSTEM DROP  TABLE IF EXISTS truncate_test_memory;
+DROP TABLE IF EXISTS truncate_test_memory;
 
-SYSTEM DROP  TABLE IF EXISTS truncate_test_tiny_log;
+DROP TABLE IF EXISTS truncate_test_tiny_log;
 
-SYSTEM DROP  TABLE IF EXISTS truncate_test_stripe_log;
+DROP TABLE IF EXISTS truncate_test_stripe_log;
 
-SYSTEM DROP  TABLE IF EXISTS truncate_test_merge_tree;
+DROP TABLE IF EXISTS truncate_test_merge_tree;
 
-SYSTEM DROP  TABLE IF EXISTS truncate_test_materialized_view;
+DROP TABLE IF EXISTS truncate_test_materialized_view;
 
-SYSTEM DROP  TABLE IF EXISTS truncate_test_materialized_depend;
+DROP TABLE IF EXISTS truncate_test_materialized_depend;
 
 CREATE TABLE truncate_test_set
 (
@@ -101,4 +101,4 @@ FROM truncate_test_merge_tree;
 SELECT *
 FROM truncate_test_materialized_view;
 
-SYSTEM DROP  TABLE IF EXISTS truncate_test_set;
+DROP TABLE IF EXISTS truncate_test_set;

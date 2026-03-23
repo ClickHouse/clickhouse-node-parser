@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists cdp_segments;
+DROP TABLE IF EXISTS cdp_segments;
 
-SYSTEM drop  table if exists cdp_customers;
+DROP TABLE IF EXISTS cdp_customers;
 
 CREATE TABLE cdp_segments
 (
@@ -18,6 +18,6 @@ CREATE TABLE cdp_customers
 ENGINE = ReplacingMergeTree()
 ORDER BY (mid_seq);
 
-SYSTEM drop  table cdp_segments;
+DROP TABLE cdp_segments;
 
-SYSTEM drop  table cdp_customers;
+DROP TABLE cdp_customers;

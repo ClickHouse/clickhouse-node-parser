@@ -11,7 +11,7 @@ SET correlated_subqueries_use_in_memory_buffer = 0;
 -- Disable table swaps during query planning
 SET query_plan_join_swap_table = false;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

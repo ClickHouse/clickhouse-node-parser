@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS bf_tokenbf_map_keys_test;
+DROP TABLE IF EXISTS bf_tokenbf_map_keys_test;
 
-SYSTEM DROP  TABLE IF EXISTS bf_ngrambf_map_keys_test;
+DROP TABLE IF EXISTS bf_ngrambf_map_keys_test;
 
 CREATE TABLE bf_tokenbf_map_keys_test
 (
@@ -72,7 +72,7 @@ SELECT *
 FROM bf_tokenbf_map_keys_test
 WHERE map_fixed['K3'] != '';
 
-SYSTEM DROP  TABLE bf_tokenbf_map_keys_test;
+DROP TABLE bf_tokenbf_map_keys_test;
 
 CREATE TABLE bf_tokenbf_map_values_test
 (
@@ -184,7 +184,7 @@ FROM bf_tokenbf_map_values_test
 WHERE NOT mapContainsValueLike(map_fixed, 'V2%')
 SETTINGS force_data_skipping_indices = 'map_fixed_values_tokenbf';
 
-SYSTEM DROP  TABLE bf_tokenbf_map_values_test;
+DROP TABLE bf_tokenbf_map_values_test;
 
 CREATE TABLE bf_ngrambf_map_keys_test
 (
@@ -256,7 +256,7 @@ SELECT *
 FROM bf_ngrambf_map_keys_test
 WHERE map_fixed['K3'] != '';
 
-SYSTEM DROP  TABLE bf_ngrambf_map_keys_test;
+DROP TABLE bf_ngrambf_map_keys_test;
 
 CREATE TABLE bf_ngrambf_map_values_test
 (
@@ -328,4 +328,4 @@ SELECT *
 FROM bf_ngrambf_map_values_test
 WHERE map_fixed['K3'] != '';
 
-SYSTEM DROP  TABLE bf_ngrambf_map_values_test;
+DROP TABLE bf_ngrambf_map_values_test;

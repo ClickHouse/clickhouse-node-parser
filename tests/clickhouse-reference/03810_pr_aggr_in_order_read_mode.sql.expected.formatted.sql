@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (
@@ -28,4 +28,4 @@ GROUP BY a
 HAVING materialize(0)
 SETTINGS parallel_replicas_local_plan = 1;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;

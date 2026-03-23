@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists product_groups;
+DROP TABLE IF EXISTS product_groups;
 
-SYSTEM drop  table if exists products;
+DROP TABLE IF EXISTS products;
 
 CREATE TABLE product_groups
 (
@@ -134,6 +134,6 @@ ORDER BY
     product_name ASC,
     price ASC;
 
-SYSTEM drop  table product_groups;
+DROP TABLE product_groups;
 
-SYSTEM drop  table products;
+DROP TABLE products;

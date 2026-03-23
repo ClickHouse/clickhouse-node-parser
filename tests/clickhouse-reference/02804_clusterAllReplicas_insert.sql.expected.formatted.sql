@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (
@@ -13,4 +13,4 @@ SELECT *
 FROM data
 ORDER BY key ASC;
 
-SYSTEM drop  table data;
+DROP TABLE data;

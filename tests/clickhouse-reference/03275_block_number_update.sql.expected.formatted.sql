@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_block_number_mut;
+DROP TABLE IF EXISTS t_block_number_mut;
 
 SET mutations_sync = 2;
 

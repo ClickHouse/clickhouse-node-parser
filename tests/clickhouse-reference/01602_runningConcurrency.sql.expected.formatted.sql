@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS runningConcurrency_test;
+DROP TABLE IF EXISTS runningConcurrency_test;
 
 CREATE TABLE runningConcurrency_test
 (
@@ -12,7 +12,7 @@ INSERT INTO runningConcurrency_test;
 SELECT runningConcurrency(begin, `end`)
 FROM runningConcurrency_test;
 
-SYSTEM DROP  TABLE runningConcurrency_test;
+DROP TABLE runningConcurrency_test;
 
 CREATE TABLE runningConcurrency_test
 (

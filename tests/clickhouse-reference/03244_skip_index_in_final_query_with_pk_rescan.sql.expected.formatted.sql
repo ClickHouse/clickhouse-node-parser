@@ -3,7 +3,7 @@ SET use_skip_indexes = 1;
 
 SET use_skip_indexes_if_final = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_final_query_tbl;
+DROP TABLE IF EXISTS t_final_query_tbl;
 
 CREATE TABLE t_final_query_tbl
 (
@@ -64,9 +64,9 @@ FROM t_final_query_tbl FINAL
 WHERE v = 58889995
 SETTINGS use_skip_indexes_if_final_exact_mode = 1;
 
-SYSTEM DROP  TABLE t_final_query_tbl;
+DROP TABLE t_final_query_tbl;
 
-SYSTEM DROP  TABLE IF EXISTS t_final_query_tbl2;
+DROP TABLE IF EXISTS t_final_query_tbl2;
 
 CREATE TABLE t_final_query_tbl2
 (
@@ -139,4 +139,4 @@ FROM t_final_query_tbl2 FINAL
 WHERE v = 58889995
 SETTINGS use_skip_indexes_if_final_exact_mode = 1;
 
-SYSTEM DROP  TABLE t_final_query_tbl2;
+DROP TABLE t_final_query_tbl2;

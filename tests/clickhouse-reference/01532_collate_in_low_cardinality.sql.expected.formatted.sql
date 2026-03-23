@@ -1,7 +1,7 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS test_collate;
+DROP TABLE IF EXISTS test_collate;
 
-SYSTEM DROP  TABLE IF EXISTS test_collate_null;
+DROP TABLE IF EXISTS test_collate_null;
 
 CREATE TABLE test_collate
 (
@@ -61,6 +61,6 @@ ORDER BY
     x ASC,
     s ASC COLLATE 'ru';
 
-SYSTEM DROP  TABLE test_collate;
+DROP TABLE test_collate;
 
-SYSTEM DROP  TABLE test_collate_null;
+DROP TABLE test_collate_null;

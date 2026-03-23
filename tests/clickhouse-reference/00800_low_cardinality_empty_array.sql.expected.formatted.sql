@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists lc_00800_1;
+DROP TABLE IF EXISTS lc_00800_1;
 
 CREATE TABLE lc_00800_1
 (

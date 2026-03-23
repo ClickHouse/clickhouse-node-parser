@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS installation_stats;
+DROP TABLE IF EXISTS installation_stats;
 
 CREATE TABLE installation_stats
 (
@@ -23,7 +23,7 @@ FROM (
         LIMIT 5 BY message
     );
 
-SYSTEM DROP  TABLE installation_stats;
+DROP TABLE installation_stats;
 
 CREATE TEMPORARY TABLE Accounts
 (

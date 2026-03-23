@@ -1,8 +1,8 @@
 -- Tags: no-replicated-database, long
 -- Tag no-replicated-database: profile events for mutations may differ because of additional replicas.
-SYSTEM DROP  TABLE IF EXISTS t_apply_patches SYNC;
+DROP TABLE IF EXISTS t_apply_patches;
 
-SYSTEM DROP  TABLE IF EXISTS t_apply_patches_smt SYNC;
+DROP TABLE IF EXISTS t_apply_patches_smt;
 
 SET enable_lightweight_update = 1;
 

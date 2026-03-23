@@ -4,7 +4,7 @@
 SET enable_positional_arguments_for_projections = 1;
 
 -- Test 1: CREATE TABLE with positional GROUP BY in projection
-SYSTEM DROP  TABLE IF EXISTS test_proj_positional;
+DROP TABLE IF EXISTS test_proj_positional;
 
 CREATE TABLE test_proj_positional
 (
@@ -28,7 +28,7 @@ SELECT *
 FROM test_proj_positional
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE test_proj_positional;
+DROP TABLE test_proj_positional;
 
 CREATE TABLE test_proj_positional
 (

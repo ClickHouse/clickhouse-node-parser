@@ -1,9 +1,9 @@
 -- Tags: no-fasttest, no-replicated-database
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
-SYSTEM DROP  TABLE IF EXISTS test_1;
+DROP TABLE IF EXISTS test_1;
 
-SYSTEM DROP  TABLE IF EXISTS test_2;
+DROP TABLE IF EXISTS test_2;
 
 CREATE TABLE test
 (

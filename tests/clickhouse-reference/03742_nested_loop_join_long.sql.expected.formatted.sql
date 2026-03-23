@@ -1,5 +1,5 @@
 -- Tags: long
-SYSTEM DROP  TABLE IF EXISTS events;
+DROP TABLE IF EXISTS events;
 
 CREATE TABLE events
 (
@@ -22,7 +22,7 @@ INSERT INTO events SELECT
     toDateTime('2024-01-01 00:00:00') + toIntervalMinute(number)
 FROM numbers(10);
 
-SYSTEM DROP  TABLE IF EXISTS attributes;
+DROP TABLE IF EXISTS attributes;
 
 CREATE TABLE attributes
 (
@@ -58,7 +58,7 @@ INSERT INTO attributes SELECT
 FROM numbers(200000);
 
 -- More keys in left table and different data distribution, more distinct keys
-SYSTEM DROP  TABLE IF EXISTS events2;
+DROP TABLE IF EXISTS events2;
 
 CREATE TABLE events2
 (
@@ -75,7 +75,7 @@ INSERT INTO events2 SELECT
     toDateTime('2024-01-01 00:00:00') + toIntervalMinute(number)
 FROM numbers(1000000);
 
-SYSTEM DROP  TABLE IF EXISTS attributes2;
+DROP TABLE IF EXISTS attributes2;
 
 CREATE TABLE attributes2
 (

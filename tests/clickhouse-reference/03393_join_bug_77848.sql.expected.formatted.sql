@@ -1,8 +1,8 @@
 SET parallel_replicas_local_plan = 1;
 
-SYSTEM DROP  TABLE IF EXISTS BadTable;
+DROP TABLE IF EXISTS BadTable;
 
-SYSTEM DROP  TABLE IF EXISTS BadJoin;
+DROP TABLE IF EXISTS BadJoin;
 
 CREATE TABLE IF NOT EXISTS BadTable
 (

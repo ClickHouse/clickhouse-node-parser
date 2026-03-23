@@ -1,8 +1,8 @@
 SET convert_query_to_cnf = 0;
 
-SYSTEM DROP  TABLE IF EXISTS n;
+DROP TABLE IF EXISTS n;
 
-SYSTEM DROP  TABLE IF EXISTS r;
+DROP TABLE IF EXISTS r;
 
 CREATE TABLE n
 (
@@ -19,6 +19,6 @@ ENGINE = Memory;
 
 SET enable_optimize_predicate_expression = 0;
 
-SYSTEM DROP  TABLE n;
+DROP TABLE n;
 
-SYSTEM DROP  TABLE r;
+DROP TABLE r;

@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -21,4 +21,4 @@ SELECT
     bcd
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

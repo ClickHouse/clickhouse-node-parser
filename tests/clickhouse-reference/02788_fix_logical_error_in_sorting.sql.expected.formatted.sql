@@ -1,8 +1,8 @@
 SET allow_deprecated_error_prone_window_functions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS session_events;
+DROP TABLE IF EXISTS session_events;
 
-SYSTEM DROP  TABLE IF EXISTS event_types;
+DROP TABLE IF EXISTS event_types;
 
 CREATE TABLE session_events
 (
@@ -44,6 +44,6 @@ FROM numbers(20);
 
 SET optimize_sorting_by_input_stream_properties = 1;
 
-SYSTEM DROP  TABLE session_events;
+DROP TABLE session_events;
 
-SYSTEM DROP  TABLE event_types;
+DROP TABLE event_types;

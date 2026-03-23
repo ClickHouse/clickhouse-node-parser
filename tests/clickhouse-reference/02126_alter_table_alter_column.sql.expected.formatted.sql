@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_column_02126;
+DROP TABLE IF EXISTS alter_column_02126;
 
 CREATE TABLE alter_column_02126
 (

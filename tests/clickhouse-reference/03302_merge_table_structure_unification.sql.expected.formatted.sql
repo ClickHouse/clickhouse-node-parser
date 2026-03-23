@@ -1,10 +1,10 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_a;
+DROP TABLE IF EXISTS test_a;
 
-SYSTEM DROP  TABLE IF EXISTS test_b;
+DROP TABLE IF EXISTS test_b;
 
-SYSTEM DROP  TABLE IF EXISTS test_merge;
+DROP TABLE IF EXISTS test_merge;
 
 CREATE TABLE test_a
 (
@@ -41,10 +41,10 @@ SELECT *
 FROM merge('^test_')
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE test_merge;
+DROP TABLE test_merge;
 
 SET merge_table_max_tables_to_look_for_schema_inference = 1;
 
-SYSTEM DROP  TABLE test_a;
+DROP TABLE test_a;
 
-SYSTEM DROP  TABLE test_b;
+DROP TABLE test_b;

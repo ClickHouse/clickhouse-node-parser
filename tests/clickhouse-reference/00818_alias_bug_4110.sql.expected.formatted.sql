@@ -101,7 +101,7 @@ FROM (
     ) AS data
 WHERE data.value > 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_00818;
+DROP TABLE IF EXISTS test_00818;
 
 CREATE TABLE test_00818
 (
@@ -117,4 +117,4 @@ SELECT
     test_00818.not_field AS field
 FROM test_00818;
 
-SYSTEM DROP  TABLE test_00818;
+DROP TABLE test_00818;

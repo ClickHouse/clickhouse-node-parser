@@ -1,7 +1,7 @@
 -- add_minmax_index_for_numeric_columns=0: Different output in system.data_skipping_indices
-SYSTEM DROP  TABLE IF EXISTS data_01917;
+DROP TABLE IF EXISTS data_01917;
 
-SYSTEM DROP  TABLE IF EXISTS data_01917_2;
+DROP TABLE IF EXISTS data_01917_2;
 
 CREATE TABLE data_01917
 (
@@ -46,6 +46,6 @@ FROM `system`.data_skipping_indices
 WHERE type = 'minmax'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE data_01917;
+DROP TABLE data_01917;
 
-SYSTEM DROP  TABLE data_01917_2;
+DROP TABLE data_01917_2;

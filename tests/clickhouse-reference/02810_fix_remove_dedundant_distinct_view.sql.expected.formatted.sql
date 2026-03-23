@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists tab_v;
+DROP TABLE IF EXISTS tab_v;
 
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

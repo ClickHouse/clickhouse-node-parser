@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_prewhere_default_column;
+DROP TABLE IF EXISTS test_prewhere_default_column;
 
-SYSTEM DROP  TABLE IF EXISTS test_prewhere_column_type;
+DROP TABLE IF EXISTS test_prewhere_column_type;
 
 CREATE TABLE test_prewhere_default_column
 (
@@ -40,6 +40,6 @@ SELECT
 FROM test_prewhere_column_type
 WHERE (x = 2) AS y;
 
-SYSTEM DROP  TABLE test_prewhere_default_column;
+DROP TABLE test_prewhere_default_column;
 
-SYSTEM DROP  TABLE test_prewhere_column_type;
+DROP TABLE test_prewhere_column_type;

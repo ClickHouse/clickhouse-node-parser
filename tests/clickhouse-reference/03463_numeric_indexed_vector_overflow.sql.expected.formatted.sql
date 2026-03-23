@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS uin_value_details;
+DROP TABLE IF EXISTS uin_value_details;
 
 CREATE TABLE uin_value_details
 (
@@ -12,7 +12,7 @@ INSERT INTO uin_value_details (uin, value);
 
 INSERT INTO uin_value_details (uin, value);
 
-SYSTEM DROP  TABLE uin_value_details;
+DROP TABLE uin_value_details;
 
 -- https://github.com/ClickHouse/ClickHouse/issues/82239
 SELECT 'Test with NaN, INFs and Nulls' AS test;
@@ -52,6 +52,6 @@ INSERT INTO test SELECT groupNumericIndexedVectorState(toUInt32(2), -1.54743e+26
 
 INSERT INTO test2 SELECT groupNumericIndexedVectorState(toUInt32(1), 18446744073709551615); -- { serverError INCORRECT_DATA }
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
-SYSTEM DROP  TABLE test2;
+DROP TABLE test2;

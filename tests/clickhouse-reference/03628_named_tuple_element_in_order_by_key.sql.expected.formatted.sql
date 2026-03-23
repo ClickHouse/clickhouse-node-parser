@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -81,4 +81,4 @@ SETTINGS
     max_rows_to_read = 1,
     parallel_replicas_index_analysis_only_on_coordinator = 0;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

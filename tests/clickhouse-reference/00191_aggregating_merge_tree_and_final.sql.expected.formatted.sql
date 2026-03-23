@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS aggregating_00191;
+DROP TABLE IF EXISTS aggregating_00191;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -42,4 +42,4 @@ SELECT
 FROM aggregating_00191
 ORDER BY k ASC;
 
-SYSTEM DROP  TABLE aggregating_00191;
+DROP TABLE aggregating_00191;

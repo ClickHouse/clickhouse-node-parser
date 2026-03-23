@@ -21,6 +21,6 @@ ORDER BY
     cluster ASC,
     replica_num ASC;
 
-SYSTEM DROP  DATABASE rdb1;
+DROP DATABASE rdb1;
 
-SYSTEM DROP  DATABASE rdb2;
+DROP DATABASE rdb2;

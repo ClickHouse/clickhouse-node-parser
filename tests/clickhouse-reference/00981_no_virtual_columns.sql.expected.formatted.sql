@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS merge_a;
+DROP TABLE IF EXISTS merge_a;
 
-SYSTEM DROP  TABLE IF EXISTS merge_b;
+DROP TABLE IF EXISTS merge_b;
 
-SYSTEM DROP  TABLE IF EXISTS merge_ab;
+DROP TABLE IF EXISTS merge_ab;
 
 CREATE TABLE merge_a
 (
@@ -23,8 +23,8 @@ FROM `system`.`columns`
 WHERE database = currentDatabase()
     AND table = 'merge_ab';
 
-SYSTEM DROP  TABLE merge_a;
+DROP TABLE merge_a;
 
-SYSTEM DROP  TABLE merge_b;
+DROP TABLE merge_b;
 
-SYSTEM DROP  TABLE merge_ab;
+DROP TABLE merge_ab;

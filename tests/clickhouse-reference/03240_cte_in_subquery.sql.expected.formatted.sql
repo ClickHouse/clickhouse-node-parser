@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS subquery_cte_in;
+DROP TABLE IF EXISTS subquery_cte_in;
 
 CREATE TABLE subquery_cte_in
 (
@@ -34,4 +34,4 @@ FROM (
         WHERE date IN (cte_1, cte_2)
     );
 
-SYSTEM DROP  TABLE subquery_cte_in;
+DROP TABLE subquery_cte_in;

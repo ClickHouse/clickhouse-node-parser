@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_test;
+DROP TABLE IF EXISTS alter_test;
 
 CREATE TABLE alter_test
 (
@@ -8,4 +8,4 @@ CREATE TABLE alter_test
 ENGINE = ReplacingMergeTree(b)
 ORDER BY a;
 
-SYSTEM DROP  TABLE alter_test;
+DROP TABLE alter_test;

@@ -1,6 +1,6 @@
 -- Tags: no-parallel, no-replicated-database
 -- ^ creates a database.
-SYSTEM DROP  DATABASE IF EXISTS test_03333;
+DROP DATABASE IF EXISTS test_03333;
 
 CREATE DATABASE test_03333;
 
@@ -10,7 +10,7 @@ CREATE TABLE test_03333.t
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE IF EXISTS merge;
+DROP TABLE IF EXISTS merge;
 
 CREATE TABLE merge
 ENGINE = Merge(test_03333, 't');
@@ -26,6 +26,6 @@ FROM `system`.tables
 WHERE database = currentDatabase()
     AND table = 'merge';
 
-SYSTEM DROP  DATABASE test_03333;
+DROP DATABASE test_03333;
 
-SYSTEM DROP  TABLE merge;
+DROP TABLE merge;

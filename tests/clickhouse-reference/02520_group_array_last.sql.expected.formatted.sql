@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists simple_agg_groupArrayLastArray;
+DROP TABLE IF EXISTS simple_agg_groupArrayLastArray;
 
 -- { echo }
 -- BAD_ARGUMENTS

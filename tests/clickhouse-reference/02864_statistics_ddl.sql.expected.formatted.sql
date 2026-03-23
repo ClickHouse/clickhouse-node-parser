@@ -3,7 +3,7 @@
 -- Tests that DDL statements which create / drop / materialize statistics
 SET mutations_sync = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 SET allow_experimental_statistics = 0;
 
@@ -45,7 +45,7 @@ CREATE TABLE tab
 ENGINE = MergeTree()
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

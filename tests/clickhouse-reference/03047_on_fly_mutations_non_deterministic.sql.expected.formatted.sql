@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lightweight_mut_2;
+DROP TABLE IF EXISTS t_lightweight_mut_2;
 
 SET apply_mutations_on_fly = 1;
 
@@ -26,4 +26,4 @@ WHERE database = currentDatabase()
     AND NOT is_done
     AND NOT is_killed;
 
-SYSTEM DROP  TABLE t_lightweight_mut_2;
+DROP TABLE t_lightweight_mut_2;

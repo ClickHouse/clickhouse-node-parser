@@ -1,6 +1,6 @@
-SYSTEM drop  table IF EXISTS tab1;
+DROP TABLE IF EXISTS tab1;
 
-SYSTEM drop  table IF EXISTS tab1_copy;
+DROP TABLE IF EXISTS tab1_copy;
 
 CREATE TABLE tab1
 (
@@ -31,6 +31,6 @@ FROM
 LEFT JOIN tab1_copy
     ON tab1.b1 + 3 = tab1_copy.b1 + 2;
 
-SYSTEM drop  table tab1;
+DROP TABLE tab1;
 
-SYSTEM drop  table tab1_copy;
+DROP TABLE tab1_copy;

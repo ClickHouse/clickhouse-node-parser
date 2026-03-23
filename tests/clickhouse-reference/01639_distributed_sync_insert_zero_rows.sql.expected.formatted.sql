@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS local;
+DROP TABLE IF EXISTS local;
 
-SYSTEM DROP  TABLE IF EXISTS distributed;
+DROP TABLE IF EXISTS distributed;
 
 CREATE TABLE local
 (
@@ -32,6 +32,6 @@ INSERT INTO distributed SELECT number
 FROM numbers(256)
 WHERE number < 128;
 
-SYSTEM DROP  TABLE local;
+DROP TABLE local;
 
-SYSTEM DROP  TABLE distributed;
+DROP TABLE distributed;

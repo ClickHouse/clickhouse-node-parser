@@ -7,6 +7,6 @@ FROM `system`.settings_profile_elements
 WHERE user_name = 'test_01605'
     OR profile_name = 'test_01605';
 
-SYSTEM DROP  SETTINGS PROFILE 'test_01605';
+DROP SETTINGS PROFILE 'test_01605';
 
-SYSTEM DROP  USER 'test_01605';
+DROP USER 'test_01605';

@@ -69,12 +69,12 @@ FROM truncate_test_stripe_log;
 SELECT *
 FROM truncate_test_merge_tree;
 
-SYSTEM DROP  TABLE truncate_test_log;
+DROP TABLE truncate_test_log;
 
-SYSTEM DROP  TABLE truncate_test_memory;
+DROP TABLE truncate_test_memory;
 
-SYSTEM DROP  TABLE truncate_test_tiny_log;
+DROP TABLE truncate_test_tiny_log;
 
-SYSTEM DROP  TABLE truncate_test_stripe_log;
+DROP TABLE truncate_test_stripe_log;
 
-SYSTEM DROP  TABLE truncate_test_merge_tree;
+DROP TABLE truncate_test_merge_tree;

@@ -1,14 +1,14 @@
-SYSTEM DROP  TABLE IF EXISTS constraint_test_assumption;
+DROP TABLE IF EXISTS constraint_test_assumption;
 
-SYSTEM DROP  TABLE IF EXISTS constraint_test_transitivity;
+DROP TABLE IF EXISTS constraint_test_transitivity;
 
-SYSTEM DROP  TABLE IF EXISTS constraint_test_transitivity2;
+DROP TABLE IF EXISTS constraint_test_transitivity2;
 
-SYSTEM DROP  TABLE IF EXISTS constraint_test_transitivity3;
+DROP TABLE IF EXISTS constraint_test_transitivity3;
 
-SYSTEM DROP  TABLE IF EXISTS constraint_test_constants_repl;
+DROP TABLE IF EXISTS constraint_test_constants_repl;
 
-SYSTEM DROP  TABLE IF EXISTS constraint_test_constants;
+DROP TABLE IF EXISTS constraint_test_constants;
 
 SET convert_query_to_cnf = 1;
 
@@ -81,7 +81,7 @@ SELECT count()
 FROM constraint_test_assumption
 WHERE (startsWith(URL, 'test') = true); ---> assumption -> 4
 
-SYSTEM DROP  TABLE constraint_test_assumption;
+DROP TABLE constraint_test_assumption;
 
 CREATE TABLE constraint_test_transitivity
 (
@@ -101,7 +101,7 @@ SELECT count()
 FROM constraint_test_transitivity
 WHERE a = d; ---> assumption -> 1
 
-SYSTEM DROP  TABLE constraint_test_transitivity;
+DROP TABLE constraint_test_transitivity;
 
 CREATE TABLE constraint_test_strong_connectivity
 (
@@ -137,7 +137,7 @@ FROM constraint_test_strong_connectivity
 WHERE a <= c
     OR b <= d; ---> assumption -> 1
 
-SYSTEM DROP  TABLE constraint_test_strong_connectivity;
+DROP TABLE constraint_test_strong_connectivity;
 
 CREATE TABLE constraint_test_transitivity2
 (
@@ -178,7 +178,7 @@ SELECT count()
 FROM constraint_test_transitivity2
 WHERE a != d; ---> assumption -> 1
 
-SYSTEM DROP  TABLE constraint_test_transitivity2;
+DROP TABLE constraint_test_transitivity2;
 
 CREATE TABLE constraint_test_transitivity3
 (
@@ -200,7 +200,7 @@ SELECT count()
 FROM constraint_test_transitivity3
 WHERE b >= a; ---> assumption -> 1
 
-SYSTEM DROP  TABLE constraint_test_transitivity3;
+DROP TABLE constraint_test_transitivity3;
 
 CREATE TABLE constraint_test_constants_repl
 (
@@ -231,7 +231,7 @@ SELECT count()
 FROM constraint_test_constants_repl
 WHERE ((a - b)) * 2 = c + d; ---> assumption -> 1
 
-SYSTEM DROP  TABLE constraint_test_constants_repl;
+DROP TABLE constraint_test_constants_repl;
 
 CREATE TABLE constraint_test_constants
 (
@@ -277,4 +277,4 @@ SELECT count()
 FROM constraint_test_constants
 WHERE 11 <= a; ---> assumption -> 0
 
-SYSTEM DROP  TABLE constraint_test_constants;
+DROP TABLE constraint_test_constants;

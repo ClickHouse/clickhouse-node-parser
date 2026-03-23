@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -26,4 +26,4 @@ ORDER BY val1 ASC;
 
 SET enable_optimize_predicate_expression = 1;
 
-SYSTEM drop  table t;
+DROP TABLE t;

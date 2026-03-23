@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ties;
+DROP TABLE IF EXISTS `ties`;
 
 CREATE TABLE `ties`
 (
@@ -124,4 +124,4 @@ FROM (
         LIMIT 8, 6 WITH TIES
     );
 
-SYSTEM DROP  TABLE ties;
+DROP TABLE `ties`;

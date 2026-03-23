@@ -1,6 +1,6 @@
 -- Tags: long, no-debug, no-tsan, no-asan, no-ubsan, no-msan, no-parallel
 -- no-parallel because the sets use a lot of memory, which may interfere with other tests
-SYSTEM DROP  TABLE IF EXISTS 02581_trips;
+DROP TABLE IF EXISTS `02581_trips`;
 
 CREATE TABLE `02581_trips`
 (
@@ -50,4 +50,4 @@ ORDER BY name ASC;
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 
-SYSTEM DROP  TABLE 02581_trips;
+DROP TABLE `02581_trips`;

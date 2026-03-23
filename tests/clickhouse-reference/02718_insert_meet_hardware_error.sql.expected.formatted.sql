@@ -1,5 +1,5 @@
 -- Tags: zookeeper, no-parallel
-SYSTEM DROP  TABLE IF EXISTS t_hardware_error NO DELAY;
+DROP TABLE IF EXISTS t_hardware_error;
 
 CREATE TABLE t_hardware_error
 (
@@ -15,4 +15,4 @@ INSERT INTO t_hardware_error;
 SELECT count()
 FROM t_hardware_error;
 
-SYSTEM DROP  TABLE t_hardware_error NO DELAY;
+DROP TABLE t_hardware_error;

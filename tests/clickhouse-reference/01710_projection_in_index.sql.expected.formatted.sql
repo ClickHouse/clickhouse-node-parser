@@ -1,6 +1,6 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -29,9 +29,9 @@ FROM t
 WHERE i < 5
     AND j IN (1, 2);
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -52,4 +52,4 @@ FROM (
         WHERE time_fmt > '2022-09-05 00:00:00'
     );
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -1,6 +1,6 @@
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
-SYSTEM DROP  TABLE IF EXISTS array_pk;
+DROP TABLE IF EXISTS array_pk;
 
 CREATE TABLE array_pk
 (
@@ -27,4 +27,4 @@ SELECT *
 FROM array_pk
 ORDER BY n ASC;
 
-SYSTEM DROP  TABLE array_pk;
+DROP TABLE array_pk;

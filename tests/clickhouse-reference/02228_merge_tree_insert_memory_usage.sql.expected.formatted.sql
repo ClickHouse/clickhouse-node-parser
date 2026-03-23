@@ -3,7 +3,7 @@
 SET insert_keeper_fault_injection_probability = 0; -- to succeed this test can require too many retries due to 100 partitions, so disable fault injections
 
 -- regression for MEMORY_LIMIT_EXCEEDED error because of deferred final part flush
-SYSTEM drop  table if exists data_02228;
+DROP TABLE IF EXISTS data_02228;
 
 CREATE TABLE data_02228
 (
@@ -36,9 +36,9 @@ SETTINGS
     max_partitions_per_insert_block = 1024,
     max_insert_delayed_streams_for_parallel_write = 1000000; -- { serverError MEMORY_LIMIT_EXCEEDED }
 
-SYSTEM drop  table data_02228;
+DROP TABLE data_02228;
 
-SYSTEM drop  table if exists data_rep_02228 SYNC;
+DROP TABLE IF EXISTS data_rep_02228;
 
 CREATE TABLE data_rep_02228
 (
@@ -71,4 +71,4 @@ SETTINGS
     max_partitions_per_insert_block = 1024,
     max_insert_delayed_streams_for_parallel_write = 1000000; -- { serverError MEMORY_LIMIT_EXCEEDED }
 
-SYSTEM drop  table data_rep_02228 SYNC;
+DROP TABLE data_rep_02228;

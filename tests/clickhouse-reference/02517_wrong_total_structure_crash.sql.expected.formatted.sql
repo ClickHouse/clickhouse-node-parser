@@ -48,10 +48,10 @@ FROM distributed
 GROUP BY x
 WITH TOTALS; -- { serverError TYPE_MISMATCH }
 
-SYSTEM DROP  TABLE distributed;
+DROP TABLE distributed;
 
-SYSTEM DROP  TABLE local;
+DROP TABLE local;
 
-SYSTEM DROP  TABLE alias_local10;
+DROP TABLE alias_local10;
 
-SYSTEM DROP  TABLE alias10__fuzz_13;
+DROP TABLE alias10__fuzz_13;

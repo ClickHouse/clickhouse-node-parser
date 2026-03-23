@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS derived_metrics_local;
+DROP TABLE IF EXISTS derived_metrics_local;
 
 CREATE TABLE derived_metrics_local
 (
@@ -19,7 +19,7 @@ INSERT INTO derived_metrics_local;
 SELECT *
 FROM derived_metrics_local;
 
-SYSTEM DROP  TABLE derived_metrics_local;
+DROP TABLE derived_metrics_local;
 
 CREATE TABLE derived_metrics_local
 (

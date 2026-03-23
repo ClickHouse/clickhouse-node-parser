@@ -1,6 +1,6 @@
 -- Tags: long, no-msan
 -- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
-SYSTEM drop  table if exists test_compact_without_substreams_advanced;
+DROP TABLE IF EXISTS test_compact_without_substreams_advanced;
 
 CREATE TABLE test_compact_without_substreams_advanced
 (
@@ -17,9 +17,9 @@ SELECT json
 FROM test_compact_without_substreams_advanced
 FORMAT Null;
 
-SYSTEM drop  table test_compact_without_substreams_advanced;
+DROP TABLE test_compact_without_substreams_advanced;
 
-SYSTEM drop  table if exists test_compact_advanced;
+DROP TABLE IF EXISTS test_compact_advanced;
 
 CREATE TABLE test_compact_advanced
 (
@@ -272,4 +272,4 @@ SELECT
 FROM test_compact_advanced
 FORMAT Null;
 
-SYSTEM drop  table test_compact_advanced;
+DROP TABLE test_compact_advanced;

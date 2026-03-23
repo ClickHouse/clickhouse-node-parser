@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_shard_scope;
+DROP TABLE IF EXISTS test_shard_scope;
 
-SYSTEM DROP  TABLE IF EXISTS dis_test_shard_scope;
+DROP TABLE IF EXISTS dis_test_shard_scope;
 
 SET parallel_replicas_only_with_analyzer = 0; -- necessary for CI run with disabled analyzer
 
@@ -25,6 +25,6 @@ SELECT
     max(time_col)
 FROM dis_test_shard_scope;
 
-SYSTEM DROP  TABLE test_shard_scope;
+DROP TABLE test_shard_scope;
 
-SYSTEM DROP  TABLE dis_test_shard_scope;
+DROP TABLE dis_test_shard_scope;

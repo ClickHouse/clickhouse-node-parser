@@ -1,11 +1,11 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/4567
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS fact;
+DROP TABLE IF EXISTS fact;
 
-SYSTEM DROP  TABLE IF EXISTS animals;
+DROP TABLE IF EXISTS animals;
 
-SYSTEM DROP  TABLE IF EXISTS colors;
+DROP TABLE IF EXISTS colors;
 
 CREATE TABLE fact
 (

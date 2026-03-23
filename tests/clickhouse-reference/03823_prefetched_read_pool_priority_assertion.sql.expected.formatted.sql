@@ -1,5 +1,5 @@
 -- Regression test for https://github.com/ClickHouse/ClickHouse/issues/78287
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -30,4 +30,4 @@ SELECT *
 FROM t0
 FORMAT Null;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

@@ -4,7 +4,7 @@ SET max_bytes_before_external_sort = 0;
 
 SET max_bytes_ratio_before_external_sort = 0;
 
-SYSTEM drop  table if exists stack;
+DROP TABLE IF EXISTS stack;
 
 SET max_insert_threads = 4;
 

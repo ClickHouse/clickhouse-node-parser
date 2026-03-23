@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_fill_arrays;
+DROP TABLE IF EXISTS t_fill_arrays;
 
 CREATE TABLE t_fill_arrays
 (
@@ -16,4 +16,4 @@ SELECT count()
 FROM t_fill_arrays
 WHERE NOT ignore(arrCol, mapCol.values);
 
-SYSTEM DROP  TABLE t_fill_arrays;
+DROP TABLE t_fill_arrays;

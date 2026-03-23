@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS cool_table;
+DROP TABLE IF EXISTS cool_table;
 
 CREATE TABLE IF NOT EXISTS cool_table
 (

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists logs;
+DROP TABLE IF EXISTS logs;
 
 CREATE TABLE logs
 (

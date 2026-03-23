@@ -1,6 +1,6 @@
-SYSTEM drop  table if EXISTS l;
+DROP TABLE IF EXISTS l;
 
-SYSTEM drop  table if EXISTS r;
+DROP TABLE IF EXISTS r;
 
 CREATE TABLE l
 (
@@ -55,9 +55,9 @@ FROM (
 WHERE isNull(luid)
     AND isNotNull(ruid);
 
-SYSTEM drop  table l;
+DROP TABLE l;
 
-SYSTEM drop  table r;
+DROP TABLE r;
 
 CREATE TABLE l
 (

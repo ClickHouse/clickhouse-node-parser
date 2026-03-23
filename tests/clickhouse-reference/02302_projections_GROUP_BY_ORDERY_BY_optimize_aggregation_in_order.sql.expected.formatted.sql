@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_agg_proj_02302;
+DROP TABLE IF EXISTS test_agg_proj_02302;
 
 CREATE TABLE test_agg_proj_02302
 (
@@ -42,4 +42,4 @@ SETTINGS
     optimize_read_in_order = 1;
 
 -- { echoOff }
-SYSTEM drop  table test_agg_proj_02302;
+DROP TABLE test_agg_proj_02302;

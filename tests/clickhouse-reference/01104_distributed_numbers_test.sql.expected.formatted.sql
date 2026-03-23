@@ -13,7 +13,7 @@ LIMIT 2
 SETTINGS max_threads = 1
 FORMAT Null;
 
-SYSTEM DROP  TABLE IF EXISTS d_numbers;
+DROP TABLE IF EXISTS d_numbers;
 
 CREATE TABLE d_numbers
 (
@@ -47,4 +47,4 @@ SETTINGS
 
 SET distributed_product_mode = 'local';
 
-SYSTEM DROP  TABLE d_numbers;
+DROP TABLE d_numbers;

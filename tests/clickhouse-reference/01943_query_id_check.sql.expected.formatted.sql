@@ -2,7 +2,7 @@
 -- Tag no-replicated-database: Different query_id
 SET prefer_localhost_replica = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tmp;
+DROP TABLE IF EXISTS tmp;
 
 CREATE TABLE tmp
 ENGINE = TinyLog AS
@@ -17,7 +17,7 @@ WHERE query_id = (
     AND current_database = currentDatabase()
 LIMIT 1;
 
-SYSTEM DROP  TABLE tmp;
+DROP TABLE tmp;
 
 CREATE TABLE tmp
 ENGINE = TinyLog AS

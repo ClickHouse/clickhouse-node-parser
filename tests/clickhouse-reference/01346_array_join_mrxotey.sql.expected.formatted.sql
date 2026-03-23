@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -24,4 +24,4 @@ WHERE b = 1
         FROM test
     );
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

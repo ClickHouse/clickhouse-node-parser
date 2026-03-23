@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -20,4 +20,4 @@ FROM `system`.data_skipping_indices
 WHERE database = currentDatabase()
     AND table = 'tab';
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,6 +1,6 @@
 -- Tags: long, no-random-merge-tree-settings
 --- FIXME no-random-merge-tree-settings requires investigation
-SYSTEM drop  table if exists data_01513;
+DROP TABLE IF EXISTS data_01513;
 
 CREATE TABLE data_01513
 (
@@ -53,4 +53,4 @@ WITH TOTALS
 FORMAT Null
 SETTINGS optimize_aggregation_in_order = 1; -- { serverError MEMORY_LIMIT_EXCEEDED }
 
-SYSTEM drop  table data_01513;
+DROP TABLE data_01513;

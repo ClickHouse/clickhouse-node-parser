@@ -1,5 +1,5 @@
 -- Tags: no-random-merge-tree-settings
-SYSTEM drop  table if exists z;
+DROP TABLE IF EXISTS z;
 
 CREATE TABLE z
 (
@@ -37,4 +37,4 @@ GROUP BY
     `partition`
 ORDER BY size DESC;
 
-SYSTEM drop  table z;
+DROP TABLE z;

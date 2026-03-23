@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -12,4 +12,4 @@ SET enable_positional_arguments_for_projections = 0;
 
 SET enable_positional_arguments_for_projections = 1;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

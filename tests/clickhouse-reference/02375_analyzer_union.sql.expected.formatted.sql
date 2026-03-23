@@ -1,6 +1,6 @@
 SET enable_analyzer = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -109,4 +109,4 @@ EXCEPT
     );
 
 -- { echoOff }
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

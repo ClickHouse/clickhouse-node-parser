@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists enum;
+DROP TABLE IF EXISTS enum;
 
 CREATE TABLE enum
 ENGINE = MergeTree

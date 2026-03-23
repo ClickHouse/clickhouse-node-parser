@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -12,4 +12,4 @@ FROM numbers(10);
 SELECT getSubcolumn(x, 'null')
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -1,5 +1,5 @@
 -- Tags: log-engine
-SYSTEM DROP  TABLE IF EXISTS numbers_squashed;
+DROP TABLE IF EXISTS numbers_squashed;
 
 CREATE TABLE numbers_squashed AS `system`.numbers
 ENGINE = StripeLog;
@@ -30,4 +30,4 @@ SET min_insert_block_size_bytes = 1000000;
 SELECT count()
 FROM numbers_squashed;
 
-SYSTEM DROP  TABLE numbers_squashed;
+DROP TABLE numbers_squashed;

@@ -12,7 +12,7 @@ SET mutations_sync = 2; -- want synchronous materialize
 -- brute force search is used for the un-indexed rows. Furthermore we test that the same
 -- tokenizer used to create the index is used for the un-indexed parts as is specified in
 -- the index.
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -23,7 +23,7 @@ ENGINE = MergeTree
 ORDER BY (id)
 SETTINGS index_granularity = 2;
 
-SYSTEM DROP  VIEW IF EXISTS explain_indexes;
+DROP VIEW IF EXISTS explain_indexes;
 
 CREATE VIEW explain_indexes
 AS
@@ -93,7 +93,7 @@ FROM tab
 WHERE hasAllTokens(message, ['abc', 'fo']);
 
 -- { echoOff }
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 SELECT arraySort(groupArray(id))
 FROM tab
@@ -111,4 +111,4 @@ SELECT arraySort(groupArray(id))
 FROM tab
 WHERE hasAllTokens(message, tokens('bar$', 'splitByNonAlpha'));
 
-SYSTEM DROP  VIEW explain_indexes;
+DROP VIEW explain_indexes;

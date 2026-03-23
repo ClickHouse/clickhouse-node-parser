@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/71382
-SYSTEM DROP  TABLE IF EXISTS rewrite;
+DROP TABLE IF EXISTS rewrite;
 
 CREATE TABLE rewrite
 (

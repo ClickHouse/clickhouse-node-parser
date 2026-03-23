@@ -8,7 +8,7 @@ SET use_variant_as_common_type = 1;
 
 SET allow_experimental_dynamic_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization;
+DROP TABLE IF EXISTS optimize_lazy_materialization;
 
 CREATE TABLE optimize_lazy_materialization
 (
@@ -207,10 +207,10 @@ ORDER BY c ASC
 LIMIT 3;
 
 -- { echoOff }
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_compact_mt;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_compact_mt;
 
 -- queries with int data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_int_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_int_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_int_data_type
 (
@@ -235,7 +235,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with float data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_float_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_float_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_float_data_type
 (
@@ -260,7 +260,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with decimal data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_decimal_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_decimal_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_decimal_data_type
 (
@@ -285,7 +285,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with string data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_string_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_string_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_string_data_type
 (
@@ -310,7 +310,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with fixed string data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_fixed_string_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_fixed_string_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_fixed_string_data_type
 (
@@ -335,7 +335,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with fixed date data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_date_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_date_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_date_data_type
 (
@@ -360,7 +360,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with fixed date32 data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_date32_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_date32_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_date32_data_type
 (
@@ -385,7 +385,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with fixed datetime data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_datetime_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_datetime_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_datetime_data_type
 (
@@ -413,7 +413,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with fixed datetime64 data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_datetime64_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_datetime64_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_datetime64_data_type
 (
@@ -441,7 +441,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with fixed enum data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_enum_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_enum_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_enum_data_type
 (
@@ -466,7 +466,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with bool data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_bool_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_bool_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_bool_data_type
 (
@@ -491,7 +491,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with uuid data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_uuid_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_uuid_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_uuid_data_type
 (
@@ -519,7 +519,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with ipv4 data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_ipv4_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_ipv4_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_ipv4_data_type
 (
@@ -544,7 +544,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with ipv6 data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_ipv6_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_ipv6_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_ipv6_data_type
 (
@@ -569,7 +569,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with array data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_array_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_array_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_array_data_type
 (
@@ -606,7 +606,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with tuple data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_tuple_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_tuple_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_tuple_data_type
 (
@@ -631,7 +631,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with map data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_map_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_map_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_map_data_type
 (
@@ -664,7 +664,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with variant data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_variant_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_variant_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_variant_data_type
 (
@@ -706,7 +706,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with low_cardinality data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_low_cardinality_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_low_cardinality_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_low_cardinality_data_type
 (
@@ -731,7 +731,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with nullable data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_nullable_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_nullable_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_nullable_data_type
 (
@@ -756,7 +756,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with nested data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_nested_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_nested_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_nested_data_type
 (
@@ -786,7 +786,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with dynamic data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_dynamic_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_dynamic_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_dynamic_data_type
 (
@@ -824,7 +824,7 @@ LIMIT 10;
 
 -- { echoOff }
 -- queries with sparse data type
-SYSTEM DROP  TABLE IF EXISTS optimize_lazy_materialization_with_sparse_data_type;
+DROP TABLE IF EXISTS optimize_lazy_materialization_with_sparse_data_type;
 
 CREATE TABLE optimize_lazy_materialization_with_sparse_data_type
 (

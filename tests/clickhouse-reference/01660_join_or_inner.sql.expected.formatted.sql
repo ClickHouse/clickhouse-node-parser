@@ -1,8 +1,8 @@
 SET joined_subquery_requires_alias = 0;
 
-SYSTEM drop  table if exists tab2;
+DROP TABLE IF EXISTS tab2;
 
-SYSTEM drop  table if exists tab3;
+DROP TABLE IF EXISTS tab3;
 
 CREATE TABLE tab2
 (
@@ -96,6 +96,6 @@ INNER JOIN (
     OR a = bbbbb
     OR aa = bbbbb;
 
-SYSTEM drop  table tab2;
+DROP TABLE tab2;
 
-SYSTEM drop  table tab3;
+DROP TABLE tab3;

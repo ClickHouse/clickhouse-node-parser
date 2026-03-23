@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists radacct;
+DROP TABLE IF EXISTS radacct;
 
-SYSTEM drop  table if exists mv_traffic_by_tadig15min;
+DROP TABLE IF EXISTS mv_traffic_by_tadig15min;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

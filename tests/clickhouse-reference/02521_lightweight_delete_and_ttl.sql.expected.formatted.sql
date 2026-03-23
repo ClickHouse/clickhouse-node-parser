@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS lwd_test_02521;
+DROP TABLE IF EXISTS lwd_test_02521;
 
 CREATE TABLE lwd_test_02521
 (
@@ -39,4 +39,4 @@ SELECT
 FROM lwd_test_02521;
 
 -- { echoOff }
-SYSTEM DROP  TABLE lwd_test_02521;
+DROP TABLE lwd_test_02521;

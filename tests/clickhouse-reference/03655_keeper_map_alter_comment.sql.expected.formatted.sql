@@ -1,7 +1,7 @@
 -- Tags: zookeeper
 SET distributed_ddl_output_mode = 'none';
 
-SYSTEM DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
+DROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
 
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier}
 ENGINE = Replicated('/clickhouse/databases/{database}', 'shard1', 'replica1');
@@ -30,4 +30,4 @@ SELECT
 FROM `system`.zookeeper
 WHERE path = concat('/clickhouse/databases/', currentDatabase(), '/metadata');
 
-SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier} SYNC;
+DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};

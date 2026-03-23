@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS column_modify_test;
+DROP TABLE IF EXISTS column_modify_test;
 
 CREATE TABLE column_modify_test
 (

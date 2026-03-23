@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_1;
+DROP TABLE IF EXISTS test_table_join_1;
 
 CREATE TABLE test_table_join_1
 (
@@ -11,7 +11,7 @@ ENGINE = TinyLog;
 
 INSERT INTO test_table_join_1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_2;
+DROP TABLE IF EXISTS test_table_join_2;
 
 CREATE TABLE test_table_join_2
 (
@@ -38,6 +38,6 @@ FROM
 INNER JOIN test_table_join_2 AS t2
     USING (id);
 
-SYSTEM DROP  TABLE test_table_join_1;
+DROP TABLE test_table_join_1;
 
-SYSTEM DROP  TABLE test_table_join_2;
+DROP TABLE test_table_join_2;

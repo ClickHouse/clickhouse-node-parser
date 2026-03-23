@@ -1,7 +1,7 @@
 SET mutations_sync = 1;
 
 -- No dependencies
-SYSTEM DROP  TABLE IF EXISTS foo_without_dependencies;
+DROP TABLE IF EXISTS foo_without_dependencies;
 
 CREATE TABLE foo_without_dependencies
 (
@@ -25,7 +25,7 @@ FROM foo_without_dependencies
 ORDER BY x ASC;
 
 -- With an index
-SYSTEM DROP  TABLE IF EXISTS foo_with_index;
+DROP TABLE IF EXISTS foo_with_index;
 
 CREATE TABLE foo_with_index
 (
@@ -75,4 +75,4 @@ SELECT
 FROM foo_with_projection
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE IF EXISTS foo_with_projection;
+DROP TABLE IF EXISTS foo_with_projection;

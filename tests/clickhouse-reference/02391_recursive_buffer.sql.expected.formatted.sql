@@ -1,6 +1,6 @@
 -- Tags: no-parallel
 -- because of system.tables poisoning
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -17,11 +17,11 @@ WHERE table = 'test'
     AND database = currentDatabase()
 FORMAT Null;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
-SYSTEM DROP  TABLE IF EXISTS test1;
+DROP TABLE IF EXISTS test1;
 
-SYSTEM DROP  TABLE IF EXISTS test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test1
 (
@@ -35,4 +35,4 @@ CREATE TABLE test2
 )
 ENGINE = Buffer(currentDatabase(), test1, 16, 10, 100, 10000, 1000000, 10000000, 100000000); -- { serverError INFINITE_LOOP }
 
-SYSTEM DROP  TABLE test1;
+DROP TABLE test1;

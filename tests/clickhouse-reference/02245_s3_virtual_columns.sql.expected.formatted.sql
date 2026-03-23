@@ -1,7 +1,7 @@
 -- Tags: no-fasttest
 -- Tag no-fasttest: Depends on AWS
 -- { echo }
-SYSTEM drop  table if exists test_02245;
+DROP TABLE IF EXISTS test_02245;
 
 CREATE TABLE test_02245
 (
@@ -18,7 +18,7 @@ FROM test_02245;
 SELECT _path
 FROM test_02245;
 
-SYSTEM drop  table if exists test_02245_2;
+DROP TABLE IF EXISTS test_02245_2;
 
 CREATE TABLE test_02245_2
 (

@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS t_json_mutations;
+DROP TABLE IF EXISTS t_json_mutations;
 
 SET enable_json_type = 1;
 
@@ -26,4 +26,4 @@ SELECT *
 FROM t_json_mutations
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_json_mutations;
+DROP TABLE t_json_mutations;

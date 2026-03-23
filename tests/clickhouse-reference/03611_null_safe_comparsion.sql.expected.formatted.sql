@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS 03611_nscmp_tbl;
+DROP TABLE IF EXISTS `03611_nscmp_tbl`;
 
 CREATE TABLE `03611_nscmp_tbl`
 (
@@ -410,7 +410,7 @@ SELECT
     c_map IS DISTINCT FROM c_tuple
 FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SYSTEM DROP  TABLE IF EXISTS 03611_t_nullsafe;
+DROP TABLE IF EXISTS `03611_t_nullsafe`;
 
 CREATE TABLE IF NOT EXISTS `03611_t_nullsafe`
 (

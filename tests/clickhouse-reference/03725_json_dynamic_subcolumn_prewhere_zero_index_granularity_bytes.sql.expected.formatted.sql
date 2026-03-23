@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -19,4 +19,4 @@ FROM test
 WHERE s = 'a'
     AND isNull(json.a);
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

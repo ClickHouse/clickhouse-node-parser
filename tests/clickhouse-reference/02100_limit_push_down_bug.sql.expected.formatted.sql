@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tbl_repr;
+DROP TABLE IF EXISTS tbl_repr;
 
 CREATE TABLE tbl_repr
 (

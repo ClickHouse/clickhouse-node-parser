@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mem_test;
+DROP TABLE IF EXISTS mem_test;
 
 CREATE TABLE mem_test
 (
@@ -18,4 +18,4 @@ SELECT *
 FROM mem_test
 FORMAT Null;
 
-SYSTEM DROP  TABLE mem_test;
+DROP TABLE mem_test;

@@ -76,6 +76,6 @@ WHERE current_database = currentDatabase()
 
 SET exclude_materialize_skip_indexes_on_insert = 'idx_a, `id,x_b`';
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
-SYSTEM DROP  VIEW explain_indexes;
+DROP VIEW explain_indexes;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tp;
+DROP TABLE IF EXISTS tp;
 
 CREATE TABLE tp
 (
@@ -29,4 +29,4 @@ GROUP BY d1;
 
 INSERT INTO tp;
 
-SYSTEM drop  table tp;
+DROP TABLE tp;

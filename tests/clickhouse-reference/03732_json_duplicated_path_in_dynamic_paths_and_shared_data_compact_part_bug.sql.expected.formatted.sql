@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -19,4 +19,4 @@ FROM test
 ORDER BY id ASC
 FORMAT Null;
 
-SYSTEM drop  table test;
+DROP TABLE test;

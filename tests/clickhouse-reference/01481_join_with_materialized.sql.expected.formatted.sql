@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM drop  table if exists t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE t1
 (
@@ -27,6 +27,6 @@ FROM
 INNER JOIN t2
     USING (x);
 
-SYSTEM drop  table t1;
+DROP TABLE t1;
 
-SYSTEM drop  table t2;
+DROP TABLE t2;

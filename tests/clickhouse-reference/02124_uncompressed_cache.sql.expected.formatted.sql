@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_uncompressed_cache;
+DROP TABLE IF EXISTS t_uncompressed_cache;
 
 CREATE TABLE t_uncompressed_cache
 (
@@ -34,4 +34,4 @@ PREWHERE id = 0
     OR id = 100
 SETTINGS use_uncompressed_cache = 1;
 
-SYSTEM DROP  TABLE t_uncompressed_cache;
+DROP TABLE t_uncompressed_cache;

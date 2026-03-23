@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS my_events;
+DROP TABLE IF EXISTS my_events;
 
 CREATE TABLE my_events
 (

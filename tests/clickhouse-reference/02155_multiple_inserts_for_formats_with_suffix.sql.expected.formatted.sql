@@ -1,5 +1,5 @@
 -- Tags: no-fasttest, no-parallel
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -21,7 +21,7 @@ SELECT *
 FROM test
 ORDER BY number ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

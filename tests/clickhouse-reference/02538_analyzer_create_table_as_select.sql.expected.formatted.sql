@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_data;
+DROP TABLE IF EXISTS test_table_data;
 
 CREATE TABLE test_table_data
 (
@@ -12,7 +12,7 @@ ORDER BY id;
 
 INSERT INTO test_table_data;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 ENGINE = MergeTree()
@@ -23,6 +23,6 @@ FROM test_table_data;
 SELECT *
 FROM test_table;
 
-SYSTEM DROP  TABLE test_table_data;
+DROP TABLE test_table_data;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

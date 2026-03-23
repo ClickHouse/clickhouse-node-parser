@@ -25,7 +25,7 @@ FROM (
             )
     );
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -43,7 +43,7 @@ FORMAT Null;
 SELECT mapApply((k, v) -> (k, finalizeAggregation(v)), x)
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS row_limits_test;
+DROP TABLE IF EXISTS row_limits_test;
 
 SET max_block_size = 10;
 
@@ -40,7 +40,7 @@ SET max_block_size = 9;
 -- and we have a row limit <= 1000, we shouldn't exceed this value when max_threads = 1.
 -- (process_part in MergeTreeDataSelectExecutor uses a thread pool the size of max_threads to read data,
 -- so we can exceed it slightly if max_threads > 1, but we'll still prevent a lot of scans and part processing)
-SYSTEM DROP  TABLE IF EXISTS row_limits_fail_fast;
+DROP TABLE IF EXISTS row_limits_fail_fast;
 
 CREATE TABLE row_limits_fail_fast
 (
@@ -124,4 +124,4 @@ SELECT count()
 FROM row_limits_fail_fast
 WHERE key < 400;
 
-SYSTEM DROP  TABLE row_limits_fail_fast;
+DROP TABLE row_limits_fail_fast;

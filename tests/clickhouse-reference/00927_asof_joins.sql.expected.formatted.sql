@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS md;
+DROP TABLE IF EXISTS md;
 
-SYSTEM DROP  TABLE IF EXISTS tv;
+DROP TABLE IF EXISTS tv;
 
 CREATE TABLE md
 (
@@ -54,6 +54,6 @@ LEFT JOIN md
 ORDER BY (tv.key, tv.t) ASC
 SETTINGS join_algorithm = 'full_sorting_merge';
 
-SYSTEM DROP  TABLE md;
+DROP TABLE md;
 
-SYSTEM DROP  TABLE tv;
+DROP TABLE tv;

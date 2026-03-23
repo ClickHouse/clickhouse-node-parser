@@ -1,10 +1,10 @@
 -- Tags: no-asan, no-tsan, no-msan, no-ubsan, no-sanitize-coverage, no-parallel-replicas, no-flaky-check
 -- - no-parallel-replicas - has --replace-log-memory-with-mergetree switch
-SYSTEM drop  table if exists t_log;
+DROP TABLE IF EXISTS t_log;
 
-SYSTEM drop  table if exists t_mt;
+DROP TABLE IF EXISTS t_mt;
 
-SYSTEM drop  table if exists mv;
+DROP TABLE IF EXISTS mv;
 
 SET max_threads = 1;
 
@@ -35,7 +35,7 @@ AS
 SELECT *
 FROM t_mt;
 
-SYSTEM drop  table mv;
+DROP TABLE mv;
 
 -- Log does not support sparse columns - RemovingSparseTransform added
 CREATE MATERIALIZED VIEW mv

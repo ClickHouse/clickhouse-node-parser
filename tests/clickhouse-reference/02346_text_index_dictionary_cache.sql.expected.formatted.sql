@@ -15,7 +15,7 @@ SET log_queries = 1;
 
 SET max_rows_to_read = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -33,7 +33,7 @@ INSERT INTO tab SELECT
     concat('text_', leftPad(toString(number), 3, '0'))
 FROM numbers(256);
 
-SYSTEM DROP  VIEW IF EXISTS text_index_cache_stats;
+DROP VIEW IF EXISTS text_index_cache_stats;
 
 CREATE VIEW text_index_cache_stats
 AS
@@ -82,4 +82,4 @@ WHERE hasAnyTokens(message, 'text_129');
 SELECT *
 FROM text_index_cache_stats(filter = 'text_129');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

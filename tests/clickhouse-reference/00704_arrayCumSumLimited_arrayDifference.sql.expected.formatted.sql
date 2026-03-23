@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 SELECT arrayCumSumNonNegative([1, 2, 3, 4]);
 

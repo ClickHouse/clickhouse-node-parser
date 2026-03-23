@@ -27,7 +27,7 @@ FROM source
 WHERE toYear(ts) = 2021
 SETTINGS enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS source;
+DROP TABLE IF EXISTS source;
 
 CREATE TABLE source
 (
@@ -483,4 +483,4 @@ FROM source
 WHERE toYear(ts_64) >= 2023
 SETTINGS enable_analyzer = 1;
 
-SYSTEM DROP  TABLE source;
+DROP TABLE source;

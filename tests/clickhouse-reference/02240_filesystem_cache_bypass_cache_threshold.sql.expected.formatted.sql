@@ -1,6 +1,6 @@
 SET enable_filesystem_cache_on_write_operations = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

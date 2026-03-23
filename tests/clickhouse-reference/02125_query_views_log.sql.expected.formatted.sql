@@ -1,12 +1,12 @@
 SET output_format_pretty_single_large_number_tip_threshold = 0;
 
-SYSTEM drop  table if exists src;
+DROP TABLE IF EXISTS src;
 
-SYSTEM drop  table if exists dst;
+DROP TABLE IF EXISTS dst;
 
-SYSTEM drop  table if exists mv1;
+DROP TABLE IF EXISTS mv1;
 
-SYSTEM drop  table if exists mv2;
+DROP TABLE IF EXISTS mv2;
 
 CREATE TABLE src
 (

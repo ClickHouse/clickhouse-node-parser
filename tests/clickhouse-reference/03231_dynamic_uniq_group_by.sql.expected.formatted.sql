@@ -4,7 +4,7 @@ SET allow_suspicious_types_in_group_by = 1;
 
 SET allow_suspicious_types_in_order_by = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -38,4 +38,4 @@ FROM test
 GROUP BY d
 ORDER BY d ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

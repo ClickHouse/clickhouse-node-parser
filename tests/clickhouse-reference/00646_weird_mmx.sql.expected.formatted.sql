@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS weird_mmx;
+DROP TABLE IF EXISTS weird_mmx;
 
 CREATE TABLE weird_mmx
 (
@@ -15,4 +15,4 @@ LIMIT 915;
 SELECT sum(length(*))
 FROM weird_mmx;
 
-SYSTEM DROP  TABLE weird_mmx;
+DROP TABLE weird_mmx;

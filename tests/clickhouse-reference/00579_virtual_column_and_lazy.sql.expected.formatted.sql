@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS sample_00579_1;
+DROP TABLE IF EXISTS sample_00579_1;
 
-SYSTEM DROP  TABLE IF EXISTS sample_00579_2;
+DROP TABLE IF EXISTS sample_00579_2;
 
-SYSTEM DROP  TABLE IF EXISTS sample_merge_00579;
+DROP TABLE IF EXISTS sample_merge_00579;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -36,8 +36,8 @@ SET max_threads = 1;
 SELECT _sample_factor
 FROM merge(currentDatabase(), '^sample_00579_\\d$');
 
-SYSTEM DROP  TABLE sample_00579_1;
+DROP TABLE sample_00579_1;
 
-SYSTEM DROP  TABLE sample_00579_2;
+DROP TABLE sample_00579_2;
 
-SYSTEM DROP  TABLE sample_merge_00579;
+DROP TABLE sample_merge_00579;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists dist;
+DROP TABLE IF EXISTS dist;
 
 CREATE TABLE dist AS `system`.one
 ENGINE = Distributed('test_shard_localhost', `system`, one);

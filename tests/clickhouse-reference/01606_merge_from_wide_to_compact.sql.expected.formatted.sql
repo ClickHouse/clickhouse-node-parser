@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS wide_to_comp;
+DROP TABLE IF EXISTS wide_to_comp;
 
 CREATE TABLE wide_to_comp
 (
@@ -29,4 +29,4 @@ SELECT count()
 FROM wide_to_comp
 WHERE NOT ignore(*);
 
-SYSTEM DROP  TABLE wide_to_comp;
+DROP TABLE wide_to_comp;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_with_defaults_on_aliases;
+DROP TABLE IF EXISTS table_with_defaults_on_aliases;
 
 CREATE TABLE table_with_defaults_on_aliases
 (

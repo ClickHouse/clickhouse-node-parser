@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS map_lc;
+DROP TABLE IF EXISTS map_lc;
 
 CREATE TABLE map_lc
 (
@@ -11,7 +11,7 @@ INSERT INTO map_lc SELECT map('a', 'b');
 SELECT kv['a']
 FROM map_lc;
 
-SYSTEM DROP  TABLE map_lc;
+DROP TABLE map_lc;
 
 SELECT
     map(toFixedString('1', 1), 1) AS m,

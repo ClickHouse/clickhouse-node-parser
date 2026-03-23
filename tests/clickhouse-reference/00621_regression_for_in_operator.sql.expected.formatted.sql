@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS regression_for_in_operator_view;
+DROP TABLE IF EXISTS regression_for_in_operator_view;
 
-SYSTEM DROP  TABLE IF EXISTS regression_for_in_operator;
+DROP TABLE IF EXISTS regression_for_in_operator;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -58,6 +58,6 @@ SETTINGS enable_analyzer = 1;
 
 SET optimize_min_equality_disjunction_chain_length = 3;
 
-SYSTEM DROP  TABLE regression_for_in_operator_view;
+DROP TABLE regression_for_in_operator_view;
 
-SYSTEM DROP  TABLE regression_for_in_operator;
+DROP TABLE regression_for_in_operator;

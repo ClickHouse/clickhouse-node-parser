@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS table_for_ttl;
+DROP TABLE IF EXISTS table_for_ttl;
 
 CREATE TABLE table_for_ttl
 (

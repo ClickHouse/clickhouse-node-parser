@@ -1,5 +1,5 @@
 -- Tags: stateful
-SYSTEM DROP  TABLE IF EXISTS join;
+DROP TABLE IF EXISTS `join`;
 
 CREATE TABLE `join`
 (
@@ -27,4 +27,4 @@ LEFT JOIN `join`
 GROUP BY loyalty
 ORDER BY loyalty ASC;
 
-SYSTEM DROP  TABLE join;
+DROP TABLE `join`;

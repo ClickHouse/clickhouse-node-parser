@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -26,4 +26,4 @@ SELECT count(*)
 FROM test
 WHERE bitmapContains(bitmapBuild([1, 5, 7, 9]), toUInt64(num));
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

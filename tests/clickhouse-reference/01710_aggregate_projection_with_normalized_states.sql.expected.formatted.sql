@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS r;
+DROP TABLE IF EXISTS r;
 
 SELECT finalizeAggregation(CAST(quantileState(0)(arrayJoin([1,2,3])) AS AggregateFunction(quantile(1), UInt8)));
 
@@ -42,4 +42,4 @@ SELECT
     quantilesTimingMerge(toInt64(1))(q)
 FROM remote('127.0.0.{1,2}', currentDatabase(), r);
 
-SYSTEM DROP  TABLE r;
+DROP TABLE r;

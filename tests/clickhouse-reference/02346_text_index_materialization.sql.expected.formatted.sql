@@ -4,7 +4,7 @@ SET enable_full_text_index = 1;
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -57,4 +57,4 @@ WHERE ilike(`explain`, '%Granules%');
 -- ------------------------------------------------------------
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

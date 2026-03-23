@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS local_table_l;
+DROP TABLE IF EXISTS local_table_l;
 
-SYSTEM DROP  TABLE IF EXISTS local_table_r;
+DROP TABLE IF EXISTS local_table_r;
 
-SYSTEM DROP  TABLE IF EXISTS dis_table_r;
+DROP TABLE IF EXISTS dis_table_r;
 
 CREATE TABLE local_table_l
 (
@@ -44,8 +44,8 @@ FROM
 RIGHT JOIN dis_table_r AS r
     ON l.c = r.c;
 
-SYSTEM DROP  TABLE local_table_l;
+DROP TABLE local_table_l;
 
-SYSTEM DROP  TABLE local_table_r;
+DROP TABLE local_table_r;
 
-SYSTEM DROP  TABLE dis_table_r;
+DROP TABLE dis_table_r;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -63,4 +63,4 @@ SELECT
 FROM t
 ORDER BY n ASC;
 
-SYSTEM drop  table t;
+DROP TABLE t;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_fixed_string_nested_json;
+DROP TABLE IF EXISTS test_fixed_string_nested_json;
 
 CREATE TABLE test_fixed_string_nested_json
 (
@@ -12,4 +12,4 @@ INSERT INTO test_fixed_string_nested_json (data);
 SELECT JSONExtract(data, 'Tuple(a FixedString(24))') AS json
 FROM test_fixed_string_nested_json;
 
-SYSTEM DROP  TABLE test_fixed_string_nested_json;
+DROP TABLE test_fixed_string_nested_json;

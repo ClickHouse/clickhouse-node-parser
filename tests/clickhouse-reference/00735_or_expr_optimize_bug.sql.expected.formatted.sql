@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS or_expr_bug;
+DROP TABLE IF EXISTS or_expr_bug;
 
 CREATE TABLE or_expr_bug
 (
@@ -18,4 +18,4 @@ WHERE ((a = 1
     OR b = 22
     OR b = 23));
 
-SYSTEM DROP  TABLE or_expr_bug;
+DROP TABLE or_expr_bug;

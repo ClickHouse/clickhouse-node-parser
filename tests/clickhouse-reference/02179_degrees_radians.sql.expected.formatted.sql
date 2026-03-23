@@ -1,5 +1,5 @@
 -- test conversion from degrees to radians
-SYSTEM DROP  TABLE IF EXISTS test_degs_to_rads;
+DROP TABLE IF EXISTS test_degs_to_rads;
 
 CREATE TABLE test_degs_to_rads
 (
@@ -35,10 +35,10 @@ SELECT RADIANS(degrees)
 FROM test_degs_to_rads
 ORDER BY degrees ASC;
 
-SYSTEM DROP  TABLE test_degs_to_rads;
+DROP TABLE test_degs_to_rads;
 
 -- test conversion from radians to degrees
-SYSTEM DROP  TABLE IF EXISTS test_rads_to_degs;
+DROP TABLE IF EXISTS test_rads_to_degs;
 
 CREATE TABLE test_rads_to_degs
 (
@@ -80,4 +80,4 @@ SELECT DEGREES(radians)
 FROM test_rads_to_degs
 ORDER BY radians ASC;
 
-SYSTEM DROP  TABLE test_rads_to_degs;
+DROP TABLE test_rads_to_degs;

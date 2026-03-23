@@ -2,7 +2,7 @@ SET insert_keeper_max_retries = 100;
 
 SET insert_keeper_retry_max_backoff_ms = 10;
 
-SYSTEM DROP  TABLE IF EXISTS table1 SYNC;
+DROP TABLE IF EXISTS table1;
 
 CREATE TABLE table1
 (
@@ -45,7 +45,7 @@ FROM table1
 WHERE id % 200 < 0
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE IF EXISTS table2 SYNC;
+DROP TABLE IF EXISTS table2;
 
 CREATE TABLE table2
 (
@@ -72,7 +72,7 @@ WHERE table = 'table2'
     AND database = currentDatabase()
 ORDER BY p ASC;
 
-SYSTEM DROP  TABLE IF EXISTS table3 SYNC;
+DROP TABLE IF EXISTS table3;
 
 CREATE TABLE table3
 (
@@ -99,7 +99,7 @@ WHERE table = 'table3'
     AND database = currentDatabase()
 ORDER BY p ASC;
 
-SYSTEM DROP  TABLE IF EXISTS table4 SYNC;
+DROP TABLE IF EXISTS table4;
 
 CREATE TABLE table4
 (
@@ -130,10 +130,10 @@ SELECT
 FROM table1
 ORDER BY v ASC;
 
-SYSTEM DROP  TABLE table1 SYNC;
+DROP TABLE table1;
 
-SYSTEM DROP  TABLE table2 SYNC;
+DROP TABLE table2;
 
-SYSTEM DROP  TABLE table3 SYNC;
+DROP TABLE table3;
 
-SYSTEM DROP  TABLE table4 SYNC;
+DROP TABLE table4;

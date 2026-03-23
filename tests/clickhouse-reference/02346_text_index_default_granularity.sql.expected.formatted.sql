@@ -3,7 +3,7 @@
 SET enable_full_text_index = 1;
 
 -- After CREATE TABLE
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -20,7 +20,7 @@ WHERE database = currentDatabase()
     AND table = 'tab'
     AND name = 'idx';
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 -- After CREATE + ALTER ADD TABLE
 CREATE TABLE tab

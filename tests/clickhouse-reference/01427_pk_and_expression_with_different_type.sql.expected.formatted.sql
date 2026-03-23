@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS pk;
+DROP TABLE IF EXISTS pk;
 
 CREATE TABLE pk
 (
@@ -13,4 +13,4 @@ FROM pk
 WHERE x >= toDateTime(120)
     AND x <= toDateTime(NULL);
 
-SYSTEM DROP  TABLE pk;
+DROP TABLE pk;

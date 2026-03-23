@@ -1,8 +1,8 @@
 -- Tags: no-parallel-replicas
 -- no-parallel-replicas: read_rows can differ if query execution was cancelled for remote replica(s)
-SYSTEM DROP  TABLE IF EXISTS ev;
+DROP TABLE IF EXISTS ev;
 
-SYSTEM DROP  TABLE IF EXISTS idx;
+DROP TABLE IF EXISTS idx;
 
 CREATE TABLE ev
 (

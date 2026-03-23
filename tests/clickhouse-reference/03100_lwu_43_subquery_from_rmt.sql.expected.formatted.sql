@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS lightweight_test SYNC;
+DROP TABLE IF EXISTS lightweight_test;
 
-SYSTEM DROP  TABLE IF EXISTS keys SYNC;
+DROP TABLE IF EXISTS keys;
 
 CREATE TABLE lightweight_test
 (

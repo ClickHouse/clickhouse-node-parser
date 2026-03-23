@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_enum_in_unknown_value;
+DROP TABLE IF EXISTS t_enum_in_unknown_value;
 
 CREATE TABLE t_enum_in_unknown_value
 (

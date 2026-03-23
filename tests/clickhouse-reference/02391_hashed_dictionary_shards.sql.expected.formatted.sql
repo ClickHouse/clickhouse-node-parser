@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -11,7 +11,7 @@ SELECT
     number
 FROM numbers(1e5);
 
-SYSTEM DROP  TABLE IF EXISTS test_table_nullable;
+DROP TABLE IF EXISTS test_table_nullable;
 
 CREATE TABLE test_table_nullable
 (
@@ -24,7 +24,7 @@ SELECT
     if(number % 2 == 0, NULL, number)
 FROM numbers(1e5);
 
-SYSTEM DROP  TABLE IF EXISTS test_table_string;
+DROP TABLE IF EXISTS test_table_string;
 
 CREATE TABLE test_table_string
 (
@@ -37,7 +37,7 @@ SELECT
     number
 FROM numbers(1e5);
 
-SYSTEM DROP  TABLE IF EXISTS test_table_complex;
+DROP TABLE IF EXISTS test_table_complex;
 
 CREATE TABLE test_table_complex
 (
@@ -52,7 +52,7 @@ SELECT
     number
 FROM numbers(1e5);
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_10_shards;
+DROP DICTIONARY IF EXISTS test_dictionary_10_shards;
 
 CREATE DICTIONARY test_dictionary_10_shards
 (
@@ -73,9 +73,9 @@ SELECT count()
 FROM test_table
 WHERE dictGet('test_dictionary_10_shards', 'value', key) != value;
 
-SYSTEM DROP  DICTIONARY test_dictionary_10_shards;
+DROP DICTIONARY test_dictionary_10_shards;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_10_shards_nullable;
+DROP DICTIONARY IF EXISTS test_dictionary_10_shards_nullable;
 
 CREATE DICTIONARY test_dictionary_10_shards_nullable
 (
@@ -96,9 +96,9 @@ SELECT count()
 FROM test_table_nullable
 WHERE dictGet('test_dictionary_10_shards_nullable', 'value', key) != value;
 
-SYSTEM DROP  DICTIONARY test_dictionary_10_shards_nullable;
+DROP DICTIONARY test_dictionary_10_shards_nullable;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_complex_dictionary_10_shards;
+DROP DICTIONARY IF EXISTS test_complex_dictionary_10_shards;
 
 CREATE DICTIONARY test_complex_dictionary_10_shards
 (
@@ -120,9 +120,9 @@ SELECT count()
 FROM test_table_complex
 WHERE dictGet('test_complex_dictionary_10_shards', 'value', (key_1, key_2)) != value;
 
-SYSTEM DROP  DICTIONARY test_complex_dictionary_10_shards;
+DROP DICTIONARY test_complex_dictionary_10_shards;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_10_shards_string;
+DROP DICTIONARY IF EXISTS test_dictionary_10_shards_string;
 
 CREATE DICTIONARY test_dictionary_10_shards_string
 (
@@ -134,9 +134,9 @@ SOURCE(clickhouse(TABLE test_table_string))
 LIFETIME(0)
 LAYOUT(SPARSE_HASHED(SHARDS 10));
 
-SYSTEM DROP  DICTIONARY test_dictionary_10_shards_string;
+DROP DICTIONARY test_dictionary_10_shards_string;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_10_shards_incremental;
+DROP DICTIONARY IF EXISTS test_dictionary_10_shards_incremental;
 
 CREATE DICTIONARY test_dictionary_10_shards_incremental
 (
@@ -148,12 +148,12 @@ SOURCE(clickhouse(TABLE test_table_last_access UPDATE_FIELD last_access))
 LIFETIME(0)
 LAYOUT(SPARSE_HASHED(SHARDS 10));
 
-SYSTEM DROP  DICTIONARY test_dictionary_10_shards_incremental;
+DROP DICTIONARY test_dictionary_10_shards_incremental;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  TABLE test_table_nullable;
+DROP TABLE test_table_nullable;
 
-SYSTEM DROP  TABLE test_table_string;
+DROP TABLE test_table_string;
 
-SYSTEM DROP  TABLE test_table_complex;
+DROP TABLE test_table_complex;

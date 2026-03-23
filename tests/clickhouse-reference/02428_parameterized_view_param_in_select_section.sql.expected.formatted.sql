@@ -47,13 +47,13 @@ FROM v2(m = 'test');
 SELECT *
 FROM v3(m = 'test');
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  view v1;
+DROP VIEW v1;
 
-SYSTEM drop  view v2;
+DROP VIEW v2;
 
-SYSTEM drop  view v3;
+DROP VIEW v3;
 
 CREATE TABLE t
 (

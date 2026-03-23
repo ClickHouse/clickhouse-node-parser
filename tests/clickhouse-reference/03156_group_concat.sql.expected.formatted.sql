@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_groupConcat;
+DROP TABLE IF EXISTS test_groupConcat;
 
 CREATE TABLE test_groupConcat
 (

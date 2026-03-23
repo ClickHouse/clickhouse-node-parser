@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -45,4 +45,4 @@ INNER JOIN mergeTreeProjection(currentDatabase(), test, p2) AS r
     USING (a)
 SETTINGS enable_analyzer = 1;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

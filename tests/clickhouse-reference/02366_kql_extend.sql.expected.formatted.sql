@@ -11,7 +11,7 @@
 --     'Aldi','Snargaluff',600,'2016-09-11',
 --     'Costco','Snargaluff',200,'2016-09-10',
 -- ]
-SYSTEM DROP  TABLE IF EXISTS Ledger;
+DROP TABLE IF EXISTS Ledger;
 
 CREATE TABLE Ledger
 (

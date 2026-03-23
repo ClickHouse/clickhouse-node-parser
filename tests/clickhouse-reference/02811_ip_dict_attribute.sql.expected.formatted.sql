@@ -21,6 +21,6 @@ LAYOUT(HASHED());
 
 SELECT dictGet('dict', ('ip6', 'ip4'), arrayJoin([2,1]));
 
-SYSTEM DROP  DICTIONARY dict;
+DROP DICTIONARY dict;
 
-SYSTEM DROP  TABLE src;
+DROP TABLE src;

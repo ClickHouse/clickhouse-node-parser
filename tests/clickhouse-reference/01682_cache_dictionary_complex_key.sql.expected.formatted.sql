@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01682_database_for_cache_dictionary;
+DROP DATABASE IF EXISTS `01682_database_for_cache_dictionary`;
 
 CREATE DATABASE `01682_database_for_cache_dictionary`;
 
@@ -62,9 +62,9 @@ SELECT *
 FROM `01682_database_for_cache_dictionary`.cache_dictionary_complex_key_simple_attributes
 ORDER BY id ASC;
 
-SYSTEM DROP  DICTIONARY 01682_database_for_cache_dictionary.cache_dictionary_complex_key_simple_attributes;
+DROP DICTIONARY `01682_database_for_cache_dictionary`.cache_dictionary_complex_key_simple_attributes;
 
-SYSTEM DROP  TABLE 01682_database_for_cache_dictionary.complex_key_simple_attributes_source_table;
+DROP TABLE `01682_database_for_cache_dictionary`.complex_key_simple_attributes_source_table;
 
 CREATE TABLE `01682_database_for_cache_dictionary`.complex_key_complex_attributes_source_table
 (
@@ -125,8 +125,8 @@ SELECT *
 FROM `01682_database_for_cache_dictionary`.cache_dictionary_complex_key_complex_attributes
 ORDER BY id ASC;
 
-SYSTEM DROP  DICTIONARY 01682_database_for_cache_dictionary.cache_dictionary_complex_key_complex_attributes;
+DROP DICTIONARY `01682_database_for_cache_dictionary`.cache_dictionary_complex_key_complex_attributes;
 
-SYSTEM DROP  TABLE 01682_database_for_cache_dictionary.complex_key_complex_attributes_source_table;
+DROP TABLE `01682_database_for_cache_dictionary`.complex_key_complex_attributes_source_table;
 
-SYSTEM DROP  DATABASE 01682_database_for_cache_dictionary;
+DROP DATABASE `01682_database_for_cache_dictionary`;

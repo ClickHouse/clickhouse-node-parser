@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -10,4 +10,4 @@ SET throw_if_no_data_to_insert = 0;
 
 INSERT INTO t;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

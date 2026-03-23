@@ -1,7 +1,7 @@
 -- Issue: https://github.com/ClickHouse/ClickHouse/issues/89433
-SYSTEM DROP  TABLE IF EXISTS tbl;
+DROP TABLE IF EXISTS tbl;
 
-SYSTEM DROP  TABLE IF EXISTS join_engine;
+DROP TABLE IF EXISTS join_engine;
 
 CREATE TABLE tbl
 (

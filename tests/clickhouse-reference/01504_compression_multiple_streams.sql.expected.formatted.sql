@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS columns_with_multiple_streams;
+DROP TABLE IF EXISTS columns_with_multiple_streams;
 
 SET mutations_sync = 2;
 
@@ -26,7 +26,7 @@ ORDER BY field0 ASC;
 
 INSERT INTO columns_with_multiple_streams;
 
-SYSTEM DROP  TABLE IF EXISTS columns_with_multiple_streams_compact;
+DROP TABLE IF EXISTS columns_with_multiple_streams_compact;
 
 CREATE TABLE columns_with_multiple_streams_compact
 (
@@ -52,7 +52,7 @@ ORDER BY field0 ASC;
 
 INSERT INTO columns_with_multiple_streams_compact;
 
-SYSTEM DROP  TABLE IF EXISTS columns_with_multiple_streams_bad_case;
+DROP TABLE IF EXISTS columns_with_multiple_streams_bad_case;
 
 -- validation still works, non-sense codecs checked
 CREATE TABLE columns_with_multiple_streams_bad_case

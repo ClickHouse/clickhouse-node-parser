@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS series__fuzz_35;
+DROP TABLE IF EXISTS series__fuzz_35;
 
 CREATE TABLE series__fuzz_35
 (
@@ -18,4 +18,4 @@ FROM (
     )
 FORMAT Null;
 
-SYSTEM DROP  TABLE series__fuzz_35;
+DROP TABLE series__fuzz_35;

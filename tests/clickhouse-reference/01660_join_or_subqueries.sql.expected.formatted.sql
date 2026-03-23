@@ -2,9 +2,9 @@ SET joined_subquery_requires_alias = 0;
 
 SET max_threads = 1;
 
-SYSTEM drop  table if exists tab1;
+DROP TABLE IF EXISTS tab1;
 
-SYSTEM drop  table if exists tab2;
+DROP TABLE IF EXISTS tab2;
 
 CREATE TABLE tab1
 (
@@ -94,6 +94,6 @@ LEFT JOIN (
     ON b1 + 1 = z
     OR b1 = z * 2;
 
-SYSTEM drop  table tab1;
+DROP TABLE tab1;
 
-SYSTEM drop  table tab2;
+DROP TABLE tab2;

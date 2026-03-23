@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/64543
-SYSTEM DROP  TABLE IF EXISTS foo;
+DROP TABLE IF EXISTS foo;
 
-SYSTEM DROP  TABLE IF EXISTS bar;
+DROP TABLE IF EXISTS bar;
 
 CREATE TABLE foo
 (
@@ -34,7 +34,7 @@ WHERE bar.seq > foo.seq
 SETTINGS final = 1;
 
 -- Same problem possible can happen with array join
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (

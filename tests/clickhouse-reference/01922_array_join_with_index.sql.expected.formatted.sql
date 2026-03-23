@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_array_index;
+DROP TABLE IF EXISTS t_array_index;
 
 CREATE TABLE t_array_index
 (

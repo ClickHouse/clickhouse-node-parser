@@ -1,5 +1,5 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (
@@ -8,7 +8,7 @@ CREATE TABLE data
 )
 ENGINE = TinyLog();
 
-SYSTEM DROP  TABLE IF EXISTS data_distributed;
+DROP TABLE IF EXISTS data_distributed;
 
 CREATE TABLE data_distributed
 (
@@ -34,6 +34,6 @@ FROM data_distributed;
 
 SET prefer_localhost_replica = 0;
 
-SYSTEM DROP  TABLE data_distributed;
+DROP TABLE data_distributed;
 
-SYSTEM DROP  TABLE data;
+DROP TABLE data;

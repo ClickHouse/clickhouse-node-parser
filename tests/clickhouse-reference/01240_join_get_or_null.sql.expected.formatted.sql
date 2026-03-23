@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS join_test;
+DROP TABLE IF EXISTS join_test;
 
 CREATE TABLE join_test
 (
@@ -9,7 +9,7 @@ ENGINE = Join(`ANY`, `LEFT`, id);
 
 SELECT joinGetOrNull('join_test', 'num', 500);
 
-SYSTEM DROP  TABLE join_test;
+DROP TABLE join_test;
 
 CREATE TABLE join_test
 (
@@ -25,7 +25,7 @@ CREATE TABLE join_test
 )
 ENGINE = Join(`ANY`, `LEFT`, id);
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

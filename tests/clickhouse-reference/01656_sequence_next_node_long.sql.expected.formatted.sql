@@ -1,7 +1,7 @@
 -- Tags: long, no-azure-blob-storage
 SET allow_experimental_funnel_functions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_sequenceNextNode_Nullable;
+DROP TABLE IF EXISTS test_sequenceNextNode_Nullable;
 
 CREATE TABLE IF NOT EXISTS test_sequenceNextNode_Nullable
 (
@@ -496,7 +496,7 @@ GROUP BY id
 ORDER BY id ASC;
 
 -- The same testcases for a non-null type.
-SYSTEM DROP  TABLE IF EXISTS test_sequenceNextNode;
+DROP TABLE IF EXISTS test_sequenceNextNode;
 
 CREATE TABLE IF NOT EXISTS test_sequenceNextNode
 (
@@ -1004,7 +1004,7 @@ SELECT
 FROM test_sequenceNextNode
 WHERE id = 12;
 
-SYSTEM DROP  TABLE IF EXISTS test_base_condition;
+DROP TABLE IF EXISTS test_base_condition;
 
 CREATE TABLE IF NOT EXISTS test_base_condition
 (

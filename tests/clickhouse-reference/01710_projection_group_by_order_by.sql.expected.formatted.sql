@@ -1,9 +1,9 @@
 --Tags: no-random-merge-tree-settings
 -- Tag no-random-merge-tree-settings: bug in formatting of projections.
 -- https://github.com/ClickHouse/ClickHouse/issues/44318
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM drop  table if exists tp;
+DROP TABLE IF EXISTS tp;
 
 CREATE TABLE tp
 (

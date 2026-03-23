@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -25,4 +25,4 @@ FROM test
 WHERE notLike(a, '1%2')
 ORDER BY a ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

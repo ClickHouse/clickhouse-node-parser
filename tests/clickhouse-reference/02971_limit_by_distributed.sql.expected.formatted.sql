@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM drop  table if exists tlb;
+DROP TABLE IF EXISTS tlb;
 
 CREATE TABLE tlb
 (
@@ -28,4 +28,4 @@ ORDER BY k ASC
 LIMIT 1 BY k;
 
 -- { echoOff }
-SYSTEM DROP  TABLE tlb;
+DROP TABLE tlb;

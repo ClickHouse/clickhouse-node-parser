@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nulls_first_sort_test;
+DROP TABLE IF EXISTS nulls_first_sort_test;
 
 CREATE TABLE nulls_first_sort_test
 (
@@ -18,4 +18,4 @@ ORDER BY
     c ASC
 LIMIT 5;
 
-SYSTEM DROP  TABLE nulls_first_sort_test;
+DROP TABLE nulls_first_sort_test;

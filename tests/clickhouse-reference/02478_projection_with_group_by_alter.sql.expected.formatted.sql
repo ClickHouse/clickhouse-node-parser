@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS testing;
+DROP TABLE IF EXISTS testing;
 
 CREATE TABLE testing
 (
@@ -43,4 +43,4 @@ WHERE database = currentDatabase()
     AND NOT is_done;
 
 -- { echoOff }
-SYSTEM DROP  TABLE testing;
+DROP TABLE testing;

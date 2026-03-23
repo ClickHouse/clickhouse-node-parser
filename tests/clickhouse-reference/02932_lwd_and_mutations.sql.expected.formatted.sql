@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwd_mutations;
+DROP TABLE IF EXISTS t_lwd_mutations;
 
 CREATE TABLE t_lwd_mutations
 (

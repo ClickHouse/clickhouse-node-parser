@@ -4,9 +4,9 @@
 -- because ReplaceLongConstWithScalarVisitor was replacing LIMIT BY LIMIT/OFFSET constants
 -- with __getScalar function nodes.
 -- Setting optimize_const_name_size = 0 replaces ALL constants with __getScalar calls.
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t0
 (

@@ -1,5 +1,5 @@
 -- add_minmax_index_for_numeric_columns=0: Different plan
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -19,4 +19,4 @@ SET enable_analyzer = 0;
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

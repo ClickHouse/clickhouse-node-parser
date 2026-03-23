@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_async_insert_table_function;
+DROP TABLE IF EXISTS t_async_insert_table_function;
 
 CREATE TABLE t_async_insert_table_function
 (
@@ -15,4 +15,4 @@ SELECT *
 FROM t_async_insert_table_function
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_async_insert_table_function;
+DROP TABLE t_async_insert_table_function;

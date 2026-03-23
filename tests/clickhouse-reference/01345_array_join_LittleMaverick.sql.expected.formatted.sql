@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -33,4 +33,4 @@ WHERE (status IN (
 GROUP BY CUBE(status)
 LIMIT 100;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

@@ -1,8 +1,8 @@
 -- Tags: no-fasttest
 -- no-fasttest: 'MsgPack` format is not supported
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS random_filename;
+DROP TABLE IF EXISTS random_filename;
 
 CREATE TABLE t0
 (
@@ -40,6 +40,6 @@ SELECT *
 FROM t0
 ORDER BY c0 ASC;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
-SYSTEM DROP  TABLE random_filename;
+DROP TABLE random_filename;

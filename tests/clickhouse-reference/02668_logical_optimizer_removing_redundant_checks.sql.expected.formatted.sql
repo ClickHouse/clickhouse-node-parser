@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS 02668_logical_optimizer;
+DROP TABLE IF EXISTS `02668_logical_optimizer`;
 
 CREATE TABLE `02668_logical_optimizer`
 (

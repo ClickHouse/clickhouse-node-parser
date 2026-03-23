@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists order;
+DROP TABLE IF EXISTS `order`;
 
 CREATE TABLE `order`
 (

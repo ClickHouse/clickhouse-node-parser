@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS logs;
+DROP TABLE IF EXISTS logs;
 
 CREATE TABLE logs
 (
@@ -14,4 +14,4 @@ WHERE plogs.date = '2019-11-20';
 
 INSERT INTO logs;
 
-SYSTEM DROP  TABLE logs;
+DROP TABLE logs;

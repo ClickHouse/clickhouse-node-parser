@@ -2,7 +2,7 @@
 --- Verify that ReplacingMergeTree properly handles _is_deleted:
 --- SELECT FINAL should take `_is_deleted` into consideration when there is only one partition.
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -43,4 +43,4 @@ SELECT count()
 FROM t FINAL
 SETTINGS do_not_merge_across_partitions_select_final = 0;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS subcolumns;
+DROP TABLE IF EXISTS subcolumns;
 
 CREATE TABLE subcolumns
 (
@@ -59,4 +59,4 @@ ORDER BY tuple()
 SETTINGS min_bytes_for_wide_part = 0;
 
 -- SELECT nested.col1, nested.col2, nested.size0, nested.size0, nested.col2.null FROM subcolumns;
-SYSTEM DROP  TABLE subcolumns;
+DROP TABLE subcolumns;

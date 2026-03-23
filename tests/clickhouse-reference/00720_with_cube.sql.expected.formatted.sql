@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS cube;
+DROP TABLE IF EXISTS `cube`;
 
 CREATE TABLE `cube`
 (
@@ -68,4 +68,4 @@ ORDER BY
 
 SET group_by_two_level_threshold = 1;
 
-SYSTEM DROP  TABLE cube;
+DROP TABLE `cube`;

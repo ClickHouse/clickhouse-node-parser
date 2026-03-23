@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_02152;
+DROP TABLE IF EXISTS test_02152;
 
 CREATE TABLE test_02152
 (
@@ -19,7 +19,7 @@ INSERT INTO test_02152 SELECT
 SELECT *
 FROM test_02152;
 
-SYSTEM drop  table test_02152;
+DROP TABLE test_02152;
 
 CREATE TABLE test_02152
 (

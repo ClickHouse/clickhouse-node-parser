@@ -1,9 +1,9 @@
 -- Tags: global
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
-SYSTEM drop  table if exists xp;
+DROP TABLE IF EXISTS xp;
 
-SYSTEM drop  table if exists xp_d;
+DROP TABLE IF EXISTS xp_d;
 
 CREATE TABLE xp
 (

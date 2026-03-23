@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_qualify;
+DROP TABLE IF EXISTS test_qualify;
 
 CREATE TABLE test_qualify
 (

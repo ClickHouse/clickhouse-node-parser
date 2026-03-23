@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists ax;
+DROP TABLE IF EXISTS ax;
 
-SYSTEM drop  table if exists bx;
+DROP TABLE IF EXISTS bx;
 
 CREATE TABLE ax
 (
@@ -26,6 +26,6 @@ CROSS JOIN ax
 WHERE ax.A = bx.A
     AND ax.B IN (1, 2);
 
-SYSTEM drop  table ax;
+DROP TABLE ax;
 
-SYSTEM drop  table bx;
+DROP TABLE bx;

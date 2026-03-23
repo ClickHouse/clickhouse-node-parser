@@ -1,9 +1,9 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/11000
-SYSTEM DROP  TABLE IF EXISTS test_table_01;
+DROP TABLE IF EXISTS test_table_01;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_02;
+DROP TABLE IF EXISTS test_table_02;
 
-SYSTEM DROP  TABLE IF EXISTS test_view_01;
+DROP TABLE IF EXISTS test_view_01;
 
 SET enable_analyzer = 1;
 

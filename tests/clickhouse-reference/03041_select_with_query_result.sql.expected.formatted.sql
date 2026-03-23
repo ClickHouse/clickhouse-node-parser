@@ -1,11 +1,11 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/44153
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS parent;
+DROP TABLE IF EXISTS parent;
 
-SYSTEM DROP  TABLE IF EXISTS join_table_1;
+DROP TABLE IF EXISTS join_table_1;
 
-SYSTEM DROP  TABLE IF EXISTS join_table_2;
+DROP TABLE IF EXISTS join_table_2;
 
 CREATE TABLE parent
 (

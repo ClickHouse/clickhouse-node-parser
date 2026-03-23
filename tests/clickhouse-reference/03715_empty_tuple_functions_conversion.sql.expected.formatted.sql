@@ -1,6 +1,6 @@
 SELECT CAST(tuple(), 'SimpleAggregateFunction(min, Tuple())');
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -13,7 +13,7 @@ INSERT INTO tab;
 SELECT CAST(c0, 'SimpleAggregateFunction(min, Tuple())')
 FROM tab;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -27,7 +27,7 @@ INSERT INTO t0 (c0);
 SELECT *
 FROM t0;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (

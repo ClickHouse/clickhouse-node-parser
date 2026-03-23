@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/53380
-SYSTEM drop  table if exists parent;
+DROP TABLE IF EXISTS parent;
 
-SYSTEM drop  table if exists child;
+DROP TABLE IF EXISTS child;
 
 CREATE TABLE parent
 (
@@ -37,10 +37,10 @@ CREATE TABLE child3
 )
 ENGINE = MergeTree;
 
-SYSTEM drop  table child3;
+DROP TABLE child3;
 
-SYSTEM drop  table child2;
+DROP TABLE child2;
 
-SYSTEM drop  table child;
+DROP TABLE child;
 
-SYSTEM drop  table parent;
+DROP TABLE parent;

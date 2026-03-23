@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users
 (
@@ -26,4 +26,4 @@ SETTINGS
     optimize_use_projections = 1,
     force_optimize_projection = 1;
 
-SYSTEM DROP  TABLE users;
+DROP TABLE users;

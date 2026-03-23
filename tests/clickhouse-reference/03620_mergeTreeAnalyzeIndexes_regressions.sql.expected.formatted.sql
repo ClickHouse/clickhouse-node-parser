@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/93817
-SYSTEM drop  table if exists data_add_minmax_index_for_numeric_columns;
+DROP TABLE IF EXISTS data_add_minmax_index_for_numeric_columns;
 
 CREATE TABLE data_add_minmax_index_for_numeric_columns
 (

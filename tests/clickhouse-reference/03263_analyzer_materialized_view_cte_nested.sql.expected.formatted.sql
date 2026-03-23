@@ -1,8 +1,8 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
-SYSTEM DROP  VIEW IF EXISTS test_mv;
+DROP VIEW IF EXISTS test_mv;
 
 CREATE TABLE test_table
 ENGINE = MergeTree
@@ -35,6 +35,6 @@ INSERT INTO test_table;
 SELECT *
 FROM test_mv;
 
-SYSTEM DROP  VIEW test_mv;
+DROP VIEW test_mv;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

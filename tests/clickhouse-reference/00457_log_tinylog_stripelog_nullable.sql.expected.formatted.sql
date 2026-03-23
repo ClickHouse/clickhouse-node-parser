@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nullable_00457;
+DROP TABLE IF EXISTS nullable_00457;
 
 CREATE TABLE nullable_00457
 (
@@ -60,4 +60,4 @@ CREATE TABLE nullable_00457
 )
 ENGINE = StripeLog;
 
-SYSTEM DROP  TABLE nullable_00457;
+DROP TABLE nullable_00457;

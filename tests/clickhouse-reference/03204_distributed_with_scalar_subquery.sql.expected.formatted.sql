@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_c3oollc8r;
+DROP TABLE IF EXISTS t_c3oollc8r;
 
 CREATE TABLE t_c3oollc8r
 (
@@ -18,4 +18,4 @@ SELECT (
     ) > c_lfntfzg
 FROM remote('127.0.0.{1,2}', currentDatabase(), t_c3oollc8r);
 
-SYSTEM DROP  TABLE t_c3oollc8r;
+DROP TABLE t_c3oollc8r;

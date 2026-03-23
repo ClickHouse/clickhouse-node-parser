@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_uniq_exact;
+DROP TABLE IF EXISTS t_uniq_exact;
 
 CREATE TABLE t_uniq_exact
 (
@@ -113,4 +113,4 @@ GROUP BY a
 ORDER BY a ASC
 SETTINGS min_hit_rate_to_use_consecutive_keys_optimization = 0.5;
 
-SYSTEM DROP  TABLE t_uniq_exact;
+DROP TABLE t_uniq_exact;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_index_agg_func;
+DROP TABLE IF EXISTS t_index_agg_func;
 
 CREATE TABLE t_index_agg_func
 (
@@ -46,4 +46,4 @@ FROM t_index_agg_func FINAL
 WHERE vv >= 10
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_index_agg_func;
+DROP TABLE t_index_agg_func;

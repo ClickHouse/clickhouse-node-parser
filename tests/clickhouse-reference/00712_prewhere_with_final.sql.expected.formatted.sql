@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists trepl;
+DROP TABLE IF EXISTS trepl;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -16,9 +16,9 @@ SELECT b
 FROM trepl FINAL
 PREWHERE a < 1000;
 
-SYSTEM drop  table trepl;
+DROP TABLE trepl;
 
-SYSTEM drop  table if exists versioned_collapsing;
+DROP TABLE IF EXISTS versioned_collapsing;
 
 CREATE TABLE versioned_collapsing
 (
@@ -35,4 +35,4 @@ SELECT x
 FROM versioned_collapsing FINAL
 PREWHERE version < 1000;
 
-SYSTEM drop  table versioned_collapsing;
+DROP TABLE versioned_collapsing;

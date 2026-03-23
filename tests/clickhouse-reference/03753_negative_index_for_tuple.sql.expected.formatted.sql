@@ -11,9 +11,9 @@ SELECT tupleElement((1, 2), negate(1e42)); -- { serverError ILLEGAL_TYPE_OF_ARGU
 
 SELECT tupleElement((1, 'hello'), -10, 2);
 
-SYSTEM drop  table if exists a1;
+DROP TABLE IF EXISTS a1;
 
-SYSTEM drop  table if exists a2;
+DROP TABLE IF EXISTS a2;
 
 CREATE TABLE a1
 (
@@ -44,15 +44,15 @@ FROM (
     )
 ORDER BY `all` ASC;
 
-SYSTEM drop  table a1;
+DROP TABLE a1;
 
-SYSTEM drop  table a2;
+DROP TABLE a2;
 
 SET enable_analyzer = 1;
 
 SET optimize_functions_to_subcolumns = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -60,4 +60,4 @@ CREATE TABLE test
 )
 ENGINE = Memory;
 
-SYSTEM drop  table test;
+DROP TABLE test;

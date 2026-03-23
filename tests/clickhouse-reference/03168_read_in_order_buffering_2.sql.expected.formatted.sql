@@ -1,5 +1,5 @@
 -- Tags: long, no-random-settings, no-tsan, no-asan, no-msan, no-object-storage
-SYSTEM DROP  TABLE IF EXISTS t_read_in_order_2;
+DROP TABLE IF EXISTS t_read_in_order_2;
 
 CREATE TABLE t_read_in_order_2
 (
@@ -27,4 +27,4 @@ FROM t_read_in_order_2
 ORDER BY id ASC
 FORMAT Null;
 
-SYSTEM DROP  TABLE t_read_in_order_2;
+DROP TABLE t_read_in_order_2;

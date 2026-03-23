@@ -1,7 +1,7 @@
 -- Tags: no-debug, no-parallel, long, no-object-storage, no-random-settings, no-random-merge-tree-settings
 SET optimize_trivial_insert_select = 1;
 
-SYSTEM DROP  TABLE IF EXISTS table_with_single_pk;
+DROP TABLE IF EXISTS table_with_single_pk;
 
 CREATE TABLE table_with_single_pk
 (
@@ -25,7 +25,7 @@ WHERE event_type = 'MutatePart'
     AND table = 'table_with_single_pk'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE IF EXISTS table_with_multi_pk;
+DROP TABLE IF EXISTS table_with_multi_pk;
 
 CREATE TABLE table_with_multi_pk
 (
@@ -53,7 +53,7 @@ WHERE event_type = 'MutatePart'
     AND table = 'table_with_multi_pk'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE IF EXISTS table_with_function_pk;
+DROP TABLE IF EXISTS table_with_function_pk;
 
 CREATE TABLE table_with_function_pk
 (
@@ -81,7 +81,7 @@ WHERE event_type = 'MutatePart'
     AND table = 'table_with_function_pk'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE IF EXISTS table_without_pk;
+DROP TABLE IF EXISTS table_without_pk;
 
 CREATE TABLE table_without_pk
 (

@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM drop  table if exists test_02312;
+DROP TABLE IF EXISTS test_02312;
 
 CREATE TABLE test_02312
 (
@@ -12,7 +12,7 @@ INSERT INTO test_02312;
 SELECT *
 FROM test_02312;
 
-SYSTEM drop  table test_02312;
+DROP TABLE test_02312;
 
 CREATE TABLE test_02312
 (

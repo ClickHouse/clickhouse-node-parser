@@ -1,5 +1,5 @@
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_simple;
+DROP TABLE IF EXISTS test_has_idx_simple;
 
 CREATE TABLE test_has_idx_simple
 (
@@ -39,7 +39,7 @@ SELECT count()
 FROM test_has_idx_simple
 WHERE has([10, 50000, 90000, 'a'], id); -- { serverError NO_COMMON_TYPE }
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_col;
+DROP TABLE IF EXISTS test_has_idx_tuple_col;
 
 CREATE TABLE test_has_idx_tuple_col
 (
@@ -65,7 +65,7 @@ SELECT count()
 FROM test_has_idx_tuple_col
 WHERE key_tuple IN ((10, 0), (50000, 0));
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_col_nullable_elements;
+DROP TABLE IF EXISTS test_has_idx_tuple_col_nullable_elements;
 
 CREATE TABLE test_has_idx_tuple_col_nullable_elements
 (
@@ -92,7 +92,7 @@ FROM test_has_idx_tuple_col_nullable_elements
 WHERE key_tuple IN ((10, 0), (50000, 0), (0, NULL), (NULL, 10), (NULL, 20))
 SETTINGS transform_null_in = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_array_col;
+DROP TABLE IF EXISTS test_has_idx_array_col;
 
 CREATE TABLE test_has_idx_array_col
 (
@@ -118,7 +118,7 @@ SELECT count()
 FROM test_has_idx_array_col
 WHERE arr_key IN ([[10, 11], [50000, 50001]]);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_two_cols;
+DROP TABLE IF EXISTS test_has_idx_tuple_two_cols;
 
 CREATE TABLE test_has_idx_tuple_two_cols
 (
@@ -152,7 +152,7 @@ SELECT count()
 FROM test_has_idx_tuple_two_cols
 WHERE (k1, k2) IN ((10, 0), (50000, 0), (NULL, NULL));
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_lowcard;
+DROP TABLE IF EXISTS test_has_idx_lowcard;
 
 CREATE TABLE test_has_idx_lowcard
 (
@@ -176,7 +176,7 @@ SELECT count()
 FROM test_has_idx_lowcard
 WHERE key_lc IN ('1000010', '1000042', '1000077');
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_nullable;
+DROP TABLE IF EXISTS test_has_idx_nullable;
 
 CREATE TABLE test_has_idx_nullable
 (
@@ -209,7 +209,7 @@ FROM test_has_idx_nullable
 WHERE key_nullable IN (11, 50000, 90000, NULL)
 SETTINGS transform_null_in = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_func_key;
+DROP TABLE IF EXISTS test_has_idx_func_key;
 
 CREATE TABLE test_has_idx_func_key
 (
@@ -233,7 +233,7 @@ SELECT count()
 FROM test_has_idx_func_key
 WHERE toDate(ts) IN ('2020-01-01', '2020-01-02', '2020-01-03');
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (

@@ -1,6 +1,6 @@
 INSERT INTO FUNCTION file(`data1622.json`, TSV, `value String`);
 
-SYSTEM drop  table if exists json;
+DROP TABLE IF EXISTS json;
 
 CREATE TABLE json
 (

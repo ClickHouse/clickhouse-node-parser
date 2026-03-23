@@ -6,7 +6,7 @@ SET query_plan_convert_outer_join_to_inner_join = 0;
 
 SET parallel_hash_join_threshold = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_1;
+DROP TABLE IF EXISTS test_table_1;
 
 CREATE TABLE test_table_1
 (
@@ -151,6 +151,6 @@ WHERE lhs.id = 5
     AND rhs.id = 6;
 
 -- { echoOff }
-SYSTEM DROP  TABLE test_table_1;
+DROP TABLE test_table_1;
 
-SYSTEM DROP  TABLE test_table_2;
+DROP TABLE test_table_2;

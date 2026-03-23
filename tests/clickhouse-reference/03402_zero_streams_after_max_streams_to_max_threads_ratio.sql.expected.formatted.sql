@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 03402_data;
+DROP TABLE IF EXISTS `03402_data`;
 
 CREATE TABLE `03402_data`
 (
@@ -52,4 +52,4 @@ SETTINGS
     max_threads = 2,
     max_streams_to_max_threads_ratio = 0.2;
 
-SYSTEM DROP  TABLE 03402_data;
+DROP TABLE `03402_data`;

@@ -2,7 +2,7 @@ SET join_algorithm = 'full_sorting_merge';
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS events0;
+DROP TABLE IF EXISTS events0;
 
 CREATE TABLE events0
 (
@@ -39,9 +39,9 @@ LEFT JOIN events0 AS e
 ORDER BY p.ts ASC;
 
 -- SETTINGS join_use_nulls = 1
-SYSTEM DROP  TABLE IF EXISTS events;
+DROP TABLE IF EXISTS events;
 
-SYSTEM DROP  TABLE IF EXISTS probes;
+DROP TABLE IF EXISTS probes;
 
 CREATE TABLE events
 (

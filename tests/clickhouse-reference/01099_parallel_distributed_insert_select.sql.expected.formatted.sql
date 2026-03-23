@@ -4,13 +4,13 @@ SET send_logs_level = 'fatal';
 
 SET prefer_localhost_replica = 1;
 
-SYSTEM DROP  TABLE IF EXISTS local_01099_a;
+DROP TABLE IF EXISTS local_01099_a;
 
-SYSTEM DROP  TABLE IF EXISTS local_01099_b;
+DROP TABLE IF EXISTS local_01099_b;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_01099_a;
+DROP TABLE IF EXISTS distributed_01099_a;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_01099_b;
+DROP TABLE IF EXISTS distributed_01099_b;
 
 SET parallel_distributed_insert_select = 1;
 
@@ -42,13 +42,13 @@ FROM distributed_01099_a;
 SELECT *
 FROM distributed_01099_b;
 
-SYSTEM DROP  TABLE local_01099_a;
+DROP TABLE local_01099_a;
 
-SYSTEM DROP  TABLE local_01099_b;
+DROP TABLE local_01099_b;
 
-SYSTEM DROP  TABLE distributed_01099_a;
+DROP TABLE distributed_01099_a;
 
-SYSTEM DROP  TABLE distributed_01099_b;
+DROP TABLE distributed_01099_b;
 
 CREATE TABLE distributed_01099_a AS local_01099_a
 ENGINE = Distributed('test_cluster_two_shards_localhost', currentDatabase(), local_01099_a, rand());
@@ -127,9 +127,9 @@ FROM remote('localhost', numbers(5)) AS tx;
 SELECT *
 FROM distributed_01099_c;
 
-SYSTEM DROP  TABLE local_01099_c;
+DROP TABLE local_01099_c;
 
-SYSTEM DROP  TABLE distributed_01099_c;
+DROP TABLE distributed_01099_c;
 
 INSERT INTO distributed_01099_b WITH concat('http://localhost:8123/?query=', 'select+{1,2,3}+format+TSV') AS url
 

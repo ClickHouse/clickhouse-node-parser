@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS group_by_all;
+DROP TABLE IF EXISTS group_by_all;
 
 CREATE TABLE group_by_all
 (

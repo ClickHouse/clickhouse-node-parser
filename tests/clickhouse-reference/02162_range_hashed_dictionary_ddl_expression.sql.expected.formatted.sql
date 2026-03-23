@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02162_test_table;
+DROP TABLE IF EXISTS `02162_test_table`;
 
 CREATE TABLE `02162_test_table`
 (
@@ -10,7 +10,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `02162_test_table`;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02162_test_dictionary;
+DROP DICTIONARY IF EXISTS `02162_test_dictionary`;
 
 CREATE DICTIONARY `02162_test_dictionary`
 (
@@ -29,6 +29,6 @@ LAYOUT(RANGE_HASHED());
 SELECT *
 FROM `02162_test_dictionary`;
 
-SYSTEM DROP  DICTIONARY 02162_test_dictionary;
+DROP DICTIONARY `02162_test_dictionary`;
 
-SYSTEM DROP  TABLE 02162_test_table;
+DROP TABLE `02162_test_table`;

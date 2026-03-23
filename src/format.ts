@@ -283,6 +283,8 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
         : quoteIdent(t.table);
       return `${indent}TRUNCATE TABLE ${tn}`;
     }
+    case 'drop':
+      return formatStatement(node, indent);
     // CTE nodes — format inline
     case 'cteSubquery':
       return `${quoteIdent(node.name)} AS (\n${formatStatement(node.query, indent + '  ')}\n${indent})`;
@@ -392,6 +394,32 @@ function formatStatement(stmt: Statement, indent: string): string {
       ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}`
       : quoteIdent(t.table);
     return `${indent}TRUNCATE TABLE ${name}`;
+  }
+  if (stmt.kind === 'drop') {
+    const fmtRef = (t: import('./ast').TableRef) =>
+      t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table);
+    // DROP INDEX has special syntax: DROP INDEX [IF EXISTS] name ON table
+    if (stmt.targetType === 'INDEX' && stmt.indexName && stmt.table) {
+      let result = `${indent}DROP INDEX`;
+      if (stmt.ifExists) result += ' IF EXISTS';
+      result += ` ${quoteIdent(stmt.indexName)} ON ${fmtRef(stmt.table)}`;
+      return result;
+    }
+    let result = `${indent}DROP`;
+    if (stmt.temporary) result += ' TEMPORARY';
+    result += ` ${stmt.targetType}`;
+    if (stmt.ifExists) result += ' IF EXISTS';
+    if (stmt.tables && stmt.tables.length > 0) {
+      result += ` ${stmt.tables.map(fmtRef).join(', ')}`;
+    } else if (stmt.table) {
+      result += ` ${fmtRef(stmt.table)}`;
+    }
+    if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+    if (stmt.settings && stmt.settings.length > 0) {
+      result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+    }
+    if (stmt.format) result += ` FORMAT ${stmt.format}`;
+    return result;
   }
   if (stmt.kind === 'parallelWith') {
     return stmt.queries.map((q) => formatStatement(q, indent)).join(`\nPARALLEL WITH\n`);
@@ -523,6 +551,14 @@ function formatUseStatement(stmt: UseStatement, indent: string): string {
 }
 
 function formatSystemStatement(stmt: SystemStatement, indent: string): string {
+  // Opaque statements (DROP USER, ALTER, etc.) store the full body including the keyword
+  if (
+    /^(DROP|ALTER|RENAME|ATTACH|DETACH|OPTIMIZE|CHECK|DESCRIBE|DESC|EXISTS|SHOW|GRANT|REVOKE|EXCHANGE|KILL|UNDO|DELETE|BACKUP|RESTORE|BEGIN|COMMIT|ROLLBACK|WATCH|UNDROP|MOVE|TRUNCATE)\b/i.test(
+      stmt.body,
+    )
+  ) {
+    return `${indent}${stmt.body}`;
+  }
   return `${indent}SYSTEM ${stmt.body}`;
 }
 

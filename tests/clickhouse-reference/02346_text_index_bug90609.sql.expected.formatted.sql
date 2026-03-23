@@ -1,7 +1,7 @@
 -- Test for Bug 90609
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -31,4 +31,4 @@ PREWHERE (
         PREWHERE hasAllTokens(text, ['Alick'])
     ) = '1'; -- { serverError INCORRECT_RESULT_OF_SCALAR_SUBQUERY }
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

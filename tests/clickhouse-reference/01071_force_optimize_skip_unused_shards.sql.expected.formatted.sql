@@ -1,15 +1,15 @@
 -- Tags: shard
 SET optimize_skip_unused_shards = 1;
 
-SYSTEM drop  table if exists data_01071;
+DROP TABLE IF EXISTS data_01071;
 
-SYSTEM drop  table if exists dist_01071;
+DROP TABLE IF EXISTS dist_01071;
 
-SYSTEM drop  table if exists data2_01071;
+DROP TABLE IF EXISTS data2_01071;
 
-SYSTEM drop  table if exists dist2_01071;
+DROP TABLE IF EXISTS dist2_01071;
 
-SYSTEM drop  table if exists dist2_layer_01071;
+DROP TABLE IF EXISTS dist2_layer_01071;
 
 CREATE TABLE data_01071
 (

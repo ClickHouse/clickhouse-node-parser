@@ -1,6 +1,6 @@
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -12,7 +12,7 @@ ORDER BY tuple();
 
 INSERT INTO tab (str);
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

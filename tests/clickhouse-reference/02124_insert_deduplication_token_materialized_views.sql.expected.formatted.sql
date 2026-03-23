@@ -1,10 +1,10 @@
-SYSTEM drop  table if exists test  sync;
+DROP TABLE IF EXISTS test;
 
-SYSTEM drop  table if exists test_mv_a sync;
+DROP TABLE IF EXISTS test_mv_a;
 
-SYSTEM drop  table if exists test_mv_b sync;
+DROP TABLE IF EXISTS test_mv_b;
 
-SYSTEM drop  table if exists test_mv_c sync;
+DROP TABLE IF EXISTS test_mv_c;
 
 SET deduplicate_blocks_in_dependent_materialized_views = 0;
 
@@ -237,10 +237,10 @@ SELECT
         WHERE test = 'case4'
     );
 
-SYSTEM drop  table test sync;
+DROP TABLE test;
 
-SYSTEM drop  table test_mv_a sync;
+DROP TABLE test_mv_a;
 
-SYSTEM drop  table test_mv_b sync;
+DROP TABLE test_mv_b;
 
-SYSTEM drop  table test_mv_c sync;
+DROP TABLE test_mv_c;

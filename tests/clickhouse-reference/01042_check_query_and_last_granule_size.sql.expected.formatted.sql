@@ -2,7 +2,7 @@ SET optimize_trivial_insert_select = 1;
 
 SET check_query_single_value_result = 0;
 
-SYSTEM DROP  TABLE IF EXISTS check_query_test;
+DROP TABLE IF EXISTS check_query_test;
 
 CREATE TABLE check_query_test
 (
@@ -21,7 +21,7 @@ INSERT INTO check_query_test SELECT
 FROM `system`.numbers
 LIMIT 81920;
 
-SYSTEM DROP  TABLE IF EXISTS check_query_test_non_adaptive;
+DROP TABLE IF EXISTS check_query_test_non_adaptive;
 
 CREATE TABLE check_query_test_non_adaptive
 (

@@ -1,5 +1,5 @@
 -- Tags: replica
-SYSTEM DROP  TABLE IF EXISTS bad_arrays;
+DROP TABLE IF EXISTS bad_arrays;
 
 CREATE TABLE bad_arrays
 (
@@ -15,7 +15,7 @@ FROM
     bad_arrays
 ARRAY JOIN b;
 
-SYSTEM DROP  TABLE bad_arrays;
+DROP TABLE bad_arrays;
 
 CREATE TABLE bad_arrays
 (

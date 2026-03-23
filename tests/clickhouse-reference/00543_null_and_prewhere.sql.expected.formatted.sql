@@ -18,4 +18,4 @@ SELECT count()
 FROM test
 WHERE val = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;

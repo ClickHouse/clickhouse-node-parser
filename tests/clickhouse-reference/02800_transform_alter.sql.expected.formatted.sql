@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_xy;
+DROP TABLE IF EXISTS test_xy;
 
-SYSTEM DROP  TABLE IF EXISTS updates;
+DROP TABLE IF EXISTS updates;
 
 CREATE TABLE test_xy
 (
@@ -58,6 +58,6 @@ ORDER BY
     x ASC,
     y ASC;
 
-SYSTEM DROP  TABLE test_xy;
+DROP TABLE test_xy;
 
-SYSTEM DROP  TABLE updates;
+DROP TABLE updates;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS merge_table_standard_delete;
+DROP TABLE IF EXISTS merge_table_standard_delete;
 
 CREATE TABLE merge_table_standard_delete
 (
@@ -31,9 +31,9 @@ SET check_query_single_value_result = 1;
 SELECT COUNT()
 FROM merge_table_standard_delete;
 
-SYSTEM DROP  TABLE merge_table_standard_delete;
+DROP TABLE merge_table_standard_delete;
 
-SYSTEM drop  table if exists t_light;
+DROP TABLE IF EXISTS t_light;
 
 CREATE TABLE t_light
 (
@@ -102,7 +102,7 @@ WHERE database = currentDatabase()
     AND `rows` > 0
 ORDER BY name ASC;
 
-SYSTEM drop  table t_light;
+DROP TABLE t_light;
 
 CREATE TABLE t_large
 (
@@ -123,4 +123,4 @@ FROM t_large
 WHERE a IN (1, 1000, 1005, 50000)
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE  t_large;
+DROP TABLE t_large;

@@ -2,7 +2,7 @@ SET enable_named_columns_in_function_tuple = 1;
 
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists x;
+DROP TABLE IF EXISTS x;
 
 CREATE TABLE x
 (
@@ -40,9 +40,9 @@ FROM x;
 
 SELECT tupleNames(1); -- { serverError 43 }
 
-SYSTEM drop  table x;
+DROP TABLE x;
 
-SYSTEM drop  table if exists tbl;
+DROP TABLE IF EXISTS tbl;
 
 -- Make sure named tuple won't break Values insert
 CREATE TABLE tbl
@@ -57,7 +57,7 @@ INSERT INTO tbl; -- without tuple it's interpreted differently inside values blo
 SELECT *
 FROM tbl;
 
-SYSTEM drop  table tbl;
+DROP TABLE tbl;
 
 -- Avoid generating named tuple for special keywords
 SELECT

@@ -2,7 +2,7 @@
 -- add_minmax_index_for_numeric_columns=0: Different plan
 -- EXPLAIN output may differ
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_simple;
+DROP TABLE IF EXISTS test_has_idx_simple;
 
 CREATE TABLE test_has_idx_simple
 (
@@ -18,7 +18,7 @@ INSERT INTO test_has_idx_simple SELECT
     toString(number)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_col;
+DROP TABLE IF EXISTS test_has_idx_tuple_col;
 
 CREATE TABLE test_has_idx_tuple_col
 (
@@ -36,7 +36,7 @@ INSERT INTO test_has_idx_tuple_col SELECT
     toString(number)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_col_nullable_elements;
+DROP TABLE IF EXISTS test_has_idx_tuple_col_nullable_elements;
 
 CREATE TABLE test_has_idx_tuple_col_nullable_elements
 (
@@ -54,7 +54,7 @@ INSERT INTO test_has_idx_tuple_col_nullable_elements SELECT
     toString(number)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_array_col;
+DROP TABLE IF EXISTS test_has_idx_array_col;
 
 CREATE TABLE test_has_idx_array_col
 (
@@ -72,7 +72,7 @@ INSERT INTO test_has_idx_array_col SELECT
     toString(number)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_tuple_two_cols;
+DROP TABLE IF EXISTS test_has_idx_tuple_two_cols;
 
 CREATE TABLE test_has_idx_tuple_two_cols
 (
@@ -90,7 +90,7 @@ INSERT INTO test_has_idx_tuple_two_cols SELECT
     toString(number)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_lowcard;
+DROP TABLE IF EXISTS test_has_idx_lowcard;
 
 CREATE TABLE test_has_idx_lowcard
 (
@@ -106,7 +106,7 @@ INSERT INTO test_has_idx_lowcard SELECT
     toString((number % 100) + 1000000)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_nullable;
+DROP TABLE IF EXISTS test_has_idx_nullable;
 
 CREATE TABLE test_has_idx_nullable
 (
@@ -122,7 +122,7 @@ INSERT INTO test_has_idx_nullable SELECT
     if(number % 10 = 0, NULL, number)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_idx_func_key;
+DROP TABLE IF EXISTS test_has_idx_func_key;
 
 CREATE TABLE test_has_idx_func_key
 (
@@ -138,7 +138,7 @@ INSERT INTO test_has_idx_func_key SELECT
     toString(number)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (

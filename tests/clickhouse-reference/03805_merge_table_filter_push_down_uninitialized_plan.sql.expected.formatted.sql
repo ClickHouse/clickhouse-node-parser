@@ -1,9 +1,9 @@
 -- Test case for fix: QueryPlan was not initialized error when pushing down filter to Merge table
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
-SYSTEM DROP  TABLE IF EXISTS foo_merge;
+DROP TABLE IF EXISTS foo_merge;
 
 CREATE TABLE t1
 (
@@ -40,8 +40,8 @@ FROM viewExplain('EXPLAIN', '', (
             parallel_replicas_local_plan = 1
     ));
 
-SYSTEM DROP  TABLE foo_merge;
+DROP TABLE foo_merge;
 
-SYSTEM DROP  TABLE t2;
+DROP TABLE t2;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;

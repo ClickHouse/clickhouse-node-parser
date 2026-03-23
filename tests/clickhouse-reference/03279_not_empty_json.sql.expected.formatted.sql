@@ -13,7 +13,7 @@ SELECT
     notEmpty(json)
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

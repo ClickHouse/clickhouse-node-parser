@@ -1,7 +1,7 @@
 -- Tags: no-fasttest
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
-SYSTEM drop  table if exists test_cluster;
+DROP TABLE IF EXISTS test_cluster;
 
 CREATE TABLE test
 (
@@ -25,6 +25,6 @@ SELECT
     d.Int64
 FROM test_cluster;
 
-SYSTEM drop  table test_cluster;
+DROP TABLE test_cluster;
 
-SYSTEM drop  table test;
+DROP TABLE test;

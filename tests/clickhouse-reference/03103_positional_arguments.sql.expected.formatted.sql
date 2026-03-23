@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/56466
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users
 (

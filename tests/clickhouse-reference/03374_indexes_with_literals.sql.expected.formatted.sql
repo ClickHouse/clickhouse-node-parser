@@ -2,7 +2,7 @@
 -- add_minmax_index_for_numeric_columns=0: We don't want to use implicit indexes since we are checking the one created manually
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -16,7 +16,7 @@ SETTINGS index_granularity = 1, add_minmax_index_for_numeric_columns = 0;
 INSERT INTO test SELECT number
 FROM numbers(1000);
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS enum_test;
+DROP TABLE IF EXISTS enum_test;
 
 CREATE TABLE enum_test
 (

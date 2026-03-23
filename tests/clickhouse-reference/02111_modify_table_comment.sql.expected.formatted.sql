@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 02111_modify_table_comment;
+DROP DATABASE IF EXISTS `02111_modify_table_comment`;
 
 CREATE DATABASE `02111_modify_table_comment`;
 
@@ -17,4 +17,4 @@ CREATE TABLE t_merge AS t
 ENGINE = Merge('02111_modify_table_comment', 't')
 COMMENT 'this is a Merge table';
 
-SYSTEM DROP  DATABASE 02111_modify_table_comment;
+DROP DATABASE `02111_modify_table_comment`;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_00974;
+DROP TABLE IF EXISTS test_00974;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -32,4 +32,4 @@ SETTINGS
     enable_optimize_predicate_expression_to_final_subquery = 1,
     max_rows_to_read = 2;
 
-SYSTEM DROP  TABLE test_00974;
+DROP TABLE test_00974;

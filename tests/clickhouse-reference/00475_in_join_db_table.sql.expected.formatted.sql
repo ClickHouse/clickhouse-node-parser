@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS set;
+DROP TABLE IF EXISTS `set`;
 
 CREATE TABLE `set`
 (
@@ -12,7 +12,7 @@ SELECT
     ((arrayJoin(['hello', 'world']) AS s)) IN (`set`),
     s;
 
-SYSTEM DROP  TABLE set;
+DROP TABLE `set`;
 
 CREATE TABLE `set`
 (
@@ -20,7 +20,7 @@ CREATE TABLE `set`
 )
 ENGINE = Set;
 
-SYSTEM DROP  TABLE IF EXISTS join;
+DROP TABLE IF EXISTS `join`;
 
 CREATE TABLE `join`
 (
@@ -42,7 +42,7 @@ LEFT JOIN `join`
     USING (k)
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE join;
+DROP TABLE `join`;
 
 CREATE TABLE `join`
 (

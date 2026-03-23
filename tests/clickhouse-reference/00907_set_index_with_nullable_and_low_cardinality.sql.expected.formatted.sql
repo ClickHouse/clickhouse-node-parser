@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists nullable_set_index;
+DROP TABLE IF EXISTS nullable_set_index;
 
 CREATE TABLE nullable_set_index
 (

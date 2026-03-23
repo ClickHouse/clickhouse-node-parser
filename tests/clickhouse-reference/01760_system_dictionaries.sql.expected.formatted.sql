@@ -1,9 +1,9 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01760_db;
+DROP DATABASE IF EXISTS `01760_db`;
 
 CREATE DATABASE `01760_db`;
 
-SYSTEM DROP  TABLE IF EXISTS 01760_db.example_simple_key_source;
+DROP TABLE IF EXISTS `01760_db`.example_simple_key_source;
 
 CREATE TABLE `01760_db`.example_simple_key_source
 (
@@ -14,7 +14,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `01760_db`.example_simple_key_source;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 01760_db.example_simple_key_dictionary;
+DROP DICTIONARY IF EXISTS `01760_db`.example_simple_key_dictionary;
 
 CREATE DICTIONARY `01760_db`.example_simple_key_dictionary
 (
@@ -39,11 +39,11 @@ WHERE database = '01760_db';
 SELECT *
 FROM `01760_db`.example_simple_key_dictionary;
 
-SYSTEM DROP  DICTIONARY 01760_db.example_simple_key_dictionary;
+DROP DICTIONARY `01760_db`.example_simple_key_dictionary;
 
-SYSTEM DROP  TABLE 01760_db.example_simple_key_source;
+DROP TABLE `01760_db`.example_simple_key_source;
 
-SYSTEM DROP  TABLE IF EXISTS 01760_db.example_complex_key_source;
+DROP TABLE IF EXISTS `01760_db`.example_complex_key_source;
 
 CREATE TABLE `01760_db`.example_complex_key_source
 (
@@ -55,7 +55,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `01760_db`.example_complex_key_source;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 01760_db.example_complex_key_dictionary;
+DROP DICTIONARY IF EXISTS `01760_db`.example_complex_key_dictionary;
 
 CREATE DICTIONARY `01760_db`.example_complex_key_dictionary
 (
@@ -70,8 +70,8 @@ LAYOUT(COMPLEX_KEY_DIRECT());
 SELECT *
 FROM `01760_db`.example_complex_key_dictionary;
 
-SYSTEM DROP  DICTIONARY 01760_db.example_complex_key_dictionary;
+DROP DICTIONARY `01760_db`.example_complex_key_dictionary;
 
-SYSTEM DROP  TABLE 01760_db.example_complex_key_source;
+DROP TABLE `01760_db`.example_complex_key_source;
 
-SYSTEM DROP  DATABASE 01760_db;
+DROP DATABASE `01760_db`;

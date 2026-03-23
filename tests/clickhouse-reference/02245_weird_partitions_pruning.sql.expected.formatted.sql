@@ -6,7 +6,7 @@
 -- min_max indexes for both column, so partition pruning works for both columns.
 -- It's very similar to min_max skip index but gives bigger performance boost,
 -- because partition pruning happens on very early query stage.
-SYSTEM DROP  TABLE IF EXISTS weird_partitions_02245;
+DROP TABLE IF EXISTS weird_partitions_02245;
 
 CREATE TABLE weird_partitions_02245
 (
@@ -81,4 +81,4 @@ WHERE d >= '2022-01-01 00:00:00'
     AND d1 < '2020-01-01 00:00:00'
 ORDER BY _partition_id ASC;
 
-SYSTEM DROP  TABLE weird_partitions_02245;
+DROP TABLE weird_partitions_02245;

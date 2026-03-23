@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_sequence;
+DROP TABLE IF EXISTS t_lwu_sequence;
 
 SET enable_lightweight_update = 1;
 
@@ -35,4 +35,4 @@ WHERE database = currentDatabase()
     AND startsWith(name, 'patch')
     AND active;
 
-SYSTEM DROP  TABLE t_lwu_sequence;
+DROP TABLE t_lwu_sequence;

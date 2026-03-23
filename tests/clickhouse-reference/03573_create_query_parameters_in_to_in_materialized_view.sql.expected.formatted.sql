@@ -28,7 +28,7 @@ FROM dst_table
 ORDER BY number ASC;
 
 -- strange use case
-SYSTEM DROP  TABLE mv_table, dst_table, src_table;
+DROP TABLE mv_table, dst_table, src_table;
 
 CREATE TABLE dst_table
 (

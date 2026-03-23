@@ -6,7 +6,7 @@ SET optimize_move_to_prewhere = 0;
 
 SET query_plan_optimize_join_order_limit = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -18,7 +18,7 @@ ORDER BY id;
 
 INSERT INTO test_table;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join;
+DROP TABLE IF EXISTS test_table_join;
 
 CREATE TABLE test_table_join
 (
@@ -39,6 +39,6 @@ INNER JOIN test_table_join AS t2
     ON t1.id = t2.id
 WHERE t1.id = 0;
 
-SYSTEM DROP  TABLE test_table_join;
+DROP TABLE test_table_join;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

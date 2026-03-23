@@ -54,7 +54,7 @@ SELECT quantiles(0.5)(arrayJoin([inf, -inf, 0, -inf, inf, -0]));
 
 SELECT quantiles(0.5)(arrayJoin([-inf, -inf, 0, inf, inf, -0]));
 
-SYSTEM DROP  TABLE IF EXISTS issue32107;
+DROP TABLE IF EXISTS issue32107;
 
 CREATE TABLE issue32107
 (

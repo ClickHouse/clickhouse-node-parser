@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS partition_and_primary_keys_using_same_expression;
+DROP TABLE IF EXISTS partition_and_primary_keys_using_same_expression;
 
 CREATE TABLE partition_and_primary_keys_using_same_expression
 (
@@ -18,4 +18,4 @@ ORDER BY dt ASC;
 
 SELECT '---';
 
-SYSTEM DROP  TABLE partition_and_primary_keys_using_same_expression;
+DROP TABLE partition_and_primary_keys_using_same_expression;

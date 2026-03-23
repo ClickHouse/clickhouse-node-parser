@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS table_with_materialized;
+DROP TABLE IF EXISTS table_with_materialized;
 
 CREATE TABLE table_with_materialized
 (
@@ -14,4 +14,4 @@ FROM
     numbers(1) AS n
 CROSS JOIN table_with_materialized;
 
-SYSTEM DROP  TABLE table_with_materialized;
+DROP TABLE table_with_materialized;

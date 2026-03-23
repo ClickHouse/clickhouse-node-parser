@@ -3,7 +3,7 @@ SET allow_experimental_full_text_index = 1;
 
 SET use_query_condition_cache = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -24,4 +24,4 @@ SELECT count()
 FROM tab
 WHERE hasToken(str, 'aa'); -- this must not return an error
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

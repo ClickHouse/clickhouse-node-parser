@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -24,7 +24,7 @@ SELECT `my.json`.a
 FROM test
 SETTINGS enable_analyzer = 0;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 SELECT `t.t`.a
 FROM format(JSONEachRow, '`t.t` Tuple(a UInt32)', '{"t.t" : {"a" : 42}}');

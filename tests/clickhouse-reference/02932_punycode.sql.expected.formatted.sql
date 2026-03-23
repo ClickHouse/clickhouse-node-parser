@@ -184,7 +184,7 @@ SELECT
     tryPunycodeDecode(puny) AS original_try
 FORMAT Vertical;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -202,7 +202,7 @@ SELECT
     tryPunycodeDecode(puny) AS original_try
 FROM tab;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

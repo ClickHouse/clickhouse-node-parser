@@ -1,8 +1,8 @@
 SET allow_experimental_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS AddedToCart;
+DROP TABLE IF EXISTS AddedToCart;
 
-SYSTEM DROP  TABLE IF EXISTS Session;
+DROP TABLE IF EXISTS Session;
 
 CREATE TABLE Session
 (
@@ -54,6 +54,6 @@ ORDER BY
     page_level ASC
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE AddedToCart;
+DROP TABLE AddedToCart;
 
-SYSTEM DROP  TABLE Session;
+DROP TABLE Session;

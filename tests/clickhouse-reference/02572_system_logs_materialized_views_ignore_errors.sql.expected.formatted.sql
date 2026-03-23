@@ -4,9 +4,9 @@
 -- Attach MV to system.query_log and check that writing query_log will not fail
 SET log_queries = 1;
 
-SYSTEM drop  table if exists log_proxy_02572;
+DROP TABLE IF EXISTS log_proxy_02572;
 
-SYSTEM drop  table if exists push_to_logs_proxy_mv_02572;
+DROP TABLE IF EXISTS push_to_logs_proxy_mv_02572;
 
 CREATE TABLE log_proxy_02572 AS `system`.query_log
 ENGINE = Distributed('test_shard_localhost', currentDatabase(), 'receiver_02572');
@@ -20,9 +20,9 @@ FROM `system`.query_log;
 SELECT 1
 FORMAT Null;
 
-SYSTEM drop  table log_proxy_02572;
+DROP TABLE log_proxy_02572;
 
-SYSTEM drop  table push_to_logs_proxy_mv_02572;
+DROP TABLE push_to_logs_proxy_mv_02572;
 
 SET log_queries = 0;
 

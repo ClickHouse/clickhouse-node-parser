@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_delete_empty_part;
+DROP TABLE IF EXISTS t_delete_empty_part;
 
 CREATE TABLE t_delete_empty_part
 (
@@ -40,4 +40,4 @@ WHERE database = currentDatabase()
     AND event_type = 'MutatePart'
 ORDER BY part_name ASC;
 
-SYSTEM DROP  TABLE t_delete_empty_part;
+DROP TABLE t_delete_empty_part;

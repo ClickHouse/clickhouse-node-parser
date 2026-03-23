@@ -1,7 +1,12 @@
 [
   {
-    "kind": "system",
-    "body": "DROP  TABLE IF EXISTS test_max_size_drop SYNC"
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_max_size_drop"
+    },
+    "ifExists": true
   },
   {
     "kind": "set",
@@ -90,14 +95,32 @@
     }
   },
   {
-    "kind": "system",
-    "body": "DROP  TABLE test_max_size_drop SETTINGS max_table_size_to_drop = 1",
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_max_size_drop"
+    },
+    "settings": [
+      {
+        "name": "max_table_size_to_drop",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
     "trailingComments": [
       "-- { serverError TABLE_SIZE_EXCEEDS_MAX_DROP_SIZE_LIMIT }"
     ]
   },
   {
-    "kind": "system",
-    "body": "DROP  TABLE test_max_size_drop SYNC"
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_max_size_drop"
+    }
   }
 ]

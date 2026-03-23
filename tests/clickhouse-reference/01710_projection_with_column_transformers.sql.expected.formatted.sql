@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists foo;
+DROP TABLE IF EXISTS foo;
 
 CREATE TABLE foo
 (
@@ -8,4 +8,4 @@ CREATE TABLE foo
 ENGINE = MergeTree
 ORDER BY bar;
 
-SYSTEM drop  table foo;
+DROP TABLE foo;

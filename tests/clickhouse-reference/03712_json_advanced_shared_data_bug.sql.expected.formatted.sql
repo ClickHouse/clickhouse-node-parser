@@ -1,6 +1,6 @@
 SET optimize_if_transform_strings_to_enum = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -18,4 +18,4 @@ SELECT
     c0.`^a`
 FROM t0;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

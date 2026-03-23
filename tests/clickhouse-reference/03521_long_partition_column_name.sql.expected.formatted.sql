@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_long_partition_column_name;
+DROP TABLE IF EXISTS t_long_partition_column_name;
 
 CREATE TABLE t_long_partition_column_name
 (

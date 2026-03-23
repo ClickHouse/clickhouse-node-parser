@@ -1,6 +1,6 @@
 SET mutations_sync = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -22,7 +22,7 @@ FROM test;
 SELECT DISTINCT arrayJoin(JSONSharedDataPaths(json))
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

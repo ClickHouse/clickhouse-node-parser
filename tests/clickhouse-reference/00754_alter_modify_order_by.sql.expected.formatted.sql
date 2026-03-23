@@ -2,7 +2,7 @@ SET send_logs_level = 'fatal';
 
 SET optimize_on_insert = 0;
 
-SYSTEM DROP  TABLE IF EXISTS no_order;
+DROP TABLE IF EXISTS no_order;
 
 CREATE TABLE no_order
 (
@@ -12,9 +12,9 @@ CREATE TABLE no_order
 ENGINE = MergeTree
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE no_order;
+DROP TABLE no_order;
 
-SYSTEM DROP  TABLE IF EXISTS old_style;
+DROP TABLE IF EXISTS old_style;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -25,9 +25,9 @@ CREATE TABLE old_style
 )
 ENGINE = MergeTree(d, x, 8192);
 
-SYSTEM DROP  TABLE old_style;
+DROP TABLE old_style;
 
-SYSTEM DROP  TABLE IF EXISTS summing;
+DROP TABLE IF EXISTS summing;
 
 CREATE TABLE summing
 (
@@ -52,4 +52,4 @@ ORDER BY
     y ASC,
     z ASC;
 
-SYSTEM DROP  TABLE summing;
+DROP TABLE summing;

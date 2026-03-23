@@ -1,6 +1,6 @@
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE IF EXISTS mergetree_00698;
+DROP TABLE IF EXISTS mergetree_00698;
 
 CREATE TABLE mergetree_00698
 (
@@ -18,4 +18,4 @@ FROM mergetree_00698;
 
 INSERT INTO mergetree_00698;
 
-SYSTEM DROP  TABLE mergetree_00698;
+DROP TABLE mergetree_00698;

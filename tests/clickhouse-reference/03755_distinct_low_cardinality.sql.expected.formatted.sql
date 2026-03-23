@@ -1,5 +1,5 @@
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS distinct_lc_basic;
+DROP TABLE IF EXISTS distinct_lc_basic;
 
 CREATE TABLE distinct_lc_basic
 (
@@ -44,7 +44,7 @@ SELECT (
             )
     );
 
-SYSTEM DROP  TABLE IF EXISTS distinct_lc_low_cardinality;
+DROP TABLE IF EXISTS distinct_lc_low_cardinality;
 
 CREATE TABLE distinct_lc_low_cardinality
 (
@@ -89,7 +89,7 @@ SELECT (
             )
     );
 
-SYSTEM DROP  TABLE IF EXISTS distinct_lc_nullable;
+DROP TABLE IF EXISTS distinct_lc_nullable;
 
 CREATE TABLE distinct_lc_nullable
 (
@@ -226,7 +226,7 @@ SELECT (
             )
     );
 
-SYSTEM DROP  TABLE IF EXISTS distinct_lc_mixed;
+DROP TABLE IF EXISTS distinct_lc_mixed;
 
 CREATE TABLE distinct_lc_mixed
 (
@@ -267,7 +267,7 @@ SELECT (
         FROM distinct_lc_mixed
     );
 
-SYSTEM DROP  TABLE IF EXISTS distinct_lc_all_same;
+DROP TABLE IF EXISTS distinct_lc_all_same;
 
 CREATE TABLE distinct_lc_all_same
 (
@@ -312,7 +312,7 @@ SELECT (
             )
     );
 
-SYSTEM DROP  TABLE IF EXISTS distinct_lc_sparse_nulls;
+DROP TABLE IF EXISTS distinct_lc_sparse_nulls;
 
 CREATE TABLE distinct_lc_sparse_nulls
 (

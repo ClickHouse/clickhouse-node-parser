@@ -3,11 +3,11 @@
 --- Tag no-async-insert: async inserts are not supported with non-parallel quorum inserts
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE IF EXISTS quorum1 SYNC;
+DROP TABLE IF EXISTS quorum1;
 
-SYSTEM DROP  TABLE IF EXISTS quorum2 SYNC;
+DROP TABLE IF EXISTS quorum2;
 
-SYSTEM DROP  TABLE IF EXISTS quorum3 SYNC;
+DROP TABLE IF EXISTS quorum3;
 
 CREATE TABLE quorum1
 (
@@ -60,8 +60,8 @@ FROM quorum2;
 SELECT count()
 FROM quorum3;
 
-SYSTEM DROP  TABLE quorum1 SYNC;
+DROP TABLE quorum1;
 
-SYSTEM DROP  TABLE quorum2 SYNC;
+DROP TABLE quorum2;
 
-SYSTEM DROP  TABLE quorum3 SYNC;
+DROP TABLE quorum3;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_tz_hour;
+DROP TABLE IF EXISTS test_tz_hour;
 
 CREATE TABLE test_tz_hour
 (
@@ -24,4 +24,4 @@ GROUP BY
     toHour_UTC,
     toHour_Israel;
 
-SYSTEM drop  table test_tz_hour;
+DROP TABLE test_tz_hour;

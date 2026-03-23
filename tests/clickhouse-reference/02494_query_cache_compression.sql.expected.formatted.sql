@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 -- Create test table with lot's of rows
 CREATE TABLE t
@@ -36,4 +36,4 @@ SETTINGS
     use_query_cache = true,
     query_cache_compress_entries = false;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

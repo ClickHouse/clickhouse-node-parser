@@ -1,7 +1,7 @@
 -- Tags: no-replicated-database
 -- no-replicated-database: read_rows in query_log differs because of replicated database.
 -- add_minmax_index_for_numeric_columns=0: Less read_rows
-SYSTEM DROP  TABLE IF EXISTS t_lwd_index SYNC;
+DROP TABLE IF EXISTS t_lwd_index;
 
 CREATE TABLE t_lwd_index
 (
@@ -25,4 +25,4 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE t_lwd_index;
+DROP TABLE t_lwd_index;

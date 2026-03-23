@@ -1,7 +1,7 @@
 -- add_minmax_index_for_numeric_columns=0: Different plan
-SYSTEM DROP  TABLE IF EXISTS alpha;
+DROP TABLE IF EXISTS alpha;
 
-SYSTEM DROP  TABLE IF EXISTS alpha__day;
+DROP TABLE IF EXISTS alpha__day;
 
 SET session_timezone = 'Etc/UTC';
 

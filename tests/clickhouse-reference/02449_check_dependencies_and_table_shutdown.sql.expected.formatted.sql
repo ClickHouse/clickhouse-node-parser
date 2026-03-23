@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS table;
+DROP TABLE IF EXISTS table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict;
+DROP DICTIONARY IF EXISTS dict;
 
-SYSTEM DROP  TABLE IF EXISTS view;
+DROP TABLE IF EXISTS view;
 
 CREATE TABLE view
 (
@@ -35,15 +35,15 @@ ORDER BY tuple();
 SELECT *
 FROM dictionary('dict');
 
-SYSTEM DROP  TABLE view; -- {serverError HAVE_DEPENDENT_OBJECTS}
+DROP TABLE view; -- {serverError HAVE_DEPENDENT_OBJECTS}
 
 -- check that table is not readonly
 INSERT INTO view;
 
-SYSTEM DROP  DICTIONARY dict; -- {serverError HAVE_DEPENDENT_OBJECTS}
+DROP DICTIONARY dict; -- {serverError HAVE_DEPENDENT_OBJECTS}
 
 SELECT *
 FROM dictionary('dict')
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE table;
+DROP TABLE table;

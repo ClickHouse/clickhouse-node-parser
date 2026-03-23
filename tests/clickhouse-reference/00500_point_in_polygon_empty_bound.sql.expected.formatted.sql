@@ -18,7 +18,7 @@ SELECT pointInPolygon((2.5, 2.5), [(0., 0.), (5., 0.), (10., 0.)], [(2., 2.), (3
 
 SELECT pointInPolygon((1., 1.), [(0., 0.), (5., 0.), (10., 0.)], [(2., 2.), (3., 3.), (3., 2.)]);
 
-SYSTEM DROP  TABLE IF EXISTS points_test;
+DROP TABLE IF EXISTS points_test;
 
 CREATE TABLE points_test
 (

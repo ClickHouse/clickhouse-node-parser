@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS pk_set;
+DROP TABLE IF EXISTS pk_set;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -58,4 +58,4 @@ WHERE host IN ('admin.market2', 'admin.market3', 'admin.market4', 'abc', 'news')
 -- better way:
 -- for i in {1..1000}; do echo "SELECT count() FROM pk_set WHERE host IN ('a'"$(seq 1 $i | sed -r "s/.+/,'\\0'/")") AND code = 100 AND n = 11;"; done > queries.tsv
 -- clickhouse-benchmark < queries.tsv
-SYSTEM DROP  TABLE pk_set;
+DROP TABLE pk_set;

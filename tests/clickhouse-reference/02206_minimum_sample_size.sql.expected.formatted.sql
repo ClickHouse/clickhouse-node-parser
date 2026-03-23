@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS minimum_sample_size_continuos;
+DROP TABLE IF EXISTS minimum_sample_size_continuos;
 
 CREATE TABLE minimum_sample_size_continuos
 (
@@ -18,7 +18,7 @@ CREATE TABLE minimum_sample_size_continuos
 )
 ENGINE = Memory();
 
-SYSTEM DROP  TABLE IF EXISTS minimum_sample_size_conversion;
+DROP TABLE IF EXISTS minimum_sample_size_conversion;
 
 CREATE TABLE minimum_sample_size_conversion
 (

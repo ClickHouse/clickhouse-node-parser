@@ -1,8 +1,8 @@
 -- Tags: long, no-random-merge-tree-settings, no-distributed-cache
 -- no-random-merge-tree-settings - times out in private
-SYSTEM DROP  TABLE IF EXISTS build;
+DROP TABLE IF EXISTS build;
 
-SYSTEM DROP  TABLE IF EXISTS skewed_probe;
+DROP TABLE IF EXISTS skewed_probe;
 
 SET session_timezone = 'UTC';
 

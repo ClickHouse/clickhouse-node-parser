@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS perf;
+DROP TABLE IF EXISTS perf;
 
 CREATE TABLE perf
 (
@@ -61,4 +61,4 @@ FROM (
             USING (site)
     );
 
-SYSTEM DROP  TABLE perf;
+DROP TABLE perf;

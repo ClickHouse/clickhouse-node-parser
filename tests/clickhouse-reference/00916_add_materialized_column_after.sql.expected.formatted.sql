@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS add_materialized_column_after;
+DROP TABLE IF EXISTS add_materialized_column_after;
 
 CREATE TABLE add_materialized_column_after
 (
@@ -8,4 +8,4 @@ CREATE TABLE add_materialized_column_after
 ENGINE = MergeTree
 ORDER BY x;
 
-SYSTEM DROP  TABLE add_materialized_column_after;
+DROP TABLE add_materialized_column_after;

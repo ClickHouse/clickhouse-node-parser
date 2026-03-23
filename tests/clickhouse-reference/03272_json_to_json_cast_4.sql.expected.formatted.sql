@@ -4,7 +4,7 @@ SET enable_analyzer = 1;
 
 SET output_format_native_write_json_as_string = 0;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -79,4 +79,4 @@ SELECT
     json2.k7
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

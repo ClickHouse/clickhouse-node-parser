@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_update_00806;
+DROP TABLE IF EXISTS alter_update_00806;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -17,4 +17,4 @@ SELECT e
 FROM alter_update_00806
 ORDER BY d ASC;
 
-SYSTEM DROP  TABLE alter_update_00806;
+DROP TABLE alter_update_00806;

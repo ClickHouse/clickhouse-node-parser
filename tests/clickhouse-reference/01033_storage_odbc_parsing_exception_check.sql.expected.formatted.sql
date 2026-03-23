@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS BannerDict;
+DROP TABLE IF EXISTS BannerDict;
 
 CREATE TABLE BannerDict
 (

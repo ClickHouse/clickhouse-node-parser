@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists proj;
+DROP TABLE IF EXISTS proj;
 
 CREATE TABLE proj
 (
@@ -15,4 +15,4 @@ SELECT max(date)
 FROM proj
 PREWHERE date != '2012-10-24';
 
-SYSTEM drop  table proj;
+DROP TABLE proj;

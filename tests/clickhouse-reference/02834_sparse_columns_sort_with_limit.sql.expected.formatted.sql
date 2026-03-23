@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_sort_limit;
+DROP TABLE IF EXISTS t_sparse_sort_limit;
 
 CREATE TABLE t_sparse_sort_limit
 (

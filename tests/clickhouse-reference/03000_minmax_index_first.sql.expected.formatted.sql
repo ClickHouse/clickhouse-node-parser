@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS skip_table;
+DROP TABLE IF EXISTS skip_table;
 
 CREATE TABLE skip_table
 (
@@ -26,4 +26,4 @@ FROM (
     )
 WHERE like(`explain`, '%Name%');
 
-SYSTEM DROP  TABLE skip_table;
+DROP TABLE skip_table;

@@ -10,4 +10,4 @@ FROM named_tuples
 FORMAT JSONEachRow
 SETTINGS output_format_json_named_tuples_as_objects = 1;
 
-SYSTEM drop  table named_tuples;
+DROP TABLE named_tuples;

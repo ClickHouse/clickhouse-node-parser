@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS collapsing_table;
+DROP TABLE IF EXISTS collapsing_table;
 
 SET optimize_on_insert = 0;
 
@@ -23,7 +23,7 @@ SELECT
     count()
 FROM collapsing_table;
 
-SYSTEM DROP  TABLE IF EXISTS collapsing_suspicious_granularity;
+DROP TABLE IF EXISTS collapsing_suspicious_granularity;
 
 CREATE TABLE collapsing_suspicious_granularity
 (

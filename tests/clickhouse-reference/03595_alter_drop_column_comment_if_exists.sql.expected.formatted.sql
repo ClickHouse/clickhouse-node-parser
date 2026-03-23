@@ -2,7 +2,7 @@
 -- Test for issue #85608: Logical Error when using DROP COLUMN and COMMENT COLUMN IF EXISTS in same ALTER
 -- This test verifies that COMMENT COLUMN IF EXISTS works correctly when the column is being dropped in the same ALTER statement
 -- Test with Memory engine
-SYSTEM DROP  TABLE IF EXISTS test_alter_drop_comment;
+DROP TABLE IF EXISTS test_alter_drop_comment;
 
 CREATE TABLE test_alter_drop_comment
 (
@@ -21,7 +21,7 @@ WHERE table = 'test_alter_drop_comment'
     AND database = currentDatabase()
 ORDER BY name ASC;
 
-SYSTEM DROP  TABLE test_alter_drop_comment;
+DROP TABLE test_alter_drop_comment;
 
 -- Test with different table engines
 -- Test with MergeTree
@@ -34,7 +34,7 @@ CREATE TABLE test_alter_drop_comment_mt
 ENGINE = MergeTree()
 ORDER BY id;
 
-SYSTEM DROP  TABLE test_alter_drop_comment_mt;
+DROP TABLE test_alter_drop_comment_mt;
 
 -- Test edge case: try to drop and comment the same column without IF EXISTS (should fail)
 CREATE TABLE test_alter_fail
@@ -44,4 +44,4 @@ CREATE TABLE test_alter_fail
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE test_alter_fail;
+DROP TABLE test_alter_fail;

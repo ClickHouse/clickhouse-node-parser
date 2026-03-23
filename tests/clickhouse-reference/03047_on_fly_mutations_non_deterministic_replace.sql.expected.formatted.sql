@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lightweight_mut_5;
+DROP TABLE IF EXISTS t_lightweight_mut_5;
 
 SET apply_mutations_on_fly = 1;
 
@@ -30,7 +30,7 @@ WHERE database = currentDatabase()
     AND NOT is_done
 ORDER BY command ASC;
 
-SYSTEM DROP  TABLE t_lightweight_mut_5;
+DROP TABLE t_lightweight_mut_5;
 
 -- SELECT groupArray(...)
 CREATE TABLE t_lightweight_mut_5

@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists test_left;
+DROP TABLE IF EXISTS test_left;
 
-SYSTEM drop  table if exists test_right;
+DROP TABLE IF EXISTS test_right;
 
 CREATE TABLE test_left
 (
@@ -50,6 +50,6 @@ FROM
 LEFT JOIN test_right
     ON test_left.b = test_right.b;
 
-SYSTEM drop  table test_left;
+DROP TABLE test_left;
 
-SYSTEM drop  table test_right;
+DROP TABLE test_right;

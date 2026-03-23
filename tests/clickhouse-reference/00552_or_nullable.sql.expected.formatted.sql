@@ -98,7 +98,7 @@ FROM (
         LIMIT 10
     );
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -124,4 +124,4 @@ SELECT x
 FROM test
 WHERE x != 1;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

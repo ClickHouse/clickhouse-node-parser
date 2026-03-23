@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS date_table;
+DROP TABLE IF EXISTS date_table;
 
 CREATE TABLE date_table
 (
@@ -18,7 +18,7 @@ INSERT INTO date_table;
 
 INSERT INTO date_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS range_dictionary;
+DROP DICTIONARY IF EXISTS range_dictionary;
 
 CREATE DICTIONARY range_dictionary
 (
@@ -83,9 +83,9 @@ ORDER BY
     StartDate ASC,
     EndDate ASC;
 
-SYSTEM DROP  DICTIONARY range_dictionary;
+DROP DICTIONARY range_dictionary;
 
-SYSTEM DROP  TABLE date_table;
+DROP TABLE date_table;
 
 CREATE TABLE date_table
 (
@@ -163,4 +163,4 @@ ORDER BY
     StartDate ASC,
     EndDate ASC;
 
-SYSTEM DROP  DICTIONARY range_dictionary_nullable;
+DROP DICTIONARY range_dictionary_nullable;

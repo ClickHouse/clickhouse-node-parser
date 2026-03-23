@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS too_many_parts;
+DROP TABLE IF EXISTS too_many_parts;
 
 CREATE TABLE too_many_parts
 (
@@ -26,4 +26,4 @@ FROM too_many_parts;
 INSERT INTO too_many_parts SELECT *
 FROM numbers(10); -- { serverError TOO_MANY_PARTS }
 
-SYSTEM DROP  TABLE too_many_parts;
+DROP TABLE too_many_parts;

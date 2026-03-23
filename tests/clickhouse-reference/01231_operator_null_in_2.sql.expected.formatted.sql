@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS null_in_subquery;
+DROP TABLE IF EXISTS null_in_subquery;
 
 CREATE TABLE null_in_subquery
 (
@@ -137,7 +137,7 @@ WHERE i GLOBAL NOT IN (
         WHERE dt = 2
     );
 
-SYSTEM DROP  TABLE IF EXISTS null_in_tuple;
+DROP TABLE IF EXISTS null_in_tuple;
 
 CREATE TABLE null_in_tuple
 (

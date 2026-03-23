@@ -1,5 +1,5 @@
 -- Tags: no-ordinary-database, no-fasttest
-SYSTEM DROP  TABLE IF EXISTS 03549_test SYNC;
+DROP TABLE IF EXISTS `03549_test`;
 
 CREATE TABLE `03549_test`
 (

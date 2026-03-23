@@ -37,4 +37,4 @@ FROM ts_raw_data;
 
 SET allow_experimental_ts_to_grid_aggregate_function = 1;
 
-SYSTEM DROP  TABLE ts_raw_data;
+DROP TABLE ts_raw_data;

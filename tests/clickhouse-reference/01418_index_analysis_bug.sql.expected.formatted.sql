@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mytable_local;
+DROP TABLE IF EXISTS mytable_local;
 
 CREATE TABLE mytable_local
 (
@@ -27,9 +27,9 @@ WHERE (toYYYYMM(eventday) = 202007)
 GROUP BY eventday
 ORDER BY eventday ASC;
 
-SYSTEM DROP  TABLE mytable_local;
+DROP TABLE mytable_local;
 
-SYSTEM DROP  TABLE IF EXISTS table_float;
+DROP TABLE IF EXISTS table_float;
 
 CREATE TABLE table_float
 (
@@ -48,4 +48,4 @@ WHERE (toUInt64(f) = 1)
     AND (f <= 1.4)
     AND (u > 0);
 
-SYSTEM DROP  TABLE table_float;
+DROP TABLE table_float;

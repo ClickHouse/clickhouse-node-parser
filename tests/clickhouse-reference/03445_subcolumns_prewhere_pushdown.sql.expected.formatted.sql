@@ -1,7 +1,7 @@
 -- Tags: no-parallel-replicas
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -51,4 +51,4 @@ FROM test
 WHERE json.a::Int64 < 4
 SETTINGS optimize_move_to_prewhere = 0;
 
-SYSTEM drop  table test;
+DROP TABLE test;

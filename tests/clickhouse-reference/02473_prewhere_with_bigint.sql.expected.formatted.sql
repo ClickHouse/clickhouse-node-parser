@@ -1,10 +1,10 @@
-SYSTEM DROP  TABLE IF EXISTS prewhere_int128;
+DROP TABLE IF EXISTS prewhere_int128;
 
-SYSTEM DROP  TABLE IF EXISTS prewhere_int256;
+DROP TABLE IF EXISTS prewhere_int256;
 
-SYSTEM DROP  TABLE IF EXISTS prewhere_uint128;
+DROP TABLE IF EXISTS prewhere_uint128;
 
-SYSTEM DROP  TABLE IF EXISTS prewhere_uint256;
+DROP TABLE IF EXISTS prewhere_uint256;
 
 CREATE TABLE prewhere_int128
 (
@@ -19,7 +19,7 @@ SELECT a
 FROM prewhere_int128
 PREWHERE a; -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }
 
-SYSTEM DROP  TABLE prewhere_int128;
+DROP TABLE prewhere_int128;
 
 CREATE TABLE prewhere_int256
 (
@@ -34,7 +34,7 @@ SELECT a
 FROM prewhere_int256
 PREWHERE a; -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }
 
-SYSTEM DROP  TABLE prewhere_int256;
+DROP TABLE prewhere_int256;
 
 CREATE TABLE prewhere_uint128
 (
@@ -49,7 +49,7 @@ SELECT a
 FROM prewhere_uint128
 PREWHERE a; -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }
 
-SYSTEM DROP  TABLE prewhere_uint128;
+DROP TABLE prewhere_uint128;
 
 CREATE TABLE prewhere_uint256
 (
@@ -64,4 +64,4 @@ SELECT a
 FROM prewhere_uint256
 PREWHERE a; -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }
 
-SYSTEM DROP  TABLE prewhere_uint256;
+DROP TABLE prewhere_uint256;

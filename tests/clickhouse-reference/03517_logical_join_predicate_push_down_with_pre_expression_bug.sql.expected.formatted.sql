@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists td;
+DROP TABLE IF EXISTS td;
 
-SYSTEM drop  table if exists tdt;
+DROP TABLE IF EXISTS tdt;
 
 CREATE TABLE td
 (

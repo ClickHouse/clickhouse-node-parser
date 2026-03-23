@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists my_table;
+DROP TABLE IF EXISTS my_table;
 
-SYSTEM drop  view if exists my_view;
+DROP VIEW IF EXISTS my_view;
 
 CREATE TABLE my_table
 (
@@ -15,6 +15,6 @@ AS
 SELECT * REPLACE (arrayMap(x -> x + 1, `Object.Key`) AS `Object.Key`)
 FROM my_table;
 
-SYSTEM drop  table my_table;
+DROP TABLE my_table;
 
-SYSTEM drop  view my_view;
+DROP VIEW my_view;

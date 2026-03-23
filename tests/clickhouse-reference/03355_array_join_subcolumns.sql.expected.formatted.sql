@@ -1,7 +1,7 @@
 -- Tags: no-parallel-replicas
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -24,4 +24,4 @@ FROM
     test
 ARRAY JOIN t.b;
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists pr_t;
+DROP TABLE IF EXISTS pr_t;
 
 CREATE TABLE pr_t
 (

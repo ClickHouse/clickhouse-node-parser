@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS events;
+DROP TABLE IF EXISTS events;
 
 CREATE TABLE events
 (
@@ -48,4 +48,4 @@ ORDER BY
     payload ASC,
     id ASC;
 
-SYSTEM DROP  TABLE events;
+DROP TABLE events;

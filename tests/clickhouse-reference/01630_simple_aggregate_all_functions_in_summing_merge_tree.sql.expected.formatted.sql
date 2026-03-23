@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS simple_agf_aggregating_mt;
+DROP TABLE IF EXISTS simple_agf_aggregating_mt;
 
 CREATE TABLE simple_agf_aggregating_mt
 (
@@ -165,4 +165,4 @@ INSERT INTO simple_agf_aggregating_mt SELECT
 FROM numbers(10000)
 GROUP BY a;
 
-SYSTEM DROP  TABLE simple_agf_aggregating_mt;
+DROP TABLE simple_agf_aggregating_mt;

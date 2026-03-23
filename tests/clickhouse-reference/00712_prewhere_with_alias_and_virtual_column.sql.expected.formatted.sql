@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tab_00712_1;
+DROP TABLE IF EXISTS tab_00712_1;
 
 CREATE TABLE tab_00712_1
 (
@@ -15,4 +15,4 @@ SELECT ignore(_part)
 FROM tab_00712_1
 PREWHERE b = 2;
 
-SYSTEM drop  table tab_00712_1;
+DROP TABLE tab_00712_1;

@@ -3,7 +3,7 @@
 -- add_minmax_index_for_numeric_columns=0: Adds more output to SHOW INDEX
 -- Create a test table and verify that the output of SHOW INDEXES is sane.
 -- The matching of actual/expected results relies on the fact that the output of SHOW INDEX is sorted.
-SYSTEM DROP  TABLE IF EXISTS tbl;
+DROP TABLE IF EXISTS tbl;
 
 CREATE TABLE tbl
 (
@@ -23,7 +23,7 @@ SETTINGS add_minmax_index_for_numeric_columns = 0;
 
 SELECT '--- Aliases of SHOW INDEX';
 
-SYSTEM DROP  TABLE IF EXISTS `$4@^7`;
+DROP TABLE IF EXISTS `$4@^7`;
 
 CREATE TABLE `$4@^7`
 (
@@ -33,9 +33,9 @@ ENGINE = MergeTree
 ORDER BY c
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
-SYSTEM DROP  TABLE `$4@^7`;
+DROP TABLE `$4@^7`;
 
-SYSTEM DROP  TABLE IF EXISTS NULL;
+DROP TABLE IF EXISTS `NULL`;
 
 CREATE TABLE `NULL`
 (
@@ -45,9 +45,9 @@ ENGINE = MergeTree
 ORDER BY c
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
-SYSTEM DROP  TABLE NULL;
+DROP TABLE `NULL`;
 
-SYSTEM DROP  TABLE IF EXISTS `tab.with.dots`;
+DROP TABLE IF EXISTS `tab.with.dots`;
 
 CREATE TABLE `tab.with.dots`
 (
@@ -65,9 +65,9 @@ ENGINE = MergeTree
 PRIMARY KEY (c, a)
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
-SYSTEM DROP  TABLE `tab.with.dots`;
+DROP TABLE `tab.with.dots`;
 
-SYSTEM DROP  DATABASE IF EXISTS `'`;
+DROP DATABASE IF EXISTS `'`;
 
 CREATE DATABASE `'`;
 
@@ -79,17 +79,17 @@ ENGINE = MergeTree
 ORDER BY c
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
-SYSTEM DROP  TABLE `'`.`'`;
+DROP TABLE `'`.`'`;
 
-SYSTEM DROP  DATABASE `'`;
+DROP DATABASE `'`;
 
 -- Create a table in a different database. Intentionally using the same table/column names as above so
 -- we notice if something is buggy in the implementation of SHOW INDEX.
-SYSTEM DROP  DATABASE IF EXISTS database_123456789abcde;
+DROP DATABASE IF EXISTS database_123456789abcde;
 
 CREATE DATABASE database_123456789abcde; -- pseudo-random database name
 
-SYSTEM DROP  TABLE IF EXISTS database_123456789abcde.tbl;
+DROP TABLE IF EXISTS database_123456789abcde.tbl;
 
 CREATE TABLE database_123456789abcde.tbl
 (
@@ -101,6 +101,6 @@ ENGINE = MergeTree
 PRIMARY KEY a
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
-SYSTEM DROP  DATABASE database_123456789abcde;
+DROP DATABASE database_123456789abcde;
 
-SYSTEM DROP  TABLE tbl;
+DROP TABLE tbl;

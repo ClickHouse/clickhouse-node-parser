@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists test_in_tuple_1;
+DROP TABLE IF EXISTS test_in_tuple_1;
 
-SYSTEM drop  table if exists test_in_tuple_2;
+DROP TABLE IF EXISTS test_in_tuple_2;
 
-SYSTEM drop  table if exists test_in_tuple;
+DROP TABLE IF EXISTS test_in_tuple;
 
 CREATE TABLE test_in_tuple_1
 (

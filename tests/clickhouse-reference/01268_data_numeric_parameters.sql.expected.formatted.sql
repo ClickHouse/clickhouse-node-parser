@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS ints;
+DROP TABLE IF EXISTS ints;
 
-SYSTEM DROP  TABLE IF EXISTS floats;
+DROP TABLE IF EXISTS floats;
 
-SYSTEM DROP  TABLE IF EXISTS strings;
+DROP TABLE IF EXISTS strings;
 
 CREATE TABLE ints
 (
@@ -66,8 +66,8 @@ SELECT
     toTypeName(b)
 FROM strings;
 
-SYSTEM DROP  TABLE floats;
+DROP TABLE floats;
 
-SYSTEM DROP  TABLE ints;
+DROP TABLE ints;
 
-SYSTEM DROP  TABLE strings;
+DROP TABLE strings;

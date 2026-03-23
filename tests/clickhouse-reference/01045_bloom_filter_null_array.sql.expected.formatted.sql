@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_null_array;
+DROP TABLE IF EXISTS bloom_filter_null_array;
 
 CREATE TABLE bloom_filter_null_array
 (

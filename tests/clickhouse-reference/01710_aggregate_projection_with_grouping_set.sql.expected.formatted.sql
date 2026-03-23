@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -70,4 +70,4 @@ ORDER BY
     dim2 ASC,
     count() ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

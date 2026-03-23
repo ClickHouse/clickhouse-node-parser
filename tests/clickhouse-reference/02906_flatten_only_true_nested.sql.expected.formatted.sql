@@ -1,6 +1,6 @@
 SET flatten_nested = 1;
 
-SYSTEM drop  table if exists test_nested;
+DROP TABLE IF EXISTS test_nested;
 
 CREATE TABLE test_nested
 (
@@ -8,9 +8,9 @@ CREATE TABLE test_nested
 )
 ENGINE = Memory;
 
-SYSTEM drop  table test_nested;
+DROP TABLE test_nested;
 
-SYSTEM drop  table if exists test_array_tuple;
+DROP TABLE IF EXISTS test_array_tuple;
 
 CREATE TABLE test_array_tuple
 (
@@ -18,4 +18,4 @@ CREATE TABLE test_array_tuple
 )
 ENGINE = Memory;
 
-SYSTEM drop  table test_array_tuple;
+DROP TABLE test_array_tuple;

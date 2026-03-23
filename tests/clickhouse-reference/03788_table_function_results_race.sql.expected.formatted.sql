@@ -1,10 +1,10 @@
 -- Test for data race in Context::executeTableFunction when multiple threads
 -- resolve the same table function concurrently (e.g., in materialized views).
-SYSTEM DROP  TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS mv;
 
-SYSTEM DROP  TABLE IF EXISTS dest;
+DROP TABLE IF EXISTS dest;
 
-SYSTEM DROP  TABLE IF EXISTS source;
+DROP TABLE IF EXISTS source;
 
 CREATE TABLE source
 (
@@ -49,8 +49,8 @@ FROM numbers(10000);
 SELECT count()
 FROM dest;
 
-SYSTEM DROP  TABLE mv;
+DROP TABLE mv;
 
-SYSTEM DROP  TABLE dest;
+DROP TABLE dest;
 
-SYSTEM DROP  TABLE source;
+DROP TABLE source;

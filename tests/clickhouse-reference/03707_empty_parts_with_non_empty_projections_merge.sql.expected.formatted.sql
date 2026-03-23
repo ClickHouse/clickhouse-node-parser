@@ -1,5 +1,5 @@
 -- { echoOn }
-SYSTEM drop  table if exists mt1;
+DROP TABLE IF EXISTS mt1;
 
 CREATE TABLE mt1
 (

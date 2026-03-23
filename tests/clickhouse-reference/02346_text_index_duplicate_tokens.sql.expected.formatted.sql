@@ -1,6 +1,6 @@
 -- Tags: no-parallel-replicas
 -- Tests queries with duplicate tokens against a text index
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 SET enable_analyzer = 1;
 
@@ -40,7 +40,7 @@ FROM (
     )
 WHERE like(`explain`, '%Filter column%');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

@@ -2,7 +2,7 @@ SET enable_analyzer = 1;
 
 SET optimize_syntax_fuse_functions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS fuse_tbl;
+DROP TABLE IF EXISTS fuse_tbl;
 
 CREATE TABLE fuse_tbl
 (
@@ -59,4 +59,4 @@ FROM (
         GROUP BY x
     );
 
-SYSTEM DROP  TABLE fuse_tbl;
+DROP TABLE fuse_tbl;

@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_a;
+DROP TABLE IF EXISTS test_a;
 
-SYSTEM DROP  TABLE IF EXISTS test_b;
+DROP TABLE IF EXISTS test_b;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -41,6 +41,6 @@ INNER JOIN (
     USING (OldColumn)
 PREWHERE NewColumn != '';
 
-SYSTEM DROP  TABLE test_a;
+DROP TABLE test_a;
 
-SYSTEM DROP  TABLE test_b;
+DROP TABLE test_b;

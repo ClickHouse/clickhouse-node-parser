@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS qbits;
+DROP TABLE IF EXISTS qbits;
 
 CREATE TABLE qbits
 (
@@ -17,7 +17,7 @@ SELECT *
 FROM qbits
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE qbits;
+DROP TABLE qbits;
 
 CREATE TABLE qbits
 (

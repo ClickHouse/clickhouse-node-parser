@@ -1,6 +1,6 @@
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS t_sparse_mutations_2;
+DROP TABLE IF EXISTS t_sparse_mutations_2;
 
 CREATE TABLE t_sparse_mutations_2
 (
@@ -35,4 +35,4 @@ SELECT
 FROM t_sparse_mutations_2
 WHERE s != '';
 
-SYSTEM DROP  TABLE t_sparse_mutations_2;
+DROP TABLE t_sparse_mutations_2;

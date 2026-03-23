@@ -3,7 +3,7 @@ SET optimize_move_to_prewhere = 1;
 
 SET convert_query_to_cnf = 0;
 
-SYSTEM DROP  TABLE IF EXISTS prewhere_move;
+DROP TABLE IF EXISTS prewhere_move;
 
 CREATE TABLE prewhere_move
 (
@@ -28,7 +28,7 @@ FROM (
 WHERE like(`explain`, '%Prewhere%')
     OR like(`explain`, '%Filter%');
 
-SYSTEM DROP  TABLE prewhere_move;
+DROP TABLE prewhere_move;
 
 CREATE TABLE prewhere_move
 (

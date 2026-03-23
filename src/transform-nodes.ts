@@ -4,6 +4,7 @@ import type {
   FromExpr,
   OrderByItem,
   CTE,
+  TableElement,
   ASTNodeKind,
   ASTNodeKindMap,
 } from './ast';
@@ -79,13 +80,14 @@ export interface NodePositionMap {
   parallelWith: Statement;
   insert: Statement;
   truncate: Statement;
+  drop: Statement;
 
   // CREATE TABLE element nodes
-  columnDef: import('./ast').TableElement;
-  constraintDef: import('./ast').TableElement;
-  indexDef: import('./ast').TableElement;
-  projectionDef: import('./ast').TableElement;
-  foreignKeyDef: import('./ast').TableElement;
+  columnDef: TableElement;
+  constraintDef: TableElement;
+  indexDef: TableElement;
+  projectionDef: TableElement;
+  foreignKeyDef: TableElement;
 }
 
 /**

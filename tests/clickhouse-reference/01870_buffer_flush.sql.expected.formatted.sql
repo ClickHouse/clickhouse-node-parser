@@ -1,7 +1,7 @@
 -- Tags: no-parallel
 -- Check that Buffer will be flushed before shutdown
 -- (via DETACH DATABASE)
-SYSTEM drop  database if exists db_01870;
+DROP DATABASE IF EXISTS db_01870;
 
 CREATE DATABASE db_01870;
 
@@ -25,4 +25,4 @@ LIMIT 5;
 SELECT count()
 FROM db_01870.a_data_01870;
 
-SYSTEM drop  database db_01870;
+DROP DATABASE db_01870;

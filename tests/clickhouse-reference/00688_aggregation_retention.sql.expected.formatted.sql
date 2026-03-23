@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS retention_test;
+DROP TABLE IF EXISTS retention_test;
 
 CREATE TABLE retention_test
 (
@@ -59,4 +59,4 @@ FROM (
         GROUP BY uid
     );
 
-SYSTEM DROP  TABLE retention_test;
+DROP TABLE retention_test;

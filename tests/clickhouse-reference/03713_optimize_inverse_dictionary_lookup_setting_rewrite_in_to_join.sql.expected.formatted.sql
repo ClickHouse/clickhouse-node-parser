@@ -9,9 +9,9 @@ SET optimize_or_like_chain = 0;
 -- Expect no rewrite of dictGet(...) = 'constant'
 SET rewrite_in_to_join = 1;
 
-SYSTEM DROP  DICTIONARY IF EXISTS colors;
+DROP DICTIONARY IF EXISTS colors;
 
-SYSTEM DROP  TABLE IF EXISTS ref_colors;
+DROP TABLE IF EXISTS ref_colors;
 
 CREATE TABLE ref_colors
 (
@@ -35,7 +35,7 @@ SOURCE(clickhouse(TABLE 'ref_colors'))
 LIFETIME(0)
 LAYOUT(HASHED());
 
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (

@@ -103,7 +103,7 @@ FROM (
             )
     );
 
-SYSTEM DROP  TABLE IF EXISTS test1;
+DROP TABLE IF EXISTS test1;
 
 CREATE TABLE test1
 (
@@ -148,7 +148,7 @@ FROM (
         FROM test1
     );
 
-SYSTEM DROP  TABLE IF EXISTS test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test2
 (

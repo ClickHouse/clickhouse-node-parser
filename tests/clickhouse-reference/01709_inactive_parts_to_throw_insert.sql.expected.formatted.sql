@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data_01709;
+DROP TABLE IF EXISTS data_01709;
 
 CREATE TABLE data_01709
 (
@@ -14,4 +14,4 @@ INSERT INTO data_01709;
 
 INSERT INTO data_01709; -- { serverError TOO_MANY_PARTS }
 
-SYSTEM drop  table data_01709;
+DROP TABLE data_01709;

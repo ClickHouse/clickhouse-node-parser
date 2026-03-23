@@ -10,7 +10,7 @@ ORDER BY
 SETTINGS enable_positional_arguments = 0;
 
 -- sensor table
-SYSTEM drop  table if exists ts;
+DROP TABLE IF EXISTS ts;
 
 CREATE TABLE ts
 (

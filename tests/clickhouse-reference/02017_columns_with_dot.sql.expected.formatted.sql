@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_with_dots;
+DROP TABLE IF EXISTS t_with_dots;
 
 CREATE TABLE t_with_dots
 (
@@ -14,7 +14,7 @@ INSERT INTO t_with_dots;
 SELECT *
 FROM t_with_dots;
 
-SYSTEM DROP  TABLE t_with_dots;
+DROP TABLE t_with_dots;
 
 CREATE TABLE t_with_dots
 (

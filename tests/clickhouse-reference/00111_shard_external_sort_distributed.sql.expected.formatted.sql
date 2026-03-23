@@ -12,7 +12,7 @@ SET max_execution_time = 300;
 
 SET max_execution_time_leaf = 300;
 
-SYSTEM DROP  TABLE IF EXISTS numbers10m;
+DROP TABLE IF EXISTS numbers10m;
 
 CREATE VIEW numbers10m
 AS
@@ -30,4 +30,4 @@ FROM remote('127.0.0.{2,3}', currentDatabase(), numbers10m)
 ORDER BY number * 1234567890123456789 ASC
 LIMIT 4999980, 20;
 
-SYSTEM DROP  TABLE numbers10m;
+DROP TABLE numbers10m;

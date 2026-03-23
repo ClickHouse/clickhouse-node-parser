@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_serialization_hints;
+DROP TABLE IF EXISTS t_serialization_hints;
 
 CREATE TABLE t_serialization_hints
 (
@@ -24,4 +24,4 @@ WHERE database = currentDatabase()
     AND table = 't_serialization_hints'
 ORDER BY name ASC;
 
-SYSTEM DROP  TABLE t_serialization_hints;
+DROP TABLE t_serialization_hints;

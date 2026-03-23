@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -32,4 +32,4 @@ WHERE database = currentDatabase()
 
 SELECT '-------------------------------------------------------------------------';
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

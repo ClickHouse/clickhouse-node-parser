@@ -1,6 +1,6 @@
 SET optimize_trivial_insert_select = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_sparse;
+DROP TABLE IF EXISTS t_sparse;
 
 CREATE TABLE t_sparse
 (
@@ -42,4 +42,4 @@ INSERT INTO t_sparse SELECT
     toString(number)
 FROM numbers(1, 100000);
 
-SYSTEM DROP  TABLE t_sparse;
+DROP TABLE t_sparse;

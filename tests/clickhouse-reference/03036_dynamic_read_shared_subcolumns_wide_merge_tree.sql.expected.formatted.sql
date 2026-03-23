@@ -7,7 +7,7 @@ SET allow_experimental_dynamic_type = 1;
 
 SET min_bytes_to_use_direct_io = 0; -- min_bytes_to_use_direct_io > 0 is broken
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -184,4 +184,4 @@ SELECT
 FROM test
 FORMAT Null;
 
-SYSTEM drop  table test;
+DROP TABLE test;

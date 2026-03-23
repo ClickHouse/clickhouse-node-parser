@@ -1,5 +1,5 @@
 -- Tags: no-random-merge-tree-settings, no-random-settings, no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS index_test;
+DROP TABLE IF EXISTS index_test;
 
 CREATE TABLE index_test
 (

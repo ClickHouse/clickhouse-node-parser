@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -28,4 +28,4 @@ ORDER BY
     s ASC
 LIMIT 30;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

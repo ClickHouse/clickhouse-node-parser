@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists replacing;
+DROP TABLE IF EXISTS replacing;
 
 CREATE TABLE replacing
 (
@@ -26,4 +26,4 @@ INSERT INTO replacing;
 SELECT *
 FROM replacing;
 
-SYSTEM drop  table replacing;
+DROP TABLE replacing;

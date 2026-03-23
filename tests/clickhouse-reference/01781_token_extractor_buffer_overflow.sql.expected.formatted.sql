@@ -1,6 +1,6 @@
 SET max_block_size = 10, min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0, max_threads = 20;
 
-SYSTEM DROP  TABLE IF EXISTS bloom_filter;
+DROP TABLE IF EXISTS bloom_filter;
 
 CREATE TABLE bloom_filter
 (
@@ -25,4 +25,4 @@ SELECT max(id)
 FROM bloom_filter
 WHERE hasToken(s, 'abcabcabcabcabcabcabcab\0');
 
-SYSTEM DROP  TABLE bloom_filter;
+DROP TABLE bloom_filter;

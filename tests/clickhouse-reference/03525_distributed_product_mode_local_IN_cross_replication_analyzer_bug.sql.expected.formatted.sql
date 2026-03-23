@@ -3,11 +3,11 @@ CREATE DATABASE IF NOT EXISTS shard_0;
 
 CREATE DATABASE IF NOT EXISTS shard_1;
 
-SYSTEM drop  table if exists shard_0.test;
+DROP TABLE IF EXISTS shard_0.test;
 
-SYSTEM drop  table if exists shard_1.test;
+DROP TABLE IF EXISTS shard_1.test;
 
-SYSTEM drop  table if exists test_dist;
+DROP TABLE IF EXISTS test_dist;
 
 CREATE TABLE shard_0.test
 (

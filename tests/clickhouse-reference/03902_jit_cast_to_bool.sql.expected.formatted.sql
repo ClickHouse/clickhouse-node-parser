@@ -5,7 +5,7 @@ SET compile_expressions = 1;
 
 SET min_count_to_compile_expression = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_jit_bool;
+DROP TABLE IF EXISTS test_jit_bool;
 
 CREATE TABLE test_jit_bool
 (
@@ -38,4 +38,4 @@ FROM test_jit_bool
 WHERE a < 5
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE test_jit_bool;
+DROP TABLE test_jit_bool;

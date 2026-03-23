@@ -34,7 +34,7 @@ SELECT flipCoordinates(readWkt('POLYGON((-180 -90, 180 -90, 180 90, -180 90, -18
 SELECT flipCoordinates(materialize(readWkt('POINT(5 10)')))
 FROM numbers(3);
 
-SYSTEM DROP  TABLE IF EXISTS test_geom;
+DROP TABLE IF EXISTS test_geom;
 
 CREATE TABLE test_geom
 (
@@ -51,4 +51,4 @@ SELECT
 FROM test_geom
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_geom;
+DROP TABLE test_geom;

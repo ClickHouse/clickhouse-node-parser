@@ -10,7 +10,7 @@ SET optimize_aggregation_in_order = 1;
 
 SET max_block_size = 1000;
 
-SYSTEM DROP  TABLE IF EXISTS join_on_disk;
+DROP TABLE IF EXISTS join_on_disk;
 
 CREATE TABLE join_on_disk
 (
@@ -36,4 +36,4 @@ LEFT JOIN (
     USING (id)
 FORMAT Null;
 
-SYSTEM DROP  TABLE join_on_disk;
+DROP TABLE join_on_disk;

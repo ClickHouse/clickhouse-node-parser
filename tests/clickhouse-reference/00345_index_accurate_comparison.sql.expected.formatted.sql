@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS index;
+DROP TABLE IF EXISTS index;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -26,4 +26,4 @@ SELECT *
 FROM index
 WHERE key < -0.5;
 
-SYSTEM DROP  TABLE index;
+DROP TABLE index;

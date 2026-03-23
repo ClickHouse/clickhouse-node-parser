@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nested_test;
+DROP TABLE IF EXISTS nested_test;
 
 CREATE TABLE nested_test
 (
@@ -74,4 +74,4 @@ FROM
     nested_test
 ARRAY JOIN nest AS n, arrayEnumerate(nest.x) AS num;
 
-SYSTEM DROP  TABLE nested_test;
+DROP TABLE nested_test;

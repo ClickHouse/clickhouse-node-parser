@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS desc_pk;
+DROP TABLE IF EXISTS desc_pk;
 
 CREATE TABLE desc_pk
 (
@@ -17,4 +17,4 @@ SELECT
     max(a)
 FROM desc_pk;
 
-SYSTEM DROP  TABLE desc_pk;
+DROP TABLE desc_pk;

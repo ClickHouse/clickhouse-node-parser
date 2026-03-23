@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -17,4 +17,4 @@ SELECT count(*)
 FROM t
 WHERE like(k, 'dst%kkkk');
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

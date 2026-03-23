@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ttl_with_default;
+DROP TABLE IF EXISTS ttl_with_default;
 
 CREATE TABLE ttl_with_default
 (
@@ -17,4 +17,4 @@ SELECT a
 FROM ttl_with_default
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE ttl_with_default;
+DROP TABLE ttl_with_default;

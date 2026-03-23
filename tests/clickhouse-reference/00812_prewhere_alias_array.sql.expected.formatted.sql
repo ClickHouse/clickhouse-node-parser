@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS prewhere;
+DROP TABLE IF EXISTS `prewhere`;
 
 CREATE TABLE `prewhere`
 (
@@ -14,4 +14,4 @@ FROM `prewhere`
 PREWHERE (length(s) >= 1) = 0
 WHERE NOT ignore(y);
 
-SYSTEM DROP  TABLE prewhere;
+DROP TABLE `prewhere`;

@@ -1,6 +1,6 @@
 -- Tags: no-fasttest, no-ordinary-database
 -- Tests that vector similarity indexes cannot be created with index_granularity_bytes = 0
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 -- If adaptive index granularity is disabled, certain vector search queries with PREWHERE run into LOGICAL_ERRORs.
 --     CREATE TABLE tab (`id` Int32, `vec` Array(Float32), INDEX idx vec TYPE  vector_similarity('hnsw', 'L2Distance') GRANULARITY 100000000) ENGINE = MergeTree ORDER BY id SETTINGS index_granularity_bytes = 0;
@@ -26,4 +26,4 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity_bytes = 0;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_join_remote_l;
+DROP TABLE IF EXISTS test_join_remote_l;
 
-SYSTEM DROP  TABLE IF EXISTS test_join_remote_r;
+DROP TABLE IF EXISTS test_join_remote_r;
 
 CREATE TABLE test_join_remote_l
 (
@@ -124,6 +124,6 @@ FROM
 RIGHT JOIN test_join_remote_r AS y
     ON true;
 
-SYSTEM DROP  TABLE test_join_remote_l;
+DROP TABLE test_join_remote_l;
 
-SYSTEM DROP  TABLE test_join_remote_r;
+DROP TABLE test_join_remote_r;

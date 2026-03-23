@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -16,4 +16,4 @@ INSERT INTO test_table;
 SELECT MAX(1)
 FROM test_table;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

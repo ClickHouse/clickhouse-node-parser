@@ -1,19 +1,19 @@
 -- Ensure that sparse columns does not leads to any errors/warnings while pushing via Distributed
-SYSTEM drop  table if exists sparse;
+DROP TABLE IF EXISTS sparse;
 
-SYSTEM drop  table if exists intermediate;
+DROP TABLE IF EXISTS intermediate;
 
-SYSTEM drop  table if exists non_sparse;
+DROP TABLE IF EXISTS non_sparse;
 
-SYSTEM drop  table if exists non_sparse_remote;
+DROP TABLE IF EXISTS non_sparse_remote;
 
-SYSTEM drop  table if exists mv_non_sparse;
+DROP TABLE IF EXISTS mv_non_sparse;
 
-SYSTEM drop  table if exists log;
+DROP TABLE IF EXISTS log;
 
-SYSTEM drop  table if exists log_remote;
+DROP TABLE IF EXISTS log_remote;
 
-SYSTEM drop  table if exists mv_log;
+DROP TABLE IF EXISTS mv_log;
 
 CREATE TABLE sparse
 (

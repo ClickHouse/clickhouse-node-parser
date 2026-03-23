@@ -1,8 +1,8 @@
-SYSTEM DROP  ROW POLICY IF EXISTS test_filter_policy ON test_table;
+DROP ROW POLICY IF EXISTS test_filter_policy ON test_table;
 
-SYSTEM DROP  ROW POLICY IF EXISTS test_filter_policy_2 ON test_table;
+DROP ROW POLICY IF EXISTS test_filter_policy_2 ON test_table;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -56,8 +56,8 @@ FROM test_table
 PREWHERE 7 / ((n % 5)) > 2
 WHERE (n % 33) == 0;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  ROW POLICY test_filter_policy ON test_table;
+DROP ROW POLICY test_filter_policy ON test_table;
 
-SYSTEM DROP  ROW POLICY test_filter_policy_2 ON test_table;
+DROP ROW POLICY test_filter_policy_2 ON test_table;

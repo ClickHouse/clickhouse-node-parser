@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS select_final;
+DROP TABLE IF EXISTS select_final;
 
 SET allow_asynchronous_read_from_io_pool_for_merge_tree = 0;
 
@@ -73,4 +73,4 @@ FROM numbers(500000);
 SELECT max(x)
 FROM select_final FINAL;
 
-SYSTEM DROP  TABLE select_final;
+DROP TABLE select_final;

@@ -51,7 +51,7 @@ SELECT sqidEncode(toNullable(materialize(1)), toLowCardinality(materialize(2)));
 
 SELECT sqidDecode('invalid sqid');
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -68,6 +68,6 @@ SELECT sqidDecode(id)
 FROM tab
 FORMAT Null;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 SELECT sqid(1, 2);

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists ipv6_test26473;
+DROP TABLE IF EXISTS ipv6_test26473;
 
 CREATE TABLE ipv6_test26473
 (
@@ -21,4 +21,4 @@ SELECT
     cutIPv6(ipv6, 10, 1)
 FROM ipv6_test26473;
 
-SYSTEM drop  table ipv6_test26473;
+DROP TABLE ipv6_test26473;

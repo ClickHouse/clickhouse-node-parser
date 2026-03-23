@@ -1,6 +1,6 @@
 SELECT arrayExists(x -> ((x.1) = 'pattern'), CAST([tuple('a', 1)] AS Array(Tuple(LowCardinality(String), UInt8))));
 
-SYSTEM DROP  TABLE IF EXISTS table;
+DROP TABLE IF EXISTS table;
 
 CREATE TABLE table
 (

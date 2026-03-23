@@ -1,6 +1,6 @@
 SELECT '-------- Bloom filter --------';
 
-SYSTEM DROP  TABLE IF EXISTS 03165_token_bf;
+DROP TABLE IF EXISTS `03165_token_bf`;
 
 SET enable_full_text_index = 1;
 
@@ -134,7 +134,7 @@ WHERE multiSearchAny(message, [' wx ', 'yz']);
 
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS 03165_token_ft;
+DROP TABLE IF EXISTS `03165_token_ft`;
 
 CREATE TABLE `03165_token_ft`
 (

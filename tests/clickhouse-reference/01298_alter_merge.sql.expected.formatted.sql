@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists merge;
+DROP TABLE IF EXISTS merge;
 
-SYSTEM drop  table if exists merge1;
+DROP TABLE IF EXISTS merge1;
 
-SYSTEM drop  table if exists merge2;
+DROP TABLE IF EXISTS merge2;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -62,8 +62,8 @@ FROM merge
 WHERE dummy1 <> ''
 LIMIT 10;
 
-SYSTEM drop  table merge;
+DROP TABLE merge;
 
-SYSTEM drop  table merge1;
+DROP TABLE merge1;
 
-SYSTEM drop  table merge2;
+DROP TABLE merge2;

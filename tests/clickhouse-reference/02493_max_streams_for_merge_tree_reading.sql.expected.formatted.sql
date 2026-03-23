@@ -1,7 +1,7 @@
 -- Tags: no-random-merge-tree-settings
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -175,4 +175,4 @@ FROM (
 WHERE like(`explain`, '%Resize%');
 
 -- { echoOff }
-SYSTEM drop  table t;
+DROP TABLE t;

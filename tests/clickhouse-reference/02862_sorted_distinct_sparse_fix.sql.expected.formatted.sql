@@ -1,6 +1,6 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
-SYSTEM DROP  TABLE IF EXISTS t_sparse_distinct;
+DROP TABLE IF EXISTS t_sparse_distinct;
 
 CREATE TABLE t_sparse_distinct
 (
@@ -50,4 +50,4 @@ SELECT DISTINCT
 FROM t_sparse_distinct
 FORMAT Null;
 
-SYSTEM DROP  TABLE t_sparse_distinct;
+DROP TABLE t_sparse_distinct;

@@ -1,10 +1,10 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01913_db;
+DROP DATABASE IF EXISTS `01913_db`;
 
 CREATE DATABASE `01913_db`
 ENGINE = Atomic;
 
-SYSTEM DROP  TABLE IF EXISTS 01913_db.test_source_table_1;
+DROP TABLE IF EXISTS `01913_db`.test_source_table_1;
 
 CREATE TABLE `01913_db`.test_source_table_1
 (
@@ -15,7 +15,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `01913_db`.test_source_table_1;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 01913_db.test_dictionary;
+DROP DICTIONARY IF EXISTS `01913_db`.test_dictionary;
 
 CREATE DICTIONARY `01913_db`.test_dictionary
 (
@@ -29,7 +29,7 @@ LAYOUT(DIRECT());
 SELECT *
 FROM `01913_db`.test_dictionary;
 
-SYSTEM DROP  TABLE IF EXISTS 01913_db.test_source_table_2;
+DROP TABLE IF EXISTS `01913_db`.test_source_table_2;
 
 CREATE TABLE `01913_db`.test_source_table_2
 (
@@ -40,10 +40,10 @@ ENGINE = TinyLog;
 
 INSERT INTO `01913_db`.test_source_table_2;
 
-SYSTEM DROP  DICTIONARY 01913_db.test_dictionary;
+DROP DICTIONARY `01913_db`.test_dictionary;
 
-SYSTEM DROP  TABLE 01913_db.test_source_table_1;
+DROP TABLE `01913_db`.test_source_table_1;
 
-SYSTEM DROP  TABLE 01913_db.test_source_table_2;
+DROP TABLE `01913_db`.test_source_table_2;
 
-SYSTEM DROP  DATABASE 01913_db;
+DROP DATABASE `01913_db`;

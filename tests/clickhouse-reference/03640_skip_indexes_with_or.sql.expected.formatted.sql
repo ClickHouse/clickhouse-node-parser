@@ -11,7 +11,7 @@ SET use_skip_indexes_on_data_read = 0;
 
 SET use_skip_indexes = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -124,7 +124,7 @@ WHERE (v1 = 1
     AND v2 = 1001)
 SETTINGS max_rows_to_read = 384;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

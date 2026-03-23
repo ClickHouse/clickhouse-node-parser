@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS t_length_1;
+DROP TABLE IF EXISTS t_length_1;
 
-SYSTEM DROP  TABLE IF EXISTS t_length_2;
+DROP TABLE IF EXISTS t_length_2;
 
 SET optimize_functions_to_subcolumns = 1;
 
@@ -49,6 +49,6 @@ WHERE length(arr) IN (
         FROM t_length_2 FINAL
     );
 
-SYSTEM DROP  TABLE t_length_1;
+DROP TABLE t_length_1;
 
-SYSTEM DROP  TABLE t_length_2;
+DROP TABLE t_length_2;

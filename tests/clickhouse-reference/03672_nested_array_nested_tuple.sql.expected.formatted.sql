@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nest;
+DROP TABLE IF EXISTS nest;
 
 CREATE TABLE nest
 (
@@ -12,7 +12,7 @@ INSERT INTO nest (nested_field.e1);
 SELECT *
 FROM nest;
 
-SYSTEM DROP  TABLE IF EXISTS nest_2;
+DROP TABLE IF EXISTS nest_2;
 
 CREATE TABLE nest_2
 (

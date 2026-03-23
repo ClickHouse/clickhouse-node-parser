@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS array;
+DROP TABLE IF EXISTS `array`;
 
 CREATE TABLE `array`
 (
@@ -20,4 +20,4 @@ SELECT *
 FROM `array`
 WHERE arr > [null, 12];
 
-SYSTEM DROP  TABLE array;
+DROP TABLE `array`;

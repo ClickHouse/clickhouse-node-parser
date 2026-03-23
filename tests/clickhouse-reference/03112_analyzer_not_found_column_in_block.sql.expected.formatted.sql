@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/54511
-SYSTEM DROP  TABLE IF EXISTS my_first_table;
+DROP TABLE IF EXISTS my_first_table;
 
 CREATE TABLE my_first_table
 (

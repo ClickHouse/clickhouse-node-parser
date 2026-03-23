@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS uin_value_details;
+DROP TABLE IF EXISTS uin_value_details;
 
 CREATE TABLE uin_value_details
 (

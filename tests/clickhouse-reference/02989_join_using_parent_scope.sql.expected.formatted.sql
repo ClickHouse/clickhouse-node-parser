@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tabc;
+DROP TABLE IF EXISTS tabc;
 
 CREATE TABLE tabc
 (
@@ -15,7 +15,7 @@ INSERT INTO tabc (a, s) SELECT
     concat('abc', toString(number))
 FROM numbers(4);
 
-SYSTEM DROP  TABLE IF EXISTS ta;
+DROP TABLE IF EXISTS ta;
 
 CREATE TABLE ta
 (
@@ -27,7 +27,7 @@ ORDER BY tuple();
 INSERT INTO ta SELECT number
 FROM numbers(4);
 
-SYSTEM DROP  TABLE IF EXISTS tb;
+DROP TABLE IF EXISTS tb;
 
 CREATE TABLE tb
 (
@@ -277,7 +277,7 @@ SETTINGS
     enable_analyzer = 1;
 
 -- This is example where query may return different results with different `analyzer_compatibility_join_using_top_level_identifier`
-SYSTEM DROP  TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users
 (
@@ -330,4 +330,4 @@ ORDER BY u1.uid ASC
 FORMAT TSVWithNamesAndTypes
 SETTINGS enable_analyzer = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tc;
+DROP TABLE IF EXISTS tc;

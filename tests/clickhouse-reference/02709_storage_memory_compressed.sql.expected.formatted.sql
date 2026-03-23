@@ -1,5 +1,5 @@
 -- Tags: memory-engine
-SYSTEM DROP  TABLE IF EXISTS t_memory_compressed;
+DROP TABLE IF EXISTS t_memory_compressed;
 
 CREATE TABLE t_memory_compressed
 (
@@ -19,4 +19,4 @@ SELECT *
 FROM t_memory_compressed
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_memory_compressed;
+DROP TABLE t_memory_compressed;

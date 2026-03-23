@@ -1,5 +1,5 @@
 -- Tags: zookeeper
-SYSTEM DROP  TABLE IF EXISTS t_remove_sample_by;
+DROP TABLE IF EXISTS t_remove_sample_by;
 
 CREATE TABLE t_remove_sample_by
 (
@@ -12,7 +12,7 @@ SAMPLE BY id;
 SELECT *
 FROM t_remove_sample_by SAMPLE 1/10; -- { serverError SAMPLING_NOT_SUPPORTED }
 
-SYSTEM DROP  TABLE t_remove_sample_by;
+DROP TABLE t_remove_sample_by;
 
 CREATE TABLE t_remove_sample_by
 (

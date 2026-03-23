@@ -3,9 +3,9 @@ SET send_logs_level = 'fatal';
 
 SET allow_suspicious_codecs = 1;
 
-SYSTEM DROP  TABLE IF EXISTS compression_codec_replicated1;
+DROP TABLE IF EXISTS compression_codec_replicated1;
 
-SYSTEM DROP  TABLE IF EXISTS compression_codec_replicated2;
+DROP TABLE IF EXISTS compression_codec_replicated2;
 
 CREATE TABLE compression_codec_replicated1
 (
@@ -57,9 +57,9 @@ FROM compression_codec_replicated2
 WHERE id = 2
 GROUP BY id;
 
-SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple_replicated1;
+DROP TABLE IF EXISTS compression_codec_multiple_replicated1;
 
-SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple_replicated2;
+DROP TABLE IF EXISTS compression_codec_multiple_replicated2;
 
 SET network_compression_method = 'lz4hc';
 
@@ -125,7 +125,7 @@ FROM compression_codec_multiple_replicated2;
 SELECT sum(cityHash64(*))
 FROM compression_codec_multiple_replicated1;
 
-SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple_more_types_replicated;
+DROP TABLE IF EXISTS compression_codec_multiple_more_types_replicated;
 
 CREATE TABLE compression_codec_multiple_more_types_replicated
 (
@@ -144,7 +144,7 @@ SELECT *
 FROM compression_codec_multiple_more_types_replicated
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE IF EXISTS compression_codec_multiple_with_key_replicated;
+DROP TABLE IF EXISTS compression_codec_multiple_with_key_replicated;
 
 SET network_compression_method = 'zstd';
 
@@ -178,4 +178,4 @@ SELECT COUNTDistinct(data)
 FROM compression_codec_multiple_with_key_replicated
 WHERE id < 222;
 
-SYSTEM DROP  TABLE compression_codec_multiple_more_types_replicated;
+DROP TABLE compression_codec_multiple_more_types_replicated;

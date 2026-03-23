@@ -3,7 +3,7 @@
 -- no-shared-merge-tree: doesn't support databases without UUID
 -- Testcase for https://github.com/ClickHouse/ClickHouse/issues/92863
 -- Tables/parts without UUID should not enter into the query condition cache.
-SYSTEM DROP  DATABASE IF EXISTS memory_db;
+DROP DATABASE IF EXISTS memory_db;
 
 CREATE DATABASE memory_db
 ENGINE = Memory;
@@ -38,6 +38,6 @@ SELECT count(*)
 FROM tab
 WHERE val = 24; -- 1 match
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
-SYSTEM DROP  DATABASE memory_db;
+DROP DATABASE memory_db;

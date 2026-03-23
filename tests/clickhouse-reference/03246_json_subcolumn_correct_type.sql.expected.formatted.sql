@@ -4,7 +4,7 @@ SET enable_analyzer = 1;
 
 SET allow_dynamic_type_in_join_keys = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -25,4 +25,4 @@ FROM
 FULL JOIN test
     ON test.json.Float32 = tx.c0;
 
-SYSTEM drop  table test;
+DROP TABLE test;

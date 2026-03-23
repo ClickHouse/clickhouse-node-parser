@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tbl;
+DROP TABLE IF EXISTS tbl;
 
 CREATE TABLE tbl
 (
@@ -26,4 +26,4 @@ SELECT *
 FROM tbl
 FORMAT TabSeparatedWithNamesAndTypes;
 
-SYSTEM DROP  TABLE tbl;
+DROP TABLE tbl;

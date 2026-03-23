@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM drop  table if exists lc_00688;
+DROP TABLE IF EXISTS lc_00688;
 
 CREATE TABLE lc_00688
 (
@@ -52,7 +52,7 @@ SELECT
     )
 FROM lc_00688;
 
-SYSTEM drop  table if exists ary_lc_null;
+DROP TABLE IF EXISTS ary_lc_null;
 
 CREATE TABLE ary_lc_null
 (

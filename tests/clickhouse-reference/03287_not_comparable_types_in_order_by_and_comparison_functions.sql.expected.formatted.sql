@@ -1,6 +1,6 @@
 SET enable_json_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -36,4 +36,4 @@ FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 SELECT agg1 != agg2
 FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SYSTEM drop  table test;
+DROP TABLE test;

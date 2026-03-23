@@ -1,5 +1,5 @@
 -- Tags: no-fasttest, no-msan
-SYSTEM drop  table if exists dummy;
+DROP TABLE IF EXISTS dummy;
 
 CREATE TABLE dummy
 (
@@ -25,4 +25,4 @@ FROM dummy
 GROUP BY num2;
 
 -- { echoOff }
-SYSTEM drop  table dummy;
+DROP TABLE dummy;

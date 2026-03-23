@@ -2,7 +2,7 @@ SET enable_analyzer = 1;
 
 SET optimize_functions_to_subcolumns = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -16,4 +16,4 @@ SELECT count()
 FROM test
 WHERE notEmpty(a.x);
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

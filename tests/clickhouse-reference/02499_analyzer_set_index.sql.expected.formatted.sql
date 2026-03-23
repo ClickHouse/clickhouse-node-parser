@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -32,4 +32,4 @@ INNER JOIN (
 WHERE t1.value = '1'
 SETTINGS force_data_skipping_indices = 'value_idx';
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

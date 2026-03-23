@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_subcolumns_if;
+DROP TABLE IF EXISTS t_subcolumns_if;
 
 CREATE TABLE t_subcolumns_if
 (

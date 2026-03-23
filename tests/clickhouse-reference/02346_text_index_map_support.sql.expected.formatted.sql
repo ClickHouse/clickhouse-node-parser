@@ -4,7 +4,7 @@ SET enable_analyzer = 1;
 
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -55,7 +55,7 @@ SELECT count()
 FROM tab
 WHERE mapContains(map_fixed, toFixedString('K3', 2));
 
-SYSTEM DROP  VIEW IF EXISTS explain_index_mapContains;
+DROP VIEW IF EXISTS explain_index_mapContains;
 
 CREATE VIEW explain_index_mapContains
 AS
@@ -127,7 +127,7 @@ SELECT count()
 FROM tab
 WHERE map_fixed[toFixedString('K3', 2)] = 'V3';
 
-SYSTEM DROP  VIEW IF EXISTS explain_index_equals;
+DROP VIEW IF EXISTS explain_index_equals;
 
 CREATE VIEW explain_index_equals
 AS
@@ -199,7 +199,7 @@ SELECT count()
 FROM tab
 WHERE has(map_fixed, toFixedString('K3', 2));
 
-SYSTEM DROP  VIEW IF EXISTS explain_index_has;
+DROP VIEW IF EXISTS explain_index_has;
 
 CREATE VIEW explain_index_has
 AS
@@ -271,7 +271,7 @@ SELECT count()
 FROM tab
 WHERE hasAnyTokens(mapKeys(map_fixed), 'K3 K4');
 
-SYSTEM DROP  VIEW IF EXISTS explain_index_has_any_tokens;
+DROP VIEW IF EXISTS explain_index_has_any_tokens;
 
 CREATE VIEW explain_index_has_any_tokens
 AS
@@ -343,7 +343,7 @@ SELECT count()
 FROM tab
 WHERE hasAllTokens(mapKeys(map_fixed), 'K3 K4');
 
-SYSTEM DROP  VIEW IF EXISTS explain_index_has_all_tokens;
+DROP VIEW IF EXISTS explain_index_has_all_tokens;
 
 CREATE VIEW explain_index_has_all_tokens
 AS
@@ -383,11 +383,11 @@ FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'K2 K3');
 SELECT *
 FROM explain_index_has_all_tokens(use_idx_fixed = 1, filter = 'K3 K4');
 
-SYSTEM DROP  VIEW explain_index_has_any_tokens;
+DROP VIEW explain_index_has_any_tokens;
 
-SYSTEM DROP  VIEW explain_index_has_all_tokens;
+DROP VIEW explain_index_has_all_tokens;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (
@@ -681,7 +681,7 @@ FROM tab
 WHERE mapContainsValueLike(map_fixed, '% q %');
 
 -- 
-SYSTEM DROP  VIEW IF EXISTS explain_index_key_like;
+DROP VIEW IF EXISTS explain_index_key_like;
 
 CREATE VIEW explain_index_key_like
 AS
@@ -697,7 +697,7 @@ WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Granules:%')
 LIMIT 2, 3);
 
-SYSTEM DROP  VIEW IF EXISTS explain_index_value_like;
+DROP VIEW IF EXISTS explain_index_value_like;
 
 CREATE VIEW explain_index_value_like
 AS
@@ -749,12 +749,12 @@ FROM explain_index_value_like(col = 'map_fixed', pattern = '% q %');
 SELECT *
 FROM explain_index_value_like(col = 'map_fixed', pattern = '% k %');
 
-SYSTEM DROP  VIEW explain_index_mapContains;
+DROP VIEW explain_index_mapContains;
 
-SYSTEM DROP  VIEW explain_index_equals;
+DROP VIEW explain_index_equals;
 
-SYSTEM DROP  VIEW explain_index_has;
+DROP VIEW explain_index_has;
 
-SYSTEM DROP  VIEW explain_index_key_like;
+DROP VIEW explain_index_key_like;
 
-SYSTEM DROP  VIEW explain_index_value_like;
+DROP VIEW explain_index_value_like;

@@ -2,11 +2,11 @@
 -- no-azure-blob-storage: too slow
 --          ^
 --          makes SELECTs extremely slow sometimes for some reason: "Aggregated. 1000000 to 1 rows (from 7.63 MiB) in 242.829221645 sec."
-SYSTEM DROP  TABLE IF EXISTS sample_00314_1;
+DROP TABLE IF EXISTS sample_00314_1;
 
-SYSTEM DROP  TABLE IF EXISTS sample_00314_2;
+DROP TABLE IF EXISTS sample_00314_2;
 
-SYSTEM DROP  TABLE IF EXISTS sample_merge_00314;
+DROP TABLE IF EXISTS sample_merge_00314;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -43,8 +43,8 @@ FROM sample_merge_00314 SAMPLE 100000;
 SELECT abs(sum(_sample_factor) - 3000000) / 3000000 < 0.001
 FROM merge(currentDatabase(), '^sample_00314_\\d$') SAMPLE 100000;
 
-SYSTEM DROP  TABLE sample_00314_1;
+DROP TABLE sample_00314_1;
 
-SYSTEM DROP  TABLE sample_00314_2;
+DROP TABLE sample_00314_2;
 
-SYSTEM DROP  TABLE sample_merge_00314;
+DROP TABLE sample_merge_00314;

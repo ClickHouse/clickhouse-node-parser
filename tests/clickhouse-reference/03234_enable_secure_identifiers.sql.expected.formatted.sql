@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS `test_foo_#`;
+DROP TABLE IF EXISTS `test_foo_#`;
 
 CREATE TABLE `test_foo_#`
 (
@@ -11,7 +11,7 @@ PARTITION BY toYear(date)
 COMMENT 'test'
 SETTINGS enforce_strict_identifier_format = true; -- { serverError BAD_ARGUMENTS }
 
-SYSTEM DROP  TABLE IF EXISTS test_foo;
+DROP TABLE IF EXISTS test_foo;
 
 CREATE TABLE test_foo
 (

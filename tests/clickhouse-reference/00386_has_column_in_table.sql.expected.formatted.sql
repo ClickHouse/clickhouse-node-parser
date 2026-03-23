@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS has_column_in_table;
+DROP TABLE IF EXISTS has_column_in_table;
 
 CREATE TABLE has_column_in_table
 (
@@ -51,4 +51,4 @@ SELECT hasColumnInTable('d', 't', 's'); -- { serverError UNKNOWN_DATABASE }
 
 SELECT hasColumnInTable(currentDatabase(), 't', 's'); -- { serverError UNKNOWN_TABLE }
 
-SYSTEM DROP  TABLE has_column_in_table;
+DROP TABLE has_column_in_table;

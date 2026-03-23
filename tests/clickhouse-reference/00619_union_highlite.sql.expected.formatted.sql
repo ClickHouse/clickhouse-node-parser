@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS union;
+DROP TABLE IF EXISTS `union`;
 
 CREATE VIEW `union`
 AS
@@ -10,4 +10,4 @@ SELECT *
 FROM `union`
 ORDER BY test ASC;
 
-SYSTEM DROP  TABLE union;
+DROP TABLE `union`;

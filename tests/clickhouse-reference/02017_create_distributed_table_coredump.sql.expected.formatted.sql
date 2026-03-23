@@ -1,11 +1,11 @@
 -- Tags: distributed
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM drop  table if exists td1;
+DROP TABLE IF EXISTS td1;
 
-SYSTEM drop  table if exists td2;
+DROP TABLE IF EXISTS td2;
 
-SYSTEM drop  table if exists td3;
+DROP TABLE IF EXISTS td3;
 
 CREATE TABLE t
 (

@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS github_events;
+DROP TABLE IF EXISTS github_events;
 
 CREATE TABLE github_events
 (
@@ -125,4 +125,4 @@ ENGINE = MergeTree
 ORDER BY (event_type, repo_name, created_at)
 SETTINGS allow_nullable_key = 1;
 
-SYSTEM DROP  TABLE github_events;
+DROP TABLE github_events;

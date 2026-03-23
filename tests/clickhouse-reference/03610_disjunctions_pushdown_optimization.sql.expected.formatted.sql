@@ -7,9 +7,9 @@ SET enable_analyzer = 1;
 
 SET enable_join_runtime_filters = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tp1;
+DROP TABLE IF EXISTS tp1;
 
-SYSTEM DROP  TABLE IF EXISTS tp2;
+DROP TABLE IF EXISTS tp2;
 
 CREATE TABLE tp1
 (
@@ -136,14 +136,14 @@ WHERE (t1.k IN (1, 2))
     OR (t1.k IN (3, 4))
 ORDER BY t1.k ASC;
 
-SYSTEM DROP  TABLE tp1;
+DROP TABLE tp1;
 
-SYSTEM DROP  TABLE tp2;
+DROP TABLE tp2;
 
 ---------- CASE D ----------
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
-SYSTEM DROP  TABLE IF EXISTS table2;
+DROP TABLE IF EXISTS table2;
 
 CREATE TABLE table1
 (
@@ -201,9 +201,9 @@ ORDER BY
     c ASC
 FORMAT TSV;
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;
 
-SYSTEM DROP  TABLE table2;
+DROP TABLE table2;
 
 SELECT
     n1.number,

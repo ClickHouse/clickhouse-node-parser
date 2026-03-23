@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS decimal_dt;
+DROP TABLE IF EXISTS decimal_dt;
 
 CREATE TABLE decimal_dt
 (

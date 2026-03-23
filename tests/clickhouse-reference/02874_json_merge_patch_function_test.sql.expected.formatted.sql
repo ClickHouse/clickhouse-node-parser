@@ -23,7 +23,7 @@ SELECT jsonMergePatch('[1]'); -- { serverError BAD_ARGUMENTS }
 
 SELECT jsonMergePatch('{"a": "1","b": 2,"c": [true,"qrdzkzjvnos": true,"yxqhipj": false,"oesax": "33o8_6AyUy"}]}', '{"c": "1"}'); -- { serverError BAD_ARGUMENTS }
 
-SYSTEM drop  table if exists t_json_merge;
+DROP TABLE IF EXISTS t_json_merge;
 
 CREATE TABLE t_json_merge
 (
@@ -49,4 +49,4 @@ SELECT jsonMergePatch(s1, s2)
 FROM t_json_merge
 ORDER BY id ASC;
 
-SYSTEM drop  table t_json_merge;
+DROP TABLE t_json_merge;

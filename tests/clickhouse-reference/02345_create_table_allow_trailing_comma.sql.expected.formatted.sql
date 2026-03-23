@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS trailing_comma_1 SYNC;
+DROP TABLE IF EXISTS trailing_comma_1;
 
 CREATE TABLE trailing_comma_1
 (
@@ -7,9 +7,9 @@ CREATE TABLE trailing_comma_1
 ENGINE = MergeTree()
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE trailing_comma_1;
+DROP TABLE trailing_comma_1;
 
-SYSTEM DROP  TABLE IF EXISTS trailing_comma_2 SYNC;
+DROP TABLE IF EXISTS trailing_comma_2;
 
 CREATE TABLE trailing_comma_2
 (
@@ -18,9 +18,9 @@ CREATE TABLE trailing_comma_2
 ENGINE = MergeTree()
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE trailing_comma_2;
+DROP TABLE trailing_comma_2;
 
-SYSTEM DROP  TABLE IF EXISTS trailing_comma_3 SYNC;
+DROP TABLE IF EXISTS trailing_comma_3;
 
 CREATE TABLE trailing_comma_3
 (
@@ -30,4 +30,4 @@ CREATE TABLE trailing_comma_3
 ENGINE = MergeTree()
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE trailing_comma_3;
+DROP TABLE trailing_comma_3;

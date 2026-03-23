@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
-SYSTEM DROP  TABLE IF EXISTS test_d;
+DROP TABLE IF EXISTS test_d;
 
 CREATE TABLE test
 (
@@ -28,6 +28,6 @@ SETTINGS
     max_parallel_replicas = 3,
     parallel_replicas_for_non_replicated_merge_tree = 1;
 
-SYSTEM DROP  TABLE test_d;
+DROP TABLE test_d;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_read_in_order_1;
+DROP TABLE IF EXISTS t_read_in_order_1;
 
 CREATE TABLE t_read_in_order_1
 (
@@ -52,4 +52,4 @@ WHERE like(`explain`, '%BufferChunks%');
 
 SET read_in_order_use_buffering = 0;
 
-SYSTEM DROP  TABLE t_read_in_order_1;
+DROP TABLE t_read_in_order_1;

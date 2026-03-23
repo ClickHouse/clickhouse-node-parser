@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS realtimedrep;
+DROP TABLE IF EXISTS realtimedrep;
 
 CREATE TABLE realtimedrep
 (
@@ -9,7 +9,7 @@ ORDER BY tuple();
 
 INSERT INTO realtimedrep;
 
-SYSTEM DROP  TABLE IF EXISTS realtimedistributed;
+DROP TABLE IF EXISTS realtimedistributed;
 
 CREATE TABLE realtimedistributed
 (
@@ -17,7 +17,7 @@ CREATE TABLE realtimedistributed
 )
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), realtimedrep, rand());
 
-SYSTEM DROP  TABLE IF EXISTS realtimebuff__fuzz_19;
+DROP TABLE IF EXISTS realtimebuff__fuzz_19;
 
 CREATE TABLE realtimebuff__fuzz_19
 (
@@ -27,7 +27,7 @@ ENGINE = Buffer(currentDatabase(), 'realtimedistributed', 16, 3600, 36000, 10000
 
 INSERT INTO realtimebuff__fuzz_19;
 
-SYSTEM DROP  TABLE IF EXISTS realtimebuff__fuzz_20;
+DROP TABLE IF EXISTS realtimebuff__fuzz_20;
 
 CREATE TABLE realtimebuff__fuzz_20
 (

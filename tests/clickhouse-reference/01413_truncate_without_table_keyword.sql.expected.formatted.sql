@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS truncate_test;
+DROP TABLE IF EXISTS truncate_test;
 
 CREATE TABLE truncate_test
 (
@@ -12,4 +12,4 @@ SELECT *
 FROM truncate_test
 ORDER BY uint8 ASC;
 
-SYSTEM DROP  TABLE truncate_test;
+DROP TABLE truncate_test;

@@ -1,6 +1,6 @@
 -- Tags: no-parallel-replicas
 -- no-parallel-replicas: the result of EXPLAIN differs with parallel replicas
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

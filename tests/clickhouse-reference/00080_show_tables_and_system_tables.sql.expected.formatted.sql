@@ -1,5 +1,5 @@
 -- Tags: log-engine
-SYSTEM DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
+DROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
 
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier};
 
@@ -54,7 +54,7 @@ FROM `system`.tables
 WHERE name = 'test_log'
     AND database = currentDatabase();
 
-SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};
+DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};
 
 -- Check that create_table_query works for system tables and unusual Databases
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier}

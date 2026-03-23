@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS t_json_partitions;
+DROP TABLE IF EXISTS t_json_partitions;
 
 SET enable_json_type = 1;
 
@@ -19,4 +19,4 @@ FROM t_json_partitions
 ORDER BY id ASC
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE t_json_partitions;
+DROP TABLE t_json_partitions;

@@ -1,7 +1,7 @@
 -- { echoOn }
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tree;
+DROP TABLE IF EXISTS tree;
 
 CREATE TABLE tree
 (
@@ -16,7 +16,7 @@ INSERT INTO tree;
 
 SELECT '--';
 
-SYSTEM DROP  TABLE tree;
+DROP TABLE tree;
 
 /**
   * Based on https://github.com/postgres/postgres/blob/master/src/test/regress/sql/with.sql, license:
@@ -57,7 +57,7 @@ SYSTEM DROP  TABLE tree;
 --      |         |
 --      |         +->D-+->F
 --      +->E-+->G
-SYSTEM DROP  TABLE IF EXISTS department;
+DROP TABLE IF EXISTS department;
 
 CREATE TABLE department
 (

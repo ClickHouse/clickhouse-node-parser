@@ -1,28 +1,28 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM drop  table if exists lc_str_0;
+DROP TABLE IF EXISTS lc_str_0;
 
-SYSTEM drop  table if exists lc_str_1;
+DROP TABLE IF EXISTS lc_str_1;
 
-SYSTEM drop  table if exists lc_null_str_0;
+DROP TABLE IF EXISTS lc_null_str_0;
 
-SYSTEM drop  table if exists lc_null_str_1;
+DROP TABLE IF EXISTS lc_null_str_1;
 
-SYSTEM drop  table if exists lc_int8_0;
+DROP TABLE IF EXISTS lc_int8_0;
 
-SYSTEM drop  table if exists lc_int8_1;
+DROP TABLE IF EXISTS lc_int8_1;
 
-SYSTEM drop  table if exists lc_null_int8_0;
+DROP TABLE IF EXISTS lc_null_int8_0;
 
-SYSTEM drop  table if exists lc_null_int8_1;
+DROP TABLE IF EXISTS lc_null_int8_1;
 
-SYSTEM drop  table if exists lc_fix_str_0;
+DROP TABLE IF EXISTS lc_fix_str_0;
 
-SYSTEM drop  table if exists lc_fix_str_1;
+DROP TABLE IF EXISTS lc_fix_str_1;
 
-SYSTEM drop  table if exists lc_null_fix_str_0;
+DROP TABLE IF EXISTS lc_null_fix_str_0;
 
-SYSTEM drop  table if exists lc_null_fix_str_1;
+DROP TABLE IF EXISTS lc_null_fix_str_1;
 
 CREATE TABLE lc_str_0
 (
@@ -118,7 +118,7 @@ FROM (
 GROUP BY val
 ORDER BY val ASC;
 
-SYSTEM drop  table if exists lc_str_uuid;
+DROP TABLE IF EXISTS lc_str_uuid;
 
 CREATE TABLE lc_str_uuid
 (

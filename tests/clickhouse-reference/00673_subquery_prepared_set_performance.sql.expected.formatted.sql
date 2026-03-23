@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mergetree_00673;
+DROP TABLE IF EXISTS mergetree_00673;
 
 CREATE TABLE mergetree_00673
 (
@@ -78,4 +78,4 @@ FROM (
 
 SET force_primary_key = 1;
 
-SYSTEM DROP  TABLE mergetree_00673;
+DROP TABLE mergetree_00673;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tztest;
+DROP TABLE IF EXISTS tztest;
 
 CREATE TABLE tztest
 (
@@ -26,4 +26,4 @@ SELECT 1
 FROM tztest
 WHERE '2019-05-06 12:00:00' = timeBerlin;
 
-SYSTEM DROP  TABLE tztest;
+DROP TABLE tztest;

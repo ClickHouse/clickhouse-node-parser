@@ -2,7 +2,7 @@ SET enable_json_type = 1;
 
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -32,4 +32,4 @@ FROM test_view;
 SELECT data.a.:Int64
 FROM test_view;
 
-SYSTEM drop  table test;
+DROP TABLE test;

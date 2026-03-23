@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_function_dictionary_source_table;
+DROP TABLE IF EXISTS table_function_dictionary_source_table;
 
 CREATE TABLE table_function_dictionary_source_table
 (
@@ -11,7 +11,7 @@ INSERT INTO table_function_dictionary_source_table;
 
 INSERT INTO table_function_dictionary_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS table_function_dictionary_test_dictionary;
+DROP DICTIONARY IF EXISTS table_function_dictionary_test_dictionary;
 
 CREATE DICTIONARY table_function_dictionary_test_dictionary
 (
@@ -26,6 +26,6 @@ SELECT *
 FROM dictionary('table_function_dictionary_test_dictionary')
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  DICTIONARY table_function_dictionary_test_dictionary;
+DROP DICTIONARY table_function_dictionary_test_dictionary;
 
-SYSTEM DROP  TABLE table_function_dictionary_source_table;
+DROP TABLE table_function_dictionary_source_table;

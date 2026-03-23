@@ -1,6 +1,6 @@
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS t_block_number_proj;
+DROP TABLE IF EXISTS t_block_number_proj;
 
 CREATE TABLE t_block_number_proj
 (
@@ -25,9 +25,9 @@ FROM t_block_number_proj
 WHERE b = 5
 SETTINGS force_optimize_projection = 1;
 
-SYSTEM DROP  TABLE t_block_number_proj;
+DROP TABLE t_block_number_proj;
 
-SYSTEM DROP  TABLE IF EXISTS t_block_number_ttl;
+DROP TABLE IF EXISTS t_block_number_ttl;
 
 CREATE TABLE t_block_number_ttl
 (
@@ -45,4 +45,4 @@ SELECT *
 FROM t_block_number_ttl
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE t_block_number_ttl;
+DROP TABLE t_block_number_ttl;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_not_has;
+DROP TABLE IF EXISTS bloom_filter_not_has;
 
 CREATE TABLE bloom_filter_not_has
 (

@@ -1,8 +1,8 @@
 -- Tags: no-replicated-database
 -- no-replicated-database: fails due to additional shard.
-SYSTEM DROP  TABLE IF EXISTS t_detach_attach_patches SYNC;
+DROP TABLE IF EXISTS t_detach_attach_patches;
 
-SYSTEM DROP  TABLE IF EXISTS t_detach_attach_patches_dst SYNC;
+DROP TABLE IF EXISTS t_detach_attach_patches_dst;
 
 SET enable_lightweight_update = 1;
 
@@ -48,6 +48,6 @@ ORDER BY `ALL` ASC;
 
 SET apply_patch_parts = 0;
 
-SYSTEM DROP  TABLE t_detach_attach_patches SYNC;
+DROP TABLE t_detach_attach_patches;
 
-SYSTEM DROP  TABLE t_detach_attach_patches_dst SYNC;
+DROP TABLE t_detach_attach_patches_dst;

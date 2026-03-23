@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists rate_test;
+DROP TABLE IF EXISTS rate_test;
 
 CREATE TABLE rate_test
 (
@@ -12,7 +12,7 @@ INSERT INTO rate_test;
 SELECT 1.0 = boundingRatio(timestamp, event)
 FROM rate_test;
 
-SYSTEM drop  table if exists rate_test2;
+DROP TABLE IF EXISTS rate_test2;
 
 CREATE TABLE rate_test2
 (
@@ -27,9 +27,9 @@ INSERT INTO rate_test2 (timestamp, event);
 SELECT 1.0 = boundingRatio(timestamp, event)
 FROM rate_test2;
 
-SYSTEM drop  table rate_test;
+DROP TABLE rate_test;
 
-SYSTEM drop  table rate_test2;
+DROP TABLE rate_test2;
 
 SELECT boundingRatio(number, number * 1.5)
 FROM numbers(10);

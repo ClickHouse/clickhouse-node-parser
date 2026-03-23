@@ -3,7 +3,7 @@
 --
 -- Simple key
 --
-SYSTEM DROP  TABLE IF EXISTS simple_key_source_table_01862;
+DROP TABLE IF EXISTS simple_key_source_table_01862;
 
 CREATE TABLE simple_key_source_table_01862
 (
@@ -15,7 +15,7 @@ ENGINE = Memory();
 INSERT INTO simple_key_source_table_01862;
 
 -- simple flat
-SYSTEM DROP  DICTIONARY IF EXISTS simple_key_flat_dictionary_01862;
+DROP DICTIONARY IF EXISTS simple_key_flat_dictionary_01862;
 
 CREATE DICTIONARY simple_key_flat_dictionary_01862
 (
@@ -48,10 +48,10 @@ FORMAT Null;
 SELECT dictGet('simple_key_flat_dictionary_01862', 'value', toUInt64(2))
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY simple_key_flat_dictionary_01862;
+DROP DICTIONARY simple_key_flat_dictionary_01862;
 
 -- simple direct
-SYSTEM DROP  DICTIONARY IF EXISTS simple_key_direct_dictionary_01862;
+DROP DICTIONARY IF EXISTS simple_key_direct_dictionary_01862;
 
 CREATE DICTIONARY simple_key_direct_dictionary_01862
 (
@@ -82,10 +82,10 @@ FORMAT Null;
 SELECT dictGet('simple_key_direct_dictionary_01862', 'value', toUInt64(2))
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY simple_key_direct_dictionary_01862;
+DROP DICTIONARY simple_key_direct_dictionary_01862;
 
 -- simple hashed
-SYSTEM DROP  DICTIONARY IF EXISTS simple_key_hashed_dictionary_01862;
+DROP DICTIONARY IF EXISTS simple_key_hashed_dictionary_01862;
 
 CREATE DICTIONARY simple_key_hashed_dictionary_01862
 (
@@ -112,10 +112,10 @@ FORMAT Null;
 SELECT dictGet('simple_key_hashed_dictionary_01862', 'value', toUInt64(2))
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY simple_key_hashed_dictionary_01862;
+DROP DICTIONARY simple_key_hashed_dictionary_01862;
 
 -- simple sparse_hashed
-SYSTEM DROP  DICTIONARY IF EXISTS simple_key_sparse_hashed_dictionary_01862;
+DROP DICTIONARY IF EXISTS simple_key_sparse_hashed_dictionary_01862;
 
 CREATE DICTIONARY simple_key_sparse_hashed_dictionary_01862
 (
@@ -142,10 +142,10 @@ FORMAT Null;
 SELECT dictGet('simple_key_sparse_hashed_dictionary_01862', 'value', toUInt64(2))
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY simple_key_sparse_hashed_dictionary_01862;
+DROP DICTIONARY simple_key_sparse_hashed_dictionary_01862;
 
 -- simple cache
-SYSTEM DROP  DICTIONARY IF EXISTS simple_key_cache_dictionary_01862;
+DROP DICTIONARY IF EXISTS simple_key_cache_dictionary_01862;
 
 CREATE DICTIONARY simple_key_cache_dictionary_01862
 (
@@ -176,14 +176,14 @@ SELECT
     dictGet('simple_key_cache_dictionary_01862', 'value', key)
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY simple_key_cache_dictionary_01862;
+DROP DICTIONARY simple_key_cache_dictionary_01862;
 
-SYSTEM DROP  TABLE simple_key_source_table_01862;
+DROP TABLE simple_key_source_table_01862;
 
 --
 -- Complex key
 --
-SYSTEM DROP  TABLE IF EXISTS complex_key_source_table_01862;
+DROP TABLE IF EXISTS complex_key_source_table_01862;
 
 CREATE TABLE complex_key_source_table_01862
 (
@@ -196,7 +196,7 @@ ENGINE = Memory();
 INSERT INTO complex_key_source_table_01862;
 
 -- complex hashed
-SYSTEM DROP  DICTIONARY IF EXISTS complex_key_hashed_dictionary_01862;
+DROP DICTIONARY IF EXISTS complex_key_hashed_dictionary_01862;
 
 CREATE DICTIONARY complex_key_hashed_dictionary_01862
 (
@@ -224,10 +224,10 @@ FORMAT Null;
 SELECT dictGet('complex_key_hashed_dictionary_01862', 'value', (toUInt64(2), 'FirstKey'))
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY complex_key_hashed_dictionary_01862;
+DROP DICTIONARY complex_key_hashed_dictionary_01862;
 
 -- complex direct
-SYSTEM DROP  DICTIONARY IF EXISTS complex_key_direct_dictionary_01862;
+DROP DICTIONARY IF EXISTS complex_key_direct_dictionary_01862;
 
 CREATE DICTIONARY complex_key_direct_dictionary_01862
 (
@@ -254,10 +254,10 @@ FORMAT Null;
 SELECT dictGet('complex_key_direct_dictionary_01862', 'value', (toUInt64(2), 'FirstKey'))
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY complex_key_direct_dictionary_01862;
+DROP DICTIONARY complex_key_direct_dictionary_01862;
 
 -- complex cache
-SYSTEM DROP  DICTIONARY IF EXISTS complex_key_cache_dictionary_01862;
+DROP DICTIONARY IF EXISTS complex_key_cache_dictionary_01862;
 
 CREATE DICTIONARY complex_key_cache_dictionary_01862
 (
@@ -285,14 +285,14 @@ FORMAT Null;
 SELECT dictGet('complex_key_cache_dictionary_01862', 'value', (toUInt64(2), 'FirstKey'))
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY complex_key_cache_dictionary_01862;
+DROP DICTIONARY complex_key_cache_dictionary_01862;
 
-SYSTEM DROP  TABLE complex_key_source_table_01862;
+DROP TABLE complex_key_source_table_01862;
 
 --
 -- Range
 --
-SYSTEM DROP  TABLE IF EXISTS range_key_source_table_01862;
+DROP TABLE IF EXISTS range_key_source_table_01862;
 
 CREATE TABLE range_key_source_table_01862
 (
@@ -306,7 +306,7 @@ ENGINE = Memory();
 INSERT INTO range_key_source_table_01862;
 
 -- simple range_hashed
-SYSTEM DROP  DICTIONARY IF EXISTS simple_key_range_hashed_dictionary_01862;
+DROP DICTIONARY IF EXISTS simple_key_range_hashed_dictionary_01862;
 
 CREATE DICTIONARY simple_key_range_hashed_dictionary_01862
 (
@@ -336,14 +336,14 @@ FORMAT Null;
 SELECT dictGet('simple_key_range_hashed_dictionary_01862', 'value', toUInt64(2), today())
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY simple_key_range_hashed_dictionary_01862;
+DROP DICTIONARY simple_key_range_hashed_dictionary_01862;
 
-SYSTEM DROP  TABLE range_key_source_table_01862;
+DROP TABLE range_key_source_table_01862;
 
 --
 -- IP Trie
 --
-SYSTEM DROP  TABLE IF EXISTS ip_trie_source_table_01862;
+DROP TABLE IF EXISTS ip_trie_source_table_01862;
 
 CREATE TABLE ip_trie_source_table_01862
 (
@@ -355,7 +355,7 @@ ENGINE = Memory();
 INSERT INTO ip_trie_source_table_01862;
 
 -- ip_trie
-SYSTEM DROP  DICTIONARY IF EXISTS ip_trie_dictionary_01862;
+DROP DICTIONARY IF EXISTS ip_trie_dictionary_01862;
 
 CREATE DICTIONARY ip_trie_dictionary_01862
 (
@@ -385,12 +385,12 @@ FORMAT Null;
 SELECT dictGet('ip_trie_dictionary_01862', 'value', tuple(toIPv4('1.1.1.1')))
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY ip_trie_dictionary_01862;
+DROP DICTIONARY ip_trie_dictionary_01862;
 
-SYSTEM DROP  TABLE ip_trie_source_table_01862;
+DROP TABLE ip_trie_source_table_01862;
 
 -- Polygon
-SYSTEM DROP  TABLE IF EXISTS polygons_01862;
+DROP TABLE IF EXISTS polygons_01862;
 
 CREATE TABLE polygons_01862
 (
@@ -407,7 +407,7 @@ INSERT INTO polygons_01862;
 
 INSERT INTO polygons_01862;
 
-SYSTEM DROP  TABLE IF EXISTS points_01862;
+DROP TABLE IF EXISTS points_01862;
 
 CREATE TABLE points_01862
 (
@@ -426,7 +426,7 @@ INSERT INTO points_01862;
 
 INSERT INTO points_01862;
 
-SYSTEM DROP  DICTIONARY IF EXISTS polygon_dictionary_01862;
+DROP DICTIONARY IF EXISTS polygon_dictionary_01862;
 
 CREATE DICTIONARY polygon_dictionary_01862
 (
@@ -453,8 +453,8 @@ SELECT
 FROM points_01862
 FORMAT Null;
 
-SYSTEM DROP  DICTIONARY polygon_dictionary_01862;
+DROP DICTIONARY polygon_dictionary_01862;
 
-SYSTEM DROP  TABLE polygons_01862;
+DROP TABLE polygons_01862;
 
-SYSTEM DROP  TABLE points_01862;
+DROP TABLE points_01862;

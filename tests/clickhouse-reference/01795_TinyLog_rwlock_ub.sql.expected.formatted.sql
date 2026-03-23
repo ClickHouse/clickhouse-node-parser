@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS underlying_01795;
+DROP TABLE IF EXISTS underlying_01795;
 
 CREATE TABLE underlying_01795
 (
@@ -14,4 +14,4 @@ SELECT *
 FROM underlying_01795
 FORMAT Null;
 
-SYSTEM DROP  TABLE underlying_01795;
+DROP TABLE underlying_01795;

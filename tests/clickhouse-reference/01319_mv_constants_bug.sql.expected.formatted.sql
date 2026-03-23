@@ -1,14 +1,14 @@
-SYSTEM DROP  TABLE IF EXISTS distributed_table_merged;
+DROP TABLE IF EXISTS distributed_table_merged;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_table_1;
+DROP TABLE IF EXISTS distributed_table_1;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_table_2;
+DROP TABLE IF EXISTS distributed_table_2;
 
-SYSTEM DROP  TABLE IF EXISTS local_table_1;
+DROP TABLE IF EXISTS local_table_1;
 
-SYSTEM DROP  TABLE IF EXISTS local_table_2;
+DROP TABLE IF EXISTS local_table_2;
 
-SYSTEM DROP  TABLE IF EXISTS local_table_merged;
+DROP TABLE IF EXISTS local_table_merged;
 
 CREATE TABLE local_table_1
 (
@@ -51,4 +51,4 @@ ENGINE = Merge('default', 'distributed_table_1|distributed_table_2');
 SELECT 1
 FROM distributed_table_merged;
 
-SYSTEM DROP  TABLE local_table_merged;
+DROP TABLE local_table_merged;

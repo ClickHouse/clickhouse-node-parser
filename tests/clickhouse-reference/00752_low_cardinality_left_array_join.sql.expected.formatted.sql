@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM drop  table if exists lc_left_aj;
+DROP TABLE IF EXISTS lc_left_aj;
 
 CREATE TABLE lc_left_aj
 (

@@ -5,7 +5,7 @@ SET automatic_parallel_replicas_mode = 0;
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_index_hint;
+DROP TABLE IF EXISTS t_index_hint;
 
 CREATE TABLE t_index_hint
 (
@@ -101,4 +101,4 @@ WHERE type = 'QueryFinish'
     AND like(query, '%SELECT count() FROM t_index_hint%')
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE t_index_hint;
+DROP TABLE t_index_hint;

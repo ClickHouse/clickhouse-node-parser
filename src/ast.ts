@@ -1846,7 +1846,7 @@ export type CreateStatement =
 export type ParallelWithStatement = {
   kind: 'parallelWith';
   /** The CREATE or INSERT statements being executed in parallel (always 2+). */
-  queries: (CreateStatement | InsertStatement | TruncateStatement)[];
+  queries: (CreateStatement | InsertStatement | TruncateStatement | DropStatement)[];
 } & NodeMetadata;
 
 /**
@@ -1884,6 +1884,34 @@ export type TruncateStatement = {
 } & NodeMetadata;
 
 /**
+ * A DROP statement: drops a table, view, database, dictionary, or function.
+ *
+ * @example `DROP TABLE IF EXISTS t`
+ * @example `DROP DATABASE mydb`
+ */
+export type DropStatement = {
+  kind: 'drop';
+  /** The target to drop (single table/database/etc.). */
+  table?: TableRef;
+  /** Multiple targets for comma-separated DROP (e.g. DROP TABLE t1, t2). */
+  tables?: TableRef[];
+  /** The type of object being dropped. */
+  targetType: 'TABLE' | 'VIEW' | 'DICTIONARY' | 'DATABASE' | 'FUNCTION' | 'INDEX';
+  /** For DROP INDEX: the index name. */
+  indexName?: string;
+  /** Whether TEMPORARY keyword was specified. */
+  temporary?: boolean;
+  /** Whether IF EXISTS or IF EMPTY was specified. */
+  ifExists?: boolean;
+  /** Optional ON CLUSTER clause. */
+  onCluster?: string;
+  /** Optional SETTINGS clause. */
+  settings?: SettingItem[];
+  /** Optional FORMAT clause. */
+  format?: string;
+} & NodeMetadata;
+
+/**
  * Union of all top-level statement types.
  *
  * Use the `kind` field to discriminate between variants.
@@ -1899,7 +1927,8 @@ export type Statement =
   | CreateStatement
   | ParallelWithStatement
   | InsertStatement
-  | TruncateStatement;
+  | TruncateStatement
+  | DropStatement;
 
 // ── AST node kind map ────────────────────────────────────────────────────────
 
@@ -1965,6 +1994,7 @@ export interface ASTNodeKindMap {
   parallelWith: ParallelWithStatement;
   insert: InsertStatement;
   truncate: TruncateStatement;
+  drop: DropStatement;
   columnDef: ColumnDef;
   constraintDef: ConstraintDef;
   indexDef: IndexDef;
@@ -2652,7 +2682,12 @@ export const ParallelWithStatementSchema: z.ZodType<ParallelWithStatement> = z.l
   z.object({
     kind: z.literal('parallelWith'),
     queries: z.array(
-      z.union([CreateStatementSchema, InsertStatementSchema, TruncateStatementSchema]),
+      z.union([
+        CreateStatementSchema,
+        InsertStatementSchema,
+        TruncateStatementSchema,
+        DropStatementSchema,
+      ]),
     ),
     ...ExprMetadataFields,
   }),
@@ -2684,6 +2719,22 @@ export const TruncateStatementSchema: z.ZodType<TruncateStatement> = z.lazy(() =
   }),
 );
 
+/** Zod schema for {@link DropStatement}. */
+export const DropStatementSchema: z.ZodType<DropStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('drop'),
+    table: TableRefSchema.optional(),
+    tables: z.array(TableRefSchema).optional(),
+    targetType: z.enum(['TABLE', 'VIEW', 'DICTIONARY', 'DATABASE', 'FUNCTION', 'INDEX']),
+    temporary: z.boolean().optional(),
+    ifExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    format: z.string().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
 /** Zod schema for {@link Statement}. */
 export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
   z.union([
@@ -2700,6 +2751,7 @@ export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
     ParallelWithStatementSchema,
     InsertStatementSchema,
     TruncateStatementSchema,
+    DropStatementSchema,
   ]),
 );
 

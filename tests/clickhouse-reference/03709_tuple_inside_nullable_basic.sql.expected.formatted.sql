@@ -1,6 +1,6 @@
 SET allow_experimental_nullable_tuple_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tuple_test;
+DROP TABLE IF EXISTS tuple_test;
 
 CREATE TABLE tuple_test
 (
@@ -648,7 +648,7 @@ GROUP BY category
 ORDER BY category ASC
 SETTINGS enable_analyzer = 1; -- Here, tup.u notation is not recognized in old analyzer
 
-SYSTEM DROP  TABLE IF EXISTS test_nullable_tuple;
+DROP TABLE IF EXISTS test_nullable_tuple;
 
 CREATE TABLE test_nullable_tuple
 (

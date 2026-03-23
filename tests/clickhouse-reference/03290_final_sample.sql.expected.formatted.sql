@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sample_final;
+DROP TABLE IF EXISTS t_sample_final;
 
 CREATE TABLE t_sample_final
 (
@@ -33,4 +33,4 @@ SELECT count()
 FROM t_sample_final FINAL SAMPLE 1/2
 WHERE NOT ignore(*);
 
-SYSTEM DROP  TABLE t_sample_final;
+DROP TABLE t_sample_final;

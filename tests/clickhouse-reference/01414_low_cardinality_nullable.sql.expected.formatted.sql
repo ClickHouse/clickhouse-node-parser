@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM DROP  TABLE IF EXISTS lc_nullable;
+DROP TABLE IF EXISTS lc_nullable;
 
 CREATE TABLE lc_nullable
 (

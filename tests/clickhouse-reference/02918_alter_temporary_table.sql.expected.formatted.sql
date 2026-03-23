@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_test;
+DROP TABLE IF EXISTS alter_test;
 
 CREATE TEMPORARY TABLE alter_test
 (
@@ -15,4 +15,4 @@ INSERT INTO alter_test;
 SELECT *
 FROM alter_test;
 
-SYSTEM DROP  TABLE alter_test;
+DROP TABLE alter_test;

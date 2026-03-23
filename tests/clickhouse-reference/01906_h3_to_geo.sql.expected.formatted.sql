@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS h3_indexes;
+DROP TABLE IF EXISTS h3_indexes;
 
 CREATE TABLE h3_indexes
 (
@@ -41,9 +41,9 @@ INSERT INTO h3_indexes;
 
 INSERT INTO h3_indexes;
 
-SYSTEM DROP  TABLE h3_indexes;
+DROP TABLE h3_indexes;
 
-SYSTEM DROP  TABLE IF EXISTS h3_geo;
+DROP TABLE IF EXISTS h3_geo;
 
 -- compare if the results of h3ToGeo and geoToH3 are the same
 CREATE TABLE h3_geo
@@ -96,4 +96,4 @@ FROM (
         FROM h3_geo
     );
 
-SYSTEM DROP  TABLE h3_geo;
+DROP TABLE h3_geo;

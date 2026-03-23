@@ -1,6 +1,6 @@
 -- Tags: long
 -- Random settings limits: index_granularity=(100, None); index_granularity_bytes=(100000, None)
-SYSTEM drop  table if exists test_compact_map;
+DROP TABLE IF EXISTS test_compact_map;
 
 CREATE TABLE test_compact_map
 (
@@ -63,9 +63,9 @@ SELECT
 FROM test_compact_map
 FORMAT Null;
 
-SYSTEM drop  table test_compact_map format Null;
+DROP TABLE test_compact_map FORMAT Null;
 
-SYSTEM drop  table if exists test_compact_map_tuple;
+DROP TABLE IF EXISTS test_compact_map_tuple;
 
 CREATE TABLE test_compact_map_tuple
 (
@@ -141,4 +141,4 @@ SELECT
 FROM test_compact_map_tuple
 FORMAT Null;
 
-SYSTEM drop  table test_compact_map_tuple;
+DROP TABLE test_compact_map_tuple;

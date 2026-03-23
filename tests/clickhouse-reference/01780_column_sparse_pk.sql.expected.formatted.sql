@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_pk;
+DROP TABLE IF EXISTS t_sparse_pk;
 
-SYSTEM DROP  TABLE IF EXISTS t_full_pk;
+DROP TABLE IF EXISTS t_full_pk;
 
 CREATE TABLE t_sparse_pk
 (

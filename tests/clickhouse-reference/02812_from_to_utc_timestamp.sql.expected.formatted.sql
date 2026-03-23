@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_tbl;
+DROP TABLE IF EXISTS test_tbl;
 
 CREATE TABLE test_tbl
 (
@@ -140,4 +140,4 @@ SELECT
     from_utc_timestamp(toDateTime('2106-02-07 06:28:16'), 'Asia/Tokyo')
 SETTINGS session_timezone = 'UTC';
 
-SYSTEM DROP  TABLE test_tbl;
+DROP TABLE test_tbl;

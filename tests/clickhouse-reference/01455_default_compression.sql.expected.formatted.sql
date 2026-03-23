@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS compress_table;
+DROP TABLE IF EXISTS compress_table;
 
 CREATE TABLE compress_table
 (

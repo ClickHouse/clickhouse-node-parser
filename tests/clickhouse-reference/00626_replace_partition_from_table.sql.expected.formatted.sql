@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS src;
+DROP TABLE IF EXISTS src;
 
-SYSTEM DROP  TABLE IF EXISTS dst;
+DROP TABLE IF EXISTS dst;
 
 CREATE TABLE src
 (
@@ -62,9 +62,9 @@ WHERE database = currentDatabase()
 SELECT (max(m) - min(m) > 1) AS new_block_is_generated
 FROM test_block_numbers;
 
-SYSTEM DROP  TEMPORARY TABLE test_block_numbers;
+DROP TEMPORARY TABLE test_block_numbers;
 
-SYSTEM DROP  TABLE src;
+DROP TABLE src;
 
 INSERT INTO src;
 

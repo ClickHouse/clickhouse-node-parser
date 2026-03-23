@@ -14,11 +14,11 @@ FROM (
             )
     );
 
-SYSTEM drop  table if exists consumer_02366;
+DROP TABLE IF EXISTS consumer_02366;
 
-SYSTEM drop  table if exists producer_02366;
+DROP TABLE IF EXISTS producer_02366;
 
-SYSTEM drop  table if exists mv_02366;
+DROP TABLE IF EXISTS mv_02366;
 
 CREATE TABLE consumer_02366
 (
@@ -59,8 +59,8 @@ SELECT
     finalizeAggregation(dec)
 FROM consumer_02366;
 
-SYSTEM drop  table consumer_02366;
+DROP TABLE consumer_02366;
 
-SYSTEM drop  table producer_02366;
+DROP TABLE producer_02366;
 
-SYSTEM drop  table mv_02366;
+DROP TABLE mv_02366;

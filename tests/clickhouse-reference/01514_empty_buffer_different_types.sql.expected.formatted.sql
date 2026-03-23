@@ -1,6 +1,6 @@
 SET send_logs_level = 'error';
 
-SYSTEM DROP  TABLE IF EXISTS merge_tree_table1;
+DROP TABLE IF EXISTS merge_tree_table1;
 
 CREATE TABLE merge_tree_table1
 (
@@ -31,4 +31,4 @@ SELECT s
 FROM buffer_table1
 WHERE x = 2;
 
-SYSTEM DROP  TABLE buffer_table1;
+DROP TABLE buffer_table1;

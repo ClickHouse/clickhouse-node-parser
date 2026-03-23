@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS columns;
+DROP TABLE IF EXISTS `columns`;
 
 CREATE TABLE `columns`
 (
@@ -36,4 +36,4 @@ FROM (
         FROM `columns`
     );
 
-SYSTEM DROP  TABLE columns;
+DROP TABLE `columns`;

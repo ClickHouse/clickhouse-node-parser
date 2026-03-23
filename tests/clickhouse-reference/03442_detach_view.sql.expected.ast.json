@@ -1,7 +1,12 @@
 [
   {
-    "kind": "system",
-    "body": "DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}"
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "{CLICKHOUSE_DATABASE:Identifier}"
+    },
+    "ifExists": true
   },
   {
     "kind": "createDatabase",
@@ -12,8 +17,14 @@
     }
   },
   {
-    "kind": "system",
-    "body": "DROP  TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.v0"
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "v0"
+    },
+    "ifExists": true
   },
   {
     "kind": "createMaterializedView",

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02005_test_table;
+DROP TABLE IF EXISTS `02005_test_table`;
 
 CREATE TABLE `02005_test_table`
 (
@@ -28,7 +28,7 @@ SELECT mapPopulateSeries(map(1, 4, 1, 5, 5, 6));
 
 SELECT mapPopulateSeries(map(1, 4, 1, 5, 5, 6), materialize(10));
 
-SYSTEM DROP  TABLE 02005_test_table;
+DROP TABLE `02005_test_table`;
 
 CREATE TABLE `02005_test_table`
 (

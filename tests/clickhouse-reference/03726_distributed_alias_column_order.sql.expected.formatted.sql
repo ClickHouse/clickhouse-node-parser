@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_local;
+DROP TABLE IF EXISTS test_local;
 
 CREATE TABLE test_local
 (

@@ -1,11 +1,11 @@
 -- Tags: no-ordinary-database
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM drop  table if exists dist;
+DROP TABLE IF EXISTS dist;
 
-SYSTEM drop  table if exists buf;
+DROP TABLE IF EXISTS buf;
 
-SYSTEM drop  table if exists join;
+DROP TABLE IF EXISTS `join`;
 
 CREATE TABLE t
 (
@@ -69,10 +69,10 @@ FROM `system`.tables
 WHERE database = currentDatabase()
 ORDER BY name ASC;
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table dist;
+DROP TABLE dist;
 
-SYSTEM drop  table buf;
+DROP TABLE buf;
 
-SYSTEM drop  table join;
+DROP TABLE `join`;

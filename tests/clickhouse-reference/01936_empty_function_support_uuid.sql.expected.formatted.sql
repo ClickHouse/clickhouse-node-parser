@@ -13,9 +13,9 @@ FROM (
         SELECT toUUID('00000000-0000-0000-0000-000000000001') AS uuid
     );
 
-SYSTEM DROP  TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users;
 
-SYSTEM DROP  TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS orders;
 
 CREATE TABLE users
 (
@@ -50,6 +50,6 @@ LEFT JOIN (
     ) AS t2
     USING (user_id);
 
-SYSTEM DROP  TABLE users;
+DROP TABLE users;
 
-SYSTEM DROP  TABLE orders;
+DROP TABLE orders;

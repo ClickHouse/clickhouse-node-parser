@@ -2,7 +2,7 @@
 -- It appeared to trigger assertion.
 SET cross_to_inner_join_rewrite = 1;
 
-SYSTEM DROP  TABLE IF EXISTS codecTest;
+DROP TABLE IF EXISTS codecTest;
 
 CREATE TABLE codecTest
 (
@@ -87,7 +87,7 @@ WHERE (dF64 != 3)
     AND (c2.key = (c1.key - 1048576))
 LIMIT 0;
 
-SYSTEM DROP  TABLE codecTest;
+DROP TABLE codecTest;
 
 CREATE TABLE codecTest
 (

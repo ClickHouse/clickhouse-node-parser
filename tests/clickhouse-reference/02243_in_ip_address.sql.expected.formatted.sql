@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -25,4 +25,4 @@ WHERE value_ipv6 IN (
         FROM test_table
     );
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

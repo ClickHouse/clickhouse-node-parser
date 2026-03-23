@@ -28,6 +28,6 @@ SELECT
     to
 FROM cte;
 
-SYSTEM drop  table test_view;
+DROP TABLE test_view;
 
-SYSTEM drop  table test_table;
+DROP TABLE test_table;

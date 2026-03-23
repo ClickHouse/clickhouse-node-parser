@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tree;
+DROP TABLE IF EXISTS tree;
 
 CREATE TABLE tree
 (
@@ -14,4 +14,4 @@ INSERT INTO tree;
 
 SELECT '--';
 
-SYSTEM DROP  TABLE tree;
+DROP TABLE tree;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 -- You can create a table with the {server_uuid} substituted.
 CREATE TABLE test
@@ -30,4 +30,4 @@ ORDER BY x; -- { serverError REPLICA_ALREADY_EXISTS }
 -- The macro {server_uuid} is special, not a configuration-type macro. It's normal that it is inaccessible with the getMacro function.
 SELECT getMacro('server_uuid'); -- { serverError NO_ELEMENTS_IN_CONFIG }
 
-SYSTEM DROP  TABLE test SYNC;
+DROP TABLE test;

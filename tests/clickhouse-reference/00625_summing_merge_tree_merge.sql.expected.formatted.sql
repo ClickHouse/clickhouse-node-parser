@@ -1,6 +1,6 @@
 -- Tags: no-msan
 -- msan: too slow
-SYSTEM DROP  TABLE IF EXISTS tab_00625;
+DROP TABLE IF EXISTS tab_00625;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -28,4 +28,4 @@ INSERT INTO tab_00625 SELECT
 FROM `system`.numbers
 LIMIT 10;
 
-SYSTEM DROP  TABLE tab_00625;
+DROP TABLE tab_00625;

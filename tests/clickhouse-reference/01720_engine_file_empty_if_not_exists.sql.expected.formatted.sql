@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS file_engine_table;
+DROP TABLE IF EXISTS file_engine_table;
 
 CREATE TABLE file_engine_table
 (
@@ -13,4 +13,4 @@ SET engine_file_empty_if_not_exists = 0;
 
 SET engine_file_empty_if_not_exists = 1;
 
-SYSTEM DROP  TABLE file_engine_table;
+DROP TABLE file_engine_table;

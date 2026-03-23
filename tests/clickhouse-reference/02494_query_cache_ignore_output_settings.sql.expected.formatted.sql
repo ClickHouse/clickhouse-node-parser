@@ -3,7 +3,7 @@
 -- Checks that the query cache ignores output format related settings (settings starting with 'output_format_')
 SET max_block_size = 100;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

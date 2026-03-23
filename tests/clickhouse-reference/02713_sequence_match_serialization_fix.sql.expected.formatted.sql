@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS 02713_seqt;
+DROP TABLE IF EXISTS `02713_seqt`;
 
-SYSTEM DROP  TABLE IF EXISTS 02713_seqt_distr;
+DROP TABLE IF EXISTS `02713_seqt_distr`;
 
 SELECT
     'serialized state is not used',

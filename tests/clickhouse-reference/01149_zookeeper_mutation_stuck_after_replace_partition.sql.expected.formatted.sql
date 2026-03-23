@@ -3,9 +3,9 @@ SET insert_keeper_fault_injection_probability = 0; -- disable fault injection; p
 
 SET send_logs_level = 'error';
 
-SYSTEM drop  table if exists mt;
+DROP TABLE IF EXISTS mt;
 
-SYSTEM drop  table if exists rmt sync;
+DROP TABLE IF EXISTS rmt;
 
 CREATE TABLE mt
 (
@@ -60,7 +60,7 @@ FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'rmt';
 
-SYSTEM drop  table rmt sync;
+DROP TABLE rmt;
 
 SET replication_alter_partitions_sync = 0;
 
@@ -68,4 +68,4 @@ INSERT INTO rmt;
 
 SET replication_alter_partitions_sync = 1;
 
-SYSTEM drop  table mt;
+DROP TABLE mt;

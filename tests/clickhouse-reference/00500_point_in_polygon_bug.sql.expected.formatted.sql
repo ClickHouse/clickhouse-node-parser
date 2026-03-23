@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists coords;
+DROP TABLE IF EXISTS coords;
 
 CREATE TABLE coords
 (

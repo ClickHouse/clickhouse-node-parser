@@ -36,7 +36,7 @@ FROM (
     )
 HAVING tuple(untuple(min(x))).1 != 42;
 
-SYSTEM drop  table if exists kv;
+DROP TABLE IF EXISTS kv;
 
 CREATE TABLE kv
 (

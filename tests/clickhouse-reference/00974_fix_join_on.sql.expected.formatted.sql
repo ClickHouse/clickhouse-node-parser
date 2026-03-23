@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM drop  table if exists t2;
+DROP TABLE IF EXISTS t2;
 
-SYSTEM drop  table if exists t3;
+DROP TABLE IF EXISTS t3;
 
 CREATE TABLE t1
 (
@@ -214,8 +214,8 @@ INNER JOIN t3 AS table3
 
 SET enable_optimize_predicate_expression = 1;
 
-SYSTEM drop  table t1;
+DROP TABLE t1;
 
-SYSTEM drop  table t2;
+DROP TABLE t2;
 
-SYSTEM drop  table t3;
+DROP TABLE t3;

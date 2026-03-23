@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_mutation;
+DROP TABLE IF EXISTS t_sparse_mutation;
 
 CREATE TABLE t_sparse_mutation
 (
@@ -27,4 +27,4 @@ WHERE database = currentDatabase()
     AND table = 't_sparse_mutation'
     AND active;
 
-SYSTEM DROP  TABLE t_sparse_mutation;
+DROP TABLE t_sparse_mutation;

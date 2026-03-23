@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02125_test_table;
+DROP TABLE IF EXISTS `02125_test_table`;
 
 CREATE TABLE `02125_test_table`
 (
@@ -9,7 +9,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `02125_test_table`;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02125_test_dictionary;
+DROP DICTIONARY IF EXISTS `02125_test_dictionary`;
 
 CREATE DICTIONARY `02125_test_dictionary`
 (

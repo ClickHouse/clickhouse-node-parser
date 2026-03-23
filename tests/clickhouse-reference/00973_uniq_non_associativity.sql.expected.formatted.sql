@@ -2,13 +2,13 @@
  * But due to subtle bug in implementation it is not associative in very rare cases.
  * In this test we fill data structure with specific pattern that reproduces this behaviour.
  */
-SYSTEM DROP  TABLE IF EXISTS part_a;
+DROP TABLE IF EXISTS part_a;
 
-SYSTEM DROP  TABLE IF EXISTS part_b;
+DROP TABLE IF EXISTS part_b;
 
-SYSTEM DROP  TABLE IF EXISTS part_c;
+DROP TABLE IF EXISTS part_c;
 
-SYSTEM DROP  TABLE IF EXISTS part_d;
+DROP TABLE IF EXISTS part_d;
 
 /* Create values that will resize hash table to the maximum (131072 cells) and fill it with less than max_fill (65536 cells)
  * and occupy cells near the end except last 10 cells:
@@ -228,10 +228,10 @@ FROM (
         FROM part_d
     );
 
-SYSTEM DROP  TABLE part_a;
+DROP TABLE part_a;
 
-SYSTEM DROP  TABLE part_b;
+DROP TABLE part_b;
 
-SYSTEM DROP  TABLE part_c;
+DROP TABLE part_c;
 
-SYSTEM DROP  TABLE part_d;
+DROP TABLE part_d;

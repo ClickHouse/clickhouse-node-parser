@@ -1,6 +1,6 @@
 SET optimize_on_insert = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tags;
+DROP TABLE IF EXISTS tags;
 
 CREATE TABLE tags
 (
@@ -13,10 +13,10 @@ ORDER BY (id);
 
 INSERT INTO tags (id, seqs);
 
-SYSTEM DROP  TABLE tags;
+DROP TABLE tags;
 
 -- https://github.com/ClickHouse/ClickHouse/issues/15294
-SYSTEM drop  table if exists TestTable;
+DROP TABLE IF EXISTS TestTable;
 
 CREATE TABLE TestTable
 (
@@ -41,12 +41,12 @@ FROM TestTable
 WHERE column == 'test'
 GROUP BY column;
 
-SYSTEM drop  table TestTable;
+DROP TABLE TestTable;
 
 -- https://github.com/ClickHouse/ClickHouse/issues/11407
-SYSTEM drop  table if exists aaa;
+DROP TABLE IF EXISTS aaa;
 
-SYSTEM drop  table if exists bbb;
+DROP TABLE IF EXISTS bbb;
 
 CREATE TABLE aaa
 (
@@ -70,6 +70,6 @@ PARTITION BY tuple();
 
 INSERT INTO bbb;
 
-SYSTEM drop  table aaa;
+DROP TABLE aaa;
 
-SYSTEM drop  table bbb;
+DROP TABLE bbb;

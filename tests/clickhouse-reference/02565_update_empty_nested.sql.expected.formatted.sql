@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_update_empty_nested;
+DROP TABLE IF EXISTS t_update_empty_nested;
 
 CREATE TABLE t_update_empty_nested
 (
@@ -25,4 +25,4 @@ SELECT
     sum(length(nested.arr2))
 FROM t_update_empty_nested;
 
-SYSTEM DROP  TABLE t_update_empty_nested;
+DROP TABLE t_update_empty_nested;

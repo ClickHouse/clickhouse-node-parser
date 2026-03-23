@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_func_to_subcolumns_variant;
+DROP TABLE IF EXISTS t_func_to_subcolumns_variant;
 
 SET allow_experimental_variant_type = 1;
 
@@ -19,4 +19,4 @@ SET enable_analyzer = 1;
 SELECT variantElement(v, 'String')
 FROM t_func_to_subcolumns_variant;
 
-SYSTEM DROP  TABLE t_func_to_subcolumns_variant;
+DROP TABLE t_func_to_subcolumns_variant;

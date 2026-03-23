@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -40,4 +40,4 @@ SELECT count()
 FROM test
 WHERE d <= toDate('2024-01-02');
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS user_country;
+DROP TABLE IF EXISTS user_country;
 
-SYSTEM DROP  TABLE IF EXISTS user_transactions;
+DROP TABLE IF EXISTS user_transactions;
 
 CREATE TABLE user_country
 (
@@ -35,6 +35,6 @@ WHERE user_id = 1
     AND country = 'US'
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE user_country;
+DROP TABLE user_country;
 
-SYSTEM DROP  TABLE user_transactions;
+DROP TABLE user_transactions;

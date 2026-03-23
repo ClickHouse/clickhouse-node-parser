@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS foo_local;
+DROP TABLE IF EXISTS foo_local;
 
-SYSTEM DROP  TABLE IF EXISTS foo_distributed;
+DROP TABLE IF EXISTS foo_distributed;
 
 CREATE TABLE foo_local
 (
@@ -24,6 +24,6 @@ FROM
 INNER JOIN _tmp_baz
     ON foo_distributed.bar = _tmp_baz.qux;
 
-SYSTEM DROP  TABLE foo_local;
+DROP TABLE foo_local;
 
-SYSTEM DROP  TABLE foo_distributed;
+DROP TABLE foo_distributed;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists lc_test;
+DROP TABLE IF EXISTS lc_test;
 
 CREATE TABLE lc_test
 (

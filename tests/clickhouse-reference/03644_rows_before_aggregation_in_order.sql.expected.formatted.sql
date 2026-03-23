@@ -1,6 +1,6 @@
 -- Tags: no-parallel-replicas, no-random-merge-tree-settings
 -- no-parallel-replicas: always returns rows_before_limit_counter in response
-SYSTEM drop  table if exists 03644_data;
+DROP TABLE IF EXISTS `03644_data`;
 
 CREATE TABLE `03644_data`
 (
@@ -24,4 +24,4 @@ SETTINGS
     optimize_aggregation_in_order = 1
 FORMAT JSONCompact;
 
-SYSTEM drop  table 03644_data;
+DROP TABLE `03644_data`;

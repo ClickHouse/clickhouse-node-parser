@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS rollup;
+DROP TABLE IF EXISTS `rollup`;
 
 CREATE TABLE `rollup`
 (
@@ -81,4 +81,4 @@ ORDER BY
     a ASC,
     b ASC;
 
-SYSTEM DROP  TABLE rollup;
+DROP TABLE `rollup`;

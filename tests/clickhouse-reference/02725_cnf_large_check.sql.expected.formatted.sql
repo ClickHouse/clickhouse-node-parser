@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02725_cnf;
+DROP TABLE IF EXISTS `02725_cnf`;
 
 CREATE TABLE `02725_cnf`
 (
@@ -119,4 +119,4 @@ SETTINGS
     convert_query_to_cnf = 1,
     enable_analyzer = 0;
 
-SYSTEM DROP  TABLE 02725_cnf;
+DROP TABLE `02725_cnf`;

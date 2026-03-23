@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -22,4 +22,4 @@ WHERE (database = currentDatabase())
     AND (table = 't')
     AND active;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

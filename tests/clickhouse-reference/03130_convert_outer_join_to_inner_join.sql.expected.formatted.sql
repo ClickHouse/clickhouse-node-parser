@@ -2,7 +2,7 @@ SET enable_analyzer = 1;
 
 SET join_algorithm = 'hash';
 
-SYSTEM DROP  TABLE IF EXISTS test_table_1;
+DROP TABLE IF EXISTS test_table_1;
 
 CREATE TABLE test_table_1
 (
@@ -13,7 +13,7 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 16; # We have number of granules in the `EXPLAIN` output in reference file
 
-SYSTEM DROP  TABLE IF EXISTS test_table_2;
+DROP TABLE IF EXISTS test_table_2;
 
 CREATE TABLE test_table_2
 (
@@ -52,6 +52,6 @@ FULL JOIN test_table_2 AS rhs
 WHERE lhs.id != 0
     AND rhs.id != 0;
 
-SYSTEM DROP  TABLE test_table_1;
+DROP TABLE test_table_1;
 
-SYSTEM DROP  TABLE test_table_2;
+DROP TABLE test_table_2;

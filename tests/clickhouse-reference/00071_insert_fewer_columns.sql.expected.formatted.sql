@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS insert_fewer_columns;
+DROP TABLE IF EXISTS insert_fewer_columns;
 
 CREATE TABLE insert_fewer_columns
 (
@@ -13,7 +13,7 @@ SELECT *
 FROM insert_fewer_columns;
 
 -- Test position arguments in insert.
-SYSTEM DROP  TABLE IF EXISTS insert_fewer_columns_2;
+DROP TABLE IF EXISTS insert_fewer_columns_2;
 
 CREATE TABLE insert_fewer_columns_2
 (
@@ -35,4 +35,4 @@ SELECT
     b
 FROM insert_fewer_columns_2;
 
-SYSTEM DROP  TABLE insert_fewer_columns;
+DROP TABLE insert_fewer_columns;

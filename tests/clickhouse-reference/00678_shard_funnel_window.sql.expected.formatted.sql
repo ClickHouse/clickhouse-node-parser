@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS remote_test;
+DROP TABLE IF EXISTS remote_test;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

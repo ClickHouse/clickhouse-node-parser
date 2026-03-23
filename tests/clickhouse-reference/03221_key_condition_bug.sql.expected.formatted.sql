@@ -14,4 +14,4 @@ FROM report_metrics_v2
 WHERE (intDiv(a, 50) = 200)
     AND (intDiv(a, 50000) = 0);
 
-SYSTEM DROP  TABLE report_metrics_v2;
+DROP TABLE report_metrics_v2;

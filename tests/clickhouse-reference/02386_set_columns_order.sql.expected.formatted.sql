@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS userid_set;
+DROP TABLE IF EXISTS userid_set;
 
-SYSTEM DROP  TABLE IF EXISTS userid_test;
+DROP TABLE IF EXISTS userid_test;
 
-SYSTEM DROP  TABLE IF EXISTS userid_set2;
+DROP TABLE IF EXISTS userid_set2;
 
 CREATE TABLE userid_set
 (
@@ -39,8 +39,8 @@ ENGINE = Set;
 
 INSERT INTO userid_set2;
 
-SYSTEM DROP  TABLE userid_set;
+DROP TABLE userid_set;
 
-SYSTEM DROP  TABLE userid_test;
+DROP TABLE userid_test;
 
-SYSTEM DROP  TABLE userid_set2;
+DROP TABLE userid_set2;

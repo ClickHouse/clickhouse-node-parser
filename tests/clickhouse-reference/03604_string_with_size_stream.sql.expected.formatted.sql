@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -27,7 +27,7 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY column ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (
@@ -51,9 +51,9 @@ SET query_plan_optimize_lazy_materialization = 1;
 
 SET query_plan_max_limit_for_lazy_materialization = 10;
 
-SYSTEM drop  table if exists test_old;
+DROP TABLE IF EXISTS test_old;
 
-SYSTEM drop  table if exists test_new;
+DROP TABLE IF EXISTS test_new;
 
 CREATE TABLE test_old
 (
@@ -119,18 +119,18 @@ WHERE y > 5
 ORDER BY y ASC
 LIMIT 2;
 
-SYSTEM drop  table test_old;
+DROP TABLE test_old;
 
-SYSTEM drop  table test_new;
+DROP TABLE test_new;
 
 -- Substreams cache test for Compact/Wide parts and inside Tuple
-SYSTEM drop  table if exists test_old_compact;
+DROP TABLE IF EXISTS test_old_compact;
 
-SYSTEM drop  table if exists test_old_wide;
+DROP TABLE IF EXISTS test_old_wide;
 
-SYSTEM drop  table if exists test_new_compact;
+DROP TABLE IF EXISTS test_new_compact;
 
-SYSTEM drop  table if exists test_new_wide;
+DROP TABLE IF EXISTS test_new_wide;
 
 CREATE TABLE test_old_compact
 (
@@ -284,13 +284,13 @@ ORDER BY `all` ASC
 LIMIT 2
 OFFSET 3;
 
-SYSTEM drop  table test_old_compact;
+DROP TABLE test_old_compact;
 
-SYSTEM drop  table test_old_wide;
+DROP TABLE test_old_wide;
 
-SYSTEM drop  table test_new_compact;
+DROP TABLE test_new_compact;
 
-SYSTEM drop  table test_new_wide;
+DROP TABLE test_new_wide;
 
 -- Test empty string comparison and .size subcolumn optimization
 SET enable_analyzer = 1;
@@ -299,7 +299,7 @@ SET optimize_empty_string_comparisons = 1;
 
 SET optimize_functions_to_subcolumns = 0;
 
-SYSTEM drop  table if exists t_column_names;
+DROP TABLE IF EXISTS t_column_names;
 
 CREATE TABLE t_column_names
 (
@@ -314,4 +314,4 @@ FROM t_column_names;
 
 SET optimize_functions_to_subcolumns = 1;
 
-SYSTEM drop  table t_column_names;
+DROP TABLE t_column_names;

@@ -1,6 +1,6 @@
 -- Tags: no-parallel-replicas, no-parallel
 -- Tests correctness and profile events of SYSTEM CLEAR TEXT INDEX CACHES
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 SET enable_full_text_index = 1;
 

@@ -1,5 +1,5 @@
 -- Tags: stateful, race
-SYSTEM drop  table if exists dest00153;
+DROP TABLE IF EXISTS dest00153;
 
 CREATE TEMPORARY TABLE dest00153
 (

@@ -1,5 +1,5 @@
 -- Tags: no-object-storage
-SYSTEM drop  table if exists tvm;
+DROP TABLE IF EXISTS tvm;
 
 CREATE TABLE tvm
 (
@@ -623,4 +623,4 @@ WHERE table = 'tvm'
     AND peak_memory_usage > 100000000
 FORMAT Vertical;
 
-SYSTEM drop  table tvm;
+DROP TABLE tvm;

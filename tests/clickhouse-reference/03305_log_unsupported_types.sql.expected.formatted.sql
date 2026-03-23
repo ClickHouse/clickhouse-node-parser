@@ -3,7 +3,7 @@ SET enable_json_type = 1;
 
 SET enable_dynamic_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

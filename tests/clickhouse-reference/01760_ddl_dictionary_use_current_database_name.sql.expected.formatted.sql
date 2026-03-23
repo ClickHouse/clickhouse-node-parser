@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ddl_dictonary_test_source;
+DROP TABLE IF EXISTS ddl_dictonary_test_source;
 
 CREATE TABLE ddl_dictonary_test_source
 (
@@ -11,7 +11,7 @@ INSERT INTO ddl_dictonary_test_source;
 
 INSERT INTO ddl_dictonary_test_source;
 
-SYSTEM DROP  DICTIONARY IF EXISTS ddl_dictionary_test;
+DROP DICTIONARY IF EXISTS ddl_dictionary_test;
 
 CREATE DICTIONARY ddl_dictionary_test
 (
@@ -30,6 +30,6 @@ SELECT dictHas('ddl_dictionary_test', number)
 FROM `system`.numbers
 LIMIT 3;
 
-SYSTEM DROP  DICTIONARY ddl_dictionary_test;
+DROP DICTIONARY ddl_dictionary_test;
 
-SYSTEM DROP  TABLE ddl_dictonary_test_source;
+DROP TABLE ddl_dictonary_test_source;

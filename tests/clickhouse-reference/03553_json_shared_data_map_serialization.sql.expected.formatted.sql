@@ -1,6 +1,6 @@
 SET output_format_json_quote_64bit_integers = 0;
 
-SYSTEM drop  table if exists source;
+DROP TABLE IF EXISTS source;
 
 CREATE TABLE source
 (
@@ -10,7 +10,7 @@ ENGINE = Memory;
 
 INSERT INTO source;
 
-SYSTEM drop  table if exists test_compact_map;
+DROP TABLE IF EXISTS test_compact_map;
 
 CREATE TABLE test_compact_map
 (
@@ -64,9 +64,9 @@ SELECT
     json.`^a`
 FROM test_compact_map;
 
-SYSTEM drop  table test_compact_map;
+DROP TABLE test_compact_map;
 
-SYSTEM drop  table if exists test_compact_map_tuple;
+DROP TABLE IF EXISTS test_compact_map_tuple;
 
 CREATE TABLE test_compact_map_tuple
 (
@@ -132,9 +132,9 @@ SELECT
     json.data
 FROM test_compact_map_tuple;
 
-SYSTEM drop  table test_compact_map_tuple;
+DROP TABLE test_compact_map_tuple;
 
-SYSTEM drop  table if exists test_wide_map;
+DROP TABLE IF EXISTS test_wide_map;
 
 CREATE TABLE test_wide_map
 (
@@ -288,9 +288,9 @@ SELECT
 FROM test_wide_map
 SETTINGS max_block_size = 3;
 
-SYSTEM drop  table test_wide_map;
+DROP TABLE test_wide_map;
 
-SYSTEM drop  table if exists test_wide_map_tuple;
+DROP TABLE IF EXISTS test_wide_map_tuple;
 
 CREATE TABLE test_wide_map_tuple
 (
@@ -482,6 +482,6 @@ SELECT
 FROM test_wide_map_tuple
 SETTINGS max_block_size = 3;
 
-SYSTEM drop  table test_wide_map_tuple;
+DROP TABLE test_wide_map_tuple;
 
-SYSTEM drop  table source;
+DROP TABLE source;

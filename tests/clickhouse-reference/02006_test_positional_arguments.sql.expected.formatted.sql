@@ -4,9 +4,9 @@ SET enable_positional_arguments = 1;
 
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
-SYSTEM drop  table if exists test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test
 (
@@ -309,7 +309,7 @@ FROM (
         ORDER BY 1 ASC
     );
 
-SYSTEM drop  table if exists tp2;
+DROP TABLE IF EXISTS tp2;
 
 CREATE TABLE tp2
 (
@@ -389,4 +389,4 @@ SELECT
 FROM test
 GROUP BY data;
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -5,7 +5,7 @@ SELECT `01856_test_function_0`(2, 3, 4);
 
 SELECT isConstant(`01856_test_function_0`(1, 2, 3));
 
-SYSTEM DROP  FUNCTION 01856_test_function_0;
+DROP FUNCTION `01856_test_function_0`;
 
 CREATE FUNCTION `01856_test_function_1` AS (a, b) -> `01856_test_function_1`(a, b) + `01856_test_function_1`(a, b); --{serverError CANNOT_CREATE_RECURSIVE_FUNCTION}
 
@@ -17,8 +17,8 @@ CREATE FUNCTION `01856_test_function_2` AS (a, b) -> a + b;
 
 CREATE FUNCTION `01856_test_function_2` AS a -> concat(a, '!!!'); --{serverError FUNCTION_ALREADY_EXISTS}
 
-SYSTEM DROP  FUNCTION 01856_test_function_2;
+DROP FUNCTION `01856_test_function_2`;
 
-SYSTEM DROP  FUNCTION unknown_function; -- {serverError UNKNOWN_FUNCTION}
+DROP FUNCTION unknown_function; -- {serverError UNKNOWN_FUNCTION}
 
-SYSTEM DROP  FUNCTION CAST; -- {serverError CANNOT_DROP_FUNCTION}
+DROP FUNCTION CAST; -- {serverError CANNOT_DROP_FUNCTION}

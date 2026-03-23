@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM DROP  TABLE IF EXISTS group_by_null_key;
+DROP TABLE IF EXISTS group_by_null_key;
 
 CREATE TABLE group_by_null_key
 (
@@ -37,4 +37,4 @@ SELECT
 FROM group_by_null_key
 GROUP BY ROLLUP(c2);
 
-SYSTEM DROP  TABLE group_by_null_key;
+DROP TABLE group_by_null_key;

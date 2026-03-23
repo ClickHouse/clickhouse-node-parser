@@ -2,7 +2,7 @@
 -- Replicated
 SET allow_suspicious_ttl_expressions = 0;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_ttl_00933 SYNC;
+DROP TABLE IF EXISTS replicated_ttl_00933;
 
 -- Create
 CREATE TABLE replicated_ttl_00933

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS `01851_merge_tree`;
+DROP TABLE IF EXISTS `01851_merge_tree`;
 
 CREATE TABLE `01851_merge_tree`
 (
@@ -10,7 +10,7 @@ CREATE TABLE `01851_merge_tree`
 ENGINE = MergeTree
 ORDER BY n1;
 
-SYSTEM DROP  TABLE IF EXISTS `001851_merge_tree_mv`;
+DROP TABLE IF EXISTS `001851_merge_tree_mv`;
 
 CREATE MATERIALIZED VIEW `01851_merge_tree_mv`
 ENGINE = Memory
@@ -20,6 +20,6 @@ SELECT
     n3
 FROM `01851_merge_tree`;
 
-SYSTEM DROP  TABLE `01851_merge_tree`;
+DROP TABLE `01851_merge_tree`;
 
-SYSTEM DROP  TABLE `01851_merge_tree_mv`;
+DROP TABLE `01851_merge_tree_mv`;

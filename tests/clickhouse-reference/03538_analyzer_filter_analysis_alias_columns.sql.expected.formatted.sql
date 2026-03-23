@@ -22,7 +22,7 @@ FROM
 INNER JOIN t0__fuzz_42
     USING (c1); -- { serverError NOT_IMPLEMENTED }
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
 CREATE TABLE t0
 (

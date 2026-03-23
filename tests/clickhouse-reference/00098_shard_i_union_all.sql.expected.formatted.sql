@@ -1,7 +1,7 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS report1;
+DROP TABLE IF EXISTS report1;
 
-SYSTEM DROP  TABLE IF EXISTS report2;
+DROP TABLE IF EXISTS report2;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -47,6 +47,6 @@ ORDER BY
     id ASC,
     event_date ASC;
 
-SYSTEM DROP  TABLE report1;
+DROP TABLE report1;
 
-SYSTEM DROP  TABLE report2;
+DROP TABLE report2;

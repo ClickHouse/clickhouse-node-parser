@@ -3,7 +3,7 @@ SET session_timezone = 'UTC';
 -- For explain with indexes and key condition values verification
 SET parallel_replicas_local_plan = 1;
 
-SYSTEM DROP  TABLE IF EXISTS 03636_data_pk, 03636_data_partitions, 03636_data_parsed;
+DROP TABLE IF EXISTS `03636_data_pk`, `03636_data_partitions`, `03636_data_parsed`;
 
 CREATE TABLE `03636_data_pk`
 (
@@ -47,7 +47,7 @@ WHERE ilike(trim(`explain`), 'condition: %')
     OR ilike(trim(`explain`), 'granules: %')
 SETTINGS session_timezone = 'EST';
 
-SYSTEM DROP  TABLE 03636_data_pk;
+DROP TABLE `03636_data_pk`;
 
 CREATE TABLE `03636_data_partitions`
 (
@@ -90,7 +90,7 @@ WHERE ilike(trim(`explain`), 'condition: %')
     OR ilike(trim(`explain`), 'granules: %')
 SETTINGS session_timezone = 'EST';
 
-SYSTEM DROP  TABLE 03636_data_partitions;
+DROP TABLE `03636_data_partitions`;
 
 CREATE TABLE `03636_data_parsed`
 (
@@ -132,4 +132,4 @@ WHERE ilike(trim(`explain`), 'condition: %')
     OR ilike(trim(`explain`), 'granules: %')
 SETTINGS session_timezone = 'EST';
 
-SYSTEM DROP  TABLE 03636_data_parsed;
+DROP TABLE `03636_data_parsed`;

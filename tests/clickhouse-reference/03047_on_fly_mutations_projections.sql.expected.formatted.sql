@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_update_projections;
+DROP TABLE IF EXISTS t_update_projections;
 
 SET apply_mutations_on_fly = 1;
 
@@ -25,4 +25,4 @@ SETTINGS force_optimize_projection = 1;
 SELECT sum(v)
 FROM t_update_projections;
 
-SYSTEM DROP  TABLE t_update_projections;
+DROP TABLE t_update_projections;

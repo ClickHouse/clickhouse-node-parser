@@ -1,5 +1,5 @@
 -- Tags: no-ordinary-database, no-fasttest
-SYSTEM DROP  TABLE IF EXISTS 02706_keeper_map_insert_strict SYNC;
+DROP TABLE IF EXISTS `02706_keeper_map_insert_strict`;
 
 CREATE TABLE `02706_keeper_map_insert_strict`
 (
@@ -21,4 +21,4 @@ INSERT INTO `02706_keeper_map_insert_strict`;
 
 SET keeper_map_strict_mode = true;
 
-SYSTEM DROP  TABLE 02706_keeper_map_insert_strict;
+DROP TABLE `02706_keeper_map_insert_strict`;

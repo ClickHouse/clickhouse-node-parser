@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 SET enable_analyzer = 1;
 
@@ -33,4 +33,4 @@ INNER JOIN _table
     ON t1.a = _table.number
     AND start_date = '2024-09-23');
 
-SYSTEM drop  table t;
+DROP TABLE t;

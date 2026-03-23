@@ -1,14 +1,14 @@
 SET optimize_read_in_order = 1, query_plan_read_in_order = 1, enable_analyzer = 0;
 
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
-SYSTEM drop  table if exists tab2;
+DROP TABLE IF EXISTS tab2;
 
-SYSTEM drop  table if exists tab3;
+DROP TABLE IF EXISTS tab3;
 
-SYSTEM drop  table if exists tab4;
+DROP TABLE IF EXISTS tab4;
 
-SYSTEM drop  table if exists tab5;
+DROP TABLE IF EXISTS tab5;
 
 CREATE TABLE tab
 (

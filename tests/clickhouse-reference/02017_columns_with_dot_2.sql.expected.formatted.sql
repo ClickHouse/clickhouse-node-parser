@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_nested;
+DROP TABLE IF EXISTS test_nested;
 
 CREATE TABLE test_nested
 (
@@ -14,4 +14,4 @@ INSERT INTO test_nested;
 SELECT *
 FROM test_nested;
 
-SYSTEM DROP  TABLE test_nested;
+DROP TABLE test_nested;

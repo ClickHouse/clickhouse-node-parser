@@ -1,7 +1,7 @@
 -- Tags: long, no-azure-blob-storage
 SET output_format_json_quote_64bit_integers = 0;
 
-SYSTEM drop  table if exists source;
+DROP TABLE IF EXISTS source;
 
 CREATE TABLE source
 (
@@ -11,7 +11,7 @@ ENGINE = Memory;
 
 INSERT INTO source;
 
-SYSTEM drop  table if exists test_wide_advanced;
+DROP TABLE IF EXISTS test_wide_advanced;
 
 CREATE TABLE test_wide_advanced
 (
@@ -270,6 +270,6 @@ SELECT
 FROM test_wide_advanced
 SETTINGS max_block_size = 3;
 
-SYSTEM drop  table test_wide_advanced;
+DROP TABLE test_wide_advanced;
 
-SYSTEM drop  table source;
+DROP TABLE source;

@@ -11,4 +11,4 @@ ENGINE = ReplacingMergeTree()
 ORDER BY (id, event_date, event_time)
 PARTITION BY event_date;
 
-SYSTEM DROP  TABLE IF EXISTS test_break_ddl;
+DROP TABLE IF EXISTS test_break_ddl;

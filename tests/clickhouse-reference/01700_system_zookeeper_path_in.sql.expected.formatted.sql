@@ -1,6 +1,6 @@
 -- Tags: zookeeper, no-shared-merge-tree
 -- no-shared-merge-tree: depend on replicated merge tree zookeeper structure
-SYSTEM DROP  TABLE IF EXISTS sample_table;
+DROP TABLE IF EXISTS sample_table;
 
 CREATE TABLE sample_table
 (

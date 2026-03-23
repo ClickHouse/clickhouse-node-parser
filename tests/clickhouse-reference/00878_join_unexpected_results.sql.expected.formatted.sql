@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM drop  table if exists s;
+DROP TABLE IF EXISTS s;
 
 CREATE TABLE t
 (
@@ -146,6 +146,6 @@ WHERE t.b = 2;
 
 SET join_use_nulls = 0;
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table s;
+DROP TABLE s;

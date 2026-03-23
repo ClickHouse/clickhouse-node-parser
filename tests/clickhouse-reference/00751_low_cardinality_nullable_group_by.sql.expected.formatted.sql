@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM drop  table if exists low_null_float;
+DROP TABLE IF EXISTS low_null_float;
 
 CREATE TABLE low_null_float
 (

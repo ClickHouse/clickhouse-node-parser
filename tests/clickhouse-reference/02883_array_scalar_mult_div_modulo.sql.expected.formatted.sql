@@ -50,7 +50,7 @@ SELECT values * 5
 FROM my_table
 WHERE arrayExists(x -> x > 5, values);
 
-SYSTEM DROP  TABLE my_table;
+DROP TABLE my_table;
 
 SELECT [6, 6, 3] % 2;
 

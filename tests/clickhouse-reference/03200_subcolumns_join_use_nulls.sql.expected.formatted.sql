@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_subcolumns_join;
+DROP TABLE IF EXISTS t_subcolumns_join;
 
 CREATE TABLE t_subcolumns_join
 (
@@ -24,4 +24,4 @@ SETTINGS
     optimize_functions_to_subcolumns = 1,
     join_use_nulls = 1;
 
-SYSTEM DROP  TABLE t_subcolumns_join;
+DROP TABLE t_subcolumns_join;

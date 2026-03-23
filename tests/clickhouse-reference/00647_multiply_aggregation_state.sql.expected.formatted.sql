@@ -56,7 +56,7 @@ FROM (
             )
     );
 
-SYSTEM DROP  TABLE IF EXISTS mult_aggregation;
+DROP TABLE IF EXISTS mult_aggregation;
 
 CREATE TABLE mult_aggregation
 (

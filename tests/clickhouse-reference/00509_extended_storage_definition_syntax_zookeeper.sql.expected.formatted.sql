@@ -2,7 +2,7 @@
 -- no-shared-merge-tree: boring test, nothing new
 SET optimize_on_insert = 0;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_with_sampling;
+DROP TABLE IF EXISTS replicated_with_sampling;
 
 CREATE TABLE replicated_with_sampling
 (
@@ -17,9 +17,9 @@ INSERT INTO replicated_with_sampling;
 SELECT sum(x)
 FROM replicated_with_sampling SAMPLE 1/2;
 
-SYSTEM DROP  TABLE replicated_with_sampling;
+DROP TABLE replicated_with_sampling;
 
-SYSTEM DROP  TABLE IF EXISTS replacing;
+DROP TABLE IF EXISTS replacing;
 
 CREATE TABLE replacing
 (
@@ -40,9 +40,9 @@ INSERT INTO replacing;
 SELECT *
 FROM replacing;
 
-SYSTEM DROP  TABLE replacing;
+DROP TABLE replacing;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_collapsing;
+DROP TABLE IF EXISTS replicated_collapsing;
 
 CREATE TABLE replicated_collapsing
 (
@@ -61,9 +61,9 @@ INSERT INTO replicated_collapsing;
 SELECT *
 FROM replicated_collapsing;
 
-SYSTEM DROP  TABLE replicated_collapsing;
+DROP TABLE replicated_collapsing;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_versioned_collapsing;
+DROP TABLE IF EXISTS replicated_versioned_collapsing;
 
 CREATE TABLE replicated_versioned_collapsing
 (
@@ -85,9 +85,9 @@ INSERT INTO replicated_versioned_collapsing;
 SELECT *
 FROM replicated_versioned_collapsing;
 
-SYSTEM DROP  TABLE replicated_versioned_collapsing;
+DROP TABLE replicated_versioned_collapsing;
 
-SYSTEM DROP  TABLE IF EXISTS with_settings;
+DROP TABLE IF EXISTS with_settings;
 
 CREATE TABLE with_settings
 (
@@ -104,4 +104,4 @@ FROM `system`.replicas
 WHERE database = currentDatabase()
     AND table = 'with_settings';
 
-SYSTEM DROP  TABLE with_settings;
+DROP TABLE with_settings;

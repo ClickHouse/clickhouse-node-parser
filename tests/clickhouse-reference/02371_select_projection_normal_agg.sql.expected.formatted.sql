@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS video_log;
+DROP TABLE IF EXISTS video_log;
 
 CREATE TABLE video_log
 (
@@ -14,7 +14,7 @@ ORDER BY (user_id, device_id)
 PARTITION BY toDate(datetime)
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
-SYSTEM DROP  TABLE IF EXISTS rng;
+DROP TABLE IF EXISTS rng;
 
 CREATE TABLE rng
 (
@@ -46,7 +46,7 @@ INSERT INTO video_log SELECT
 FROM rng
 LIMIT 10;
 
-SYSTEM DROP  TABLE IF EXISTS video_log_result;
+DROP TABLE IF EXISTS video_log_result;
 
 CREATE TABLE video_log_result
 (

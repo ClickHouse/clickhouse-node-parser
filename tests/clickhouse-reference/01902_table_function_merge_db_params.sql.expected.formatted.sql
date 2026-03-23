@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01902_db_params;
+DROP DATABASE IF EXISTS `01902_db_params`;
 
 CREATE DATABASE `01902_db_params`;
 
@@ -45,4 +45,4 @@ ORDER BY
 
 USE 01902_db_params;
 
-SYSTEM DROP  DATABASE 01902_db_params;
+DROP DATABASE `01902_db_params`;

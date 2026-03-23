@@ -1,7 +1,7 @@
 -- Tags: no-parallel
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  DATABASE IF EXISTS database_for_dict;
+DROP DATABASE IF EXISTS database_for_dict;
 
 CREATE DATABASE database_for_dict;
 

@@ -1,6 +1,6 @@
 SET allow_deprecated_error_prone_window_functions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS arena;
+DROP TABLE IF EXISTS arena;
 
 CREATE TABLE arena
 (

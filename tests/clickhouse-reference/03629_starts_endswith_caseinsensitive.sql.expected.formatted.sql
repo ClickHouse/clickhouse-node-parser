@@ -57,7 +57,7 @@ SELECT
     endsWithCaseInsensitive('中国', '�'),
     endsWithCaseInsensitiveUTF8('中国', '�');
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -150,4 +150,4 @@ FROM tab
 WHERE endsWithCaseInsensitiveUTF8(S1, S2);
 
 -- endsWithCaseCaseInsensitiveUTF8 does not support FixedString
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

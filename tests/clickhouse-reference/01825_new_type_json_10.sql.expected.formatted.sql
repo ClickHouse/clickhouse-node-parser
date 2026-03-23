@@ -3,7 +3,7 @@ SET enable_json_type = 1;
 
 SET allow_suspicious_types_in_order_by = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_json_10;
+DROP TABLE IF EXISTS t_json_10;
 
 CREATE TABLE t_json_10
 (
@@ -30,4 +30,4 @@ SELECT
 FROM t_json_10
 ORDER BY o.a.b ASC;
 
-SYSTEM DROP  TABLE t_json_10;
+DROP TABLE t_json_10;

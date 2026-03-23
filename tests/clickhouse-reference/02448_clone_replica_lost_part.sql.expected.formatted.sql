@@ -2,9 +2,9 @@
 -- no-shared-merge-tree: depend on replication queue/fetches
 SET insert_keeper_fault_injection_probability = 0; -- disable fault injection; part ids are non-deterministic in case of insert retries
 
-SYSTEM drop  table if exists rmt1;
+DROP TABLE IF EXISTS rmt1;
 
-SYSTEM drop  table if exists rmt2;
+DROP TABLE IF EXISTS rmt2;
 
 CREATE TABLE rmt1
 (
@@ -151,6 +151,6 @@ SELECT
     arraySort(groupArray(n))
 FROM rmt1;
 
-SYSTEM drop  table rmt1;
+DROP TABLE rmt1;
 
-SYSTEM drop  table rmt2;
+DROP TABLE rmt2;

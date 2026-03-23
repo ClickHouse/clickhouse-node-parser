@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t50;
+DROP TABLE IF EXISTS t50;
 
 CREATE TABLE t50
 (
@@ -29,4 +29,4 @@ FROM t50
 PREWHERE b = 1
 ORDER BY a ASC;
 
-SYSTEM drop  table t50;
+DROP TABLE t50;

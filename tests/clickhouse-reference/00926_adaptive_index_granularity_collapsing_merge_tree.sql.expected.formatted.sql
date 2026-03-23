@@ -1,6 +1,6 @@
 -- Tags: no-random-merge-tree-settings
 ----- Group of very similar simple tests ------
-SYSTEM DROP  TABLE IF EXISTS zero_rows_per_granule;
+DROP TABLE IF EXISTS zero_rows_per_granule;
 
 CREATE TABLE zero_rows_per_granule
 (
@@ -39,7 +39,7 @@ WHERE table = 'zero_rows_per_granule'
 
 SELECT '-----';
 
-SYSTEM DROP  TABLE IF EXISTS four_rows_per_granule;
+DROP TABLE IF EXISTS four_rows_per_granule;
 
 CREATE TABLE four_rows_per_granule
 (

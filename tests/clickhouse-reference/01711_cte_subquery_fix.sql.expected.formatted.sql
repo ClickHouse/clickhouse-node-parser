@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 ENGINE = Memory AS
@@ -10,9 +10,9 @@ WITH cte AS (
 SELECT *
 FROM cte;
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table if exists view1;
+DROP TABLE IF EXISTS view1;
 
 CREATE VIEW view1
 AS
@@ -24,4 +24,4 @@ WITH t AS (
 SELECT n
 FROM t;
 
-SYSTEM drop  table view1;
+DROP TABLE view1;

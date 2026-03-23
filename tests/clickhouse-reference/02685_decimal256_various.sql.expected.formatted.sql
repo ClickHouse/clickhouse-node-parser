@@ -91,7 +91,7 @@ SELECT coalesce(cast('123', 'Nullable(Decimal(40, 10))'), 0);
 
 SELECT coalesce(cast('123', 'Decimal(40, 10)'), 0);
 
-SYSTEM DROP  TABLE IF EXISTS decimal_insert_cast_issue;
+DROP TABLE IF EXISTS decimal_insert_cast_issue;
 
 CREATE TABLE decimal_insert_cast_issue
 (
@@ -106,4 +106,4 @@ INSERT INTO decimal_insert_cast_issue;
 SELECT *
 FROM decimal_insert_cast_issue;
 
-SYSTEM DROP  TABLE decimal_insert_cast_issue;
+DROP TABLE decimal_insert_cast_issue;

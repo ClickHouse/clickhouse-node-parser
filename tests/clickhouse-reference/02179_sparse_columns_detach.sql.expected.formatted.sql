@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_detach;
+DROP TABLE IF EXISTS t_sparse_detach;
 
 CREATE TABLE t_sparse_detach
 (
@@ -27,4 +27,4 @@ WHERE table = 't_sparse_detach'
     AND active
 ORDER BY column ASC;
 
-SYSTEM DROP  TABLE t_sparse_detach;
+DROP TABLE t_sparse_detach;

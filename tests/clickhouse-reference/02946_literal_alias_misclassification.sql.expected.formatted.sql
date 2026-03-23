@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS literal_alias_misclassification;
+DROP TABLE IF EXISTS literal_alias_misclassification;
 
 CREATE TABLE literal_alias_misclassification
 (

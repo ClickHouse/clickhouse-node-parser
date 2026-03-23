@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists X;
+DROP TABLE IF EXISTS X;
 
-SYSTEM drop  table if exists Y;
+DROP TABLE IF EXISTS Y;
 
 CREATE TABLE X
 (
@@ -114,6 +114,6 @@ SELECT '----';
 
 SET join_use_nulls = 1;
 
-SYSTEM drop  table X;
+DROP TABLE X;
 
-SYSTEM drop  table Y;
+DROP TABLE Y;

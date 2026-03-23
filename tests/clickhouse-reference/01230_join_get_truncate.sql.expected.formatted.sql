@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS join_test;
+DROP TABLE IF EXISTS join_test;
 
 CREATE TABLE join_test
 (
@@ -27,4 +27,4 @@ LIMIT 1000;
 SELECT joinGet('join_test', 'num', 500);
 
 -- joinGet('join_test', 'num', 500) will be 1000 and it is not fine
-SYSTEM DROP  TABLE join_test;
+DROP TABLE join_test;

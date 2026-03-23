@@ -1,5 +1,5 @@
 -- Tags: zookeeper
-SYSTEM DROP  TABLE IF EXISTS join_inner_table SYNC;
+DROP TABLE IF EXISTS join_inner_table;
 
 CREATE TABLE join_inner_table
 (
@@ -105,7 +105,7 @@ SETTINGS
     enable_analyzer = 1;
 
 ---- Query with JOIN
-SYSTEM DROP  TABLE IF EXISTS join_outer_table SYNC;
+DROP TABLE IF EXISTS join_outer_table;
 
 CREATE TABLE join_outer_table
 (

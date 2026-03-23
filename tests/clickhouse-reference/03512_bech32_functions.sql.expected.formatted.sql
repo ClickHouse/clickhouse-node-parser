@@ -51,7 +51,7 @@ FROM (
         SELECT bech32Decode(bech32Encode('bc', unhex('751e76e8199196d454941c45d1b3a323f1433bd6'))) AS tup
     );
 
-SYSTEM DROP  TABLE IF EXISTS hex_data;
+DROP TABLE IF EXISTS hex_data;
 
 CREATE TABLE hex_data
 (
@@ -80,7 +80,7 @@ LIMIT 1;
 
 -- for encoding, if using a FixedString column for the data it is crucial that there is no padding
 -- since the input is binary, there is no way to check for it
-SYSTEM DROP  TABLE IF EXISTS bech32_test;
+DROP TABLE IF EXISTS bech32_test;
 
 CREATE TABLE bech32_test
 (
@@ -129,9 +129,9 @@ FROM (
         FROM bech32_test
     ) AS round_trip;
 
-SYSTEM DROP  TABLE hex_data;
+DROP TABLE hex_data;
 
-SYSTEM DROP  TABLE bech32_test;
+DROP TABLE bech32_test;
 
 -- negative tests
 SELECT bech32Decode('');
@@ -193,7 +193,7 @@ FROM (
     );
 
 -- test decode from table
-SYSTEM DROP  TABLE IF EXISTS addresses;
+DROP TABLE IF EXISTS addresses;
 
 CREATE TABLE addresses
 (
@@ -223,4 +223,4 @@ SELECT
     hex(bech32Decode(address).2) = hex(bech32Decode(address_fixed).2) AS match
 FROM bech32_test;
 
-SYSTEM DROP  TABLE addresses;
+DROP TABLE addresses;

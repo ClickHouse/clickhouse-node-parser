@@ -1,8 +1,8 @@
 -- Tags: no-parallel-replicas
 -- no-parallel-replicas: FORMAT JSON returns additional keys
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM DROP  TABLE IF EXISTS t_v;
+DROP TABLE IF EXISTS t_v;
 
 CREATE TABLE t
 (

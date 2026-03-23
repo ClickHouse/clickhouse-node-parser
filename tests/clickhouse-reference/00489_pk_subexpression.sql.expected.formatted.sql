@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS pk;
+DROP TABLE IF EXISTS pk;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -75,4 +75,4 @@ FROM pk
 WHERE (and(greaterOrEquals(x, toDateTime(60)), lessOrEquals(x, toDateTime(120))))
     AND y = 11;
 
-SYSTEM DROP  TABLE pk;
+DROP TABLE pk;

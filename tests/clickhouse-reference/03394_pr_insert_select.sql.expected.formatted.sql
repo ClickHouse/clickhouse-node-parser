@@ -2,9 +2,9 @@ SET enable_analyzer = 1; -- parallel distributed insert select for replicated ta
 
 SET parallel_distributed_insert_select = 2;
 
-SYSTEM DROP  TABLE IF EXISTS t_mt_source;
+DROP TABLE IF EXISTS t_mt_source;
 
-SYSTEM DROP  TABLE IF EXISTS t_rmt_target SYNC;
+DROP TABLE IF EXISTS t_rmt_target;
 
 CREATE TABLE t_mt_source
 (
@@ -64,6 +64,6 @@ SELECT *
 FROM t_mt_source
 ORDER BY k ASC;
 
-SYSTEM DROP  TABLE t_mt_source;
+DROP TABLE t_mt_source;
 
-SYSTEM DROP  TABLE t_rmt_target SYNC;
+DROP TABLE t_rmt_target;

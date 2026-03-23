@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02691_drop_column_replicated;
+DROP TABLE IF EXISTS `02691_drop_column_replicated`;
 
 CREATE TABLE `02691_drop_column_replicated`
 (
@@ -12,4 +12,4 @@ ORDER BY col1;
 
 INSERT INTO `02691_drop_column_replicated`;
 
-SYSTEM DROP  TABLE 02691_drop_column_replicated;
+DROP TABLE `02691_drop_column_replicated`;

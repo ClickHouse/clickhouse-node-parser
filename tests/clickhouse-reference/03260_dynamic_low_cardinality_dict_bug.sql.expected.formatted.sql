@@ -2,7 +2,7 @@ SET allow_experimental_dynamic_type = 1;
 
 SET min_bytes_to_use_direct_io = 0;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -22,4 +22,4 @@ SELECT d.`LowCardinality(String)`
 FROM test
 SETTINGS max_threads = 1;
 
-SYSTEM drop  table test;
+DROP TABLE test;

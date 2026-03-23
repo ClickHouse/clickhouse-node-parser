@@ -7,7 +7,7 @@ SET use_variant_as_common_type = 1;
 
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -28,4 +28,4 @@ FROM
 ARRAY JOIN json.b
 WHERE has(json.a, 2);
 
-SYSTEM drop  table test;
+DROP TABLE test;

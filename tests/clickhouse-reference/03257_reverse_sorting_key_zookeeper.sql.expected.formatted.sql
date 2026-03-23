@@ -1,7 +1,7 @@
 -- Tags: zookeeper, no-random-merge-tree-settings, no-replicated-database
-SYSTEM drop  table if exists x1;
+DROP TABLE IF EXISTS x1;
 
-SYSTEM drop  table if exists x2;
+DROP TABLE IF EXISTS x2;
 
 CREATE TABLE x1
 (
@@ -32,6 +32,6 @@ FROM `system`.zookeeper
 WHERE path = concat('/clickhouse/tables/', currentDatabase(), '/x2')
     AND name = 'metadata';
 
-SYSTEM drop  table x1;
+DROP TABLE x1;
 
-SYSTEM drop  table x2;
+DROP TABLE x2;

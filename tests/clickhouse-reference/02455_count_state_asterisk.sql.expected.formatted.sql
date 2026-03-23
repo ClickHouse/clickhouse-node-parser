@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists a;
+DROP TABLE IF EXISTS a;
 
-SYSTEM drop  table if exists b;
+DROP TABLE IF EXISTS b;
 
 CREATE TABLE a
 (
@@ -20,6 +20,6 @@ INSERT INTO a;
 SELECT countMerge(*)
 FROM b;
 
-SYSTEM drop  table b;
+DROP TABLE b;
 
-SYSTEM drop  table a;
+DROP TABLE a;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS multidimensional;
+DROP TABLE IF EXISTS multidimensional;
 
 CREATE TABLE multidimensional
 (
@@ -19,7 +19,7 @@ SELECT *
 FROM multidimensional
 ORDER BY t ASC;
 
-SYSTEM DROP  TABLE multidimensional;
+DROP TABLE multidimensional;
 
 CREATE TABLE multidimensional
 (

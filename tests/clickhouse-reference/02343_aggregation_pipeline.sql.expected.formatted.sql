@@ -17,7 +17,7 @@ SET allow_prefetched_read_pool_for_remote_filesystem = 0;
 SET allow_prefetched_read_pool_for_local_filesystem = 0;
 
 -- { echoOff }
-SYSTEM DROP  TABLE IF EXISTS proj_agg_02343;
+DROP TABLE IF EXISTS proj_agg_02343;
 
 CREATE TABLE proj_agg_02343
 (

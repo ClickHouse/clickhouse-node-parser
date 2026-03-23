@@ -160,11 +160,11 @@ FROM {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict;
 SELECT 37 == COUNTDistinct(prefix)
 FROM {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict;
 
-SYSTEM DROP  TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict;
+DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict;
 
-SYSTEM DROP  DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict_ipv4_trie;
+DROP DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict_ipv4_trie;
 
-SYSTEM DROP  TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie;
+DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie;
 
 CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie
 (
@@ -727,11 +727,11 @@ WHERE prefix == '2620:0:870::/48';
 SELECT 134 == COUNT(*)
 FROM {CLICKHOUSE_DATABASE:Identifier}.table_from_ip_trie_dict;
 
-SYSTEM DROP  TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_from_ip_trie_dict;
+DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_from_ip_trie_dict;
 
-SYSTEM DROP  DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict_ip_trie;
+DROP DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict_ip_trie;
 
-SYSTEM DROP  TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie;
+DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie;
 
 INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie SELECT
     concat('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/', toString(number)) AS prefix,
@@ -1037,4 +1037,4 @@ SELECT '30' == dictGetString(concat({CLICKHOUSE_DATABASE:String}, '.dict_ip_trie
 
 SELECT '30' == dictGetString(concat({CLICKHOUSE_DATABASE:String}, '.dict_ip_trie'), 'val', tuple(IPv4StringToNum('255.255.255.255')));
 
-SYSTEM DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
+DROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};

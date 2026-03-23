@@ -1,7 +1,7 @@
 -- Tags: long, no-parallel
 -- Generate many parts (partitions) to ensure that all replicas will be chosen for distributed index analysis
 -- even failed replica (that is included into parallel_replicas cluster), and ensure that the SELECT wont fail (parts should be analyzed locally).
-SYSTEM drop  table if exists test_10m;
+DROP TABLE IF EXISTS test_10m;
 
 CREATE TABLE test_10m
 (

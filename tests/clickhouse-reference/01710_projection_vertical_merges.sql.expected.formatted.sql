@@ -1,6 +1,6 @@
 -- Tags: long, no-parallel, no-msan, no-tsan, no-asan
 -- set no-parallel and no sanitizers tag is to prevent timeout of this test
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -42,4 +42,4 @@ SELECT c18
 FROM t
 WHERE c1 < 0;
 
-SYSTEM drop  table t;
+DROP TABLE t;

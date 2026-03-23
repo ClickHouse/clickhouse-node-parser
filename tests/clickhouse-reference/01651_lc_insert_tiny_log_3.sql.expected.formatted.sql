@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1, max_rows_to_read = '31M';
 
-SYSTEM drop  table if exists perf_lc_num;
+DROP TABLE IF EXISTS perf_lc_num;
 
 CREATE TABLE perf_lc_num
 (

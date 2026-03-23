@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS summing_merge_tree_datetime64;
+DROP TABLE IF EXISTS summing_merge_tree_datetime64;
 
 CREATE TABLE summing_merge_tree_datetime64
 (
@@ -37,4 +37,4 @@ INSERT INTO summing_merge_tree_datetime64 SELECT
 SELECT *
 FROM summing_merge_tree_datetime64 FINAL;
 
-SYSTEM DROP  TABLE summing_merge_tree_datetime64;
+DROP TABLE summing_merge_tree_datetime64;

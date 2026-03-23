@@ -1,7 +1,7 @@
 -- Tags: long, no-object-storage
-SYSTEM drop  table if exists tp_1;
+DROP TABLE IF EXISTS tp_1;
 
-SYSTEM drop  table if exists tp_2;
+DROP TABLE IF EXISTS tp_2;
 
 CREATE TABLE tp_1
 (

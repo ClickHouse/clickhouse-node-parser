@@ -3,7 +3,7 @@ SELECT now() + CAST(toFixedString(materialize(toNullable('1')), 1), 'IPv6'); -- 
 
 SELECT CAST('2000-01-01', 'Date32') - CAST(0, 'IPv4'); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (

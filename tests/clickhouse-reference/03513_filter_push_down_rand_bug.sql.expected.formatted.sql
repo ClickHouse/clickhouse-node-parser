@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists users_items;
+DROP TABLE IF EXISTS users_items;
 
 CREATE TABLE users_items
 (

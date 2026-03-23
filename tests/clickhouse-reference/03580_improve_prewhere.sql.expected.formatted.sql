@@ -17,7 +17,7 @@ SET allow_experimental_statistics = 1;
 
 SET use_statistics = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_improve_prewhere;
+DROP TABLE IF EXISTS test_improve_prewhere;
 
 CREATE TABLE test_improve_prewhere
 (
@@ -78,4 +78,4 @@ FROM (
 WHERE ilike(`explain`, '%Prewhere filter column%');
 
 -- { echoOff }
-SYSTEM DROP  TABLE test_improve_prewhere;
+DROP TABLE test_improve_prewhere;

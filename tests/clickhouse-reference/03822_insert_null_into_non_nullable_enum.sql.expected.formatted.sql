@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/69683
 -- Inserting NULL into a non-Nullable Enum column should use the default value,
 -- not produce an invalid value that causes errors later.
-SYSTEM DROP  TABLE IF EXISTS t_enum_null;
+DROP TABLE IF EXISTS t_enum_null;
 
 CREATE TABLE t_enum_null
 (
@@ -16,4 +16,4 @@ INSERT INTO t_enum_null (c0);
 SELECT *
 FROM t_enum_null;
 
-SYSTEM DROP  TABLE t_enum_null;
+DROP TABLE t_enum_null;

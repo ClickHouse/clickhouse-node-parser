@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tab_int;
+DROP TABLE IF EXISTS tab_int;
 
 CREATE TABLE tab_int
 (
@@ -54,9 +54,9 @@ WHERE ((col_int = 1
     OR col_int = 2))
     AND col_int = '1';
 
-SYSTEM DROP  TABLE tab_int;
+DROP TABLE tab_int;
 
-SYSTEM DROP  TABLE IF EXISTS tab_bool;
+DROP TABLE IF EXISTS tab_bool;
 
 CREATE TABLE tab_bool
 (
@@ -118,4 +118,4 @@ FROM tab_bool
 WHERE col_bool = 'false'
     AND col_bool = false;
 
-SYSTEM DROP  TABLE tab_bool;
+DROP TABLE tab_bool;

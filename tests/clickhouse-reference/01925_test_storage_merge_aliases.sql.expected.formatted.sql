@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM drop  table if exists merge;
+DROP TABLE IF EXISTS merge;
 
 CREATE TABLE merge
 (
@@ -13,9 +13,9 @@ CREATE TABLE merge
 )
 ENGINE = Merge(currentDatabase(), '^alias_');
 
-SYSTEM drop  table if exists alias_1;
+DROP TABLE IF EXISTS alias_1;
 
-SYSTEM drop  table if exists alias_2;
+DROP TABLE IF EXISTS alias_2;
 
 CREATE TABLE alias_1
 (

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists geohash_test_data;
+DROP TABLE IF EXISTS geohash_test_data;
 
 CREATE TABLE geohash_test_data
 (

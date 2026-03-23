@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t0, t1, t4, t5;
+DROP TABLE IF EXISTS t0, t1, t4, t5;
 
 SET join_use_nulls = 1;
 
@@ -93,4 +93,4 @@ LEFT JOIN (
     ON (ref_2.c52 = subq_1.c_6_c185_6)
 WHERE intExp2(ref_2.pkey) <= hiveHash(ref_2.c56);
 
-SYSTEM DROP  TABLE t0, t1, t4, t5;
+DROP TABLE t0, t1, t4, t5;

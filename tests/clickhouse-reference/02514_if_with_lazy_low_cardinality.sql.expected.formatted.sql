@@ -14,4 +14,4 @@ FROM
     t
 LEFT ARRAY JOIN arr;
 
-SYSTEM drop  table t;
+DROP TABLE t;

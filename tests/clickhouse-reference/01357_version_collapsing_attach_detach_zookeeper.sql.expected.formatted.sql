@@ -1,5 +1,5 @@
 -- Tags: zookeeper, no-random-merge-tree-settings
-SYSTEM DROP  TABLE IF EXISTS versioned_collapsing_table;
+DROP TABLE IF EXISTS versioned_collapsing_table;
 
 CREATE TABLE versioned_collapsing_table
 (

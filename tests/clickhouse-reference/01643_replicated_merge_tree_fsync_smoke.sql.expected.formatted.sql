@@ -5,9 +5,9 @@ SET send_logs_level = 'error';
 
 SET database_atomic_wait_for_drop_and_detach_synchronously = 1;
 
-SYSTEM drop  table if exists rep_fsync_r1;
+DROP TABLE IF EXISTS rep_fsync_r1;
 
-SYSTEM drop  table if exists rep_fsync_r2;
+DROP TABLE IF EXISTS rep_fsync_r2;
 
 CREATE TABLE rep_fsync_r1
 (
@@ -28,9 +28,9 @@ INSERT INTO rep_fsync_r1;
 SELECT *
 FROM rep_fsync_r2;
 
-SYSTEM drop  table rep_fsync_r1;
+DROP TABLE rep_fsync_r1;
 
-SYSTEM drop  table rep_fsync_r2;
+DROP TABLE rep_fsync_r2;
 
 CREATE TABLE rep_fsync_r1
 (

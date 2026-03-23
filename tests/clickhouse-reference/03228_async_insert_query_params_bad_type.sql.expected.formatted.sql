@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_async_insert_params;
+DROP TABLE IF EXISTS t_async_insert_params;
 
 CREATE TABLE t_async_insert_params
 (
@@ -21,4 +21,4 @@ SELECT *
 FROM t_async_insert_params
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_async_insert_params;
+DROP TABLE t_async_insert_params;

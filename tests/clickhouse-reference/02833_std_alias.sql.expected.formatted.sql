@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS series;
+DROP TABLE IF EXISTS series;
 
 CREATE TABLE series
 (
@@ -20,4 +20,4 @@ SELECT
     stddevPop(y)
 FROM series;
 
-SYSTEM DROP  TABLE series;
+DROP TABLE series;

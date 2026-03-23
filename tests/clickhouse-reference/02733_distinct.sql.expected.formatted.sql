@@ -1,6 +1,6 @@
 -- Tags: no-random-settings
 -- there is a bug if `optimize_distinct_in_order` is true
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -33,4 +33,4 @@ SELECT DISTINCT
     c3
 FROM test;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

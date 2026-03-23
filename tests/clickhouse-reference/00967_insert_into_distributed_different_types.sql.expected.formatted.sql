@@ -1,9 +1,9 @@
 -- Tags: distributed
 SET distributed_foreground_insert = 1;
 
-SYSTEM DROP  TABLE IF EXISTS dist_00967;
+DROP TABLE IF EXISTS dist_00967;
 
-SYSTEM DROP  TABLE IF EXISTS underlying_00967;
+DROP TABLE IF EXISTS underlying_00967;
 
 -- To suppress "Structure does not match (...), implicit conversion will be done." message
 SET send_logs_level = 'error';
@@ -27,6 +27,6 @@ LIMIT 1;
 SELECT *
 FROM dist_00967;
 
-SYSTEM DROP  TABLE dist_00967;
+DROP TABLE dist_00967;
 
-SYSTEM DROP  TABLE underlying_00967;
+DROP TABLE underlying_00967;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS sample_merge_tree;
+DROP TABLE IF EXISTS sample_merge_tree;
 
 CREATE TABLE sample_merge_tree
 (

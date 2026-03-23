@@ -1,9 +1,9 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS test_db_2025;
+DROP DATABASE IF EXISTS test_db_2025;
 
 CREATE DATABASE test_db_2025;
 
-SYSTEM DROP  TABLE IF EXISTS test_db_2025.test_table;
+DROP TABLE IF EXISTS test_db_2025.test_table;
 
 CREATE TABLE test_db_2025.test_table
 (
@@ -23,7 +23,7 @@ PRIMARY KEY id
 SOURCE(clickhouse(TABLE 'test_table' DB 'test_db_2025'))
 LAYOUT(DIRECT());
 
-SYSTEM DROP  TABLE IF EXISTS test_db_2025.view_table;
+DROP TABLE IF EXISTS test_db_2025.view_table;
 
 CREATE TABLE test_db_2025.view_table
 (
@@ -34,7 +34,7 @@ ENGINE = TinyLog;
 
 INSERT INTO test_db_2025.view_table;
 
-SYSTEM DROP  VIEW IF EXISTS test_view_different_db;
+DROP VIEW IF EXISTS test_view_different_db;
 
 CREATE VIEW test_view_different_db
 AS
@@ -47,12 +47,12 @@ FROM test_db_2025.view_table;
 SELECT *
 FROM test_view_different_db;
 
-SYSTEM DROP  DICTIONARY test_db_2025.test_dictionary;
+DROP DICTIONARY test_db_2025.test_dictionary;
 
-SYSTEM DROP  TABLE test_db_2025.test_table;
+DROP TABLE test_db_2025.test_table;
 
-SYSTEM DROP  TABLE test_db_2025.view_table;
+DROP TABLE test_db_2025.view_table;
 
-SYSTEM DROP  VIEW test_view_different_db;
+DROP VIEW test_view_different_db;
 
-SYSTEM DROP  DATABASE test_db_2025;
+DROP DATABASE test_db_2025;

@@ -1,6 +1,6 @@
 -- Tags: no-fasttest
 -- Tag no-fasttest: Depends on OpenSSL
-SYSTEM DROP  TABLE IF EXISTS test_01344;
+DROP TABLE IF EXISTS test_01344;
 
 CREATE TABLE test_01344
 (
@@ -25,4 +25,4 @@ SELECT NULL
 FROM test_01344
 WHERE ignore(x, lcm(NULL, 1048576), -2) = NULL;
 
-SYSTEM DROP  TABLE test_01344;
+DROP TABLE test_01344;

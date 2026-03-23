@@ -6,7 +6,7 @@ SET max_block_size = 65536;
 
 SET allow_experimental_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_limit_by_all;
+DROP TABLE IF EXISTS test_limit_by_all;
 
 CREATE TABLE test_limit_by_all
 (
@@ -198,7 +198,7 @@ FROM test_limit_by_all
 LIMIT 1 BY ALL; -- { serverError 62 }
 
 -- JOIN + ARRAY JOIN
-SYSTEM DROP  TABLE IF EXISTS test_limit_by_all_tags;
+DROP TABLE IF EXISTS test_limit_by_all_tags;
 
 CREATE TABLE test_limit_by_all_tags
 (
@@ -223,7 +223,7 @@ ORDER BY
     value ASC
 LIMIT 1 BY ALL;
 
-SYSTEM DROP  TABLE test_limit_by_all_tags;
+DROP TABLE test_limit_by_all_tags;
 
 SELECT
     id,
@@ -320,4 +320,4 @@ ORDER BY
     value ASC
 LIMIT 1 BY ALL;
 
-SYSTEM DROP  TABLE test_limit_by_all;
+DROP TABLE test_limit_by_all;

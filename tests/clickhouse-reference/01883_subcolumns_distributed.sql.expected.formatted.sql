@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS t_subcolumns_local;
+DROP TABLE IF EXISTS t_subcolumns_local;
 
-SYSTEM DROP  TABLE IF EXISTS t_subcolumns_dist;
+DROP TABLE IF EXISTS t_subcolumns_dist;
 
 CREATE TABLE t_subcolumns_local
 (
@@ -24,7 +24,7 @@ SELECT
     t.s2
 FROM t_subcolumns_dist;
 
-SYSTEM DROP  TABLE t_subcolumns_local;
+DROP TABLE t_subcolumns_local;
 
 -- StripeLog doesn't support subcolumns.
 CREATE TABLE t_subcolumns_local
@@ -51,4 +51,4 @@ SELECT
 FROM t_subcolumns_dist
 SETTINGS enable_analyzer = 0; -- {serverError UNKNOWN_IDENTIFIER}
 
-SYSTEM DROP  TABLE t_subcolumns_dist;
+DROP TABLE t_subcolumns_dist;

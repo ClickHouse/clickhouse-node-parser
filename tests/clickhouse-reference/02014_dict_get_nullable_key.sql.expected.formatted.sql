@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS dictionary_non_nullable_source_table;
+DROP TABLE IF EXISTS dictionary_non_nullable_source_table;
 
 CREATE TABLE dictionary_non_nullable_source_table
 (
@@ -9,7 +9,7 @@ ENGINE = TinyLog;
 
 INSERT INTO dictionary_non_nullable_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_non_nullable;
+DROP DICTIONARY IF EXISTS test_dictionary_non_nullable;
 
 CREATE DICTIONARY test_dictionary_non_nullable
 (
@@ -24,11 +24,11 @@ SELECT dictGet('test_dictionary_non_nullable', 'value', NULL);
 
 SELECT dictGet('test_dictionary_non_nullable', 'value', arrayJoin([toUInt64(0), NULL, 1]));
 
-SYSTEM DROP  DICTIONARY test_dictionary_non_nullable;
+DROP DICTIONARY test_dictionary_non_nullable;
 
-SYSTEM DROP  TABLE dictionary_non_nullable_source_table;
+DROP TABLE dictionary_non_nullable_source_table;
 
-SYSTEM DROP  TABLE IF EXISTS dictionary_nullable_source_table;
+DROP TABLE IF EXISTS dictionary_nullable_source_table;
 
 CREATE TABLE dictionary_nullable_source_table
 (
@@ -39,7 +39,7 @@ ENGINE = TinyLog;
 
 INSERT INTO dictionary_nullable_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary_nullable;
+DROP DICTIONARY IF EXISTS test_dictionary_nullable;
 
 CREATE DICTIONARY test_dictionary_nullable
 (
@@ -54,6 +54,6 @@ SELECT dictGet('test_dictionary_nullable', 'value', NULL);
 
 SELECT dictGet('test_dictionary_nullable', 'value', arrayJoin([toUInt64(0), NULL, 1, 2]));
 
-SYSTEM DROP  DICTIONARY test_dictionary_nullable;
+DROP DICTIONARY test_dictionary_nullable;
 
-SYSTEM DROP  TABLE dictionary_nullable_source_table;
+DROP TABLE dictionary_nullable_source_table;

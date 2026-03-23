@@ -1,6 +1,6 @@
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test54378;
+DROP TABLE IF EXISTS test54378;
 
 CREATE TABLE test54378
 (
@@ -23,4 +23,4 @@ GROUP BY
     toDate(toDate(-2147483649, NULL), NULL),
     -inf;
 
-SYSTEM DROP  TABLE test54378;
+DROP TABLE test54378;

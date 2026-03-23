@@ -3,7 +3,7 @@ SET max_insert_threads = 1, max_threads = 100, min_insert_block_size_rows = 1048
 
 SET allow_deprecated_error_prone_window_functions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -25,4 +25,4 @@ SELECT DISTINCT
     runningDifference(x)
 FROM t;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

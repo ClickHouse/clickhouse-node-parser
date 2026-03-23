@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists dst_02224;
+DROP TABLE IF EXISTS dst_02224;
 
-SYSTEM drop  table if exists src_02224;
+DROP TABLE IF EXISTS src_02224;
 
 CREATE TABLE dst_02224
 (
@@ -44,6 +44,6 @@ SETTINGS
     max_distributed_depth = 1;
 
 -- { echoOff }
-SYSTEM drop  table src_02224;
+DROP TABLE src_02224;
 
-SYSTEM drop  table dst_02224;
+DROP TABLE dst_02224;

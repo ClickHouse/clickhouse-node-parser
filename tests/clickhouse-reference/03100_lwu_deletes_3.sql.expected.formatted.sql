@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_deletes_3 SYNC;
+DROP TABLE IF EXISTS t_lwu_deletes_3;
 
 CREATE TABLE t_lwu_deletes_3
 (
@@ -74,4 +74,4 @@ WHERE database = currentDatabase()
     AND NOT startsWith(name, 'patch')
     AND active;
 
-SYSTEM DROP  TABLE t_lwu_deletes_3 SYNC;
+DROP TABLE t_lwu_deletes_3;

@@ -1,5 +1,5 @@
 -- Tags: no-parallel, no-fasttest
-SYSTEM DROP  TABLE IF EXISTS t_s3_compressed_blocks;
+DROP TABLE IF EXISTS t_s3_compressed_blocks;
 
 CREATE TABLE t_s3_compressed_blocks
 (
@@ -21,4 +21,4 @@ SELECT count()
 FROM t_s3_compressed_blocks
 WHERE NOT ignore(s);
 
-SYSTEM DROP  TABLE t_s3_compressed_blocks;
+DROP TABLE t_s3_compressed_blocks;

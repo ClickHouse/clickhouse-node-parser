@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data_02293;
+DROP TABLE IF EXISTS data_02293;
 
 CREATE TABLE data_02293
 (
@@ -23,4 +23,4 @@ FROM data_02293
 GROUP BY a
 SETTINGS optimize_aggregation_in_order = 1;
 
-SYSTEM drop  table data_02293;
+DROP TABLE data_02293;

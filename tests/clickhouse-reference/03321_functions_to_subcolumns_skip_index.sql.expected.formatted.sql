@@ -1,5 +1,5 @@
 -- Tags: no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_test;
+DROP TABLE IF EXISTS bloom_filter_test;
 
 CREATE TABLE bloom_filter_test
 (
@@ -47,4 +47,4 @@ FROM bloom_filter_test
 WHERE mapContains(m, '1')
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE bloom_filter_test;
+DROP TABLE bloom_filter_test;

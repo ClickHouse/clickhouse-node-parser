@@ -1,10 +1,10 @@
 SET allow_materialized_view_with_bad_select = 1;
 
-SYSTEM DROP  TABLE IF EXISTS mv_extra_columns_dst;
+DROP TABLE IF EXISTS mv_extra_columns_dst;
 
-SYSTEM DROP  TABLE IF EXISTS mv_extra_columns_src;
+DROP TABLE IF EXISTS mv_extra_columns_src;
 
-SYSTEM DROP  TABLE IF EXISTS mv_extra_columns_view;
+DROP TABLE IF EXISTS mv_extra_columns_view;
 
 CREATE TABLE mv_extra_columns_dst
 (
@@ -44,8 +44,8 @@ ORDER BY v ASC;
 SELECT *
 FROM mv_extra_columns_view; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
-SYSTEM DROP  TABLE mv_extra_columns_view;
+DROP TABLE mv_extra_columns_view;
 
-SYSTEM DROP  TABLE mv_extra_columns_src;
+DROP TABLE mv_extra_columns_src;
 
-SYSTEM DROP  TABLE mv_extra_columns_dst;
+DROP TABLE mv_extra_columns_dst;

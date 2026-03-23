@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data_02177;
+DROP TABLE IF EXISTS data_02177;
 
 CREATE TABLE data_02177
 (
@@ -24,4 +24,4 @@ GROUP BY key
 SETTINGS distributed_aggregation_memory_efficient = 0;
 
 -- { echoOff }
-SYSTEM drop  table data_02177;
+DROP TABLE data_02177;

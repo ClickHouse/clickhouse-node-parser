@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_final_collapsing;
+DROP TABLE IF EXISTS t_final_collapsing;
 
 CREATE TABLE t_final_collapsing
 (
@@ -21,7 +21,7 @@ SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_i
 
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 1, split_intersecting_parts_ranges_into_layers_final = 1;
 
-SYSTEM DROP  TABLE t_final_collapsing;
+DROP TABLE t_final_collapsing;
 
 CREATE TABLE t_final_collapsing
 (

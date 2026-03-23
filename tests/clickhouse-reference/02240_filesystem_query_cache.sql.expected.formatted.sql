@@ -4,7 +4,7 @@ SET skip_download_if_exceeds_query_cache = 1;
 
 SET filesystem_cache_max_download_size = 128;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

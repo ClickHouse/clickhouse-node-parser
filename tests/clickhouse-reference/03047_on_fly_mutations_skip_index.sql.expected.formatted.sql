@@ -3,7 +3,7 @@
 -- no-parallel-replicas: the result of EXPLAIN differs with parallel replicas
 SET use_query_condition_cache = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t_lightweight_mut_3;
+DROP TABLE IF EXISTS t_lightweight_mut_3;
 
 SET mutations_sync = 0;
 
@@ -85,4 +85,4 @@ FROM (
     )
 WHERE like(s, 'Granules: %');
 
-SYSTEM DROP  TABLE t_lightweight_mut_3;
+DROP TABLE t_lightweight_mut_3;

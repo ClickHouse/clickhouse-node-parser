@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS optimize_final;
+DROP TABLE IF EXISTS optimize_final;
 
 SET optimize_skip_merged_partitions = 1;
 
@@ -41,4 +41,4 @@ WHERE table = 'optimize_final'
     AND database = currentDatabase()
     AND active = 1;
 
-SYSTEM DROP  TABLE optimize_final;
+DROP TABLE optimize_final;

@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS nullable_key;
+DROP TABLE IF EXISTS nullable_key;
 
-SYSTEM DROP  TABLE IF EXISTS nullable_key_without_final_mark;
+DROP TABLE IF EXISTS nullable_key_without_final_mark;
 
-SYSTEM DROP  TABLE IF EXISTS nullable_minmax_index;
+DROP TABLE IF EXISTS nullable_minmax_index;
 
 SET max_threads = 1;
 
@@ -133,13 +133,13 @@ SELECT *
 FROM nullable_minmax_index
 WHERE v <= 2;
 
-SYSTEM DROP  TABLE nullable_key;
+DROP TABLE nullable_key;
 
-SYSTEM DROP  TABLE nullable_key_without_final_mark;
+DROP TABLE nullable_key_without_final_mark;
 
-SYSTEM DROP  TABLE nullable_minmax_index;
+DROP TABLE nullable_minmax_index;
 
-SYSTEM DROP  TABLE IF EXISTS xxxx_null;
+DROP TABLE IF EXISTS xxxx_null;
 
 CREATE TABLE xxxx_null
 (
@@ -155,7 +155,7 @@ SELECT *
 FROM xxxx_null
 WHERE ts > '2021-10-11 00:00:00';
 
-SYSTEM DROP  TABLE xxxx_null;
+DROP TABLE xxxx_null;
 
 -- nullable keys are forbidden when `allow_nullable_key = 0`
 CREATE TABLE invalid_null

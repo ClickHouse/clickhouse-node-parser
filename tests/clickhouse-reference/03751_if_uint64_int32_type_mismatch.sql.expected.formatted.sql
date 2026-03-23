@@ -2,7 +2,7 @@
 -- The issue was: Unexpected return type from if. Expected Int64. Got Int128.
 -- This happened when the canUnsignedBeSigned flag on UInt64 type was lost during
 -- query plan transformations in distributed queries.
-SYSTEM DROP  TABLE IF EXISTS test_if_type_mismatch;
+DROP TABLE IF EXISTS test_if_type_mismatch;
 
 CREATE TABLE test_if_type_mismatch
 (
@@ -49,4 +49,4 @@ SELECT
     if(1, floor(4373163444658715090), toInt32(0)) AS when_true,
     if(0, floor(4373163444658715090), toInt32(42)) AS when_false;
 
-SYSTEM DROP  TABLE test_if_type_mismatch;
+DROP TABLE test_if_type_mismatch;

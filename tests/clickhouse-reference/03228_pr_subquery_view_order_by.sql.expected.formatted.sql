@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS view1;
+DROP TABLE IF EXISTS view1;
 
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
 CREATE TABLE table1
 (
@@ -32,6 +32,6 @@ SETTINGS
     parallel_replicas_for_non_replicated_merge_tree = 1,
     parallel_replicas_local_plan = 1;
 
-SYSTEM DROP  TABLE view1;
+DROP TABLE view1;
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;

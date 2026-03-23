@@ -1,6 +1,6 @@
 SET optimize_read_in_order = 1;
 
-SYSTEM DROP  TABLE IF EXISTS mytable;
+DROP TABLE IF EXISTS mytable;
 
 CREATE TABLE mytable
 (

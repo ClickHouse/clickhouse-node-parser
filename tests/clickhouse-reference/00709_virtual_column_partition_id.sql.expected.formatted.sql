@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS partition_id;
+DROP TABLE IF EXISTS partition_id;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

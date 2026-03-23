@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS dst_sparse;
+DROP TABLE IF EXISTS dst_sparse;
 
-SYSTEM DROP  TABLE IF EXISTS mytable_sparse;
+DROP TABLE IF EXISTS mytable_sparse;
 
 CREATE TABLE dst_sparse
 (

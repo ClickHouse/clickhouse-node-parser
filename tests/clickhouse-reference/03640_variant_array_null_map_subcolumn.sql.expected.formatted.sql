@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -12,4 +12,4 @@ INSERT INTO test SELECT ['hello', null, 'world'];
 SELECT v.`Array(Nullable(String))`.`null`
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

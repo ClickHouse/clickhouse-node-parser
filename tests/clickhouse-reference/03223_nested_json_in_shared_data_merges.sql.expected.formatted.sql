@@ -1,6 +1,6 @@
 SET enable_json_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -25,4 +25,4 @@ FROM test;
 SELECT JSONSharedDataPaths(arrayJoin(json.`a[]`))
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

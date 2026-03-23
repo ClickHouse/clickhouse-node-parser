@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -17,4 +17,4 @@ ORDER BY qbit ASC; -- {serverError ILLEGAL_COLUMN}
 SELECT qbit < qbit
 FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SYSTEM drop  table test;
+DROP TABLE test;

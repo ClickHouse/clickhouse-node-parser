@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS session;
+DROP TABLE IF EXISTS session;
 
-SYSTEM DROP  TABLE IF EXISTS queue;
+DROP TABLE IF EXISTS queue;
 
-SYSTEM DROP  TABLE IF EXISTS forward;
+DROP TABLE IF EXISTS forward;
 
 CREATE TABLE session
 (
@@ -40,8 +40,8 @@ FROM session;
 SELECT *
 FROM forward;
 
-SYSTEM DROP  TABLE session;
+DROP TABLE session;
 
-SYSTEM DROP  TABLE queue;
+DROP TABLE queue;
 
-SYSTEM DROP  TABLE forward;
+DROP TABLE forward;

@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists fooL;
+DROP TABLE IF EXISTS fooL;
 
-SYSTEM drop  table if exists fooR;
+DROP TABLE IF EXISTS fooR;
 
 CREATE TABLE fooL
 (
@@ -38,6 +38,6 @@ LEFT JOIN fooR
     USING (a)
 ORDER BY a ASC;
 
-SYSTEM drop  table fooL;
+DROP TABLE fooL;
 
-SYSTEM drop  table fooR;
+DROP TABLE fooR;

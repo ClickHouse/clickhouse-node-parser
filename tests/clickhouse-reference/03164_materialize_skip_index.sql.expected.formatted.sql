@@ -1,5 +1,5 @@
 -- add_minmax_index_for_numeric_columns=0: Changes the plan FOR b
-SYSTEM DROP  TABLE IF EXISTS t_skip_index_insert;
+DROP TABLE IF EXISTS t_skip_index_insert;
 
 CREATE TABLE t_skip_index_insert
 (

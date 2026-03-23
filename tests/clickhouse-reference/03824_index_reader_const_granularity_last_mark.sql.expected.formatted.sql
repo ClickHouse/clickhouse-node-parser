@@ -2,7 +2,7 @@
 -- when use_const_adaptive_granularity=1 and index_granularity_bytes=0
 -- (the last mark in the granularity may report more rows than actually exist).
 -- Tags: no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -35,4 +35,4 @@ SETTINGS
     use_skip_indexes_for_top_k = 1,
     use_skip_indexes_on_data_read = 0;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

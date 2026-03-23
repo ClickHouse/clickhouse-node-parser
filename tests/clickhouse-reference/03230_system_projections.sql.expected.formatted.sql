@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS projections;
+DROP TABLE IF EXISTS projections;
 
-SYSTEM DROP  TABLE IF EXISTS projections_2;
+DROP TABLE IF EXISTS projections_2;
 
 CREATE TABLE projections
 (
@@ -46,6 +46,6 @@ FROM `system`.projections
 WHERE type = 'Normal'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE projections;
+DROP TABLE projections;
 
-SYSTEM DROP  TABLE projections_2;
+DROP TABLE projections_2;

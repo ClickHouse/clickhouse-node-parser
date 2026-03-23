@@ -5,7 +5,7 @@ SET allow_suspicious_indices = 1;
 
 SET allow_experimental_dynamic_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_set_index_dynamic;
+DROP TABLE IF EXISTS t_set_index_dynamic;
 
 CREATE TABLE t_set_index_dynamic
 (
@@ -35,4 +35,4 @@ FROM t_set_index_dynamic
 PREWHERE indexHint(indexHint(*))
 WHERE indexHint(indexHint(*));
 
-SYSTEM DROP  TABLE t_set_index_dynamic;
+DROP TABLE t_set_index_dynamic;

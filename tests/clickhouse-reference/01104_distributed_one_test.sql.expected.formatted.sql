@@ -1,5 +1,5 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS d_one;
+DROP TABLE IF EXISTS d_one;
 
 CREATE TABLE d_one
 (
@@ -37,7 +37,7 @@ ORDER BY _shard_num ASC;
 
 SET distributed_product_mode = 'local';
 
-SYSTEM DROP  TABLE d_one;
+DROP TABLE d_one;
 
 SELECT
     'remote_0',

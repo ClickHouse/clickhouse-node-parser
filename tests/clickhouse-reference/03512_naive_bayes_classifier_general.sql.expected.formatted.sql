@@ -17,7 +17,7 @@ SELECT
 FROM numbers(10)
 ORDER BY number ASC;
 
-SYSTEM DROP  TABLE IF EXISTS model_names;
+DROP TABLE IF EXISTS model_names;
 
 CREATE TABLE model_names
 (
@@ -28,7 +28,7 @@ ORDER BY model_name;
 
 INSERT INTO model_names;
 
-SYSTEM DROP  TABLE IF EXISTS input_texts;
+DROP TABLE IF EXISTS input_texts;
 
 CREATE TABLE input_texts
 (

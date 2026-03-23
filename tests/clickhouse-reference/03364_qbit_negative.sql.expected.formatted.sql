@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS qbits;
+DROP TABLE IF EXISTS qbits;
 
 CREATE TABLE qbits
 (
@@ -34,4 +34,4 @@ FROM qbits; -- { serverError TYPE_MISMATCH }
 SELECT vec::QBit(Float64, 1)
 FROM qbits;
 
-SYSTEM DROP  TABLE qbits;
+DROP TABLE qbits;

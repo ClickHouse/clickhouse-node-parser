@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS checks SYNC;
+DROP TABLE IF EXISTS checks;
 
 CREATE TABLE checks
 (
@@ -84,4 +84,4 @@ SETTINGS
     cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
     max_parallel_replicas = 3;
 
-SYSTEM DROP  TABLE checks SYNC;
+DROP TABLE checks;

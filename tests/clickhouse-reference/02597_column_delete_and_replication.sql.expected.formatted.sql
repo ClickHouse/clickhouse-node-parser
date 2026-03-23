@@ -28,4 +28,4 @@ SELECT *
 FROM test
 FORMAT Null;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

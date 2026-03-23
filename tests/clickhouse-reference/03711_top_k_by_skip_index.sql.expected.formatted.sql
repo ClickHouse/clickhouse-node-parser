@@ -4,7 +4,7 @@ SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injectio
 
 SET read_overflow_mode = 'break';
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

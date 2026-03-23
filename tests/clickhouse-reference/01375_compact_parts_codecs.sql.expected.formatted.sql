@@ -1,5 +1,5 @@
 -- Tags: no-parallel, no-random-merge-tree-settings
-SYSTEM DROP  TABLE IF EXISTS codecs;
+DROP TABLE IF EXISTS codecs;
 
 CREATE TABLE codecs
 (
@@ -30,7 +30,7 @@ SELECT
     max(s)
 FROM codecs;
 
-SYSTEM DROP  TABLE codecs;
+DROP TABLE codecs;
 
 CREATE TABLE codecs
 (

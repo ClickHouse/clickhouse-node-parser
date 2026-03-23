@@ -1,7 +1,7 @@
 SET enable_full_text_index = 1;
 
 -- Some tests for lightweight deleted on a column with text index
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -30,4 +30,4 @@ SELECT count()
 FROM tab
 WHERE hasAllTokens(s, 'was');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

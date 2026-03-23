@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
 CREATE TABLE table1
 (
@@ -54,4 +54,4 @@ FROM table1
 GROUP BY k
 ORDER BY k ASC;
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;

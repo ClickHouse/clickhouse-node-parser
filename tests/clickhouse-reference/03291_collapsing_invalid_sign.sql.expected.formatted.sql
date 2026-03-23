@@ -1,6 +1,6 @@
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE IF EXISTS t_03291_collapsing_invalid_sign;
+DROP TABLE IF EXISTS t_03291_collapsing_invalid_sign;
 
 CREATE TABLE t_03291_collapsing_invalid_sign
 (
@@ -23,9 +23,9 @@ SELECT *
 FROM t_03291_collapsing_invalid_sign
 WHERE sign = 2;
 
-SYSTEM DROP  TABLE t_03291_collapsing_invalid_sign;
+DROP TABLE t_03291_collapsing_invalid_sign;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 -- From https://github.com/ClickHouse/ClickHouse/issues/70964
 CREATE TABLE t0
@@ -55,10 +55,10 @@ FROM t0 FINAL;
 SELECT *
 FROM t0;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
 -- CI found a LOGICAL_ERROR during vertical merge, testing for it here
-SYSTEM DROP  TABLE IF EXISTS t_03291_collapsing_invalid_sign_vertical_merge;
+DROP TABLE IF EXISTS t_03291_collapsing_invalid_sign_vertical_merge;
 
 CREATE TABLE t_03291_collapsing_invalid_sign_vertical_merge
 (
@@ -71,7 +71,7 @@ SETTINGS enable_vertical_merge_algorithm = 1, vertical_merge_algorithm_min_rows_
 
 INSERT INTO t_03291_collapsing_invalid_sign_vertical_merge;
 
-SYSTEM DROP  TABLE t_03291_collapsing_invalid_sign_vertical_merge;
+DROP TABLE t_03291_collapsing_invalid_sign_vertical_merge;
 
 CREATE TABLE t0
 (

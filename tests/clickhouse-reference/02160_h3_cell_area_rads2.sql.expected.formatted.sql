@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS h3_indexes;
+DROP TABLE IF EXISTS h3_indexes;
 
 CREATE TABLE h3_indexes
 (
@@ -45,4 +45,4 @@ SELECT substring(h3CellAreaRads2(h3_index)::String, 1, 10)
 FROM h3_indexes
 ORDER BY h3_index ASC;
 
-SYSTEM DROP  TABLE h3_indexes;
+DROP TABLE h3_indexes;

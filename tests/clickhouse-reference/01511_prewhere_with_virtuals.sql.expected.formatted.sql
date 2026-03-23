@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS  test_not_found_column_nothing;
+DROP TABLE IF EXISTS test_not_found_column_nothing;
 
 CREATE TABLE test_not_found_column_nothing
 (
@@ -24,4 +24,4 @@ SELECT _part
 FROM test_not_found_column_nothing
 PREWHERE col001 = 0;
 
-SYSTEM DROP  TABLE test_not_found_column_nothing;
+DROP TABLE test_not_found_column_nothing;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -8,4 +8,4 @@ ENGINE = MergeTree()
 ORDER BY tuple()
 TTL (materialize(c0));
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

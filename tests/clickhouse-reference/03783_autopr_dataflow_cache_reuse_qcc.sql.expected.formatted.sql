@@ -2,7 +2,7 @@
 -- no-sanitizers: too slow
 -- long: for flaky check
 -- no-parallel: Depends on the query condition cache content (queries executed in parallel may overflow the cache size or straight away call "clear cache")
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 -- index_granularity: to be able to produce small blocks from reading
 CREATE TABLE t

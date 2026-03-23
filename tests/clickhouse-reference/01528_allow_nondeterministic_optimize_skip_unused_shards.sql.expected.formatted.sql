@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM drop  table if exists dist_01528;
+DROP TABLE IF EXISTS dist_01528;
 
 CREATE TABLE dist_01528 AS `system`.one
 ENGINE = Distributed('test_cluster_two_shards', `system`, one, rand() + dummy);
@@ -17,4 +17,4 @@ FROM dist_01528
 WHERE dummy = 2
 SETTINGS allow_nondeterministic_optimize_skip_unused_shards = 1;
 
-SYSTEM drop  table dist_01528;
+DROP TABLE dist_01528;

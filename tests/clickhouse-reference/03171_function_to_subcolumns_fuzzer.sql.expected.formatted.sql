@@ -2,7 +2,7 @@ SET optimize_functions_to_subcolumns = 1;
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_func_to_subcolumns_map_2;
+DROP TABLE IF EXISTS t_func_to_subcolumns_map_2;
 
 CREATE TABLE t_func_to_subcolumns_map_2
 (
@@ -17,9 +17,9 @@ INSERT INTO t_func_to_subcolumns_map_2;
 SELECT sum(mapContains(m, toNullable('aaa')))
 FROM t_func_to_subcolumns_map_2;
 
-SYSTEM DROP  TABLE t_func_to_subcolumns_map_2;
+DROP TABLE t_func_to_subcolumns_map_2;
 
-SYSTEM DROP  TABLE IF EXISTS t_func_to_subcolumns_join;
+DROP TABLE IF EXISTS t_func_to_subcolumns_join;
 
 CREATE TABLE t_func_to_subcolumns_join
 (
@@ -53,9 +53,9 @@ FULL JOIN (
 WHERE empty(arr)
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_func_to_subcolumns_join;
+DROP TABLE t_func_to_subcolumns_join;
 
-SYSTEM DROP  TABLE IF EXISTS t_func_to_subcolumns_use_nulls;
+DROP TABLE IF EXISTS t_func_to_subcolumns_use_nulls;
 
 CREATE TABLE t_func_to_subcolumns_use_nulls
 (
@@ -81,4 +81,4 @@ HAVING n <= 4
 ORDER BY n ASC
 SETTINGS group_by_use_nulls = 1;
 
-SYSTEM DROP  TABLE t_func_to_subcolumns_use_nulls;
+DROP TABLE t_func_to_subcolumns_use_nulls;

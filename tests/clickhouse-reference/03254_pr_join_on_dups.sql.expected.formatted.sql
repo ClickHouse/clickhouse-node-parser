@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists X sync;
+DROP TABLE IF EXISTS X;
 
-SYSTEM drop  table if exists Y sync;
+DROP TABLE IF EXISTS Y;
 
 SET min_bytes_to_use_direct_io = 0; -- min_bytes_to_use_direct_io > 0 is broken and leads to unexpected results, https://github.com/ClickHouse/ClickHouse/issues/65690
 
@@ -458,6 +458,6 @@ ORDER BY
     s.x_a ASC,
     s.x_b ASC;
 
-SYSTEM drop  table X sync;
+DROP TABLE X;
 
-SYSTEM drop  table Y sync;
+DROP TABLE Y;

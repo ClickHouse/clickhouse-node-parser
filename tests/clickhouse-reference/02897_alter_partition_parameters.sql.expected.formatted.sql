@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -17,7 +17,7 @@ SET param_partition = '2023-10-09';
 
 SET param_partition_id = '20231009';
 
-SYSTEM DROP  TABLE IF EXISTS test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test2
 (
@@ -37,7 +37,7 @@ SET param_first = '2';
 
 SET param_second = '4';
 
-SYSTEM DROP  TABLE IF EXISTS test3;
+DROP TABLE IF EXISTS test3;
 
 CREATE TABLE test3
 (
@@ -55,7 +55,7 @@ SET param_simple = '1';
 SELECT count()
 FROM test3;
 
-SYSTEM DROP  TABLE IF EXISTS test4;
+DROP TABLE IF EXISTS test4;
 
 CREATE TABLE test4
 (
@@ -70,7 +70,7 @@ INSERT INTO test4;
 SELECT count()
 FROM test4;
 
-SYSTEM DROP  TABLE IF EXISTS test5;
+DROP TABLE IF EXISTS test5;
 
 CREATE TABLE test5
 (
@@ -90,7 +90,7 @@ SET param_s = '2';
 SELECT count()
 FROM test5;
 
-SYSTEM DROP  TABLE IF EXISTS test6;
+DROP TABLE IF EXISTS test6;
 
 CREATE TABLE test6
 (

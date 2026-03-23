@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_update_prewhere;
+DROP TABLE IF EXISTS t_update_prewhere;
 
 SET mutations_sync = 2;
 

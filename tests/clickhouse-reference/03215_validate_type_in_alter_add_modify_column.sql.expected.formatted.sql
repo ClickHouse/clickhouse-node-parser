@@ -2,7 +2,7 @@ SET allow_suspicious_low_cardinality_types = 0;
 
 SET allow_suspicious_fixed_string_types = 0;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -11,4 +11,4 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY id;
 
-SYSTEM drop  table test;
+DROP TABLE test;

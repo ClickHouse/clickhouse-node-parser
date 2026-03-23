@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t1__fuzz_0;
+DROP TABLE IF EXISTS t1__fuzz_0;
 
 CREATE TABLE t1__fuzz_0
 (
@@ -13,7 +13,7 @@ INSERT INTO t1__fuzz_0 SELECT
     toString(number)
 FROM numbers(10);
 
-SYSTEM DROP  TABLE IF EXISTS left_join__fuzz_2;
+DROP TABLE IF EXISTS left_join__fuzz_2;
 
 CREATE TABLE left_join__fuzz_2
 (
@@ -38,6 +38,6 @@ ORDER BY
     toNullable(toLowCardinality(toUInt256(14))) ASC,
     x DESC;
 
-SYSTEM DROP  TABLE t1__fuzz_0;
+DROP TABLE t1__fuzz_0;
 
-SYSTEM DROP  TABLE left_join__fuzz_2;
+DROP TABLE left_join__fuzz_2;

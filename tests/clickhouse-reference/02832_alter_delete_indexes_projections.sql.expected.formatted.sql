@@ -1,6 +1,6 @@
 SET mutations_sync = 2;
 
-SYSTEM drop  table if exists t_delete_skip_index;
+DROP TABLE IF EXISTS t_delete_skip_index;
 
 CREATE TABLE t_delete_skip_index
 (
@@ -21,7 +21,7 @@ SELECT count()
 FROM t_delete_skip_index
 WHERE y IN (4, 5);
 
-SYSTEM drop  table if exists t_delete_projection;
+DROP TABLE IF EXISTS t_delete_projection;
 
 CREATE TABLE t_delete_projection
 (

@@ -1,10 +1,10 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS segmented_ctr_cache;
+DROP TABLE IF EXISTS segmented_ctr_cache;
 
-SYSTEM DROP  TABLE IF EXISTS bookmarks_join;
+DROP TABLE IF EXISTS bookmarks_join;
 
-SYSTEM DROP  TABLE IF EXISTS cart_join;
+DROP TABLE IF EXISTS cart_join;
 
 CREATE TABLE IF NOT EXISTS segmented_ctr_cache
 (
@@ -74,8 +74,8 @@ LEFT JOIN bookmarks_join
     AND bookmarks_join.segment_id = segmented_ctr_cache.segment_id
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE segmented_ctr_cache;
+DROP TABLE segmented_ctr_cache;
 
-SYSTEM DROP  TABLE bookmarks_join;
+DROP TABLE bookmarks_join;
 
-SYSTEM DROP  TABLE cart_join;
+DROP TABLE cart_join;

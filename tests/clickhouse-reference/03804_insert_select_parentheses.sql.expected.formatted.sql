@@ -1,6 +1,6 @@
 -- Test that INSERT SELECT with parentheses around the SELECT part is supported
 -- This was previously rejected by the parser
-SYSTEM DROP  TABLE IF EXISTS t_insert_select_parens;
+DROP TABLE IF EXISTS t_insert_select_parens;
 
 CREATE TABLE t_insert_select_parens
 (
@@ -45,4 +45,4 @@ INSERT INTO t_insert_select_parens (x) (WITH cte AS (
 SELECT val
 FROM cte);
 
-SYSTEM DROP  TABLE t_insert_select_parens;
+DROP TABLE t_insert_select_parens;

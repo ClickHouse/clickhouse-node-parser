@@ -1,5 +1,5 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/91415
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -13,4 +13,4 @@ SELECT estimateCompressionRatio(c0) OVER (ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWI
 FROM t0
 SETTINGS use_variant_as_common_type = 1;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

@@ -1,5 +1,5 @@
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS midpoint_test;
+DROP TABLE IF EXISTS midpoint_test;
 
 CREATE TABLE midpoint_test
 (
@@ -189,7 +189,7 @@ SELECT
 -- ===============================================================
 -- Nullable columns: per-row NULL skipping
 -- ===============================================================
-SYSTEM DROP  TABLE IF EXISTS midpoint_nullable_test;
+DROP TABLE IF EXISTS midpoint_nullable_test;
 
 CREATE TABLE midpoint_nullable_test
 (
@@ -331,7 +331,7 @@ FROM midpoint_test;
 -- ===============================================================
 -- All arguments are Nullable columns: some rows all NULL, others partially non-NULL
 -- ===============================================================
-SYSTEM DROP  TABLE IF EXISTS midpoint_nullable3_test;
+DROP TABLE IF EXISTS midpoint_nullable3_test;
 
 CREATE TABLE midpoint_nullable3_test
 (

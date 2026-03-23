@@ -1,5 +1,5 @@
 -- Tags: long
-SYSTEM DROP  TABLE IF EXISTS t_json_parallel;
+DROP TABLE IF EXISTS t_json_parallel;
 
 SET enable_json_type = 1, max_insert_threads = 20, max_threads = 20, min_insert_block_size_rows = 65536;
 
@@ -18,4 +18,4 @@ SELECT
     count()
 FROM t_json_parallel;
 
-SYSTEM DROP  TABLE t_json_parallel;
+DROP TABLE t_json_parallel;

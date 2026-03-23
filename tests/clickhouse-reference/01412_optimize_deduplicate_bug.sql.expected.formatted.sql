@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tesd_dedupl;
+DROP TABLE IF EXISTS tesd_dedupl;
 
 CREATE TABLE tesd_dedupl
 (

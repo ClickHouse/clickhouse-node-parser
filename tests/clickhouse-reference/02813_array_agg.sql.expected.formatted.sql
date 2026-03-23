@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -20,4 +20,4 @@ SELECT aRray_Agg(s)
 FROM t
 GROUP BY n;
 
-SYSTEM drop  table t;
+DROP TABLE t;

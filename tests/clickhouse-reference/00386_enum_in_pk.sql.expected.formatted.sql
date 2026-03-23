@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS enum_pk;
+DROP TABLE IF EXISTS enum_pk;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -120,4 +120,4 @@ FROM enum_pk
 WHERE (d != '0'
     AND d != '1');
 
-SYSTEM DROP  TABLE enum_pk;
+DROP TABLE enum_pk;

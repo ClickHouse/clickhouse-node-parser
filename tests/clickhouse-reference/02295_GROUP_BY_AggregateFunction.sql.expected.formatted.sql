@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data_02295;
+DROP TABLE IF EXISTS data_02295;
 
 CREATE TABLE data_02295
 (
@@ -109,4 +109,4 @@ SETTINGS
     max_threads = 1;
 
 -- { echoOff }
-SYSTEM drop  table data_02295;
+DROP TABLE data_02295;

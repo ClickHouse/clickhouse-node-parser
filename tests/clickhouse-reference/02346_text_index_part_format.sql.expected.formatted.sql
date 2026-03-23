@@ -5,9 +5,9 @@ SET enable_full_text_index = 1;
 
 SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it explicitly to have local plan for parallel replicas
 
-SYSTEM DROP  TABLE IF EXISTS tab_compact_full;
+DROP TABLE IF EXISTS tab_compact_full;
 
-SYSTEM DROP  TABLE IF EXISTS tab_wide_full;
+DROP TABLE IF EXISTS tab_wide_full;
 
 CREATE TABLE tab_compact_full
 (
@@ -77,6 +77,6 @@ FROM (
 WHERE like(`explain`, '%text%')
     OR like(`explain`, '%Granules:%');
 
-SYSTEM DROP  TABLE tab_compact_full;
+DROP TABLE tab_compact_full;
 
-SYSTEM DROP  TABLE tab_wide_full;
+DROP TABLE tab_wide_full;

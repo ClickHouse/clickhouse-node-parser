@@ -1,6 +1,6 @@
 SET cast_ipv4_ipv6_default_on_conversion_error = 1;
 
-SYSTEM DROP  TABLE IF EXISTS ipv4_test;
+DROP TABLE IF EXISTS ipv4_test;
 
 CREATE TABLE ipv4_test
 (
@@ -12,9 +12,9 @@ ORDER BY id;
 
 SET cast_ipv4_ipv6_default_on_conversion_error = 0;
 
-SYSTEM DROP  TABLE ipv4_test;
+DROP TABLE ipv4_test;
 
-SYSTEM DROP  TABLE IF EXISTS ipv6_test;
+DROP TABLE IF EXISTS ipv6_test;
 
 CREATE TABLE ipv6_test
 (
@@ -27,4 +27,4 @@ ORDER BY id;
 SELECT *
 FROM ipv6_test;
 
-SYSTEM DROP  TABLE ipv6_test;
+DROP TABLE ipv6_test;

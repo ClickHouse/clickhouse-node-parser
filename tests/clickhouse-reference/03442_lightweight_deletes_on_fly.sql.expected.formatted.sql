@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_deletes;
+DROP TABLE IF EXISTS test_deletes;
 
 CREATE TABLE test_deletes
 (
@@ -17,7 +17,7 @@ SELECT a
 FROM test_deletes
 SETTINGS apply_mutations_on_fly = 1;
 
-SYSTEM DROP  TABLE test_deletes;
+DROP TABLE test_deletes;
 
 CREATE TABLE test_deletes
 (

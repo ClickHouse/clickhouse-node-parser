@@ -13,4 +13,4 @@ INSERT INTO `03246_range_literal_replacement_works`;
 SELECT *
 FROM `03246_range_literal_replacement_works`;
 
-SYSTEM DROP  TABLE IF EXISTS 03246_range_literal_replacement_works;
+DROP TABLE IF EXISTS `03246_range_literal_replacement_works`;

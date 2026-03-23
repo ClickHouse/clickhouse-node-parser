@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS lwd_merge;
+DROP TABLE IF EXISTS lwd_merge;
 
 CREATE TABLE lwd_merge
 (

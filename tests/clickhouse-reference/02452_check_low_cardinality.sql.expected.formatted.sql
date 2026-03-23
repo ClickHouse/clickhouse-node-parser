@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS test_low_cardinality_string;
+DROP TABLE IF EXISTS test_low_cardinality_string;
 
-SYSTEM DROP  TABLE IF EXISTS test_low_cardinality_uuid;
+DROP TABLE IF EXISTS test_low_cardinality_uuid;
 
-SYSTEM DROP  TABLE IF EXISTS test_low_cardinality_int;
+DROP TABLE IF EXISTS test_low_cardinality_int;
 
 CREATE TABLE test_low_cardinality_string
 (
@@ -87,8 +87,8 @@ SELECT JSONExtract(data, 'Tuple(
                             )') AS json
 FROM test_low_cardinality_uuid;
 
-SYSTEM DROP  TABLE test_low_cardinality_string;
+DROP TABLE test_low_cardinality_string;
 
-SYSTEM DROP  TABLE test_low_cardinality_uuid;
+DROP TABLE test_low_cardinality_uuid;
 
-SYSTEM DROP  TABLE test_low_cardinality_int;
+DROP TABLE test_low_cardinality_int;

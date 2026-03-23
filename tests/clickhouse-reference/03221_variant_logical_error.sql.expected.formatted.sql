@@ -2,7 +2,7 @@ SET allow_experimental_variant_type = 1;
 
 SET allow_suspicious_types_in_order_by = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -44,4 +44,4 @@ SELECT
 FROM test
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

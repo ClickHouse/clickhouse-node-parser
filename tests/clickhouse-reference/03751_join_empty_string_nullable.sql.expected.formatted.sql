@@ -1,6 +1,6 @@
 -- Test that empty string is not converted to NULL in Join table with Nullable(String) column
 -- https://github.com/ClickHouse/ClickHouse/issues/71414
-SYSTEM DROP  TABLE IF EXISTS t_join_nullable_string;
+DROP TABLE IF EXISTS t_join_nullable_string;
 
 -- Case 1: Nullable(String) key column with INNER JOIN
 CREATE TABLE t_join_nullable_string
@@ -16,7 +16,7 @@ SELECT
     isNull(c0) AS is_null
 FROM t_join_nullable_string;
 
-SYSTEM DROP  TABLE t_join_nullable_string;
+DROP TABLE t_join_nullable_string;
 
 -- Case 2: Nullable(String) key column with LEFT JOIN (NULL keys are not stored in join tables)
 CREATE TABLE t_join_nullable_string

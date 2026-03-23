@@ -1,6 +1,6 @@
 SET optimize_on_insert = 0;
 
-SYSTEM DROP  TABLE IF EXISTS partitioned_by_tuple;
+DROP TABLE IF EXISTS partitioned_by_tuple;
 
 CREATE TABLE partitioned_by_tuple
 (
@@ -27,4 +27,4 @@ ORDER BY
     w ASC,
     y ASC;
 
-SYSTEM DROP  TABLE partitioned_by_tuple;
+DROP TABLE partitioned_by_tuple;

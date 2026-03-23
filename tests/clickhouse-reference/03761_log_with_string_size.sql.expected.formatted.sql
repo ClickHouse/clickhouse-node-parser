@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/89909
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -20,7 +20,7 @@ SELECT t0.c0.size
 FROM t0
 WHERE t0.c0 IN (1);
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t0
 (

@@ -5,4 +5,4 @@ CREATE TABLE test_table
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

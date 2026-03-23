@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/40956#issuecomment-1262096612
-SYSTEM DROP  TABLE IF EXISTS row_level_policy_prewhere;
+DROP TABLE IF EXISTS row_level_policy_prewhere;
 
-SYSTEM DROP  ROW POLICY IF EXISTS row_level_policy_prewhere_policy0 ON row_level_policy_prewhere;
+DROP ROW POLICY IF EXISTS row_level_policy_prewhere_policy0 ON row_level_policy_prewhere;
 
 CREATE TABLE row_level_policy_prewhere
 (
@@ -19,4 +19,4 @@ SELECT *
 FROM row_level_policy_prewhere
 PREWHERE y = 'foo';
 
-SYSTEM DROP  TABLE row_level_policy_prewhere;
+DROP TABLE row_level_policy_prewhere;

@@ -3,7 +3,7 @@ SET send_logs_level = 'fatal';
 
 SELECT '----00489----';
 
-SYSTEM DROP  TABLE IF EXISTS pk;
+DROP TABLE IF EXISTS pk;
 
 -- NOTE: here the timezone is pinned to UTC, to avoid issues with "partial
 -- timezones" (timezones that does not starts from 00:00), like
@@ -79,13 +79,13 @@ FROM pk
 WHERE (and(greaterOrEquals(x, toDateTime(60)), lessOrEquals(x, toDateTime(120))))
     AND y = 11;
 
-SYSTEM DROP  TABLE pk;
+DROP TABLE pk;
 
 SET max_block_size = 8192;
 
 SET max_rows_to_read = 0;
 
-SYSTEM DROP  TABLE IF EXISTS merge_tree;
+DROP TABLE IF EXISTS merge_tree;
 
 CREATE TABLE merge_tree
 (
@@ -125,13 +125,13 @@ SELECT count()
 FROM merge_tree
 WHERE toUInt64(x) IN (0, 0);
 
-SYSTEM DROP  TABLE merge_tree;
+DROP TABLE merge_tree;
 
 SET force_primary_key = 0;
 
-SYSTEM DROP  TABLE IF EXISTS large_alter_table_00926;
+DROP TABLE IF EXISTS large_alter_table_00926;
 
-SYSTEM DROP  TABLE IF EXISTS store_of_hash_00926;
+DROP TABLE IF EXISTS store_of_hash_00926;
 
 SET allow_suspicious_codecs = 1;
 

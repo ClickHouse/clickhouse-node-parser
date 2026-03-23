@@ -19,7 +19,7 @@ SELECT
     valid_column_2
 FROM test;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
 CREATE TABLE test2
 (
@@ -39,7 +39,7 @@ SELECT
     valid_column_2
 FROM test2;
 
-SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};
+DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};
 
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier} ON CLUSTER test_shard_localhost
 ENGINE = Atomic;

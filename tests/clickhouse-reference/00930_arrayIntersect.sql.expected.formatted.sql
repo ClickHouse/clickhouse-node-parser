@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists array_intersect;
+DROP TABLE IF EXISTS array_intersect;
 
 CREATE TABLE array_intersect
 (

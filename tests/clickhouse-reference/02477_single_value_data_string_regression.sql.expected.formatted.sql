@@ -215,7 +215,7 @@ SELECT
     'fuzz5',
     finalizeAggregation(CAST(unhex('0100000000000000000FFFFFFFF0'), 'AggregateFunction(argMax, UInt64, String)')); -- { serverError INCORRECT_DATA }
 
-SYSTEM drop  table if exists aggr;
+DROP TABLE IF EXISTS aggr;
 
 CREATE TABLE aggr
 (
@@ -254,4 +254,4 @@ SELECT
     length(x)
 FROM aggr;
 
-SYSTEM drop  table aggr;
+DROP TABLE aggr;

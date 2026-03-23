@@ -1,6 +1,6 @@
 -- Tags: no-random-merge-tree-settings, no-random-settings
 -- - no-random-merge-tree-settings -- may change number of parts
-SYSTEM drop  table if exists test_10m;
+DROP TABLE IF EXISTS test_10m;
 
 CREATE TABLE test_10m
 (

@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
-SYSTEM drop  view if exists v;
+DROP VIEW IF EXISTS v;
 
-SYSTEM drop  dictionary if exists dict;
+DROP DICTIONARY IF EXISTS dict;
 
 CREATE TABLE test
 (
@@ -28,7 +28,7 @@ SOURCE(clickhouse(TABLE 'v'))
 LIFETIME(MIN 0 MAX 1000)
 LAYOUT(FLAT());
 
-SYSTEM drop  view v; -- {serverError HAVE_DEPENDENT_OBJECTS}
+DROP VIEW v; -- {serverError HAVE_DEPENDENT_OBJECTS}
 
 CREATE OR REPLACE VIEW v (x UInt32, v String, y UInt32)
 AS
@@ -38,6 +38,6 @@ SELECT
     42 AS y
 FROM test;
 
-SYSTEM drop  dictionary dict;
+DROP DICTIONARY dict;
 
-SYSTEM drop  table test;
+DROP TABLE test;

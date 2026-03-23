@@ -1,7 +1,7 @@
 SET enable_full_text_index = 1;
 
 -- Tsts that covered sparse grams are filtered out.
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 -- To have always local plan in EXPLAIN when running the test with enabled parallel replicas
 SET parallel_replicas_local_plan = 1;
@@ -33,4 +33,4 @@ FROM (
     )
 WHERE like(`explain`, '%Condition:%');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS x;
+DROP TABLE IF EXISTS x;
 
-SYSTEM DROP  TABLE IF EXISTS x_as;
+DROP TABLE IF EXISTS x_as;
 
 SELECT '-------------- Test copy sorting clauses from source table --------------';
 
@@ -19,9 +19,9 @@ CREATE TABLE x_as AS x
 ENGINE = MergeTree
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 
-SYSTEM DROP  TABLE x;
+DROP TABLE x;
 
-SYSTEM DROP  TABLE x_as;
+DROP TABLE x_as;
 
 CREATE TABLE x
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_columns_clear;
+DROP TABLE IF EXISTS t_sparse_columns_clear;
 
 CREATE TABLE t_sparse_columns_clear
 (
@@ -27,7 +27,7 @@ SET mutations_sync = 2;
 
 SET alter_sync = 2;
 
-SYSTEM DROP  TABLE t_sparse_columns_clear SYNC;
+DROP TABLE t_sparse_columns_clear;
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 

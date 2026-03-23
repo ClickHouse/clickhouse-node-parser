@@ -4,7 +4,7 @@ ORDER BY number DESC
 LIMIT 3 WITH TIES
 OFFSET 2;
 
-SYSTEM DROP  TABLE IF EXISTS test_fetch;
+DROP TABLE IF EXISTS test_fetch;
 
 CREATE TABLE test_fetch
 (
@@ -41,4 +41,4 @@ ORDER BY
     a ASC,
     b ASC;
 
-SYSTEM DROP  TABLE test_fetch;
+DROP TABLE test_fetch;

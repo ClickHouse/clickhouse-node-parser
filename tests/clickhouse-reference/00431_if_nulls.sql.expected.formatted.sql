@@ -13,7 +13,7 @@
  *
  * Thus we have 5 * 4 * 4 = 80 combinations.
  */
-SYSTEM DROP  TABLE IF EXISTS nullable_00431;
+DROP TABLE IF EXISTS nullable_00431;
 
 CREATE VIEW nullable_00431
 AS
@@ -274,4 +274,4 @@ FROM nullable_00431;
 SELECT if(cond_non_constant_nullable, then_non_constant_nullable, else_non_constant_nullable) AS res
 FROM nullable_00431;
 
-SYSTEM DROP  TABLE nullable_00431;
+DROP TABLE nullable_00431;

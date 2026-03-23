@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists X;
+DROP TABLE IF EXISTS X;
 
-SYSTEM drop  table if exists Y;
+DROP TABLE IF EXISTS Y;
 
 CREATE TABLE X
 (
@@ -150,6 +150,6 @@ ORDER BY
     s.x_name ASC,
     j.y_name ASC;
 
-SYSTEM drop  table X;
+DROP TABLE X;
 
-SYSTEM drop  table Y;
+DROP TABLE Y;

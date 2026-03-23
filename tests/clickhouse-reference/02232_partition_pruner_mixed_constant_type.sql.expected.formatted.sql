@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS broken;
+DROP TABLE IF EXISTS broken;
 
 CREATE TABLE broken
 (
@@ -14,4 +14,4 @@ SELECT *
 FROM broken
 WHERE time > -1;
 
-SYSTEM DROP  TABLE broken;
+DROP TABLE broken;

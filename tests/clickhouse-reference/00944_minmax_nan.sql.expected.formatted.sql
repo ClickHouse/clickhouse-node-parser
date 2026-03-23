@@ -1,7 +1,7 @@
 SET parallel_replicas_local_plan = 1;
 
 -- Test for issue #75523
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -86,4 +86,4 @@ WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Granules:%')
 LIMIT 2, 3; -- Skip the primary index parts and granules.
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

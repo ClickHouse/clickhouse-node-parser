@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM drop  table if exists t3;
+DROP TABLE IF EXISTS t3;
 
 CREATE TABLE t0
 (
@@ -28,8 +28,8 @@ ENGINE = MergeTree;
 
 INSERT INTO t1;
 
-SYSTEM drop  table t0;
+DROP TABLE t0;
 
-SYSTEM drop  table t1;
+DROP TABLE t1;
 
-SYSTEM drop  table t3;
+DROP TABLE t3;

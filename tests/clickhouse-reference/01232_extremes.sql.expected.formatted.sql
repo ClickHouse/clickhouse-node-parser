@@ -63,17 +63,17 @@ CREATE DATABASE IF NOT EXISTS shard_0;
 
 CREATE DATABASE IF NOT EXISTS shard_1;
 
-SYSTEM drop  table if exists shard_0.num_01232;
+DROP TABLE IF EXISTS shard_0.num_01232;
 
-SYSTEM drop  table if exists shard_0.num2_01232;
+DROP TABLE IF EXISTS shard_0.num2_01232;
 
-SYSTEM drop  table if exists shard_1.num_01232;
+DROP TABLE IF EXISTS shard_1.num_01232;
 
-SYSTEM drop  table if exists shard_1.num2_01232;
+DROP TABLE IF EXISTS shard_1.num2_01232;
 
-SYSTEM drop  table if exists distr;
+DROP TABLE IF EXISTS distr;
 
-SYSTEM drop  table if exists distr2;
+DROP TABLE IF EXISTS distr2;
 
 CREATE TABLE shard_0.num_01232
 (
@@ -135,6 +135,6 @@ SELECT *
 FROM distr2
 ORDER BY number ASC;
 
-SYSTEM drop  database shard_0;
+DROP DATABASE shard_0;
 
-SYSTEM drop  database shard_1;
+DROP DATABASE shard_1;

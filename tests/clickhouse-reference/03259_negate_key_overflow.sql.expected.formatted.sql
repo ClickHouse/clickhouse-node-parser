@@ -11,7 +11,7 @@ SELECT *
 FROM a
 WHERE negate(x) = -42;
 
-SYSTEM drop  table a;
+DROP TABLE a;
 
 CREATE TABLE a
 (

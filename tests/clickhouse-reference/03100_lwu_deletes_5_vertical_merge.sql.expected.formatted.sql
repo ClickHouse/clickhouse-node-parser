@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_deletes_vertical;
+DROP TABLE IF EXISTS t_lwu_deletes_vertical;
 
 CREATE TABLE t_lwu_deletes_vertical
 (

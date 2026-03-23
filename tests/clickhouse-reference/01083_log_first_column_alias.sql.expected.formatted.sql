@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_alias;
+DROP TABLE IF EXISTS test_alias;
 
 CREATE TABLE test_alias
 (
@@ -10,4 +10,4 @@ ENGINE = Log;
 SELECT count()
 FROM test_alias;
 
-SYSTEM DROP  TABLE test_alias;
+DROP TABLE test_alias;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_with_lc_key;
+DROP TABLE IF EXISTS table_with_lc_key;
 
 CREATE TABLE table_with_lc_key
 (
@@ -16,7 +16,7 @@ FROM table_with_lc_key
 WHERE enum_key > 0
     AND like(lc_key, 'h%');
 
-SYSTEM DROP  TABLE IF EXISTS table_with_string_key;
+DROP TABLE IF EXISTS table_with_string_key;
 
 CREATE TABLE table_with_string_key
 (

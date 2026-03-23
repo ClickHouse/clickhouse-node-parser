@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
 CREATE TABLE table1
 (
@@ -27,4 +27,4 @@ SETTINGS
     enable_parallel_replicas = 1,
     max_parallel_replicas = 2;
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;

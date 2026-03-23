@@ -9,9 +9,9 @@ SET join_algorithm = 'partial_merge';
 
 SET query_plan_join_swap_table = 0;
 
-SYSTEM DROP  TABLE IF EXISTS left;
+DROP TABLE IF EXISTS `left`;
 
-SYSTEM DROP  TABLE IF EXISTS right;
+DROP TABLE IF EXISTS `right`;
 
 CREATE TABLE `left`
 (

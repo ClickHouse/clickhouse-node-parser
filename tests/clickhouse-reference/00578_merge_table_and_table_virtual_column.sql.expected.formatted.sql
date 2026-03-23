@@ -1,12 +1,12 @@
-SYSTEM DROP  TABLE IF EXISTS numbers1;
+DROP TABLE IF EXISTS numbers1;
 
-SYSTEM DROP  TABLE IF EXISTS numbers2;
+DROP TABLE IF EXISTS numbers2;
 
-SYSTEM DROP  TABLE IF EXISTS numbers3;
+DROP TABLE IF EXISTS numbers3;
 
-SYSTEM DROP  TABLE IF EXISTS numbers4;
+DROP TABLE IF EXISTS numbers4;
 
-SYSTEM DROP  TABLE IF EXISTS numbers5;
+DROP TABLE IF EXISTS numbers5;
 
 CREATE TABLE numbers1
 ENGINE = StripeLog AS
@@ -69,12 +69,12 @@ SELECT count()
 FROM merge(currentDatabase(), '^numbers\\d+$')
 WHERE _table = 'non_existing';
 
-SYSTEM DROP  TABLE numbers1;
+DROP TABLE numbers1;
 
-SYSTEM DROP  TABLE numbers2;
+DROP TABLE numbers2;
 
-SYSTEM DROP  TABLE numbers3;
+DROP TABLE numbers3;
 
-SYSTEM DROP  TABLE numbers4;
+DROP TABLE numbers4;
 
-SYSTEM DROP  TABLE numbers5;
+DROP TABLE numbers5;

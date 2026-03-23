@@ -11,9 +11,9 @@ SELECT bitShiftLeft(if(materialize(1), '123', '123'), 1)
 FROM numbers(1);
 
 -- The next queries are from fuzzer that found the bug:
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t0
 (
@@ -38,11 +38,11 @@ WHERE 'J[' < multiIf(ref_5.pkey IN (
         SELECT 1
     ), bitShiftLeft(multiIf(ref_5.c0 > NULL, '1', ')'), 40), NULL);
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;
 
-SYSTEM DROP  TABLE IF EXISTS t5;
+DROP TABLE IF EXISTS t5;
 
 CREATE TABLE t5
 (
@@ -59,4 +59,4 @@ SELECT subq_0.pkey AS c_1_c1193_15
 FROM t5 AS subq_0
 WHERE isNotNull(sipHash128(0, subq_0.c18, bitShiftRight(multiIf(false, (sipHash128(subq_0.pkey, subq_0.c18, 'S')), '1'), 0)));
 
-SYSTEM DROP  TABLE t5;
+DROP TABLE t5;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS map_test_index_map_keys;
+DROP TABLE IF EXISTS map_test_index_map_keys;
 
 CREATE TABLE map_test_index_map_keys
 (
@@ -111,9 +111,9 @@ FROM map_test_index_map_keys
 WHERE has(map, '')
 SETTINGS force_data_skipping_indices = 'map_bloom_filter_keys';
 
-SYSTEM DROP  TABLE map_test_index_map_keys;
+DROP TABLE map_test_index_map_keys;
 
-SYSTEM DROP  TABLE IF EXISTS map_test_index_map_values;
+DROP TABLE IF EXISTS map_test_index_map_values;
 
 CREATE TABLE map_test_index_map_values
 (
@@ -197,4 +197,4 @@ SELECT *
 FROM map_test_index_map_values
 WHERE mapContainsValue(map, '');
 
-SYSTEM DROP  TABLE map_test_index_map_values;
+DROP TABLE map_test_index_map_values;

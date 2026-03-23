@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -22,4 +22,4 @@ SETTINGS
     query_plan_join_shard_by_pk_ranges = 1,
     max_threads = 2;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

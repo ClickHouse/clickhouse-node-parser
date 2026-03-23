@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS t_subcolumns_sizes;
+DROP TABLE IF EXISTS t_subcolumns_sizes;
 
 CREATE TABLE t_subcolumns_sizes
 (

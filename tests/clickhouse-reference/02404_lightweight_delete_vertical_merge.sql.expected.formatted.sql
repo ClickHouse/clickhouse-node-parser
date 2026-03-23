@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS lwd_test;
+DROP TABLE IF EXISTS lwd_test;
 
 CREATE TABLE lwd_test
 (
@@ -56,4 +56,4 @@ INSERT INTO lwd_test SELECT
     toString(number + 200) AS value
 FROM numbers(10);
 
-SYSTEM DROP  TABLE lwd_test;
+DROP TABLE lwd_test;

@@ -15,4 +15,4 @@ SELECT
     t.str
 FROM null_02902;
 
-SYSTEM DROP  TABLE null_02902;
+DROP TABLE null_02902;

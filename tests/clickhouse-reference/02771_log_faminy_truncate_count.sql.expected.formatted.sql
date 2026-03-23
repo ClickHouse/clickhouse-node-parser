@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_log;
+DROP TABLE IF EXISTS test_log;
 
 CREATE TABLE test_log
 (
@@ -19,4 +19,4 @@ CREATE TABLE test_log
 )
 ENGINE = StripeLog;
 
-SYSTEM DROP  TABLE test_log;
+DROP TABLE test_log;

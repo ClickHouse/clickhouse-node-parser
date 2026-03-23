@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists rate_test;
+DROP TABLE IF EXISTS rate_test;
 
-SYSTEM drop  table if exists rate_test2;
+DROP TABLE IF EXISTS rate_test2;
 
 CREATE TABLE rate_test
 (

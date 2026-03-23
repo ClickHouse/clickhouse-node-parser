@@ -1,6 +1,6 @@
 -- Tags: no-fasttest, no-ordinary-database
 -- Tests that various conditions are checked during creation of vector search indexes.
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

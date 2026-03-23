@@ -2,11 +2,11 @@
 -- Must use `default` database and these tables - they're configured in tests/*_dictionary.xml
 USE default;
 
-SYSTEM drop  table if exists ints;
+DROP TABLE IF EXISTS ints;
 
-SYSTEM drop  table if exists strings;
+DROP TABLE IF EXISTS strings;
 
-SYSTEM drop  table if exists decimals;
+DROP TABLE IF EXISTS decimals;
 
 CREATE TABLE ints
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS numbers_10k_log;
+DROP TABLE IF EXISTS numbers_10k_log;
 
 SET max_block_size = 1000;
 
@@ -19,4 +19,4 @@ FROM numbers_10k_log
 GROUP BY k
 LIMIT 1;
 
-SYSTEM DROP  TABLE numbers_10k_log;
+DROP TABLE numbers_10k_log;

@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS han_1;
+DROP TABLE IF EXISTS han_1;
 
 CREATE TABLE han_1
 (

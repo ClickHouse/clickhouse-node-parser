@@ -1,6 +1,6 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
-SYSTEM DROP  TABLE IF EXISTS constCondOptimization;
+DROP TABLE IF EXISTS constCondOptimization;
 
 CREATE TABLE constCondOptimization
 (
@@ -31,4 +31,4 @@ FROM constCondOptimization
 WHERE if(0, 1, n = 1000)
     AND 1 = 1;
 
-SYSTEM DROP  TABLE constCondOptimization;
+DROP TABLE constCondOptimization;

@@ -1,5 +1,5 @@
 -- Tests that CREATE TABLE and ADD INDEX respect settings 'enable_full_text_index'
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 -- Test CREATE TABLE
 SET enable_full_text_index = 0;
@@ -15,7 +15,7 @@ ORDER BY tuple(); -- { serverError SUPPORT_IS_DISABLED }
 
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE tab1;
+DROP TABLE tab1;
 
 CREATE TABLE tab
 (
@@ -25,4 +25,4 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

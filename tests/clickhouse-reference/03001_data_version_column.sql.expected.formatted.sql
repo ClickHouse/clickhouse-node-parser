@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_data_version;
+DROP TABLE IF EXISTS t_data_version;
 
 CREATE TABLE t_data_version
 (
@@ -31,4 +31,4 @@ WHERE _part_data_version = 4
 ORDER BY a ASC
 SETTINGS max_rows_to_read = 1;
 
-SYSTEM DROP  TABLE t_data_version;
+DROP TABLE t_data_version;

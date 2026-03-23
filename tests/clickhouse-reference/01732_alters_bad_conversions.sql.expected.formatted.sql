@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS bad_conversions;
+DROP TABLE IF EXISTS bad_conversions;
 
-SYSTEM DROP  TABLE IF EXISTS bad_conversions_2;
+DROP TABLE IF EXISTS bad_conversions_2;
 
 CREATE TABLE bad_conversions
 (

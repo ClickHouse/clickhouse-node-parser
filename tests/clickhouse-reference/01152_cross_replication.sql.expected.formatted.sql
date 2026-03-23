@@ -1,11 +1,11 @@
 -- Tags: replica, no-parallel
-SYSTEM DROP  DATABASE IF EXISTS shard_0;
+DROP DATABASE IF EXISTS shard_0;
 
-SYSTEM DROP  DATABASE IF EXISTS shard_1;
+DROP DATABASE IF EXISTS shard_1;
 
 SET distributed_ddl_output_mode = 'none';
 
-SYSTEM DROP  TABLE IF EXISTS demo_loan_01568_dist;
+DROP TABLE IF EXISTS demo_loan_01568_dist;
 
 CREATE DATABASE shard_0;
 
@@ -63,8 +63,8 @@ FROM shard_0.demo_loan_01568;
 SELECT *
 FROM shard_1.demo_loan_01568;
 
-SYSTEM DROP  DATABASE shard_0;
+DROP DATABASE shard_0;
 
-SYSTEM DROP  DATABASE shard_1;
+DROP DATABASE shard_1;
 
-SYSTEM DROP  TABLE demo_loan_01568_dist;
+DROP TABLE demo_loan_01568_dist;

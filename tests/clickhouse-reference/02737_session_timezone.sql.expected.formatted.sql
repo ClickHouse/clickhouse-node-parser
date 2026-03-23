@@ -59,4 +59,4 @@ FROM test_tz_setting
 WHERE d == toDateTime('2000-01-01 02:00:00'); -- 0 rows expected
 
 -- Cleanup table
-SYSTEM DROP  TABLE test_tz_setting SYNC;
+DROP TABLE test_tz_setting;

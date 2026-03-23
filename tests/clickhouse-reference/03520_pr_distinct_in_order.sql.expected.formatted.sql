@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t_dio;
+DROP TABLE IF EXISTS t_dio;
 
 SET optimize_read_in_order = 0, optimize_distinct_in_order = 1;
 

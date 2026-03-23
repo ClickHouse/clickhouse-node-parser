@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -26,4 +26,4 @@ SELECT
     jd.`b[]`.c.:`Array(Array(Nullable(Int64)))`.size1
 FROM test; -- {serverError UNKNOWN_IDENTIFIER}
 
-SYSTEM drop  table test;
+DROP TABLE test;

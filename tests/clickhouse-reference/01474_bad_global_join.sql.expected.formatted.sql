@@ -1,7 +1,7 @@
 -- Tags: global
-SYSTEM DROP  TABLE IF EXISTS local_table;
+DROP TABLE IF EXISTS local_table;
 
-SYSTEM DROP  TABLE IF EXISTS dist_table;
+DROP TABLE IF EXISTS dist_table;
 
 CREATE TABLE local_table
 (
@@ -30,6 +30,6 @@ FROM
 LEFT JOIN local_table AS t
     USING (id);
 
-SYSTEM DROP  TABLE local_table;
+DROP TABLE local_table;
 
-SYSTEM DROP  TABLE dist_table;
+DROP TABLE dist_table;

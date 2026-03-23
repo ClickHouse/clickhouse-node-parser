@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (
@@ -15,4 +15,4 @@ SELECT 1
 FROM merge(currentDatabase(), '^data$')
 WHERE _table IN (NULL);
 
-SYSTEM drop  table data;
+DROP TABLE data;

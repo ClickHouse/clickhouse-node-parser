@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02176_test_simple_key_table;
+DROP TABLE IF EXISTS `02176_test_simple_key_table`;
 
 CREATE TABLE `02176_test_simple_key_table`
 (
@@ -9,7 +9,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `02176_test_simple_key_table`;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02176_test_simple_key_dictionary;
+DROP DICTIONARY IF EXISTS `02176_test_simple_key_dictionary`;
 
 CREATE DICTIONARY `02176_test_simple_key_dictionary`
 (
@@ -36,11 +36,11 @@ SELECT dictHas('02176_test_simple_key_dictionary', '0');
 
 SELECT dictHas('02176_test_simple_key_dictionary', [0]); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SYSTEM DROP  DICTIONARY 02176_test_simple_key_dictionary;
+DROP DICTIONARY `02176_test_simple_key_dictionary`;
 
-SYSTEM DROP  TABLE 02176_test_simple_key_table;
+DROP TABLE `02176_test_simple_key_table`;
 
-SYSTEM DROP  TABLE IF EXISTS 02176_test_complex_key_table;
+DROP TABLE IF EXISTS `02176_test_complex_key_table`;
 
 CREATE TABLE `02176_test_complex_key_table`
 (
@@ -52,7 +52,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `02176_test_complex_key_table`;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02176_test_complex_key_dictionary;
+DROP DICTIONARY IF EXISTS `02176_test_complex_key_dictionary`;
 
 CREATE DICTIONARY `02176_test_complex_key_dictionary`
 (
@@ -84,6 +84,6 @@ SELECT dictHas('02176_test_complex_key_dictionary', tuple([0], '0')); --{serverE
 
 SELECT dictHas('02176_test_complex_key_dictionary', tuple(toUInt64(0), 0));
 
-SYSTEM DROP  DICTIONARY 02176_test_complex_key_dictionary;
+DROP DICTIONARY `02176_test_complex_key_dictionary`;
 
-SYSTEM DROP  TABLE 02176_test_complex_key_table;
+DROP TABLE `02176_test_complex_key_table`;

@@ -1,8 +1,8 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test1;
+DROP TABLE IF EXISTS test1;
 
-SYSTEM DROP  TABLE IF EXISTS test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test1
 (
@@ -42,6 +42,6 @@ SELECT
 FROM merge(currentDatabase(), '^test.*')
 ORDER BY `all` ASC;
 
-SYSTEM DROP  TABLE test1;
+DROP TABLE test1;
 
-SYSTEM DROP  TABLE test2;
+DROP TABLE test2;

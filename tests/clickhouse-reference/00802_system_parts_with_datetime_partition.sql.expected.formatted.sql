@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS datetime_table;
+DROP TABLE IF EXISTS datetime_table;
 
 -- Create a table with DateTime column, but not used in partition key
 CREATE TABLE datetime_table

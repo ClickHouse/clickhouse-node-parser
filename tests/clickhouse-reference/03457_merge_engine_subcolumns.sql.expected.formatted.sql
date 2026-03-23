@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists test1;
+DROP TABLE IF EXISTS test1;
 
-SYSTEM drop  table if exists test2;
+DROP TABLE IF EXISTS test2;
 
-SYSTEM drop  table if exists test_merge;
+DROP TABLE IF EXISTS test_merge;
 
 CREATE TABLE test1
 (
@@ -92,13 +92,13 @@ SELECT
 FROM test_merge
 ORDER BY `all` ASC;
 
-SYSTEM drop  table test_merge;
+DROP TABLE test_merge;
 
-SYSTEM drop  table test1;
+DROP TABLE test1;
 
-SYSTEM drop  table test2;
+DROP TABLE test2;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -121,4 +121,4 @@ SELECT
     json.d
 FROM test_merge;
 
-SYSTEM drop  table test;
+DROP TABLE test;

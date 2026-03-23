@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS replaceall;
+DROP TABLE IF EXISTS replaceall;
 
 CREATE TABLE replaceall
 (
@@ -20,7 +20,7 @@ SELECT
 FROM replaceall
 ORDER BY str ASC;
 
-SYSTEM DROP  TABLE replaceall;
+DROP TABLE replaceall;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

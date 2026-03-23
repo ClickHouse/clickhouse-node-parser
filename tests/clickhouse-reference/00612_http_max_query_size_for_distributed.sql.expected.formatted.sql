@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS data_00612;
+DROP TABLE IF EXISTS data_00612;
 
-SYSTEM DROP  TABLE IF EXISTS dist_00612;
+DROP TABLE IF EXISTS dist_00612;
 
 CREATE TABLE data_00612
 (
@@ -30,6 +30,6 @@ SET distributed_foreground_insert = 0;
 
 SET prefer_localhost_replica = 1;
 
-SYSTEM DROP  TABLE dist_00612;
+DROP TABLE dist_00612;
 
-SYSTEM DROP  TABLE data_00612;
+DROP TABLE data_00612;

@@ -1,5 +1,5 @@
 -- Tags: no-replicated-database, no-random-merge-tree-settings
-SYSTEM drop  table if exists data_01641;
+DROP TABLE IF EXISTS data_01641;
 
 -- Disable cache for s3 storage tests because it increases memory usage.
 SET enable_filesystem_cache = 0;
@@ -26,4 +26,4 @@ FROM numbers(120000);
 
 SET max_memory_usage = '10Mi', max_untracked_memory = 0;
 
-SYSTEM drop  table data_01641;
+DROP TABLE data_01641;

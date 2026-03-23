@@ -1,6 +1,6 @@
 -- Tags: no-async-insert
 -- - no-async-insert -- due to INSERT is performed in background the connection is preserved, and last CREATE TEMPORARY TABLE will fail with TABLE_ALREADY_EXISTS
-SYSTEM DROP  TABLE IF EXISTS default_constraints;
+DROP TABLE IF EXISTS default_constraints;
 
 CREATE TABLE default_constraints
 (
@@ -24,7 +24,7 @@ FROM default_constraints;
 SELECT count()
 FROM default_constraints;
 
-SYSTEM DROP  TABLE default_constraints;
+DROP TABLE default_constraints;
 
 CREATE TEMPORARY TABLE default_constraints
 (

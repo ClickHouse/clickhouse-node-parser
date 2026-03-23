@@ -10,7 +10,7 @@ SET max_bytes_ratio_before_external_group_by = 0;
 
 SET max_bytes_before_external_group_by = 0;
 
-SYSTEM DROP  TABLE IF EXISTS numbers500k;
+DROP TABLE IF EXISTS numbers500k;
 
 CREATE TABLE numbers500k
 (
@@ -44,4 +44,4 @@ SET totals_mode = 'after_having_exclusive';
 
 SET totals_mode = 'before_having';
 
-SYSTEM DROP  TABLE numbers500k;
+DROP TABLE numbers500k;

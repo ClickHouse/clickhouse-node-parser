@@ -1,6 +1,6 @@
 -- Tags: no-fasttest, no-ordinary-database
 -- Tests that vector similarity indexes can be detached/attached.
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -14,4 +14,4 @@ SETTINGS index_granularity = 8192;
 
 INSERT INTO tab;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

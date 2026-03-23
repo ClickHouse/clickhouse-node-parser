@@ -1,5 +1,5 @@
 -- Tags: deadlock
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -15,7 +15,7 @@ FROM t;
 SELECT count()
 FROM t;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;
 
 CREATE TABLE t
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS default;
+DROP TABLE IF EXISTS default;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -16,4 +16,4 @@ SELECT
     toUInt32(t)
 FROM default;
 
-SYSTEM DROP  TABLE default;
+DROP TABLE default;

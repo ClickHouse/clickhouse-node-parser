@@ -61,13 +61,13 @@ INNER JOIN (
 WHERE name = 'enable_optimize_predicate_expression';
 
 -- https://github.com/ClickHouse/ClickHouse/issues/6767
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
-SYSTEM DROP  TABLE IF EXISTS t3;
+DROP TABLE IF EXISTS t3;
 
-SYSTEM DROP  TABLE IF EXISTS view1;
+DROP TABLE IF EXISTS view1;
 
 CREATE TABLE t1
 (
@@ -137,9 +137,9 @@ WHERE ccc > 1;
 -- https://github.com/ClickHouse/ClickHouse/issues/5674
 -- https://github.com/ClickHouse/ClickHouse/issues/4731
 -- https://github.com/ClickHouse/ClickHouse/issues/4904
-SYSTEM DROP  TABLE IF EXISTS A;
+DROP TABLE IF EXISTS A;
 
-SYSTEM DROP  TABLE IF EXISTS B;
+DROP TABLE IF EXISTS B;
 
 CREATE TABLE A
 (
@@ -162,7 +162,7 @@ ORDER BY (ts, id)
 PARTITION BY toStartOfHour(ts);
 
 -- https://github.com/ClickHouse/ClickHouse/issues/7802
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (

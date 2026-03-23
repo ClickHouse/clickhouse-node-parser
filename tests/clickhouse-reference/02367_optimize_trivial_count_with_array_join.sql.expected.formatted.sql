@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t
 (
@@ -27,6 +27,6 @@ ARRAY JOIN (
     ) AS _a
 SETTINGS optimize_trivial_count_query = 1;
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table t1;
+DROP TABLE t1;

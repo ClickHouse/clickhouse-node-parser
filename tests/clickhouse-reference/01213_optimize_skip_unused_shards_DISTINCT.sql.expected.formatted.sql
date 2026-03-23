@@ -35,6 +35,6 @@ SETTINGS
     optimize_skip_unused_shards = 1,
     optimize_distributed_group_by_sharding_key = 1;
 
-SYSTEM DROP  TABLE local_01213;
+DROP TABLE local_01213;
 
-SYSTEM DROP  TABLE dist_01213;
+DROP TABLE dist_01213;

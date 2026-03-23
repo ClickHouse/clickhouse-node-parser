@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_ind_merge_2;
+DROP TABLE IF EXISTS t_ind_merge_2;
 
 CREATE TABLE t_ind_merge_2
 (
@@ -30,4 +30,4 @@ FROM numbers(1000);
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 
-SYSTEM DROP  TABLE t_ind_merge_2;
+DROP TABLE t_ind_merge_2;

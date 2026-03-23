@@ -1,5 +1,5 @@
 -- Tags: no-parallel, long
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_null_array;
+DROP TABLE IF EXISTS bloom_filter_null_array;
 
 CREATE TABLE bloom_filter_null_array
 (
@@ -24,4 +24,4 @@ SELECT COUNT()
 FROM bloom_filter_null_array
 WHERE NOT has(v, 0);
 
-SYSTEM DROP  TABLE bloom_filter_null_array;
+DROP TABLE bloom_filter_null_array;

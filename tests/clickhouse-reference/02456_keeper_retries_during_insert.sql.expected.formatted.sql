@@ -1,7 +1,7 @@
 -- Tags: replica
-SYSTEM DROP  TABLE IF EXISTS keeper_retries_r1 SYNC;
+DROP TABLE IF EXISTS keeper_retries_r1;
 
-SYSTEM DROP  TABLE IF EXISTS keeper_retries_r2 SYNC;
+DROP TABLE IF EXISTS keeper_retries_r2;
 
 CREATE TABLE keeper_retries_r1
 (
@@ -39,6 +39,6 @@ SELECT *
 FROM keeper_retries_r1
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE keeper_retries_r1 SYNC;
+DROP TABLE keeper_retries_r1;
 
-SYSTEM DROP  TABLE keeper_retries_r2 SYNC;
+DROP TABLE keeper_retries_r2;

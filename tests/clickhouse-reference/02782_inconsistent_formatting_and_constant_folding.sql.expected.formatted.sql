@@ -6,9 +6,9 @@ SELECT
     -0.,
     toTypeName(-0.);
 
-SYSTEM DROP  TABLE IF EXISTS t4;
+DROP TABLE IF EXISTS t4;
 
-SYSTEM DROP  TABLE IF EXISTS t7;
+DROP TABLE IF EXISTS t7;
 
 CREATE TABLE t4
 (
@@ -52,6 +52,6 @@ FROM (
     )
 WHERE x <= multiIf(true, 1, exp10(x) <= 1, 1, 1);
 
-SYSTEM DROP  TABLE t7;
+DROP TABLE t7;
 
-SYSTEM DROP  TABLE t4;
+DROP TABLE t4;

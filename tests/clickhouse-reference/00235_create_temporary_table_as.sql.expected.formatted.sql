@@ -1,4 +1,4 @@
-SYSTEM drop  temporary table if exists one_0023;
+DROP TEMPORARY TABLE IF EXISTS one_0023;
 
 CREATE TEMPORARY TABLE one_0023 AS
 SELECT 1;

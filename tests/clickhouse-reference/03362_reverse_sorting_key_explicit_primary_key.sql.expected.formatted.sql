@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists x1;
+DROP TABLE IF EXISTS x1;
 
 CREATE TABLE x1
 (
@@ -20,4 +20,4 @@ SELECT count()
 FROM x1
 WHERE and(greaterOrEquals(i, 3), lessOrEquals(i, 10));
 
-SYSTEM drop  table x1;
+DROP TABLE x1;

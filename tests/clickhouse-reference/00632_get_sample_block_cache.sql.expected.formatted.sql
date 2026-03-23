@@ -5,11 +5,11 @@ SET joined_subquery_requires_alias = 0;
 SET enable_analyzer = 1;
 
 -- This test (SELECT) without cache can take tens minutes
-SYSTEM DROP  TABLE IF EXISTS dict_string;
+DROP TABLE IF EXISTS dict_string;
 
-SYSTEM DROP  TABLE IF EXISTS dict_ui64;
+DROP TABLE IF EXISTS dict_ui64;
 
-SYSTEM DROP  TABLE IF EXISTS video_views;
+DROP TABLE IF EXISTS video_views;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -493,16 +493,16 @@ FROM (
             USING (entityIri)
     );
 
-SYSTEM DROP  TABLE dict_string;
+DROP TABLE dict_string;
 
-SYSTEM DROP  TABLE dict_ui64;
+DROP TABLE dict_ui64;
 
-SYSTEM DROP  TABLE video_views;
+DROP TABLE video_views;
 
 -- Test for tsan: Ensure cache is used from one thread
 SET max_threads = 32, max_memory_usage = '10G';
 
-SYSTEM DROP  TABLE IF EXISTS sample_00632;
+DROP TABLE IF EXISTS sample_00632;
 
 CREATE TABLE sample_00632
 (
@@ -1227,4 +1227,4 @@ FROM (
         ORDER BY x ASC
     );
 
-SYSTEM DROP  TABLE sample_00632;
+DROP TABLE sample_00632;

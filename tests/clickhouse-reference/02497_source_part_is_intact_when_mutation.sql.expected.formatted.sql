@@ -3,7 +3,7 @@ SET mutations_sync = 1;
 
 SET check_query_single_value_result = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t_source_part_is_intact;
+DROP TABLE IF EXISTS t_source_part_is_intact;
 
 CREATE TABLE t_source_part_is_intact
 (
@@ -24,4 +24,4 @@ SELECT
     count()
 FROM t_source_part_is_intact;
 
-SYSTEM DROP  TABLE t_source_part_is_intact;
+DROP TABLE t_source_part_is_intact;

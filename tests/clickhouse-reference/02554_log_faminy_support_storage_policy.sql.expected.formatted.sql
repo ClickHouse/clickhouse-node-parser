@@ -1,5 +1,5 @@
 -- Tags: no-fasttest, log-engine
-SYSTEM DROP  TABLE IF EXISTS test_2554_log;
+DROP TABLE IF EXISTS test_2554_log;
 
 CREATE TABLE test_2554_log
 (
@@ -13,9 +13,9 @@ INSERT INTO test_2554_log SELECT 1;
 SELECT *
 FROM test_2554_log;
 
-SYSTEM DROP  TABLE test_2554_log;
+DROP TABLE test_2554_log;
 
-SYSTEM DROP  TABLE IF EXISTS test_2554_tinylog;
+DROP TABLE IF EXISTS test_2554_tinylog;
 
 CREATE TABLE test_2554_tinylog
 (
@@ -29,9 +29,9 @@ INSERT INTO test_2554_tinylog SELECT 1;
 SELECT *
 FROM test_2554_tinylog;
 
-SYSTEM DROP  TABLE test_2554_tinylog;
+DROP TABLE test_2554_tinylog;
 
-SYSTEM DROP  TABLE IF EXISTS test_2554_stripelog;
+DROP TABLE IF EXISTS test_2554_stripelog;
 
 CREATE TABLE test_2554_stripelog
 (
@@ -45,7 +45,7 @@ INSERT INTO test_2554_stripelog SELECT 1;
 SELECT *
 FROM test_2554_stripelog;
 
-SYSTEM DROP  TABLE test_2554_stripelog;
+DROP TABLE test_2554_stripelog;
 
 CREATE TABLE test_2554_error
 (

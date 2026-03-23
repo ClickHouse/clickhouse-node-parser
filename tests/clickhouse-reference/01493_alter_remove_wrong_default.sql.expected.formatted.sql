@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS default_table;
+DROP TABLE IF EXISTS default_table;
 
 CREATE TABLE default_table
 (

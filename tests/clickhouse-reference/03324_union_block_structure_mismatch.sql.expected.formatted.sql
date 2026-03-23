@@ -3,7 +3,7 @@
 -- the branches may have different headers (e.g., due to different query DAGs being applied).
 -- Without the fix, this would cause an assertion failure / crash in debug builds.
 -- With the fix, the projection optimization is safely skipped when headers don't match.
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -23,4 +23,4 @@ FROM t0
 WHERE materialize(1)
 SETTINGS force_optimize_projection = 1; -- { serverError PROJECTION_NOT_USED }
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS repro_hits;
+DROP TABLE IF EXISTS repro_hits;
 
 CREATE TABLE repro_hits
 (

@@ -1,6 +1,6 @@
 SET use_variant_as_common_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -19,4 +19,4 @@ SELECT
     json.`^a`
 FROM t0;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

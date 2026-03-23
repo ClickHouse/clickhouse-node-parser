@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_index_granularity;
+DROP TABLE IF EXISTS t_index_granularity;
 
 CREATE TABLE t_index_granularity
 (
@@ -31,7 +31,7 @@ WHERE database = currentDatabase()
     AND table = 't_index_granularity'
     AND active;
 
-SYSTEM DROP  TABLE t_index_granularity;
+DROP TABLE t_index_granularity;
 
 CREATE TABLE t_index_granularity
 (

@@ -1,5 +1,5 @@
 -- Tags: no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS data_02771;
+DROP TABLE IF EXISTS data_02771;
 
 CREATE TABLE data_02771
 (
@@ -71,4 +71,4 @@ WHERE notLike(`explain`, '%Expression%')
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE data_02771;
+DROP TABLE data_02771;

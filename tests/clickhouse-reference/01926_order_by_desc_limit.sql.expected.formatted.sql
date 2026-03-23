@@ -1,5 +1,5 @@
 -- Tags: no-random-settings, no-azure-blob-storage
-SYSTEM DROP  TABLE IF EXISTS order_by_desc;
+DROP TABLE IF EXISTS order_by_desc;
 
 SET enable_filesystem_cache = 0;
 

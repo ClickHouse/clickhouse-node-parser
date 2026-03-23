@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -10,7 +10,7 @@ ENGINE = AggregatingMergeTree()
 ORDER BY (col1, col2);
 
 -- regression from performance tests comparison script
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 ENGINE = Null AS

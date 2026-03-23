@@ -8,4 +8,4 @@ ENGINE = Memory; -- {serverError NOT_IMPLEMENTED}
 
 SET compatibility_ignore_collation_in_create_table = true;
 
-SYSTEM DROP  TABLE t_02267_collation;
+DROP TABLE t_02267_collation;

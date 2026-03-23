@@ -2,9 +2,9 @@ SET output_format_pretty_color = 1;
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
-SYSTEM DROP  TABLE IF EXISTS table2;
+DROP TABLE IF EXISTS table2;
 
 CREATE TABLE table1
 (

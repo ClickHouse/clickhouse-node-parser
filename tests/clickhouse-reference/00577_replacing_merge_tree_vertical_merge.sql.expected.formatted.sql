@@ -1,6 +1,6 @@
 SET optimize_on_insert = 0;
 
-SYSTEM drop  table if exists tab_00577;
+DROP TABLE IF EXISTS tab_00577;
 
 CREATE TABLE tab_00577
 (
@@ -24,9 +24,9 @@ ORDER BY version ASC;
 SELECT *
 FROM tab_00577;
 
-SYSTEM drop  table tab_00577;
+DROP TABLE tab_00577;
 
-SYSTEM DROP  TABLE IF EXISTS testCleanupR1;
+DROP TABLE IF EXISTS testCleanupR1;
 
 CREATE TABLE testCleanupR1
 (

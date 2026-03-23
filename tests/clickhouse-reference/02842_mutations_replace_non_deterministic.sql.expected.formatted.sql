@@ -1,6 +1,6 @@
 -- Tags: no-shared-merge-tree
 -- With shared merge tree non deterministic mutations are allowed
-SYSTEM DROP  TABLE IF EXISTS t_mutations_nondeterministic SYNC;
+DROP TABLE IF EXISTS t_mutations_nondeterministic;
 
 SET mutations_sync = 2;
 
@@ -32,7 +32,7 @@ WHERE database = currentDatabase()
     AND is_done
 ORDER BY command ASC;
 
-SYSTEM DROP  TABLE t_mutations_nondeterministic SYNC;
+DROP TABLE t_mutations_nondeterministic;
 
 -- SELECT groupArray(...)
 CREATE TABLE t_mutations_nondeterministic

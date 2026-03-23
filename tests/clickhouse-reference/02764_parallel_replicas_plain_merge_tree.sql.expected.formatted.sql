@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS parallel_replicas_plain;
+DROP TABLE IF EXISTS parallel_replicas_plain;
 
 CREATE TABLE parallel_replicas_plain
 (
@@ -27,4 +27,4 @@ FORMAT Null;
 
 SET parallel_replicas_for_non_replicated_merge_tree = 1;
 
-SYSTEM DROP  TABLE parallel_replicas_plain;
+DROP TABLE parallel_replicas_plain;

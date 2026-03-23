@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 01802_empsalary;
+DROP TABLE IF EXISTS `01802_empsalary`;
 
 CREATE TABLE `01802_empsalary`
 (

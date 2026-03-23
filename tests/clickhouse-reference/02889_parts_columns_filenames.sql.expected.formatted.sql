@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_parts_columns_filenames;
+DROP TABLE IF EXISTS t_parts_columns_filenames;
 
 CREATE TABLE t_parts_columns_filenames
 (

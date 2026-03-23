@@ -5421,7 +5421,7 @@ FROM `system`.numbers
 LIMIT 10;
 
 /* No CASE expression. String clauses. */
-SYSTEM DROP  TABLE IF EXISTS multi_if_check;
+DROP TABLE IF EXISTS multi_if_check;
 
 CREATE TABLE multi_if_check
 (

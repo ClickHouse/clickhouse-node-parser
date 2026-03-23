@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS test_collate;
+DROP TABLE IF EXISTS test_collate;
 
 CREATE TABLE test_collate
 (
@@ -34,4 +34,4 @@ ORDER BY
     x ASC,
     s ASC COLLATE 'ru';
 
-SYSTEM DROP  TABLE test_collate;
+DROP TABLE test_collate;

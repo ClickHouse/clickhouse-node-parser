@@ -1,6 +1,6 @@
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS t_ephemeral_02205_1;
+DROP TABLE IF EXISTS t_ephemeral_02205_1;
 
 CREATE TABLE t_ephemeral_02205_1
 (

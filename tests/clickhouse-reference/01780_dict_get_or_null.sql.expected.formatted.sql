@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS simple_key_dictionary_source_table;
+DROP TABLE IF EXISTS simple_key_dictionary_source_table;
 
 CREATE TABLE simple_key_dictionary_source_table
 (
@@ -14,7 +14,7 @@ INSERT INTO simple_key_dictionary_source_table;
 
 INSERT INTO simple_key_dictionary_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS simple_key_dictionary;
+DROP DICTIONARY IF EXISTS simple_key_dictionary;
 
 CREATE DICTIONARY simple_key_dictionary
 (
@@ -35,11 +35,11 @@ SELECT
 FROM `system`.numbers
 LIMIT 5;
 
-SYSTEM DROP  DICTIONARY simple_key_dictionary;
+DROP DICTIONARY simple_key_dictionary;
 
-SYSTEM DROP  TABLE simple_key_dictionary_source_table;
+DROP TABLE simple_key_dictionary_source_table;
 
-SYSTEM DROP  TABLE IF EXISTS complex_key_dictionary_source_table;
+DROP TABLE IF EXISTS complex_key_dictionary_source_table;
 
 CREATE TABLE complex_key_dictionary_source_table
 (
@@ -56,7 +56,7 @@ INSERT INTO complex_key_dictionary_source_table;
 
 INSERT INTO complex_key_dictionary_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS complex_key_dictionary;
+DROP DICTIONARY IF EXISTS complex_key_dictionary;
 
 CREATE DICTIONARY complex_key_dictionary
 (
@@ -78,11 +78,11 @@ SELECT
 FROM `system`.numbers
 LIMIT 5;
 
-SYSTEM DROP  DICTIONARY complex_key_dictionary;
+DROP DICTIONARY complex_key_dictionary;
 
-SYSTEM DROP  TABLE complex_key_dictionary_source_table;
+DROP TABLE complex_key_dictionary_source_table;
 
-SYSTEM DROP  TABLE IF EXISTS range_key_dictionary_source_table;
+DROP TABLE IF EXISTS range_key_dictionary_source_table;
 
 CREATE TABLE range_key_dictionary_source_table
 (
@@ -100,7 +100,7 @@ INSERT INTO range_key_dictionary_source_table;
 
 INSERT INTO range_key_dictionary_source_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS range_key_dictionary;
+DROP DICTIONARY IF EXISTS range_key_dictionary;
 
 CREATE DICTIONARY range_key_dictionary
 (
@@ -125,6 +125,6 @@ SELECT
 FROM `system`.numbers
 LIMIT 5;
 
-SYSTEM DROP  DICTIONARY range_key_dictionary;
+DROP DICTIONARY range_key_dictionary;
 
-SYSTEM DROP  TABLE range_key_dictionary_source_table;
+DROP TABLE range_key_dictionary_source_table;

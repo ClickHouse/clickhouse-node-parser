@@ -38,7 +38,7 @@ SELECT toString(toDateTime('2017-11-05 08:07:47', 'Asia/Istanbul'), 'Asia/Kolkat
 
 SELECT '-- Test const timezone arguments --';
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -158,7 +158,7 @@ ORDER BY val ASC
 SETTINGS allow_nonconst_timezone_arguments = 1;
 
 -- test for a related bug:
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 SET allow_nonconst_timezone_arguments = 1;
 

@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS json;
+DROP TABLE IF EXISTS json;
 
 CREATE TABLE json
 (
@@ -18,4 +18,4 @@ INSERT INTO json (y);
 
 INSERT INTO json (x, y);
 
-SYSTEM DROP  TABLE json;
+DROP TABLE json;

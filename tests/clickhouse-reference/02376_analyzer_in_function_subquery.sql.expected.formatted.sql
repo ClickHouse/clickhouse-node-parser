@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -12,7 +12,7 @@ ORDER BY tuple();
 
 INSERT INTO test_table;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_for_in;
+DROP TABLE IF EXISTS test_table_for_in;
 
 CREATE TABLE test_table_for_in
 (
@@ -86,6 +86,6 @@ WHERE id IN (
     );
 
 -- { echoOff }
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  TABLE test_table_for_in;
+DROP TABLE test_table_for_in;

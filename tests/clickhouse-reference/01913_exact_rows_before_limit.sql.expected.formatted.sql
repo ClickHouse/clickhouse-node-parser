@@ -1,5 +1,5 @@
 -- Tags: no-parallel, no-random-merge-tree-settings
-SYSTEM drop  table if exists test_rows_compact_part;
+DROP TABLE IF EXISTS test_rows_compact_part;
 
 CREATE TABLE test_rows_compact_part
 (
@@ -31,7 +31,7 @@ LIMIT 1
 FORMAT JSONCompact
 SETTINGS exact_rows_before_limit = 1, output_format_write_statistics = 0;
 
-SYSTEM drop  table if exists test_rows_wide_part;
+DROP TABLE IF EXISTS test_rows_wide_part;
 
 CREATE TABLE test_rows_wide_part
 (

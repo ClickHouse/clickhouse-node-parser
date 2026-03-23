@@ -2,11 +2,11 @@ SET ignore_materialized_views_with_dropped_target_table = 1;
 
 SET send_logs_level = 'error';
 
-SYSTEM drop  table if exists from_table;
+DROP TABLE IF EXISTS from_table;
 
-SYSTEM drop  table if exists to_table;
+DROP TABLE IF EXISTS to_table;
 
-SYSTEM drop  table if exists mv;
+DROP TABLE IF EXISTS mv;
 
 CREATE TABLE from_table
 (
@@ -36,8 +36,8 @@ FROM from_table;
 SELECT *
 FROM to_table;
 
-SYSTEM drop  table to_table;
+DROP TABLE to_table;
 
-SYSTEM drop  table from_table;
+DROP TABLE from_table;
 
-SYSTEM drop  view mv;
+DROP VIEW mv;

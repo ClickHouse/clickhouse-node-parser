@@ -3,7 +3,7 @@
 -- test is derived from 03246_alter_from_string_to_json.sql
 SET max_block_size = 20000;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -38,4 +38,4 @@ ORDER BY x ASC
 LIMIT 10
 OFFSET 120000;
 
-SYSTEM drop  table test;
+DROP TABLE test;

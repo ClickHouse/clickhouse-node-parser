@@ -25,4 +25,4 @@ SELECT json.a
 FROM test
 FORMAT Null;
 
-SYSTEM drop  table test;
+DROP TABLE test;

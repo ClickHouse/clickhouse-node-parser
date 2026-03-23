@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS src_table;
+DROP TABLE IF EXISTS src_table;
 
-SYSTEM DROP  TABLE IF EXISTS copied_table;
+DROP TABLE IF EXISTS copied_table;
 
 CREATE TABLE src_table
 (
@@ -32,6 +32,6 @@ FROM copied_table
 ORDER BY time ASC
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE src_table;
+DROP TABLE src_table;
 
-SYSTEM DROP  TABLE copied_table;
+DROP TABLE copied_table;

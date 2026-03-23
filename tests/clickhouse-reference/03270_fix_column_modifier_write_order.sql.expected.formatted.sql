@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
 SET allow_experimental_statistics = 1;
 

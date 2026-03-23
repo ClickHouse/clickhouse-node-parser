@@ -2,7 +2,7 @@
 -- Random settings limits: index_granularity=(100, None); merge_max_block_size=(100, None)
 SET allow_experimental_dynamic_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -72,4 +72,4 @@ INSERT INTO test SELECT
     concat('str_', number)
 FROM numbers(30000);
 
-SYSTEM drop  table test;
+DROP TABLE test;

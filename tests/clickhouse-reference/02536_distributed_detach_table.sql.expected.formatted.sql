@@ -21,6 +21,6 @@ SELECT
     sum(n)
 FROM test_dist_02536; -- 0 0
 
-SYSTEM DROP  TABLE test_02536;
+DROP TABLE test_02536;
 
-SYSTEM DROP  TABLE test_dist_02536;
+DROP TABLE test_dist_02536;

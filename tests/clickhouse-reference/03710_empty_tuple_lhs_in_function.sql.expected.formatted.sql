@@ -22,7 +22,7 @@ SELECT tuple() IN ((tuple()));
 
 SELECT tuple() IN ([(((tuple())))]);
 
-SYSTEM DROP  TABLE IF EXISTS test_empty_tuple;
+DROP TABLE IF EXISTS test_empty_tuple;
 
 CREATE TABLE test_empty_tuple
 (

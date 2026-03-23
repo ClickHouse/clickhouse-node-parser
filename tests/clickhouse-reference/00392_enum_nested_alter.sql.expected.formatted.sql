@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS enum_nested_alter;
+DROP TABLE IF EXISTS enum_nested_alter;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -21,7 +21,7 @@ SELECT *
 FROM enum_nested_alter
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE enum_nested_alter;
+DROP TABLE enum_nested_alter;
 
 CREATE TABLE enum_nested_alter
 (

@@ -1,5 +1,5 @@
 -- Tags: no-random-settings
-SYSTEM DROP  TABLE IF EXISTS test_parallel_replicas_settings;
+DROP TABLE IF EXISTS test_parallel_replicas_settings;
 
 CREATE TABLE test_parallel_replicas_settings
 (
@@ -65,4 +65,4 @@ WHERE yesterday() <= event_date
     AND ilike(message, '%Setting ''use_hedged_requests'' explicitly with enabled ''enable_parallel_replicas'' has no effect%')
 SETTINGS enable_parallel_replicas = 0;
 
-SYSTEM DROP  TABLE test_parallel_replicas_settings;
+DROP TABLE test_parallel_replicas_settings;

@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -120,7 +120,7 @@ GROUP BY
     modulo(toLowCardinality('03147_parquet_memory_tracking.parquet'), number, toLowCardinality(3)); -- { serverError UNKNOWN_IDENTIFIER }
 
 -- { echoOff }
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
 SELECT
     [1, 2] AS arr,

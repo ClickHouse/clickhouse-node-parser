@@ -284,26 +284,26 @@ FROM `system`.warnings
 WHERE like(message, 'The number of%')
 ORDER BY message ASC;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_02931;
+DROP DATABASE IF EXISTS test_max_num_to_warn_02931;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_1;
+DROP DATABASE IF EXISTS test_max_num_to_warn_1;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_2;
+DROP DATABASE IF EXISTS test_max_num_to_warn_2;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_3;
+DROP DATABASE IF EXISTS test_max_num_to_warn_3;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_4;
+DROP DATABASE IF EXISTS test_max_num_to_warn_4;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_5;
+DROP DATABASE IF EXISTS test_max_num_to_warn_5;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_6;
+DROP DATABASE IF EXISTS test_max_num_to_warn_6;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_7;
+DROP DATABASE IF EXISTS test_max_num_to_warn_7;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_8;
+DROP DATABASE IF EXISTS test_max_num_to_warn_8;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_9;
+DROP DATABASE IF EXISTS test_max_num_to_warn_9;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_10;
+DROP DATABASE IF EXISTS test_max_num_to_warn_10;
 
-SYSTEM DROP  DATABASE IF EXISTS test_max_num_to_warn_11;
+DROP DATABASE IF EXISTS test_max_num_to_warn_11;

@@ -1,5 +1,5 @@
 -- Tags: long
-SYSTEM DROP  TABLE IF EXISTS topk;
+DROP TABLE IF EXISTS topk;
 
 CREATE TABLE topk
 (
@@ -26,4 +26,4 @@ FROM topk;
 SELECT topKWeighted(10)(toString(number), number)
 FROM numbers(3000000);
 
-SYSTEM DROP  TABLE topk;
+DROP TABLE topk;

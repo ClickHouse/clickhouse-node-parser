@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_02235;
+DROP TABLE IF EXISTS t_sparse_02235;
 
 CREATE TABLE t_sparse_02235
 (
@@ -25,4 +25,4 @@ ORDER BY
     name ASC,
     column ASC;
 
-SYSTEM DROP  TABLE t_sparse_02235;
+DROP TABLE t_sparse_02235;

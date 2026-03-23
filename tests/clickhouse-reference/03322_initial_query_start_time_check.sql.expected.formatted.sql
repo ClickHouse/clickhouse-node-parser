@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS tmp;
+DROP TABLE IF EXISTS tmp;
 
 CREATE OR REPLACE VIEW tmp
 AS
@@ -24,4 +24,4 @@ SETTINGS
     max_distributed_connections = 1,
     async_socket_for_remote = 0;
 
-SYSTEM DROP  TABLE tmp;
+DROP TABLE tmp;

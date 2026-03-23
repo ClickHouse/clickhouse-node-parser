@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists projection_test__fuzz_0;
+DROP TABLE IF EXISTS projection_test__fuzz_0;
 
 SET allow_suspicious_low_cardinality_types = 1;
 
@@ -80,4 +80,4 @@ ORDER BY
     100000000000000000000. ASC
 FORMAT Null;
 
-SYSTEM drop  table projection_test__fuzz_0;
+DROP TABLE projection_test__fuzz_0;

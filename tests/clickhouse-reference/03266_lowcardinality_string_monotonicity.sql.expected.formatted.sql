@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_lc_pk;
+DROP TABLE IF EXISTS test_lc_pk;
 
 CREATE TABLE test_lc_pk
 (
@@ -32,4 +32,4 @@ FROM (
     )
 WHERE like(`explain`, '%Condition%');
 
-SYSTEM DROP  TABLE test_lc_pk;
+DROP TABLE test_lc_pk;

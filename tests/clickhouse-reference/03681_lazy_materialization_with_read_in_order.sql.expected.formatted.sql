@@ -10,7 +10,7 @@ SET enable_analyzer = 1;
 
 SET parallel_replicas_local_plan = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_lazy_read_in_order;
+DROP TABLE IF EXISTS test_lazy_read_in_order;
 
 -- Create a table with sorting key on column 'a'
 CREATE TABLE test_lazy_read_in_order
@@ -187,7 +187,7 @@ ORDER BY
 LIMIT 5;
 
 -- Additional correctness tests for lazy materialization with read-in-order
-SYSTEM DROP  TABLE IF EXISTS test_correctness;
+DROP TABLE IF EXISTS test_correctness;
 
 CREATE TABLE test_correctness
 (

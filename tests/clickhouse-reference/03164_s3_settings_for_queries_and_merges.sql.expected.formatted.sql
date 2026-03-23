@@ -10,7 +10,7 @@ SET remote_read_min_bytes_for_seek = 100000;
 -- Will affect INSERT, but not merge
 SET s3_check_objects_after_upload = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_compact_bytes_s3;
+DROP TABLE IF EXISTS t_compact_bytes_s3;
 
 CREATE TABLE t_compact_bytes_s3
 (

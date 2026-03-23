@@ -1,7 +1,7 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS t_flatten_tuple;
+DROP TABLE IF EXISTS t_flatten_tuple;
 
-SYSTEM DROP  TABLE IF EXISTS t_flatten_object;
+DROP TABLE IF EXISTS t_flatten_object;
 
 SET flatten_nested = 0;
 

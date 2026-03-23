@@ -1,8 +1,8 @@
 -- Tags: no-fasttest, no-ordinary-database
 -- Tests that quoted and unquoted parameters can be passed to vector search indexes.
-SYSTEM DROP  TABLE IF EXISTS tab1;
+DROP TABLE IF EXISTS tab1;
 
-SYSTEM DROP  TABLE IF EXISTS tab2;
+DROP TABLE IF EXISTS tab2;
 
 CREATE TABLE tab1
 (
@@ -20,9 +20,9 @@ CREATE TABLE tab2
     PRIMARY KEY(id)
 );
 
-SYSTEM DROP  TABLE tab1;
+DROP TABLE tab1;
 
-SYSTEM DROP  TABLE tab2;
+DROP TABLE tab2;
 
 CREATE TABLE tab1
 (

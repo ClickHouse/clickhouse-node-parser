@@ -1,7 +1,7 @@
 -- Tags: no-fasttest, no-parallel
-SYSTEM DROP  USER IF EXISTS test_user_03593;
+DROP USER IF EXISTS test_user_03593;
 
-SYSTEM DROP  USER IF EXISTS test_user_03593_1;
+DROP USER IF EXISTS test_user_03593_1;
 
 CREATE USER test_user_03593;
 
@@ -13,6 +13,6 @@ SELECT
 FROM `system`.grants
 WHERE user_name = 'test_user_03593';
 
-SYSTEM DROP  USER test_user_03593;
+DROP USER test_user_03593;
 
-SYSTEM DROP  USER test_user_03593_1;
+DROP USER test_user_03593_1;

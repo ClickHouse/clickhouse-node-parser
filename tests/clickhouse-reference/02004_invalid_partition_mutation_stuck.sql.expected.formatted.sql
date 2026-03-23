@@ -1,6 +1,6 @@
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS rep_data;
+DROP TABLE IF EXISTS rep_data;
 
 CREATE TABLE rep_data
 (
@@ -15,7 +15,7 @@ SETTINGS number_of_free_entries_in_pool_to_execute_mutation = 0;
 
 INSERT INTO rep_data;
 
-SYSTEM DROP  TABLE IF EXISTS data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (

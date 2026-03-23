@@ -1,7 +1,7 @@
 -- Tags: distributed
 SET enable_memory_bound_merging_of_aggregation_results = 0;
 
-SYSTEM drop  table if exists projection_test;
+DROP TABLE IF EXISTS projection_test;
 
 CREATE TABLE projection_test
 (
@@ -38,7 +38,7 @@ GROUP BY dt_m;
 SELECT sum(cost)
 FROM projection_test;
 
-SYSTEM drop  table if exists projection_test_d;
+DROP TABLE IF EXISTS projection_test_d;
 
 CREATE TABLE projection_test_d
 (
@@ -56,6 +56,6 @@ GROUP BY dt_m;
 SELECT sum(cost)
 FROM projection_test_d;
 
-SYSTEM drop  table projection_test;
+DROP TABLE projection_test;
 
-SYSTEM drop  table projection_test_d;
+DROP TABLE projection_test_d;

@@ -1,7 +1,7 @@
 -- Tags: no-shared-merge-tree
 -- Tag no-shared-merge-tree - in SMT this works differently
 -- Test for MergeTreeData::checkDropCommandDoesntAffectInProgressMutations() basically
-SYSTEM DROP  TABLE IF EXISTS test SYNC;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -22,4 +22,4 @@ SELECT *
 FROM test
 FORMAT Null;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_graphite;
+DROP TABLE IF EXISTS test_graphite;
 
 CREATE TABLE test_graphite
 (
@@ -14,4 +14,4 @@ ORDER BY key;
 
 INSERT INTO test_graphite (key); -- { serverError BAD_ARGUMENTS }
 
-SYSTEM DROP  TABLE test_graphite;
+DROP TABLE test_graphite;

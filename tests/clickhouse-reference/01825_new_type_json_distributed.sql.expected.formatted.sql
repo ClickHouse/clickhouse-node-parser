@@ -1,9 +1,9 @@
 -- Tags: no-fasttest
 SET enable_json_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_json_local;
+DROP TABLE IF EXISTS t_json_local;
 
-SYSTEM DROP  TABLE IF EXISTS t_json_dist;
+DROP TABLE IF EXISTS t_json_dist;
 
 CREATE TABLE t_json_local
 (

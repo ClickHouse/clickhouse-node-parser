@@ -1,5 +1,5 @@
 -- Tags: long, no-object-storage
-SYSTEM DROP  TABLE IF EXISTS mt;
+DROP TABLE IF EXISTS mt;
 
 CREATE TABLE mt
 (
@@ -21,4 +21,4 @@ SELECT
     sum(x)
 FROM mt;
 
-SYSTEM DROP  TABLE mt;
+DROP TABLE mt;

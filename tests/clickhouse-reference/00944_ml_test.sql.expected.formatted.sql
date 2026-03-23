@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS defaults;
+DROP TABLE IF EXISTS defaults;
 
 CREATE TABLE defaults
 (
@@ -12,7 +12,7 @@ ENGINE = Memory;
 
 INSERT INTO defaults;
 
-SYSTEM DROP  TABLE IF EXISTS model;
+DROP TABLE IF EXISTS model;
 
 CREATE TABLE model
 ENGINE = Memory AS
@@ -42,6 +42,6 @@ FROM (
         FROM numbers(1000)
     );
 
-SYSTEM DROP  TABLE model;
+DROP TABLE model;
 
-SYSTEM DROP  TABLE defaults;
+DROP TABLE defaults;

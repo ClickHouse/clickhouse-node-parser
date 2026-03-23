@@ -26,7 +26,7 @@ FROM (
         LIMIT 10
     );
 
-SYSTEM DROP  TABLE IF EXISTS numbers_mt;
+DROP TABLE IF EXISTS numbers_mt;
 
 CREATE TABLE numbers_mt
 (
@@ -139,7 +139,7 @@ FROM
     )
 ARRAY JOIN ns;
 
-SYSTEM DROP  TABLE numbers_mt;
+DROP TABLE numbers_mt;
 
 INSERT INTO numbers_mt SELECT *
 FROM `system`.numbers

@@ -1,5 +1,5 @@
 -- Tags: long
-SYSTEM DROP  TABLE IF EXISTS test_ttl_group_by01763;
+DROP TABLE IF EXISTS test_ttl_group_by01763;
 
 CREATE TABLE test_ttl_group_by01763
 (
@@ -74,4 +74,4 @@ FROM test_ttl_group_by01763
 WHERE key = 3
     AND ts <= today() - toIntervalDay(30);
 
-SYSTEM DROP  TABLE test_ttl_group_by01763;
+DROP TABLE test_ttl_group_by01763;

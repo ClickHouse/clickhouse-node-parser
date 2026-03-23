@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 03161_table;
+DROP TABLE IF EXISTS `03161_table`;
 
 CREATE TABLE `03161_table`
 (
@@ -33,7 +33,7 @@ SETTINGS
 
 -- Checking reproducer from GitHub issue
 -- https://github.com/ClickHouse/ClickHouse/issues/57400
-SYSTEM DROP  TABLE IF EXISTS 03161_reproducer;
+DROP TABLE IF EXISTS `03161_reproducer`;
 
 CREATE TABLE `03161_reproducer`
 (

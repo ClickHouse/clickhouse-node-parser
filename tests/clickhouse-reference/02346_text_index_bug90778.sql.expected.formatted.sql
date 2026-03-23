@@ -1,7 +1,7 @@
 -- Tags: no-parallel-replicas
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -45,4 +45,4 @@ FROM (
     )
 WHERE like(`explain`, '%Filter column:%');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_condition_cache;
+DROP TABLE IF EXISTS t_lwu_condition_cache;
 
 SET use_query_condition_cache = 1;
 

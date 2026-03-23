@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -15,4 +15,4 @@ SELECT count(val)
 FROM test
 SETTINGS optimize_use_implicit_projections = 1;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

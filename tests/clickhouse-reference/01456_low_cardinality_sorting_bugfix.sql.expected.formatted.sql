@@ -1,4 +1,4 @@
-SYSTEM drop   table if exists order_test1;
+DROP TABLE IF EXISTS order_test1;
 
 CREATE TABLE order_test1
 (
@@ -60,4 +60,4 @@ ORDER BY
     color ASC,
     timestamp DESC;
 
-SYSTEM DROP  TABLE order_test1;
+DROP TABLE order_test1;

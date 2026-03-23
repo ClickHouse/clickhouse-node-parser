@@ -4,7 +4,7 @@ SET output_format_pretty_color = 1;
 
 SET read_in_order_two_level_merge_threshold = 1000000;
 
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -17,4 +17,4 @@ SETTINGS index_granularity = 8192;
 INSERT INTO t SELECT *
 FROM numbers_mt(1e3);
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

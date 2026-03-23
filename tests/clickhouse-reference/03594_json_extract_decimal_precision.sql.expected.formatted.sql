@@ -2,7 +2,7 @@
 -- This test verifies that JSONExtract correctly handles decimal values
 -- without losing precision when extracting from JSON numbers
 -- Fixes issue #69082
-SYSTEM DROP  TABLE IF EXISTS test_json_decimal_precision;
+DROP TABLE IF EXISTS test_json_decimal_precision;
 
 CREATE TABLE test_json_decimal_precision
 (

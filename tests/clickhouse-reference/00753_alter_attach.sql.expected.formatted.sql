@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_attach;
+DROP TABLE IF EXISTS alter_attach;
 
 CREATE TABLE alter_attach
 (
@@ -19,7 +19,7 @@ ORDER BY x ASC;
 
 INSERT INTO alter_attach;
 
-SYSTEM DROP  TABLE IF EXISTS detach_all_no_partition;
+DROP TABLE IF EXISTS detach_all_no_partition;
 
 CREATE TABLE detach_all_no_partition
 (
@@ -35,13 +35,13 @@ SELECT *
 FROM detach_all_no_partition
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE alter_attach;
+DROP TABLE alter_attach;
 
-SYSTEM DROP  TABLE detach_all_no_partition;
+DROP TABLE detach_all_no_partition;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_table_detach_all1;
+DROP TABLE IF EXISTS replicated_table_detach_all1;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_table_detach_all2;
+DROP TABLE IF EXISTS replicated_table_detach_all2;
 
 CREATE TABLE replicated_table_detach_all1
 (
@@ -71,13 +71,13 @@ SELECT *
 FROM replicated_table_detach_all2
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE replicated_table_detach_all1;
+DROP TABLE replicated_table_detach_all1;
 
-SYSTEM DROP  TABLE replicated_table_detach_all2;
+DROP TABLE replicated_table_detach_all2;
 
-SYSTEM DROP  TABLE IF EXISTS partition_all;
+DROP TABLE IF EXISTS partition_all;
 
-SYSTEM DROP  TABLE IF EXISTS partition_all2;
+DROP TABLE IF EXISTS partition_all2;
 
 CREATE TABLE partition_all
 (
@@ -103,9 +103,9 @@ PARTITION BY p;
 
 INSERT INTO partition_all2;
 
-SYSTEM DROP  TABLE partition_all;
+DROP TABLE partition_all;
 
-SYSTEM DROP  TABLE partition_all2;
+DROP TABLE partition_all2;
 
 -- test ATTACH ALL
 CREATE TABLE partition_attach_all
@@ -138,6 +138,6 @@ SELECT *
 FROM replicated_partition_attach_all
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE partition_attach_all;
+DROP TABLE partition_attach_all;
 
-SYSTEM DROP  TABLE replicated_partition_attach_all;
+DROP TABLE replicated_partition_attach_all;

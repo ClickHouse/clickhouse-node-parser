@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_generic_events_all;
+DROP TABLE IF EXISTS test_generic_events_all;
 
 CREATE TABLE test_generic_events_all
 (

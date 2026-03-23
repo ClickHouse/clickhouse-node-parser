@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS h3_indexes;
+DROP TABLE IF EXISTS h3_indexes;
 
 CREATE TABLE h3_indexes
 (
@@ -44,4 +44,4 @@ SELECT round(h3ExactEdgeLengthKm(h3_index), 2)
 FROM h3_indexes
 ORDER BY h3_index ASC;
 
-SYSTEM DROP  TABLE h3_indexes;
+DROP TABLE h3_indexes;

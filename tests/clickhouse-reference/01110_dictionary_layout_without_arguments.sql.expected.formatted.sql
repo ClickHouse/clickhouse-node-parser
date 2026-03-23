@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS db_for_dict;
+DROP DATABASE IF EXISTS db_for_dict;
 
 CREATE DATABASE db_for_dict;
 

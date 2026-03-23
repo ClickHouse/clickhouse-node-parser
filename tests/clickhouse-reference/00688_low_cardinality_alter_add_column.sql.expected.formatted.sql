@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists cardinality;
+DROP TABLE IF EXISTS cardinality;
 
 CREATE TABLE cardinality
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_nested_modify;
+DROP TABLE IF EXISTS t_nested_modify;
 
 CREATE TABLE t_nested_modify
 (
@@ -22,4 +22,4 @@ SELECT
 FROM t_nested_modify
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_nested_modify;
+DROP TABLE t_nested_modify;

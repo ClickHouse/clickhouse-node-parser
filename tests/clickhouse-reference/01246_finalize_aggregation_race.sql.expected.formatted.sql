@@ -1,5 +1,5 @@
 -- Tags: race
-SYSTEM drop  table if exists test_quantile;
+DROP TABLE IF EXISTS test_quantile;
 
 CREATE TABLE test_quantile
 (
@@ -72,4 +72,4 @@ FROM (
     )
 ORDER BY y ASC;
 
-SYSTEM drop  table test_quantile;
+DROP TABLE test_quantile;

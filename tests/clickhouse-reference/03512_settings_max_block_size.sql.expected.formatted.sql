@@ -4,4 +4,4 @@ CREATE TABLE tab
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

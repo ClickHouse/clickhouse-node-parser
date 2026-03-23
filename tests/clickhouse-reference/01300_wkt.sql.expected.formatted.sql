@@ -6,7 +6,7 @@ SELECT wkt([[(0., 0.), (10., 0.), (10., 10.), (0., 10.)], [(4., 4.), (5., 4.), (
 
 SELECT wkt([[[(0., 0.), (10., 0.), (10., 10.), (0., 10.)], [(4., 4.), (5., 4.), (5., 5.), (4., 5.)]], [[(-10., -10.), (-10., -9.), (-9., 10.)]]]);
 
-SYSTEM DROP  TABLE IF EXISTS geo;
+DROP TABLE IF EXISTS geo;
 
 CREATE TABLE geo
 (
@@ -64,4 +64,4 @@ INSERT INTO geo;
 
 INSERT INTO geo;
 
-SYSTEM DROP  TABLE geo;
+DROP TABLE geo;

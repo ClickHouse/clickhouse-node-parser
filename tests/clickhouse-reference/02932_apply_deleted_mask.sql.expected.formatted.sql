@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_materialize_delete;
+DROP TABLE IF EXISTS t_materialize_delete;
 
 CREATE TABLE t_materialize_delete
 (
@@ -30,4 +30,4 @@ WHERE database = currentDatabase()
     AND table = 't_materialize_delete'
     AND active;
 
-SYSTEM DROP  TABLE t_materialize_delete;
+DROP TABLE t_materialize_delete;

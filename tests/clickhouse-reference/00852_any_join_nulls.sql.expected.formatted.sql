@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
-SYSTEM DROP  TABLE IF EXISTS table2;
+DROP TABLE IF EXISTS table2;
 
 CREATE TABLE table1
 (
@@ -26,6 +26,6 @@ LEFT JOIN table2
 
 SET join_use_nulls = 1;
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;
 
-SYSTEM DROP  TABLE table2;
+DROP TABLE table2;

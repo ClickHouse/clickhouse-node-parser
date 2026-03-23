@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_map;
+DROP TABLE IF EXISTS table_map;
 
 CREATE TABLE table_map
 (
@@ -209,4 +209,4 @@ SELECT mapUpdate(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT mapUpdate(map(1, 3, 3, 2), map(1, 0, 2, 0), map(1, 0, 2, 0)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SYSTEM DROP  TABLE table_map;
+DROP TABLE table_map;

@@ -1,6 +1,6 @@
 SELECT tupleToNameValuePairs(tuple(1, 2, 3));
 
-SYSTEM DROP  TABLE IF EXISTS test02008;
+DROP TABLE IF EXISTS test02008;
 
 CREATE TABLE test02008
 (

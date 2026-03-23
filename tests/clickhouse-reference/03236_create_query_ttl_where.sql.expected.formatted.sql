@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ttl;
+DROP TABLE IF EXISTS ttl;
 
 CREATE TABLE ttl
 (
@@ -13,4 +13,4 @@ TTL timestamp + toIntervalSecond(2) WHERE a IN (
     LIMIT 100000
 );
 
-SYSTEM DROP  TABLE ttl;
+DROP TABLE ttl;

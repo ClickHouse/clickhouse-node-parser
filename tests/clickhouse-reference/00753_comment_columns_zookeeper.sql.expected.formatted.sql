@@ -1,5 +1,5 @@
 -- Tags: zookeeper
-SYSTEM DROP  TABLE IF EXISTS check_comments;
+DROP TABLE IF EXISTS check_comments;
 
 CREATE TABLE check_comments
 (
@@ -14,4 +14,4 @@ FROM `system`.`columns`
 WHERE table = 'check.comments'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE check_comments;
+DROP TABLE check_comments;

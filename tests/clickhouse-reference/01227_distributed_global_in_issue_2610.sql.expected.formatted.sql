@@ -1,6 +1,6 @@
 -- Tags: distributed
 -- Test from the issue https://github.com/ClickHouse/ClickHouse/issues/2610
-SYSTEM drop  table if exists data_01227;
+DROP TABLE IF EXISTS data_01227;
 
 CREATE TABLE data_01227
 (
@@ -28,4 +28,4 @@ PREWHERE key GLOBAL IN (
         PREWHERE key = 2
     );
 
-SYSTEM drop  table data_01227;
+DROP TABLE data_01227;

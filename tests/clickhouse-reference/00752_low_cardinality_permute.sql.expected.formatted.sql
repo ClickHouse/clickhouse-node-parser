@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists lc_perm;
+DROP TABLE IF EXISTS lc_perm;
 
 CREATE TABLE lc_perm
 (

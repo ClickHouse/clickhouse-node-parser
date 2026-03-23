@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02985_test;
+DROP TABLE IF EXISTS `02985_test`;
 
 SET async_insert = 1;
 

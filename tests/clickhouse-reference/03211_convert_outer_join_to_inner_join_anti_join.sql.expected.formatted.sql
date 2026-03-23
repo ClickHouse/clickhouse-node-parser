@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -43,4 +43,4 @@ LEFT JOIN t0 AS right_0
     ON ((`left`.c0) = (right_0.c1))
 WHERE check <> 0;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

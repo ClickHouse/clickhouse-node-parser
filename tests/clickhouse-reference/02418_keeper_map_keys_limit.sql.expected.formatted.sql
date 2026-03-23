@@ -1,5 +1,5 @@
 -- Tags: no-ordinary-database, no-fasttest
-SYSTEM DROP  TABLE IF EXISTS 02418_test SYNC;
+DROP TABLE IF EXISTS `02418_test`;
 
 CREATE TABLE `02418_test`
 (
@@ -37,6 +37,6 @@ INSERT INTO `02418_test`;
 
 INSERT INTO `02418_test`; -- { serverError LIMIT_EXCEEDED }
 
-SYSTEM DROP  TABLE 02418_test SYNC;
+DROP TABLE `02418_test`;
 
-SYSTEM DROP  TABLE 02418_test_another SYNC;
+DROP TABLE `02418_test_another`;

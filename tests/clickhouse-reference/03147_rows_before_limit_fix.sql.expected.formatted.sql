@@ -1,6 +1,6 @@
 SET exact_rows_before_limit = 1;
 
-SYSTEM DROP  TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users
 (
@@ -20,9 +20,9 @@ LIMIT 20
 FORMAT JSON
 SETTINGS output_format_write_statistics = 0;
 
-SYSTEM DROP  TABLE users;
+DROP TABLE users;
 
-SYSTEM DROP  TABLE IF EXISTS test_rows_count_bug_local;
+DROP TABLE IF EXISTS test_rows_count_bug_local;
 
 CREATE TABLE test_rows_count_bug_local
 (
@@ -47,4 +47,4 @@ LIMIT 20
 FORMAT JSON
 SETTINGS output_format_write_statistics = 0;
 
-SYSTEM DROP  TABLE test_rows_count_bug_local;
+DROP TABLE test_rows_count_bug_local;

@@ -1,8 +1,8 @@
 SET joined_subquery_requires_alias = 0;
 
-SYSTEM DROP  TABLE IF EXISTS left_table;
+DROP TABLE IF EXISTS left_table;
 
-SYSTEM DROP  TABLE IF EXISTS right_table;
+DROP TABLE IF EXISTS right_table;
 
 CREATE TABLE left_table
 (

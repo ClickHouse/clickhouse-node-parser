@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS arrays_test;
+DROP TABLE IF EXISTS arrays_test;
 
 CREATE TABLE arrays_test
 (
@@ -71,4 +71,4 @@ SELECT
     sumArrayIf(arr, like(s, '%e%'))
 FROM arrays_test;
 
-SYSTEM DROP  TABLE arrays_test;
+DROP TABLE arrays_test;

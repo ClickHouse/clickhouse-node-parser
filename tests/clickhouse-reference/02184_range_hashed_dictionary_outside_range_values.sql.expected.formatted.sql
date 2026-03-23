@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02184_range_dictionary_source_table;
+DROP TABLE IF EXISTS `02184_range_dictionary_source_table`;
 
 CREATE TABLE `02184_range_dictionary_source_table`
 (
@@ -13,7 +13,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `02184_range_dictionary_source_table`;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02184_range_dictionary;
+DROP DICTIONARY IF EXISTS `02184_range_dictionary`;
 
 CREATE DICTIONARY `02184_range_dictionary`
 (
@@ -37,6 +37,6 @@ SELECT dictGet('02184_range_dictionary', ('value_0', 'value_1', 'value_2'), 1, 1
 
 SELECT dictHas('02184_range_dictionary', 1, 18446744073709551615);
 
-SYSTEM DROP  DICTIONARY 02184_range_dictionary;
+DROP DICTIONARY `02184_range_dictionary`;
 
-SYSTEM DROP  TABLE 02184_range_dictionary_source_table;
+DROP TABLE `02184_range_dictionary_source_table`;

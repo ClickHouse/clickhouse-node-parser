@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mt;
+DROP TABLE IF EXISTS mt;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -11,4 +11,4 @@ ENGINE = MergeTree(d, x, 8192);
 
 INSERT INTO mt;
 
-SYSTEM DROP  TABLE mt;
+DROP TABLE mt;

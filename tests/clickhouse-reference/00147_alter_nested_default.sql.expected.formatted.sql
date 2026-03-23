@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_00147;
+DROP TABLE IF EXISTS alter_00147;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -44,4 +44,4 @@ ARRAY JOIN n
 WHERE like(n.x, '%Hello%')
 ORDER BY n.x ASC;
 
-SYSTEM DROP  TABLE alter_00147;
+DROP TABLE alter_00147;

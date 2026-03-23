@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS foo;
+DROP TABLE IF EXISTS foo;
 
-SYSTEM DROP  TABLE IF EXISTS bar;
+DROP TABLE IF EXISTS bar;
 
-SYSTEM DROP  TABLE IF EXISTS view_foo_bar;
+DROP TABLE IF EXISTS view_foo_bar;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -54,8 +54,8 @@ LEFT JOIN (
 SELECT *
 FROM view_foo_bar;
 
-SYSTEM DROP  TABLE foo;
+DROP TABLE foo;
 
-SYSTEM DROP  TABLE bar;
+DROP TABLE bar;
 
-SYSTEM DROP  TABLE view_foo_bar;
+DROP TABLE view_foo_bar;

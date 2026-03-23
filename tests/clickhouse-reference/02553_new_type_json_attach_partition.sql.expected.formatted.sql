@@ -1,6 +1,6 @@
 SET enable_json_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_json_attach_partition;
+DROP TABLE IF EXISTS t_json_attach_partition;
 
 CREATE TABLE t_json_attach_partition
 (
@@ -19,4 +19,4 @@ FROM t_json_attach_partition
 ORDER BY toString(c) ASC
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE t_json_attach_partition;
+DROP TABLE t_json_attach_partition;

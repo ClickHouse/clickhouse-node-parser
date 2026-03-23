@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS map_extractKeyLike_test;
+DROP TABLE IF EXISTS map_extractKeyLike_test;
 
 CREATE TABLE map_extractKeyLike_test
 (
@@ -35,7 +35,7 @@ SELECT
 FROM map_extractKeyLike_test
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE map_extractKeyLike_test;
+DROP TABLE map_extractKeyLike_test;
 
 SELECT mapExtractKeyLike(map('aa', 1, 'bb', 2), 'a%');
 

@@ -92,7 +92,7 @@ SELECT concat('With ', materialize([[(20, 20), (50, 20), (50, 50), (20, 50)], [(
 
 SELECT concat('With ', materialize([[[(0, 0), (10, 0), (10, 10), (0, 10)]], [[(20, 20), (50, 20), (50, 50), (20, 50)],[(30, 30), (50, 50), (50, 30)]]]::MultiPolygon));
 
-SYSTEM DROP  TABLE IF EXISTS concat_saf_test;
+DROP TABLE IF EXISTS concat_saf_test;
 
 CREATE TABLE concat_saf_test
 (
@@ -110,9 +110,9 @@ SELECT concat('With ', x)
 FROM concat_saf_test
 ORDER BY x DESC;
 
-SYSTEM DROP  TABLE concat_saf_test;
+DROP TABLE concat_saf_test;
 
-SYSTEM DROP  TABLE IF EXISTS concat_nested_test;
+DROP TABLE IF EXISTS concat_nested_test;
 
 CREATE TABLE concat_nested_test
 (
@@ -126,7 +126,7 @@ INSERT INTO concat_nested_test;
 SELECT concat('With ', attrs.k, attrs.v)
 FROM concat_nested_test;
 
-SYSTEM DROP  TABLE concat_nested_test;
+DROP TABLE concat_nested_test;
 
 SELECT concat(NULL, NULL);
 

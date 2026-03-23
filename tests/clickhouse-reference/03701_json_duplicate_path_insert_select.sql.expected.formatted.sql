@@ -1,5 +1,5 @@
 -- Test INSERT...SELECT with duplicate paths
-SYSTEM DROP  TABLE IF EXISTS test_json_duplicates;
+DROP TABLE IF EXISTS test_json_duplicates;
 
 CREATE TABLE test_json_duplicates
 (
@@ -17,4 +17,4 @@ SETTINGS type_json_skip_duplicated_paths = 1;
 SELECT *
 FROM test_json_duplicates;
 
-SYSTEM DROP  TABLE test_json_duplicates;
+DROP TABLE test_json_duplicates;

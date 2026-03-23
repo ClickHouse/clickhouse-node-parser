@@ -1,6 +1,6 @@
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE IF EXISTS add_aggregate;
+DROP TABLE IF EXISTS add_aggregate;
 
 CREATE TABLE add_aggregate
 (

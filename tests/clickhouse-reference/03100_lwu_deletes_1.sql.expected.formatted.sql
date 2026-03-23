@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_delete;
+DROP TABLE IF EXISTS t_lwu_delete;
 
 CREATE TABLE t_lwu_delete
 (

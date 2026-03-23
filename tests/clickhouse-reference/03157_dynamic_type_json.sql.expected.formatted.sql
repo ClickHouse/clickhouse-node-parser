@@ -4,7 +4,7 @@ SET enable_json_type = 1;
 
 SET allow_experimental_variant_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_deep_nested_json;
+DROP TABLE IF EXISTS test_deep_nested_json;
 
 CREATE TABLE test_deep_nested_json
 (
@@ -27,4 +27,4 @@ SELECT
 FROM test_deep_nested_json
 ORDER BY i ASC;
 
-SYSTEM DROP  TABLE test_deep_nested_json;
+DROP TABLE test_deep_nested_json;

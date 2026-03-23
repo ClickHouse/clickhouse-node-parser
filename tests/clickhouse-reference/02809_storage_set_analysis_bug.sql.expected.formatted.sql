@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_set;
+DROP TABLE IF EXISTS test_set;
 
-SYSTEM DROP  TABLE IF EXISTS null_in__fuzz_6;
+DROP TABLE IF EXISTS null_in__fuzz_6;
 
 SET allow_suspicious_low_cardinality_types = 1;
 
@@ -35,6 +35,6 @@ FROM null_in__fuzz_6
 PREWHERE 71
 WHERE i IN (test_set); -- { serverError CANNOT_CONVERT_TYPE }
 
-SYSTEM DROP  TABLE test_set;
+DROP TABLE test_set;
 
-SYSTEM DROP  TABLE null_in__fuzz_6;
+DROP TABLE null_in__fuzz_6;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data_02233;
+DROP TABLE IF EXISTS data_02233;
 
 CREATE TABLE data_02233
 (
@@ -49,4 +49,4 @@ SETTINGS
     max_threads = 1,
     optimize_aggregation_in_order = 1;
 
-SYSTEM drop  table data_02233;
+DROP TABLE data_02233;

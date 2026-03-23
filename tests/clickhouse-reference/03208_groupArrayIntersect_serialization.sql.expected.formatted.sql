@@ -4,7 +4,7 @@ SELECT
 
 SELECT finalizeAggregation(CAST(unhex('010101'), 'AggregateFunction(groupArrayIntersect, Array(UInt8))'));
 
-SYSTEM DROP  TABLE IF EXISTS grouparray;
+DROP TABLE IF EXISTS grouparray;
 
 CREATE TABLE grouparray
 (
@@ -52,7 +52,7 @@ SELECT
     arraySort(groupArrayIntersectMerge(v))
 FROM grouparray;
 
-SYSTEM DROP  TABLE IF EXISTS grouparray_string;
+DROP TABLE IF EXISTS grouparray_string;
 
 CREATE TABLE grouparray_string
 (

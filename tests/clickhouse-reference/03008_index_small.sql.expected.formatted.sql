@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -20,4 +20,4 @@ SELECT count()
 FROM test
 WHERE b >= 0;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

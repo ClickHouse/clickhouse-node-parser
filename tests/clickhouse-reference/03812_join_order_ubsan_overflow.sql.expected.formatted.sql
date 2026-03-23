@@ -5,7 +5,7 @@
 -- Test for UBSan issue in join order optimization when estimated row count overflows UInt64
 -- The issue occurs when converting a very large double to UInt64 in estimateJoinCardinality
 -- https://github.com/ClickHouse/ClickHouse/pull/94704
-SYSTEM DROP  TABLE IF EXISTS data_03812;
+DROP TABLE IF EXISTS data_03812;
 
 CREATE TABLE data_03812
 (
@@ -19,4 +19,4 @@ INSERT INTO data_03812;
 
 SET max_rows_to_read = 0;
 
-SYSTEM DROP  TABLE data_03812;
+DROP TABLE data_03812;

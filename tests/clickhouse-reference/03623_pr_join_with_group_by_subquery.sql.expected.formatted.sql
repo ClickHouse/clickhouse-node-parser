@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists users sync;
+DROP TABLE IF EXISTS users;
 
-SYSTEM drop  table if exists messages sync;
+DROP TABLE IF EXISTS messages;
 
 CREATE TABLE users
 (
@@ -140,6 +140,6 @@ ORDER BY
     user_id ASC,
     c ASC;
 
-SYSTEM drop  table users sync;
+DROP TABLE users;
 
-SYSTEM drop  table messages sync;
+DROP TABLE messages;

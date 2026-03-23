@@ -1,7 +1,7 @@
 -- Tags: no-parallel
 SELECT '-----------------------';
 
-SYSTEM DROP  DATABASE IF EXISTS test_no_loop;
+DROP DATABASE IF EXISTS test_no_loop;
 
 CREATE DATABASE IF NOT EXISTS test_no_loop;
 
@@ -74,9 +74,9 @@ SELECT count(*)
 FROM `system`.detached_tables
 WHERE database = 'test_no_loop';
 
-SYSTEM DROP  DATABASE test_no_loop;
+DROP DATABASE test_no_loop;
 
-SYSTEM DROP  DATABASE IF EXISTS test_no_loop_2;
+DROP DATABASE IF EXISTS test_no_loop_2;
 
 CREATE DATABASE test_no_loop_2;
 
@@ -107,4 +107,4 @@ SELECT count(*)
 FROM `system`.detached_tables
 WHERE database = 'test_no_loop_2';
 
-SYSTEM DROP  DATABASE test_no_loop_2;
+DROP DATABASE test_no_loop_2;

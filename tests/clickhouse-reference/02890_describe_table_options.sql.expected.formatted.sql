@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_describe_options;
+DROP TABLE IF EXISTS t_describe_options;
 
 SET print_pretty_type_names = 0;
 
@@ -29,4 +29,4 @@ SET describe_compact_output = 1, describe_include_virtual_columns = 1, describe_
 SET describe_compact_output = 1, describe_include_virtual_columns = 1, describe_include_subcolumns = 1;
 
 -- { echoOff }
-SYSTEM DROP  TABLE t_describe_options;
+DROP TABLE t_describe_options;

@@ -1,5 +1,5 @@
 -- {echoOn }
-SYSTEM DROP  DICTIONARY IF EXISTS d0;
+DROP DICTIONARY IF EXISTS d0;
 
 CREATE DICTIONARY d0
 (
@@ -22,9 +22,9 @@ SELECT dictGetChildren('d0', NULL); -- { serverError UNSUPPORTED_METHOD }
 
 SELECT dictGetChildren(NULL, NULL); -- { serverError UNSUPPORTED_METHOD }
 
-SYSTEM DROP  DICTIONARY IF EXISTS hierarchical_dictionary;
+DROP DICTIONARY IF EXISTS hierarchical_dictionary;
 
-SYSTEM DROP  TABLE IF EXISTS hierarchy_source;
+DROP TABLE IF EXISTS hierarchy_source;
 
 CREATE TABLE hierarchy_source
 (

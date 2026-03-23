@@ -1,25 +1,25 @@
 -- Tags: no-parallel, no-fasttest
 SET prefer_localhost_replica = 1;
 
-SYSTEM DROP  TABLE IF EXISTS file;
+DROP TABLE IF EXISTS file;
 
-SYSTEM DROP  TABLE IF EXISTS url;
+DROP TABLE IF EXISTS url;
 
-SYSTEM DROP  TABLE IF EXISTS view;
+DROP TABLE IF EXISTS view;
 
-SYSTEM DROP  TABLE IF EXISTS buffer;
+DROP TABLE IF EXISTS buffer;
 
-SYSTEM DROP  TABLE IF EXISTS merge;
+DROP TABLE IF EXISTS merge;
 
-SYSTEM DROP  TABLE IF EXISTS merge_tf;
+DROP TABLE IF EXISTS merge_tf;
 
-SYSTEM DROP  TABLE IF EXISTS distributed;
+DROP TABLE IF EXISTS distributed;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_tf;
+DROP TABLE IF EXISTS distributed_tf;
 
-SYSTEM DROP  TABLE IF EXISTS rich_syntax;
+DROP TABLE IF EXISTS rich_syntax;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict;
+DROP DICTIONARY IF EXISTS dict;
 
 CREATE TABLE file
 (
@@ -101,22 +101,22 @@ SELECT sum(n)
 FROM rich_syntax
 SETTINGS serialize_query_plan = 0;
 
-SYSTEM DROP  TABLE file;
+DROP TABLE file;
 
-SYSTEM DROP  DICTIONARY dict;
+DROP DICTIONARY dict;
 
-SYSTEM DROP  TABLE url;
+DROP TABLE url;
 
-SYSTEM DROP  TABLE view;
+DROP TABLE view;
 
-SYSTEM DROP  TABLE buffer;
+DROP TABLE buffer;
 
-SYSTEM DROP  TABLE merge;
+DROP TABLE merge;
 
-SYSTEM DROP  TABLE merge_tf;
+DROP TABLE merge_tf;
 
-SYSTEM DROP  TABLE distributed;
+DROP TABLE distributed;
 
-SYSTEM DROP  TABLE distributed_tf;
+DROP TABLE distributed_tf;
 
-SYSTEM DROP  TABLE rich_syntax;
+DROP TABLE rich_syntax;

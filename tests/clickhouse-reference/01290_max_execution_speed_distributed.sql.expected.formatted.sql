@@ -1,7 +1,7 @@
 -- Tags: distributed
 SET log_queries = 1;
 
-SYSTEM DROP  TABLE IF EXISTS times;
+DROP TABLE IF EXISTS times;
 
 CREATE TEMPORARY TABLE times
 (

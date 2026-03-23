@@ -1,7 +1,7 @@
 -- Tags: no-parallel-replicas
 SET output_format_write_statistics = 0;
 
-SYSTEM DROP  TABLE IF EXISTS 03408_memory;
+DROP TABLE IF EXISTS `03408_memory`;
 
 CREATE TABLE `03408_memory`
 (
@@ -49,4 +49,4 @@ LIMIT 3
 FORMAT JsonCompact
 SETTINGS exact_rows_before_limit = 1;
 
-SYSTEM DROP  TABLE 03408_memory;
+DROP TABLE `03408_memory`;

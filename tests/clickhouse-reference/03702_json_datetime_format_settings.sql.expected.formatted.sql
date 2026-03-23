@@ -8,7 +8,7 @@ SELECT
 SETTINGS date_time_input_format = 'best_effort';
 
 -- INSERT SELECT should also respect date_time_input_format setting
-SYSTEM DROP  TABLE IF EXISTS test_json_datetime;
+DROP TABLE IF EXISTS test_json_datetime;
 
 CREATE TABLE test_json_datetime
 (
@@ -22,4 +22,4 @@ SETTINGS date_time_input_format = 'best_effort';
 SELECT JSONAllPathsWithTypes(json)
 FROM test_json_datetime;
 
-SYSTEM DROP  TABLE test_json_datetime;
+DROP TABLE test_json_datetime;

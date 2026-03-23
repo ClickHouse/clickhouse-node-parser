@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists histogram;
+DROP TABLE IF EXISTS histogram;
 
 CREATE TABLE histogram
 (

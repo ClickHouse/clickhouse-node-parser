@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -15,4 +15,4 @@ ORDER BY
     toDateTime(toDateTime(-2, NULL, NULL) + 100.0001, NULL, -2, NULL) DESC,
     x ASC;
 
-SYSTEM drop  table tab;
+DROP TABLE tab;

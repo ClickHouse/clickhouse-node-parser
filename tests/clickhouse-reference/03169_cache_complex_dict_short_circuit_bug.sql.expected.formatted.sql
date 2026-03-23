@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS complex_key_simple_attributes_source_short_circuit_table;
+DROP TABLE IF EXISTS complex_key_simple_attributes_source_short_circuit_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS cache_dictionary_complex_key_simple_attributes_short_circuit;
+DROP DICTIONARY IF EXISTS cache_dictionary_complex_key_simple_attributes_short_circuit;
 
 CREATE TABLE complex_key_simple_attributes_source_short_circuit_table
 (

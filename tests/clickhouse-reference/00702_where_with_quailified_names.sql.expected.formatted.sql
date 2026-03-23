@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS where_qualified;
+DROP TABLE IF EXISTS where_qualified;
 
 CREATE TABLE where_qualified
 (
@@ -15,4 +15,4 @@ SELECT a
 FROM where_qualified
 WHERE where_qualified.b;
 
-SYSTEM DROP  TABLE where_qualified;
+DROP TABLE where_qualified;

@@ -14,9 +14,9 @@
 -- (To cover scope of the Context in PushingToViews chain)
 SET distributed_foreground_insert = 1;
 
-SYSTEM DROP  TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS mv;
 
-SYSTEM DROP  DATABASE IF EXISTS dict_in_01023;
+DROP DATABASE IF EXISTS dict_in_01023;
 
 CREATE DATABASE dict_in_01023;
 
@@ -81,20 +81,20 @@ INSERT INTO input;
 SELECT count()
 FROM output;
 
-SYSTEM DROP  TABLE mv;
+DROP TABLE mv;
 
-SYSTEM DROP  TABLE output;
+DROP TABLE output;
 
-SYSTEM DROP  TABLE dist_out;
+DROP TABLE dist_out;
 
-SYSTEM DROP  TABLE buffer_;
+DROP TABLE buffer_;
 
-SYSTEM DROP  TABLE null_;
+DROP TABLE null_;
 
-SYSTEM DROP  TABLE input;
+DROP TABLE input;
 
-SYSTEM DROP  DICTIONARY dict_in_01023.dict;
+DROP DICTIONARY dict_in_01023.dict;
 
-SYSTEM DROP  TABLE dict_in_01023.input;
+DROP TABLE dict_in_01023.input;
 
-SYSTEM DROP  DATABASE dict_in_01023;
+DROP DATABASE dict_in_01023;

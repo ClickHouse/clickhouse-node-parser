@@ -1,7 +1,7 @@
 -- Tags: deadlock, distributed
-SYSTEM DROP  TABLE IF EXISTS t_local;
+DROP TABLE IF EXISTS t_local;
 
-SYSTEM DROP  TABLE IF EXISTS t_dist;
+DROP TABLE IF EXISTS t_dist;
 
 CREATE TABLE t_local
 (
@@ -19,6 +19,6 @@ SET distributed_foreground_insert = 1;
 
 INSERT INTO t_dist;
 
-SYSTEM DROP  TABLE t_local;
+DROP TABLE t_local;
 
-SYSTEM DROP  TABLE t_dist;
+DROP TABLE t_dist;

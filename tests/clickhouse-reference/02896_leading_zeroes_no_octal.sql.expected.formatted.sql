@@ -1,7 +1,7 @@
 -- Tags: no-async-insert
-SYSTEM DROP  TABLE IF EXISTS t_leading_zeroes;
+DROP TABLE IF EXISTS t_leading_zeroes;
 
-SYSTEM DROP  TABLE IF EXISTS t_leading_zeroes_f;
+DROP TABLE IF EXISTS t_leading_zeroes_f;
 
 CREATE TABLE t_leading_zeroes
 (

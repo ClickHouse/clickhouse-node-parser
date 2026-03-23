@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (
@@ -14,7 +14,7 @@ SELECT
 FROM numbers(100000)
 SETTINGS max_insert_threads = 1;
 
-SYSTEM drop  table if exists keys_1;
+DROP TABLE IF EXISTS keys_1;
 
 CREATE TABLE keys_1
 (
@@ -24,7 +24,7 @@ ENGINE = Log() AS
 SELECT *
 FROM numbers(10);
 
-SYSTEM drop  table if exists keys_2;
+DROP TABLE IF EXISTS keys_2;
 
 CREATE TABLE keys_2
 (

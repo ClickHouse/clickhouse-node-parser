@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_test;
+DROP TABLE IF EXISTS alter_test;
 
 CREATE TEMPORARY TABLE alter_test
 (

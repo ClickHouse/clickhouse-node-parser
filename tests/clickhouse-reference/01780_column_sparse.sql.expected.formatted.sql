@@ -1,7 +1,7 @@
 -- { echo }
-SYSTEM DROP  TABLE IF EXISTS t_sparse;
+DROP TABLE IF EXISTS t_sparse;
 
-SYSTEM DROP  TABLE IF EXISTS t_sparse_1;
+DROP TABLE IF EXISTS t_sparse_1;
 
 CREATE TABLE t_sparse
 (
@@ -103,6 +103,6 @@ ORDER BY
     id ASC
 LIMIT 5;
 
-SYSTEM DROP  TABLE t_sparse;
+DROP TABLE t_sparse;
 
-SYSTEM DROP  TABLE t_sparse_1;
+DROP TABLE t_sparse_1;

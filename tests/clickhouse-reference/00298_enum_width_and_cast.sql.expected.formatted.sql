@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS enum;
+DROP TABLE IF EXISTS enum;
 
 SET output_format_pretty_color = 1;
 
@@ -34,4 +34,4 @@ ORDER BY
     y ASC
 FORMAT PrettyCompactMonoBlock;
 
-SYSTEM DROP  TABLE enum;
+DROP TABLE enum;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS kv;
+DROP TABLE IF EXISTS kv;
 
 CREATE TABLE kv
 (
@@ -58,6 +58,6 @@ INNER JOIN t2
     USING (k)
 SETTINGS join_any_take_last_row = 1;
 
-SYSTEM DROP  TABLE kv;
+DROP TABLE kv;
 
-SYSTEM DROP  TABLE kv_overwrite;
+DROP TABLE kv_overwrite;

@@ -25,7 +25,7 @@ FROM format(JSONEachRow, 'x UUID', '{"x":""}');
 
 -- { echoOff }
 -- Simple type AggregateFunction
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
 CREATE TABLE table1
 (
@@ -33,7 +33,7 @@ CREATE TABLE table1
 )
 ENGINE = Memory();
 
-SYSTEM DROP  TABLE IF EXISTS table2;
+DROP TABLE IF EXISTS table2;
 
 CREATE TABLE table2
 (
@@ -52,9 +52,9 @@ SELECT COUNTDistinct(col)
 FROM table1;
 
 -- { echoOff }
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;
 
-SYSTEM DROP  TABLE table2;
+DROP TABLE table2;
 
 -- The setting input_format_defaults_for_omitted_fields determines the default value if enabled.
 CREATE TABLE table1

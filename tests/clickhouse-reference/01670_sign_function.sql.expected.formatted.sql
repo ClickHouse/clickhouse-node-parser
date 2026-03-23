@@ -4,7 +4,7 @@ SELECT sign(1);
 
 SELECT sign(-1);
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -33,4 +33,4 @@ FROM test;
 SELECT sign(n5)
 FROM test;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

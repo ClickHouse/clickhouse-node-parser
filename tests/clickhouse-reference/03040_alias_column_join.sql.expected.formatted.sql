@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/44365
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS 03040_test;
+DROP TABLE IF EXISTS `03040_test`;
 
 CREATE TABLE `03040_test`
 (

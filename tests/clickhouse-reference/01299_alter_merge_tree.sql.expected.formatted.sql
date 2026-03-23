@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists merge_tree;
+DROP TABLE IF EXISTS merge_tree;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -25,4 +25,4 @@ FROM merge_tree
 WHERE dummy <> ''
 LIMIT 10;
 
-SYSTEM drop  table merge_tree;
+DROP TABLE merge_tree;

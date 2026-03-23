@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS big_array;
+DROP TABLE IF EXISTS big_array;
 
 CREATE TABLE big_array
 (
@@ -59,4 +59,4 @@ FROM
 ARRAY JOIN x AS y
 WHERE has(x, 15);
 
-SYSTEM DROP  TABLE big_array;
+DROP TABLE big_array;

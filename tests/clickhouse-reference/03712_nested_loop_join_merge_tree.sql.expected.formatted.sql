@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS events;
+DROP TABLE IF EXISTS events;
 
 SET allow_suspicious_low_cardinality_types = 1;
 
@@ -32,7 +32,7 @@ INSERT INTO events SELECT
     toDateTime('2024-01-01 00:00:00') + toIntervalMinute(number)
 FROM numbers(500, 500);
 
-SYSTEM DROP  TABLE IF EXISTS attributes;
+DROP TABLE IF EXISTS attributes;
 
 CREATE TABLE attributes
 (

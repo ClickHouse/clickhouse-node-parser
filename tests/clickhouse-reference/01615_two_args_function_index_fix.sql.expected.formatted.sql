@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists bad_date_time;
+DROP TABLE IF EXISTS bad_date_time;
 
 CREATE TABLE bad_date_time
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_numbers__fuzz_29;
+DROP TABLE IF EXISTS test_numbers__fuzz_29;
 
 SET max_threads = 1, max_insert_threads = 1;
 
@@ -22,4 +22,4 @@ GROUP BY a
 WITH ROLLUP
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE test_numbers__fuzz_29;
+DROP TABLE test_numbers__fuzz_29;

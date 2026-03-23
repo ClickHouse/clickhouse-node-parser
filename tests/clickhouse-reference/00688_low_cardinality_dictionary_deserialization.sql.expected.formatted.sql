@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists lc_dict_reading;
+DROP TABLE IF EXISTS lc_dict_reading;
 
 CREATE TABLE lc_dict_reading
 (

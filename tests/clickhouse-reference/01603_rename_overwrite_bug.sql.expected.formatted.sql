@@ -1,7 +1,7 @@
 -- Tags: no-parallel, memory-engine, log-engine
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  database IF EXISTS test_1603_rename_bug_ordinary;
+DROP DATABASE IF EXISTS test_1603_rename_bug_ordinary;
 
 SET allow_deprecated_database_ordinary = 1;
 
@@ -25,10 +25,10 @@ FROM test_1603_rename_bug_ordinary.foo;
 SELECT count()
 FROM test_1603_rename_bug_ordinary.bar;
 
-SYSTEM DROP  DATABASE test_1603_rename_bug_ordinary;
+DROP DATABASE test_1603_rename_bug_ordinary;
 
 -- was not broken, adding just in case.
-SYSTEM DROP  database IF EXISTS test_1603_rename_bug_atomic;
+DROP DATABASE IF EXISTS test_1603_rename_bug_atomic;
 
 CREATE DATABASE test_1603_rename_bug_atomic
 ENGINE = Atomic;
@@ -49,4 +49,4 @@ FROM test_1603_rename_bug_atomic.foo;
 SELECT count()
 FROM test_1603_rename_bug_atomic.bar;
 
-SYSTEM DROP  DATABASE test_1603_rename_bug_atomic;
+DROP DATABASE test_1603_rename_bug_atomic;

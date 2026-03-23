@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_unexpected_cluster;
+DROP TABLE IF EXISTS test_unexpected_cluster;
 
 CREATE TABLE test_unexpected_cluster
 (
@@ -18,4 +18,4 @@ SELECT count()
 FROM test_unexpected_cluster
 WHERE NOT ignore(*); -- { serverError UNEXPECTED_CLUSTER }
 
-SYSTEM DROP  TABLE test_unexpected_cluster;
+DROP TABLE test_unexpected_cluster;

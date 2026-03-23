@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -17,4 +17,4 @@ SET alter_sync = 0;
 SELECT *
 FROM t;
 
-SYSTEM drop  table t;
+DROP TABLE t;

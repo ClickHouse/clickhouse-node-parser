@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -27,4 +27,4 @@ FROM `system`.parts_columns
 WHERE database = currentDatabase()
     AND table = 'test';
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

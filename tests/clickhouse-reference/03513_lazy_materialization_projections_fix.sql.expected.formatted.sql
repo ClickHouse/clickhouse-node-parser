@@ -7,7 +7,7 @@ SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, 
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tt0;
+DROP TABLE IF EXISTS tt0;
 
 CREATE TABLE tt0
 (
@@ -71,7 +71,7 @@ WHERE v = '3'
 ORDER BY v ASC
 LIMIT 10;
 
-SYSTEM DROP  TABLE IF EXISTS tt1;
+DROP TABLE IF EXISTS tt1;
 
 CREATE TABLE tt1
 (
@@ -128,6 +128,6 @@ FROM (
     )
 WHERE ilike(s, 'LazilyRead%');
 
-SYSTEM DROP  TABLE tt1;
+DROP TABLE tt1;
 
-SYSTEM DROP  TABLE tt0;
+DROP TABLE tt0;

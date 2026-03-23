@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/448
-SYSTEM DROP  TABLE IF EXISTS a;
+DROP TABLE IF EXISTS a;
 
-SYSTEM DROP  TABLE iF EXISTS b;
+DROP TABLE IF EXISTS b;
 
 CREATE TABLE a
 (

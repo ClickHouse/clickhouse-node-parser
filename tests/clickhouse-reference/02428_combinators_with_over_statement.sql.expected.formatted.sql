@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -31,4 +31,4 @@ FROM test;
 SELECT uniqStateDistinctMap(map(1, x)) OVER (PARTITION BY y)
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

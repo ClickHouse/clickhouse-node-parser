@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS Dates;
+DROP TABLE IF EXISTS Dates;
 
 CREATE TABLE Dates
 (
@@ -45,4 +45,4 @@ SELECT toString((
     ), if(number % 2, 'America/Los_Angeles', ''))
 FROM numbers(5); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SYSTEM DROP  TABLE Dates;
+DROP TABLE Dates;

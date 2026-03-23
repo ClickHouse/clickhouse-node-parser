@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mt;
+DROP TABLE IF EXISTS mt;
 
 CREATE TABLE mt
 (
@@ -15,4 +15,4 @@ SET allow_nondeterministic_mutations = 1;
 SELECT DISTINCT n
 FROM mt;
 
-SYSTEM DROP  TABLE mt;
+DROP TABLE mt;

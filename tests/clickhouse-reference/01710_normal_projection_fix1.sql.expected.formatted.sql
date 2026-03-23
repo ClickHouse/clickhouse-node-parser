@@ -1,5 +1,5 @@
 -- add_minmax_index_for_numeric_columns=0: Would use the index and not the projection that we want to test
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -36,4 +36,4 @@ SELECT
 FROM t
 WHERE j = -1;
 
-SYSTEM drop  table t;
+DROP TABLE t;

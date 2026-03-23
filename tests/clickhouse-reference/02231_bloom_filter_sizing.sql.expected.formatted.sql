@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_sizing_pk;
+DROP TABLE IF EXISTS bloom_filter_sizing_pk;
 
 CREATE TABLE bloom_filter_sizing_pk
 (
@@ -27,7 +27,7 @@ WHERE database = currentDatabase()
     AND secondary_indices_uncompressed_bytes > 200
     AND active;
 
-SYSTEM DROP  TABLE IF EXISTS bloom_filter_sizing_sec;
+DROP TABLE IF EXISTS bloom_filter_sizing_sec;
 
 CREATE TABLE bloom_filter_sizing_sec
 (

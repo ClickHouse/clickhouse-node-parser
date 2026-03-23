@@ -1,7 +1,7 @@
 -- Tags: stateful
-SYSTEM DROP  TABLE IF EXISTS basic;
+DROP TABLE IF EXISTS basic;
 
-SYSTEM DROP  TABLE IF EXISTS visits_null;
+DROP TABLE IF EXISTS visits_null;
 
 CREATE TABLE visits_null
 (
@@ -60,6 +60,6 @@ WHERE CounterID = 942285
 GROUP BY StartDate
 ORDER BY StartDate ASC;
 
-SYSTEM DROP  TABLE visits_null;
+DROP TABLE visits_null;
 
-SYSTEM DROP  TABLE basic;
+DROP TABLE basic;

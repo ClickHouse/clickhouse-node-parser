@@ -3,7 +3,7 @@ SET max_threads = 3;
 
 SET min_bytes_to_use_direct_io = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -36,4 +36,4 @@ FROM (
     )
 ORDER BY `all` ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -82,7 +82,7 @@ WHERE like(query, '%DESCRIBE ( SELECT ''1947 #3 QUERY - TRUE'',%')
     AND event_date >= yesterday()
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE src2dst_true;
+DROP TABLE src2dst_true;
 
 -- Retry the same but using use_index_for_in_with_subqueries = 0
 SET use_index_for_in_with_subqueries = 0;
@@ -148,8 +148,8 @@ WHERE like(query, '%DESCRIBE ( SELECT ''1947 #3 QUERY - FALSE'',%')
     AND event_date >= yesterday()
 FORMAT JSONEachRow;
 
-SYSTEM DROP  TABLE src2dst_false;
+DROP TABLE src2dst_false;
 
-SYSTEM DROP  TABLE src;
+DROP TABLE src;
 
-SYSTEM DROP  TABLE dst;
+DROP TABLE dst;

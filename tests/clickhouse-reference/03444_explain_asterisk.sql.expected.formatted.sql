@@ -1,5 +1,5 @@
 -- Fuzzing `Can't set alias of * of Asterisk on alias`
-SYSTEM DROP  TABLE IF EXISTS t1, t2, t3__fuzz_0;
+DROP TABLE IF EXISTS t1, t2, t3__fuzz_0;
 
 CREATE TABLE t1
 (

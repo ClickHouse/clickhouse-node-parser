@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sparse_intersect;
+DROP TABLE IF EXISTS t_sparse_intersect;
 
 CREATE TABLE t_sparse_intersect
 (
@@ -37,4 +37,4 @@ INTERSECT
         FROM t_sparse_intersect
     );
 
-SYSTEM DROP  TABLE t_sparse_intersect;
+DROP TABLE t_sparse_intersect;

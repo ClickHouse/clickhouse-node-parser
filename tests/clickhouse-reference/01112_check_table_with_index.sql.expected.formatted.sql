@@ -1,6 +1,6 @@
 SET check_query_single_value_result = 'false';
 
-SYSTEM DROP  TABLE IF EXISTS check_table_with_indices;
+DROP TABLE IF EXISTS check_table_with_indices;
 
 CREATE TABLE check_table_with_indices
 (
@@ -13,4 +13,4 @@ ORDER BY id;
 
 INSERT INTO check_table_with_indices;
 
-SYSTEM DROP  TABLE check_table_with_indices;
+DROP TABLE check_table_with_indices;

@@ -1,8 +1,8 @@
 -- Regression test for non-monotonic Time64 conversion in MergeTreeSetIndex.
 -- Converting from DateTime to Time64 extracts time-of-day component, which is not monotonic.
-SYSTEM DROP  TABLE IF EXISTS mt_test;
+DROP TABLE IF EXISTS mt_test;
 
-SYSTEM DROP  TABLE IF EXISTS merge_test;
+DROP TABLE IF EXISTS merge_test;
 
 CREATE TABLE mt_test
 (
@@ -36,6 +36,6 @@ SELECT count() > 0
 FROM merge_test
 WHERE x NOT IN (12345, 67890);
 
-SYSTEM DROP  TABLE merge_test;
+DROP TABLE merge_test;
 
-SYSTEM DROP  TABLE mt_test;
+DROP TABLE mt_test;

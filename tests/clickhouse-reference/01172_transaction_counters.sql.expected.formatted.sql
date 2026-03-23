@@ -1,5 +1,5 @@
 -- Tags: no-ordinary-database, no-encrypted-storage
-SYSTEM drop  table if exists txn_counters;
+DROP TABLE IF EXISTS txn_counters;
 
 CREATE TABLE txn_counters
 (
@@ -129,4 +129,4 @@ WHERE tid IN (
     AND table = 'txn_counters')
 ORDER BY event_time ASC;
 
-SYSTEM drop  table txn_counters;
+DROP TABLE txn_counters;

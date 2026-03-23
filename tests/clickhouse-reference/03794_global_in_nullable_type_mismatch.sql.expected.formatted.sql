@@ -7,7 +7,7 @@
 -- before being written to the external table.
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab0;
+DROP TABLE IF EXISTS tab0;
 
 CREATE TABLE tab0
 (
@@ -47,4 +47,4 @@ WHERE x GLOBAL IN (
         FROM numbers(5)
     );
 
-SYSTEM DROP  TABLE tab0;
+DROP TABLE tab0;

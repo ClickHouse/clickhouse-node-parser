@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01778_db;
+DROP DATABASE IF EXISTS `01778_db`;
 
 CREATE DATABASE `01778_db`;
 
@@ -42,7 +42,7 @@ SELECT dictGetDescendants('01778_db.hierarchy_flat_dictionary', number, 1)
 FROM `system`.numbers
 LIMIT 6;
 
-SYSTEM DROP  DICTIONARY 01778_db.hierarchy_flat_dictionary;
+DROP DICTIONARY `01778_db`.hierarchy_flat_dictionary;
 
 CREATE DICTIONARY `01778_db`.hierarchy_hashed_dictionary
 (
@@ -74,7 +74,7 @@ SELECT dictGetDescendants('01778_db.hierarchy_hashed_dictionary', number, 1)
 FROM `system`.numbers
 LIMIT 6;
 
-SYSTEM DROP  DICTIONARY 01778_db.hierarchy_hashed_dictionary;
+DROP DICTIONARY `01778_db`.hierarchy_hashed_dictionary;
 
 CREATE DICTIONARY `01778_db`.hierarchy_cache_dictionary
 (
@@ -94,7 +94,7 @@ SELECT dictIsIn('01778_db.hierarchy_cache_dictionary', number, number)
 FROM `system`.numbers
 LIMIT 6;
 
-SYSTEM DROP  DICTIONARY 01778_db.hierarchy_cache_dictionary;
+DROP DICTIONARY `01778_db`.hierarchy_cache_dictionary;
 
 CREATE DICTIONARY `01778_db`.hierarchy_direct_dictionary
 (
@@ -113,8 +113,8 @@ SELECT dictIsIn('01778_db.hierarchy_direct_dictionary', number, number)
 FROM `system`.numbers
 LIMIT 6;
 
-SYSTEM DROP  DICTIONARY 01778_db.hierarchy_direct_dictionary;
+DROP DICTIONARY `01778_db`.hierarchy_direct_dictionary;
 
-SYSTEM DROP  TABLE 01778_db.hierarchy_source_table;
+DROP TABLE `01778_db`.hierarchy_source_table;
 
-SYSTEM DROP  DATABASE 01778_db;
+DROP DATABASE `01778_db`;

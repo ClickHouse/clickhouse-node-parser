@@ -1,6 +1,6 @@
 SET check_query_single_value_result = 0;
 
-SYSTEM DROP  TABLE IF EXISTS mt_table;
+DROP TABLE IF EXISTS mt_table;
 
 CREATE TABLE mt_table
 (

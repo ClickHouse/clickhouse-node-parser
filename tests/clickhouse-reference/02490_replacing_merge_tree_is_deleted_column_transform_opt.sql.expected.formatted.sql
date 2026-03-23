@@ -1,5 +1,5 @@
 -- Test for FINAL query on ReplacingMergeTree + is_deleted makes use of optimizations.
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

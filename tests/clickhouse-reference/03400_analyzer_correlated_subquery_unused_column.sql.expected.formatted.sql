@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users
 (
@@ -17,7 +17,7 @@ INSERT INTO users;
 
 INSERT INTO users;
 
-SYSTEM DROP  TABLE IF EXISTS users2;
+DROP TABLE IF EXISTS users2;
 
 CREATE TABLE users2
 (

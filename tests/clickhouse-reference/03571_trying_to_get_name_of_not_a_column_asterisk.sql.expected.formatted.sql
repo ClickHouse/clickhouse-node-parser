@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -7,9 +7,9 @@ CREATE TABLE t0
 ENGINE = MergeTree
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
-SYSTEM DROP  TABLE IF EXISTS 02577_keepermap_delete_update;
+DROP TABLE IF EXISTS `02577_keepermap_delete_update`;
 
 CREATE TABLE `02577_keepermap_delete_update`
 (
@@ -19,4 +19,4 @@ CREATE TABLE `02577_keepermap_delete_update`
 )
 PRIMARY KEY key;
 
-SYSTEM DROP  TABLE 02577_keepermap_delete_update;
+DROP TABLE `02577_keepermap_delete_update`;

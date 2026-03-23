@@ -1,5 +1,5 @@
 -- Tags: long, zookeeper
-SYSTEM DROP  TABLE IF EXISTS report;
+DROP TABLE IF EXISTS report;
 
 CREATE TABLE report
 (
@@ -24,7 +24,7 @@ WHERE product = 'PS';
 
 INSERT INTO report;
 
-SYSTEM DROP  TABLE IF EXISTS replicated_report;
+DROP TABLE IF EXISTS replicated_report;
 
 CREATE TABLE replicated_report
 (

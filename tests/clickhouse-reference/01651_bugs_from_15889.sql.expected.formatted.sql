@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS xp;
+DROP TABLE IF EXISTS xp;
 
-SYSTEM DROP  TABLE IF EXISTS xp_d;
+DROP TABLE IF EXISTS xp_d;
 
 SET log_queries = 1;
 
@@ -50,7 +50,7 @@ WHERE A GLOBAL IN (
         SELECT NULL
     );
 
-SYSTEM DROP  TABLE IF EXISTS trace_log;
+DROP TABLE IF EXISTS trace_log;
 
 CREATE TABLE trace_log
 (

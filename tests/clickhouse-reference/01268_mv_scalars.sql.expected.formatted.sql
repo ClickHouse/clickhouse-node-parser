@@ -1,18 +1,18 @@
-SYSTEM DROP  TABLE IF EXISTS dest_table_mv;
+DROP TABLE IF EXISTS dest_table_mv;
 
-SYSTEM DROP  TABLE IF EXISTS left_table;
+DROP TABLE IF EXISTS left_table;
 
-SYSTEM DROP  TABLE IF EXISTS right_table;
+DROP TABLE IF EXISTS right_table;
 
-SYSTEM DROP  TABLE IF EXISTS dest_table;
+DROP TABLE IF EXISTS dest_table;
 
-SYSTEM DROP  TABLE IF EXISTS src_table;
+DROP TABLE IF EXISTS src_table;
 
-SYSTEM DROP  VIEW IF EXISTS dst_mv;
+DROP VIEW IF EXISTS dst_mv;
 
-SYSTEM DROP  VIEW IF EXISTS dst_mv_1;
+DROP VIEW IF EXISTS dst_mv_1;
 
-SYSTEM DROP  VIEW IF EXISTS dst_mv_2;
+DROP VIEW IF EXISTS dst_mv_2;
 
 CREATE TABLE src_table AS `system`.numbers
 ENGINE = Memory;
@@ -109,12 +109,12 @@ INSERT INTO left_table SELECT
     number * 2
 FROM numbers(3);
 
-SYSTEM drop  table dest_table_mv;
+DROP TABLE dest_table_mv;
 
-SYSTEM drop  table left_table;
+DROP TABLE left_table;
 
-SYSTEM drop  table right_table;
+DROP TABLE right_table;
 
-SYSTEM drop  table dest_table;
+DROP TABLE dest_table;
 
-SYSTEM drop  table src_table;
+DROP TABLE src_table;

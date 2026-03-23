@@ -5,7 +5,7 @@ SET use_uncompressed_cache = 0;
 
 SET allow_prefetched_read_pool_for_remote_filesystem = 0;
 
-SYSTEM DROP  TABLE IF EXISTS adaptive_table;
+DROP TABLE IF EXISTS adaptive_table;
 
 -- If the granularity of consequent blocks differs a lot, then adaptive
 -- granularity will adjust the amount of marks correctly.

@@ -1,9 +1,9 @@
 -- Tags: stateful
 SELECT '-- check that distinct with and w/o optimization produce the same result';
 
-SYSTEM drop  table if exists distinct_in_order sync;
+DROP TABLE IF EXISTS distinct_in_order;
 
-SYSTEM drop  table if exists ordinary_distinct sync;
+DROP TABLE IF EXISTS ordinary_distinct;
 
 CREATE TABLE distinct_in_order
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_functions_to_subcolumns_alias;
+DROP TABLE IF EXISTS t_functions_to_subcolumns_alias;
 
 CREATE TABLE t_functions_to_subcolumns_alias
 (
@@ -24,4 +24,4 @@ SELECT mapContains(m, 'foo') AS hit
 FROM t_functions_to_subcolumns_alias
 FORMAT TSVWithNames;
 
-SYSTEM DROP  TABLE t_functions_to_subcolumns_alias;
+DROP TABLE t_functions_to_subcolumns_alias;

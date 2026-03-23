@@ -1,8 +1,8 @@
-SYSTEM DROP  DICTIONARY IF EXISTS dict_sharded;
+DROP DICTIONARY IF EXISTS dict_sharded;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_sharded_multi;
+DROP DICTIONARY IF EXISTS dict_sharded_multi;
 
-SYSTEM DROP  TABLE IF EXISTS dict_data;
+DROP TABLE IF EXISTS dict_data;
 
 CREATE TABLE dict_data
 (
@@ -42,7 +42,7 @@ FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_sharded';
 
-SYSTEM DROP  DICTIONARY dict_sharded;
+DROP DICTIONARY dict_sharded;
 
 CREATE DICTIONARY dict_sharded_multi
 (
@@ -67,6 +67,6 @@ FROM `system`.dictionaries
 WHERE database = currentDatabase()
     AND name = 'dict_sharded_multi';
 
-SYSTEM DROP  DICTIONARY dict_sharded_multi;
+DROP DICTIONARY dict_sharded_multi;
 
-SYSTEM DROP  TABLE dict_data;
+DROP TABLE dict_data;

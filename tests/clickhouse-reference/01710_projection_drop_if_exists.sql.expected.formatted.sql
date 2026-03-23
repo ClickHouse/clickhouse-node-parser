@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tp;
+DROP TABLE IF EXISTS tp;
 
 CREATE TABLE tp
 (
@@ -12,4 +12,4 @@ CREATE TABLE tp
 ENGINE = MergeTree
 ORDER BY y;
 
-SYSTEM drop  table tp;
+DROP TABLE tp;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS stored_aggregates;
+DROP TABLE IF EXISTS stored_aggregates;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -21,4 +21,4 @@ FROM (
 SELECT uniqMerge(Uniq)
 FROM stored_aggregates;
 
-SYSTEM DROP  TABLE stored_aggregates;
+DROP TABLE stored_aggregates;

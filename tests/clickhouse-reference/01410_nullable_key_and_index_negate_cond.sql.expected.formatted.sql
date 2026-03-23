@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_23634;
+DROP TABLE IF EXISTS test_23634;
 
 SET force_primary_key = 1;
 
@@ -81,4 +81,4 @@ ORDER BY
     s1 ASC,
     s1 ASC;
 
-SYSTEM drop  table test_23634;
+DROP TABLE test_23634;

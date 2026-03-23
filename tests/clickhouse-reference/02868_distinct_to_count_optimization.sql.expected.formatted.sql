@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_rewrite_uniq_to_count;
+DROP TABLE IF EXISTS test_rewrite_uniq_to_count;
 
 CREATE TABLE test_rewrite_uniq_to_count
 (

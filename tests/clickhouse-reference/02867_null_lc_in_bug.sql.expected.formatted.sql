@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/50570
-SYSTEM DROP  TABLE IF EXISTS tnul SYNC;
+DROP TABLE IF EXISTS tnul;
 
-SYSTEM DROP  TABLE IF EXISTS tlc SYNC;
+DROP TABLE IF EXISTS tlc;
 
 CREATE TABLE tnul
 (
@@ -16,7 +16,7 @@ SELECT lc
 FROM tnul
 WHERE notIn(lc, ('rty', 'uiop'));
 
-SYSTEM DROP  TABLE tnul SYNC;
+DROP TABLE tnul;
 
 CREATE TABLE tlc
 (
@@ -31,4 +31,4 @@ SELECT lc
 FROM tlc
 WHERE notIn(lc, ('rty', 'uiop'));
 
-SYSTEM DROP  TABLE tlc SYNC;
+DROP TABLE tlc;

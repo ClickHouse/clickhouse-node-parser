@@ -5,7 +5,7 @@ SET optimize_on_insert = 0;
 
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE IF EXISTS old_style;
+DROP TABLE IF EXISTS old_style;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -16,11 +16,11 @@ CREATE TABLE old_style
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00754/old_style', 'r1', d, x, 8192);
 
-SYSTEM DROP  TABLE old_style;
+DROP TABLE old_style;
 
-SYSTEM DROP  TABLE IF EXISTS summing_r1;
+DROP TABLE IF EXISTS summing_r1;
 
-SYSTEM DROP  TABLE IF EXISTS summing_r2;
+DROP TABLE IF EXISTS summing_r2;
 
 CREATE TABLE summing_r1
 (
@@ -54,6 +54,6 @@ ORDER BY
     y ASC,
     z ASC;
 
-SYSTEM DROP  TABLE summing_r1;
+DROP TABLE summing_r1;
 
-SYSTEM DROP  TABLE summing_r2;
+DROP TABLE summing_r2;

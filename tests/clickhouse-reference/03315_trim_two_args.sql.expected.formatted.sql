@@ -89,7 +89,7 @@ FROM tab;
 SELECT trimBoth(col, 'ac')
 FROM tab;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 -- Bug 78796
 SELECT isConstant(trimBoth(''));

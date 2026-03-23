@@ -1,11 +1,11 @@
 -- Force new analyzer because the old one doesn't support multiple USING clauses in a query
 SET allow_suspicious_low_cardinality_types = 1, enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE t0
 (
@@ -39,8 +39,8 @@ INNER JOIN t2
     USING (y)
 PREWHERE toLowCardinality(1);
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;
 
-SYSTEM DROP  TABLE t2;
+DROP TABLE t2;

@@ -81,6 +81,6 @@ SELECT
 FROM rmt2
 ORDER BY n ASC;
 
-SYSTEM drop  table rmt1;
+DROP TABLE rmt1;
 
-SYSTEM drop  table rmt2;
+DROP TABLE rmt2;

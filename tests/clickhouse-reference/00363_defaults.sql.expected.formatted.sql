@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS prewhere_defaults;
+DROP TABLE IF EXISTS prewhere_defaults;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -21,4 +21,4 @@ ORDER BY x ASC;
 
 INSERT INTO prewhere_defaults (x);
 
-SYSTEM DROP  TABLE prewhere_defaults;
+DROP TABLE prewhere_defaults;

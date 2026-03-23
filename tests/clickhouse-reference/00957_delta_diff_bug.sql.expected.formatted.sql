@@ -1,6 +1,6 @@
 SET allow_suspicious_codecs = 1;
 
-SYSTEM DROP  TABLE IF EXISTS segfault_table;
+DROP TABLE IF EXISTS segfault_table;
 
 CREATE TABLE segfault_table
 (

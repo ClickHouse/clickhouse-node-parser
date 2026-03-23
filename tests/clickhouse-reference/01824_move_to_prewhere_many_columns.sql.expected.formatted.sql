@@ -5,7 +5,7 @@ SET convert_query_to_cnf = 0;
 
 SET move_all_conditions_to_prewhere = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t_move_to_prewhere;
+DROP TABLE IF EXISTS t_move_to_prewhere;
 
 CREATE TABLE t_move_to_prewhere
 (

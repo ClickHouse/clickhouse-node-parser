@@ -4,7 +4,7 @@ SET query_plan_join_swap_table = 0;
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -20,7 +20,7 @@ INSERT INTO t0 SELECT
     toDateTime('2024-01-01 00:00:00') + toIntervalMinute(number)
 FROM numbers(10);
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (
@@ -78,6 +78,6 @@ FROM
 RIGHT JOIN t0
     ON t1.EventId = t0.Id;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;

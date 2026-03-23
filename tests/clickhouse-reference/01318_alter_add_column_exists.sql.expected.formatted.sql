@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS add_table;
+DROP TABLE IF EXISTS add_table;
 
 CREATE TABLE add_table
 (

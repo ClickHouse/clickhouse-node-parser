@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_mut_virtuals;
+DROP TABLE IF EXISTS t_mut_virtuals;
 
 CREATE TABLE t_mut_virtuals
 (
@@ -20,4 +20,4 @@ SELECT *
 FROM t_mut_virtuals
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_mut_virtuals;
+DROP TABLE t_mut_virtuals;

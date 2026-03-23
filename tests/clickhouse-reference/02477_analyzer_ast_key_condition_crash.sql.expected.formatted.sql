@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -20,4 +20,4 @@ FROM test_table
 WHERE id = 1
 SETTINGS query_plan_optimize_primary_key = 0;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

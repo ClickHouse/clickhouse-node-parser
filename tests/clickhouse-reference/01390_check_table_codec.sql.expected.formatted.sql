@@ -1,6 +1,6 @@
 SET check_query_single_value_result = 0;
 
-SYSTEM DROP  TABLE IF EXISTS check_codec;
+DROP TABLE IF EXISTS check_codec;
 
 CREATE TABLE check_codec
 (
@@ -16,7 +16,7 @@ INSERT INTO check_codec SELECT
     number * 2
 FROM numbers(1000);
 
-SYSTEM DROP  TABLE check_codec;
+DROP TABLE check_codec;
 
 CREATE TABLE check_codec
 (

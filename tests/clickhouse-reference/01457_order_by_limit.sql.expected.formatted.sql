@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists order_by_another;
+DROP TABLE IF EXISTS order_by_another;
 
 CREATE TABLE order_by_another
 (

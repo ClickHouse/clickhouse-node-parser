@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_datetime;
+DROP TABLE IF EXISTS test_datetime;
 
 CREATE TABLE test_datetime
 (
@@ -14,4 +14,4 @@ SELECT *
 FROM test_datetime
 WHERE time = toDate(18012);
 
-SYSTEM DROP  TABLE test_datetime;
+DROP TABLE test_datetime;

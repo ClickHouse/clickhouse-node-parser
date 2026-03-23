@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -16,4 +16,4 @@ INSERT INTO test SELECT
     1,
     10;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

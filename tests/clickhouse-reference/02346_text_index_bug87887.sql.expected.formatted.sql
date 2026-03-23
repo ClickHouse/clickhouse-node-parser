@@ -7,7 +7,7 @@ SET use_skip_indexes = 1;
 
 SET query_plan_direct_read_from_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -49,4 +49,4 @@ SELECT
 FROM tab
 WHERE hasToken(c0, NULL);
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

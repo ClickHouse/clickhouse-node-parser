@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -7,4 +7,4 @@ CREATE TABLE test
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

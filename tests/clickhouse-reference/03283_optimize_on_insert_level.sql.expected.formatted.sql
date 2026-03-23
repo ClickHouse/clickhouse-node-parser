@@ -2,7 +2,7 @@ SET insert_keeper_fault_injection_probability = 0;
 
 SET max_threads = 4;
 
-SYSTEM DROP  TABLE IF EXISTS t_optimize_level;
+DROP TABLE IF EXISTS t_optimize_level;
 
 CREATE TABLE t_optimize_level
 (
@@ -40,7 +40,7 @@ WHERE database = currentDatabase()
     AND table = 't_optimize_level'
     AND active;
 
-SYSTEM DROP  TABLE t_optimize_level;
+DROP TABLE t_optimize_level;
 
 CREATE TABLE t_optimize_level
 (

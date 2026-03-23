@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data_01295;
+DROP TABLE IF EXISTS data_01295;
 
 CREATE TABLE data_01295
 (
@@ -21,4 +21,4 @@ SETTINGS max_threads = 2; -- stuck with multiple threads
 
 SET max_insert_threads = 2;
 
-SYSTEM drop  table data_01295;
+DROP TABLE data_01295;

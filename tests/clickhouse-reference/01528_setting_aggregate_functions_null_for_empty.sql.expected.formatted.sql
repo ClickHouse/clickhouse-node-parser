@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS defaults;
+DROP TABLE IF EXISTS defaults;
 
 CREATE TABLE defaults
 (
@@ -25,4 +25,4 @@ FROM numbers(10);
 
 SET aggregate_functions_null_for_empty = 0;
 
-SYSTEM DROP  TABLE defaults;
+DROP TABLE defaults;

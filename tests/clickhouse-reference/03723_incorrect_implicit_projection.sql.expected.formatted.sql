@@ -1,5 +1,5 @@
 -- See also 03604_key_condition_set_tuple_bug.sql‎
-SYSTEM DROP  TABLE IF EXISTS prd_bid_events_simple_no_partition;
+DROP TABLE IF EXISTS prd_bid_events_simple_no_partition;
 
 CREATE TABLE prd_bid_events_simple_no_partition
 (

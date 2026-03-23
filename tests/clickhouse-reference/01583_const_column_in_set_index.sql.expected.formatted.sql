@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists insub;
+DROP TABLE IF EXISTS insub;
 
 CREATE TABLE insub
 (

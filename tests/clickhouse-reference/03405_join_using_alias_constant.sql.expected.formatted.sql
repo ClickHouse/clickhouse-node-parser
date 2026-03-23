@@ -1,13 +1,13 @@
 -- Tags: no-parallel-replicas
 -- FIXME: with parallel replicas:
 -- Cannot convert column `__table1.b` because it is non constant in source stream but must be constant in result. (ILLEGAL_COLUMN)
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t1lc;
+DROP TABLE IF EXISTS t1lc;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
-SYSTEM DROP  TABLE IF EXISTS t2lc;
+DROP TABLE IF EXISTS t2lc;
 
 SET allow_suspicious_low_cardinality_types = 1;
 

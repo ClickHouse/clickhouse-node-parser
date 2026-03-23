@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS replace;
+DROP TABLE IF EXISTS `replace`;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -36,4 +36,4 @@ ORDER BY
     Id ASC,
     Version ASC;
 
-SYSTEM DROP  TABLE replace;
+DROP TABLE `replace`;

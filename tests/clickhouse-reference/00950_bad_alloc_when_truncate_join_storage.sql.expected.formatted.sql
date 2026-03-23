@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS join_test;
+DROP TABLE IF EXISTS join_test;
 
 CREATE TABLE join_test
 (

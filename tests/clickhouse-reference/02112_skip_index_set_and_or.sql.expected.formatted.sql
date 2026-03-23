@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists set_index;
+DROP TABLE IF EXISTS set_index;
 
 CREATE TABLE set_index
 (

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_join;
+DROP TABLE IF EXISTS test_join;
 
 CREATE TABLE test_join
 (
@@ -50,4 +50,4 @@ ORDER BY
     id ASC,
     name ASC;
 
-SYSTEM drop  table test_join;
+DROP TABLE test_join;

@@ -1,6 +1,6 @@
 -- Tags: distributed, no-parallel, no-replicated-database
 -- Tag no-replicated-database: ON CLUSTER is not allowed
-SYSTEM DROP  DATABASE IF EXISTS 02028_db ON CLUSTER test_shard_localhost;
+DROP DATABASE IF EXISTS `02028_db` ON CLUSTER test_shard_localhost;
 
 CREATE DATABASE `02028_db` ON CLUSTER test_shard_localhost;
 
@@ -34,4 +34,4 @@ INSERT INTO t2_local;
 
 INSERT INTO t2_local;
 
-SYSTEM DROP  DATABASE 02028_db ON CLUSTER test_shard_localhost;
+DROP DATABASE `02028_db` ON CLUSTER test_shard_localhost;

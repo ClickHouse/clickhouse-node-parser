@@ -1,6 +1,6 @@
 SET mutations_sync = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_updates;
+DROP TABLE IF EXISTS test_updates;
 
 CREATE TABLE test_updates
 (
@@ -19,4 +19,4 @@ FROM numbers(10);
 SELECT *
 FROM test_updates;
 
-SYSTEM DROP  TABLE test_updates;
+DROP TABLE test_updates;

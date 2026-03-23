@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS uin_value_details_int32_int8;
+DROP TABLE IF EXISTS uin_value_details_int32_int8;
 
 CREATE TABLE uin_value_details_int32_int8
 (
@@ -13,7 +13,7 @@ INSERT INTO uin_value_details_int32_int8 (ds, uin, value);
 
 INSERT INTO uin_value_details_int32_int8 (ds, uin, value);
 
-SYSTEM DROP  TABLE IF EXISTS uin_value_details_int32_int64;
+DROP TABLE IF EXISTS uin_value_details_int32_int64;
 
 CREATE TABLE uin_value_details_int32_int64
 (
@@ -28,7 +28,7 @@ INSERT INTO uin_value_details_int32_int64 (ds, uin, value);
 
 INSERT INTO uin_value_details_int32_int64 (ds, uin, value);
 
-SYSTEM DROP  TABLE IF EXISTS uin_value_details_int32_float64;
+DROP TABLE IF EXISTS uin_value_details_int32_float64;
 
 CREATE TABLE uin_value_details_int32_float64
 (

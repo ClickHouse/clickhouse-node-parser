@@ -2,9 +2,9 @@ SET any_join_distinct_right_table_keys = 1;
 
 SET joined_subquery_requires_alias = 0;
 
-SYSTEM DROP  TABLE IF EXISTS local_statements;
+DROP TABLE IF EXISTS local_statements;
 
-SYSTEM DROP  TABLE IF EXISTS statements;
+DROP TABLE IF EXISTS statements;
 
 CREATE TABLE local_statements
 (
@@ -57,6 +57,6 @@ ENGINE = Distributed(test_shard_localhost, currentDatabase(), 'local_statements'
 
 INSERT INTO local_statements;
 
-SYSTEM DROP  TABLE local_statements;
+DROP TABLE local_statements;
 
-SYSTEM DROP  TABLE statements;
+DROP TABLE statements;

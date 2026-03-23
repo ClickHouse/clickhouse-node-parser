@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
 CREATE TABLE table1
 (
@@ -49,7 +49,7 @@ ORDER BY
     CRC32(str1) ASC,
     CRC32(str2) ASC;
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;
 
 SELECT hex(CRC32IEEE('foo'));
 

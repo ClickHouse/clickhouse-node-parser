@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -12,7 +12,7 @@ ORDER BY tuple();
 
 INSERT INTO tab;
 
-SYSTEM DROP  TABLE IF EXISTS mem;
+DROP TABLE IF EXISTS mem;
 
 CREATE TABLE mem
 (
@@ -23,7 +23,7 @@ ENGINE = Join(`ANY`, `LEFT`, k);
 
 INSERT INTO mem;
 
-SYSTEM DROP  TABLE IF EXISTS mem2;
+DROP TABLE IF EXISTS mem2;
 
 CREATE TABLE mem2
 (
@@ -81,8 +81,8 @@ FROM (
     )
 WHERE ilike(`explain`, '%ReadFromRemoteParallelReplicas%');
 
-SYSTEM DROP  TABLE mem2;
+DROP TABLE mem2;
 
-SYSTEM DROP  TABLE mem;
+DROP TABLE mem;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

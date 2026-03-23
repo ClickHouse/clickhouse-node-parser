@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_point_in_polygon;
+DROP TABLE IF EXISTS t_point_in_polygon;
 
 CREATE TABLE t_point_in_polygon
 (
@@ -14,4 +14,4 @@ SELECT *
 FROM t_point_in_polygon
 WHERE pointInPolygon(p, [(0, 0), (10, 0), (10, 10), (0, 10)]);
 
-SYSTEM DROP  TABLE t_point_in_polygon;
+DROP TABLE t_point_in_polygon;

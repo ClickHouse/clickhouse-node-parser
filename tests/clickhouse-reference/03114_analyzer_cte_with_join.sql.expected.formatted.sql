@@ -2,7 +2,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/58500
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (

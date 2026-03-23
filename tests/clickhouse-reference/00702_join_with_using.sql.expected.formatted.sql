@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS using1;
+DROP TABLE IF EXISTS using1;
 
-SYSTEM DROP  TABLE IF EXISTS using2;
+DROP TABLE IF EXISTS using2;
 
 CREATE TABLE using1
 (
@@ -30,14 +30,14 @@ LEFT JOIN (
     USING (a, b)
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE using1;
+DROP TABLE using1;
 
-SYSTEM DROP  TABLE using2;
+DROP TABLE using2;
 
 --
-SYSTEM drop  table if exists persons;
+DROP TABLE IF EXISTS persons;
 
-SYSTEM drop  table if exists children;
+DROP TABLE IF EXISTS children;
 
 CREATE TABLE persons
 (
@@ -146,6 +146,6 @@ ORDER BY
     name ASC,
     childName ASC;
 
-SYSTEM drop  table persons;
+DROP TABLE persons;
 
-SYSTEM drop  table children;
+DROP TABLE children;

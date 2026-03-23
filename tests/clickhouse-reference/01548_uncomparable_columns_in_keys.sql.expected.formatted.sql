@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS uncomparable_keys;
+DROP TABLE IF EXISTS uncomparable_keys;
 
 CREATE TABLE foo
 (

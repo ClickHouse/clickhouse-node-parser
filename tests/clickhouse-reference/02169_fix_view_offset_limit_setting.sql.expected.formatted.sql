@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS counter;
+DROP TABLE IF EXISTS counter;
 
 CREATE TABLE counter
 (
@@ -13,7 +13,7 @@ INSERT INTO counter SELECT
     now()
 FROM numbers(500);
 
-SYSTEM DROP  TABLE IF EXISTS vcounter;
+DROP TABLE IF EXISTS vcounter;
 
 CREATE VIEW vcounter
 AS
@@ -39,6 +39,6 @@ SETTINGS
     limit = 6,
     offset = 0;
 
-SYSTEM DROP  TABLE vcounter;
+DROP TABLE vcounter;
 
-SYSTEM DROP  TABLE counter;
+DROP TABLE counter;

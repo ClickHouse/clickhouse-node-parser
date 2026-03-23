@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tdm__fuzz_23;
+DROP TABLE IF EXISTS tdm__fuzz_23;
 
 CREATE TABLE tdm__fuzz_23
 (
@@ -15,4 +15,4 @@ FROM tdm__fuzz_23
 WHERE toDate(x) < toDate(now(), 'Asia/Istanbul')
 SETTINGS max_rows_to_read = 1;
 
-SYSTEM DROP  TABLE tdm__fuzz_23;
+DROP TABLE tdm__fuzz_23;

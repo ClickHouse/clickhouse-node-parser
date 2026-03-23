@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS clicks;
+DROP TABLE IF EXISTS clicks;
 
-SYSTEM DROP  TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS transactions;
 
 CREATE TABLE clicks
 (
@@ -324,6 +324,6 @@ ORDER BY
     total ASC,
     domain ASC;
 
-SYSTEM DROP  TABLE clicks;
+DROP TABLE clicks;
 
-SYSTEM DROP  TABLE transactions;
+DROP TABLE transactions;

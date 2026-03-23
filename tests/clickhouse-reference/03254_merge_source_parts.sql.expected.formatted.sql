@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -20,4 +20,4 @@ WHERE database = currentDatabase()
     AND table = 'test'
     AND event_type = 'MergeParts';
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

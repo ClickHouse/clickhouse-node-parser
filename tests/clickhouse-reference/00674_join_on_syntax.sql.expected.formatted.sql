@@ -2,13 +2,13 @@ SET joined_subquery_requires_alias = 0;
 
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists tab1;
+DROP TABLE IF EXISTS tab1;
 
-SYSTEM drop  table if exists tab2;
+DROP TABLE IF EXISTS tab2;
 
-SYSTEM drop  table if exists tab3;
+DROP TABLE IF EXISTS tab3;
 
-SYSTEM drop  table if exists tab1_copy;
+DROP TABLE IF EXISTS tab1_copy;
 
 CREATE TABLE tab1
 (
@@ -579,10 +579,10 @@ LEFT JOIN (
     ON tab1.b1 + 3 = s.b1 + 2
 FORMAT JSONEachRow;
 
-SYSTEM drop  table tab1;
+DROP TABLE tab1;
 
-SYSTEM drop  table tab1_copy;
+DROP TABLE tab1_copy;
 
-SYSTEM drop  table tab2;
+DROP TABLE tab2;
 
-SYSTEM drop  table tab3;
+DROP TABLE tab3;

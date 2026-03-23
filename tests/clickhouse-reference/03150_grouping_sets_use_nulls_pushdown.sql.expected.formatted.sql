@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_grouping_sets_predicate;
+DROP TABLE IF EXISTS test_grouping_sets_predicate;
 
 CREATE TABLE test_grouping_sets_predicate
 (

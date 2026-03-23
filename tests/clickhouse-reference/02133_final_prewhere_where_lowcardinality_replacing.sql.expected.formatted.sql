@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS errors_local;
+DROP TABLE IF EXISTS errors_local;
 
 CREATE TABLE errors_local
 (
@@ -17,7 +17,7 @@ PREWHERE isNotNull(level)
 WHERE isNotNull(level)
 LIMIT 1;
 
-SYSTEM DROP  TABLE errors_local;
+DROP TABLE errors_local;
 
 CREATE TABLE errors_local
 (

@@ -1,5 +1,5 @@
 -- Tags: no-random-settings
-SYSTEM drop  table if exists tab_00484;
+DROP TABLE IF EXISTS tab_00484;
 
 CREATE TABLE tab_00484
 (
@@ -96,4 +96,4 @@ FROM tab_00484
 PREWHERE s = 'abc'
 FORMAT Null;
 
-SYSTEM drop  table tab_00484;
+DROP TABLE tab_00484;

@@ -5,7 +5,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/96060
 SET use_query_condition_cache = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_qcc_cte;
+DROP TABLE IF EXISTS test_qcc_cte;
 
 CREATE TABLE test_qcc_cte
 (
@@ -18,4 +18,4 @@ ORDER BY activity_year;
 INSERT INTO test_qcc_cte SELECT number % 10 + 2018
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE test_qcc_cte;
+DROP TABLE test_qcc_cte;

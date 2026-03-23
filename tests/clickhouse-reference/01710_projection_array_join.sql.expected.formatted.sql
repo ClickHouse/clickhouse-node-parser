@@ -1,6 +1,6 @@
 SET optimize_use_projections = 1;
 
-SYSTEM drop  table if exists x;
+DROP TABLE IF EXISTS x;
 
 CREATE TABLE x
 (
@@ -19,4 +19,4 @@ FROM
     x
 ARRAY JOIN arr AS a;
 
-SYSTEM drop  table x;
+DROP TABLE x;

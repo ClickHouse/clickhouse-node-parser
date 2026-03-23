@@ -1,9 +1,9 @@
 -- Tags: no-shared-merge-tree
-SYSTEM DROP  TABLE IF EXISTS checksums_r3;
+DROP TABLE IF EXISTS checksums_r3;
 
-SYSTEM DROP  TABLE IF EXISTS checksums_r2;
+DROP TABLE IF EXISTS checksums_r2;
 
-SYSTEM DROP  TABLE IF EXISTS checksums_r1;
+DROP TABLE IF EXISTS checksums_r1;
 
 CREATE TABLE checksums_r1
 (

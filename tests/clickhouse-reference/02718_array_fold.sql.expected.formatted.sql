@@ -44,7 +44,7 @@ SELECT arrayFold((acc, x) -> if(x % 2, arrayPushFront(acc, x), arrayPushBack(acc
 FROM `system`.numbers
 LIMIT 5;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -63,7 +63,7 @@ SELECT
 FROM tab
 ORDER BY line ASC;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

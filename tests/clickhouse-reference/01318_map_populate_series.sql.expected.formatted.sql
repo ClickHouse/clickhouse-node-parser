@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists map_test;
+DROP TABLE IF EXISTS map_test;
 
 CREATE TABLE map_test
 ENGINE = TinyLog() AS
@@ -31,7 +31,7 @@ FROM map_test;
 SELECT mapPopulateSeries([toUInt64(3), 4], map.2, n)
 FROM map_test;
 
-SYSTEM drop  table map_test;
+DROP TABLE map_test;
 
 SELECT
     mapPopulateSeries([toUInt8(1), 2], [toUInt8(1), 1]) AS res,

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
 SET allow_suspicious_low_cardinality_types = 1;
 
@@ -16,4 +16,4 @@ SELECT *
 FROM t1
 WHERE id = 21585718595728998;
 
-SYSTEM drop  table t1;
+DROP TABLE t1;

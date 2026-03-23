@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_tuple_numeric;
+DROP TABLE IF EXISTS t_tuple_numeric;
 
 CREATE TABLE t_tuple_numeric
 (
@@ -39,7 +39,7 @@ SELECT
     t.`2`
 FROM t_tuple_numeric; -- {serverError UNKNOWN_IDENTIFIER, ARGUMENT_OUT_OF_BOUND}
 
-SYSTEM DROP  TABLE t_tuple_numeric;
+DROP TABLE t_tuple_numeric;
 
 CREATE TABLE t_tuple_numeric
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS lower_test;
+DROP TABLE IF EXISTS lower_test;
 
 CREATE TABLE lower_test
 (
@@ -16,4 +16,4 @@ FROM lower_test
 WHERE lower(b) IN ('a', 'b')
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE lower_test;
+DROP TABLE lower_test;

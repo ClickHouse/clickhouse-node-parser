@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_map_contains;
+DROP TABLE IF EXISTS t_map_contains;
 
 CREATE TABLE t_map_contains
 (
@@ -15,4 +15,4 @@ SET enable_analyzer = 1;
 SELECT mapContains(m, 'a')
 FROM t_map_contains;
 
-SYSTEM DROP  TABLE t_map_contains;
+DROP TABLE t_map_contains;

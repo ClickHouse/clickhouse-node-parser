@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -20,4 +20,4 @@ SELECT
     dt
 FROM t;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

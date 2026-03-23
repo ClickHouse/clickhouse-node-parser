@@ -7,11 +7,11 @@ SET force_optimize_skip_unused_shards = 2;
 
 SET check_table_dependencies = 0;
 
-SYSTEM drop  database if exists db_01527_ranges;
+DROP DATABASE IF EXISTS db_01527_ranges;
 
-SYSTEM drop  table if exists dist_01527;
+DROP TABLE IF EXISTS dist_01527;
 
-SYSTEM drop  table if exists data_01527;
+DROP TABLE IF EXISTS data_01527;
 
 CREATE DATABASE db_01527_ranges;
 
@@ -48,7 +48,7 @@ SELECT _shard_num
 FROM dist_01527
 WHERE key = 1;
 
-SYSTEM drop  table db_01527_ranges.data sync;
+DROP TABLE db_01527_ranges.data;
 
 CREATE TABLE db_01527_ranges.data
 ENGINE = Memory() AS
@@ -57,12 +57,12 @@ SELECT
     number + 1 AS shard
 FROM numbers(100);
 
-SYSTEM drop  table data_01527;
+DROP TABLE data_01527;
 
-SYSTEM drop  table dist_01527;
+DROP TABLE dist_01527;
 
-SYSTEM drop  table db_01527_ranges.data;
+DROP TABLE db_01527_ranges.data;
 
-SYSTEM drop  dictionary db_01527_ranges.dict;
+DROP DICTIONARY db_01527_ranges.dict;
 
-SYSTEM drop  database db_01527_ranges;
+DROP DATABASE db_01527_ranges;

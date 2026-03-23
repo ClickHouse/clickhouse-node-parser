@@ -1,7 +1,7 @@
 -- Tags: distributed
 SET max_block_size = 1000;
 
-SYSTEM DROP  TABLE IF EXISTS numbers_10_00223;
+DROP TABLE IF EXISTS numbers_10_00223;
 
 CREATE TABLE numbers_10_00223
 ENGINE = Log AS
@@ -86,7 +86,7 @@ FROM (
             k2 ASC
     );
 
-SYSTEM DROP  TABLE numbers_10_00223;
+DROP TABLE numbers_10_00223;
 
 SELECT count()
 FROM remote('127.0.0.{2,3}', `system`.one);

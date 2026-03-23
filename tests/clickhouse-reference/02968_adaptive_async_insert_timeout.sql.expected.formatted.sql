@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS async_insert_mt_test;
+DROP TABLE IF EXISTS async_insert_mt_test;
 
 CREATE TABLE async_insert_mt_test
 (

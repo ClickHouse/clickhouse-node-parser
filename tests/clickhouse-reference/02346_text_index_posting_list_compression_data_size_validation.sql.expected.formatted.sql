@@ -15,9 +15,9 @@ SET min_insert_block_size_rows = 0;
 
 SET min_insert_block_size_bytes = 0;
 
-SYSTEM DROP  TABLE IF EXISTS tab_bitpacking;
+DROP TABLE IF EXISTS tab_bitpacking;
 
-SYSTEM DROP  TABLE IF EXISTS tab_uncompressed;
+DROP TABLE IF EXISTS tab_uncompressed;
 
 CREATE TABLE tab_bitpacking
 (
@@ -90,6 +90,6 @@ WHERE database = currentDatabase()
     AND table IN ('tab_bitpacking', 'tab_uncompressed')
 GROUP BY table;
 
-SYSTEM DROP  TABLE tab_bitpacking;
+DROP TABLE tab_bitpacking;
 
-SYSTEM DROP  TABLE tab_uncompressed;
+DROP TABLE tab_uncompressed;

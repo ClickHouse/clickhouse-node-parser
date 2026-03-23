@@ -1,9 +1,9 @@
 -- Tags: no-fasttest
 SET log_queries = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tabl_1;
+DROP TABLE IF EXISTS tabl_1;
 
-SYSTEM DROP  TABLE IF EXISTS tabl_2;
+DROP TABLE IF EXISTS tabl_2;
 
 CREATE TABLE tabl_1
 (
@@ -35,6 +35,6 @@ WHERE type = 'QueryFinish'
 GROUP BY normalizeQuery(query)
 ORDER BY normalizeQuery(query) ASC;
 
-SYSTEM DROP  TABLE tabl_1;
+DROP TABLE tabl_1;
 
-SYSTEM DROP  TABLE tabl_2;
+DROP TABLE tabl_2;

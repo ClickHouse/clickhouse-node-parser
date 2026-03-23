@@ -34,4 +34,4 @@ WHERE current_database = currentDatabase()
     AND type IN ('QueryFinish', 'ExceptionBeforeStart')
 ORDER BY log_comment ASC;
 
-SYSTEM DROP  TABLE t_03176;
+DROP TABLE t_03176;

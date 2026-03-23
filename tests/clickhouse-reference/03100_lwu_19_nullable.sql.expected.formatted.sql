@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS mutation_table;
+DROP TABLE IF EXISTS mutation_table;
 
 SET enable_lightweight_update = 1;
 

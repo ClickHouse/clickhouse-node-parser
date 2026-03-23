@@ -41,7 +41,7 @@ SELECT
     ) AS subquery,
     arrayMap(x -> x + arrayMap(x -> subquery, [1])[1], [1,2,3]);
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -117,7 +117,7 @@ WHERE concat(concat(concat(toString(id), '___\0_______\0____'), toString(id)), c
 SELECT arrayMap(x -> splitByChar(toString(id), arrayMap(x -> toString(1), [NULL])), [NULL])
 FROM test_table; -- { serverError ILLEGAL_COLUMN };
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
 -- { echoOff }
 SELECT

@@ -4,7 +4,7 @@ SET allow_experimental_variant_type = 1;
 
 SET use_variant_as_common_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -137,4 +137,4 @@ SELECT
 FROM test
 ORDER BY x ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

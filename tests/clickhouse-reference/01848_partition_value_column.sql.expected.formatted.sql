@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists tbl;
+DROP TABLE IF EXISTS tbl;
 
-SYSTEM drop  table if exists tbl2;
+DROP TABLE IF EXISTS tbl2;
 
 CREATE TABLE tbl
 (
@@ -54,6 +54,6 @@ SELECT _partition_value
 FROM tbl2
 GROUP BY 1; -- { serverError UNKNOWN_IDENTIFIER }
 
-SYSTEM drop  table tbl;
+DROP TABLE tbl;
 
-SYSTEM drop  table tbl2;
+DROP TABLE tbl2;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS grouping_sets;
+DROP TABLE IF EXISTS grouping_sets;
 
 CREATE TABLE grouping_sets
 (

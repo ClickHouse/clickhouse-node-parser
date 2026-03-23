@@ -1,5 +1,5 @@
 -- Tags: no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS t_lwd_indexes;
+DROP TABLE IF EXISTS t_lwd_indexes;
 
 SET enable_lightweight_update = 1;
 
@@ -79,4 +79,4 @@ FROM (
     )
 WHERE like(`explain`, '%Granules%');
 
-SYSTEM DROP  TABLE t_lwd_indexes;
+DROP TABLE t_lwd_indexes;

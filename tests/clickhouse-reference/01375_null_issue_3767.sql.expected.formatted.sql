@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS null_issue_3767;
+DROP TABLE IF EXISTS null_issue_3767;
 
 CREATE TABLE null_issue_3767
 (
@@ -12,4 +12,4 @@ SELECT value
 FROM null_issue_3767
 WHERE value NOT IN ('A String');
 
-SYSTEM DROP  TABLE null_issue_3767;
+DROP TABLE null_issue_3767;

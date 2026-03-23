@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tbl;
+DROP TABLE IF EXISTS tbl;
 
 CREATE TABLE tbl
 (
@@ -22,4 +22,4 @@ ORDER BY (a, b) ASC
 SETTINGS read_in_order_use_virtual_row = 1
 FORMAT Hash;
 
-SYSTEM DROP  TABLE tbl;
+DROP TABLE tbl;

@@ -1,7 +1,7 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/14739
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists test_subquery;
+DROP TABLE IF EXISTS test_subquery;
 
 CREATE TABLE test_subquery
 ENGINE = Memory AS

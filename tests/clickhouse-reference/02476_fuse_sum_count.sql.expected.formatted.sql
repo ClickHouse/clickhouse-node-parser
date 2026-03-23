@@ -2,7 +2,7 @@ SET enable_analyzer = 1;
 
 SET optimize_syntax_fuse_functions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS fuse_tbl;
+DROP TABLE IF EXISTS fuse_tbl;
 
 CREATE TABLE fuse_tbl
 (
@@ -137,4 +137,4 @@ FROM (
 
 -- TODO: uncomment after https://github.com/ClickHouse/ClickHouse/pull/43372
 -- SELECT avg(b), x - 2 AS b FROM (SELECT number as x FROM numbers(1)) GROUP BY x;
-SYSTEM DROP  TABLE fuse_tbl;
+DROP TABLE fuse_tbl;

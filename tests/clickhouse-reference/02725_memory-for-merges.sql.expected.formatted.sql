@@ -1,6 +1,6 @@
 -- Tags: no-object-storage, no-random-merge-tree-settings, no-fasttest
 -- We allocate a lot of memory for buffers when reading or writing to S3
-SYSTEM DROP  TABLE IF EXISTS 02725_memory_for_merges SYNC;
+DROP TABLE IF EXISTS `02725_memory_for_merges`;
 
 CREATE TABLE `02725_memory_for_merges`
 (

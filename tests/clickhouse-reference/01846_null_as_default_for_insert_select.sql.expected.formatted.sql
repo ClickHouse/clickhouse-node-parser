@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_null_as_default;
+DROP TABLE IF EXISTS test_null_as_default;
 
 CREATE TABLE test_null_as_default
 (
@@ -58,4 +58,4 @@ SELECT
     2,
     NULL;
 
-SYSTEM DROP  TABLE test_null_as_default;
+DROP TABLE test_null_as_default;

@@ -1,7 +1,7 @@
 -- insert data duplicates by providing deduplication token on insert
-SYSTEM DROP  TABLE IF EXISTS insert_dedup_token1 SYNC;
+DROP TABLE IF EXISTS insert_dedup_token1;
 
-SYSTEM DROP  TABLE IF EXISTS insert_dedup_token2 SYNC;
+DROP TABLE IF EXISTS insert_dedup_token2;
 
 CREATE TABLE insert_dedup_token1
 (
@@ -50,6 +50,6 @@ SET insert_deduplication_token = '2';
 
 INSERT INTO insert_dedup_token2; -- inserted
 
-SYSTEM DROP  TABLE insert_dedup_token1 SYNC;
+DROP TABLE insert_dedup_token1;
 
-SYSTEM DROP  TABLE insert_dedup_token2 SYNC;
+DROP TABLE insert_dedup_token2;

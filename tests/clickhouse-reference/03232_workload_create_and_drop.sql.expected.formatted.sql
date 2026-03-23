@@ -13,8 +13,8 @@ CREATE WORKLOAD IF NOT EXISTS production IN `all`;
 
 CREATE WORKLOAD development IN `all`;
 
-SYSTEM DROP  WORKLOAD IF EXISTS production;
+DROP WORKLOAD IF EXISTS production;
 
-SYSTEM DROP  WORKLOAD development;
+DROP WORKLOAD development;
 
-SYSTEM DROP  WORKLOAD all;
+DROP WORKLOAD all;

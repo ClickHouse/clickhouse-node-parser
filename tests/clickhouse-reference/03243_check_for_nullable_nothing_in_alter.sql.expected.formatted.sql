@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists src;
+DROP TABLE IF EXISTS src;
 
-SYSTEM drop  table if exists dst;
+DROP TABLE IF EXISTS dst;
 
-SYSTEM drop  view if exists v;
+DROP VIEW IF EXISTS v;
 
 CREATE TABLE src
 (
@@ -22,8 +22,8 @@ AS
 SELECT x
 FROM src;
 
-SYSTEM drop  view v;
+DROP VIEW v;
 
-SYSTEM drop  table dst;
+DROP TABLE dst;
 
-SYSTEM drop  table src;
+DROP TABLE src;

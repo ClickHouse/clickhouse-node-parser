@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tsv_raw;
+DROP TABLE IF EXISTS tsv_raw;
 
 CREATE TABLE tsv_raw
 (
@@ -17,4 +17,4 @@ SELECT *
 FROM tsv_raw
 FORMAT JSONCompactEachRow;
 
-SYSTEM drop  table tsv_raw;
+DROP TABLE tsv_raw;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_replacing;
+DROP TABLE IF EXISTS t_lwu_replacing;
 
 CREATE TABLE t_lwu_replacing
 (

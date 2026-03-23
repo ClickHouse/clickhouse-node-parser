@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS spark_bar_test;
+DROP TABLE IF EXISTS spark_bar_test;
 
 CREATE TABLE spark_bar_test
 (

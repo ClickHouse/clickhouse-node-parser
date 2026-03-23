@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists x;
+DROP TABLE IF EXISTS x;
 
 CREATE TABLE x
 (
@@ -9,4 +9,4 @@ ORDER BY tuple();
 
 INSERT INTO x;
 
-SYSTEM drop  table x;
+DROP TABLE x;

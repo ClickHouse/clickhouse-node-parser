@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_sample_factor;
+DROP TABLE IF EXISTS t_sample_factor;
 
 CREATE TABLE t_sample_factor
 (
@@ -22,4 +22,4 @@ SELECT uniq(b) * any(_sample_factor)
 FROM t_sample_factor SAMPLE 200000
 PREWHERE a < -1;
 
-SYSTEM DROP  TABLE t_sample_factor;
+DROP TABLE t_sample_factor;

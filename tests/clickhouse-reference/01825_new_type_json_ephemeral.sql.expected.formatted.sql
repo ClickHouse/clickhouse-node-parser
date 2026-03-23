@@ -1,6 +1,6 @@
 SET enable_json_type = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_github_json;
+DROP TABLE IF EXISTS t_github_json;
 
 CREATE TABLE t_github_json
 (
@@ -14,4 +14,4 @@ ORDER BY (event_type, repo_name);
 
 INSERT INTO t_github_json (message_raw);
 
-SYSTEM DROP  TABLE t_github_json;
+DROP TABLE t_github_json;

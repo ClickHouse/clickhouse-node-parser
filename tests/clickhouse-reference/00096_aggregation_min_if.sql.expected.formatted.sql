@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS min_if;
+DROP TABLE IF EXISTS min_if;
 
 CREATE TABLE min_if
 (
@@ -29,4 +29,4 @@ FROM min_if;
 SELECT minIf(int, int != 0)
 FROM min_if;
 
-SYSTEM DROP  TABLE min_if;
+DROP TABLE min_if;

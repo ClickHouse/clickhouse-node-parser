@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -61,4 +61,4 @@ CROSS JOIN (
 CROSS JOIN t1 AS t2
 CROSS JOIN t2 AS t3;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

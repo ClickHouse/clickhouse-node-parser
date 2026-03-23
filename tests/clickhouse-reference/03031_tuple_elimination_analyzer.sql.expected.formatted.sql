@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 SET allow_suspicious_low_cardinality_types = true, enable_analyzer = true;
 
@@ -13,4 +13,4 @@ SELECT 0;
 SELECT tuple(tuple(id) = tuple(1048576))
 FROM test;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

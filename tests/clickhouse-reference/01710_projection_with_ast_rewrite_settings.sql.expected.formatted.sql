@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS aggregate_functions_null_for_empty;
+DROP TABLE IF EXISTS aggregate_functions_null_for_empty;
 
 CREATE TABLE aggregate_functions_null_for_empty
 (
@@ -18,9 +18,9 @@ SETTINGS aggregate_functions_null_for_empty = true;
 SELECT count()
 FROM aggregate_functions_null_for_empty;
 
-SYSTEM DROP  TABLE aggregate_functions_null_for_empty;
+DROP TABLE aggregate_functions_null_for_empty;
 
-SYSTEM DROP  TABLE IF EXISTS transform_null_in;
+DROP TABLE IF EXISTS transform_null_in;
 
 CREATE TABLE transform_null_in
 (
@@ -40,9 +40,9 @@ SETTINGS transform_null_in = true;
 SELECT count()
 FROM transform_null_in;
 
-SYSTEM DROP  TABLE transform_null_in;
+DROP TABLE transform_null_in;
 
-SYSTEM DROP  TABLE IF EXISTS legacy_column_name_of_tuple_literal;
+DROP TABLE IF EXISTS legacy_column_name_of_tuple_literal;
 
 CREATE TABLE legacy_column_name_of_tuple_literal
 (
@@ -62,4 +62,4 @@ SETTINGS legacy_column_name_of_tuple_literal = true;
 SELECT count()
 FROM legacy_column_name_of_tuple_literal;
 
-SYSTEM DROP  TABLE legacy_column_name_of_tuple_literal;
+DROP TABLE legacy_column_name_of_tuple_literal;

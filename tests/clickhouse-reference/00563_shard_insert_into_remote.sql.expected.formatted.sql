@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -18,4 +18,4 @@ SELECT *
 FROM tab
 ORDER BY val ASC;
 
-SYSTEM drop  table tab;
+DROP TABLE tab;

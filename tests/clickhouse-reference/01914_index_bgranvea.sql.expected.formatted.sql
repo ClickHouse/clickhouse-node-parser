@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -23,4 +23,4 @@ FROM test
 WHERE insid IN (1)
     AND insidvalue IN (1);
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

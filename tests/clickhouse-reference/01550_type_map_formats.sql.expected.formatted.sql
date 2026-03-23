@@ -3,7 +3,7 @@ SET output_format_write_statistics = 0;
 
 SET output_format_json_pretty_print = 0;
 
-SYSTEM DROP  TABLE IF EXISTS map_formats;
+DROP TABLE IF EXISTS map_formats;
 
 CREATE TABLE map_formats
 (
@@ -42,4 +42,4 @@ FROM map_formats
 ORDER BY m['k1'] ASC
 FORMAT TSKV;
 
-SYSTEM DROP  TABLE map_formats;
+DROP TABLE map_formats;

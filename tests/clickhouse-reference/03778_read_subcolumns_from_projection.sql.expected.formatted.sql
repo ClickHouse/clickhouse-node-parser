@@ -2,7 +2,7 @@
 -- Tag no-parallel-replicas: output of explain is different
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -35,4 +35,4 @@ FROM test
 WHERE x = 'x_1'
     AND y.s = 'y_1';
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS limited_merge_table;
+DROP TABLE IF EXISTS limited_merge_table;
 
 SET max_threads = 1;
 

@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS tmp_01781;
+DROP TABLE IF EXISTS tmp_01781;
 
-SYSTEM DROP  TABLE IF EXISTS dist_01781;
+DROP TABLE IF EXISTS dist_01781;
 
 SET prefer_localhost_replica = 0;
 
@@ -26,6 +26,6 @@ FROM numbers(1000);
 
 SET distributed_foreground_insert = 0;
 
-SYSTEM DROP  TABLE tmp_01781;
+DROP TABLE tmp_01781;
 
-SYSTEM DROP  TABLE dist_01781;
+DROP TABLE dist_01781;

@@ -1,5 +1,5 @@
 -- Test Array empty (size0 substream)
-SYSTEM drop  table if exists test_empty_array;
+DROP TABLE IF EXISTS test_empty_array;
 
 CREATE TABLE test_empty_array
 (
@@ -28,7 +28,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Array notEmpty (size0 substream)
-SYSTEM drop  table if exists test_notempty_array;
+DROP TABLE IF EXISTS test_notempty_array;
 
 CREATE TABLE test_notempty_array
 (
@@ -57,7 +57,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Array length (size0 substream)
-SYSTEM drop  table if exists test_length_array;
+DROP TABLE IF EXISTS test_length_array;
 
 CREATE TABLE test_length_array
 (
@@ -88,7 +88,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test String empty (size substream)
-SYSTEM drop  table if exists test_empty_string;
+DROP TABLE IF EXISTS test_empty_string;
 
 CREATE TABLE test_empty_string
 (
@@ -117,7 +117,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test String notEmpty (size substream)
-SYSTEM drop  table if exists test_notempty_string;
+DROP TABLE IF EXISTS test_notempty_string;
 
 CREATE TABLE test_notempty_string
 (
@@ -146,7 +146,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test String length (size substream)
-SYSTEM drop  table if exists test_length_string;
+DROP TABLE IF EXISTS test_length_string;
 
 CREATE TABLE test_length_string
 (
@@ -177,7 +177,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Map empty (size0 substream)
-SYSTEM drop  table if exists test_empty_map;
+DROP TABLE IF EXISTS test_empty_map;
 
 CREATE TABLE test_empty_map
 (
@@ -206,7 +206,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Map notEmpty (size0 substream)
-SYSTEM drop  table if exists test_notempty_map;
+DROP TABLE IF EXISTS test_notempty_map;
 
 CREATE TABLE test_notempty_map
 (
@@ -235,7 +235,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Map length (size0 substream)
-SYSTEM drop  table if exists test_length_map;
+DROP TABLE IF EXISTS test_length_map;
 
 CREATE TABLE test_length_map
 (
@@ -266,7 +266,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Map mapKeys (keys substream)
-SYSTEM drop  table if exists test_mapkeys;
+DROP TABLE IF EXISTS test_mapkeys;
 
 CREATE TABLE test_mapkeys
 (
@@ -278,7 +278,7 @@ ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 
 -- Test Map mapValues (values substream)
-SYSTEM drop  table if exists test_mapvalues;
+DROP TABLE IF EXISTS test_mapvalues;
 
 CREATE TABLE test_mapvalues
 (
@@ -290,7 +290,7 @@ ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 
 -- Test Map mapContainsKey (keys substream)
-SYSTEM drop  table if exists test_mapcontainskey;
+DROP TABLE IF EXISTS test_mapcontainskey;
 
 CREATE TABLE test_mapcontainskey
 (
@@ -302,7 +302,7 @@ ENGINE = MergeTree
 ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 
 -- Test Nullable isNull (null substream)
-SYSTEM drop  table if exists test_isnull;
+DROP TABLE IF EXISTS test_isnull;
 
 CREATE TABLE test_isnull
 (
@@ -331,7 +331,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Nullable isNotNull (null substream)
-SYSTEM drop  table if exists test_isnotnull;
+DROP TABLE IF EXISTS test_isnotnull;
 
 CREATE TABLE test_isnotnull
 (
@@ -360,7 +360,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Nullable count (null substream)
-SYSTEM drop  table if exists test_count_nullable;
+DROP TABLE IF EXISTS test_count_nullable;
 
 CREATE TABLE test_count_nullable
 (
@@ -392,7 +392,7 @@ SETTINGS optimize_functions_to_subcolumns = 0;
 
 -- { echoOff }
 -- Test Tuple tupleElement (named subcolumn)
-SYSTEM drop  table if exists test_tupleelement;
+DROP TABLE IF EXISTS test_tupleelement;
 
 CREATE TABLE test_tupleelement
 (

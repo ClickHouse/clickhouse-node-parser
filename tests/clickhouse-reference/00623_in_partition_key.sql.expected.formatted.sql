@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test54378;
+DROP TABLE IF EXISTS test54378;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -242,4 +242,4 @@ WHERE date IN (
         SELECT toDate('2018-04-19')
     );
 
-SYSTEM drop  table test54378;
+DROP TABLE test54378;

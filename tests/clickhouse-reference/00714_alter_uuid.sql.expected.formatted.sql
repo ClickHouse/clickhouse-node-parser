@@ -14,7 +14,7 @@ SELECT
     toFixedString('00000000-0000-04f8-9cb8-cb1b82fb3900', 36) AS str,
     CAST(str, 'UUID');
 
-SYSTEM DROP  TABLE IF EXISTS uuid;
+DROP TABLE IF EXISTS uuid;
 
 CREATE TABLE IF NOT EXISTS uuid
 (
@@ -38,7 +38,7 @@ SELECT
     toTypeName(id1)
 FROM uuid;
 
-SYSTEM DROP  TABLE uuid;
+DROP TABLE uuid;
 
 -- with UUID in key
 CREATE TABLE IF NOT EXISTS uuid

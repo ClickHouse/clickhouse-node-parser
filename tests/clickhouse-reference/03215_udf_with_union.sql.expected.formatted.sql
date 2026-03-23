@@ -1,4 +1,4 @@
-SYSTEM DROP  FUNCTION IF EXISTS 03215_udf_with_union;
+DROP FUNCTION IF EXISTS `03215_udf_with_union`;
 
 CREATE FUNCTION `03215_udf_with_union` AS () -> (
     SELECT sum(s)
@@ -11,4 +11,4 @@ CREATE FUNCTION `03215_udf_with_union` AS () -> (
 
 SELECT `03215_udf_with_union`();
 
-SYSTEM DROP  FUNCTION 03215_udf_with_union;
+DROP FUNCTION `03215_udf_with_union`;

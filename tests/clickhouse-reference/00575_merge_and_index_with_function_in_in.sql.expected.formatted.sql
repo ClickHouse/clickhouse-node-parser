@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_00575;
+DROP TABLE IF EXISTS t_00575;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -14,4 +14,4 @@ SELECT count()
 FROM t_00575
 WHERE toDayOfWeek(d) IN (2);
 
-SYSTEM DROP  TABLE t_00575;
+DROP TABLE t_00575;

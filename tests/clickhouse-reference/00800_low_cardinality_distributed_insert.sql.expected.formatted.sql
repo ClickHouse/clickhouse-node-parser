@@ -1,9 +1,9 @@
 -- Tags: distributed
 SET distributed_foreground_insert = 1;
 
-SYSTEM DROP  TABLE IF EXISTS low_cardinality;
+DROP TABLE IF EXISTS low_cardinality;
 
-SYSTEM DROP  TABLE IF EXISTS low_cardinality_all;
+DROP TABLE IF EXISTS low_cardinality_all;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

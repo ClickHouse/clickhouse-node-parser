@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM drop  table if exists s;
+DROP TABLE IF EXISTS s;
 
-SYSTEM drop  table if exists y;
+DROP TABLE IF EXISTS y;
 
 CREATE TABLE t
 (
@@ -88,8 +88,8 @@ LEFT JOIN y
 GROUP BY t.a
 ORDER BY t.a ASC;
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table s;
+DROP TABLE s;
 
-SYSTEM drop  table y;
+DROP TABLE y;

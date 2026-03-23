@@ -1,8 +1,8 @@
 SET enable_json_type = 1, type_json_skip_duplicated_paths = 1, allow_simdjson = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t0
 (
@@ -67,6 +67,6 @@ FROM
 CROSS JOIN t0
 FORMAT Null;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

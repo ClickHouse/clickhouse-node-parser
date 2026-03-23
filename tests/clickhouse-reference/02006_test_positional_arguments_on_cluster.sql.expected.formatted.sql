@@ -1,7 +1,7 @@
 -- Tags: no-ordinary-database, no-replicated-database, distributed, zookeeper
-SYSTEM DROP  TABLE IF EXISTS t02006 on cluster test_shard_localhost format Null;
+DROP TABLE IF EXISTS t02006 ON CLUSTER test_shard_localhost FORMAT Null;
 
-SYSTEM DROP  TABLE IF EXISTS m02006 on cluster test_shard_localhost format Null;
+DROP TABLE IF EXISTS m02006 ON CLUSTER test_shard_localhost FORMAT Null;
 
 CREATE TABLE t02006 ON CLUSTER test_shard_localhost
 (
@@ -24,7 +24,7 @@ GROUP BY
     i
 FORMAT Null;
 
-SYSTEM DROP  TABLE IF EXISTS tt02006 on cluster test_shard_localhost format Null;
+DROP TABLE IF EXISTS tt02006 ON CLUSTER test_shard_localhost FORMAT Null;
 
 SET enable_analyzer = 1;
 

@@ -2,7 +2,7 @@
 -- "Not found column in block" error. The issue was that MergeTreeIndexConditionSet
 -- created duplicate INPUT nodes with the same name, and ExpressionActions only
 -- mapped the first one, leaving subsequent ones unmapped.
-SYSTEM DROP  TABLE IF EXISTS test_set_index_multiple_conditions;
+DROP TABLE IF EXISTS test_set_index_multiple_conditions;
 
 CREATE TABLE test_set_index_multiple_conditions
 (
@@ -50,4 +50,4 @@ WHERE (has(mapKeys(labels), 'a')
     OR has(mapKeys(labels), 'c')
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE test_set_index_multiple_conditions;
+DROP TABLE test_set_index_multiple_conditions;

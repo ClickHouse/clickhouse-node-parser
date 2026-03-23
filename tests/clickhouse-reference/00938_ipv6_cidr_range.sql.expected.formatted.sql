@@ -6,7 +6,7 @@ SELECT IPv6CIDRToRange(toFixedString('1234', 10), 1); -- { serverError ILLEGAL_T
 
 SELECT IPv6CIDRToRange(toFixedString('1234', 16), toUInt16(1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SYSTEM DROP  TABLE IF EXISTS ipv6_range;
+DROP TABLE IF EXISTS ipv6_range;
 
 CREATE TABLE ipv6_range
 (
@@ -23,7 +23,7 @@ SELECT
     IPv6CIDRToRange(ip, cidr)
 FROM ipv6_range;
 
-SYSTEM DROP  TABLE ipv6_range;
+DROP TABLE ipv6_range;
 
 SELECT IPv6CIDRToRange(IPv6StringToNum('2001:0db8:0000:85a3:0000:0000:ac1f:8001'), 0);
 

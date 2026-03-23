@@ -6,7 +6,7 @@ SET use_query_condition_cache = 1;
 
 -- Tests a bug that the direct read optimization (text index) returned wrong results
 -- when the query condition cache is enabled.
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -31,4 +31,4 @@ SELECT groupArray(id)
 FROM tab
 WHERE hasAnyTokens(message, ['foo']);
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,15 +1,15 @@
 -- Tags: no-random-merge-tree-settings
-SYSTEM DROP  TABLE IF EXISTS data;
+DROP TABLE IF EXISTS data;
 
-SYSTEM DROP  TABLE IF EXISTS mv_indexes;
+DROP TABLE IF EXISTS mv_indexes;
 
-SYSTEM DROP  TABLE IF EXISTS mv_no_indexes;
+DROP TABLE IF EXISTS mv_no_indexes;
 
-SYSTEM DROP  TABLE IF EXISTS mv_projections;
+DROP TABLE IF EXISTS mv_projections;
 
-SYSTEM DROP  TABLE IF EXISTS mv_primary_key;
+DROP TABLE IF EXISTS mv_primary_key;
 
-SYSTEM DROP  TABLE IF EXISTS mv_primary_key_from_column;
+DROP TABLE IF EXISTS mv_primary_key_from_column;
 
 CREATE TABLE data
 (

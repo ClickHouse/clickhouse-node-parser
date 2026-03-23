@@ -3,7 +3,7 @@ SET automatic_parallel_replicas_mode = 0;
 
 SET enable_analyzer = 1;
 
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

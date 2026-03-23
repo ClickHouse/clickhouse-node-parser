@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists table_02152;
+DROP TABLE IF EXISTS table_02152;
 
 CREATE TABLE table_02152
 (

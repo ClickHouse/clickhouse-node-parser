@@ -4,7 +4,7 @@
 -- there are excessive flushes 5 seconds should be enough to catch them.
 SET function_sleep_max_microseconds_per_block = 5e9;
 
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (
@@ -12,7 +12,7 @@ CREATE TABLE data
 )
 ENGINE = Null;
 
-SYSTEM drop  table if exists empty_buffer;
+DROP TABLE IF EXISTS empty_buffer;
 
 CREATE TABLE empty_buffer
 (
@@ -23,9 +23,9 @@ ENGINE = Buffer(currentDatabase(), data, 2, 2, 4, 100000, 1000000, 10e9, 10e9, 3
 SELECT sleep(5)
 FORMAT Null;
 
-SYSTEM drop  table empty_buffer;
+DROP TABLE empty_buffer;
 
-SYSTEM drop  table if exists empty_buffer_zero_time;
+DROP TABLE IF EXISTS empty_buffer_zero_time;
 
 CREATE TABLE empty_buffer_zero_time
 (
@@ -36,9 +36,9 @@ ENGINE = Buffer(currentDatabase(), data, 2, 0, 0, 100000, 1000000, 10e9, 10e9, 0
 SELECT sleep(1)
 FORMAT Null;
 
-SYSTEM drop  table empty_buffer_zero_time;
+DROP TABLE empty_buffer_zero_time;
 
-SYSTEM drop  table if exists buffer_flush_by_min;
+DROP TABLE IF EXISTS buffer_flush_by_min;
 
 CREATE TABLE buffer_flush_by_min
 (
@@ -49,9 +49,9 @@ ENGINE = Buffer(currentDatabase(), data, 2, 2, 4, 100000, 1000000, 0, 10e9, 3);
 INSERT INTO buffer_flush_by_min SELECT *
 FROM numbers(100000 + 1);
 
-SYSTEM drop  table buffer_flush_by_min;
+DROP TABLE buffer_flush_by_min;
 
-SYSTEM drop  table if exists buffer_flush_by_max;
+DROP TABLE IF EXISTS buffer_flush_by_max;
 
 CREATE TABLE buffer_flush_by_max
 (
@@ -62,9 +62,9 @@ ENGINE = Buffer(currentDatabase(), data, 2, 2, 4, 100000, 1000000, 0, 10e9);
 INSERT INTO buffer_flush_by_max SELECT *
 FROM numbers(1);
 
-SYSTEM drop  table buffer_flush_by_max;
+DROP TABLE buffer_flush_by_max;
 
-SYSTEM drop  table if exists buffer_flush_by_flush_time;
+DROP TABLE IF EXISTS buffer_flush_by_flush_time;
 
 CREATE TABLE buffer_flush_by_flush_time
 (
@@ -74,7 +74,7 @@ ENGINE = Buffer(currentDatabase(), data, 2, 2, 4, 100000, 1000000, 10e9, 10e9, 3
 
 INSERT INTO buffer_flush_by_flush_time;
 
-SYSTEM drop  table buffer_flush_by_flush_time;
+DROP TABLE buffer_flush_by_flush_time;
 
 -- to avoid flakiness we only check that number of logs < 20, instead of some strict values
 SELECT

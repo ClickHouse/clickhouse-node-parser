@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS numbers_10_00290;
+DROP TABLE IF EXISTS numbers_10_00290;
 
 SET max_block_size = 1000;
 
@@ -18,4 +18,4 @@ GROUP BY k
 ORDER BY k ASC
 LIMIT 10;
 
-SYSTEM DROP  TABLE numbers_10_00290;
+DROP TABLE numbers_10_00290;

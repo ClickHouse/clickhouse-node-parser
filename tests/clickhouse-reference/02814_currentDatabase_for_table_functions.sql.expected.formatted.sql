@@ -1,13 +1,13 @@
 -- Based on https://github.com/ClickHouse/ClickHouse/issues/52436
 -- Test that inserts performed via Buffer table engine land into destination table.
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS null_table;
+DROP TABLE IF EXISTS null_table;
 
-SYSTEM DROP  TABLE IF EXISTS null_table_buffer;
+DROP TABLE IF EXISTS null_table_buffer;
 
-SYSTEM DROP  TABLE IF EXISTS null_mv;
+DROP TABLE IF EXISTS null_mv;
 
-SYSTEM DROP  VIEW IF EXISTS number_view;
+DROP VIEW IF EXISTS number_view;
 
 CREATE TABLE null_table
 (

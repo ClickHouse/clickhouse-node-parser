@@ -3,9 +3,9 @@ SET optimize_skip_unused_shards = 1;
 
 SET force_optimize_skip_unused_shards = 1;
 
-SYSTEM drop  table if exists d;
+DROP TABLE IF EXISTS d;
 
-SYSTEM drop  table if exists dp;
+DROP TABLE IF EXISTS dp;
 
 CREATE TABLE d
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS saved_intervals_tmp;
+DROP TABLE IF EXISTS saved_intervals_tmp;
 
 CREATE TABLE saved_intervals_tmp
 ENGINE = Memory AS
@@ -9,7 +9,7 @@ SELECT
     toIntervalNanosecond(number + 3) AS v3
 FROM numbers(2);
 
-SYSTEM DROP  TABLE IF EXISTS saved_intervals_mgt;
+DROP TABLE IF EXISTS saved_intervals_mgt;
 
 CREATE TABLE saved_intervals_mgt
 ENGINE = MergeTree()
@@ -21,7 +21,7 @@ SELECT
     toIntervalNanosecond(number + 3) AS v3
 FROM numbers(2);
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t1
 (

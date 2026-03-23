@@ -1,7 +1,7 @@
 -- Tags: no-parallel
 SET prefer_localhost_replica = 1;
 
-SYSTEM DROP  DATABASE IF EXISTS test_01457;
+DROP DATABASE IF EXISTS test_01457;
 
 CREATE DATABASE test_01457;
 
@@ -25,7 +25,7 @@ CREATE TABLE test_01457.tf_numbers
 
 CREATE TABLE test_01457.tf_merge AS merge(currentDatabase(), 'tmp');
 
-SYSTEM DROP  TABLE tmp;
+DROP TABLE tmp;
 
 -- To suppress "Structure does not match (...), implicit conversion will be done." message
 SET send_logs_level = 'error';
@@ -62,4 +62,4 @@ SELECT
     toTypeName(c)
 FROM test_01457.tf_merge;
 
-SYSTEM DROP  DATABASE test_01457;
+DROP DATABASE test_01457;

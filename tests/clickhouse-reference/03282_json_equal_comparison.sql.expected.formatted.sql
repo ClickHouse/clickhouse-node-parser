@@ -18,4 +18,4 @@ SELECT
     json1 != json2
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS table_a;
+DROP TABLE IF EXISTS table_a;
 
-SYSTEM DROP  TABLE IF EXISTS table_b;
+DROP TABLE IF EXISTS table_b;
 
 CREATE TABLE table_a
 (
@@ -135,6 +135,6 @@ ORDER BY
     count_a DESC,
     something DESC;
 
-SYSTEM DROP  TABLE table_a;
+DROP TABLE table_a;
 
-SYSTEM DROP  TABLE table_b;
+DROP TABLE table_b;

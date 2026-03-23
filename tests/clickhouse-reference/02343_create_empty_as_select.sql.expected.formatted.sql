@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM drop  table if exists mv;
+DROP TABLE IF EXISTS mv;
 
 CREATE TABLE t
 ENGINE = Memory
@@ -19,6 +19,6 @@ SELECT 1;
 SELECT count()
 FROM mv;
 
-SYSTEM drop  table t;
+DROP TABLE t;
 
-SYSTEM drop  table mv;
+DROP TABLE mv;

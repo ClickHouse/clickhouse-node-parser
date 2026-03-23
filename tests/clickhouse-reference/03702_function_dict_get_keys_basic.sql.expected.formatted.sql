@@ -1,6 +1,6 @@
-SYSTEM DROP  DICTIONARY IF EXISTS dict_neg;
+DROP DICTIONARY IF EXISTS dict_neg;
 
-SYSTEM DROP  TABLE IF EXISTS dict_src_neg;
+DROP TABLE IF EXISTS dict_src_neg;
 
 CREATE TABLE dict_src_neg
 (
@@ -44,9 +44,9 @@ FROM numbers(3); -- { serverError BAD_ARGUMENTS }
 SELECT dictGetKeys('dict_neg', 'not_a_attr_col', tuple(number))
 FROM numbers(3); -- { serverError ILLEGAL_COLUMN }
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_simple_kv;
+DROP DICTIONARY IF EXISTS dict_simple_kv;
 
-SYSTEM DROP  TABLE IF EXISTS dict_src_simple_kv;
+DROP TABLE IF EXISTS dict_src_simple_kv;
 
 CREATE TABLE dict_src_simple_kv
 (
@@ -71,9 +71,9 @@ SELECT dictGetKeys('dict_simple_kv', 'attr', toUInt32(10));
 
 SELECT toTypeName(dictGetKeys('dict_simple_kv', 'attr', toUInt32(10)));
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_complex2_kv;
+DROP DICTIONARY IF EXISTS dict_complex2_kv;
 
-SYSTEM DROP  TABLE IF EXISTS dict_src_complex2_kv;
+DROP TABLE IF EXISTS dict_src_complex2_kv;
 
 CREATE TABLE dict_src_complex2_kv
 (
@@ -100,9 +100,9 @@ SELECT dictGetKeys('dict_complex2_kv', 'attr', 10);
 
 SELECT toTypeName(dictGetKeys('dict_complex2_kv', 'attr', 10));
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_complex1_kv;
+DROP DICTIONARY IF EXISTS dict_complex1_kv;
 
-SYSTEM DROP  TABLE IF EXISTS dict_src_complex1_kv;
+DROP TABLE IF EXISTS dict_src_complex1_kv;
 
 CREATE TABLE dict_src_complex1_kv
 (
@@ -127,9 +127,9 @@ SELECT dictGetKeys('dict_complex1_kv', 'attr', 1);
 
 SELECT toTypeName(dictGetKeys('dict_complex1_kv', 'attr', 1));
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_complex_wide_kv;
+DROP DICTIONARY IF EXISTS dict_complex_wide_kv;
 
-SYSTEM DROP  TABLE IF EXISTS dict_src_complex_wide_kv;
+DROP TABLE IF EXISTS dict_src_complex_wide_kv;
 
 CREATE TABLE dict_src_complex_wide_kv
 (
@@ -168,9 +168,9 @@ SELECT dictGetKeys('dict_complex_wide_kv', 'attr', 10);
 
 SELECT toTypeName(dictGetKeys('dict_complex_wide_kv', 'attr', 10));
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_types;
+DROP DICTIONARY IF EXISTS dict_types;
 
-SYSTEM DROP  TABLE IF EXISTS dict_src_types;
+DROP TABLE IF EXISTS dict_src_types;
 
 CREATE TABLE dict_src_types
 (
@@ -289,9 +289,9 @@ SELECT dictGetKeys('dict_types', 'dec32', '1.234');
 
 SELECT dictGetKeys('dict_types', 'dec64', '42.500');
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_valexpr;
+DROP DICTIONARY IF EXISTS dict_valexpr;
 
-SYSTEM DROP  TABLE IF EXISTS dict_src_valexpr;
+DROP TABLE IF EXISTS dict_src_valexpr;
 
 CREATE TABLE dict_src_valexpr
 (
@@ -349,9 +349,9 @@ FROM (
 
 SELECT dictGetKeys('dict_valexpr', 'u64', '42');
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict_match;
+DROP DICTIONARY IF EXISTS dict_match;
 
-SYSTEM DROP  TABLE IF EXISTS dict_src_match;
+DROP TABLE IF EXISTS dict_src_match;
 
 CREATE TABLE dict_src_match
 (

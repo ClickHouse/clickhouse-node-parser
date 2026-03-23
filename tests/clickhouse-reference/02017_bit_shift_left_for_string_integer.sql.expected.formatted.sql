@@ -442,7 +442,7 @@ SELECT
     toFixedString('Hello', 10),
     bin(bitShiftLeft(toFixedString('Hello', 10), 80));
 
-SYSTEM DROP  TABLE IF EXISTS test_bit_shift_left_string_integer;
+DROP TABLE IF EXISTS test_bit_shift_left_string_integer;
 
 CREATE TABLE test_bit_shift_left_string_integer
 (

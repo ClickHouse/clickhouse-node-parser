@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM drop  database if exists db_01501;
+DROP DATABASE IF EXISTS db_01501;
 
 CREATE DATABASE db_01501;
 
@@ -110,6 +110,6 @@ FROM numbers(10);
 SELECT groupArray(dictHas('db_01501.cache_dict', toUInt64(number)))
 FROM numbers(10);
 
-SYSTEM drop  dictionary db_01501.cache_dict;
+DROP DICTIONARY db_01501.cache_dict;
 
-SYSTEM drop  table db_01501.table_cache_dict;
+DROP TABLE db_01501.table_cache_dict;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_having;
+DROP TABLE IF EXISTS t_having;
 
 CREATE TABLE t_having
 (
@@ -68,7 +68,7 @@ FROM t_having
 GROUP BY c0
 HAVING c0 = 0;
 
-SYSTEM DROP  TABLE t_having;
+DROP TABLE t_having;
 
 CREATE TABLE t_exact
 (
@@ -87,7 +87,7 @@ GROUP BY
     c0
 HAVING c0;
 
-SYSTEM DROP  TABLE t_exact;
+DROP TABLE t_exact;
 
 SELECT 1
 FROM remote('127.0.0.{1,1}')

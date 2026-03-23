@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM drop  table if exists x;
+DROP TABLE IF EXISTS x;
 
 CREATE TABLE x
 (
@@ -22,7 +22,7 @@ SELECT i
 FROM x
 WHERE i = 42;
 
-SYSTEM drop  table x;
+DROP TABLE x;
 
 CREATE TABLE x
 (

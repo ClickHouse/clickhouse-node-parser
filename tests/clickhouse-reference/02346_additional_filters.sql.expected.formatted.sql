@@ -1,11 +1,11 @@
 -- Tags: distributed
-SYSTEM drop  table if exists table_1;
+DROP TABLE IF EXISTS table_1;
 
-SYSTEM drop  table if exists table_2;
+DROP TABLE IF EXISTS table_2;
 
-SYSTEM drop  table if exists v_numbers;
+DROP TABLE IF EXISTS v_numbers;
 
-SYSTEM drop  table if exists mv_table;
+DROP TABLE IF EXISTS mv_table;
 
 SET max_rows_to_read = 0;
 

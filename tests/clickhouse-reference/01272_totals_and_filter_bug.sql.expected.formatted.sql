@@ -59,6 +59,6 @@ FULL JOIN (
 WHERE sum_metric_2 < 20
 ORDER BY dimension_1 ASC;
 
-SYSTEM DROP  TABLE foo;
+DROP TABLE foo;
 
-SYSTEM DROP  TABLE bar;
+DROP TABLE bar;

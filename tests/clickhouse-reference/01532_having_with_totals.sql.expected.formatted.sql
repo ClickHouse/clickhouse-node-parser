@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists local_t;
+DROP TABLE IF EXISTS local_t;
 
 CREATE TABLE local_t
 ENGINE = Log AS

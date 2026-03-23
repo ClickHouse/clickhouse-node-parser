@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS bloom_filter;
+DROP TABLE IF EXISTS bloom_filter;
 
 CREATE TABLE bloom_filter
 (
@@ -47,7 +47,7 @@ FROM bloom_filter
 WHERE hasTokenCaseInsensitiveOrNull(s, 'abc,def,zzz');
 
 -- as table "bloom_filter" but w/o index_granularity_bytes
-SYSTEM drop  table if exists bloom_filter2;
+DROP TABLE IF EXISTS bloom_filter2;
 
 CREATE TABLE bloom_filter2
 (
@@ -130,7 +130,7 @@ SELECT max(id)
 FROM bloom_filter
 WHERE hasToken(s, 'zzz') == 1; -- { serverError TOO_MANY_ROWS }
 
-SYSTEM DROP  TABLE bloom_filter;
+DROP TABLE bloom_filter;
 
 -- AST fuzzer crash, issue #54541
 CREATE TABLE tab
@@ -149,4 +149,4 @@ FROM tab
 WHERE str == 'else'
     AND 1.0;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -10,7 +10,7 @@ SELECT arraySlice(materialize([1, 2, 3, 4, 5, 6, 7, 8]), -2, -1);
 
 SELECT arraySlice(materialize([1, 2, 3, 4, 5, 6, 7, 8]), materialize(-2), materialize(-1));
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -34,4 +34,4 @@ FROM t;
 SELECT arraySlice(s, l, r)
 FROM t;
 
-SYSTEM drop  table t;
+DROP TABLE t;

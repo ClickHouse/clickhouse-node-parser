@@ -1,6 +1,6 @@
 SET allow_experimental_parallel_reading_from_replicas = 1, parallel_replicas_for_non_replicated_merge_tree = 1, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
 
-SYSTEM drop  table if exists 03581_data;
+DROP TABLE IF EXISTS `03581_data`;
 
 CREATE TABLE `03581_data`
 (
@@ -45,4 +45,4 @@ WHERE current_database = currentDatabase()
     AND ilike(query, '% from 03581_data where %')
 ORDER BY event_time_microseconds DESC;
 
-SYSTEM drop  table 03581_data;
+DROP TABLE `03581_data`;

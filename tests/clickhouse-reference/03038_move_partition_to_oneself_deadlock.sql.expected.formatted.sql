@@ -1,6 +1,6 @@
 SET optimize_trivial_insert_select = 1;
 
-SYSTEM DROP  TABLE IF EXISTS move_partition_to_oneself;
+DROP TABLE IF EXISTS move_partition_to_oneself;
 
 CREATE TABLE move_partition_to_oneself
 (

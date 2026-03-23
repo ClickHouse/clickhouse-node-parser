@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -15,7 +15,7 @@ FROM (
         LIMIT 100
     );
 
-SYSTEM DROP  TABLE IF EXISTS test_table_2;
+DROP TABLE IF EXISTS test_table_2;
 
 CREATE TABLE test_table_2
 (

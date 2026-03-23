@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS LOG_T;
+DROP TABLE IF EXISTS LOG_T;
 
 CREATE TABLE LOG_T
 (
@@ -21,4 +21,4 @@ WHERE has(['node'], fields.value[indexOf(fields.name, 'ProcessName')]);
 
 INSERT INTO LOG_T;
 
-SYSTEM DROP  TABLE LOG_T;
+DROP TABLE LOG_T;

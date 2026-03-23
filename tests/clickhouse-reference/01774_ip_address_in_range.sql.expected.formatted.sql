@@ -6,7 +6,7 @@ SELECT isIPAddressInRange('ffff::1', 'ffff::/16');
 
 SELECT isIPAddressInRange('fffe::1', 'ffff::/16');
 
-SYSTEM DROP  TABLE IF EXISTS test_data;
+DROP TABLE IF EXISTS test_data;
 
 CREATE TABLE test_data
 (

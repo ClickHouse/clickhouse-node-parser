@@ -1,6 +1,6 @@
 SET date_time_output_format = 'iso';
 
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (

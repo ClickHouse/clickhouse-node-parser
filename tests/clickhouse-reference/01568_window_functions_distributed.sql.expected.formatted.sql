@@ -15,7 +15,7 @@ SELECT max(identity(dummy + 1)) OVER () AS x
 FROM remote('127.0.0.{1,2}', `system`, one)
 ORDER BY x ASC;
 
-SYSTEM drop  table if exists t_01568;
+DROP TABLE IF EXISTS t_01568;
 
 CREATE TABLE t_01568
 ENGINE = Memory AS
@@ -97,4 +97,4 @@ ORDER BY
     p ASC,
     o ASC;
 
-SYSTEM drop  table t_01568;
+DROP TABLE t_01568;

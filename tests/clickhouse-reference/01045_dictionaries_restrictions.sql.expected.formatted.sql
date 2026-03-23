@@ -11,4 +11,4 @@ LAYOUT(CACHE(SIZE_IN_CELLS 10));
 -- because of lazy load we can check only in dictGet query
 SELECT dictGetString(concat({CLICKHOUSE_DATABASE:String}, '.restricted_dict'), 'value', toUInt64(1)); -- {serverError DICTIONARY_ACCESS_DENIED}
 
-SYSTEM DROP  DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.restricted_dict;
+DROP DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.restricted_dict;

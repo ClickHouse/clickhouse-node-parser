@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists max_parts_in_total;
+DROP TABLE IF EXISTS max_parts_in_total;
 
 CREATE TABLE max_parts_in_total
 (
@@ -18,4 +18,4 @@ SELECT 1;
 
 INSERT INTO max_parts_in_total SELECT 123; -- { serverError TOO_MANY_PARTS }
 
-SYSTEM drop  table max_parts_in_total;
+DROP TABLE max_parts_in_total;

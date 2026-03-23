@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS locations;
+DROP TABLE IF EXISTS locations;
 
-SYSTEM DROP  TABLE IF EXISTS location_tags;
+DROP TABLE IF EXISTS location_tags;
 
 CREATE TABLE locations
 (

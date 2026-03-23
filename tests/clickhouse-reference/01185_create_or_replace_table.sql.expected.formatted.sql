@@ -1,5 +1,5 @@
 -- Tags: no-ordinary-database
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE OR REPLACE TABLE t1
 (
@@ -26,4 +26,4 @@ FROM t1;
 
 INSERT INTO t1;
 
-SYSTEM drop  table t1;
+DROP TABLE t1;

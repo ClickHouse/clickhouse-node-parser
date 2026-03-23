@@ -34,7 +34,7 @@ FROM (
     )
 GROUP BY x;
 
-SYSTEM DROP  TABLE IF EXISTS decimal;
+DROP TABLE IF EXISTS decimal;
 
 CREATE TABLE IF NOT EXISTS decimal
 (
@@ -70,4 +70,4 @@ FROM (
             B_str
     );
 
-SYSTEM DROP  TABLE decimal;
+DROP TABLE decimal;

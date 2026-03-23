@@ -4,9 +4,9 @@ SET use_compact_format_in_distributed_parts_names = 0;
 -- use async send even for localhost
 SET prefer_localhost_replica = 0;
 
-SYSTEM drop  table if exists dist_01555;
+DROP TABLE IF EXISTS dist_01555;
 
-SYSTEM drop  table if exists data_01555;
+DROP TABLE IF EXISTS data_01555;
 
 CREATE TABLE data_01555
 (
@@ -32,7 +32,7 @@ WHERE database = currentDatabase()
     AND table = 'dist_01555'
 FORMAT CSV;
 
-SYSTEM drop  table dist_01555;
+DROP TABLE dist_01555;
 
 CREATE TABLE dist_01555
 (
@@ -48,4 +48,4 @@ WHERE database = currentDatabase()
     AND table = 'dist_01555'
 FORMAT CSV;
 
-SYSTEM drop  table data_01555;
+DROP TABLE data_01555;

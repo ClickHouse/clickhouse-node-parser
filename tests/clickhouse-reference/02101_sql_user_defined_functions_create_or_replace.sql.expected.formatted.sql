@@ -9,4 +9,4 @@ SELECT `02101_test_function`(1);
 
 CREATE FUNCTION `02101_test_function` AS x -> x + 2;
 
-SYSTEM DROP  FUNCTION 02101_test_function;
+DROP FUNCTION `02101_test_function`;

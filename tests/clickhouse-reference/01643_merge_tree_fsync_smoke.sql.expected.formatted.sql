@@ -1,6 +1,6 @@
 -- Tags: no-object-storage, no-fasttest
 -- no-fasttest: It can be slow
-SYSTEM drop  table if exists data_01643;
+DROP TABLE IF EXISTS data_01643;
 
 CREATE TABLE data_01643
 (
@@ -14,7 +14,7 @@ INSERT INTO data_01643;
 SELECT *
 FROM data_01643;
 
-SYSTEM drop  table data_01643;
+DROP TABLE data_01643;
 
 CREATE TABLE data_01643
 (

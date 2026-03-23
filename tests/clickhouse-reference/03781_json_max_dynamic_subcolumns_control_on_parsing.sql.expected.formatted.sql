@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -15,4 +15,4 @@ SELECT DISTINCT (arrayJoin(JSONDynamicPaths(json))) AS path
 FROM test
 ORDER BY path ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

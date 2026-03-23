@@ -2,7 +2,7 @@
 -- add_minmax_index_for_numeric_columns=0: Changes plan
 -- EXPLAIN output may differ
 -- { echoOn }
-SYSTEM DROP  TABLE IF EXISTS test_has_skip_minmax;
+DROP TABLE IF EXISTS test_has_skip_minmax;
 
 CREATE TABLE test_has_skip_minmax
 (
@@ -21,7 +21,7 @@ INSERT INTO test_has_skip_minmax SELECT
     toString(number)
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_skip_set;
+DROP TABLE IF EXISTS test_has_skip_set;
 
 CREATE TABLE test_has_skip_set
 (
@@ -38,7 +38,7 @@ INSERT INTO test_has_skip_set SELECT
     now() - toIntervalMinute(number) AS event_time
 FROM numbers(100000);
 
-SYSTEM DROP  TABLE IF EXISTS test_has_skip_bloom;
+DROP TABLE IF EXISTS test_has_skip_bloom;
 
 CREATE TABLE test_has_skip_bloom
 (

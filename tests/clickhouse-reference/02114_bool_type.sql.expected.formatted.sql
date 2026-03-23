@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS bool_test;
+DROP TABLE IF EXISTS bool_test;
 
 CREATE TABLE bool_test
 (

@@ -1,7 +1,7 @@
 -- Tags: long, zookeeper
-SYSTEM DROP  TABLE IF EXISTS table_for_synchronous_mutations1;
+DROP TABLE IF EXISTS table_for_synchronous_mutations1;
 
-SYSTEM DROP  TABLE IF EXISTS table_for_synchronous_mutations2;
+DROP TABLE IF EXISTS table_for_synchronous_mutations2;
 
 CREATE TABLE table_for_synchronous_mutations1
 (
@@ -31,7 +31,7 @@ FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'table_for_synchronous_mutations1';
 
-SYSTEM DROP  TABLE IF EXISTS table_for_synchronous_mutations_no_replication;
+DROP TABLE IF EXISTS table_for_synchronous_mutations_no_replication;
 
 CREATE TABLE table_for_synchronous_mutations_no_replication
 (

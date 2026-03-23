@@ -1,9 +1,9 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/37729
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS nested_test;
+DROP TABLE IF EXISTS nested_test;
 
-SYSTEM DROP  TABLE IF EXISTS join_test;
+DROP TABLE IF EXISTS join_test;
 
 CREATE TABLE nested_test
 (

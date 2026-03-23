@@ -27,4 +27,4 @@ SETTINGS
     enable_analyzer = 1,
     optimize_injective_functions_in_group_by = 1;
 
-SYSTEM drop  table test;
+DROP TABLE test;

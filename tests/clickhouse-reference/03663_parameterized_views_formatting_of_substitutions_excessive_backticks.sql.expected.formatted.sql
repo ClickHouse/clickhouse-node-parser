@@ -1,4 +1,4 @@
-SYSTEM DROP  VIEW IF EXISTS audit_size_column;
+DROP VIEW IF EXISTS audit_size_column;
 
 CREATE VIEW audit_size_column
 AS
@@ -19,4 +19,4 @@ GROUP BY
     table,
     column;
 
-SYSTEM DROP  TABLE audit_size_column;
+DROP TABLE audit_size_column;

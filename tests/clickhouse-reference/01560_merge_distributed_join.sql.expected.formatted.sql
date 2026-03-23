@@ -1,12 +1,12 @@
 -- Tags: distributed
 -- test from https://github.com/ClickHouse/ClickHouse/issues/11755#issuecomment-700850254
-SYSTEM DROP  TABLE IF EXISTS cat_hist;
+DROP TABLE IF EXISTS cat_hist;
 
-SYSTEM DROP  TABLE IF EXISTS prod_hist;
+DROP TABLE IF EXISTS prod_hist;
 
-SYSTEM DROP  TABLE IF EXISTS products_l;
+DROP TABLE IF EXISTS products_l;
 
-SYSTEM DROP  TABLE IF EXISTS products;
+DROP TABLE IF EXISTS products;
 
 CREATE TABLE cat_hist
 (
@@ -41,10 +41,10 @@ FROM
 LEFT JOIN cat_hist AS c
     USING (categoryId);
 
-SYSTEM DROP  TABLE cat_hist;
+DROP TABLE cat_hist;
 
-SYSTEM DROP  TABLE prod_hist;
+DROP TABLE prod_hist;
 
-SYSTEM DROP  TABLE products_l;
+DROP TABLE products_l;
 
-SYSTEM DROP  TABLE products;
+DROP TABLE products;

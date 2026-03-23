@@ -1,7 +1,7 @@
 -- Tags: no-sanitizers, long
 -- no-sanitizers: too slow
 -- long: for flaky check
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 -- index_granularity: to be able to produce small blocks from reading
 CREATE TABLE t

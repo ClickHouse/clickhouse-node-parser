@@ -14,7 +14,7 @@ SELECT SVG([[(0., 0.), (10, 0), (10, 10), (0, 10)], [(4., 4.), (5, 4), (5, 5), (
 
 SELECT SVG([[[(0., 0.), (10, 0), (10, 10), (0, 10)], [(4., 4.), (5, 4), (5, 5), (4, 5)]], [[(-10., -10.), (-10, -9), (-9, 10)]]], 'b');
 
-SYSTEM DROP  TABLE IF EXISTS geo;
+DROP TABLE IF EXISTS geo;
 
 CREATE TABLE geo
 (
@@ -100,4 +100,4 @@ SELECT SVG([[[(0., 0.), (10, 0), (10, 10), (0, 10)], [(4., 4.), (5, 4), (5, 5), 
 FROM geo
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE geo;
+DROP TABLE geo;

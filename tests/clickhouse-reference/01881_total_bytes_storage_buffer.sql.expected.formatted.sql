@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_buffer_table;
+DROP TABLE IF EXISTS test_buffer_table;
 
 CREATE TABLE test_buffer_table
 (
@@ -14,4 +14,4 @@ WHERE name = 'test_buffer_table'
 INSERT INTO test_buffer_table SELECT number
 FROM numbers(1000);
 
-SYSTEM DROP  TABLE test_buffer_table;
+DROP TABLE test_buffer_table;

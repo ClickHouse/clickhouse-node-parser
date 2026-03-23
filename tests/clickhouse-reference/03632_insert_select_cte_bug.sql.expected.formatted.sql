@@ -4,7 +4,7 @@ SET parallel_distributed_insert_select = 2;
 
 SET enable_global_with_statement = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_insert SYNC;
+DROP TABLE IF EXISTS test_insert;
 
 CREATE TABLE test_insert
 (
@@ -26,4 +26,4 @@ FROM cte_test;
 SELECT count()
 FROM test_insert;
 
-SYSTEM DROP  TABLE test_insert;
+DROP TABLE test_insert;

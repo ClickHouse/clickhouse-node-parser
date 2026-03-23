@@ -1,11 +1,11 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS hits;
+DROP TABLE IF EXISTS hits;
 
-SYSTEM DROP  TABLE IF EXISTS visits;
+DROP TABLE IF EXISTS visits;
 
-SYSTEM DROP  TABLE IF EXISTS hits_layer;
+DROP TABLE IF EXISTS hits_layer;
 
-SYSTEM DROP  TABLE IF EXISTS visits_layer;
+DROP TABLE IF EXISTS visits_layer;
 
 CREATE TABLE visits
 (
@@ -45,10 +45,10 @@ PREWHERE WatchID IN (
     )
 WHERE 0;
 
-SYSTEM DROP  TABLE hits;
+DROP TABLE hits;
 
-SYSTEM DROP  TABLE visits;
+DROP TABLE visits;
 
-SYSTEM DROP  TABLE hits_layer;
+DROP TABLE hits_layer;
 
-SYSTEM DROP  TABLE visits_layer;
+DROP TABLE visits_layer;

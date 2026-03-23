@@ -45,4 +45,4 @@ ORDER BY
     c3 ASC
 FORMAT Null;
 
-SYSTEM DROP  TABLE table_test;
+DROP TABLE table_test;

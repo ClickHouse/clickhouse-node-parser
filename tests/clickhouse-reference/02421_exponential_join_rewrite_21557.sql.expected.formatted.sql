@@ -1,28 +1,28 @@
 -- Tags: long
 -- https://github.com/ClickHouse/ClickHouse/issues/21557
-SYSTEM DROP  TABLE IF EXISTS store_returns;
+DROP TABLE IF EXISTS store_returns;
 
-SYSTEM DROP  TABLE IF EXISTS catalog_sales;
+DROP TABLE IF EXISTS catalog_sales;
 
-SYSTEM DROP  TABLE IF EXISTS catalog_returns;
+DROP TABLE IF EXISTS catalog_returns;
 
-SYSTEM DROP  TABLE IF EXISTS date_dim;
+DROP TABLE IF EXISTS date_dim;
 
-SYSTEM DROP  TABLE IF EXISTS store;
+DROP TABLE IF EXISTS store;
 
-SYSTEM DROP  TABLE IF EXISTS customer;
+DROP TABLE IF EXISTS customer;
 
-SYSTEM DROP  TABLE IF EXISTS customer_demographics;
+DROP TABLE IF EXISTS customer_demographics;
 
-SYSTEM DROP  TABLE IF EXISTS promotion;
+DROP TABLE IF EXISTS promotion;
 
-SYSTEM DROP  TABLE IF EXISTS household_demographics;
+DROP TABLE IF EXISTS household_demographics;
 
-SYSTEM DROP  TABLE IF EXISTS customer_address;
+DROP TABLE IF EXISTS customer_address;
 
-SYSTEM DROP  TABLE IF EXISTS income_band;
+DROP TABLE IF EXISTS income_band;
 
-SYSTEM DROP  TABLE IF EXISTS item;
+DROP TABLE IF EXISTS item;
 
 CREATE TABLE store_sales
 (

@@ -1,13 +1,13 @@
 -- Tags: no-parallel, no-fasttest
-SYSTEM DROP  DATABASE IF EXISTS database_for_dict_01268;
+DROP DATABASE IF EXISTS database_for_dict_01268;
 
 CREATE DATABASE database_for_dict_01268;
 
-SYSTEM DROP  TABLE IF EXISTS database_for_dict_01268.table_for_dict1;
+DROP TABLE IF EXISTS database_for_dict_01268.table_for_dict1;
 
-SYSTEM DROP  TABLE IF EXISTS database_for_dict_01268.table_for_dict2;
+DROP TABLE IF EXISTS database_for_dict_01268.table_for_dict2;
 
-SYSTEM DROP  TABLE IF EXISTS database_for_dict_01268.table_for_dict3;
+DROP TABLE IF EXISTS database_for_dict_01268.table_for_dict3;
 
 CREATE TABLE database_for_dict_01268.table_for_dict1
 (
@@ -58,15 +58,15 @@ INSERT INTO database_for_dict_01268.table_for_dict3;
 
 INSERT INTO database_for_dict_01268.table_for_dict3;
 
-SYSTEM DROP  DATABASE IF EXISTS db_01268;
+DROP DATABASE IF EXISTS db_01268;
 
 CREATE DATABASE db_01268;
 
-SYSTEM DROP  DICTIONARY IF EXISTS db_01268.dict1;
+DROP DICTIONARY IF EXISTS db_01268.dict1;
 
-SYSTEM DROP  DICTIONARY IF EXISTS db_01268.dict2;
+DROP DICTIONARY IF EXISTS db_01268.dict2;
 
-SYSTEM DROP  DICTIONARY IF EXISTS db_01268.dict3;
+DROP DICTIONARY IF EXISTS db_01268.dict3;
 
 CREATE DICTIONARY db_01268.dict1
 (

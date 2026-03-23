@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS column_modify_test;
+DROP TABLE IF EXISTS column_modify_test;
 
 SET use_statistics = 1;
 
@@ -22,7 +22,7 @@ FROM column_modify_test
 WHERE id = 1
 FORMAT NULL;
 
-SYSTEM DROP  TABLE column_modify_test;
+DROP TABLE column_modify_test;
 
 CREATE TABLE column_modify_test
 (

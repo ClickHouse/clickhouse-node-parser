@@ -1,6 +1,6 @@
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS t_sparse_mutations_1;
+DROP TABLE IF EXISTS t_sparse_mutations_1;
 
 CREATE TABLE t_sparse_mutations_1
 (
@@ -41,4 +41,4 @@ INSERT INTO t_sparse_mutations_1 SELECT
     if(number % 21 = 0, 'foo', '')
 FROM numbers(10000);
 
-SYSTEM DROP  TABLE t_sparse_mutations_1;
+DROP TABLE t_sparse_mutations_1;

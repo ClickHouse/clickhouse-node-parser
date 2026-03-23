@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS markdown;
+DROP TABLE IF EXISTS markdown;
 
 CREATE TABLE markdown
 (

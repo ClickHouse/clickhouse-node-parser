@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists right;
+DROP TABLE IF EXISTS `right`;
 
 CREATE TABLE `right`
 (

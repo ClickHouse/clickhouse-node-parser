@@ -1,7 +1,7 @@
 SET enable_full_text_index = 1;
 
 -- Tests text index with the 'SummingMergeTree' engine
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -37,4 +37,4 @@ SELECT value
 FROM tab
 WHERE hasToken(key, 'bar');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

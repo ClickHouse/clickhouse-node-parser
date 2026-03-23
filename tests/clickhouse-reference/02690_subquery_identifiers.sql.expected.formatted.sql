@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_str;
+DROP TABLE IF EXISTS t_str;
 
 CREATE TABLE t_str
 (
@@ -36,4 +36,4 @@ FROM (
             )::Date > today()
     );
 
-SYSTEM DROP  TABLE t_str;
+DROP TABLE t_str;

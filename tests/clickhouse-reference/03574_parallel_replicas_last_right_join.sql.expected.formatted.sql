@@ -8,11 +8,11 @@ SET parallel_replicas_for_non_replicated_merge_tree = 1;
 
 SET cluster_for_parallel_replicas = 'parallel_replicas';
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM DROP  TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS t1;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE t0
 (

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists tp;
+DROP TABLE IF EXISTS tp;
 
 CREATE TABLE tp
 (
@@ -23,7 +23,7 @@ INSERT INTO tp SELECT
     number
 FROM numbers(5);
 
-SYSTEM drop  table tp;
+DROP TABLE tp;
 
 CREATE TABLE tp
 (

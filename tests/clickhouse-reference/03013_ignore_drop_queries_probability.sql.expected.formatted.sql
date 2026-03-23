@@ -7,12 +7,12 @@ ENGINE = Memory;
 
 INSERT INTO test_memory SELECT 42;
 
-SYSTEM drop  table test_memory settings ignore_drop_queries_probability=1;
+DROP TABLE test_memory SETTINGS ignore_drop_queries_probability = 1;
 
 SELECT *
 FROM test_memory;
 
-SYSTEM drop  table test_memory;
+DROP TABLE test_memory;
 
 CREATE TABLE test_merge_tree
 (
@@ -23,12 +23,12 @@ ORDER BY number;
 
 INSERT INTO test_merge_tree SELECT 42;
 
-SYSTEM drop  table test_merge_tree settings ignore_drop_queries_probability=1;
+DROP TABLE test_merge_tree SETTINGS ignore_drop_queries_probability = 1;
 
 SELECT *
 FROM test_merge_tree;
 
-SYSTEM drop  table test_merge_tree;
+DROP TABLE test_merge_tree;
 
 CREATE TABLE test_join
 (
@@ -38,9 +38,9 @@ ENGINE = Join(`ALL`, `LEFT`, number);
 
 INSERT INTO test_join SELECT 42;
 
-SYSTEM drop  table test_join settings ignore_drop_queries_probability=1;
+DROP TABLE test_join SETTINGS ignore_drop_queries_probability = 1;
 
 SELECT *
 FROM test_join;
 
-SYSTEM drop  table test_join;
+DROP TABLE test_join;

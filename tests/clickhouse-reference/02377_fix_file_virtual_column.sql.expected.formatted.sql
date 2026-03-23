@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_02377;
+DROP TABLE IF EXISTS test_02377;
 
 CREATE TABLE test_02377
 (
@@ -26,4 +26,4 @@ SELECT
 FROM test_02377
 FORMAT Null;
 
-SYSTEM drop  table test_02377;
+DROP TABLE test_02377;

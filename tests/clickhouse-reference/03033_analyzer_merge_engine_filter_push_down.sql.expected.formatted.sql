@@ -1,6 +1,6 @@
 SET allow_suspicious_low_cardinality_types = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -28,4 +28,4 @@ SETTINGS
     optimize_move_to_prewhere = 1,
     enable_analyzer = 1;
 
-SYSTEM drop  table test;
+DROP TABLE test;

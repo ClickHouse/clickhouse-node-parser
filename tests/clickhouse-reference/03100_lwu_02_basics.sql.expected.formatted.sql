@@ -4,7 +4,7 @@ SET insert_keeper_fault_injection_probability = 0.0;
 
 SET enable_lightweight_update = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_shared SYNC;
+DROP TABLE IF EXISTS t_shared;
 
 CREATE TABLE t_shared
 (
@@ -37,4 +37,4 @@ SELECT *
 FROM t_shared
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_shared SYNC;
+DROP TABLE t_shared;

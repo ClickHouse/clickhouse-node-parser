@@ -1,5 +1,5 @@
 -- Tags: memory-engine
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -15,4 +15,4 @@ FROM t0
 FORMAT Null
 SETTINGS enable_analyzer = 1;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

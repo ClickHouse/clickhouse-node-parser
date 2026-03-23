@@ -1,6 +1,6 @@
 SET session_timezone = 'Europe/Amsterdam';
 
-SYSTEM DROP  TABLE IF EXISTS with_fill_staleness;
+DROP TABLE IF EXISTS with_fill_staleness;
 
 CREATE TABLE with_fill_staleness
 (

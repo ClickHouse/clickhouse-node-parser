@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists nested_map_multiple_values;
+DROP TABLE IF EXISTS nested_map_multiple_values;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -18,9 +18,9 @@ INSERT INTO nested_map_multiple_values;
 SELECT *
 FROM nested_map_multiple_values;
 
-SYSTEM drop  table nested_map_multiple_values;
+DROP TABLE nested_map_multiple_values;
 
-SYSTEM drop  table if exists nested_not_a_map;
+DROP TABLE IF EXISTS nested_not_a_map;
 
 CREATE TABLE nested_not_a_map
 (
@@ -40,4 +40,4 @@ INSERT INTO nested_not_a_map;
 SELECT *
 FROM nested_not_a_map;
 
-SYSTEM drop  table nested_not_a_map;
+DROP TABLE nested_not_a_map;

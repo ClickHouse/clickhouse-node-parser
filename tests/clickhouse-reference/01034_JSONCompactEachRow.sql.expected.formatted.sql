@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_2;
+DROP TABLE IF EXISTS test_table_2;
 
 SET input_format_null_as_default = 0;
 

@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS tab SYNC;
+DROP TABLE IF EXISTS tab;
 
 SET allow_experimental_statistics = 1;
 

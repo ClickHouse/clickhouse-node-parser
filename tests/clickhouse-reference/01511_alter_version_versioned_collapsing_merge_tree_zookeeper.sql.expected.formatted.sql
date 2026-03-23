@@ -1,7 +1,7 @@
 -- Tags: zookeeper
-SYSTEM DROP  TABLE IF EXISTS table_with_version_replicated_1;
+DROP TABLE IF EXISTS table_with_version_replicated_1;
 
-SYSTEM DROP  TABLE IF EXISTS table_with_version_replicated_2;
+DROP TABLE IF EXISTS table_with_version_replicated_2;
 
 CREATE TABLE table_with_version_replicated_1
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS arraytest;
+DROP TABLE IF EXISTS arraytest;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

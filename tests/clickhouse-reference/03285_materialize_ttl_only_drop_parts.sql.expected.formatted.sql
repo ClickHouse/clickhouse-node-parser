@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_03285_mat_ttl;
+DROP TABLE IF EXISTS test_03285_mat_ttl;
 
 CREATE TABLE test_03285_mat_ttl
 (
@@ -37,4 +37,4 @@ SELECT
     count()
 FROM test_03285_mat_ttl;
 
-SYSTEM DROP  TABLE test_03285_mat_ttl;
+DROP TABLE test_03285_mat_ttl;

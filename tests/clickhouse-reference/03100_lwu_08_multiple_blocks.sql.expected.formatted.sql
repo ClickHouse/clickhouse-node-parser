@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lightweight_8;
+DROP TABLE IF EXISTS t_lightweight_8;
 
 SET enable_lightweight_update = 1;
 
@@ -21,4 +21,4 @@ SET max_block_size = 8192;
 SELECT sum(v)
 FROM t_lightweight_8;
 
-SYSTEM DROP  TABLE t_lightweight_8;
+DROP TABLE t_lightweight_8;

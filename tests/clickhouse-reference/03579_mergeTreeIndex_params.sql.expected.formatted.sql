@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_mt_params;
+DROP TABLE IF EXISTS t_mt_params;
 
 CREATE TABLE t_mt_params
 (
@@ -47,4 +47,4 @@ FROM mergeTreeIndex(currentDatabase(), 't_mt_params', with_marks = 1, with_minma
 ORDER BY `ALL` ASC
 FORMAT TSVWithNames;
 
-SYSTEM DROP  TABLE t_mt_params;
+DROP TABLE t_mt_params;

@@ -4,7 +4,7 @@ SELECT tupleHammingDistance((120, 243), (120, 434));
 
 SELECT tupleHammingDistance((-12, 434), (434, 434));
 
-SYSTEM DROP  TABLE IF EXISTS defaults;
+DROP TABLE IF EXISTS defaults;
 
 CREATE TABLE defaults
 (
@@ -25,4 +25,4 @@ FROM defaults;
 SELECT tupleHammingDistance(t2, t3)
 FROM defaults;
 
-SYSTEM DROP  TABLE defaults;
+DROP TABLE defaults;

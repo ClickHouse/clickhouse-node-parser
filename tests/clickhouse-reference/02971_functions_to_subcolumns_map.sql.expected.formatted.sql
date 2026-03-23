@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_func_to_subcolumns_map;
+DROP TABLE IF EXISTS t_func_to_subcolumns_map;
 
 CREATE TABLE t_func_to_subcolumns_map
 (
@@ -23,4 +23,4 @@ FROM t_func_to_subcolumns_map;
 SELECT notEmpty(m)
 FROM t_func_to_subcolumns_map;
 
-SYSTEM DROP  TABLE t_func_to_subcolumns_map;
+DROP TABLE t_func_to_subcolumns_map;

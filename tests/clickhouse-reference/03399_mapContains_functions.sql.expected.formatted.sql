@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS map_containsValueLike_test;
+DROP TABLE IF EXISTS map_containsValueLike_test;
 
 CREATE TABLE map_containsValueLike_test
 (
@@ -28,7 +28,7 @@ FROM map_containsValueLike_test
 WHERE mapContainsValueLike(map, '3-%') = 0
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE map_containsValueLike_test;
+DROP TABLE map_containsValueLike_test;
 
 SELECT mapContainsValueLike(map('aa', '1', 'bb', '2'), '1%');
 

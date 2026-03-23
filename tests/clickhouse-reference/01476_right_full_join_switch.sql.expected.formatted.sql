@@ -2,9 +2,9 @@ SET join_algorithm = 'auto';
 
 SET max_bytes_in_join = 100;
 
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM DROP  TABLE IF EXISTS nr;
+DROP TABLE IF EXISTS nr;
 
 CREATE TABLE t
 (
@@ -142,6 +142,6 @@ FULL JOIN nr AS r
     USING (x)
 ORDER BY t.x ASC;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;
 
-SYSTEM DROP  TABLE nr;
+DROP TABLE nr;

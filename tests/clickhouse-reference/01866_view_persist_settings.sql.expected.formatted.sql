@@ -1,10 +1,10 @@
-SYSTEM DROP  TABLE IF EXISTS view_no_nulls;
+DROP TABLE IF EXISTS view_no_nulls;
 
-SYSTEM DROP  TABLE IF EXISTS view_no_nulls_set;
+DROP TABLE IF EXISTS view_no_nulls_set;
 
-SYSTEM DROP  TABLE IF EXISTS view_nulls_set;
+DROP TABLE IF EXISTS view_nulls_set;
 
-SYSTEM DROP  TABLE IF EXISTS view_nulls;
+DROP TABLE IF EXISTS view_nulls;
 
 SET join_use_nulls = 0;
 

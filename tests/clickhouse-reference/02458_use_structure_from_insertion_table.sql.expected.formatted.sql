@@ -9,7 +9,7 @@ INSERT INTO FUNCTION file(`02458_data`.jsoncompacteachrow) SELECT
     42 AS y
 SETTINGS engine_file_truncate_on_insert = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -75,7 +75,7 @@ SELECT *
 FROM test
 ORDER BY y ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

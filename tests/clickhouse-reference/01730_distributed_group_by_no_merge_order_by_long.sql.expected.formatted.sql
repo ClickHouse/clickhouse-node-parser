@@ -1,5 +1,5 @@
 -- Tags: long, distributed, no-random-settings
-SYSTEM drop  table if exists data_01730;
+DROP TABLE IF EXISTS data_01730;
 
 SET max_rows_to_read = 0, max_result_rows = 0, max_bytes_before_external_group_by = 0, max_bytes_ratio_before_external_group_by = 0;
 
@@ -72,4 +72,4 @@ SETTINGS
     max_threads = 10
 FORMAT Null;
 
-SYSTEM drop  table data_01730;
+DROP TABLE data_01730;

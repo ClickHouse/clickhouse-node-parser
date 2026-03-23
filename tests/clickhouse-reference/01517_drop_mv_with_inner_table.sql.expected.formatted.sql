@@ -5,7 +5,7 @@ SET send_logs_level = 'fatal';
 -- Atomic no SYNC
 -- (should go first to check that thread for DROP TABLE does not hang)
 --
-SYSTEM drop  database if exists db_01517_atomic;
+DROP DATABASE IF EXISTS db_01517_atomic;
 
 CREATE DATABASE db_01517_atomic
 ENGINE = Atomic;
@@ -22,15 +22,15 @@ AS
 SELECT *
 FROM db_01517_atomic.source;
 
-SYSTEM drop  table db_01517_atomic.mv;
+DROP TABLE db_01517_atomic.mv;
 
 -- ensure that the inner had been removed after sync drop
-SYSTEM drop  table db_01517_atomic.source sync;
+DROP TABLE db_01517_atomic.source;
 
 --
 -- Atomic
 --
-SYSTEM drop  database if exists db_01517_atomic_sync;
+DROP DATABASE IF EXISTS db_01517_atomic_sync;
 
 CREATE DATABASE db_01517_atomic_sync
 ENGINE = Atomic;
@@ -48,12 +48,12 @@ SELECT *
 FROM db_01517_atomic_sync.source;
 
 -- drops it and hangs with Atomic engine, due to recursive DROP
-SYSTEM drop  table db_01517_atomic_sync.mv sync;
+DROP TABLE db_01517_atomic_sync.mv;
 
 --
 -- Ordinary
 ---
-SYSTEM drop  database if exists db_01517_ordinary;
+DROP DATABASE IF EXISTS db_01517_ordinary;
 
 SET allow_deprecated_database_ordinary = 1;
 
@@ -74,14 +74,14 @@ SELECT *
 FROM db_01517_ordinary.source;
 
 -- drops it and hangs with Atomic engine, due to recursive DROP
-SYSTEM drop  table db_01517_ordinary.mv sync;
+DROP TABLE db_01517_ordinary.mv;
 
-SYSTEM drop  table db_01517_atomic_sync.source;
+DROP TABLE db_01517_atomic_sync.source;
 
-SYSTEM drop  table db_01517_ordinary.source;
+DROP TABLE db_01517_ordinary.source;
 
-SYSTEM drop  database db_01517_atomic;
+DROP DATABASE db_01517_atomic;
 
-SYSTEM drop  database db_01517_atomic_sync;
+DROP DATABASE db_01517_atomic_sync;
 
-SYSTEM drop  database db_01517_ordinary;
+DROP DATABASE db_01517_ordinary;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data_01279;
+DROP TABLE IF EXISTS data_01279;
 
 CREATE TABLE data_01279
 (
@@ -20,4 +20,4 @@ FROM data_01279
 GROUP BY key
 FORMAT Null;
 
-SYSTEM drop  table data_01279;
+DROP TABLE data_01279;

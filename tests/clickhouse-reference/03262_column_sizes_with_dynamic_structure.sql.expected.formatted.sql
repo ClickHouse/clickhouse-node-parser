@@ -3,7 +3,7 @@ SET allow_experimental_dynamic_type = 1;
 
 SET enable_json_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -32,4 +32,4 @@ WHERE active
 GROUP BY table
 ORDER BY table ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

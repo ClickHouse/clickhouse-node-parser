@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_bug;
+DROP TABLE IF EXISTS alter_bug;
 
 CREATE TABLE alter_bug
 (

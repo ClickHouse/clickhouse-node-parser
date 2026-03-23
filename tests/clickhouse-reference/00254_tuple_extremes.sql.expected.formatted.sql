@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists numbers_10;
+DROP TABLE IF EXISTS numbers_10;
 
 CREATE TABLE numbers_10
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_00061;
+DROP TABLE IF EXISTS alter_00061;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -22,4 +22,4 @@ INSERT INTO alter_00061;
 
 INSERT INTO alter_00061;
 
-SYSTEM DROP  TABLE alter_00061;
+DROP TABLE alter_00061;

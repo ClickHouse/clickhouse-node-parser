@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists X;
+DROP TABLE IF EXISTS X;
 
-SYSTEM drop  table if exists Y;
+DROP TABLE IF EXISTS Y;
 
 CREATE TABLE X
 (
@@ -456,6 +456,6 @@ ORDER BY
 
 --select 'self full nullable vs not nullable 2';
 --select Y.*, s.* from Y full join (select * from Y) as s on concat('n', Y.y_a) = s.y_b order by id;
-SYSTEM drop  table X;
+DROP TABLE X;
 
-SYSTEM drop  table Y;
+DROP TABLE Y;

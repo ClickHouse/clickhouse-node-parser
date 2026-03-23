@@ -1,6 +1,6 @@
 SET parallel_replicas_local_plan = 1;
 
-SYSTEM drop  table if exists foo;
+DROP TABLE IF EXISTS foo;
 
 CREATE TABLE foo
 (

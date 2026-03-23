@@ -1,4 +1,4 @@
-SYSTEM drop  table IF EXISTS joinbug;
+DROP TABLE IF EXISTS joinbug;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -15,7 +15,7 @@ ENGINE = MergeTree(event_date, (id, id2), 8192);
 
 INSERT INTO joinbug (id, id2, val, val2, created);
 
-SYSTEM drop  table IF EXISTS joinbug_join;
+DROP TABLE IF EXISTS joinbug_join;
 
 CREATE TABLE joinbug_join
 (
@@ -69,6 +69,6 @@ FROM
 LEFT JOIN joinbug_join
     USING (id2); -- { serverError TYPE_MISMATCH, 386 }
 
-SYSTEM DROP  TABLE joinbug;
+DROP TABLE joinbug;
 
-SYSTEM DROP  TABLE joinbug_join;
+DROP TABLE joinbug_join;

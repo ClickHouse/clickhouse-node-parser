@@ -14,4 +14,4 @@ FROM lc_null_int8_defnull AS values;
 
 SELECT ignore(toLowCardinality(1), toLowCardinality(2), 3);
 
-SYSTEM DROP  TABLE lc_null_int8_defnull;
+DROP TABLE lc_null_int8_defnull;

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists lc_prewhere;
+DROP TABLE IF EXISTS lc_prewhere;
 
 CREATE TABLE lc_prewhere
 (

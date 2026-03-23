@@ -1,10 +1,10 @@
 -- Tags: no-fasttest
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 ENGINE = S3('http://localhost:11111/test/json_data');
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 ENGINE = S3('http://localhost:11111/test/json_data', NOSIGN);

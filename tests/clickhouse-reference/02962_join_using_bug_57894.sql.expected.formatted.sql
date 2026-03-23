@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM DROP  TABLE IF EXISTS r;
+DROP TABLE IF EXISTS r;
 
 SET allow_suspicious_low_cardinality_types = 1;
 

@@ -13,7 +13,7 @@ SELECT count()
 FROM numbers(256)
 WHERE toUInt8(number);
 
-SYSTEM DROP  TABLE IF EXISTS t_filter;
+DROP TABLE IF EXISTS t_filter;
 
 CREATE TABLE t_filter
 (

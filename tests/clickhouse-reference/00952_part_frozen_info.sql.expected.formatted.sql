@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS part_info;
+DROP TABLE IF EXISTS part_info;
 
 CREATE TABLE part_info
 (
@@ -23,4 +23,4 @@ SELECT *
 FROM part_info
 ORDER BY t ASC;
 
-SYSTEM DROP  TABLE part_info;
+DROP TABLE part_info;

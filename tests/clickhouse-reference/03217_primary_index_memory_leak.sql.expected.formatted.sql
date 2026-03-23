@@ -1,5 +1,5 @@
 -- Tags: no-debug, no-tsan, no-msan, no-asan, no-random-settings, no-random-merge-tree-settings
-SYSTEM DROP  TABLE IF EXISTS t_primary_index_memory;
+DROP TABLE IF EXISTS t_primary_index_memory;
 
 CREATE TABLE t_primary_index_memory
 (
@@ -20,4 +20,4 @@ SETTINGS
 SELECT count()
 FROM t_primary_index_memory;
 
-SYSTEM DROP  TABLE t_primary_index_memory;
+DROP TABLE t_primary_index_memory;

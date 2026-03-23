@@ -3,7 +3,7 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
 -- { echo }
-SYSTEM drop  table if exists test_02302;
+DROP TABLE IF EXISTS test_02302;
 
 CREATE TABLE test_02302
 (
@@ -19,7 +19,7 @@ SETTINGS s3_truncate_on_insert = 1;
 SELECT *
 FROM test_02302; -- { serverError NOT_IMPLEMENTED }
 
-SYSTEM drop  table test_02302;
+DROP TABLE test_02302;
 
 SET max_rows_to_read = 1;
 

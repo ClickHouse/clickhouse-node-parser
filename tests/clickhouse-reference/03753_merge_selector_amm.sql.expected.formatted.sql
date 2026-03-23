@@ -1,5 +1,5 @@
 -- Tags: long
-SYSTEM drop  table if exists mt sync;
+DROP TABLE IF EXISTS mt;
 
 CREATE TABLE mt
 (

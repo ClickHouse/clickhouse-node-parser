@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists test_array_joins;
+DROP TABLE IF EXISTS test_array_joins;
 
-SYSTEM drop  table if exists v4test_array_joins;
+DROP TABLE IF EXISTS v4test_array_joins;
 
 CREATE TABLE test_array_joins
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nullable_alter;
+DROP TABLE IF EXISTS nullable_alter;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -21,4 +21,4 @@ SELECT x
 FROM nullable_alter
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE nullable_alter;
+DROP TABLE nullable_alter;

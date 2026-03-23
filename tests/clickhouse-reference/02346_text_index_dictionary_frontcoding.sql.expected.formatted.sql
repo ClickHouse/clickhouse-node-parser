@@ -1,7 +1,7 @@
 SET enable_full_text_index = 1;
 
 -- Tests text index parameter `dictionary_block_frontcoding_compression`.
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -40,4 +40,4 @@ SELECT count()
 FROM tab
 WHERE hasToken(text_fc, 'abc');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

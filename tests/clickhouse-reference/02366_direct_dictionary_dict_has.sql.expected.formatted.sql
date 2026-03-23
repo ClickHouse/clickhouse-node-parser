@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -7,7 +7,7 @@ CREATE TABLE test_table
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE IF EXISTS test_lookup_table;
+DROP TABLE IF EXISTS test_lookup_table;
 
 CREATE TABLE test_lookup_table
 (
@@ -38,7 +38,7 @@ INSERT INTO test_lookup_table;
 
 INSERT INTO test_lookup_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS test_dictionary;
+DROP DICTIONARY IF EXISTS test_dictionary;
 
 CREATE DICTIONARY test_dictionary
 (
@@ -56,8 +56,8 @@ SELECT
 FROM test_lookup_table
 ORDER BY id ASC;
 
-SYSTEM DROP  DICTIONARY test_dictionary;
+DROP DICTIONARY test_dictionary;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  TABLE test_lookup_table;
+DROP TABLE test_lookup_table;

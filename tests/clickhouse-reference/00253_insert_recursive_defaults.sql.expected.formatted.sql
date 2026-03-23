@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS defaults;
+DROP TABLE IF EXISTS defaults;
 
 CREATE TABLE defaults
 (
@@ -13,9 +13,9 @@ INSERT INTO defaults (a);
 SELECT *
 FROM defaults;
 
-SYSTEM DROP  TABLE defaults;
+DROP TABLE defaults;
 
-SYSTEM DROP  TABLE IF EXISTS elog_cut;
+DROP TABLE IF EXISTS elog_cut;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -47,4 +47,4 @@ SELECT
     sample_key
 FROM elog_cut;
 
-SYSTEM DROP  TABLE elog_cut;
+DROP TABLE elog_cut;

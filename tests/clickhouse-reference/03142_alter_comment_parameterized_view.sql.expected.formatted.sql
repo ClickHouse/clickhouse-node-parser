@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table_comment;
+DROP TABLE IF EXISTS test_table_comment;
 
 CREATE VIEW test_table_comment
 AS
@@ -9,4 +9,4 @@ FROM `system`.tables
 WHERE name = 'test_table_comment'
     AND database = currentDatabase();
 
-SYSTEM DROP  TABLE test_table_comment;
+DROP TABLE test_table_comment;

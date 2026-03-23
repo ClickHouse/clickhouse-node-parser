@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -8,7 +8,7 @@ CREATE TABLE test_table
 ENGINE = MergeTree
 ORDER BY id;
 
-SYSTEM DROP  VIEW IF EXISTS test_view;
+DROP VIEW IF EXISTS test_view;
 
 CREATE VIEW test_view
 AS
@@ -17,6 +17,6 @@ SELECT
     value
 FROM test_table;
 
-SYSTEM DROP  VIEW test_view;
+DROP VIEW test_view;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tab_00481;
+DROP TABLE IF EXISTS tab_00481;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -29,4 +29,4 @@ FORMAT Null;
 
 SELECT 0;
 
-SYSTEM DROP  TABLE tab_00481;
+DROP TABLE tab_00481;

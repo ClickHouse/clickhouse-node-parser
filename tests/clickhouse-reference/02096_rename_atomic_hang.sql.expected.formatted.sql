@@ -1,9 +1,9 @@
 -- Tags: no-parallel
 SET send_logs_level = 'fatal';
 
-SYSTEM drop  database if exists db_hang;
+DROP DATABASE IF EXISTS db_hang;
 
-SYSTEM drop  database if exists db_hang_temp;
+DROP DATABASE IF EXISTS db_hang_temp;
 
 SET allow_deprecated_database_ordinary = 1;
 
@@ -36,7 +36,7 @@ FROM numbers(1000);
 CREATE DATABASE db_hang_temp
 ENGINE = Atomic;
 
-SYSTEM drop  database db_hang;
+DROP DATABASE db_hang;
 
 SELECT count()
 FROM db_hang.test;

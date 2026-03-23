@@ -5,7 +5,7 @@ SET insert_keeper_fault_injection_probability = 0.0;
 
 SET enable_lightweight_update = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_shared SYNC;
+DROP TABLE IF EXISTS t_shared;
 
 CREATE TABLE t_shared
 (
@@ -33,7 +33,7 @@ ORDER BY id ASC;
 
 INSERT INTO t_shared;
 
-SYSTEM DROP  TABLE t_shared SYNC;
+DROP TABLE t_shared;
 
 SELECT mapSort(mapFilter((k, v) -> k IN ('ReadTasksWithAppliedPatches', 'PatchesAppliedInAllReadTasks', 'PatchesMergeAppliedInAllReadTasks', 'PatchesJoinAppliedInAllReadTasks'), ProfileEvents))
 FROM `system`.query_log

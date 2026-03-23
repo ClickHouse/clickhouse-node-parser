@@ -1,5 +1,5 @@
 -- Tags: replica, no-parallel
-SYSTEM DROP  DATABASE IF EXISTS shard_0;
+DROP DATABASE IF EXISTS shard_0;
 
 CREATE DATABASE shard_0;
 
@@ -15,4 +15,4 @@ CREATE TABLE shard_0.t0 ON CLUSTER `'test_cluster_two_shards_different_databases
 ENGINE = MergeTree()
 ORDER BY tuple();
 
-SYSTEM DROP  DATABASE shard_0;
+DROP DATABASE shard_0;

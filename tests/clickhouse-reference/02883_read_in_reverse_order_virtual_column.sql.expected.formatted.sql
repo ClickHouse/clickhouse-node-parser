@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_reverse_order_virt_col;
+DROP TABLE IF EXISTS t_reverse_order_virt_col;
 
 CREATE TABLE t_reverse_order_virt_col
 (

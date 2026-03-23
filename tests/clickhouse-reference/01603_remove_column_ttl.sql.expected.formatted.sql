@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS table_with_column_ttl;
+DROP TABLE IF EXISTS table_with_column_ttl;
 
 CREATE TABLE table_with_column_ttl
 (
@@ -22,4 +22,4 @@ ORDER BY UserID ASC;
 
 INSERT INTO table_with_column_ttl;
 
-SYSTEM DROP  TABLE table_with_column_ttl;
+DROP TABLE table_with_column_ttl;

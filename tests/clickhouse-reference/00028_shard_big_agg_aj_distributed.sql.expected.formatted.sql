@@ -1,5 +1,5 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS big_array;
+DROP TABLE IF EXISTS big_array;
 
 CREATE TABLE big_array
 (
@@ -29,4 +29,4 @@ FROM (
         ARRAY JOIN x AS y
     );
 
-SYSTEM DROP  TABLE big_array;
+DROP TABLE big_array;

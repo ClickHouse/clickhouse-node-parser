@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS totimezone_op_mono;
+DROP TABLE IF EXISTS totimezone_op_mono;
 
 CREATE TABLE totimezone_op_mono
 (

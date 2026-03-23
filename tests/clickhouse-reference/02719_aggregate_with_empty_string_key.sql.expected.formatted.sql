@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -18,4 +18,4 @@ FROM test
 GROUP BY str
 ORDER BY str ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

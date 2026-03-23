@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS my_first_table;
+DROP TABLE IF EXISTS my_first_table;
 
 CREATE TABLE my_first_table
 (
@@ -34,4 +34,4 @@ ORDER BY
     user_id ASC,
     job_id ASC;
 
-SYSTEM DROP  TABLE my_first_table;
+DROP TABLE my_first_table;

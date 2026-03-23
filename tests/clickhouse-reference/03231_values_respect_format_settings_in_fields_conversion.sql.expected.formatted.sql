@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -13,4 +13,4 @@ INSERT INTO test;
 SELECT *
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

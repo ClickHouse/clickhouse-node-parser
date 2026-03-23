@@ -1,5 +1,5 @@
 -- Tags: memory-engine
-SYSTEM drop  table if exists t_row_exists;
+DROP TABLE IF EXISTS t_row_exists;
 
 CREATE TABLE t_row_exists
 (
@@ -17,7 +17,7 @@ CREATE TABLE t_row_exists
 ENGINE = MergeTree
 ORDER BY a;
 
-SYSTEM drop  table t_row_exists;
+DROP TABLE t_row_exists;
 
 CREATE TABLE t_row_exists
 (

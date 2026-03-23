@@ -1,5 +1,5 @@
 -- Tags: shard
-SYSTEM DROP  TABLE IF EXISTS count;
+DROP TABLE IF EXISTS count;
 
 CREATE TABLE count
 (
@@ -17,4 +17,4 @@ FROM remote('127.0.0.{1,2}', currentDatabase(), count);
 SELECT count() / 2
 FROM remote('127.0.0.{1,2}', currentDatabase(), count);
 
-SYSTEM DROP  TABLE count;
+DROP TABLE count;

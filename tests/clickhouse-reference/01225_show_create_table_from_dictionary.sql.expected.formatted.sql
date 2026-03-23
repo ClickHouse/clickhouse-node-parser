@@ -1,9 +1,9 @@
 -- Tags: no-parallel
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  DATABASE IF EXISTS dict_db_01225;
+DROP DATABASE IF EXISTS dict_db_01225;
 
-SYSTEM DROP  DATABASE IF EXISTS dict_db_01225_dictionary;
+DROP DATABASE IF EXISTS dict_db_01225_dictionary;
 
 SET allow_deprecated_database_ordinary = 1;
 
@@ -31,6 +31,6 @@ SOURCE(clickhouse(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'dict_dat
 LIFETIME(MIN 0 MAX 0)
 LAYOUT(FLAT());
 
-SYSTEM DROP  DATABASE dict_db_01225;
+DROP DATABASE dict_db_01225;
 
-SYSTEM DROP  DATABASE dict_db_01225_dictionary;
+DROP DATABASE dict_db_01225_dictionary;

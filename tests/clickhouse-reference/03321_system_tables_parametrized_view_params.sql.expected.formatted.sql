@@ -1,14 +1,14 @@
-SYSTEM DROP  TABLE IF EXISTS raw_data;
+DROP TABLE IF EXISTS raw_data;
 
-SYSTEM DROP  TABLE IF EXISTS raw_temporary_data;
+DROP TABLE IF EXISTS raw_temporary_data;
 
-SYSTEM DROP  TABLE IF EXISTS parameterized_view_one_param;
+DROP TABLE IF EXISTS parameterized_view_one_param;
 
-SYSTEM DROP  TABLE IF EXISTS parameterized_view_multiple_params;
+DROP TABLE IF EXISTS parameterized_view_multiple_params;
 
-SYSTEM DROP  TABLE IF EXISTS parameterized_view_one_param_temporary;
+DROP TABLE IF EXISTS parameterized_view_one_param_temporary;
 
-SYSTEM DROP  TABLE IF EXISTS parameterized_view_multiple_params_temporary;
+DROP TABLE IF EXISTS parameterized_view_multiple_params_temporary;
 
 SELECT '-----------------------------------------';
 
@@ -92,14 +92,14 @@ FROM `system`.tables
 WHERE database = currentDatabase()
     AND name = 'parameterized_view_multiple_params_temporary';
 
-SYSTEM DROP  TABLE parameterized_view_one_param;
+DROP TABLE parameterized_view_one_param;
 
-SYSTEM DROP  TABLE parameterized_view_multiple_params;
+DROP TABLE parameterized_view_multiple_params;
 
-SYSTEM DROP  TABLE parameterized_view_one_param_temporary;
+DROP TABLE parameterized_view_one_param_temporary;
 
-SYSTEM DROP  TABLE parameterized_view_multiple_params_temporary;
+DROP TABLE parameterized_view_multiple_params_temporary;
 
-SYSTEM DROP  TABLE raw_temporary_data;
+DROP TABLE raw_temporary_data;
 
-SYSTEM DROP  TABLE raw_data;
+DROP TABLE raw_data;

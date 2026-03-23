@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -10,10 +10,10 @@ ORDER BY id;
 
 INSERT INTO test_table;
 
-SYSTEM DROP  ROW POLICY IF EXISTS test_row_policy ON test_table;
+DROP ROW POLICY IF EXISTS test_row_policy ON test_table;
 
 CREATE ROW POLICY test_row_policy ON test_table USING id >= 5 TO ALL;
 
-SYSTEM DROP  ROW POLICY test_row_policy ON test_table;
+DROP ROW POLICY test_row_policy ON test_table;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

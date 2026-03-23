@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS 01681_database_for_cache_dictionary;
+DROP DATABASE IF EXISTS `01681_database_for_cache_dictionary`;
 
 CREATE DATABASE `01681_database_for_cache_dictionary`;
 
@@ -61,9 +61,9 @@ SELECT *
 FROM `01681_database_for_cache_dictionary`.cache_dictionary_simple_key_simple_attributes
 ORDER BY id ASC;
 
-SYSTEM DROP  DICTIONARY 01681_database_for_cache_dictionary.cache_dictionary_simple_key_simple_attributes;
+DROP DICTIONARY `01681_database_for_cache_dictionary`.cache_dictionary_simple_key_simple_attributes;
 
-SYSTEM DROP  TABLE 01681_database_for_cache_dictionary.simple_key_simple_attributes_source_table;
+DROP TABLE `01681_database_for_cache_dictionary`.simple_key_simple_attributes_source_table;
 
 CREATE TABLE `01681_database_for_cache_dictionary`.simple_key_complex_attributes_source_table
 (
@@ -122,9 +122,9 @@ SELECT *
 FROM `01681_database_for_cache_dictionary`.cache_dictionary_simple_key_complex_attributes
 ORDER BY id ASC;
 
-SYSTEM DROP  DICTIONARY 01681_database_for_cache_dictionary.cache_dictionary_simple_key_complex_attributes;
+DROP DICTIONARY `01681_database_for_cache_dictionary`.cache_dictionary_simple_key_complex_attributes;
 
-SYSTEM DROP  TABLE 01681_database_for_cache_dictionary.simple_key_complex_attributes_source_table;
+DROP TABLE `01681_database_for_cache_dictionary`.simple_key_complex_attributes_source_table;
 
 CREATE TABLE `01681_database_for_cache_dictionary`.simple_key_hierarchy_table
 (
@@ -159,8 +159,8 @@ SELECT dictGetHierarchy('01681_database_for_cache_dictionary.cache_dictionary_si
 
 SELECT dictGetHierarchy('01681_database_for_cache_dictionary.cache_dictionary_simple_key_hierarchy', toUInt64(4));
 
-SYSTEM DROP  DICTIONARY 01681_database_for_cache_dictionary.cache_dictionary_simple_key_hierarchy;
+DROP DICTIONARY `01681_database_for_cache_dictionary`.cache_dictionary_simple_key_hierarchy;
 
-SYSTEM DROP  TABLE 01681_database_for_cache_dictionary.simple_key_hierarchy_table;
+DROP TABLE `01681_database_for_cache_dictionary`.simple_key_hierarchy_table;
 
-SYSTEM DROP  DATABASE 01681_database_for_cache_dictionary;
+DROP DATABASE `01681_database_for_cache_dictionary`;

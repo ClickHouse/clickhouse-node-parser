@@ -2,7 +2,7 @@
 -- add_minmax_index_for_numeric_columns=0: Different indices and plans on b
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -63,4 +63,4 @@ WHERE current_database = currentDatabase()
 
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

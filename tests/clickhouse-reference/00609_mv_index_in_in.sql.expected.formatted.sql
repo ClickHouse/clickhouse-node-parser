@@ -1,7 +1,7 @@
 -- Tags: no-ordinary-database, no-parallel
-SYSTEM DROP  TABLE IF EXISTS test_00609;
+DROP TABLE IF EXISTS test_00609;
 
-SYSTEM DROP  TABLE IF EXISTS test_mv_00609;
+DROP TABLE IF EXISTS test_mv_00609;
 
 CREATE TABLE test_00609
 (
@@ -41,6 +41,6 @@ WHERE a IN (
         FROM test_mv_00609
     ); -- OK
 
-SYSTEM DROP  TABLE test_00609;
+DROP TABLE test_00609;
 
-SYSTEM DROP  TABLE test_mv_00609;
+DROP TABLE test_mv_00609;

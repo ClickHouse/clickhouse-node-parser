@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
-SYSTEM DROP  TABLE IF EXISTS d;
+DROP TABLE IF EXISTS d;
 
 CREATE TABLE t
 (
@@ -35,7 +35,7 @@ FROM (
     )
 ORDER BY b ASC;
 
-SYSTEM DROP  TABLE d;
+DROP TABLE d;
 
 CREATE TABLE d
 (
@@ -44,4 +44,4 @@ CREATE TABLE d
 )
 ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), t);
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

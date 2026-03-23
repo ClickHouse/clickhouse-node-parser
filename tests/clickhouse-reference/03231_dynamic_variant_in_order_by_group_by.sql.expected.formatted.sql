@@ -2,7 +2,7 @@ SET allow_experimental_variant_type = 1;
 
 SET allow_experimental_dynamic_type = 1;
 
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -222,7 +222,7 @@ ORDER BY `all` ASC;
 
 SET enable_analyzer = 0;
 
-SYSTEM drop  table test;
+DROP TABLE test;
 
 CREATE TABLE test
 (

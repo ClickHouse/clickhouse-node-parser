@@ -10,7 +10,7 @@ SELECT arrayDistinct(['1212', 'sef', '343r4', '1212']);
 
 SELECT arrayDistinct(['1212', 'sef', '343r4', NULL, NULL, '232']);
 
-SYSTEM DROP  TABLE IF EXISTS arrayDistinct_test;
+DROP TABLE IF EXISTS arrayDistinct_test;
 
 CREATE TABLE arrayDistinct_test
 (
@@ -27,7 +27,7 @@ FROM arrayDistinct_test;
 SELECT arrayDistinct(arr_string)
 FROM arrayDistinct_test;
 
-SYSTEM DROP  TABLE arrayDistinct_test;
+DROP TABLE arrayDistinct_test;
 
 SELECT arrayDistinct([['1212'], ['sef'], ['343r4'], ['1212']]);
 

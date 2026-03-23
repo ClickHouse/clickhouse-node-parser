@@ -2,7 +2,7 @@ SET compile_expressions = 1;
 
 SET min_count_to_compile_expression = 1;
 
-SYSTEM DROP  TABLE IF EXISTS foo_c;
+DROP TABLE IF EXISTS foo_c;
 
 CREATE TABLE foo_c
 (

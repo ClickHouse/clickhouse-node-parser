@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS random_mt;
+DROP TABLE IF EXISTS random_mt;
 
 CREATE TABLE random_mt
 (

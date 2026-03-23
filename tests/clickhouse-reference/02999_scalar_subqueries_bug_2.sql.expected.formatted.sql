@@ -1,10 +1,10 @@
-SYSTEM drop  table if exists source;
+DROP TABLE IF EXISTS source;
 
-SYSTEM drop  table if exists target1;
+DROP TABLE IF EXISTS target1;
 
-SYSTEM drop  table if exists target2;
+DROP TABLE IF EXISTS target2;
 
-SYSTEM drop  table if exists v_heavy;
+DROP TABLE IF EXISTS v_heavy;
 
 CREATE TABLE source
 (

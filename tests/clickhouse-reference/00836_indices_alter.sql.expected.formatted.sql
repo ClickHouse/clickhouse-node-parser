@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS minmax_idx;
+DROP TABLE IF EXISTS minmax_idx;
 
-SYSTEM DROP  TABLE IF EXISTS minmax_idx2;
+DROP TABLE IF EXISTS minmax_idx2;
 
 CREATE TABLE minmax_idx
 (
@@ -32,6 +32,6 @@ SELECT *
 FROM minmax_idx2
 WHERE u64 * i32 = 2;
 
-SYSTEM DROP  TABLE minmax_idx;
+DROP TABLE minmax_idx;
 
-SYSTEM DROP  TABLE minmax_idx2;
+DROP TABLE minmax_idx2;

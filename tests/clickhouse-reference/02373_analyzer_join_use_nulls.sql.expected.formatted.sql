@@ -2,7 +2,7 @@ SET enable_analyzer = 1;
 
 SET join_use_nulls = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_1;
+DROP TABLE IF EXISTS test_table_join_1;
 
 CREATE TABLE test_table_join_1
 (
@@ -12,7 +12,7 @@ CREATE TABLE test_table_join_1
 ENGINE = MergeTree
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_2;
+DROP TABLE IF EXISTS test_table_join_2;
 
 CREATE TABLE test_table_join_2
 (
@@ -166,6 +166,6 @@ FULL JOIN test_table_join_2 AS t2
 ORDER BY `ALL` ASC;
 
 -- { echoOff }
-SYSTEM DROP  TABLE test_table_join_1;
+DROP TABLE test_table_join_1;
 
-SYSTEM DROP  TABLE test_table_join_2;
+DROP TABLE test_table_join_2;

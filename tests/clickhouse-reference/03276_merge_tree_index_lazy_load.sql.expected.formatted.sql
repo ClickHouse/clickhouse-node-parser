@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_index_lazy_load;
+DROP TABLE IF EXISTS t_index_lazy_load;
 
 CREATE TABLE t_index_lazy_load
 (
@@ -39,4 +39,4 @@ ORDER BY
     part_name ASC,
     mark_number ASC;
 
-SYSTEM DROP  TABLE t_index_lazy_load;
+DROP TABLE t_index_lazy_load;

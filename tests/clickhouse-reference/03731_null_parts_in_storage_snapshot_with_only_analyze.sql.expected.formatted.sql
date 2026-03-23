@@ -2,9 +2,9 @@
 -- InterpreterSelectQuery() with only_analyze=true, which uses
 -- getStorageSnapshotWithoutData(), and may crash in
 -- getConditionSelectivityEstimator() since parts was nullptr
-SYSTEM drop  table if exists t0;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM drop  table if exists t1;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t0
 (

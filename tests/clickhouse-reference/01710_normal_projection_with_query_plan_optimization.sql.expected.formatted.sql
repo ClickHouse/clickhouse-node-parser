@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -32,4 +32,4 @@ SELECT count()
 FROM t
 WHERE id = 3;
 
-SYSTEM drop  table t;
+DROP TABLE t;

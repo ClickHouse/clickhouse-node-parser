@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS test_dict_db;
+DROP DATABASE IF EXISTS test_dict_db;
 
 CREATE DATABASE test_dict_db;
 
@@ -69,7 +69,7 @@ SELECT
 FROM test_dict_db.table1
 WHERE dictHas('test_dict_db.table1_dict', (col1, col2, col3, col4, col5)); -- { serverError CANNOT_INSERT_NULL_IN_ORDINARY_COLUMN }
 
-SYSTEM DROP  TABLE test_dict_db.table1;
+DROP TABLE test_dict_db.table1;
 
 CREATE TABLE test_dict_db.table1
 (

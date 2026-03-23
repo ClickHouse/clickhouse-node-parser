@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS test1;
+DROP TABLE IF EXISTS test1;
 
-SYSTEM DROP  TABLE IF EXISTS test1_distributed;
+DROP TABLE IF EXISTS test1_distributed;
 
-SYSTEM DROP  TABLE IF EXISTS test_merge;
+DROP TABLE IF EXISTS test_merge;
 
 SET enable_optimize_predicate_expression = 1;
 
@@ -30,11 +30,11 @@ INNER JOIN (
     USING (name)
 WHERE id = 1;
 
-SYSTEM DROP  TABLE test1;
+DROP TABLE test1;
 
-SYSTEM DROP  TABLE test_merge;
+DROP TABLE test_merge;
 
 CREATE TABLE test_merge AS test1
 ENGINE = Merge('default', 'test1');
 
-SYSTEM DROP  TABLE test1_distributed;
+DROP TABLE test1_distributed;

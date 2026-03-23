@@ -1,8 +1,8 @@
-SYSTEM drop  table if exists v;
+DROP TABLE IF EXISTS v;
 
-SYSTEM drop  table if exists t0 sync;
+DROP TABLE IF EXISTS t0;
 
-SYSTEM drop  table if exists t1 sync;
+DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t0
 (

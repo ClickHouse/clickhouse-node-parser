@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  DATABASE IF EXISTS `01945.db`;
+DROP DATABASE IF EXISTS `01945.db`;
 
 CREATE DATABASE `01945.db`;
 
@@ -24,7 +24,7 @@ LAYOUT(DIRECT());
 SELECT *
 FROM `01945.db`.test_dictionary;
 
-SYSTEM DROP  DICTIONARY `01945.db`.test_dictionary;
+DROP DICTIONARY `01945.db`.test_dictionary;
 
 CREATE DICTIONARY `01945.db`.`test_dictionary.test`
 (
@@ -38,8 +38,8 @@ LAYOUT(DIRECT());
 SELECT *
 FROM `01945.db`.`test_dictionary.test`;
 
-SYSTEM DROP  DICTIONARY `01945.db`.`test_dictionary.test`;
+DROP DICTIONARY `01945.db`.`test_dictionary.test`;
 
-SYSTEM DROP  TABLE `01945.db`.test_dictionary_values;
+DROP TABLE `01945.db`.test_dictionary_values;
 
-SYSTEM DROP  DATABASE `01945.db`;
+DROP DATABASE `01945.db`;

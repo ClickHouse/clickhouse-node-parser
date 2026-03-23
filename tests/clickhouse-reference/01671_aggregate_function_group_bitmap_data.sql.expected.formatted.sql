@@ -61,4 +61,4 @@ ORDER BY
     new_users ASC,
     diff_users ASC;
 
-SYSTEM DROP  TABLE IF EXISTS group_bitmap_data_test;
+DROP TABLE IF EXISTS group_bitmap_data_test;

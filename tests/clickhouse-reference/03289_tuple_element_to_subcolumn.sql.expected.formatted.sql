@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_tuple_elem;
+DROP TABLE IF EXISTS t_tuple_elem;
 
 SET enable_variant_type = 1;
 
@@ -28,4 +28,4 @@ SELECT (variantElement(v, 'Array(UInt64)'), variantElement(v, 'Array(LowCardinal
 FROM t_tuple_elem
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE t_tuple_elem;
+DROP TABLE t_tuple_elem;

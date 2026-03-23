@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_datetime;
+DROP TABLE IF EXISTS test_datetime;
 
 CREATE TABLE test_datetime
 (
@@ -26,7 +26,7 @@ SET date_time_output_format = 'unix_timestamp';
 SELECT toUnixTimestamp(timestamp)
 FROM test_datetime;
 
-SYSTEM DROP  TABLE test_datetime;
+DROP TABLE test_datetime;
 
 CREATE TABLE test_datetime
 (

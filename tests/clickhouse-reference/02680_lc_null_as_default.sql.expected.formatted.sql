@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_null_as_default__fuzz_46;
+DROP TABLE IF EXISTS test_null_as_default__fuzz_46;
 
 SET allow_suspicious_low_cardinality_types = 1;
 
@@ -17,4 +17,4 @@ SELECT
     2,
     NULL;
 
-SYSTEM drop  table test_null_as_default__fuzz_46;
+DROP TABLE test_null_as_default__fuzz_46;

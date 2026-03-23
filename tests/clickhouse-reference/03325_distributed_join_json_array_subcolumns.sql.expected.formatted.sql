@@ -2,9 +2,9 @@ SET enable_json_type = 1;
 
 SET allow_experimental_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_distr;
+DROP TABLE IF EXISTS test_distr;
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -41,6 +41,6 @@ WHERE has(`right`.data.arr1, 's3')
     AND has(`right`.data.arr2, 42)
 SETTINGS enable_parallel_replicas = 0;
 
-SYSTEM DROP  TABLE test_distr;
+DROP TABLE test_distr;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

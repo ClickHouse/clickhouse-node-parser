@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_string;
+DROP TABLE IF EXISTS test_string;
 
-SYSTEM DROP  TABLE IF EXISTS test_string_alias;
+DROP TABLE IF EXISTS test_string_alias;
 
 CREATE OR REPLACE TABLE test_string
 (
@@ -31,6 +31,6 @@ ORDER BY
     table ASC,
     name ASC;
 
-SYSTEM DROP  TABLE test_string;
+DROP TABLE test_string;
 
-SYSTEM DROP  TABLE test_string_alias;
+DROP TABLE test_string_alias;

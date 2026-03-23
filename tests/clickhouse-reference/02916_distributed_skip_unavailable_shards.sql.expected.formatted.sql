@@ -1,7 +1,7 @@
 -- Tags: shard, no-fasttest
-SYSTEM DROP  TABLE IF EXISTS table_02916;
+DROP TABLE IF EXISTS table_02916;
 
-SYSTEM DROP  TABLE IF EXISTS table_02916_distributed;
+DROP TABLE IF EXISTS table_02916_distributed;
 
 CREATE TABLE table_02916
 (
@@ -28,6 +28,6 @@ SELECT
     _shard_num
 FROM table_02916_distributed;
 
-SYSTEM DROP  TABLE table_02916_distributed;
+DROP TABLE table_02916_distributed;
 
-SYSTEM DROP  TABLE table_02916;
+DROP TABLE table_02916;

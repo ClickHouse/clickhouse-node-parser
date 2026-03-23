@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists data_01801;
+DROP TABLE IF EXISTS data_01801;
 
 CREATE TABLE data_01801
 (
@@ -41,4 +41,4 @@ ORDER BY key DESC
 SETTINGS max_rows_to_read = 10
 FORMAT Null;
 
-SYSTEM drop  table data_01801;
+DROP TABLE data_01801;

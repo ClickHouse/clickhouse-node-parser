@@ -271,7 +271,7 @@ SELECT hex(sipHash128Reference()) = hex(reverse(unhex('1CE422FEE7BD8DE2000000000
 SELECT hex(sipHash128ReferenceKeyed()) = hex(reverse(unhex('1CE422FEE7BD8DE20000000000000000')))
     OR hex(sipHash128Keyed()) = '1CE422FEE7BD8DE20000000000000000';
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -289,7 +289,7 @@ FROM tab;
 SELECT hex(sipHash128ReferenceKeyed(key, 4::UInt64))
 FROM tab;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(2), toUInt64(-9223372036854775807))))
 GROUP BY
@@ -298,7 +298,7 @@ GROUP BY
     NULL + NULL,
     char(-2147483649, 1);
 
-SYSTEM DROP  TABLE IF EXISTS sipHashKeyed_test;
+DROP TABLE IF EXISTS sipHashKeyed_test;
 
 CREATE TABLE sipHashKeyed_test
 ENGINE = Memory() AS
@@ -317,9 +317,9 @@ FROM sipHashKeyed_test;
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(0), toUInt64(0)), a, b))
 FROM sipHashKeyed_test;
 
-SYSTEM DROP  TABLE sipHashKeyed_test;
+DROP TABLE sipHashKeyed_test;
 
-SYSTEM DROP  TABLE IF EXISTS sipHashKeyed_keys;
+DROP TABLE IF EXISTS sipHashKeyed_keys;
 
 CREATE TABLE sipHashKeyed_keys
 (
@@ -336,7 +336,7 @@ SELECT hex(sipHash128ReferenceKeyed(key, val))
 FROM sipHashKeyed_keys
 ORDER BY key ASC;
 
-SYSTEM DROP  TABLE sipHashKeyed_keys;
+DROP TABLE sipHashKeyed_keys;
 
 CREATE TABLE sipHashKeyed_keys
 (

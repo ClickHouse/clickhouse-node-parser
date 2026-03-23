@@ -2,7 +2,7 @@
 -- Tag no-replicated-database: Old syntax is not allowed
 -- no-shared-merge-tree: implemented replacement
 -- Tag no-async-insert: async insert calculate deduplicate block differently, it takes all inserted blocks into account as it is, the order is is matteer here
-SYSTEM DROP  TABLE IF EXISTS primary_key;
+DROP TABLE IF EXISTS primary_key;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -34,4 +34,4 @@ FROM primary_key
 WHERE negate(x) < -1
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE primary_key;
+DROP TABLE primary_key;

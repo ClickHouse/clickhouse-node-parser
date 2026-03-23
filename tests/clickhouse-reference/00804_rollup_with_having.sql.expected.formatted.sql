@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS rollup_having;
+DROP TABLE IF EXISTS rollup_having;
 
 CREATE TABLE rollup_having
 (
@@ -44,4 +44,4 @@ ORDER BY
     b ASC,
     count ASC;
 
-SYSTEM DROP  TABLE rollup_having;
+DROP TABLE rollup_having;

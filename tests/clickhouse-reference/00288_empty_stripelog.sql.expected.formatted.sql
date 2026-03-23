@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS stripelog;
+DROP TABLE IF EXISTS stripelog;
 
 CREATE TABLE stripelog
 (
@@ -12,4 +12,4 @@ ORDER BY x ASC;
 
 INSERT INTO stripelog;
 
-SYSTEM DROP  TABLE stripelog;
+DROP TABLE stripelog;

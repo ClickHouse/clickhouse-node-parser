@@ -3,9 +3,9 @@ SET insert_keeper_fault_injection_probability = 0; -- disable fault injection; p
 
 SET replication_alter_partitions_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS test SYNC;
+DROP TABLE IF EXISTS test;
 
-SYSTEM DROP  TABLE IF EXISTS test2 SYNC;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test
 (
@@ -67,6 +67,6 @@ ORDER BY x ASC;
 
 INSERT INTO test;
 
-SYSTEM DROP  TABLE test SYNC;
+DROP TABLE test;
 
-SYSTEM DROP  TABLE test2 SYNC;
+DROP TABLE test2;

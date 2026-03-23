@@ -2,11 +2,11 @@
 -- This fixes issue https://github.com/ClickHouse/ClickHouse/issues/95839 where incompatible types caused LOGICAL_ERROR.
 -- Old behavior: returned NULL, causing logical errors in some cases.
 -- New behavior: throws proper exceptions on incompatible types.
-SYSTEM DROP  TABLE IF EXISTS test_variant_compatible;
+DROP TABLE IF EXISTS test_variant_compatible;
 
-SYSTEM DROP  TABLE IF EXISTS test_variant_incompatible;
+DROP TABLE IF EXISTS test_variant_incompatible;
 
-SYSTEM DROP  TABLE IF EXISTS test_variant_array;
+DROP TABLE IF EXISTS test_variant_array;
 
 SET enable_variant_type = 1;
 

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS file;
+DROP TABLE IF EXISTS file;
 
 CREATE TABLE file
 (
@@ -20,4 +20,4 @@ FROM file;
 SELECT *
 FROM file2;
 
-SYSTEM DROP  TABLE file;
+DROP TABLE file;

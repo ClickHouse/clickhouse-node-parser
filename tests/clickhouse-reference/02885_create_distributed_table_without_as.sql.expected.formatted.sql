@@ -1,7 +1,7 @@
 -- Here a Distributed table without AS must detect its structure.
-SYSTEM DROP  TABLE IF EXISTS dist_tbl;
+DROP TABLE IF EXISTS dist_tbl;
 
-SYSTEM DROP  TABLE IF EXISTS local_tbl;
+DROP TABLE IF EXISTS local_tbl;
 
 CREATE TABLE local_tbl
 (
@@ -22,6 +22,6 @@ FROM local_tbl;
 SELECT *
 FROM dist_tbl;
 
-SYSTEM DROP  TABLE dist_tbl;
+DROP TABLE dist_tbl;
 
-SYSTEM DROP  TABLE local_tbl;
+DROP TABLE local_tbl;

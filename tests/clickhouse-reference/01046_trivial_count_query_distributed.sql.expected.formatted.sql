@@ -1,5 +1,5 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS test_count;
+DROP TABLE IF EXISTS test_count;
 
 CREATE TABLE test_count
 (
@@ -15,4 +15,4 @@ INSERT INTO test_count;
 SELECT count(1)
 FROM remote('127.0.0.{1,1,2}', currentDatabase(), test_count);
 
-SYSTEM DROP  TABLE test_count;
+DROP TABLE test_count;

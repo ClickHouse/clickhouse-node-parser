@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -14,4 +14,4 @@ INSERT INTO test SELECT
     '{}'
 FROM numbers(10000);
 
-SYSTEM drop  table test;
+DROP TABLE test;

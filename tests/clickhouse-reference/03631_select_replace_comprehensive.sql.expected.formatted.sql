@@ -5,9 +5,9 @@
 SET allow_experimental_analyzer = 1;
 
 -- Setup test tables
-SYSTEM DROP  TABLE IF EXISTS test_replace_main;
+DROP TABLE IF EXISTS test_replace_main;
 
-SYSTEM DROP  TABLE IF EXISTS test_replace_merge;
+DROP TABLE IF EXISTS test_replace_merge;
 
 CREATE TABLE test_replace_main
 (
@@ -36,7 +36,7 @@ FROM test_replace_main
 WHERE b > 150
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE IF EXISTS test_arith;
+DROP TABLE IF EXISTS test_arith;
 
 CREATE TABLE test_arith
 (
@@ -60,7 +60,7 @@ FROM test_arith
 WHERE b = 11;
 
 -- Test 1b: String replacement in WHERE
-SYSTEM DROP  TABLE IF EXISTS test_replace_str;
+DROP TABLE IF EXISTS test_replace_str;
 
 CREATE TABLE test_replace_str
 (
@@ -75,9 +75,9 @@ SELECT * REPLACE (concat(s, '_suffix') AS s)
 FROM test_replace_str
 WHERE s = 'hello_suffix';
 
-SYSTEM DROP  TABLE test_arith;
+DROP TABLE test_arith;
 
-SYSTEM DROP  TABLE test_replace_str;
+DROP TABLE test_replace_str;
 
 SELECT * REPLACE (a AS b)
 FROM test_replace_main
@@ -94,7 +94,7 @@ FROM test_replace_merge
 PREWHERE b > 150
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE IF EXISTS test_limit_by;
+DROP TABLE IF EXISTS test_limit_by;
 
 CREATE TABLE test_limit_by
 (
@@ -111,7 +111,7 @@ FROM test_limit_by
 ORDER BY id ASC
 LIMIT 1 BY b < 200;
 
-SYSTEM DROP  TABLE test_limit_by;
+DROP TABLE test_limit_by;
 
 SELECT
     * REPLACE (a AS b),
@@ -153,7 +153,7 @@ FROM test_replace_main
 WHERE b + 50 > 200
 ORDER BY b ASC;
 
-SYSTEM DROP  TABLE IF EXISTS test_group_by;
+DROP TABLE IF EXISTS test_group_by;
 
 CREATE TABLE test_group_by
 (
@@ -175,9 +175,9 @@ FROM (
 GROUP BY category
 ORDER BY category ASC;
 
-SYSTEM DROP  TABLE test_group_by;
+DROP TABLE test_group_by;
 
-SYSTEM DROP  TABLE IF EXISTS test_group_by_sub;
+DROP TABLE IF EXISTS test_group_by_sub;
 
 CREATE TABLE test_group_by_sub
 (
@@ -200,9 +200,9 @@ FROM (
     )
 ORDER BY category ASC;
 
-SYSTEM DROP  TABLE test_group_by_sub;
+DROP TABLE test_group_by_sub;
 
-SYSTEM DROP  TABLE IF EXISTS test_group_by_direct;
+DROP TABLE IF EXISTS test_group_by_direct;
 
 CREATE TABLE test_group_by_direct
 (
@@ -220,9 +220,9 @@ FROM test_group_by_direct
 GROUP BY category
 ORDER BY category ASC;
 
-SYSTEM DROP  TABLE test_group_by_direct;
+DROP TABLE test_group_by_direct;
 
-SYSTEM DROP  TABLE IF EXISTS test_having;
+DROP TABLE IF EXISTS test_having;
 
 CREATE TABLE test_having
 (
@@ -245,9 +245,9 @@ GROUP BY category
 HAVING total > 200
 ORDER BY category ASC;
 
-SYSTEM DROP  TABLE test_having;
+DROP TABLE test_having;
 
-SYSTEM DROP  TABLE IF EXISTS test_having_sub;
+DROP TABLE IF EXISTS test_having_sub;
 
 CREATE TABLE test_having_sub
 (
@@ -271,9 +271,9 @@ FROM (
     )
 ORDER BY category ASC;
 
-SYSTEM DROP  TABLE test_having_sub;
+DROP TABLE test_having_sub;
 
-SYSTEM DROP  TABLE IF EXISTS test_having_direct;
+DROP TABLE IF EXISTS test_having_direct;
 
 CREATE TABLE test_having_direct
 (
@@ -292,9 +292,9 @@ GROUP BY category
 HAVING total > 200
 ORDER BY category ASC;
 
-SYSTEM DROP  TABLE test_having_direct;
+DROP TABLE test_having_direct;
 
 -- Cleanup
-SYSTEM DROP  TABLE test_replace_main;
+DROP TABLE test_replace_main;
 
-SYSTEM DROP  TABLE test_replace_merge;
+DROP TABLE test_replace_merge;

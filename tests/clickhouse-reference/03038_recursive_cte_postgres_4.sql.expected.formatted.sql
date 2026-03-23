@@ -36,7 +36,7 @@ SET join_algorithm = 'hash';
 --
 -- test cycle detection
 --
-SYSTEM DROP  TABLE IF EXISTS graph;
+DROP TABLE IF EXISTS graph;
 
 CREATE TABLE graph
 (

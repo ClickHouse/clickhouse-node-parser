@@ -2,7 +2,7 @@ SELECT base32Encode('This is a test string');
 
 SELECT base32Encode('This is a test string', 'Second arg'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SYSTEM DROP  TABLE IF EXISTS t3447;
+DROP TABLE IF EXISTS t3447;
 
 CREATE TABLE t3447
 (

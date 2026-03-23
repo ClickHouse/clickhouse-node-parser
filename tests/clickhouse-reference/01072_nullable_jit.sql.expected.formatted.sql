@@ -1,6 +1,6 @@
 SET compile_expressions = 1;
 
-SYSTEM DROP  TABLE IF EXISTS foo;
+DROP TABLE IF EXISTS foo;
 
 CREATE TABLE foo
 (
@@ -19,4 +19,4 @@ INSERT INTO foo;
 SELECT divide(sum(a) + sum(b), nullIf(sum(c) + sum(d), 0))
 FROM foo;
 
-SYSTEM DROP  TABLE foo;
+DROP TABLE foo;

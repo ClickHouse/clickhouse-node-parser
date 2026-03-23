@@ -1,5 +1,5 @@
 -- Tags: no-azure-blob-storage
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -89,4 +89,4 @@ WHERE type = 'QueryFinish'
     )
 SETTINGS enable_parallel_replicas = 0;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

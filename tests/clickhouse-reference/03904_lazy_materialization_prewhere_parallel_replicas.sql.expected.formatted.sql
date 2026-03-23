@@ -18,7 +18,7 @@ SET parallel_replicas_local_plan = 1;
 
 SET parallel_replicas_min_number_of_rows_per_replica = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t_lazy_mat_prewhere_parallel;
+DROP TABLE IF EXISTS t_lazy_mat_prewhere_parallel;
 
 CREATE TABLE t_lazy_mat_prewhere_parallel
 (

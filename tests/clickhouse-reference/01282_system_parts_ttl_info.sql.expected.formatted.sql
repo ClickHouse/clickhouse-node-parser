@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ttl;
+DROP TABLE IF EXISTS ttl;
 
 CREATE TABLE ttl
 (
@@ -34,4 +34,4 @@ WHERE database = currentDatabase()
     AND table = 'ttl'
     AND active;
 
-SYSTEM DROP  TABLE ttl;
+DROP TABLE ttl;

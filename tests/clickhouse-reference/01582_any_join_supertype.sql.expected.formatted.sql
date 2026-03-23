@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS foo;
+DROP TABLE IF EXISTS foo;
 
-SYSTEM DROP  TABLE IF EXISTS bar;
+DROP TABLE IF EXISTS bar;
 
 CREATE TABLE foo
 (
@@ -53,6 +53,6 @@ WHERE toDate(foo.server_time, 'UTC') <= toDate('2020-04-30');
 
 SET any_join_distinct_right_table_keys = 1;
 
-SYSTEM DROP  TABLE foo;
+DROP TABLE foo;
 
-SYSTEM DROP  TABLE bar;
+DROP TABLE bar;

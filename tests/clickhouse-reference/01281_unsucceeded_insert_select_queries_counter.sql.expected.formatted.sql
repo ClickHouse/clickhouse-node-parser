@@ -1,5 +1,5 @@
 -- Tags: no-parallel, no-fasttest
-SYSTEM DROP  TABLE IF EXISTS to_insert;
+DROP TABLE IF EXISTS to_insert;
 
 CREATE TABLE to_insert
 (

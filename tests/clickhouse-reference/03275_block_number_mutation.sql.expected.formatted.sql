@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_block_number_delete sync;
+DROP TABLE IF EXISTS t_block_number_delete;
 
 SET mutations_sync = 2;
 
@@ -39,7 +39,7 @@ WHERE database = currentDatabase()
 GROUP BY column
 ORDER BY column ASC;
 
-SYSTEM DROP  TABLE t_block_number_delete;
+DROP TABLE t_block_number_delete;
 
 CREATE TABLE t_block_number_delete
 (

@@ -1,7 +1,7 @@
 -- Tags: no-fasttest, no-ordinary-database
 -- Tests that vector search indexes use a (non-standard) index granularity of 100 mio by default.
 -- After CREATE TABLE
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -19,7 +19,7 @@ WHERE database = currentDatabase()
     AND name = 'idx';
 
 -- After ALTER TABLE
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

@@ -1,6 +1,6 @@
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
 
-SYSTEM DROP  TABLE IF EXISTS test_empty;
+DROP TABLE IF EXISTS test_empty;
 
 CREATE TABLE test_empty
 (
@@ -16,9 +16,9 @@ FROM test_empty;
 
 INSERT INTO test_empty;
 
-SYSTEM DROP  TABLE test_empty;
+DROP TABLE test_empty;
 
-SYSTEM DROP  TABLE IF EXISTS test_null;
+DROP TABLE IF EXISTS test_null;
 
 CREATE TABLE test_null
 (
@@ -37,9 +37,9 @@ INSERT INTO test_null;
 
 INSERT INTO test_null;
 
-SYSTEM DROP  TABLE test_null;
+DROP TABLE test_null;
 
-SYSTEM DROP  TABLE IF EXISTS test_nested_arrays;
+DROP TABLE IF EXISTS test_nested_arrays;
 
 CREATE TABLE test_nested_arrays
 (
@@ -57,9 +57,9 @@ FROM test_nested_arrays;
 
 INSERT INTO test_nested_arrays;
 
-SYSTEM DROP  TABLE test_nested_arrays;
+DROP TABLE test_nested_arrays;
 
-SYSTEM DROP  TABLE IF EXISTS test_numbers;
+DROP TABLE IF EXISTS test_numbers;
 
 CREATE TABLE test_numbers
 (
@@ -79,9 +79,9 @@ FROM test_numbers;
 
 INSERT INTO test_numbers;
 
-SYSTEM DROP  TABLE test_numbers;
+DROP TABLE test_numbers;
 
-SYSTEM DROP  TABLE IF EXISTS test_big_numbers_sep;
+DROP TABLE IF EXISTS test_big_numbers_sep;
 
 CREATE TABLE test_big_numbers_sep
 (
@@ -96,9 +96,9 @@ FROM numbers_mt(100000);
 SELECT arraySort(groupArrayIntersect(*))
 FROM test_big_numbers_sep;
 
-SYSTEM DROP  TABLE test_big_numbers_sep;
+DROP TABLE test_big_numbers_sep;
 
-SYSTEM DROP  TABLE IF EXISTS test_big_numbers;
+DROP TABLE IF EXISTS test_big_numbers;
 
 CREATE TABLE test_big_numbers
 (
@@ -119,9 +119,9 @@ INSERT INTO test_big_numbers;
 SELECT arraySort(groupArrayIntersect(*))
 FROM test_big_numbers;
 
-SYSTEM DROP  TABLE test_big_numbers;
+DROP TABLE test_big_numbers;
 
-SYSTEM DROP  TABLE IF EXISTS test_string;
+DROP TABLE IF EXISTS test_string;
 
 CREATE TABLE test_string
 (
@@ -139,9 +139,9 @@ INSERT INTO test_string;
 SELECT arraySort(groupArrayIntersect(*))
 FROM test_string;
 
-SYSTEM DROP  TABLE test_string;
+DROP TABLE test_string;
 
-SYSTEM DROP  TABLE IF EXISTS test_big_string;
+DROP TABLE IF EXISTS test_big_string;
 
 CREATE TABLE test_big_string
 (
@@ -166,9 +166,9 @@ FROM test_big_string;
 
 INSERT INTO test_big_string;
 
-SYSTEM DROP  TABLE test_big_string;
+DROP TABLE test_big_string;
 
-SYSTEM DROP  TABLE IF EXISTS test_datetime;
+DROP TABLE IF EXISTS test_datetime;
 
 CREATE TABLE test_datetime
 (
@@ -184,9 +184,9 @@ INSERT INTO test_datetime;
 SELECT arraySort(groupArrayIntersect(*))
 FROM test_datetime;
 
-SYSTEM DROP  TABLE test_datetime;
+DROP TABLE test_datetime;
 
-SYSTEM DROP  TABLE IF EXISTS test_date32;
+DROP TABLE IF EXISTS test_date32;
 
 CREATE TABLE test_date32
 (
@@ -200,9 +200,9 @@ INSERT INTO test_date32;
 SELECT arraySort(groupArrayIntersect(*))
 FROM test_date32;
 
-SYSTEM DROP  TABLE test_date32;
+DROP TABLE test_date32;
 
-SYSTEM DROP  TABLE IF EXISTS test_date;
+DROP TABLE IF EXISTS test_date;
 
 CREATE TABLE test_date
 (
@@ -216,4 +216,4 @@ INSERT INTO test_date;
 SELECT arraySort(groupArrayIntersect(*))
 FROM test_date;
 
-SYSTEM DROP  TABLE test_date;
+DROP TABLE test_date;

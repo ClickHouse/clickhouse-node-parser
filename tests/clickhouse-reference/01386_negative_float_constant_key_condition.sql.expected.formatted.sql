@@ -1,6 +1,6 @@
 SET convert_query_to_cnf = 0;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -37,4 +37,4 @@ WHERE NOT(t0.c1
     OR (t0.c0
     AND nan));
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

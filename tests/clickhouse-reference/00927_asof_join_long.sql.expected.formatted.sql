@@ -1,5 +1,5 @@
 -- Tags: long, no-asan, no-msan, no-tsan
-SYSTEM DROP  TABLE IF EXISTS tvs;
+DROP TABLE IF EXISTS tvs;
 
 -- to use different algorithms for in subquery
 SET enable_analyzer = 1;
@@ -70,4 +70,4 @@ LEFT JOIN tvs
     USING (k, t)
 SETTINGS join_algorithm = 'full_sorting_merge';
 
-SYSTEM DROP  TABLE tvs;
+DROP TABLE tvs;

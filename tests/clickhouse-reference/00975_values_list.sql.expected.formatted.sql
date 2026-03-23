@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS values_list;
+DROP TABLE IF EXISTS values_list;
 
 SELECT *
 FROM VALUES('a UInt64, s String', (1, 'one'), (2, 'two'), (3, 'three'));
@@ -31,4 +31,4 @@ FROM VALUES('x Float64', NULL); -- { serverError TYPE_MISMATCH }
 SELECT *
 FROM VALUES('x Nullable(Float64)', NULL);
 
-SYSTEM DROP  TABLE values_list;
+DROP TABLE values_list;

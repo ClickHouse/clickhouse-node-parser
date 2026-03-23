@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS alter_00394;
+DROP TABLE IF EXISTS alter_00394;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 

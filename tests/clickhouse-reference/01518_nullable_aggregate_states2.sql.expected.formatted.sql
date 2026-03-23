@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS testNullableStates;
+DROP TABLE IF EXISTS testNullableStates;
 
-SYSTEM DROP  TABLE IF EXISTS testNullableStatesAgg;
+DROP TABLE IF EXISTS testNullableStatesAgg;
 
 CREATE TABLE testNullableStates
 (
@@ -407,6 +407,6 @@ SELECT
 FROM testNullableStatesAgg
 WHERE id = '-22';
 
-SYSTEM DROP  TABLE testNullableStates;
+DROP TABLE testNullableStates;
 
-SYSTEM DROP  TABLE testNullableStatesAgg;
+DROP TABLE testNullableStatesAgg;

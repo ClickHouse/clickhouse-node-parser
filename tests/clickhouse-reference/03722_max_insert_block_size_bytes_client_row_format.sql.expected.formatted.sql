@@ -10,13 +10,13 @@
 -- 3. Verifies the number of parts created to confirm the new isEnoughSize() logic:
 --    - min thresholds use AND: both rows AND bytes must be satisfied
 --    - max thresholds use OR: either rows OR bytes triggers block emission
-SYSTEM DROP  TABLE IF EXISTS test_max_insert_bytes;
+DROP TABLE IF EXISTS test_max_insert_bytes;
 
-SYSTEM DROP  TABLE IF EXISTS test_min_insert_rows_bytes;
+DROP TABLE IF EXISTS test_min_insert_rows_bytes;
 
-SYSTEM DROP  TABLE IF EXISTS test_min_insert_rows;
+DROP TABLE IF EXISTS test_min_insert_rows;
 
-SYSTEM DROP  TABLE IF EXISTS test_min_insert_bytes;
+DROP TABLE IF EXISTS test_min_insert_bytes;
 
 CREATE TABLE test_max_insert_bytes
 (

@@ -4,4 +4,4 @@ CREATE TABLE aine
 )
 ENGINE = Log;
 
-SYSTEM DROP  TABLE aine;
+DROP TABLE aine;

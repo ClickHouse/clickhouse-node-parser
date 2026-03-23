@@ -1,5 +1,5 @@
 -- String type
-SYSTEM drop  table if exists table_map;
+DROP TABLE IF EXISTS table_map;
 
 CREATE TABLE table_map
 (
@@ -61,7 +61,7 @@ INSERT INTO table_map;
 SELECT *
 FROM table_map;
 
-SYSTEM drop  table table_map;
+DROP TABLE table_map;
 
 -- Integer type
 CREATE TABLE table_map

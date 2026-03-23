@@ -1,9 +1,9 @@
 -- add_minmax_index_for_numeric_columns=0: Changes how many rows are read
-SYSTEM drop  table if exists test1;
+DROP TABLE IF EXISTS test1;
 
-SYSTEM drop  table if exists test_tuple;
+DROP TABLE IF EXISTS test_tuple;
 
-SYSTEM drop  table if exists test_two_args;
+DROP TABLE IF EXISTS test_two_args;
 
 CREATE TABLE test1
 (
@@ -149,8 +149,8 @@ SELECT count()
 FROM test_two_args
 WHERE i = 1; -- { serverError TOO_MANY_ROWS }
 
-SYSTEM drop  table test1;
+DROP TABLE test1;
 
-SYSTEM drop  table test_tuple;
+DROP TABLE test_tuple;
 
-SYSTEM drop  table test_two_args;
+DROP TABLE test_two_args;

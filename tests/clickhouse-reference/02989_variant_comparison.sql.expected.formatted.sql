@@ -140,4 +140,4 @@ ORDER BY
     v1 ASC,
     v2 ASC;
 
-SYSTEM drop  table test;
+DROP TABLE test;

@@ -52,7 +52,7 @@ SELECT
     toTypeName(d);
 
 -- Tables
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TEMPORARY TABLE t
 (
@@ -90,7 +90,7 @@ SELECT
 FROM t;
 
 -- MergeTree
-SYSTEM DROP  TABLE t;
+DROP TABLE t;
 
 CREATE TABLE t
 (

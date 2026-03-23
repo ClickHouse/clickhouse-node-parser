@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS nested;
+DROP TABLE IF EXISTS nested;
 
 CREATE TABLE nested
 (
@@ -56,4 +56,4 @@ CREATE TABLE nested
 ENGINE = MergeTree
 ORDER BY x;
 
-SYSTEM DROP  TABLE nested;
+DROP TABLE nested;

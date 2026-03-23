@@ -1,6 +1,6 @@
-SYSTEM DROP  VIEW IF EXISTS test_view;
+DROP VIEW IF EXISTS test_view;
 
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (

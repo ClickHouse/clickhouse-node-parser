@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users;
 
 SET session_timezone = 'UTC';
 

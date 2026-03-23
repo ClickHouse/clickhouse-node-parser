@@ -1,7 +1,7 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS data;
+DROP TABLE IF EXISTS data;
 
-SYSTEM DROP  TABLE IF EXISTS dist;
+DROP TABLE IF EXISTS dist;
 
 CREATE TABLE data
 (
@@ -28,6 +28,6 @@ SELECT *
 FROM dist
 GROUP BY key;
 
-SYSTEM DROP  TABLE data;
+DROP TABLE data;
 
-SYSTEM DROP  TABLE dist;
+DROP TABLE dist;

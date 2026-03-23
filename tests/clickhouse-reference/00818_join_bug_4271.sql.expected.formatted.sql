@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists t_00818;
+DROP TABLE IF EXISTS t_00818;
 
-SYSTEM drop  table if exists s_00818;
+DROP TABLE IF EXISTS s_00818;
 
 CREATE TABLE t_00818
 (
@@ -61,6 +61,6 @@ LEFT JOIN s_00818
     AND t_00818.b = s_00818.a
 ORDER BY t_00818.a ASC;
 
-SYSTEM drop  table t_00818;
+DROP TABLE t_00818;
 
-SYSTEM drop  table s_00818;
+DROP TABLE s_00818;

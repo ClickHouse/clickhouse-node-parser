@@ -1,13 +1,13 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS replace_partition_source;
+DROP TABLE IF EXISTS replace_partition_source;
 
-SYSTEM DROP  TABLE IF EXISTS replace_partition_dest1;
+DROP TABLE IF EXISTS replace_partition_dest1;
 
-SYSTEM DROP  TABLE IF EXISTS replace_partition_dest1_2;
+DROP TABLE IF EXISTS replace_partition_dest1_2;
 
-SYSTEM DROP  TABLE IF EXISTS replace_partition_dest2;
+DROP TABLE IF EXISTS replace_partition_dest2;
 
-SYSTEM DROP  TABLE IF EXISTS replace_partition_dest2_2;
+DROP TABLE IF EXISTS replace_partition_dest2_2;
 
 CREATE TABLE replace_partition_source
 (

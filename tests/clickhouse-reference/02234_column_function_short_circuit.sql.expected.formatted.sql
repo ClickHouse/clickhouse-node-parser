@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS dict_table;
+DROP TABLE IF EXISTS dict_table;
 
-SYSTEM DROP  TABLE IF EXISTS data_table;
+DROP TABLE IF EXISTS data_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict;
+DROP DICTIONARY IF EXISTS dict;
 
 CREATE TABLE dict_table
 (
@@ -39,8 +39,8 @@ INSERT INTO data_table;
 SELECT round(float64Field1 * if(strField1 != '', 1.0, dictGetFloat64('dict', 'float64Field', (strField1, toDate('2021-01-01')))) + if(strField2 != '', 1.0, dictGetFloat64('dict', 'float64Field', (strField2, toDate('2021-01-01')))) * if(isFinite(float64Field2), float64Field2, 0), 2)
 FROM data_table;
 
-SYSTEM DROP  DICTIONARY dict;
+DROP DICTIONARY dict;
 
-SYSTEM DROP  TABLE dict_table;
+DROP TABLE dict_table;
 
-SYSTEM DROP  TABLE data_table;
+DROP TABLE data_table;

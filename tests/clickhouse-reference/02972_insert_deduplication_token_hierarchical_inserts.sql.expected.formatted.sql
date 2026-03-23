@@ -4,7 +4,7 @@ SET deduplicate_blocks_in_dependent_materialized_views = 1;
 
 SET insert_deduplication_token = 'test';
 
-SYSTEM DROP  TABLE IF EXISTS landing;
+DROP TABLE IF EXISTS landing;
 
 CREATE TABLE landing
 (
@@ -15,7 +15,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
 
-SYSTEM DROP  TABLE IF EXISTS ds_1_1;
+DROP TABLE IF EXISTS ds_1_1;
 
 CREATE TABLE ds_1_1
 (
@@ -26,7 +26,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
 
-SYSTEM DROP  VIEW IF EXISTS mv_1_1;
+DROP VIEW IF EXISTS mv_1_1;
 
 CREATE MATERIALIZED VIEW mv_1_1
 TO ds_1_1
@@ -37,7 +37,7 @@ SELECT
 FROM landing
 GROUP BY t;
 
-SYSTEM DROP  TABLE IF EXISTS ds_1_2;
+DROP TABLE IF EXISTS ds_1_2;
 
 CREATE TABLE ds_1_2
 (
@@ -48,7 +48,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
 
-SYSTEM DROP  VIEW IF EXISTS mv_1_2;
+DROP VIEW IF EXISTS mv_1_2;
 
 CREATE MATERIALIZED VIEW mv_1_2
 TO ds_1_2
@@ -59,7 +59,7 @@ SELECT
 FROM landing
 GROUP BY t;
 
-SYSTEM DROP  TABLE IF EXISTS ds_2_1;
+DROP TABLE IF EXISTS ds_2_1;
 
 CREATE TABLE ds_2_1
 (
@@ -71,7 +71,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
 
-SYSTEM DROP  VIEW IF EXISTS mv_2_1;
+DROP VIEW IF EXISTS mv_2_1;
 
 CREATE MATERIALIZED VIEW mv_2_1
 TO ds_2_1
@@ -82,7 +82,7 @@ SELECT
     v
 FROM ds_1_1;
 
-SYSTEM DROP  VIEW IF EXISTS mv_2_2;
+DROP VIEW IF EXISTS mv_2_2;
 
 CREATE MATERIALIZED VIEW mv_2_2
 TO ds_2_1
@@ -93,7 +93,7 @@ SELECT
     v
 FROM ds_1_2;
 
-SYSTEM DROP  TABLE IF EXISTS ds_3_1;
+DROP TABLE IF EXISTS ds_3_1;
 
 CREATE TABLE ds_3_1
 (
@@ -105,7 +105,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
 
-SYSTEM DROP  VIEW IF EXISTS mv_3_1;
+DROP VIEW IF EXISTS mv_3_1;
 
 CREATE MATERIALIZED VIEW mv_3_1
 TO ds_3_1
@@ -116,7 +116,7 @@ SELECT
     v
 FROM ds_2_1;
 
-SYSTEM DROP  TABLE IF EXISTS ds_4_1;
+DROP TABLE IF EXISTS ds_4_1;
 
 CREATE TABLE ds_4_1
 (
@@ -128,7 +128,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
 
-SYSTEM DROP  VIEW IF EXISTS mv_4_1;
+DROP VIEW IF EXISTS mv_4_1;
 
 CREATE MATERIALIZED VIEW mv_4_1
 TO ds_4_1
@@ -139,7 +139,7 @@ SELECT
     v
 FROM mv_3_1;
 
-SYSTEM DROP  TABLE IF EXISTS ds_4_2;
+DROP TABLE IF EXISTS ds_4_2;
 
 CREATE TABLE ds_4_2
 (
@@ -151,7 +151,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS non_replicated_deduplication_window = 1000;
 
-SYSTEM DROP  VIEW IF EXISTS mv_4_2;
+DROP VIEW IF EXISTS mv_4_2;
 
 CREATE MATERIALIZED VIEW mv_4_2
 TO ds_4_2
@@ -184,30 +184,30 @@ ORDER BY
 SELECT count()
 FROM landing;
 
-SYSTEM DROP  TABLE landing;
+DROP TABLE landing;
 
-SYSTEM DROP  TABLE ds_1_1;
+DROP TABLE ds_1_1;
 
-SYSTEM DROP  VIEW mv_1_1;
+DROP VIEW mv_1_1;
 
-SYSTEM DROP  TABLE ds_1_2;
+DROP TABLE ds_1_2;
 
-SYSTEM DROP  VIEW mv_1_2;
+DROP VIEW mv_1_2;
 
-SYSTEM DROP  TABLE ds_2_1;
+DROP TABLE ds_2_1;
 
-SYSTEM DROP  VIEW mv_2_1;
+DROP VIEW mv_2_1;
 
-SYSTEM DROP  VIEW mv_2_2;
+DROP VIEW mv_2_2;
 
-SYSTEM DROP  TABLE ds_3_1;
+DROP TABLE ds_3_1;
 
-SYSTEM DROP  VIEW mv_3_1;
+DROP VIEW mv_3_1;
 
-SYSTEM DROP  TABLE ds_4_1;
+DROP TABLE ds_4_1;
 
-SYSTEM DROP  VIEW mv_4_1;
+DROP VIEW mv_4_1;
 
-SYSTEM DROP  TABLE ds_4_2;
+DROP TABLE ds_4_2;
 
-SYSTEM DROP  VIEW mv_4_2;
+DROP VIEW mv_4_2;

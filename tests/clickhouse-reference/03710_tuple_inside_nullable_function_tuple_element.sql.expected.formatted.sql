@@ -100,13 +100,13 @@ SELECT [
     CAST((3, 'c') AS Nullable(Tuple(Int32, String)))
 ].2;
 
-SYSTEM DROP  TABLE IF EXISTS test_nullable_tuples;
+DROP TABLE IF EXISTS test_nullable_tuples;
 
-SYSTEM DROP  TABLE IF EXISTS test_array_nullable_tuples;
+DROP TABLE IF EXISTS test_array_nullable_tuples;
 
-SYSTEM DROP  TABLE IF EXISTS test_nullable_named_tuples;
+DROP TABLE IF EXISTS test_nullable_named_tuples;
 
-SYSTEM DROP  TABLE IF EXISTS test_complex_nullable;
+DROP TABLE IF EXISTS test_complex_nullable;
 
 CREATE TABLE test_nullable_tuples
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  DICTIONARY IF EXISTS null_dict;
+DROP DICTIONARY IF EXISTS null_dict;
 
 CREATE DICTIONARY null_dict
 (
@@ -36,7 +36,7 @@ SELECT
     nullable_val
 FROM null_dict;
 
-SYSTEM DROP  DICTIONARY IF EXISTS null_ip_dict;
+DROP DICTIONARY IF EXISTS null_ip_dict;
 
 CREATE DICTIONARY null_ip_dict
 (

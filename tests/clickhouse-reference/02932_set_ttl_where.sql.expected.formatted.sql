@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_temp;
+DROP TABLE IF EXISTS t_temp;
 
 CREATE TABLE t_temp
 (
@@ -21,4 +21,4 @@ INSERT INTO t_temp SELECT
 FROM `system`.numbers
 LIMIT 100000;
 
-SYSTEM DROP  TABLE t_temp;
+DROP TABLE t_temp;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_grace_hash;
+DROP TABLE IF EXISTS test_grace_hash;
 
 CREATE TABLE test_grace_hash
 (
@@ -25,4 +25,4 @@ FROM (
         LIMIT 1000
     );
 
-SYSTEM DROP  TABLE test_grace_hash;
+DROP TABLE test_grace_hash;

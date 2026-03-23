@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS testmt;
+DROP TABLE IF EXISTS testmt;
 
 CREATE TABLE testmt
 (
@@ -15,4 +15,4 @@ FROM testmt
 WHERE CounterID IN (2)
 GROUP BY counter;
 
-SYSTEM DROP  TABLE testmt;
+DROP TABLE testmt;

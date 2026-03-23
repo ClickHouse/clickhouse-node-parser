@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS midpoint_jit;
+DROP TABLE IF EXISTS midpoint_jit;
 
 CREATE TABLE midpoint_jit
 (

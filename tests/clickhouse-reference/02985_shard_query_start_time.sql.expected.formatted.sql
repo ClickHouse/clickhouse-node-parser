@@ -1,5 +1,5 @@
 -- Tags: no-parallel-replicas
-SYSTEM DROP  TABLE IF EXISTS sharded_table;
+DROP TABLE IF EXISTS sharded_table;
 
 CREATE TABLE sharded_table
 (

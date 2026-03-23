@@ -1,7 +1,7 @@
 -- Tags: replica
-SYSTEM DROP  TABLE IF EXISTS parallel_replicas;
+DROP TABLE IF EXISTS parallel_replicas;
 
-SYSTEM DROP  TABLE IF EXISTS parallel_replicas_backup;
+DROP TABLE IF EXISTS parallel_replicas_backup;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -71,11 +71,11 @@ ORDER BY
     u ASC,
     s ASC;
 
-SYSTEM DROP  TABLE parallel_replicas_backup;
+DROP TABLE parallel_replicas_backup;
 
 /* Three replicas */
 SET parallel_replicas_count = 3;
 
 SET parallel_replica_offset = 2;
 
-SYSTEM DROP  TABLE parallel_replicas;
+DROP TABLE parallel_replicas;

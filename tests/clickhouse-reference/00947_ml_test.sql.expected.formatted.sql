@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS defaults;
+DROP TABLE IF EXISTS defaults;
 
 CREATE TABLE IF NOT EXISTS defaults
 (
@@ -12,7 +12,7 @@ ENGINE = Memory;
 
 INSERT INTO defaults;
 
-SYSTEM DROP  TABLE IF EXISTS model;
+DROP TABLE IF EXISTS model;
 
 CREATE TABLE model
 ENGINE = Memory AS
@@ -55,7 +55,7 @@ FROM (
     );
 
 -- Check GROUP BY
-SYSTEM DROP  TABLE IF EXISTS grouptest;
+DROP TABLE IF EXISTS grouptest;
 
 CREATE TABLE IF NOT EXISTS grouptest
 (
@@ -96,8 +96,8 @@ FROM (
         LIMIT 0, 1
     );
 
-SYSTEM DROP  TABLE defaults;
+DROP TABLE defaults;
 
-SYSTEM DROP  TABLE model;
+DROP TABLE model;
 
-SYSTEM DROP  TABLE grouptest;
+DROP TABLE grouptest;

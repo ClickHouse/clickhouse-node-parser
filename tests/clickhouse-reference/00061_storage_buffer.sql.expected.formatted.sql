@@ -1,7 +1,7 @@
 -- Tags: stateful
-SYSTEM DROP  TABLE IF EXISTS hits_dst;
+DROP TABLE IF EXISTS hits_dst;
 
-SYSTEM DROP  TABLE IF EXISTS hits_buffer;
+DROP TABLE IF EXISTS hits_buffer;
 
 CREATE TABLE hits_dst AS test.hits
 ENGINE = MergeTree
@@ -23,6 +23,6 @@ FROM hits_buffer;
 SELECT count()
 FROM hits_dst;
 
-SYSTEM DROP  TABLE hits_dst;
+DROP TABLE hits_dst;
 
-SYSTEM DROP  TABLE hits_buffer;
+DROP TABLE hits_buffer;

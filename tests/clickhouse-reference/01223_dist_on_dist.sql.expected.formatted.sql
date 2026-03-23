@@ -1,10 +1,10 @@
-SYSTEM drop  table if exists merge_dist_01223;
+DROP TABLE IF EXISTS merge_dist_01223;
 
-SYSTEM drop  table if exists dist_01223;
+DROP TABLE IF EXISTS dist_01223;
 
-SYSTEM drop  table if exists dist_layer_01223;
+DROP TABLE IF EXISTS dist_layer_01223;
 
-SYSTEM drop  table if exists data_01223;
+DROP TABLE IF EXISTS data_01223;
 
 CREATE TABLE data_01223
 (
@@ -135,9 +135,9 @@ SELECT count()
 FROM dist_01223
 SETTINGS distributed_group_by_no_merge = 1;
 
-SYSTEM drop  table dist_01223;
+DROP TABLE dist_01223;
 
-SYSTEM drop  table dist_layer_01223;
+DROP TABLE dist_layer_01223;
 
 CREATE TABLE dist_layer_01223 AS data_01223
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), data_01223);
@@ -158,6 +158,6 @@ WHERE key GLOBAL IN (
         SELECT toInt32(1)
     );
 
-SYSTEM drop  table merge_dist_01223;
+DROP TABLE merge_dist_01223;
 
-SYSTEM drop  table data_01223;
+DROP TABLE data_01223;

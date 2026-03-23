@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS src;
+DROP TABLE IF EXISTS src;
 
 CREATE TABLE src
 (
@@ -9,7 +9,7 @@ ENGINE = Memory;
 
 INSERT INTO src;
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict;
+DROP DICTIONARY IF EXISTS dict;
 
 CREATE DICTIONARY dict
 (
@@ -24,6 +24,6 @@ LAYOUT(FLAT());
 SELECT dictGet(concat(currentDatabase(), '.dict'), 's', number)
 FROM numbers(2);
 
-SYSTEM DROP  DICTIONARY dict;
+DROP DICTIONARY dict;
 
-SYSTEM DROP  TABLE src;
+DROP TABLE src;

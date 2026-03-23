@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS polygons_test_table;
+DROP TABLE IF EXISTS polygons_test_table;
 
 CREATE TABLE polygons_test_table
 (
@@ -9,7 +9,7 @@ ENGINE = TinyLog;
 
 INSERT INTO polygons_test_table;
 
-SYSTEM DROP  DICTIONARY IF EXISTS polygons_test_dictionary_no_option;
+DROP DICTIONARY IF EXISTS polygons_test_dictionary_no_option;
 
 CREATE DICTIONARY polygons_test_dictionary_no_option
 (
@@ -24,7 +24,7 @@ LAYOUT(POLYGON());
 SELECT *
 FROM polygons_test_dictionary_no_option; -- {serverError UNSUPPORTED_METHOD}
 
-SYSTEM DROP  DICTIONARY IF EXISTS polygons_test_dictionary;
+DROP DICTIONARY IF EXISTS polygons_test_dictionary;
 
 CREATE DICTIONARY polygons_test_dictionary
 (
@@ -39,8 +39,8 @@ LAYOUT(POLYGON(STORE_POLYGON_KEY_COLUMN 1));
 SELECT *
 FROM polygons_test_dictionary;
 
-SYSTEM DROP  DICTIONARY polygons_test_dictionary_no_option;
+DROP DICTIONARY polygons_test_dictionary_no_option;
 
-SYSTEM DROP  DICTIONARY polygons_test_dictionary;
+DROP DICTIONARY polygons_test_dictionary;
 
-SYSTEM DROP  TABLE polygons_test_table;
+DROP TABLE polygons_test_table;

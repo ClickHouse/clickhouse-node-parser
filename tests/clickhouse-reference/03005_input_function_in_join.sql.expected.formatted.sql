@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -17,4 +17,4 @@ FROM
 INNER JOIN input('a UInt64') AS y
     ON x.number = y.a;
 
-SYSTEM drop  table test;
+DROP TABLE test;

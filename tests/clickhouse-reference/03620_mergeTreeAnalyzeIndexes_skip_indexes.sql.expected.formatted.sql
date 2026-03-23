@@ -1,6 +1,6 @@
 -- Tags: no-random-merge-tree-settings
 -- - no-random-merge-tree-settings -- may change amount of granulas
-SYSTEM drop  table if exists with_skip_index;
+DROP TABLE IF EXISTS with_skip_index;
 
 CREATE TABLE with_skip_index
 (

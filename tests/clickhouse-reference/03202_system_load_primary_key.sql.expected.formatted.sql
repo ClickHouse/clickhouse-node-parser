@@ -1,8 +1,8 @@
 -- Tags: no-parallel
 -- no-parallel: test loads/unloads PKs of all tables, this affects expected results if the test runs in parallel
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
-SYSTEM DROP  TABLE IF EXISTS test2;
+DROP TABLE IF EXISTS test2;
 
 CREATE TABLE test
 (
@@ -47,6 +47,6 @@ WHERE database = currentDatabase()
     AND table IN ('test', 'test2')
 ORDER BY table ASC;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
-SYSTEM DROP  TABLE test2;
+DROP TABLE test2;

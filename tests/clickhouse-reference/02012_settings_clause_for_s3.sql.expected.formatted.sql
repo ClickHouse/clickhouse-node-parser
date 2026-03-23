@@ -1,6 +1,6 @@
 -- Tags: no-fasttest
 -- Tag no-fasttest: Depends on AWS
-SYSTEM DROP  TABLE IF EXISTS table_with_range;
+DROP TABLE IF EXISTS table_with_range;
 
 CREATE TABLE table_with_range
 (

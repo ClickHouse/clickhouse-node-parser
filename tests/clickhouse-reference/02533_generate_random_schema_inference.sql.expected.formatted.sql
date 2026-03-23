@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -14,4 +14,4 @@ LIMIT 10;
 SELECT count()
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

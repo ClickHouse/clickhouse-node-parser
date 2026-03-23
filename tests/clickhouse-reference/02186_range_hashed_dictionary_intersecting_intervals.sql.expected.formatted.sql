@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02186_range_dictionary_source_table;
+DROP TABLE IF EXISTS `02186_range_dictionary_source_table`;
 
 CREATE TABLE `02186_range_dictionary_source_table`
 (
@@ -19,7 +19,7 @@ SELECT *
 FROM `02186_range_dictionary_source_table`
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02186_range_dictionary;
+DROP DICTIONARY IF EXISTS `02186_range_dictionary`;
 
 CREATE DICTIONARY `02186_range_dictionary`
 (
@@ -43,7 +43,7 @@ SELECT dictGet('02186_range_dictionary', 'value', toUInt64(1), toDate('2020-01-0
 
 SELECT dictGet('02186_range_dictionary', 'value', toUInt64(1), toDate('2020-01-03'));
 
-SYSTEM DROP  DICTIONARY 02186_range_dictionary;
+DROP DICTIONARY `02186_range_dictionary`;
 
 CREATE DICTIONARY `02186_range_dictionary`
 (
@@ -62,4 +62,4 @@ SELECT *
 FROM `02186_range_dictionary`
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE 02186_range_dictionary_source_table;
+DROP TABLE `02186_range_dictionary_source_table`;

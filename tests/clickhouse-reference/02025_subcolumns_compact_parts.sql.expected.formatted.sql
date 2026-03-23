@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_comp_subcolumns;
+DROP TABLE IF EXISTS t_comp_subcolumns;
 
 CREATE TABLE t_comp_subcolumns
 (
@@ -28,4 +28,4 @@ FROM t_comp_subcolumns;
 SELECT sumArray(arr.size1)
 FROM t_comp_subcolumns;
 
-SYSTEM DROP  TABLE t_comp_subcolumns;
+DROP TABLE t_comp_subcolumns;

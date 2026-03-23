@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS log;
+DROP TABLE IF EXISTS log;
 
 CREATE TABLE log
 (
@@ -41,7 +41,7 @@ GROUP BY time
 ORDER BY time DESC;
 
 -- Another similar case to verify that COUNT(NOT NULL) should be able to use aggregate projection.
-SYSTEM DROP  TABLE log;
+DROP TABLE log;
 
 CREATE TABLE log
 (

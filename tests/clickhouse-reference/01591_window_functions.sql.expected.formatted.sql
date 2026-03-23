@@ -497,7 +497,7 @@ FROM numbers(2);
 
 -- optimize_read_in_order conflicts with sorting for window functions, check that
 -- it is disabled.
-SYSTEM drop  table if exists window_mt;
+DROP TABLE IF EXISTS window_mt;
 
 CREATE TABLE window_mt
 ENGINE = MergeTree
@@ -523,7 +523,7 @@ ORDER BY number ASC
 LIMIT 10
 SETTINGS optimize_read_in_order = 1;
 
-SYSTEM drop  table window_mt;
+DROP TABLE window_mt;
 
 -- some true window functions -- rank and friends
 SELECT

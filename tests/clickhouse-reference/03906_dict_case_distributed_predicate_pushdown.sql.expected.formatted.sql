@@ -2,11 +2,11 @@
 -- Dictionary + CASE + distributed table: predicate pushdown should not filter out rows incorrectly.
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t_dict_dist_local;
+DROP TABLE IF EXISTS t_dict_dist_local;
 
-SYSTEM DROP  DICTIONARY IF EXISTS d_dict_dist;
+DROP DICTIONARY IF EXISTS d_dict_dist;
 
-SYSTEM DROP  TABLE IF EXISTS t_dict_dist;
+DROP TABLE IF EXISTS t_dict_dist;
 
 CREATE TABLE t_dict_dist_local
 (
@@ -50,8 +50,8 @@ FROM (
 WHERE filter_value = 'SHOULD ALWAYS HAPPEN'
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_dict_dist;
+DROP TABLE t_dict_dist;
 
-SYSTEM DROP  DICTIONARY d_dict_dist;
+DROP DICTIONARY d_dict_dist;
 
-SYSTEM DROP  TABLE t_dict_dist_local;
+DROP TABLE t_dict_dist_local;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_empty_order_key;
+DROP TABLE IF EXISTS t_empty_order_key;
 
 SET allow_suspicious_primary_key = 0;
 
@@ -19,7 +19,7 @@ SELECT *
 FROM t_empty_order_key
 ORDER BY c0 ASC;
 
-SYSTEM DROP  TABLE t_empty_order_key;
+DROP TABLE t_empty_order_key;
 
 -- Check with forced vertical merge
 CREATE TABLE t_empty_order_key

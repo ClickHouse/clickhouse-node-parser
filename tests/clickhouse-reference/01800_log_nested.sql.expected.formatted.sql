@@ -1,5 +1,5 @@
 -- TinyLog
-SYSTEM DROP  TABLE IF EXISTS nested_01800_tiny_log;
+DROP TABLE IF EXISTS nested_01800_tiny_log;
 
 CREATE TABLE nested_01800_tiny_log
 (
@@ -13,10 +13,10 @@ SELECT 10
 FROM nested_01800_tiny_log
 FORMAT Null;
 
-SYSTEM DROP  TABLE nested_01800_tiny_log;
+DROP TABLE nested_01800_tiny_log;
 
 -- StripeLog
-SYSTEM DROP  TABLE IF EXISTS nested_01800_stripe_log;
+DROP TABLE IF EXISTS nested_01800_stripe_log;
 
 CREATE TABLE nested_01800_stripe_log
 (
@@ -30,10 +30,10 @@ SELECT 10
 FROM nested_01800_stripe_log
 FORMAT Null;
 
-SYSTEM DROP  TABLE nested_01800_stripe_log;
+DROP TABLE nested_01800_stripe_log;
 
 -- Log
-SYSTEM DROP  TABLE IF EXISTS nested_01800_log;
+DROP TABLE IF EXISTS nested_01800_log;
 
 CREATE TABLE nested_01800_log
 (
@@ -47,4 +47,4 @@ SELECT 10
 FROM nested_01800_log
 FORMAT Null;
 
-SYSTEM DROP  TABLE nested_01800_log;
+DROP TABLE nested_01800_log;

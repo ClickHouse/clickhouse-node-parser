@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lightweight SYNC;
+DROP TABLE IF EXISTS t_lightweight;
 
 SET enable_lightweight_update = 1;
 
@@ -34,4 +34,4 @@ SELECT count()
 FROM t_lightweight
 WHERE c1 != id;
 
-SYSTEM DROP  TABLE t_lightweight SYNC;
+DROP TABLE t_lightweight;

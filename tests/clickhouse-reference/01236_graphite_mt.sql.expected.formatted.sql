@@ -1,5 +1,5 @@
 -- Use DateTime('UTC') to have a common rollup window
-SYSTEM drop  table if exists test_graphite;
+DROP TABLE IF EXISTS test_graphite;
 
 CREATE TABLE test_graphite
 (
@@ -224,4 +224,4 @@ ORDER BY
     Path ASC,
     Time DESC;
 
-SYSTEM drop  table test_graphite;
+DROP TABLE test_graphite;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS bftest;
+DROP TABLE IF EXISTS bftest;
 
 CREATE TABLE bftest
 (

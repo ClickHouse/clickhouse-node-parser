@@ -1,5 +1,5 @@
 -- Test iif() function in KQL dialect
-SYSTEM DROP  TABLE IF EXISTS iif_test;
+DROP TABLE IF EXISTS iif_test;
 
 CREATE TABLE iif_test
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS datetime;
+DROP TABLE IF EXISTS datetime;
 
 CREATE TABLE datetime
 (
@@ -80,4 +80,4 @@ FROM datetime;
 SELECT quantilesBFloat16Weighted(0.2)(d, 1)
 FROM datetime;
 
-SYSTEM DROP  TABLE datetime;
+DROP TABLE datetime;

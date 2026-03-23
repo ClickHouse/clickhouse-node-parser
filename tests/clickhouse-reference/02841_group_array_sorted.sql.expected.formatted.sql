@@ -16,7 +16,7 @@ FROM (
 SELECT groupArraySorted(10)(toInt64(number / 2))
 FROM numbers(100);
 
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -30,7 +30,7 @@ INSERT INTO test;
 SELECT groupArraySorted(3)(a)
 FROM test;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;
 
 CREATE TABLE IF NOT EXISTS test
 (

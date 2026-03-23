@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS rmt1;
+DROP TABLE IF EXISTS rmt1;
 
 SET use_skip_indexes = 1;
 
@@ -117,4 +117,4 @@ WHERE ((and(greaterOrEquals(id, 650), lessOrEquals(id, 900))
     AND and(greaterOrEquals(id, 16000), lessOrEquals(id, 16500))))
     AND val = 88888888;
 
-SYSTEM DROP  TABLE rmt1;
+DROP TABLE rmt1;

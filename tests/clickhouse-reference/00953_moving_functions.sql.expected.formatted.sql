@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS moving_sum_num;
+DROP TABLE IF EXISTS moving_sum_num;
 
-SYSTEM DROP  TABLE IF EXISTS moving_sum_dec;
+DROP TABLE IF EXISTS moving_sum_dec;
 
 CREATE TABLE moving_sum_num
 (
@@ -109,6 +109,6 @@ SELECT
     toDecimal64(v, 2) AS v
 FROM moving_sum_num;
 
-SYSTEM DROP  TABLE moving_sum_dec;
+DROP TABLE moving_sum_dec;
 
-SYSTEM DROP  TABLE moving_sum_num;
+DROP TABLE moving_sum_num;

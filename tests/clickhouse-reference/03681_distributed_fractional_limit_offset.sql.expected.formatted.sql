@@ -28,9 +28,9 @@ SET enable_analyzer = 1;
 -- Distributed Table
 SET prefer_localhost_replica = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test__fuzz_2_local;
+DROP TABLE IF EXISTS test__fuzz_2_local;
 
-SYSTEM DROP  TABLE IF EXISTS test__fuzz_2_dist;
+DROP TABLE IF EXISTS test__fuzz_2_dist;
 
 CREATE TABLE test__fuzz_2_local
 (

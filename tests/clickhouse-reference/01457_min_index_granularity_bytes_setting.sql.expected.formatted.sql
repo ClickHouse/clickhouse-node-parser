@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS invalid_min_index_granularity_bytes_setting;
+DROP TABLE IF EXISTS invalid_min_index_granularity_bytes_setting;
 
 CREATE TABLE invalid_min_index_granularity_bytes_setting
 (
@@ -9,7 +9,7 @@ ENGINE = MergeTree()
 ORDER BY id
 SETTINGS index_granularity_bytes = 1, min_index_granularity_bytes = 1024; -- { serverError BAD_ARGUMENTS }
 
-SYSTEM DROP  TABLE IF EXISTS valid_min_index_granularity_bytes_setting;
+DROP TABLE IF EXISTS valid_min_index_granularity_bytes_setting;
 
 CREATE TABLE valid_min_index_granularity_bytes_setting
 (

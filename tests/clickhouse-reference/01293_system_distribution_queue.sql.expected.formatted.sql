@@ -1,9 +1,9 @@
 -- Tags: no-parallel
 SET prefer_localhost_replica = 1;
 
-SYSTEM drop  table if exists null_01293;
+DROP TABLE IF EXISTS null_01293;
 
-SYSTEM drop  table if exists dist_01293;
+DROP TABLE IF EXISTS dist_01293;
 
 CREATE TABLE null_01293
 (
@@ -42,6 +42,6 @@ SELECT
 FROM `system`.distribution_queue
 WHERE database = currentDatabase();
 
-SYSTEM drop  table null_01293;
+DROP TABLE null_01293;
 
-SYSTEM drop  table dist_01293;
+DROP TABLE dist_01293;

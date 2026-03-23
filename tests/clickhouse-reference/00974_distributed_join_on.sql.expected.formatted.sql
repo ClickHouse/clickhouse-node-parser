@@ -1,11 +1,11 @@
 -- Tags: distributed
-SYSTEM DROP  TABLE IF EXISTS source_table1;
+DROP TABLE IF EXISTS source_table1;
 
-SYSTEM DROP  TABLE IF EXISTS source_table2;
+DROP TABLE IF EXISTS source_table2;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_table1;
+DROP TABLE IF EXISTS distributed_table1;
 
-SYSTEM DROP  TABLE IF EXISTS distributed_table2;
+DROP TABLE IF EXISTS distributed_table2;
 
 CREATE TABLE source_table1
 (
@@ -74,10 +74,10 @@ INNER JOIN distributed_table1 AS t2
     ON t1_a = t2_a
 LIMIT 1;
 
-SYSTEM DROP  TABLE source_table1;
+DROP TABLE source_table1;
 
-SYSTEM DROP  TABLE source_table2;
+DROP TABLE source_table2;
 
-SYSTEM DROP  TABLE distributed_table1;
+DROP TABLE distributed_table1;
 
-SYSTEM DROP  TABLE distributed_table2;
+DROP TABLE distributed_table2;

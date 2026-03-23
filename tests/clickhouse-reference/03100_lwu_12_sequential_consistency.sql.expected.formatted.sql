@@ -1,7 +1,7 @@
 -- Tags: replica
-SYSTEM DROP  TABLE IF EXISTS t_lwu_sequential_1 SYNC;
+DROP TABLE IF EXISTS t_lwu_sequential_1;
 
-SYSTEM DROP  TABLE IF EXISTS t_lwu_sequential_2 SYNC;
+DROP TABLE IF EXISTS t_lwu_sequential_2;
 
 SET enable_lightweight_update = 1;
 

@@ -1,5 +1,5 @@
 -- Tags: stateful
-SYSTEM DROP  TABLE IF EXISTS partitions;
+DROP TABLE IF EXISTS partitions;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -36,4 +36,4 @@ FROM test.hits
 WHERE CounterID = 1704509
     AND toStartOfMonth(EventDate) = toDate('2014-03-01');
 
-SYSTEM DROP  TABLE partitions;
+DROP TABLE partitions;

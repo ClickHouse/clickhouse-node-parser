@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS primary;
+DROP TABLE IF EXISTS primary;
 
 CREATE TABLE primary
 (
@@ -13,4 +13,4 @@ FROM numbers(1000);
 SELECT max(primary)
 FROM primary;
 
-SYSTEM DROP  TABLE primary;
+DROP TABLE primary;

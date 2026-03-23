@@ -4,7 +4,7 @@
 -- Tests system table 'system.query_condition_cache'
 SET allow_experimental_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -34,4 +34,4 @@ FROM `system`.query_condition_cache;
 
 SET optimize_move_to_prewhere = false;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_materialize_column;
+DROP TABLE IF EXISTS t_materialize_column;
 
 CREATE TABLE t_materialize_column
 (
@@ -29,4 +29,4 @@ SELECT *
 FROM t_materialize_column
 ORDER BY i ASC;
 
-SYSTEM DROP  TABLE t_materialize_column;
+DROP TABLE t_materialize_column;

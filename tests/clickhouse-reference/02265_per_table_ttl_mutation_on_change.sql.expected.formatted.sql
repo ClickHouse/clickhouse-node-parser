@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists per_table_ttl_02265;
+DROP TABLE IF EXISTS per_table_ttl_02265;
 
 CREATE TABLE per_table_ttl_02265
 (
@@ -17,4 +17,4 @@ WHERE database = currentDatabase()
     AND table = 'per_table_ttl_02265';
 
 -- { echoOff }
-SYSTEM drop  table per_table_ttl_02265;
+DROP TABLE per_table_ttl_02265;

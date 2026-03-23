@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS products;
+DROP TABLE IF EXISTS products;
 
 SET enable_analyzer = 1;
 

@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists ttl_test_02129;
+DROP TABLE IF EXISTS ttl_test_02129;
 
 CREATE TABLE ttl_test_02129
 (
@@ -32,7 +32,7 @@ ORDER BY
     d ASC,
     c ASC;
 
-SYSTEM drop  table ttl_test_02129;
+DROP TABLE ttl_test_02129;
 
 CREATE TABLE ttl_test_02129
 (

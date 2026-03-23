@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS lwd_test;
+DROP TABLE IF EXISTS lwd_test;
 
 SET enable_lightweight_update = 1;
 
@@ -34,4 +34,4 @@ FROM lwd_test
 ORDER BY id ASC
 LIMIT 1;
 
-SYSTEM DROP  TABLE lwd_test;
+DROP TABLE lwd_test;

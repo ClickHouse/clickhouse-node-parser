@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS weird_projections;
+DROP TABLE IF EXISTS weird_projections;
 
 CREATE TABLE weird_projections
 (

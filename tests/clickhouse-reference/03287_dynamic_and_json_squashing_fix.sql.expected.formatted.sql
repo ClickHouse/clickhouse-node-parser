@@ -2,9 +2,9 @@ SET enable_json_type = 1;
 
 SET enable_dynamic_type = 1;
 
-SYSTEM drop  table if exists src;
+DROP TABLE IF EXISTS src;
 
-SYSTEM drop  table if exists dst;
+DROP TABLE IF EXISTS dst;
 
 CREATE TABLE src
 (
@@ -29,9 +29,9 @@ FROM remote('127.0.0.2', currentDatabase(), src);
 SELECT isDynamicElementInSharedData(d)
 FROM dst;
 
-SYSTEM drop  table src;
+DROP TABLE src;
 
-SYSTEM drop  table dst;
+DROP TABLE dst;
 
 CREATE TABLE src
 (

@@ -6,7 +6,7 @@ SELECT toStartOfWeek(toDateTime('1970-01-01 00:00:00', 'Canada/Atlantic'));
 
 SELECT toStartOfWeek(toDateTime('1970-01-04 00:00:00'));
 
-SYSTEM DROP  TABLE IF EXISTS t02176;
+DROP TABLE IF EXISTS t02176;
 
 CREATE TABLE t02176
 (
@@ -26,4 +26,4 @@ SELECT count()
 FROM t02176
 WHERE identity(timestamp) >= toDateTime('1970-01-01 00:00:00');
 
-SYSTEM DROP  TABLE t02176;
+DROP TABLE t02176;

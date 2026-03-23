@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS tuple;
+DROP TABLE IF EXISTS tuple;
 
 CREATE TABLE tuple
 (
@@ -16,4 +16,4 @@ SELECT *
 FROM tuple
 ORDER BY t ASC;
 
-SYSTEM DROP  TABLE tuple;
+DROP TABLE tuple;

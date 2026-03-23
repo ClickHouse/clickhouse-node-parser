@@ -5,9 +5,9 @@ SET allow_suspicious_types_in_order_by = 1;
 
 SET parallel_replicas_local_plan = 1;
 
-SYSTEM DROP  TABLE IF EXISTS type_json_src;
+DROP TABLE IF EXISTS type_json_src;
 
-SYSTEM DROP  TABLE IF EXISTS type_json_dst;
+DROP TABLE IF EXISTS type_json_dst;
 
 CREATE TABLE type_json_src
 (
@@ -50,9 +50,9 @@ WHERE id = 5;
 
 INSERT INTO type_json_src;
 
-SYSTEM DROP  TABLE type_json_src;
+DROP TABLE type_json_src;
 
-SYSTEM DROP  TABLE type_json_dst;
+DROP TABLE type_json_dst;
 
 CREATE TABLE type_json_dst
 (

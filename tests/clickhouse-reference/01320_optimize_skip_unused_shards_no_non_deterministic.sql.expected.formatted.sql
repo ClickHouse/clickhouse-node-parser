@@ -1,7 +1,7 @@
 -- Tags: shard
-SYSTEM drop  table if exists data_01320;
+DROP TABLE IF EXISTS data_01320;
 
-SYSTEM drop  table if exists dist_01320;
+DROP TABLE IF EXISTS dist_01320;
 
 CREATE TABLE data_01320
 (
@@ -21,6 +21,6 @@ SELECT *
 FROM dist_01320
 WHERE key = 0; -- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }
 
-SYSTEM drop  table data_01320;
+DROP TABLE data_01320;
 
-SYSTEM drop  table dist_01320;
+DROP TABLE dist_01320;

@@ -1,8 +1,8 @@
 SET prefer_localhost_replica = 0;
 
-SYSTEM drop  table if exists data;
+DROP TABLE IF EXISTS data;
 
-SYSTEM drop  table if exists dist;
+DROP TABLE IF EXISTS dist;
 
 -- { echoOn }
 CREATE TABLE data
@@ -24,7 +24,7 @@ SELECT *
 FROM data;
 
 -- check flush_on_detach=0
-SYSTEM drop  table dist;
+DROP TABLE dist;
 
 CREATE TABLE dist
 (

@@ -109,7 +109,7 @@ SELECT firstNonDefault(NULL::Nullable(Array(UInt8)), []::Array(UInt8)); -- { ser
 SELECT firstNonDefault(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, number)
 FROM numbers(3);
 
-SYSTEM DROP  TABLE IF EXISTS test_first_truthy;
+DROP TABLE IF EXISTS test_first_truthy;
 
 CREATE TABLE test_first_truthy
 (
@@ -161,4 +161,4 @@ SELECT
 FROM test_first_truthy
 ORDER BY `ALL` ASC;
 
-SYSTEM DROP  TABLE test_first_truthy;
+DROP TABLE test_first_truthy;

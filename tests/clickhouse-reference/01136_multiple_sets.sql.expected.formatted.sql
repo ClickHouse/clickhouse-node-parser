@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -26,4 +26,4 @@ SELECT project IN ('val1', 'val2')
 FROM test
 WHERE project IN ('val1', 'val2');
 
-SYSTEM drop  table test;
+DROP TABLE test;

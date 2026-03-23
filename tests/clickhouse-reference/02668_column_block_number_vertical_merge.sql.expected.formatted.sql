@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -32,4 +32,4 @@ ORDER BY id ASC;
 
 INSERT INTO test (id, a);
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

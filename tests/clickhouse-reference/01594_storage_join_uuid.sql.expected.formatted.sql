@@ -1,7 +1,7 @@
 -- the test from simPod, https://github.com/ClickHouse/ClickHouse/issues/5608
-SYSTEM DROP  TABLE IF EXISTS joint; -- the table name from the original issue.
+DROP TABLE IF EXISTS joint; -- the table name from the original issue.
 
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE IF NOT EXISTS joint
 (
@@ -29,6 +29,6 @@ FROM
 LEFT JOIN joint
     ON t.id = joint.id;
 
-SYSTEM DROP  TABLE joint;
+DROP TABLE joint;
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

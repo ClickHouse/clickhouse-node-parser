@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_enum;
+DROP TABLE IF EXISTS test_enum;
 
 CREATE TABLE test_enum
 (
@@ -16,4 +16,4 @@ FROM test_enum;
 
 SELECT toString('aaaa', NULL);
 
-SYSTEM drop  table test_enum;
+DROP TABLE test_enum;

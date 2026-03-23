@@ -98,7 +98,7 @@ WHERE current_database = currentDatabase()
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE mv1;
+DROP TABLE mv1;
 
 CREATE TABLE t3
 (
@@ -153,7 +153,7 @@ WHERE current_database = currentDatabase()
     AND event_date >= yesterday()
     AND event_time > now() - toIntervalMinute(10);
 
-SYSTEM DROP  TABLE mv2;
+DROP TABLE mv2;
 
 CREATE TABLE t4
 (
@@ -208,12 +208,12 @@ WHERE current_database = currentDatabase()
     AND event_date >= yesterday()
     AND event_time > now() - toIntervalMinute(10);
 
-SYSTEM DROP  TABLE mv3;
+DROP TABLE mv3;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;
 
-SYSTEM DROP  TABLE t2;
+DROP TABLE t2;
 
-SYSTEM DROP  TABLE t3;
+DROP TABLE t3;
 
-SYSTEM DROP  TABLE t4;
+DROP TABLE t4;

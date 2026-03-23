@@ -1,5 +1,5 @@
 -- No virtual columns should be output in DESC TABLE query.
-SYSTEM DROP  TABLE IF EXISTS upyachka;
+DROP TABLE IF EXISTS upyachka;
 
 CREATE TABLE upyachka
 (
@@ -7,4 +7,4 @@ CREATE TABLE upyachka
 )
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE upyachka;
+DROP TABLE upyachka;

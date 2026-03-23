@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS test_move_partition_src;
+DROP TABLE IF EXISTS test_move_partition_src;
 
-SYSTEM DROP  TABLE IF EXISTS test_move_partition_dest;
+DROP TABLE IF EXISTS test_move_partition_dest;
 
 CREATE TABLE IF NOT EXISTS test_move_partition_src
 (
@@ -34,6 +34,6 @@ FROM test_move_partition_src;
 SELECT count()
 FROM test_move_partition_dest;
 
-SYSTEM DROP  TABLE test_move_partition_src;
+DROP TABLE test_move_partition_src;
 
-SYSTEM DROP  TABLE test_move_partition_dest;
+DROP TABLE test_move_partition_dest;

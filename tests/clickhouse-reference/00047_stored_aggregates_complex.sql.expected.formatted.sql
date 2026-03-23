@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS stored_aggregates;
+DROP TABLE IF EXISTS stored_aggregates;
 
 SET max_insert_threads = 1;
 
@@ -96,4 +96,4 @@ FROM stored_aggregates
 GROUP BY d
 ORDER BY d ASC;
 
-SYSTEM DROP  TABLE stored_aggregates;
+DROP TABLE stored_aggregates;

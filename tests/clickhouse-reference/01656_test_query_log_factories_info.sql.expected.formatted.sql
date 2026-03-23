@@ -83,7 +83,7 @@ ORDER BY query_start_time DESC
 LIMIT 1
 FORMAT TabSeparatedWithNames;
 
-SYSTEM DROP  database IF EXISTS test_query_log_factories_info1;
+DROP DATABASE IF EXISTS test_query_log_factories_info1;
 
 CREATE DATABASE test_query_log_factories_info1
 ENGINE = Atomic;
@@ -116,6 +116,6 @@ ORDER BY query_start_time DESC
 LIMIT 1
 FORMAT TabSeparatedWithNames;
 
-SYSTEM DROP  TABLE test_query_log_factories_info1.memory_table;
+DROP TABLE test_query_log_factories_info1.memory_table;
 
-SYSTEM DROP  DATABASE test_query_log_factories_info1;
+DROP DATABASE test_query_log_factories_info1;

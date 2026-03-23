@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS final_test;
+DROP TABLE IF EXISTS final_test;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -15,4 +15,4 @@ SELECT *
 FROM final_test FINAL
 PREWHERE id == '2018-01-02';
 
-SYSTEM DROP  TABLE final_test;
+DROP TABLE final_test;

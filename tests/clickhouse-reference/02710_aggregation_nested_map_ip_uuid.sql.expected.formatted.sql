@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS summing_table;
+DROP TABLE IF EXISTS summing_table;
 
 CREATE TABLE summing_table
 (
@@ -40,4 +40,4 @@ INSERT INTO summing_table (id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.
 
 INSERT INTO summing_table (id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.total, uuidMap.value, uuidMap.total);
 
-SYSTEM DROP  TABLE summing_table;
+DROP TABLE summing_table;

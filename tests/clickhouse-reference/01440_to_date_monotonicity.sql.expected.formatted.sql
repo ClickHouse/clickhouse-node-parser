@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS tdm;
+DROP TABLE IF EXISTS tdm;
 
-SYSTEM DROP  TABLE IF EXISTS tdm2;
+DROP TABLE IF EXISTS tdm2;
 
 CREATE TABLE tdm
 (
@@ -48,6 +48,6 @@ SELECT toDateTime(timestamp)
 FROM tdm2
 WHERE toHour(toDateTime(timestamp)) = 13;
 
-SYSTEM DROP  TABLE tdm;
+DROP TABLE tdm;
 
-SYSTEM DROP  TABLE tdm2;
+DROP TABLE tdm2;

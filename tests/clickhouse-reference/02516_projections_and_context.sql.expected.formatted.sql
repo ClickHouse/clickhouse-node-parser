@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test1__fuzz_37;
+DROP TABLE IF EXISTS test1__fuzz_37;
 
 CREATE TABLE test1__fuzz_37
 (
@@ -26,4 +26,4 @@ GROUP BY dictHas('non_existing_dictionary', materialize('a')); -- { serverError 
 
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE test1__fuzz_37;
+DROP TABLE test1__fuzz_37;

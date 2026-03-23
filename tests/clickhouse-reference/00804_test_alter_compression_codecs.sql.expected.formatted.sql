@@ -2,7 +2,7 @@
 -- (because the INSERT with 300k rows sometimes takes >5 minutes in msan build, I didn't investigate why)
 SET send_logs_level = 'fatal';
 
-SYSTEM DROP  TABLE IF EXISTS alter_compression_codec;
+DROP TABLE IF EXISTS alter_compression_codec;
 
 CREATE TABLE alter_compression_codec
 (
@@ -41,7 +41,7 @@ INSERT INTO alter_compression_codec;
 
 INSERT INTO alter_compression_codec;
 
-SYSTEM DROP  TABLE IF EXISTS alter_bad_codec;
+DROP TABLE IF EXISTS alter_bad_codec;
 
 CREATE TABLE alter_bad_codec
 (
@@ -51,9 +51,9 @@ CREATE TABLE alter_bad_codec
 ENGINE = MergeTree()
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE IF EXISTS large_alter_table_00804;
+DROP TABLE IF EXISTS large_alter_table_00804;
 
-SYSTEM DROP  TABLE IF EXISTS store_of_hash_00804;
+DROP TABLE IF EXISTS store_of_hash_00804;
 
 CREATE TABLE large_alter_table_00804
 (

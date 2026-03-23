@@ -1,6 +1,6 @@
 -- Tags: no-random-merge-tree-settings, no-random-settings, no-parallel
 -- no-parallel: SYSTEM CLEAR MARK CACHE is used.
-SYSTEM DROP  TABLE IF EXISTS t_lightweight_mut_5;
+DROP TABLE IF EXISTS t_lightweight_mut_5;
 
 SET apply_mutations_on_fly = 1;
 
@@ -39,4 +39,4 @@ WHERE current_database = currentDatabase()
     AND type = 'QueryFinish'
 ORDER BY event_time_microseconds ASC;
 
-SYSTEM DROP  TABLE t_lightweight_mut_5;
+DROP TABLE t_lightweight_mut_5;

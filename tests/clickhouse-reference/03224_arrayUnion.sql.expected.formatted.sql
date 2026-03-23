@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists array_union;
+DROP TABLE IF EXISTS array_union;
 
 CREATE TABLE array_union
 (
@@ -79,7 +79,7 @@ SELECT length(arrayUnion(range(1, 100000), range(9999, 200000)));
 SELECT arraySort(arrayUnion([1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 13], [1, 14], [1, 15], [1, 16], [1, 17], [1, 18], [1, 19]));
 
 -- Table with batch inserts
-SYSTEM DROP  TABLE IF EXISTS test_array_union;
+DROP TABLE IF EXISTS test_array_union;
 
 CREATE TABLE test_array_union
 (

@@ -1,6 +1,6 @@
 SET join_use_nulls = 1;
 
-SYSTEM DROP  TABLE IF EXISTS null_00549;
+DROP TABLE IF EXISTS null_00549;
 
 CREATE TABLE null_00549
 (
@@ -39,4 +39,4 @@ ORDER BY
     a ASC,
     b ASC;
 
-SYSTEM DROP  TABLE null_00549;
+DROP TABLE null_00549;

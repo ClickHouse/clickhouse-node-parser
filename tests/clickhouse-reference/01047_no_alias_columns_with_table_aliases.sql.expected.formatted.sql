@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS requests;
+DROP TABLE IF EXISTS requests;
 
 CREATE TABLE requests
 (
@@ -31,4 +31,4 @@ SELECT *
 FROM requests AS t
 WHERE t.event_tm > toDate('2000-01-01');
 
-SYSTEM DROP  TABLE requests;
+DROP TABLE requests;

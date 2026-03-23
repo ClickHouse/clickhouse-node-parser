@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS sparse_t;
+DROP TABLE IF EXISTS sparse_t;
 
 CREATE TABLE sparse_t
 (

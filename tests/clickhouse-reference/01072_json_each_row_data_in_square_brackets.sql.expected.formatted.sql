@@ -1,5 +1,5 @@
 -- Tags: no-fasttest
-SYSTEM DROP  TABLE IF EXISTS json_square_brackets;
+DROP TABLE IF EXISTS json_square_brackets;
 
 CREATE TABLE json_square_brackets
 (

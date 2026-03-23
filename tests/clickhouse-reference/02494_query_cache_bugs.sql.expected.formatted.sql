@@ -19,7 +19,7 @@ SELECT toUInt64(42) AS x
 FORMAT Vertical
 SETTINGS use_query_cache = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -38,7 +38,7 @@ FROM tab
 FORMAT Vertical
 SETTINGS use_query_cache = 1;
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

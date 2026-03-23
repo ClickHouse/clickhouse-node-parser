@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS create_as_select_01021;
+DROP TABLE IF EXISTS create_as_select_01021;
 
 CREATE TABLE create_as_select_01021
 ENGINE = Memory AS
@@ -7,4 +7,4 @@ ENGINE = Memory AS
 SELECT *
 FROM create_as_select_01021;
 
-SYSTEM DROP  TABLE create_as_select_01021;
+DROP TABLE create_as_select_01021;

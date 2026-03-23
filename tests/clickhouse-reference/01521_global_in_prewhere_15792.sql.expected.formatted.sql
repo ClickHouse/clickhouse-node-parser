@@ -1,7 +1,7 @@
 -- Tags: global
-SYSTEM drop  table if exists xp;
+DROP TABLE IF EXISTS xp;
 
-SYSTEM drop  table if exists xp_d;
+DROP TABLE IF EXISTS xp_d;
 
 CREATE TABLE xp
 (

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -28,4 +28,4 @@ SELECT
     max(x)
 FROM test;
 
-SYSTEM DROP  TABLE test;
+DROP TABLE test;

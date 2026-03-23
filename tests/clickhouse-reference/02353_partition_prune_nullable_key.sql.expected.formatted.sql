@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists n;
+DROP TABLE IF EXISTS n;
 
 CREATE TABLE n
 (
@@ -15,4 +15,4 @@ SELECT *
 FROM n
 WHERE isNull(nc);
 
-SYSTEM drop  table n;
+DROP TABLE n;

@@ -1,6 +1,6 @@
 SET force_primary_key = 1;
 
-SYSTEM drop  table if exists tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

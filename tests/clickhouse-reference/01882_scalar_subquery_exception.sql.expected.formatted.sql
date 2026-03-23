@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists nums_in_mem;
+DROP TABLE IF EXISTS nums_in_mem;
 
-SYSTEM drop  table if exists nums_in_mem_dist;
+DROP TABLE IF EXISTS nums_in_mem_dist;
 
 CREATE TABLE nums_in_mem
 (
@@ -26,6 +26,6 @@ SELECT count() / (
     )
 FROM `system`.one; -- { serverError TOO_MANY_ROWS }
 
-SYSTEM drop  table nums_in_mem;
+DROP TABLE nums_in_mem;
 
-SYSTEM drop  table nums_in_mem_dist;
+DROP TABLE nums_in_mem_dist;

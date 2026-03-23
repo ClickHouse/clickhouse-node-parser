@@ -62,7 +62,7 @@ FROM one AS t;
 
 USE {CLICKHOUSE_DATABASE:Identifier};
 
-SYSTEM DROP  TABLE IF EXISTS nested;
+DROP TABLE IF EXISTS nested;
 
 CREATE TABLE nested
 (
@@ -82,7 +82,7 @@ SELECT
     t.*
 FROM nested AS t;
 
-SYSTEM DROP  TABLE nested;
+DROP TABLE nested;
 
 SELECT number
 FROM numbers(2);

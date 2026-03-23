@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists count_lc_test;
+DROP TABLE IF EXISTS count_lc_test;
 
 CREATE TABLE count_lc_test
 (
@@ -45,7 +45,7 @@ SELECT *
 FROM count_lc_test
 WHERE arr <= [];
 
-SYSTEM DROP  TABLE count_lc_test;
+DROP TABLE count_lc_test;
 
 CREATE TABLE count_lc_test
 (

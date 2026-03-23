@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -63,4 +63,4 @@ FULL JOIN (
     USING (item_id)
 SETTINGS join_use_nulls = '1';
 
-SYSTEM DROP  TABLE t;
+DROP TABLE t;

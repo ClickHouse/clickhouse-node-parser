@@ -1,5 +1,5 @@
 -- Tags: no-ordinary-database, no-fasttest, long
-SYSTEM DROP  TABLE IF EXISTS 02416_test SYNC;
+DROP TABLE IF EXISTS `02416_test`;
 
 CREATE TABLE `02416_test`
 (
@@ -76,7 +76,7 @@ SELECT SUM(value) == 1 + 99 + 900
 FROM `02416_test`
 WHERE key IN ('1_1', '99_1', '900_1');
 
-SYSTEM DROP  TABLE IF EXISTS 02416_test_memory;
+DROP TABLE IF EXISTS `02416_test_memory`;
 
 CREATE TABLE `02416_test`
 (

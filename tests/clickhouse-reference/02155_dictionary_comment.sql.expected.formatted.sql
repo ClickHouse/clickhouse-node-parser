@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 02155_test_table;
+DROP TABLE IF EXISTS `02155_test_table`;
 
 CREATE TABLE `02155_test_table`
 (
@@ -9,7 +9,7 @@ ENGINE = TinyLog;
 
 INSERT INTO `02155_test_table`;
 
-SYSTEM DROP  DICTIONARY IF EXISTS 02155_test_dictionary;
+DROP DICTIONARY IF EXISTS `02155_test_dictionary`;
 
 CREATE DICTIONARY `02155_test_dictionary`
 (
@@ -37,7 +37,7 @@ WHERE name == '02155_test_dictionary'
 SELECT *
 FROM `02155_test_dictionary`;
 
-SYSTEM DROP  TABLE IF EXISTS 02155_test_dictionary_view;
+DROP TABLE IF EXISTS `02155_test_dictionary_view`;
 
 CREATE TABLE `02155_test_dictionary_view`
 (
@@ -56,8 +56,8 @@ FROM `system`.tables
 WHERE name == '02155_test_dictionary_view'
     AND database == currentDatabase();
 
-SYSTEM DROP  TABLE 02155_test_dictionary_view;
+DROP TABLE `02155_test_dictionary_view`;
 
-SYSTEM DROP  DICTIONARY 02155_test_dictionary;
+DROP DICTIONARY `02155_test_dictionary`;
 
-SYSTEM DROP  TABLE 02155_test_table;
+DROP TABLE `02155_test_table`;

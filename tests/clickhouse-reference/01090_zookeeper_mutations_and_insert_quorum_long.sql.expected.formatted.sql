@@ -1,9 +1,9 @@
 -- Tags: long, zookeeper, no-replicated-database, no-async-insert
 -- Tag no-replicated-database: Fails due to additional replicas or shards
 -- Tag no-async-insert: async inserts with quorum inserts are only have sence with enabled quorum_parallel setting
-SYSTEM DROP  TABLE IF EXISTS mutations_and_quorum1 SYNC;
+DROP TABLE IF EXISTS mutations_and_quorum1;
 
-SYSTEM DROP  TABLE IF EXISTS mutations_and_quorum2 SYNC;
+DROP TABLE IF EXISTS mutations_and_quorum2;
 
 CREATE TABLE mutations_and_quorum1
 (

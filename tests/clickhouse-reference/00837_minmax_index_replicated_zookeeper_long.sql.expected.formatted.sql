@@ -1,7 +1,7 @@
 -- Tags: long, replica
-SYSTEM DROP  TABLE IF EXISTS minmax_idx1;
+DROP TABLE IF EXISTS minmax_idx1;
 
-SYSTEM DROP  TABLE IF EXISTS minmax_idx2;
+DROP TABLE IF EXISTS minmax_idx2;
 
 CREATE TABLE minmax_idx1
 (
@@ -96,6 +96,6 @@ WHERE ((u64 < 2
     AND e != 'b'
 ORDER BY dt ASC;
 
-SYSTEM DROP  TABLE minmax_idx1;
+DROP TABLE minmax_idx1;
 
-SYSTEM DROP  TABLE minmax_idx2;
+DROP TABLE minmax_idx2;

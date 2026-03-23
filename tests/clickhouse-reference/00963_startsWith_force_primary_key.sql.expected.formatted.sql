@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_startsWith;
+DROP TABLE IF EXISTS test_startsWith;
 
 CREATE TABLE test_startsWith
 (
@@ -20,4 +20,4 @@ FROM test_startsWith
 WHERE startsWith(a, 'abc')
 SETTINGS force_primary_key = 1;
 
-SYSTEM DROP  TABLE test_startsWith;
+DROP TABLE test_startsWith;

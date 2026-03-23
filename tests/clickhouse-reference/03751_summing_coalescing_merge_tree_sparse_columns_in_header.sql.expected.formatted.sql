@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists src;
+DROP TABLE IF EXISTS src;
 
 CREATE TABLE src
 (
@@ -10,7 +10,7 @@ ORDER BY tuple();
 INSERT INTO src SELECT 0
 FROM numbers(1000000);
 
-SYSTEM drop  table if exists dst;
+DROP TABLE IF EXISTS dst;
 
 CREATE TABLE dst
 (
@@ -22,7 +22,7 @@ ORDER BY tuple();
 INSERT INTO dst SELECT *
 FROM src;
 
-SYSTEM drop  table dst;
+DROP TABLE dst;
 
 CREATE TABLE dst
 (
@@ -31,4 +31,4 @@ CREATE TABLE dst
 ENGINE = SummingMergeTree
 ORDER BY tuple();
 
-SYSTEM drop  table src;
+DROP TABLE src;

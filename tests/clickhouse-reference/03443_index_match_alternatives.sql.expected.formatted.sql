@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS 03443_data;
+DROP TABLE IF EXISTS `03443_data`;
 
 CREATE TABLE `03443_data`
 (
@@ -105,4 +105,4 @@ FROM (
 WHERE like(`explain`, '%Granules: %')
 SETTINGS use_skip_indexes = 1;
 
-SYSTEM DROP  TABLE 03443_data;
+DROP TABLE `03443_data`;

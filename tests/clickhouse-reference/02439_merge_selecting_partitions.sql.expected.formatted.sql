@@ -1,6 +1,6 @@
 -- Tags: no-shared-merge-tree
 -- Predicate works in a different way
-SYSTEM drop  table if exists rmt;
+DROP TABLE IF EXISTS rmt;
 
 CREATE TABLE rmt
 (
@@ -55,4 +55,4 @@ WHERE like(path, concat('/test/02439/', getMacro('shard'), '/', currentDatabase(
             AND current_database = currentDatabase()
     )));
 
-SYSTEM drop  table rmt;
+DROP TABLE rmt;

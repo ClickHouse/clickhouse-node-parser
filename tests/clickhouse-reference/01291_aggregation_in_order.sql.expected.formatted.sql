@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS pk_order;
+DROP TABLE IF EXISTS pk_order;
 
 SET optimize_aggregation_in_order = 1;
 
@@ -112,4 +112,4 @@ GROUP BY d1
 ORDER BY d1 ASC
 LIMIT 5;
 
-SYSTEM DROP  TABLE pk_order;
+DROP TABLE pk_order;

@@ -2,7 +2,7 @@
 -- Regression test for https://github.com/ClickHouse/ClickHouse/issues/77030
 -- remote() wrapping loop() used to fail because TableFunctionLoop::getActualTableStructure
 -- returned empty ColumnsDescription, causing EMPTY_LIST_OF_COLUMNS_PASSED or a logical error.
-SYSTEM DROP  TABLE IF EXISTS t0_03765;
+DROP TABLE IF EXISTS t0_03765;
 
 CREATE TABLE t0_03765
 (
@@ -26,4 +26,4 @@ SELECT *
 FROM remote('127.0.0.1', loop(currentDatabase(), 't0_03765'))
 LIMIT 5;
 
-SYSTEM DROP  TABLE t0_03765 SYNC;
+DROP TABLE t0_03765;

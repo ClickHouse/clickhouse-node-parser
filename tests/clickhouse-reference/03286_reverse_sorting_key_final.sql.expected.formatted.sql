@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -13,7 +13,7 @@ INSERT INTO t0 (c0.c1);
 SELECT 1
 FROM t0 FINAL;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;
 
 -- For consistency of the EXPLAIN output:
 SET allow_prefetched_read_pool_for_remote_filesystem = 0;

@@ -1,9 +1,9 @@
 -- https://github.com/ClickHouse/ClickHouse/issues/65201
 SET short_circuit_function_evaluation = 'enable';
 
-SYSTEM DROP  DICTIONARY IF EXISTS direct_dictionary_simple_key_simple_attributes;
+DROP DICTIONARY IF EXISTS direct_dictionary_simple_key_simple_attributes;
 
-SYSTEM DROP  TABLE IF EXISTS simple_key_simple_attributes_source_table;
+DROP TABLE IF EXISTS simple_key_simple_attributes_source_table;
 
 CREATE TABLE simple_key_simple_attributes_source_table
 (

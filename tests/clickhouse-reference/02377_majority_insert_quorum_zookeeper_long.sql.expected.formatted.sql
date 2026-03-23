@@ -7,11 +7,11 @@ SET insert_quorum_parallel = false;
 
 SET select_sequential_consistency = 1;
 
-SYSTEM DROP  TABLE IF EXISTS quorum1;
+DROP TABLE IF EXISTS quorum1;
 
-SYSTEM DROP  TABLE IF EXISTS quorum2;
+DROP TABLE IF EXISTS quorum2;
 
-SYSTEM DROP  TABLE IF EXISTS quorum3;
+DROP TABLE IF EXISTS quorum3;
 
 CREATE TABLE quorum1
 (
@@ -50,9 +50,9 @@ SELECT x
 FROM quorum2
 ORDER BY x ASC;
 
-SYSTEM DROP  TABLE quorum1;
+DROP TABLE quorum1;
 
-SYSTEM DROP  TABLE quorum2;
+DROP TABLE quorum2;
 
 -- Create 3 replicas and stop sync 2 replicas
 CREATE TABLE quorum1
@@ -92,4 +92,4 @@ SET insert_quorum_timeout = 600000; -- set default value back
 
 INSERT INTO quorum1;
 
-SYSTEM DROP  TABLE quorum3;
+DROP TABLE quorum3;

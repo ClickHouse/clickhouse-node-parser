@@ -1,6 +1,6 @@
 -- Tags: no-fasttest
 -- Tag no-fasttest: Depends on AWS
-SYSTEM drop  table if exists test;
+DROP TABLE IF EXISTS test;
 
 CREATE TABLE test
 (
@@ -16,4 +16,4 @@ FROM s3Cluster('test_cluster_one_shard_three_replicas_localhost', 'http://localh
 SELECT *
 FROM test;
 
-SYSTEM drop  table test;
+DROP TABLE test;

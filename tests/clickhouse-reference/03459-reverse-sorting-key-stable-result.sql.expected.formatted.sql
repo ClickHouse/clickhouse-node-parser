@@ -1,5 +1,5 @@
 -- { echo ON }
-SYSTEM drop  table if exists t;
+DROP TABLE IF EXISTS t;
 
 CREATE TABLE t
 (
@@ -32,4 +32,4 @@ FROM (
         LIMIT 10
     );
 
-SYSTEM drop  table t;
+DROP TABLE t;

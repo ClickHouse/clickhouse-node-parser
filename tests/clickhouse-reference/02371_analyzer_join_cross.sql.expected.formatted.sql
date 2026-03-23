@@ -2,7 +2,7 @@ SET enable_analyzer = 1;
 
 SET single_join_prefer_left_table = 0;
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_1;
+DROP TABLE IF EXISTS test_table_join_1;
 
 CREATE TABLE test_table_join_1
 (
@@ -12,7 +12,7 @@ CREATE TABLE test_table_join_1
 ENGINE = MergeTree
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_2;
+DROP TABLE IF EXISTS test_table_join_2;
 
 CREATE TABLE test_table_join_2
 (
@@ -22,7 +22,7 @@ CREATE TABLE test_table_join_2
 ENGINE = MergeTree
 ORDER BY tuple();
 
-SYSTEM DROP  TABLE IF EXISTS test_table_join_3;
+DROP TABLE IF EXISTS test_table_join_3;
 
 CREATE TABLE test_table_join_3
 (
@@ -141,8 +141,8 @@ FROM
     test_table_join_1
 CROSS JOIN test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }
 
-SYSTEM DROP  TABLE test_table_join_1;
+DROP TABLE test_table_join_1;
 
-SYSTEM DROP  TABLE test_table_join_2;
+DROP TABLE test_table_join_2;
 
-SYSTEM DROP  TABLE test_table_join_3;
+DROP TABLE test_table_join_3;

@@ -1,5 +1,5 @@
 -- Tags: no-parallel
-SYSTEM DROP  TABLE IF EXISTS recompression_table;
+DROP TABLE IF EXISTS recompression_table;
 
 CREATE TABLE recompression_table
 (
@@ -112,4 +112,4 @@ WHERE table = 'recompression_table_compact'
     AND database = currentDatabase()
 ORDER BY name ASC;
 
-SYSTEM DROP  TABLE recompression_table_compact;
+DROP TABLE recompression_table_compact;

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS point_test, point_test_parameterized, point_test_parameterized2;
+DROP TABLE IF EXISTS point_test, point_test_parameterized, point_test_parameterized2;
 
 CREATE TABLE point_test
 (
@@ -27,4 +27,4 @@ WHERE coord IN ({point:Array(Point)});
 SELECT *
 FROM point_test_parameterized2(point = [(0, 0)]);
 
-SYSTEM DROP  TABLE point_test, point_test_parameterized, point_test_parameterized2;
+DROP TABLE point_test, point_test_parameterized, point_test_parameterized2;

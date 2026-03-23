@@ -18,4 +18,4 @@ SELECT *
 FROM datetime64_issue
 WHERE dtn IN (toDateTime64('2001-01-11 01:11:21.100', 3));
 
-SYSTEM DROP  TABLE datetime64_issue;
+DROP TABLE datetime64_issue;

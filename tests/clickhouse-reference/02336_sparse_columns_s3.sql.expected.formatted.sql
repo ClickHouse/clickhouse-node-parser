@@ -1,5 +1,5 @@
 -- Tags: no-parallel, no-fasttest, no-object-storage
-SYSTEM DROP  TABLE IF EXISTS t_sparse_s3;
+DROP TABLE IF EXISTS t_sparse_s3;
 
 CREATE TABLE t_sparse_s3
 (
@@ -134,4 +134,4 @@ PREWHERE cond
 WHERE id IN (1, 3, 5, 7, 9, 11, 13, 15, 17)
     AND NOT ignore(s);
 
-SYSTEM DROP  TABLE t_sparse_s3;
+DROP TABLE t_sparse_s3;

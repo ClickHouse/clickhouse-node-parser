@@ -1,6 +1,6 @@
 SET enable_analyzer = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -21,4 +21,4 @@ SETTINGS
     cluster_for_parallel_replicas = 'test_cluster_one_shard_two_replicas',
     max_parallel_replicas = 10;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

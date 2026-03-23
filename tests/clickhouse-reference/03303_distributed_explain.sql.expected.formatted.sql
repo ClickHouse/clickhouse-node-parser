@@ -7,7 +7,7 @@ SELECT '----------';
 
 SET serialize_query_plan = 1;
 
-SYSTEM DROP  TABLE IF EXISTS test_parallel_replicas;
+DROP TABLE IF EXISTS test_parallel_replicas;
 
 CREATE TABLE test_parallel_replicas
 (

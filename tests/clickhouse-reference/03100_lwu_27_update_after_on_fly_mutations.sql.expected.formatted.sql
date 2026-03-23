@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_lwu_on_fly SYNC;
+DROP TABLE IF EXISTS t_lwu_on_fly;
 
 SET enable_lightweight_update = 1;
 
@@ -23,4 +23,4 @@ SELECT *
 FROM t_lwu_on_fly
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_lwu_on_fly SYNC;
+DROP TABLE t_lwu_on_fly;

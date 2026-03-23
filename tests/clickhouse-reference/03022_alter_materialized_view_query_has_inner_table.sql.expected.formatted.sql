@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS src_table;
+DROP TABLE IF EXISTS src_table;
 
-SYSTEM DROP  TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS mv;
 
 CREATE TABLE src_table
 (
@@ -27,6 +27,6 @@ FROM mv;
 
 SET allow_experimental_alter_materialized_view_structure = 1;
 
-SYSTEM DROP  TABLE src_table;
+DROP TABLE src_table;
 
-SYSTEM DROP  TABLE mv;
+DROP TABLE mv;

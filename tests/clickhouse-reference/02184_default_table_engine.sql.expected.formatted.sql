@@ -10,7 +10,7 @@ CREATE TABLE table_02184
 
 SET default_table_engine = 'Log';
 
-SYSTEM DROP  TABLE table_02184;
+DROP TABLE table_02184;
 
 SET default_table_engine = 'MergeTree';
 
@@ -27,7 +27,7 @@ CREATE TABLE test_optimize_exception
 ORDER BY date
 PARTITION BY toYYYYMM(date);
 
-SYSTEM DROP  TABLE test_optimize_exception;
+DROP TABLE test_optimize_exception;
 
 CREATE TABLE table_02184
 (
@@ -56,7 +56,7 @@ FROM numbers(10);
 SELECT avg(number)
 FROM numbers1;
 
-SYSTEM DROP  TABLE numbers1;
+DROP TABLE numbers1;
 
 CREATE TABLE numbers2
 ORDER BY intHash32(number)
@@ -67,7 +67,7 @@ FROM numbers(10);
 SELECT sum(number)
 FROM numbers2;
 
-SYSTEM DROP  TABLE numbers2;
+DROP TABLE numbers2;
 
 CREATE TABLE numbers3
 ENGINE = Log AS
@@ -77,7 +77,7 @@ FROM numbers(10);
 SELECT sum(number)
 FROM numbers3;
 
-SYSTEM DROP  TABLE numbers3;
+DROP TABLE numbers3;
 
 CREATE TABLE test_table
 (
@@ -125,9 +125,9 @@ FROM test_view;
 SELECT *
 FROM test_view_filtered;
 
-SYSTEM DROP  TABLE test_view;
+DROP TABLE test_view;
 
-SYSTEM DROP  TABLE test_view_filtered;
+DROP TABLE test_view_filtered;
 
 CREATE MATERIALIZED VIEW test_view
 ORDER BY `Rows`
@@ -142,11 +142,11 @@ CREATE TABLE t1 AS test_view;
 CREATE TABLE t2 AS test_view
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;
 
-SYSTEM DROP  TABLE t1;
+DROP TABLE t1;
 
-SYSTEM DROP  TABLE t2;
+DROP TABLE t2;
 
 CREATE DATABASE test_02184
 ORDER BY kek; -- {serverError UNKNOWN_ELEMENT_IN_AST}
@@ -164,7 +164,7 @@ CREATE TABLE mt
 
 CREATE TABLE mt2 AS mt;
 
-SYSTEM DROP  TABLE mt;
+DROP TABLE mt;
 
 CREATE TEMPORARY TABLE tmp
 (
@@ -205,11 +205,11 @@ CREATE TABLE log1 AS log;
 CREATE TABLE mem AS log1
 ENGINE = Memory;
 
-SYSTEM DROP  TABLE log;
+DROP TABLE log;
 
-SYSTEM DROP  TABLE log1;
+DROP TABLE log1;
 
-SYSTEM DROP  TABLE mem;
+DROP TABLE mem;
 
 CREATE TABLE mem AS
 SELECT 1 AS n; --{serverError ENGINE_REQUIRED}
@@ -233,13 +233,13 @@ CREATE TABLE val2 AS val;
 CREATE TABLE log AS val
 ENGINE = Log;
 
-SYSTEM DROP  TABLE val;
+DROP TABLE val;
 
-SYSTEM DROP  TABLE val2;
+DROP TABLE val2;
 
-SYSTEM DROP  TABLE IF EXISTS kek;
+DROP TABLE IF EXISTS kek;
 
-SYSTEM DROP  TABLE IF EXISTS lol;
+DROP TABLE IF EXISTS lol;
 
 CREATE TABLE kek
 (
@@ -256,9 +256,9 @@ ORDER BY n
 SETTINGS min_bytes_for_wide_part = 123
 SETTINGS log_queries = 1;
 
-SYSTEM DROP  TABLE kek;
+DROP TABLE kek;
 
-SYSTEM DROP  TABLE lol;
+DROP TABLE lol;
 
 SET default_temporary_table_engine = 'Log';
 

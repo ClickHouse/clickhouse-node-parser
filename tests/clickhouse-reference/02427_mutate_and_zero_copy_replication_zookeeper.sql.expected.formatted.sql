@@ -1,6 +1,6 @@
-SYSTEM DROP  TABLE IF EXISTS mutate_and_zero_copy_replication1;
+DROP TABLE IF EXISTS mutate_and_zero_copy_replication1;
 
-SYSTEM DROP  TABLE IF EXISTS mutate_and_zero_copy_replication2;
+DROP TABLE IF EXISTS mutate_and_zero_copy_replication2;
 
 CREATE TABLE mutate_and_zero_copy_replication1
 (
@@ -26,7 +26,7 @@ INSERT INTO mutate_and_zero_copy_replication1;
 
 SET mutations_sync = 2;
 
-SYSTEM DROP  TABLE mutate_and_zero_copy_replication1 SYNC;
+DROP TABLE mutate_and_zero_copy_replication1;
 
 SELECT *
 FROM mutate_and_zero_copy_replication2

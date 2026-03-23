@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists test_materialize;
+DROP TABLE IF EXISTS test_materialize;
 
 CREATE TABLE test_materialize
 (

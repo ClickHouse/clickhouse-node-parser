@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -20,4 +20,4 @@ SETTINGS
     query_plan_join_swap_table = true,
     query_plan_use_new_logical_join_step = false;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

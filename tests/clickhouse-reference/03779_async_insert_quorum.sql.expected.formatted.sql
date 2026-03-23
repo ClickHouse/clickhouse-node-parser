@@ -1,9 +1,9 @@
 -- Tags: long, zookeeper, no-replicated-database, no-shared-merge-tree
 -- Tag no-replicated-database: Fails due to additional replicas or shards
 -- Tag no-shared-merge-tree: no-shared-merge-tree: No quorum
-SYSTEM DROP  TABLE IF EXISTS table1;
+DROP TABLE IF EXISTS table1;
 
-SYSTEM DROP  TABLE IF EXISTS table2;
+DROP TABLE IF EXISTS table2;
 
 CREATE TABLE table1
 (
@@ -75,6 +75,6 @@ SET wait_for_async_insert = 1, insert_quorum_timeout = 1;
 
 INSERT INTO table2; -- { serverError UNKNOWN_STATUS_OF_INSERT }
 
-SYSTEM DROP  TABLE table1;
+DROP TABLE table1;
 
-SYSTEM DROP  TABLE table2;
+DROP TABLE table2;

@@ -1,6 +1,6 @@
-SYSTEM drop  table if exists with_nullable;
+DROP TABLE IF EXISTS with_nullable;
 
-SYSTEM drop  table if exists without_nullable;
+DROP TABLE IF EXISTS without_nullable;
 
 CREATE TABLE with_nullable
 (
@@ -29,6 +29,6 @@ RIGHT JOIN with_nullable AS t2
     ON t0.country = t2.country
 ORDER BY 1 DESC;
 
-SYSTEM drop  table with_nullable;
+DROP TABLE with_nullable;
 
-SYSTEM drop  table without_nullable;
+DROP TABLE without_nullable;

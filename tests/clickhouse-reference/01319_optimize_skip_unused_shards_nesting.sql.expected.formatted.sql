@@ -1,9 +1,9 @@
 -- Tags: shard
-SYSTEM drop  table if exists data_01319;
+DROP TABLE IF EXISTS data_01319;
 
-SYSTEM drop  table if exists dist_01319;
+DROP TABLE IF EXISTS dist_01319;
 
-SYSTEM drop  table if exists dist_layer_01319;
+DROP TABLE IF EXISTS dist_layer_01319;
 
 CREATE TABLE data_01319
 (
@@ -36,8 +36,8 @@ SET force_optimize_skip_unused_shards_nesting = 1;
 
 SET optimize_skip_unused_shards_nesting = 1;
 
-SYSTEM drop  table data_01319;
+DROP TABLE data_01319;
 
-SYSTEM drop  table dist_01319;
+DROP TABLE dist_01319;
 
-SYSTEM drop  table dist_layer_01319;
+DROP TABLE dist_layer_01319;

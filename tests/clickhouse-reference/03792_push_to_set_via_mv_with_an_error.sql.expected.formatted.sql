@@ -4,9 +4,9 @@ SET materialized_views_ignore_errors = 1;
 SET send_logs_level = 'error';
 
 -- First case with exception during reading
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
-SYSTEM DROP  TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS mv;
 
 CREATE TABLE tab
 (

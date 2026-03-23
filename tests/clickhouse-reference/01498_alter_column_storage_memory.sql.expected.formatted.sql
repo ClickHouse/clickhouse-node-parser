@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS defaults;
+DROP TABLE IF EXISTS defaults;
 
 CREATE TABLE defaults
 (
@@ -7,4 +7,4 @@ CREATE TABLE defaults
 )
 ENGINE = Memory();
 
-SYSTEM DROP  TABLE defaults;
+DROP TABLE defaults;

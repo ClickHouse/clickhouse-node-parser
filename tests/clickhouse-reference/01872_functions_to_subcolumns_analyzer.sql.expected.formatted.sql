@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS t_func_to_subcolumns;
+DROP TABLE IF EXISTS t_func_to_subcolumns;
 
 SET enable_analyzer = 1;
 
@@ -61,9 +61,9 @@ FULL JOIN (
     USING (id)
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE t_func_to_subcolumns;
+DROP TABLE t_func_to_subcolumns;
 
-SYSTEM DROP  TABLE IF EXISTS t_tuple_null;
+DROP TABLE IF EXISTS t_tuple_null;
 
 CREATE TABLE t_tuple_null
 (
@@ -79,4 +79,4 @@ SELECT
     t.`null`
 FROM t_tuple_null;
 
-SYSTEM DROP  TABLE t_tuple_null;
+DROP TABLE t_tuple_null;

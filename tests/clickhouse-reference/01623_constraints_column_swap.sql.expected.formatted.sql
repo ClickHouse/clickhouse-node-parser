@@ -11,7 +11,7 @@ SET optimize_append_index = 1;
 
 SET optimize_trivial_insert_select = 1;
 
-SYSTEM DROP  TABLE IF EXISTS column_swap_test_test;
+DROP TABLE IF EXISTS column_swap_test_test;
 
 CREATE TABLE column_swap_test_test
 (
@@ -33,7 +33,7 @@ INSERT INTO column_swap_test_test SELECT
 FROM `system`.numbers
 LIMIT 1000000;
 
-SYSTEM DROP  TABLE column_swap_test_test;
+DROP TABLE column_swap_test_test;
 
 CREATE TABLE column_swap_test_test
 (
@@ -53,7 +53,7 @@ INSERT INTO column_swap_test_test SELECT
 FROM `system`.numbers
 LIMIT 1000000;
 
-SYSTEM DROP  TABLE IF EXISTS t_bad_constraint;
+DROP TABLE IF EXISTS t_bad_constraint;
 
 CREATE TABLE t_bad_constraint
 (
@@ -69,4 +69,4 @@ INSERT INTO t_bad_constraint SELECT
     randomPrintableASCII(100)
 FROM numbers(10000);
 
-SYSTEM DROP  TABLE t_bad_constraint;
+DROP TABLE t_bad_constraint;

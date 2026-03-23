@@ -1,4 +1,4 @@
-SYSTEM drop  table if exists alias_column_should_not_allow_compression;
+DROP TABLE IF EXISTS alias_column_should_not_allow_compression;
 
 CREATE TABLE IF NOT EXISTS alias_column_should_not_allow_compression
 (

@@ -1,6 +1,6 @@
 SET replication_alter_partitions_sync = 2;
 
-SYSTEM DROP  TABLE IF EXISTS clear_column;
+DROP TABLE IF EXISTS clear_column;
 
 CREATE TABLE clear_column
 (
@@ -35,11 +35,11 @@ WHERE (database = currentDatabase())
     AND (table = 'clear_column')
     AND (name = 'num');
 
-SYSTEM DROP  TABLE clear_column;
+DROP TABLE clear_column;
 
-SYSTEM DROP  TABLE IF EXISTS clear_column1;
+DROP TABLE IF EXISTS clear_column1;
 
-SYSTEM DROP  TABLE IF EXISTS clear_column2;
+DROP TABLE IF EXISTS clear_column2;
 
 SELECT sleep(1)
 FORMAT Null;
@@ -96,6 +96,6 @@ GROUP BY table;
 
 SET optimize_throw_if_noop = 1;
 
-SYSTEM DROP  TABLE clear_column1;
+DROP TABLE clear_column1;
 
-SYSTEM DROP  TABLE clear_column2;
+DROP TABLE clear_column2;

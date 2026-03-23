@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS decimal_sum;
+DROP TABLE IF EXISTS decimal_sum;
 
 SET allow_deprecated_syntax_for_merge_tree = 1;
 
@@ -22,4 +22,4 @@ INSERT INTO decimal_sum;
 
 INSERT INTO decimal_sum;
 
-SYSTEM drop  table decimal_sum;
+DROP TABLE decimal_sum;

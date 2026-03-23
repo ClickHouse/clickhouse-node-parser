@@ -20,7 +20,7 @@ FROM (
         SELECT 1 AS id
     ) AS t;
 
-SYSTEM DROP  TABLE IF EXISTS test_ntile;
+DROP TABLE IF EXISTS test_ntile;
 
 CREATE TABLE test_ntile
 (

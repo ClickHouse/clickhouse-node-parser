@@ -1,7 +1,7 @@
 -- Tags: use-rocksdb
-SYSTEM DROP  TABLE IF EXISTS rdb;
+DROP TABLE IF EXISTS rdb;
 
-SYSTEM DROP  TABLE IF EXISTS t2;
+DROP TABLE IF EXISTS t2;
 
 CREATE TABLE rdb
 (
@@ -110,9 +110,9 @@ SELECT value = 'grace_hash,hash,auto'
 FROM `system`.`settings`
 WHERE name = 'join_algorithm';
 
-SYSTEM DROP  DICTIONARY IF EXISTS dict;
+DROP DICTIONARY IF EXISTS dict;
 
-SYSTEM DROP  TABLE IF EXISTS src;
+DROP TABLE IF EXISTS src;
 
 CREATE TABLE src
 (

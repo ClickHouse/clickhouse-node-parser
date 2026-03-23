@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS lwd_test;
+DROP TABLE IF EXISTS lwd_test;
 
 CREATE TABLE lwd_test
 (
@@ -38,4 +38,4 @@ FROM lwd_test
 ORDER BY id ASC
 LIMIT 1;
 
-SYSTEM DROP  TABLE lwd_test;
+DROP TABLE lwd_test;

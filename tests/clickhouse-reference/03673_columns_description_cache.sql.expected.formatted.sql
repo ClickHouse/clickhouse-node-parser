@@ -1,5 +1,5 @@
 -- Cache is only for MergeTree
-SYSTEM drop  table if exists t_mem;
+DROP TABLE IF EXISTS t_mem;
 
 CREATE TABLE t_mem
 (
@@ -15,7 +15,7 @@ WHERE database = currentDatabase()
     AND table = 't_mem';
 
 -- MergeTree
-SYSTEM drop  table if exists t_mt;
+DROP TABLE IF EXISTS t_mt;
 
 -- { echoOn }
 CREATE TABLE t_mt

@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS db;
+DROP TABLE IF EXISTS db;
 
 CREATE TABLE tb
 (
@@ -25,4 +25,4 @@ FROM tb
 WHERE idx >= 0
     AND idx <= 2;
 
-SYSTEM DROP  TABLE tb;
+DROP TABLE tb;

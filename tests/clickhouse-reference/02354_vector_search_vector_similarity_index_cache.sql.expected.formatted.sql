@@ -9,7 +9,7 @@ SELECT
 FROM `system`.metrics
 WHERE metric = 'VectorSimilarityIndexCacheBytes';
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (

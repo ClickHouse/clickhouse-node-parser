@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS test_table;
 
 CREATE TABLE test_table
 (
@@ -7,4 +7,4 @@ CREATE TABLE test_table
 )
 ENGINE = TinyLog;
 
-SYSTEM DROP  TABLE test_table;
+DROP TABLE test_table;

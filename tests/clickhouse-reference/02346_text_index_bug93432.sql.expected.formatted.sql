@@ -1,6 +1,6 @@
 SET enable_full_text_index = 1;
 
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab
 (
@@ -15,4 +15,4 @@ SELECT *
 FROM tab
 WHERE hasAllTokens(col, 'abc');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;

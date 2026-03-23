@@ -1,6 +1,6 @@
 -- Tags: zookeeper, no-replicated-database, no-ordinary-database
 -- no-replicated-database: we explicitly run this test by creating a replicated database test_03321
-SYSTEM DROP  DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
+DROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
 
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier}
 ENGINE = Replicated('/clickhouse/databases/{database}', 'shard1', 'replica1');
@@ -22,4 +22,4 @@ SET database_replicated_allow_replicated_engine_arguments = 0;
 
 CREATE TABLE t2 AS t1;
 
-SYSTEM DROP  DATABASE {CLICKHOUSE_DATABASE:Identifier};
+DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};

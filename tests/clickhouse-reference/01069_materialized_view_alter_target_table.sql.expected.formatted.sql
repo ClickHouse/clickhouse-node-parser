@@ -1,8 +1,8 @@
-SYSTEM DROP  TABLE IF EXISTS mv;
+DROP TABLE IF EXISTS mv;
 
-SYSTEM DROP  TABLE IF EXISTS mv_source;
+DROP TABLE IF EXISTS mv_source;
 
-SYSTEM DROP  TABLE IF EXISTS mv_target;
+DROP TABLE IF EXISTS mv_target;
 
 CREATE TABLE mv_source
 (
@@ -36,8 +36,8 @@ SELECT *
 FROM mv_target
 ORDER BY a ASC;
 
-SYSTEM DROP  TABLE mv;
+DROP TABLE mv;
 
-SYSTEM DROP  TABLE mv_source;
+DROP TABLE mv_source;
 
-SYSTEM DROP  TABLE mv_target;
+DROP TABLE mv_target;

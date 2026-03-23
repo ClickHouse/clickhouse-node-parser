@@ -14,7 +14,7 @@ SELECT
 FROM `system`.databases
 WHERE name = {CLICKHOUSE_DATABASE_1:String};
 
-SYSTEM drop  database {CLICKHOUSE_DATABASE_1:Identifier} sync;
+DROP DATABASE {CLICKHOUSE_DATABASE_1:Identifier};
 
 CREATE DATABASE {CLICKHOUSE_DATABASE_1:Identifier}
 ENGINE = Atomic;

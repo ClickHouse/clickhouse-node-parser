@@ -10,7 +10,7 @@ SET query_plan_text_index_add_hint = 1;
 SET use_statistics = 0;
 
 -- Tests text search setting 'query_plan_text_index_add_hint' with different tokenizers
-SYSTEM DROP  TABLE IF EXISTS tab;
+DROP TABLE IF EXISTS tab;
 
 SELECT '-- splitByNonAlpha';
 
@@ -53,7 +53,7 @@ FROM (
     )
 WHERE ilike(`explain`, '%filter column%');
 
-SYSTEM DROP  TABLE tab;
+DROP TABLE tab;
 
 CREATE TABLE tab
 (

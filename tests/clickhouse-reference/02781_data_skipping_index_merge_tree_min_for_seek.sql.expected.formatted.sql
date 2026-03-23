@@ -1,5 +1,5 @@
 -- Tags: no-random-merge-tree-settings, no-random-settings
-SYSTEM DROP  TABLE IF EXISTS data;
+DROP TABLE IF EXISTS data;
 
 CREATE TABLE data
 (

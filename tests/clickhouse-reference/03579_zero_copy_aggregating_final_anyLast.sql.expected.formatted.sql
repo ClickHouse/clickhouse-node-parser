@@ -62,6 +62,6 @@ SELECT
     v7
 FROM t_coalesce2 FINAL;
 
-SYSTEM DROP  TABLE t_coalesce;
+DROP TABLE t_coalesce;
 
-SYSTEM DROP  TABLE t_coalesce2;
+DROP TABLE t_coalesce2;

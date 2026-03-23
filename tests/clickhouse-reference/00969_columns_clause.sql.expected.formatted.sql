@@ -1,4 +1,4 @@
-SYSTEM DROP  TABLE IF EXISTS ColumnsClauseTest;
+DROP TABLE IF EXISTS ColumnsClauseTest;
 
 CREATE TABLE ColumnsClauseTest
 (
@@ -14,7 +14,7 @@ SELECT COLUMNS('product.*')
 FROM ColumnsClauseTest
 ORDER BY product_price ASC;
 
-SYSTEM DROP  TABLE ColumnsClauseTest;
+DROP TABLE ColumnsClauseTest;
 
 SELECT
     number,

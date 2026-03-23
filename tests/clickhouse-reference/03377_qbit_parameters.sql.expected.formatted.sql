@@ -22,7 +22,7 @@ SET param_q6 = [1, 2, 3, 4];
 
 SELECT L2DistanceTransposed({q6:QBit(Float32, 4)}, [1, 2, 3, 4], 32);
 
-SYSTEM DROP  TABLE IF EXISTS qbit_param_test;
+DROP TABLE IF EXISTS qbit_param_test;
 
 CREATE TABLE qbit_param_test
 (
@@ -41,4 +41,4 @@ SELECT
 FROM qbit_param_test
 ORDER BY id ASC;
 
-SYSTEM DROP  TABLE qbit_param_test;
+DROP TABLE qbit_param_test;

@@ -1,7 +1,7 @@
 -- Tags: no-fasttest
 SET type_json_skip_duplicated_paths = 1;
 
-SYSTEM DROP  TABLE IF EXISTS t0;
+DROP TABLE IF EXISTS t0;
 
 CREATE TABLE t0
 (
@@ -18,4 +18,4 @@ SELECT c0
 FROM t0 FINAL
 SETTINGS output_format_native_use_flattened_dynamic_and_json_serialization = 1;
 
-SYSTEM DROP  TABLE t0;
+DROP TABLE t0;

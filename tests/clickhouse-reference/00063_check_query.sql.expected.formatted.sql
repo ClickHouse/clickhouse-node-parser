@@ -1,7 +1,7 @@
 -- Tags: log-engine
 SET check_query_single_value_result = 1;
 
-SYSTEM DROP  TABLE IF EXISTS check_query_tiny_log;
+DROP TABLE IF EXISTS check_query_tiny_log;
 
 CREATE TABLE check_query_tiny_log
 (
@@ -12,7 +12,7 @@ ENGINE = TinyLog;
 
 INSERT INTO check_query_tiny_log;
 
-SYSTEM DROP  TABLE IF EXISTS check_query_log;
+DROP TABLE IF EXISTS check_query_log;
 
 CREATE TABLE check_query_log
 (
@@ -23,6 +23,6 @@ ENGINE = Log;
 
 INSERT INTO check_query_log;
 
-SYSTEM DROP  TABLE check_query_log;
+DROP TABLE check_query_log;
 
-SYSTEM DROP  TABLE check_query_tiny_log;
+DROP TABLE check_query_tiny_log;
