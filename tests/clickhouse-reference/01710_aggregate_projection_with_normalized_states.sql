@@ -8,6 +8,13 @@ CREATE TABLE r (
          (SELECT a, quantilesTimingMerge(0.5, 0.95, 0.99)(q), sum(s) GROUP BY a)
 ) Engine=SummingMergeTree order by (x, a)
 SETTINGS deduplicate_merge_projection_mode = 'drop';  -- should set it to rebuild once projection is supported with SummingMergeTree
+insert into r
+select number%100 x,
+       'x' a,
+       quantilesTimingState(0.5, 0.95, 0.99)(number::Int64) q,
+       sum(1) s
+from numbers(1000)
+group by x,a;
 SELECT
        ifNotFinite(quantilesTimingMerge(0.95)(q)[1],0) as d1,
        ifNotFinite(quantilesTimingMerge(0.99)(q)[1],0) as d2,

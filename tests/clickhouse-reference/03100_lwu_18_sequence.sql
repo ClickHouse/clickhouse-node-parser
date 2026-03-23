@@ -6,6 +6,7 @@ SETTINGS
     enable_block_offset_column = 1,
     apply_patches_on_merge = 1,
     shared_merge_tree_disable_merges_and_mutations_assignment = 1;
+INSERT INTO t_lwu_sequence SELECT number, number FROM numbers(10);
 SELECT b FROM t_lwu_sequence WHERE a = 5 SETTINGS apply_patch_parts = 0;
 SELECT b FROM t_lwu_sequence WHERE a = 5 SETTINGS apply_patch_parts = 1;
 SELECT count(), sum(rows) FROM system.parts WHERE database = currentDatabase() AND table = 't_lwu_sequence' AND startsWith(name, 'patch') AND active;

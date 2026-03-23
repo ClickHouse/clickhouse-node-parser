@@ -1,4 +1,5 @@
 CREATE TABLE t_tuple_element(t1 Tuple(a UInt32, s String), t2 Tuple(UInt32, String)) ENGINE = Memory;
+INSERT INTO t_tuple_element VALUES ((1, 'a'), (2, 'b'));
 SET optimize_functions_to_subcolumns = 1;
 SET enable_analyzer = 1;
 SELECT t1.1 FROM t_tuple_element;

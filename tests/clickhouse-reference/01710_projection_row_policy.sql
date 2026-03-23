@@ -1,3 +1,4 @@
 CREATE TABLE t(a UInt32, b UInt32) ENGINE = MergeTree PARTITION BY a ORDER BY a;
+INSERT INTO t SELECT number % 10, number FROM numbers(10000);
 CREATE ROW POLICY OR REPLACE rp ON t FOR SELECT USING 0 TO ALL;
 SELECT count(), min(a), max(a) FROM t;

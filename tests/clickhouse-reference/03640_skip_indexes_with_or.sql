@@ -27,6 +27,8 @@ SETTINGS
     max_bytes_to_merge_at_max_space_in_pool = 1,
     use_const_adaptive_granularity = 1,
     add_minmax_index_for_numeric_columns=0;
+-- 157 ranges in total
+INSERT INTO tab SELECT number + 1, number + 1, (10000 - number), (number * 5) FROM numbers(10000);
 SET use_skip_indexes_for_disjunctions = 0;
 SELECT '-- Simple OR condition'; -- surviving granules: 159
 SELECT explain AS explain FROM (
@@ -65,6 +67,7 @@ SETTINGS
     max_bytes_to_merge_at_max_space_in_pool = 1,
     use_const_adaptive_granularity = 1,
     add_minmax_index_for_numeric_columns=0;
+INSERT INTO tab SELECT (number + 1) / 10, (number + 1) % 100, number + 1, (10000 - number), (number * 5) FROM numbers(1000);
 -- 1
 SELECT explain AS explain FROM (
     EXPLAIN indexes = 1 SELECT x, y, v1, v2 FROM tab WHERE (x < 100 AND y < 20) AND (v1 = 111 OR v2 = 111)

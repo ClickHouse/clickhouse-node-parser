@@ -34,6 +34,32 @@ CREATE TABLE tab
     s_uniq              String STATISTICS(uniq)
 ) Engine = MergeTree() ORDER BY tuple()
 SETTINGS min_bytes_for_wide_part = 0;
+INSERT INTO tab
+-- SELECT number % 10000, number % 1000, -(number % 100) FROM system.numbers LIMIT 10000;
+SELECT number % 1000, -- u64
+       number % 1000,
+       number % 1000,
+       number % 1000,
+       number % 1000,
+       number % 1000, -- f64
+       number % 1000,
+       number % 1000,
+       number % 1000,
+       number % 1000,
+       number % 1000, -- dt
+       number % 1000,
+       number % 1000,
+       number % 1000,
+       number % 1000,
+       number % 2,    -- b
+       number % 2,
+       number % 2,
+       number % 2,
+       number % 2,
+       toString(number % 1000),
+       toString(number % 1000),
+       toString(number % 1000)
+FROM system.numbers LIMIT 10000;
 SELECT count(*) FROM tab WHERE u64 = 7;
 SELECT count(*) FROM tab WHERE u64_tdigest = 7;
 SELECT count(*) FROM tab WHERE u64_minmax = 7;

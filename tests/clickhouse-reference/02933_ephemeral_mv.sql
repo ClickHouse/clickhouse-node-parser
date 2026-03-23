@@ -18,4 +18,5 @@ SELECT
   name,
   toUInt32(num) as num_ephemeral
 FROM raw;
+INSERT INTO raw VALUES ('3', '3'), ('42', '42');
 SELECT name, num FROM parsed_eph;

@@ -34,6 +34,15 @@ SETTINGS
     max_bytes_to_merge_at_max_space_in_pool = 1,
     use_const_adaptive_granularity = 1,
     add_minmax_index_for_numeric_columns=0;
+-- 600 rows, 100 granules
+INSERT INTO tab
+    SELECT number,
+           number,
+           IF (number < 6, 'firststring', IF(number < 588, 'middlestring', 'laststring')),
+           number,
+           concat('This is text in row number', toString(number)),
+           concat('Some thing for line', toString(number))
+    FROM numbers(600);
 SET use_skip_indexes_for_disjunctions = 0;
 SELECT '-- Simple OR condition'; -- surviving granules: 100, but only 1 granule is real match
 SELECT explain AS explain FROM (

@@ -5,4 +5,5 @@ CREATE TABLE test_table
     a Int64,
     grp_aggreg AggregateFunction(groupArrayArray, Array(UInt64))
 ) ENGINE = MergeTree() ORDER BY a;
+INSERT INTO test_table SELECT 0, 0, groupArrayArrayState([toUInt64(1)]);
 SELECT b, a, JSONLength(grp_aggreg, 100, NULL) FROM test_table SETTINGS optimize_aggregation_in_order = 1;

@@ -12,5 +12,9 @@ SETTINGS allow_experimental_block_number_column=1,
 ratio_of_defaults_for_sparse_serialization=0.0001,
 min_bytes_for_wide_part = 0,
 replace_long_file_name_to_hash=0; -- simpler to debug
+INSERT INTO table_with_some_columns SELECT rand(), number + 10 from numbers(100000);
+INSERT INTO table_with_some_columns SELECT rand(), number + 10 from numbers(1);
+INSERT INTO table_with_some_columns SELECT rand(), number+222222222 from numbers(1);
 set alter_sync = 2;
+INSERT INTO table_with_some_columns SELECT rand() from numbers(1);
 SELECT *, _block_number FROM table_with_some_columns where not ignore(*) Format Null;

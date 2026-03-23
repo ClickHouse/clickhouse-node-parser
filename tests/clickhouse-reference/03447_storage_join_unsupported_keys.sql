@@ -7,18 +7,32 @@ create table if not exists segmented_ctr_cache
     count_in_viewed   UInt64
 )
     engine = Memory;
+INSERT INTO segmented_ctr_cache VALUES (1182604, 44, 15, 3);
+INSERT INTO segmented_ctr_cache VALUES (311577, 52, 4, 2);
+INSERT INTO segmented_ctr_cache VALUES (284246, 45, 2, 2);
+INSERT INTO segmented_ctr_cache VALUES (1115559, 52, 9, 2);
+INSERT INTO segmented_ctr_cache VALUES (1551941, 0, 163, 4);
+INSERT INTO segmented_ctr_cache VALUES (7165089, 45, 17, 1);
 CREATE TABLE bookmarks_join
 (
   product_id Int32,
   segment_id Int32,
   count_in_bookmark Int32
 ) ENGINE = Join(ALL, LEFT, product_id, segment_id);
+INSERT INTO bookmarks_join VALUES (1182604, 44, 1);
+INSERT INTO bookmarks_join VALUES (311577, 52, 1);
+INSERT INTO bookmarks_join VALUES (7165089, 0, 1);
+INSERT INTO bookmarks_join VALUES (7165089, 50, 1);
 CREATE TABLE cart_join
 (
 product_id Int32,
 segment_id Int32,
 count_in_cart Int32
 ) ENGINE = Join(ALL, LEFT, product_id, segment_id);
+INSERT INTO cart_join VALUES (311577, 44, 1);
+INSERT INTO cart_join VALUES (311577, 52, 1);
+INSERT INTO cart_join VALUES (7165089, 0, 1);
+INSERT INTO cart_join VALUES (7165089, 45, 3);
 SELECT
     segmented_ctr_cache.product_id,
     segmented_ctr_cache.segment_id,

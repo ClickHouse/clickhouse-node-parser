@@ -6,6 +6,7 @@ CREATE TABLE range_dictionary_nullable_source_table
   value Nullable(UInt64)
 )
 ENGINE = TinyLog;
+INSERT INTO range_dictionary_nullable_source_table VALUES (0, toDate('2019-05-05'), toDate('2019-05-20'), 0), (1, toDate('2019-05-05'), toDate('2019-05-20'), NULL);
 CREATE DICTIONARY range_dictionary
 (
   key UInt64,

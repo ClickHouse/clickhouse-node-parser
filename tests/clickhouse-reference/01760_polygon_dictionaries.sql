@@ -1,6 +1,15 @@
 CREATE DATABASE 01760_db;
 CREATE TABLE 01760_db.polygons (key Array(Array(Array(Tuple(Float64, Float64)))), name String, value UInt64, value_nullable Nullable(UInt64)) ENGINE = Memory;
+INSERT INTO 01760_db.polygons VALUES ([[[(3, 1), (0, 1), (0, -1), (3, -1)]]], 'Click East', 421, 421);
+INSERT INTO 01760_db.polygons VALUES ([[[(-1, 1), (1, 1), (1, 3), (-1, 3)]]], 'Click North', 422, NULL);
+INSERT INTO 01760_db.polygons VALUES ([[[(-3, 1), (-3, -1), (0, -1), (0, 1)]]], 'Click South', 423, 423);
+INSERT INTO 01760_db.polygons VALUES ([[[(-1, -1), (1, -1), (1, -3), (-1, -3)]]], 'Click West', 424, NULL);
 CREATE TABLE 01760_db.points (x Float64, y Float64, def_i UInt64, def_s String) ENGINE = Memory;
+INSERT INTO 01760_db.points VALUES (0.1, 0.0, 112, 'aax');
+INSERT INTO 01760_db.points VALUES (-0.1, 0.0, 113, 'aay');
+INSERT INTO 01760_db.points VALUES (0.0, 1.1, 114, 'aaz');
+INSERT INTO 01760_db.points VALUES (0.0, -1.1, 115, 'aat');
+INSERT INTO 01760_db.points VALUES (3.0, 3.0, 22, 'bb');
 CREATE DICTIONARY 01760_db.dict_array
 (
     key Array(Array(Array(Tuple(Float64, Float64)))),

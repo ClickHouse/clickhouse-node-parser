@@ -1,4 +1,6 @@
 create table data_order_by_proj_incomp (t UInt64) ENGINE MergeTree() order by t;
+insert into data_order_by_proj_incomp values (5);
+insert into data_order_by_proj_incomp values (6);
 -- { echoOn }
 select t from data_order_by_proj_incomp where t > 0 order by t settings optimize_read_in_order=1;
 select t from data_order_by_proj_incomp where t > 0 order by t settings optimize_read_in_order=0;

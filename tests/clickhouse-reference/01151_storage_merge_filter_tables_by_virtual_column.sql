@@ -3,6 +3,7 @@ create table src_table_2 (n UInt64) engine=Log as select number * 10 from number
 create table src_table_3 (n UInt64) engine=MergeTree order by n as select number * 100 from numbers(10);
 create table set (s String) engine=Set as select arrayJoin(['src_table_1', 'src_table_2']);
 create temporary table tmp (s String);
+insert into tmp values ('src_table_1'), ('src_table_3');
 select count(), sum(n) from merge(currentDatabase(), 'src_table');
 -- FIXME #21401 select count(), sum(n) from merge(currentDatabase(), 'src_table') where _table = 'src_table_1' or toInt8(substr(_table, 11, 1)) = 2;
 select count(), sum(n) from merge(currentDatabase(), 'src_table') where _table in ('src_table_2', 'src_table_3');

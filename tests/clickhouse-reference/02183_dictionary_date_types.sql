@@ -6,6 +6,7 @@ CREATE TABLE 02183_dictionary_source_table
     value_date_time DateTime,
     value_date_time_64 DateTime64
 ) ENGINE=TinyLog;
+INSERT INTO 02183_dictionary_source_table VALUES (0, '2019-05-05', '2019-05-05', '2019-05-05', '2019-05-05');
 SELECT * FROM 02183_dictionary_source_table;
 CREATE DICTIONARY 02183_flat_dictionary
 (
@@ -80,6 +81,7 @@ CREATE TABLE 02183_ip_trie_dictionary_source_table
     value_date_time DateTime,
     value_date_time_64 DateTime64
 ) ENGINE=TinyLog;
+INSERT INTO 02183_ip_trie_dictionary_source_table VALUES ('127.0.0.1', '2019-05-05', '2019-05-05', '2019-05-05', '2019-05-05');
 SELECT * FROM 02183_ip_trie_dictionary_source_table;
 CREATE DICTIONARY 02183_ip_trie_dictionary
 (
@@ -102,6 +104,7 @@ CREATE TABLE 02183_polygon_dictionary_source_table
     value_date_time DateTime,
     value_date_time_64 DateTime64
 ) ENGINE = TinyLog;
+INSERT INTO 02183_polygon_dictionary_source_table VALUES ([[[(0, 0), (0, 1), (1, 1), (1, 0)]]], '2019-05-05', '2019-05-05', '2019-05-05', '2019-05-05');
 CREATE DICTIONARY 02183_polygon_dictionary
 (
     key Array(Array(Array(Tuple(Float64, Float64)))),
@@ -125,6 +128,7 @@ CREATE TABLE 02183_range_dictionary_source_table
     value_date_time DateTime,
     value_date_time_64 DateTime64
 ) ENGINE = TinyLog;
+INSERT INTO 02183_range_dictionary_source_table VALUES(0, 0, 1, '2019-05-05', '2019-05-05', '2019-05-05', '2019-05-05');
 SELECT * FROM 02183_range_dictionary_source_table;
 CREATE DICTIONARY 02183_range_dictionary
 (

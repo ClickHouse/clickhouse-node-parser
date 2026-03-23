@@ -8,6 +8,8 @@ CREATE TABLE table_b (
     something Nullable(String),
     other String
 ) ENGINE = MergeTree ORDER BY (event_id);
+INSERT INTO table_a VALUES (1, 'foo', 'foo'), (2, 'foo', 'foo'), (3, 'bar', 'bar');
+INSERT INTO table_b VALUES (1, 'bar', 'bar'), (2, 'bar', 'bar'), (3, 'test', 'test'), (4, NULL, '');
 SELECT s1.other, s2.other, count_a, count_b, toTypeName(s1.other), toTypeName(s2.other) FROM
     ( SELECT other, count() AS count_a FROM table_a GROUP BY other ) s1
 ALL FULL JOIN

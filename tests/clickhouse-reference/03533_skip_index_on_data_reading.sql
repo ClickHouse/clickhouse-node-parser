@@ -26,6 +26,8 @@ SETTINGS
     min_bytes_for_full_part_storage = 0,
     max_bytes_to_merge_at_max_space_in_pool = 1,
     add_minmax_index_for_numeric_columns=0;
+-- create 3 parts to test concurrent processing.
+INSERT INTO test VALUES (1, '2023-01-01', 101, 'https://example.com/page1', 'europe'), (2, '2023-01-01', 102, 'https://example.com/page2', 'us_west'), (3, '2023-01-02', 106, 'https://example.com/page3', 'us_west'), (4, '2023-01-02', 107, 'https://example.com/page4', 'us_west'), (5, '2023-01-03', 104, 'https://example.com/page5', 'asia');
 -- disable move to PREWHERE to ensure RowsReadByPrewhereReaders and RowsReadByMainReader reflect actual filtering on read behavior for testing
 SET optimize_move_to_prewhere = 0;
 -- agree on one granule
@@ -56,6 +58,8 @@ SETTINGS
     min_bytes_for_full_part_storage = 0,
     max_bytes_to_merge_at_max_space_in_pool = 1,
     add_minmax_index_for_numeric_columns=0;
+-- insert a part with no index
+INSERT INTO test_partial_index VALUES (1, '2023-01-01', 101, 'https://example.com/page1', 'europe'), (2, '2023-01-01', 102, 'https://example.com/page2', 'us_west'), (3, '2023-01-02', 106, 'https://example.com/page3', 'us_west'), (4, '2023-01-02', 107, 'https://example.com/page4', 'us_west'), (5, '2023-01-03', 104, 'https://example.com/page5', 'asia');
 -- agree on one granule
 SELECT * FROM test_partial_index WHERE region = 'europe' AND user_id = 101 ORDER BY ALL SETTINGS log_comment = 'test_partial_1';
 -- all filtered

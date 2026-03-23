@@ -8,6 +8,7 @@ CREATE TABLE ints (
     g BIGINT,
     h BIGINT(64)
 ) engine=Memory;
+INSERT INTO ints VALUES (1, 8, 11, 16, 21, 32, 41, 64);
 SELECT  toTypeName(a), toTypeName(b), toTypeName(c), toTypeName(d), toTypeName(e), toTypeName(f), toTypeName(g), toTypeName(h) FROM ints;
 CREATE TABLE floats (
     a FLOAT,
@@ -18,9 +19,11 @@ CREATE TABLE floats (
     f DOUBLE(4, 18)
 
 ) engine=Memory;
+INSERT INTO floats VALUES (1.1, 1.2, 1.3, 41.1, 41.1, 42.1);
 SELECT  toTypeName(a), toTypeName(b), toTypeName(c), toTypeName(d), toTypeName(e), toTypeName(f) FROM floats;
 CREATE TABLE strings (
     a VARCHAR,
     b VARCHAR(11)
 ) engine=Memory;
+INSERT INTO strings VALUES ('test', 'string');
 SELECT  toTypeName(a), toTypeName(b)  FROM strings;

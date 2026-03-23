@@ -5,6 +5,7 @@ CREATE TABLE db_for_dict.table_for_dict
   value String
 )
 ENGINE = Memory();
+INSERT INTO db_for_dict.table_for_dict VALUES (1, 'Hello'), (2, 'World');
 CREATE DICTIONARY db_for_dict.dict_with_hashed_layout
 (
   key1 UInt64,

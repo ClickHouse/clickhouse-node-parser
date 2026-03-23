@@ -4,6 +4,7 @@ CREATE TABLE test_01915_db.test_source_table_1
     id UInt64,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO test_01915_db.test_source_table_1 VALUES (0, 'Value0');
 CREATE OR REPLACE DICTIONARY test_01915_db.test_dictionary
 (
     id UInt64,
@@ -18,6 +19,7 @@ CREATE TABLE test_01915_db.test_source_table_2
     id UInt64,
     value_1 String
 ) ENGINE=TinyLog;
+INSERT INTO test_01915_db.test_source_table_2 VALUES (0, 'Value1');
 CREATE OR REPLACE DICTIONARY test_01915_db.test_dictionary
 (
     id UInt64,

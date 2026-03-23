@@ -5,3 +5,4 @@ create table table1 (
 ENGINE = MergeTree
 partition by tuple()
 order by col1;
+INSERT INTO table1 VALUES (1, 2), (1, 4);

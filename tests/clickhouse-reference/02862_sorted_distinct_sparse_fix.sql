@@ -3,6 +3,8 @@ CREATE TABLE t_sparse_distinct (id UInt32, v String)
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.9;
+INSERT INTO t_sparse_distinct SELECT number % 10, toString(number % 100 = 0) FROM numbers(100);
+INSERT INTO t_sparse_distinct(id) SELECT number % 10 FROM numbers(100);
 -- { echoOn }
 SELECT name, column, serialization_kind
 FROM system.parts_columns

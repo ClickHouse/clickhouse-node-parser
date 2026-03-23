@@ -1,14 +1,1 @@
-CREATE TABLE `02725_memory_for_merges`
-(
-    n UInt64,
-    s String
-)
-ENGINE = MergeTree
-ORDER BY n
-SETTINGS merge_max_block_size_bytes = 1024, index_granularity_bytes = 1024;
-
-SELECT if((sum(peak_memory_usage) < 1024 * 1024 * 200 AS x), x, sum(peak_memory_usage))
-FROM `system`.part_log
-WHERE database = currentDatabase()
-    AND table = '02725_memory_for_merges'
-    AND event_type = 'MergeParts';
+<Parse Error>

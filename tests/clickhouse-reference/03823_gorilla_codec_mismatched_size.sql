@@ -4,7 +4,11 @@
 
 SET allow_suspicious_codecs = 1;
 CREATE TABLE t_gorilla_mismatched (c0 Int16 CODEC(Gorilla(4))) ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO t_gorilla_mismatched (c0) VALUES (1);
 SELECT * FROM t_gorilla_mismatched;
 CREATE TABLE t_gorilla_mismatched (c0 Int16 CODEC(Gorilla(4), ZSTD)) ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO t_gorilla_mismatched (c0) VALUES (42);
 CREATE TABLE t_gorilla_mismatched (c0 Int16 CODEC(Gorilla(8))) ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO t_gorilla_mismatched (c0) VALUES (100);
 CREATE TABLE t_gorilla_mismatched (c0 Int16 CODEC(Gorilla(4))) ENGINE = MergeTree() ORDER BY tuple() SETTINGS min_bytes_for_wide_part = 10000000000;
+INSERT INTO t_gorilla_mismatched (c0) VALUES (7);

@@ -10,6 +10,9 @@ CREATE TABLE datetime_date_table (
     col_datetime64_lc LowCardinality(String),
     PRIMARY KEY col_date
 ) ENGINE = MergeTree;
+INSERT INTO datetime_date_table VALUES ('2020-03-04', '2020-03-04 10:23:45', '2020-03-04 10:23:45.123', '2020-03-04', '2020-03-04 10:23:45', '2020-03-04 10:23:45.123', '2020-03-04', '2020-03-04 10:23:45', '2020-03-04 10:23:45.123');
+INSERT INTO datetime_date_table VALUES ('2020-03-05', '2020-03-05 12:23:45', '2020-03-05 12:23:45.123', '2020-03-05', '2020-03-05 12:23:45', '2020-03-05 12:23:45.123', '2020-03-05', '2020-03-05 12:23:45', '2020-03-05 12:23:45.123');
+INSERT INTO datetime_date_table VALUES ('2020-04-05', '2020-04-05 00:10:45', '2020-04-05 00:10:45.123', '2020-04-05', '2020-04-05 00:10:45', '2020-04-05 00:10:45.123', '2020-04-05', '2020-04-05 00:10:45', '2020-04-05 00:10:45.123');
 SELECT count() FROM datetime_date_table WHERE col_date > '2020-03-04';
 SELECT count() FROM datetime_date_table WHERE col_date > '2020-03-04'::Date;
 SELECT count() FROM datetime_date_table WHERE col_date > '2020-03-04 10:20:45'; -- { serverError TYPE_MISMATCH }

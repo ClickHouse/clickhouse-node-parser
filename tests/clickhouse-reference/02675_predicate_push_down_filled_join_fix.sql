@@ -7,9 +7,11 @@ CREATE TABLE test_table
     id UInt64,
     value String
 ) ENGINE=MergeTree ORDER BY id;
+INSERT INTO test_table VALUES (0, 'Value');
 CREATE TABLE test_table_join
 (
     id UInt64,
     value String
 ) ENGINE = Join(All, inner, id);
+INSERT INTO test_table_join VALUES (0, 'JoinValue');
 SELECT t1.id, t1.value, t2.value FROM test_table AS t1 INNER JOIN test_table_join AS t2 ON t1.id = t2.id WHERE t1.id = 0;

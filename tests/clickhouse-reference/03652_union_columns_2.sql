@@ -1,5 +1,9 @@
 CREATE TABLE left (g UInt32, i UInt32)
   ORDER BY (g, i);
+INSERT INTO left VALUES
+(0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (2, 0);
 CREATE TABLE right (g UInt32, i UInt32)
   ORDER BY (g, i);
+INSERT INTO right VALUES
+(0,0), (0, 3), (0, 4), (0, 6), (1, 0);
 SET enable_analyzer = 1;

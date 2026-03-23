@@ -14,5 +14,11 @@ SETTINGS
 SET apply_patch_parts = 1;
 SET mutations_sync = 2;
 SET insert_keeper_fault_injection_probability = 0.0;
+INSERT INTO t_detach_attach_patches VALUES (0, 1, 1, 1) (0, 2, 2, 2);
+INSERT INTO t_detach_attach_patches VALUES (1, 1, 1, 1) (1, 2, 2, 2);
+INSERT INTO t_detach_attach_patches VALUES (2, 1, 1, 1) (2, 2, 2, 2);
+INSERT INTO t_detach_attach_patches VALUES (3, 1, 1, 1) (3, 2, 2, 2);
+INSERT INTO t_detach_attach_patches VALUES (4, 1, 1, 1) (4, 2, 2, 2);
+INSERT INTO t_detach_attach_patches VALUES (5, 1, 1, 1) (5, 2, 2, 2);
 SELECT * FROM t_detach_attach_patches ORDER BY ALL;
 SET apply_patch_parts = 0;

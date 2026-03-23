@@ -1,12 +1,15 @@
 SET any_join_distinct_right_table_keys = 1;
 SET enable_optimize_predicate_expression = 0;
 CREATE TABLE testJoinTable (number UInt64, data String) ENGINE = Join(ANY, INNER, number) SETTINGS any_join_distinct_right_table_keys = 1;
+INSERT INTO testJoinTable VALUES (1, '1'), (2, '2'), (3, '3');
 SELECT * FROM (SELECT * FROM numbers(10)) js1 INNER JOIN testJoinTable USING number; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 SELECT * FROM (SELECT * FROM numbers(10)) js1 INNER JOIN (SELECT * FROM testJoinTable) js2 USING number ORDER BY number;
 SELECT * FROM (SELECT * FROM numbers(10)) js1 ANY INNER JOIN testJoinTable USING number ORDER BY number;
 SELECT * FROM testJoinTable ORDER BY number;
 CREATE TABLE transaction (id Int32, value Float64, master_id Int32) ENGINE = MergeTree() ORDER BY id;
 CREATE TABLE master (id Int32, name String) ENGINE = Join (ANY, LEFT, id) SETTINGS any_join_distinct_right_table_keys = 1;
+INSERT INTO master VALUES (1, 'ONE');
+INSERT INTO transaction VALUES (1, 52.5, 1);
 SELECT tx.id, tx.value, m.name FROM transaction tx ANY LEFT JOIN master m ON m.id = tx.master_id ORDER BY tx.id;
 CREATE TABLE tbl (eventDate Date, id String) ENGINE = MergeTree() PARTITION BY tuple() ORDER BY eventDate;
 CREATE TABLE some_join (id String, value String) ENGINE = Join(ANY, LEFT, id) SETTINGS any_join_distinct_right_table_keys = 1;

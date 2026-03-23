@@ -1,4 +1,5 @@
 CREATE TABLE ties (a Int) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO ties VALUES (1), (1), (2), (2), (2), (2) (3), (3);
 SELECT a FROM ties order by a limit 1 with ties;
 SELECT a FROM ties order by a limit 3 with ties;
 SELECT a FROM ties order by a limit 5 with ties;

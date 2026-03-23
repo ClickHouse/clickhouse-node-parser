@@ -10,6 +10,8 @@ ORDER BY id
 SETTINGS
     enable_block_number_column = true,
     enable_block_offset_column = true;
+INSERT INTO t_shared SELECT number, number, number FROM numbers(20);
+INSERT INTO t_shared SELECT number, number, number FROM numbers(100, 10);
 SET apply_patch_parts = 1;
 SET max_threads = 1;
 SELECT * FROM t_shared ORDER BY id;

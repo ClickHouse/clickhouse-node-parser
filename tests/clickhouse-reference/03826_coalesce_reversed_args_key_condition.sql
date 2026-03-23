@@ -11,6 +11,12 @@ CREATE TABLE test_coalesce_reversed
 ENGINE = MergeTree
 ORDER BY ts
 SETTINGS index_granularity = 1, allow_nullable_key = 1;
+INSERT INTO test_coalesce_reversed VALUES
+    ('2026-01-01'),
+    ('2026-01-02'),
+    (NULL),
+    ('2026-01-03'),
+    ('2026-01-04');
 -- This query triggered "Inconsistent KeyCondition behavior" because
 -- coalesce(non_null_const, ts) was treated as monotonic w.r.t. ts
 -- due to using the wrong argument type in matchesExactContinuousRange().

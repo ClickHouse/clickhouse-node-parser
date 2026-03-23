@@ -1,16 +1,1 @@
-CREATE TABLE test_flatten_nested_crash
-(
-    id UInt64,
-    tenant String,
-    `arr.id` Array(Nullable(UInt64)),
-    `arr.name` Array(Nullable(String)),
-    `arr.nested` Array(Tuple(a String, b Float64))
-)
-ENGINE = MergeTree
-ORDER BY (id)
-SETTINGS index_granularity = 8192;
-
-SELECT arr.nested
-FROM test_flatten_nested_crash
-ORDER BY arr.nested ASC
-LIMIT 1;
+<Parse Error>

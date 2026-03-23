@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS testTable (
  B Int64
 ) ENGINE MergeTree()
 ORDER BY (A);
+INSERT INTO testTable VALUES ('A', 1),('B',2),('C',3);
 CREATE VIEW testView AS 
 SELECT
  A as ALow, -- like account

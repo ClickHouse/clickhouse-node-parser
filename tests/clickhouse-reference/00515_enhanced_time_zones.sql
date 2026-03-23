@@ -19,6 +19,7 @@ SELECT toString(toTimeZone(toDateTime('2017-11-05 08:07:47', 'Asia/Istanbul'), '
 SELECT toString(toDateTime('2017-11-05 08:07:47', 'Asia/Istanbul'), 'Asia/Kolkata');
 SELECT '-- Test const timezone arguments --';
 CREATE TABLE tab (val Int64, tz String) engine=Log;
+INSERT INTO tab VALUES (42, 'Asia/Singapore') (43, 'Asia/Tokyo');
 SELECT val FROM tab WHERE now(tz) != toDateTime('2000-01-01 00:00:00') ORDER BY val SETTINGS allow_nonconst_timezone_arguments = 0; -- { serverError ILLEGAL_COLUMN }
 SELECT val FROM tab WHERE now(tz) != toDateTime('2000-01-01 00:00:00') ORDER BY val SETTINGS allow_nonconst_timezone_arguments = 1;
 SELECT val FROM tab WHERE now64(9, tz) != toDateTime64('2000-01-01 00:00:00', 6) ORDER BY val SETTINGS allow_nonconst_timezone_arguments = 0; -- { serverError ILLEGAL_COLUMN }

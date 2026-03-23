@@ -6,9 +6,15 @@ CREATE TABLE t_00751
 ) ENGINE = Memory;
 CREATE TABLE u_00751 (app Enum8('a' = 0, 'b' = 1)) ENGINE = Memory;
 CREATE TABLE v_00751 (platform Enum8('a' = 0, 'b' = 1)) ENGINE = Memory;
+INSERT INTO u_00751 VALUES ('b');
+INSERT INTO v_00751 VALUES ('b');
 CREATE MATERIALIZED VIEW t_mv_00751 ENGINE = MergeTree ORDER BY date
     AS SELECT date, platform, app FROM t_00751
     WHERE app = (SELECT min(app) from u_00751) AND platform = (SELECT (SELECT min(platform) from v_00751));
 USE default;
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.t_00751 VALUES ('2000-01-01', 'a', 'a') ('2000-01-02', 'b', 'b');
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.u_00751 VALUES ('a');
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.v_00751 VALUES ('a');
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.t_00751 VALUES ('2000-01-03', 'a', 'a') ('2000-01-04', 'b', 'b');
 SELECT * FROM {CLICKHOUSE_DATABASE:Identifier}.t_00751 ORDER BY date;
 SELECT * FROM {CLICKHOUSE_DATABASE:Identifier}.t_mv_00751 ORDER BY date;

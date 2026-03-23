@@ -11,6 +11,7 @@ CREATE TABLE dist_vec
 Engine=MergeTree
 ORDER BY id
 SETTINGS index_granularity = 8, distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 10;
+INSERT INTO dist_vec SELECT number, [number/100, number/100] FROM numbers(100);
 SELECT *
 FROM dist_vec
 ORDER BY L2Distance(vec, [0.3, 0.3]) ASC

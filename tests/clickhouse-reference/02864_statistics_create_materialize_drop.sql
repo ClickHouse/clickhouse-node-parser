@@ -10,3 +10,4 @@ CREATE TABLE tab
     d DateTime STATISTICS(countmin, minmax, tdigest, uniq),
     pk String,
 ) Engine = MergeTree() ORDER BY pk;
+INSERT INTO tab select number, number, number, toDateTime(number), generateUUIDv4() FROM system.numbers LIMIT 10000;

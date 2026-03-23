@@ -21,6 +21,21 @@ CREATE TABLE codecTest (
     valueDT  DateTime CODEC(DoubleDelta),
     valueD   Date     CODEC(DoubleDelta)
 ) Engine = MergeTree ORDER BY key SETTINGS min_bytes_for_wide_part = 0, ratio_of_defaults_for_sparse_serialization = 1;
+-- checking for overflow
+INSERT INTO codecTest (key, ref_valueU64, valueU64, ref_valueI64, valueI64)
+    VALUES (1, 18446744073709551615, 18446744073709551615, 9223372036854775807, 9223372036854775807), (2, 0, 0, -9223372036854775808, -9223372036854775808), (3, 18446744073709551615, 18446744073709551615, 9223372036854775807, 9223372036854775807);
+-- n^3 covers all double delta storage cases, from small difference between neighbouref_values (stride) to big.
+INSERT INTO codecTest (key, ref_valueU64, valueU64, ref_valueU32, valueU32, ref_valueU16, valueU16, ref_valueU8, valueU8, ref_valueI64, valueI64, ref_valueI32, valueI32, ref_valueI16, valueI16, ref_valueI8, valueI8, ref_valueDT, valueDT, ref_valueD, valueD)
+    SELECT number as n, n * n * n as v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, toDateTime(v), toDateTime(v), toDate(v), toDate(v)
+    FROM system.numbers LIMIT 101, 1000;
+-- best case - constant stride
+INSERT INTO codecTest (key, ref_valueU64, valueU64, ref_valueU32, valueU32, ref_valueU16, valueU16, ref_valueU8, valueU8, ref_valueI64, valueI64, ref_valueI32, valueI32, ref_valueI16, valueI16, ref_valueI8, valueI8, ref_valueDT, valueDT, ref_valueD, valueD)
+    SELECT number as n, n as v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, toDateTime(v), toDateTime(v), toDate(v), toDate(v)
+    FROM system.numbers LIMIT 2001, 1000;
+-- worst case - random stride
+INSERT INTO codecTest (key, ref_valueU64, valueU64, ref_valueU32, valueU32, ref_valueU16, valueU16, ref_valueU8, valueU8, ref_valueI64, valueI64, ref_valueI32, valueI32, ref_valueI16, valueI16, ref_valueI8, valueI8, ref_valueDT, valueDT, ref_valueD, valueD)
+    SELECT number as n, n + (rand64() - 9223372036854775807)/1000 as v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, toDateTime(v), toDateTime(v), toDate(v), toDate(v)
+    FROM system.numbers LIMIT 3001, 1000;
 SELECT
     key,
     ref_valueU64, valueU64, ref_valueU64 - valueU64 as dU64

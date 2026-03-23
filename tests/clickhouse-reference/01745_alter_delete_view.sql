@@ -11,4 +11,5 @@ CREATE VIEW test_view AS
 SELECT f1, f2
 FROM test_table
 WHERE pk = 2;
+INSERT INTO test_table (f1, f2, pk) VALUES (1,1,1), (1,1,2), (2,1,1), (2,1,2);
 SELECT * FROM test_view ORDER BY f1, f2;

@@ -8,8 +8,11 @@ CREATE TABLE columns_with_multiple_streams (
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS min_rows_for_wide_part = 0, min_bytes_for_wide_part = 0;
+INSERT INTO columns_with_multiple_streams VALUES(1, 1, [[1]], tuple(1, [1]));
 SELECT * FROM columns_with_multiple_streams;
+INSERT INTO columns_with_multiple_streams VALUES(2, 2, [[2]], tuple(2, [2]));
 SELECT * FROM columns_with_multiple_streams ORDER BY field0;
+INSERT INTO columns_with_multiple_streams VALUES(3, 3, [[3]], tuple(3, [3]));
 CREATE TABLE columns_with_multiple_streams_compact (
   field0 Nullable(Int64) CODEC(Delta(2), LZ4),
   field1 Nullable(Int64) CODEC(Delta, LZ4),
@@ -19,8 +22,11 @@ CREATE TABLE columns_with_multiple_streams_compact (
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS min_rows_for_wide_part = 100000, min_bytes_for_wide_part = 100000;
+INSERT INTO columns_with_multiple_streams_compact VALUES(1, 1, [[1]], tuple(1, [1]));
 SELECT * FROM columns_with_multiple_streams_compact;
+INSERT INTO columns_with_multiple_streams_compact VALUES(2, 2, [[2]], tuple(2, [2]));
 SELECT * FROM columns_with_multiple_streams_compact ORDER BY field0;
+INSERT INTO columns_with_multiple_streams_compact VALUES(3, 3, [[3]], tuple(3, [3]));
 -- validation still works, non-sense codecs checked
 CREATE TABLE columns_with_multiple_streams_bad_case (
   field0 Nullable(String) CODEC(Delta, LZ4)
@@ -38,4 +44,6 @@ CREATE TABLE columns_with_multiple_streams_bad_case (
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO columns_with_multiple_streams_bad_case VALUES(1), (2);
+INSERT INTO columns_with_multiple_streams_bad_case VALUES(3);
 SELECT * FROM columns_with_multiple_streams_bad_case ORDER BY field0;

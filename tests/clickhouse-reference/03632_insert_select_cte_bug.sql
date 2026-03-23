@@ -4,4 +4,7 @@ SET enable_global_with_statement=1;
 CREATE TABLE test_insert (c1 String, c2 UInt8)
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03632/tables/test_insert', '{replica}')
 ORDER BY ();
+INSERT INTO test_insert
+WITH cte_test AS (SELECT '1234', 1)
+SELECT * FROM cte_test;
 SELECT count() FROM test_insert;

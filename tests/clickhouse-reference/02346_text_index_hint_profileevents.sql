@@ -11,6 +11,7 @@ CREATE TABLE tab
     INDEX idx_s (s) TYPE text(tokenizer = ngrams(3))
 )
 ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tab SELECT format('foo {} bar', number) FROM numbers(100000);
 SELECT count() FROM tab WHERE s LIKE '%foo%';
 SELECT count() FROM tab WHERE s LIKE '%7777%';
 SELECT

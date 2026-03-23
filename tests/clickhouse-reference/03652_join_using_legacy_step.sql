@@ -1,9 +1,13 @@
 SET query_plan_use_new_logical_join_step = 0;
 SET enable_analyzer = 1;
 CREATE TABLE t1 (x Int8) ENGINE = Memory;
+INSERT INTO t1 VALUES (1);
 CREATE TABLE t2 (x UInt8) ENGINE = Memory;
+INSERT INTO t2 VALUES (1);
 CREATE TABLE t3 (x UInt16) ENGINE = Memory;
+INSERT INTO t3 VALUES (1);
 CREATE TABLE t4 (x UInt32) ENGINE = Memory;
+INSERT INTO t4 VALUES (1);
 SELECT coalesce(t1.x, t2.x, t3.x, t4.x) AS x
 FROM t1
 FULL OUTER JOIN t2 USING (x)

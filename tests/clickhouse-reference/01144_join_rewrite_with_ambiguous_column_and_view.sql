@@ -1,6 +1,9 @@
 CREATE TABLE t1 (id UInt32, value1 String) ENGINE MergeTree() ORDER BY id;
 CREATE TABLE t2 (id UInt32, value2 String) ENGINE MergeTree() ORDER BY id;
 CREATE TABLE t3 (id UInt32, value3 String) ENGINE MergeTree() ORDER BY id;
+INSERT INTO t1 (id, value1) VALUES (1, 'val11');
+INSERT INTO t2 (id, value2) VALUES (1, 'val21');
+INSERT INTO t3 (id, value3) VALUES (1, 'val31');
 SET enable_optimize_predicate_expression = 1;
 SELECT t1.id, t2.id as id, t3.id as value
 FROM (select number as id, 42 as value from numbers(4)) t1

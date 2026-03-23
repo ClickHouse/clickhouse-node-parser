@@ -22,6 +22,18 @@ CREATE TABLE test_arraySymmetricDifference
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO test_arraySymmetricDifference
+VALUES
+(1, ['1'], ['2']),
+(2, ['2'], ['2']),
+(3, ['3'], ['3', '2']),
+(4, ['4'], ['1']),
+(5, ['5'], []),
+(6, ['6', '4'], ['5', '6']),
+(7, ['7', '0'], []),
+(8, ['8', '9', '10'], []),
+(9, ['9'], ['-1']),
+(10, ['10'], ['5']);
 SELECT
 	ta.id AS id,
     arraySort(arraySymmetricDifference(ta.arr1, ta.arr2)) AS symmetricDifference

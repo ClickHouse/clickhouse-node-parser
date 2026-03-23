@@ -11,5 +11,11 @@ CREATE TABLE table_for_rename1
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_01277/test_for_rename', '1')
 PARTITION BY date
 ORDER BY key;
+INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(9);
+INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number) from numbers(9);
 SELECT * FROM table_for_rename1 ORDER BY key;
 SELECT '-- insert after rename --';
+INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(10, 10);
+INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number) from numbers(10, 10);
+INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(20,10);
+INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number), toString(number + 2) from numbers(20, 10);

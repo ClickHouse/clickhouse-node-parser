@@ -8,6 +8,7 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity=1;
+INSERT INTO test SELECT number FROM numbers(1000);
 CREATE TABLE test
 (
     `x` String,

@@ -8,6 +8,8 @@ CREATE TABLE dictionary_nullable_default_source_table
     id UInt64,
     value Nullable(UInt64)
 ) ENGINE=TinyLog;
+INSERT INTO dictionary_nullable_source_table VALUES (0, 0), (1, NULL);
+INSERT INTO dictionary_nullable_default_source_table VALUES (2, 2), (3, NULL);
 CREATE DICTIONARY flat_dictionary
 (
     id UInt64,
@@ -87,6 +89,8 @@ CREATE TABLE polygon_dictionary_nullable_default_source_table
     key Tuple(Float64, Float64),
     value Nullable(UInt64)
 ) ENGINE=TinyLog;
+INSERT INTO polygon_dictionary_nullable_source_table VALUES ([[[(0, 0), (0, 1), (1, 1), (1, 0)]]], 0), ([[[(0, 0), (0, 1.5), (1.5, 1.5), (1.5, 0)]]], NULL);
+INSERT INTO polygon_dictionary_nullable_default_source_table VALUES ((2.0, 2.0), 2), ((4, 4), NULL);
 CREATE DICTIONARY polygon_dictionary
 (
     key Array(Array(Array(Tuple(Float64, Float64)))),
@@ -115,6 +119,8 @@ CREATE TABLE range_dictionary_nullable_default_source_table
     key UInt64,
     value Nullable(UInt64)
 ) ENGINE=TinyLog;
+INSERT INTO range_dictionary_nullable_source_table VALUES (0, toDate('2019-05-05'), toDate('2019-05-20'), 0), (1, toDate('2019-05-05'), toDate('2019-05-20'), NULL);
+INSERT INTO range_dictionary_nullable_default_source_table VALUES (2, 2), (3, NULL);
 CREATE DICTIONARY range_dictionary
 (
   key UInt64,

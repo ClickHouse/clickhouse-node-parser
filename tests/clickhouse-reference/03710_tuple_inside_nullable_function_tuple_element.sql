@@ -60,6 +60,12 @@ CREATE TABLE test_nullable_tuples
     id UInt32,
     data Nullable(Tuple(Int32, String))
 ) ENGINE = Memory;
+INSERT INTO test_nullable_tuples VALUES
+    (1, (100, 'hello')),
+    (2, NULL),
+    (3, (300, 'world')),
+    (4, NULL),
+    (5, (500, 'test'));
 SELECT id, tupleElement(data, 1) as value, toTypeName(tupleElement(data, 1)) as type
 FROM test_nullable_tuples
 ORDER BY id;
@@ -87,6 +93,11 @@ CREATE TABLE test_array_nullable_tuples
     id UInt32,
     records Array(Nullable(Tuple(Int32, String)))
 ) ENGINE = Memory;
+INSERT INTO test_array_nullable_tuples VALUES
+    (1, [CAST((100, 'a') AS Nullable(Tuple(Int32, String))), CAST(NULL AS Nullable(Tuple(Int32, String)))]),
+    (2, [CAST((200, 'b') AS Nullable(Tuple(Int32, String))), CAST((300, 'c') AS Nullable(Tuple(Int32, String)))]),
+    (3, [CAST(NULL AS Nullable(Tuple(Int32, String)))]),
+    (4, []);
 SELECT id, tupleElement(records, 1) as values, toTypeName(tupleElement(records, 1)) as type
 FROM test_array_nullable_tuples
 ORDER BY id;
@@ -103,6 +114,12 @@ CREATE TABLE test_nullable_named_tuples
     id UInt32,
     person Nullable(Tuple(name String, age UInt8, salary Float64))
 ) ENGINE = Memory;
+INSERT INTO test_nullable_named_tuples VALUES
+    (1, ('Alice', 30, 50000.0)),
+    (2, NULL),
+    (3, ('Charlie', 35, 75000.0)),
+    (4, ('Diana', 28, 60000.0)),
+    (5, NULL);
 SELECT id,
     tupleElement(person, 'name') as name,
     tupleElement(person, 'age') as age,
@@ -171,6 +188,15 @@ CREATE TABLE test_complex_nullable
     id UInt32,
     matrix Array(Array(Nullable(Tuple(x Int32, y Int32))))
 ) ENGINE = Memory;
+INSERT INTO test_complex_nullable VALUES
+    (1, [
+        [CAST((1, 2) AS Nullable(Tuple(x Int32, y Int32))), CAST(NULL AS Nullable(Tuple(x Int32, y Int32)))],
+        [CAST((5, 6) AS Nullable(Tuple(x Int32, y Int32)))]
+    ]),
+    (2, [
+        [CAST((7, 8) AS Nullable(Tuple(x Int32, y Int32)))],
+        [CAST(NULL AS Nullable(Tuple(x Int32, y Int32))), CAST((11, 12) AS Nullable(Tuple(x Int32, y Int32)))]
+    ]);
 SELECT id, tupleElement(matrix, 'x') as x_values, toTypeName(tupleElement(matrix, 'x')) as type
 FROM test_complex_nullable
 ORDER BY id;

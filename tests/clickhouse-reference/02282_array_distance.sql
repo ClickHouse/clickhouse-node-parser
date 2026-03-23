@@ -12,6 +12,7 @@ CREATE TABLE vec1 (id UInt64, v Array(UInt8)) ENGINE = Memory;
 CREATE TABLE vec2 (id UInt64, v Array(Int64)) ENGINE = Memory;
 CREATE TABLE vec2f (id UInt64, v Array(Float32)) ENGINE = Memory;
 CREATE TABLE vec2d (id UInt64, v Array(Float64)) ENGINE = Memory;
+INSERT INTO vec1 VALUES (1, [3, 4, 5]), (2, [2, 4, 8]), (3, [7, 7, 7]);
 SELECT L1Distance(v, [0, 0, 0]) FROM vec1;
 SELECT L2Distance(v, [0, 0, 0]) FROM vec1;
 SELECT L2SquaredDistance(v, [0, 0, 0]) FROM vec1;
@@ -20,6 +21,7 @@ SELECT LinfDistance([5, 4, 3], v) FROM vec1;
 SELECT cosineDistance([3, 2, 1], v) FROM vec1;
 SELECT LinfDistance(v, materialize([0, -2, 0])) FROM vec1;
 SELECT cosineDistance(v, materialize([1., 1., 1.])) FROM vec1;
+INSERT INTO vec2 VALUES (1, [100, 200, 0]), (2, [888, 777, 666]), (3, range(1, 35, 1)), (4, range(3, 37, 1)), (5, range(1, 135, 1)), (6, range(3, 137, 1));
 SELECT
     v1.id,
     v2.id,
@@ -32,6 +34,7 @@ SELECT
 FROM vec2 v1, vec2 v2
 WHERE length(v1.v) == length(v2.v)
 ORDER BY ALL;
+INSERT INTO vec2f VALUES (1, [100, 200, 0]), (2, [888, 777, 666]), (3, range(1, 35, 1)), (4, range(3, 37, 1)), (5, range(1, 135, 1)), (6, range(3, 137, 1));
 SELECT
     v1.id,
     v2.id,
@@ -44,6 +47,7 @@ SELECT
 FROM vec2f v1, vec2f v2
 WHERE length(v1.v) == length(v2.v)
 ORDER BY ALL;
+INSERT INTO vec2d VALUES (1, [100, 200, 0]), (2, [888, 777, 666]), (3, range(1, 35, 1)), (4, range(3, 37, 1)), (5, range(1, 135, 1)), (6, range(3, 137, 1));
 SELECT
     v1.id,
     v2.id,

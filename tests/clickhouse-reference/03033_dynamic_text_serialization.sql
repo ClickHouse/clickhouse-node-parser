@@ -54,6 +54,7 @@ select d, dynamicType(d) from format(Values, 'd Dynamic', $$
 (true)
 $$) format Values;
 create table test (s String) engine=Memory;
+insert into test values ('42'), ('42.42'), ('[1, 2, 3]'), ('2020-01-01'), ('2020-01-01 10:00:00'), ('NULL'), ('true');
 set cast_string_to_dynamic_use_inference=1;
 select s::Dynamic as d, dynamicType(d) from test;
 select s::Dynamic(max_types=3) as d, dynamicType(d), isDynamicElementInSharedData(d) from test;

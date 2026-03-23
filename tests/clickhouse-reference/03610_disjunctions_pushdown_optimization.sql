@@ -7,6 +7,8 @@ SET enable_analyzer=1;
 SET enable_join_runtime_filters=0;
 CREATE TABLE tp1 (k Int32, a Int32) ENGINE = MergeTree() ORDER BY k;
 CREATE TABLE tp2 (k Int32, x Int32) ENGINE = MergeTree() ORDER BY k;
+INSERT INTO tp1 VALUES (1,10),(2,20),(3,30),(4,40),(5,50),(6,60);
+INSERT INTO tp2 VALUES (1,100),(2,100),(3,200),(4,200),(5,300),(6,300);
 -- We need to make sure that query plan creates the JOIN filter only with the optimization enabled, and WHERE filter in both cases
 
 ---------- CASE A ----------
@@ -67,6 +69,8 @@ WHERE (t1.k IN (1,2)) OR (t1.k IN (3,4))
 ORDER BY t1.k;
 CREATE TABLE table1 (a UInt32, b String) ENGINE = Memory;
 CREATE TABLE table2 (c UInt32, d String) ENGINE = Memory;
+INSERT INTO table1 VALUES (5, 'a5'), (6, 'a6'), (7, 'a7'), (10, 'a10');
+INSERT INTO table2 VALUES (5, 'b5'), (6, 'b6'), (7, 'b7'), (10, 'b10');
 SELECT REGEXP_REPLACE(trimLeft(explain), '__set_Int32_\\d+_\\d+', '__set_Int32_UNIQ_ID')
 FROM (
         EXPLAIN actions = 1

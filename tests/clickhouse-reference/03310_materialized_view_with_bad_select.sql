@@ -2,7 +2,11 @@ SET allow_materialized_view_with_bad_select = 1;
 CREATE TABLE src (x int, y int) ENGINE = MergeTree ORDER BY ();
 CREATE TABLE dst (x int, z int) ENGINE = MergeTree ORDER BY ();
 CREATE MATERIALIZED VIEW mv TO dst AS SELECT x, y FROM src;
+INSERT INTO src VALUES (1, 1);
 SELECT * FROM dst;
 SET allow_materialized_view_with_bad_select = 0;
+-- Insert into existing bad MV is still possible
+INSERT INTO src VALUES (2, 2);
 SELECT * FROM dst ORDER BY ALL;
 CREATE MATERIALIZED VIEW mv TO nonexistent AS SELECT x, y FROM src;
+INSERT INTO src VALUES (3, 3); -- { serverError UNKNOWN_TABLE }

@@ -9,3 +9,5 @@ settings
     min_rows_for_wide_part=0,
     vertical_merge_algorithm_min_rows_to_activate=0,
     vertical_merge_algorithm_min_columns_to_activate=0;
+insert into data (key) values (1);
+insert into data (key) values (2);

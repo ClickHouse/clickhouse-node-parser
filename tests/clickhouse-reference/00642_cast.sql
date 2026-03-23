@@ -25,4 +25,5 @@ CREATE TABLE cast
         )
     )
 ) ENGINE = MergeTree ORDER BY e;
+INSERT INTO cast (x) VALUES (1);
 SELECT * FROM cast;

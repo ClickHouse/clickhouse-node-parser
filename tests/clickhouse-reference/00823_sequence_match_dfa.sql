@@ -5,6 +5,8 @@ CREATE TABLE sequence
     EventTime UInt64
 )
 ENGINE = Memory;
+INSERT INTO sequence SELECT 1, number = 0 ? 'A' : (number < 1000000 ? 'B' : 'C'), number FROM numbers(1000001);
+INSERT INTO sequence SELECT 1, 'D', 1e14;
 SELECT 'ABC'
 FROM sequence
 GROUP BY userID

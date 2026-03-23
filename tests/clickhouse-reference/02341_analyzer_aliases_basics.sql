@@ -10,6 +10,7 @@ CREATE TABLE test_table
     id UInt64,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO test_table VALUES (0, 'Value');
 SELECT id_alias_2, id AS id_alias, id_alias as id_alias_2 FROM test_table;
 SELECT id_1, value_1, id as id_1, value as value_1 FROM test_table;
 SELECT (id + b) AS id, id as b FROM test_table; -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }

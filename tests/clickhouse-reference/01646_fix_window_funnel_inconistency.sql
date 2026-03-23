@@ -9,6 +9,7 @@ CREATE TABLE trend
 ENGINE = MergeTree()
 PARTITION BY toYYYYMM(event_date)
 ORDER BY user_id;
+insert into trend values ('2019-01-28', 1, '2019-01-29 10:00:00', 1004, 'phone') ('2019-01-28', 1, '2019-01-29 10:00:00', 1003, 'phone') ('2019-01-28', 1, '2019-01-28 10:00:00', 1002, 'phone');
 SELECT
     level,
     count() AS c
@@ -23,3 +24,4 @@ FROM
 GROUP BY level
 ORDER BY level ASC;
 SELECT '---';
+insert into trend values ('2019-01-28', 1, '2019-01-29 10:00:00', 1003, 'phone') ('2019-01-28', 1, '2019-01-29 10:00:00', 1004, 'phone') ('2019-01-28', 1, '2019-01-28 10:00:00', 1002, 'phone');

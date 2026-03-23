@@ -4,6 +4,8 @@ CREATE TABLE table_function_dictionary_source_table
    value UInt64
 )
 ENGINE = TinyLog;
+INSERT INTO table_function_dictionary_source_table VALUES (0, 0);
+INSERT INTO table_function_dictionary_source_table VALUES (1, 1);
 CREATE DICTIONARY table_function_dictionary_test_dictionary
 (
    id UInt64,

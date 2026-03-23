@@ -1,5 +1,7 @@
 create table lhs(a UInt64) Engine=MergeTree order by ();
 create table rhs(a UInt64) Engine=MergeTree order by ();
+insert into lhs select * from numbers_mt(1e5);
+insert into rhs select * from numbers_mt(1e6);
 set enable_parallel_replicas = 0; -- join optimization (and table size estimation) disabled with parallel replicas
 set enable_analyzer = 1, use_query_condition_cache = 0;
 set join_algorithm = 'direct,parallel_hash,hash'; -- default

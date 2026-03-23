@@ -7,6 +7,9 @@ CREATE TABLE part_log_bytes_uncompressed (
 )
 Engine=MergeTree()
 ORDER BY key;
+INSERT INTO part_log_bytes_uncompressed SELECT 1, 1 FROM numbers(1000);
+INSERT INTO part_log_bytes_uncompressed SELECT 2, 1 FROM numbers(1000);
+INSERT INTO part_log_bytes_uncompressed SELECT 3, 1 FROM numbers(1000);
 SELECT event_type, table, part_name, bytes_uncompressed > 0, (bytes_uncompressed > 0 ? (size_in_bytes < bytes_uncompressed ? '1' : toString((size_in_bytes, bytes_uncompressed))) : '0')
 FROM system.part_log
 WHERE event_date >= yesterday() AND database = currentDatabase() AND table = 'part_log_bytes_uncompressed'

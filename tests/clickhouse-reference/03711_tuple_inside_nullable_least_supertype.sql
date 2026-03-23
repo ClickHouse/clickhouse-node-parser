@@ -10,6 +10,11 @@ CREATE TABLE test_nullable_tuples
     id UInt32,
     data Nullable(Tuple(val1 Int32, val2 String, val3 Float64))
 ) ENGINE = Memory;
+INSERT INTO test_nullable_tuples
+SELECT
+    number as id,
+    if(number % 5 = 0, NULL, (toInt32(number), toString(number), toFloat64(number) / 10)) as data
+FROM numbers(7);
 SELECT * FROM test_nullable_tuples ORDER BY id;
 SELECT toTypeName([
     CAST((1, 2), 'Tuple(Int8, Int8)'),

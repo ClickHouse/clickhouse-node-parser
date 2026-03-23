@@ -1,4 +1,8 @@
 create table array_union (date Date, arr Array(UInt8)) engine=MergeTree partition by date order by date;
+insert into array_union values ('2019-01-01', [1,2,3]);
+insert into array_union values ('2019-01-01', [1,2]);
+insert into array_union values ('2019-01-01', [1]);
+insert into array_union values ('2019-01-01', []);
 select arraySort(arrayUnion(arr, [1,2])) from array_union order by arr;
 select '-------';
 select arraySort(arrayUnion(arr, [])) from array_union order by arr;
@@ -35,6 +39,18 @@ CREATE TABLE test_array_union
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 8192;
+INSERT INTO test_array_union
+VALUES
+(1, ['1']),
+(2, ['2']),
+(3, ['3']),
+(4, ['4']),
+(5, ['5']),
+(6, ['6']),
+(7, ['7']),
+(8, ['8']),
+(9, ['9']),
+(10, ['10']);
 SELECT
 	ta.id AS id,
     ta.properties AS properties,

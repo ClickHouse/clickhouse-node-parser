@@ -16,6 +16,10 @@ SET parallel_view_processing=0;
 SET log_query_views=1;
 SET log_queries_min_type='QUERY_FINISH';
 SET log_queries=1;
+-- INSERT 1
+INSERT INTO table_a SELECT '111', * FROM numbers(100);
+-- INSERT 2
+INSERT INTO table_d SELECT 0.5, * FROM numbers(50);
 -- CHECK LOGS OF INSERT 1
 SELECT
     'Query log rows' as stage,

@@ -1,6 +1,7 @@
 CREATE DATABASE db_memory_01625 ENGINE = Memory;
 USE db_memory_01625;
 CREATE TABLE index_append_test_test (i Int64, a UInt32, b UInt64, CONSTRAINT c1 ASSUME i <= 2 * b AND i + 40 > a) ENGINE = MergeTree() ORDER BY i;
+INSERT INTO index_append_test_test VALUES (1, 10, 1), (2, 20, 2);
 SET convert_query_to_cnf = 1;
 SET optimize_using_constraints = 1;
 SET optimize_move_to_prewhere = 1;

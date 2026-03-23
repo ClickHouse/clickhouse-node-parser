@@ -6,6 +6,9 @@ SETTINGS
     vertical_merge_algorithm_min_columns_to_activate = 0,
     min_rows_for_wide_part = 1,
     min_bytes_for_wide_part = 1;
+INSERT INTO test(id,a) VALUES (1,1),(2,2),(3,3);
+INSERT INTO test(id,a) VALUES (4,4),(5,5),(6,6);
 SELECT id,a,_block_number,_part from test ORDER BY id;
 set mutations_sync=1;
 SELECT *,_block_number,_part from test ORDER BY id;
+INSERT INTO test(id,a) VALUES (7,7),(8,8),(9,9);

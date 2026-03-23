@@ -6,6 +6,7 @@ CREATE TABLE test02313
 )
 ENGINE = MergeTree()
 ORDER BY (a, b, c);
+INSERT INTO test02313 SELECT number % 2 + 1 AS a, number % 2 AS b, number FROM numbers(10);
 -- { echoOn }
 SELECT
     count() as d, a, b, c

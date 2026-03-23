@@ -3,3 +3,6 @@ SET enable_parallel_replicas = 0;
 SET query_plan_join_swap_table = 0, query_plan_optimize_join_order_limit = 1; -- Changes query plan
 SET enable_join_runtime_filters = 0;
 CREATE TABLE users (uid Int16, name String, age Int16) ENGINE=Memory;
+INSERT INTO users VALUES (1231, 'John', 33);
+INSERT INTO users VALUES (6666, 'Ksenia', 48);
+INSERT INTO users VALUES (8888, 'Alice', 50);

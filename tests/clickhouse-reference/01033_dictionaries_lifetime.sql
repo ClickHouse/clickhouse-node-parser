@@ -7,6 +7,7 @@ CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict
 )
 ENGINE = MergeTree()
 ORDER BY key_column;
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_for_dict VALUES (1, 100, 'Hello world');
 CREATE DATABASE {CLICKHOUSE_DATABASE_1:Identifier};
 CREATE DICTIONARY {CLICKHOUSE_DATABASE_1:Identifier}.dict1
 (

@@ -14,4 +14,6 @@ CREATE TABLE keys
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/keys', '1')
 ORDER BY (key);
+INSERT INTO lightweight_test VALUES (now(), 'val', 'key');
+INSERT INTO keys VALUES ('key');
 SELECT key, value FROM lightweight_test ORDER BY key;

@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS 03578_rocksdb_dist
     val String
 )
 ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), 03578_rocksdb_local);
+INSERT INTO 03578_rocksdb_local SELECT number, 'val-' || number FROM numbers(1000);
 SELECT '-- RocksDB: set';
 SELECT *
 FROM 03578_rocksdb_dist
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS 03578_keepermap_dist
     val String
 )
 ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), 03578_keepermap_local);
+INSERT INTO 03578_keepermap_local SELECT number, 'val-' || number FROM numbers(1000);
 SELECT *
 FROM 03578_keepermap_dist
 WHERE key GLOBAL IN (0, 1, 2)

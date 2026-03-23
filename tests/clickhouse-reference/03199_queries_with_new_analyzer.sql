@@ -9,8 +9,10 @@ CREATE TABLE test (
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO test VALUES (10, [0,1,2,3], 'xx'), (20, [3,4,5,6], 'xxx'), (90, [3,4,5,6,9], 'xxxx');
 CREATE TABLE seq (
     number UInt64
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO seq VALUES (0), (6), (7);

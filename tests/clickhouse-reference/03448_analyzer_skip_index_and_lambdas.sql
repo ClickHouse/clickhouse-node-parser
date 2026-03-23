@@ -9,6 +9,7 @@ CREATE TABLE index_test
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS allow_suspicious_indices = 1, index_granularity = 4;
+insert into index_test select number, arrayMap(x -> 'A_' || toString(x) , range(number)) from numbers(16);
 SELECT arr
 FROM index_test
 WHERE has(arrayMap(x -> lower(x), arr), lower('a_12'))

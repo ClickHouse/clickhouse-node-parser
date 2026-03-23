@@ -6,4 +6,5 @@ CREATE TABLE ttl_table
 ENGINE = MergeTree()
 ORDER BY EventDate
 SETTINGS vertical_merge_algorithm_min_rows_to_activate=1, vertical_merge_algorithm_min_columns_to_activate=1;
+INSERT INTO ttl_table VALUES(toDate('2020-10-01'), 144);
 SELECT * FROM ttl_table;

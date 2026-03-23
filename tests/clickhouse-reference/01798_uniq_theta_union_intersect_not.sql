@@ -20,6 +20,12 @@ CREATE TABLE test1
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY (year);
+INSERT INTO TABLE test1(year, uv) select '2021',uniqThetaState(toInt64(1));
+INSERT INTO TABLE test1(year, uv) select '2021',uniqThetaState(toInt64(2));
+INSERT INTO TABLE test1(year, uv) select '2021',uniqThetaState(toInt64(3));
+INSERT INTO TABLE test1(year, uv) select '2021',uniqThetaState(toInt64(4));
+INSERT INTO TABLE test1(year, uv) select '2022',uniqThetaState(toInt64(1));
+INSERT INTO TABLE test1(year, uv) select '2022',uniqThetaState(toInt64(3));
 select finalizeAggregation(uniqThetaIntersect(uv2021,uv2022))/finalizeAggregation(uv2021),finalizeAggregation(uniqThetaIntersect(uv2021,uv2022)),finalizeAggregation(uv2021)
 from
 (
@@ -33,6 +39,12 @@ CREATE TABLE test2
 )
 ENGINE = MergeTree()
 ORDER BY (year);
+INSERT INTO TABLE test2(year, uv) select '2021',1;
+INSERT INTO TABLE test2(year, uv) select '2021',2;
+INSERT INTO TABLE test2(year, uv) select '2021',3;
+INSERT INTO TABLE test2(year, uv) select '2021',4;
+INSERT INTO TABLE test2(year, uv) select '2022',1;
+INSERT INTO TABLE test2(year, uv) select '2022',3;
 select finalizeAggregation(uniqThetaIntersect(uv2021,uv2022))/finalizeAggregation(uv2021),finalizeAggregation(uniqThetaIntersect(uv2021,uv2022)),finalizeAggregation(uv2021)
 from
 (

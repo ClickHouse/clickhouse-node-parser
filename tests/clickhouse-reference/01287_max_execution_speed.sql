@@ -11,6 +11,7 @@ SET max_execution_time = 600;
 SET max_execution_speed = 1000000;
 SET max_block_size = 100;
 CREATE TEMPORARY TABLE times (t DateTime);
+INSERT INTO times SELECT now();
 SELECT count() FROM numbers(2000000);
 SELECT max(t) - min(t) >= 1 FROM times;
 SET max_execution_speed = 0;

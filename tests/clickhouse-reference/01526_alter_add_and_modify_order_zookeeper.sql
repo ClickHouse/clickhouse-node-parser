@@ -13,5 +13,7 @@ ENGINE = ReplicatedVersionedCollapsingMergeTree('/clickhouse/tables/{database}/0
 PARTITION BY y
 ORDER BY d
 SETTINGS index_granularity = 8192;
+INSERT INTO table_for_alter VALUES(toDate('2019-10-01'), 'a', 1, 'aa', 1, 1, 1);
 SELECT * FROM table_for_alter;
+INSERT INTO table_for_alter VALUES(toDate('2019-10-02'), 'b', 2, 'bb', 2, 2, 2, 1, 2);
 SELECT * FROM table_for_alter ORDER BY d;

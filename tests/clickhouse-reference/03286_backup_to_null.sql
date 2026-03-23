@@ -1,1 +1,2 @@
 CREATE TABLE t1(x Int32) ENGINE=MergeTree() ORDER BY tuple();
+INSERT INTO t1 VALUES (1), (2), (3);

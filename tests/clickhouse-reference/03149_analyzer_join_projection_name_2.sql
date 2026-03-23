@@ -14,4 +14,9 @@ LIFETIME(MIN 0 MAX 0);
 CREATE MATERIALIZED VIEW mv to target AS
 SELECT u.uid, u.name, u.gid, u.gname
 FROM users u left join groups_dict g using gid, gname;
+INSERT INTO groups VALUES ('1', 'Group1');
+INSERT INTO users VALUES (1231, 'John', '1', 'Group1');
+INSERT INTO users VALUES (6666, 'Ksenia', '1', 'Group1');
+INSERT INTO users VALUES (8888, 'Alice', '1', 'Group1');
+INSERT INTO users VALUES (1234, 'Test', '2', 'Group1');
 SELECT * FROM target ORDER BY uid format PrettyCompactMonoBlock;

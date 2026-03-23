@@ -6,6 +6,9 @@ CREATE TABLE t
 )
 ENGINE = ReplacingMergeTree(_version, _is_deleted)
 ORDER BY (account_id);
+INSERT INTO t SELECT number, 0, 1 FROM numbers(1e3);
+-- Mark the first 100 rows as deleted.
+INSERT INTO t SELECT number, 1, 1 FROM numbers(1e2);
 SELECT count() FROM t;
 SELECT count() FROM t FINAL;
 -- Both should produce the same number of rows.

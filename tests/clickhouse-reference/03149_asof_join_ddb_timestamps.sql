@@ -10,6 +10,7 @@ SELECT
     toNullable(toDateTime('2023-03-21 13:00:00') + INTERVAL number HOUR) AS begin,
     number AS value
 FROM numbers(4);
+INSERT INTO events0 VALUES (NULL, -1), (toDateTime('9999-12-31 23:59:59'), 9);
 CREATE TABLE probe0
 ENGINE = MergeTree()
 ORDER BY COALESCE(begin, toDateTime('9999-12-31 23:59:59'))
@@ -17,6 +18,7 @@ AS
 SELECT
     toNullable(toDateTime('2023-03-21 12:00:00') + INTERVAL number HOUR) AS begin
 FROM numbers(10);
+INSERT INTO probe0 VALUES (NULL), (toDateTime('9999-12-31 23:59:59'));
 SELECT
     p.begin,
     e.value

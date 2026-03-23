@@ -7,3 +7,5 @@
 
 SET use_query_condition_cache = 1;
 CREATE TABLE test_qcc_cte (activity_year Int16) ENGINE = MergeTree ORDER BY activity_year;
+-- Need enough rows to have multiple granules so the cache can incorrectly exclude some.
+INSERT INTO test_qcc_cte SELECT number % 10 + 2018 FROM numbers(100000);

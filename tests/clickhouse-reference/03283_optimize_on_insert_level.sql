@@ -3,6 +3,8 @@ SET max_threads = 4;
 CREATE TABLE t_optimize_level (a UInt64, b UInt64)
 ENGINE = ReplacingMergeTree ORDER BY a
 SETTINGS index_granularity = 1;
+INSERT INTO t_optimize_level VALUES (1, 1) (1, 2) (2, 3);
+INSERT INTO t_optimize_level VALUES (4, 3) (5, 4);
 SELECT _part, a, b FROM t_optimize_level ORDER BY a;
 SELECT count() FROM (EXPLAIN PIPELINE SELECT a, b FROM t_optimize_level FINAL) WHERE explain LIKE '%Replacing%';
 SELECT name FROM system.parts WHERE database = currentDatabase() AND table = 't_optimize_level' AND active;

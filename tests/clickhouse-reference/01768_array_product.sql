@@ -3,6 +3,7 @@ SELECT arrayProduct(array(1.0,2.0,3.0,4.0)) as a, toTypeName(a);
 SELECT arrayProduct(array(1,3.5)) as a, toTypeName(a);
 SELECT arrayProduct([toDecimal64(1,8), toDecimal64(2,8), toDecimal64(3,8)]) as a, toTypeName(a);
 CREATE TABLE test_aggregation (x Array(Int)) ENGINE=TinyLog;
+INSERT INTO test_aggregation VALUES ([1,2,3,4]), ([]), ([1,2,3]);
 SELECT arrayProduct(x) FROM test_aggregation;
 CREATE TABLE test_aggregation (x Array(Decimal64(8))) ENGINE=TinyLog;
 SELECT toTypeName(arrayProduct([toInt8(0)])), toTypeName(arrayProduct([toInt16(0)])), toTypeName(arrayProduct([toInt32(0)])), toTypeName(arrayProduct([toInt64(0)]));

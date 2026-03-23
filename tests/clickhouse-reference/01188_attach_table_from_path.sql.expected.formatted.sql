@@ -1,5 +1,1 @@
-SELECT *
-FROM file;
-
-SELECT *
-FROM mt;
+<Parse Error>

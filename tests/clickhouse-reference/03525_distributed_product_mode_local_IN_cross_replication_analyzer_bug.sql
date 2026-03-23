@@ -29,6 +29,8 @@ CREATE TABLE test_dist
     `dtm` UInt32
 )
 ENGINE = Distributed('test_cluster_two_shards_different_databases', '', 'test');
+insert into shard_0.test select number, number, number % 3 from numbers(6);
+insert into shard_1.test select number + 3, number, (number + 1) % 3 from numbers(6);
 -- { echoOn }
 
 select _shard_num, * from test_dist order by id, _shard_num;

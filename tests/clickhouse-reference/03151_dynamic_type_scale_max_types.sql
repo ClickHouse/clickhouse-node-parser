@@ -7,4 +7,5 @@ CREATE TABLE to_table
     n2 Dynamic(max_types=2)
 )
 ENGINE = MergeTree ORDER BY n1;
+INSERT INTO to_table ( n1, n2 ) VALUES (1, '2024-01-01'), (2, toDateTime64('2024-01-01', 3, 'Asia/Istanbul')), (3, toFloat32(1)), (4, toFloat64(2));
 SELECT *, dynamicType(n2), isDynamicElementInSharedData(n2) FROM to_table ORDER BY ALL;

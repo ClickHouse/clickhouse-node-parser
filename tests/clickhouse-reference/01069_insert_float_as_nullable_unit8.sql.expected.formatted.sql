@@ -1,15 +1,1 @@
-CREATE TEMPORARY TABLE t1
-(
-    a Nullable(UInt8)
-);
-
-SELECT *
-FROM t1;
-
-CREATE TEMPORARY TABLE t2
-(
-    a UInt8
-);
-
-SELECT *
-FROM t2;
+<Parse Error>

@@ -7,6 +7,13 @@ CREATE TABLE test_column_function_filter (
 ) ENGINE = MergeTree()
 ORDER BY id
 SETTINGS index_granularity = 100;
+INSERT INTO test_column_function_filter
+SELECT
+    number,
+    toString(number),
+    map('key1', toString(number), 'key2', toString(number * 2)),
+    number % 100
+FROM numbers(10000);
 -- Test case 1: ColumnFunction shares ColumnConst columns for ['12'] and ['key']
 SELECT count() FROM test_column_function_filter
 PREWHERE filter_val BETWEEN 20 AND 80

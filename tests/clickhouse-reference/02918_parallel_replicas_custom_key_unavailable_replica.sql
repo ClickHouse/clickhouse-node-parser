@@ -1,4 +1,5 @@
 CREATE TABLE 02918_parallel_replicas (x String, y Int32) ENGINE = MergeTree ORDER BY cityHash64(x);
+INSERT INTO 02918_parallel_replicas SELECT toString(number), number % 4 FROM numbers(1000);
 SET prefer_localhost_replica=0;
 --- if we try to query unavaialble replica, connection will be retried
 --- but a warning log message will be printed out

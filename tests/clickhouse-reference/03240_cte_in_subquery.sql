@@ -7,6 +7,7 @@ CREATE TABLE subquery_cte_in
 )
 ENGINE = MergeTree
 ORDER BY (label, id, date);
+INSERT INTO subquery_cte_in VALUES (toDateTime('2023-10-24 16:13:38'), 2, 6), (toDateTime('2023-10-24 16:00:00'), 2, 10), (toDateTime('2023-10-24 00:00:00'), 2, 6);
 SELECT max(date_out)
 FROM
 (

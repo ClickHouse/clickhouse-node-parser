@@ -4,3 +4,4 @@ SET allow_experimental_analyzer = 1;
 create table local_table(id UInt64) engine MergeTree order by id;
 create table distributed_table as local_table engine Distributed(test_cluster_two_shard_three_replicas_localhost, currentDatabase(), local_table, id);
 create table distributed_table2 as local_table engine Distributed(test_cluster_two_shard_three_replicas_localhost, currentDatabase(), local_table);
+insert into local_table select number from numbers(100);

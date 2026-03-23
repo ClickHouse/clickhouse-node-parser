@@ -4,3 +4,4 @@ select distinct
     ref_0.vkey as c_2_c16_0
   from 
     t0 as ref_0;
+insert into t0 values (4);

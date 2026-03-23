@@ -6,4 +6,5 @@ CREATE TABLE alter_drop_version
 )
 ENGINE = ReplacingMergeTree(ver)
 ORDER BY key;
+INSERT INTO alter_drop_version VALUES (1, '1', 1);
 SELECT * FROM alter_drop_version;

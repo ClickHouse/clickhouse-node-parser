@@ -169,6 +169,11 @@ CREATE TABLE test_array_tuple_mergetree
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO test_array_tuple_mergetree VALUES
+    (1, [(1, 'a'), (2, 'b')], [(1, 'a'), NULL], 1),
+    (2, [(3, 'c')],           [NULL],           2),
+    (3, [],                   [],               -1),
+    (4, [(4, 'd')],           [(4, 'd')],       0);
 SELECT
     id,
     arrayElementOrNull(arr, 1)        AS arr_1,

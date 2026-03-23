@@ -6,6 +6,7 @@ CREATE TABLE test_03143 (
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO test_03143 VALUES ('2100-01-01', 123, 'Hello, world!', 'xxx yyy');
 SELECT
     name,
     column,

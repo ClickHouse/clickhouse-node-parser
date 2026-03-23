@@ -1,4 +1,5 @@
 CREATE TABLE test (id UInt64) ENGINE=MergeTree ORDER BY tuple();
+INSERT INTO test SELECT number FROM numbers(200000);
 SELECT
     concat(current_database(), '')
 FROM

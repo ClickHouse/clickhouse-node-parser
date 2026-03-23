@@ -5,6 +5,7 @@ CREATE TABLE data_null (
     c Nullable(INT),
     d INT
 ) engine=Memory();
+INSERT INTO data_null VALUES (NULL, 2, NULL, 4);
 SELECT toTypeName(a), toTypeName(b), toTypeName(c), toTypeName(d) FROM data_null;
 CREATE TABLE data_null_error (
     a Nullable(INT) NULL,
@@ -24,6 +25,7 @@ CREATE TABLE set_null (
     d INT,
     f DEFAULT 1
 ) engine=Memory();
+INSERT INTO set_null VALUES (NULL, 2, NULL, NULL, NULL);
 SELECT toTypeName(a), toTypeName(b), toTypeName(c), toTypeName(d), toTypeName(f) FROM set_null;
 CREATE TABLE cannot_be_nullable (n Int8, a Array(UInt8)) ENGINE=Memory; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 CREATE TABLE cannot_be_nullable (n Int8, a Array(UInt8) NOT NULL) ENGINE=Memory;

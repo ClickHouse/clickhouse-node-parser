@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS posts
 ENGINE = ReplacingMergeTree(as_of)
 PARTITION BY toStartOfMonth(created)
 ORDER BY (page_id, post_id);
+
 CREATE TABLE IF NOT EXISTS post_metrics
 (
     `page_id` LowCardinality(String),
@@ -22,6 +23,25 @@ CREATE TABLE IF NOT EXISTS post_metrics
 ENGINE = ReplacingMergeTree(as_of)
 PARTITION BY toStartOfMonth(created)
 ORDER BY (page_id, post_id);
+
+INSERT INTO posts SELECT
+    repeat('a', (number % 10) + 1),
+    toString(number),
+    number % 10,
+    number,
+    now() - toIntervalMinute(number),
+    now()
+FROM numbers(100000);
+
+INSERT INTO post_metrics SELECT
+    repeat('a', (number % 10) + 1),
+    toString(number),
+    now() - toIntervalMinute(number),
+    number * 100,
+    number * 10,
+    now()
+FROM numbers(100000);
+
 SELECT
     host_id,
     path_id,

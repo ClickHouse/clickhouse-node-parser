@@ -12,6 +12,12 @@ CREATE TABLE ref_colors
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO ref_colors VALUES
+    (1, 'red',   5),
+    (2, 'blue',  7),
+    (3, 'red',  12),
+    (4, 'green', 0),
+    (5, 'Rose',  9);
 CREATE DICTIONARY colors
 (
   id   UInt64,
@@ -29,6 +35,12 @@ CREATE TABLE t
 )
 ENGINE = MergeTree
 ORDER BY color_id;
+INSERT INTO t VALUES
+    (1, 'a'),
+    (2, 'b'),
+    (3, 'c'),
+    (4, 'd'),
+    (5, 'R');
 SELECT color_id, payload
 FROM t
 WHERE dictGetString('colors', 'name', color_id) = 'red'
@@ -169,6 +181,7 @@ SET allow_suspicious_low_cardinality_types = 1;
 CREATE TABLE tab__fuzz_24
 (`id` LowCardinality(UInt16), `payload` LowCardinality(Nullable(Int8)))
 ENGINE = MergeTree ORDER BY id;
+INSERT INTO tab__fuzz_24 FORMAT Values (1,'x'), (2,'y'), (99,'z');
 CREATE TABLE ref_table_all
 (`id` UInt64, `name` String, `i8` String, `i16` String, `i32` String, `i64` String, `u8` String, `u16` String, `u32` String, `u64` String, `f32` String, `f64` String, `d` String, `dt` String, `uid` String, `ip4` String, `ip6` String)
 ENGINE = MergeTree ORDER BY id;

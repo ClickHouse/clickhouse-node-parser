@@ -5,12 +5,14 @@ CREATE TABLE test_table_join_1
     value String
 )
 ENGINE = TinyLog;
+INSERT INTO test_table_join_1 VALUES (0, 'Value_0');
 CREATE TABLE test_table_join_2
 (
     id UInt16,
     value String
 )
 ENGINE = TinyLog;
+INSERT INTO test_table_join_2 VALUES (0, 'Value_1');
 SELECT
     toTypeName(t2_value),
     t2.value AS t2_value

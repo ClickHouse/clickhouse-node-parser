@@ -11,7 +11,10 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 32, index_granularity_bytes = 0, min_bytes_for_wide_part = 0;
+INSERT INTO tab VALUES (0,'a'),(1,'b'),(2,'c');
 SELECT id FROM tab WHERE hasToken(text, 'b');
 SELECT id FROM tab WHERE hasToken(text, 'c');
+INSERT INTO tab VALUES (0,'a'),(1,'b'),(2,'c'),(3,'d');
 SELECT id FROM tab WHERE hasToken(text, 'd');
+INSERT INTO tab SELECT number , 'aaabbbccc' FROM numbers(128);
 SELECT id FROM tab WHERE hasToken(text, 'aaabbbccc');

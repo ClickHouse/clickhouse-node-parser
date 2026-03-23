@@ -3,6 +3,7 @@ CREATE TABLE t_lightweight_mut_6 (id UInt64, v UInt64)
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_6', '1')
 ORDER BY id
 SETTINGS ratio_of_defaults_for_sparse_serialization = 1.0; -- There is a bug.
+INSERT INTO t_lightweight_mut_6 select number, number FROM numbers(10000);
 SET mutations_sync = 2;
 SELECT count(), sum(v) FROM t_lightweight_mut_6;
 SELECT sum(has_lightweight_delete) FROM system.parts

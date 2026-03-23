@@ -9,6 +9,8 @@ SET allow_experimental_dynamic_type=1;
 SET allow_dynamic_type_in_join_keys=1;
 CREATE TABLE t0 (c0 Dynamic) ENGINE = MergeTree() ORDER BY tuple();
 CREATE TABLE t1 (c0 LowCardinality(Nullable(Int))) ENGINE = MergeTree() ORDER BY tuple() SETTINGS min_bytes_for_wide_part = 0;
+INSERT INTO TABLE t0 (c0) VALUES (1::LowCardinality(Int));
+INSERT INTO TABLE t1 (c0) VALUES (1);
 -- Check result without runtime filters
 SET enable_join_runtime_filters=0;
 SELECT id, value
@@ -43,4 +45,8 @@ USING (id);
 SET join_runtime_filter_exact_values_limit = 5;
 CREATE TABLE t2 (c0 Nullable(Int)) ENGINE = MergeTree() ORDER BY tuple();
 CREATE TABLE t3 (c0 Nullable(Int)) ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO t2 SELECT * FROM system.numbers LIMIT 10;
+INSERT INTO t2 SELECT * FROM system.numbers LIMIT 10 OFFSET 10;
+INSERT INTO t3 SELECT * FROM system.numbers LIMIT 100;
+INSERT INTO t3 SELECT * FROM system.numbers LIMIT 100 OFFSET 100;
 SELECT COUNT(*) FROM t2 JOIN t3 USING (c0);

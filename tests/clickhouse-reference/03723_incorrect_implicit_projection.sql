@@ -6,6 +6,20 @@ CREATE TABLE prd_bid_events_simple_no_partition
 ENGINE = MergeTree()
 PRIMARY KEY (timestamp, type)
 ORDER BY (timestamp, type);
+INSERT INTO prd_bid_events_simple_no_partition
+SELECT
+    arrayElement([
+        'impression',
+        'start',
+        'firstQuartile',
+        'midpoint',
+        'thirdQuartile',
+        'complete',
+        'ad_request',
+        'random_value'
+    ], 1 + (number % 8)),
+    toDateTime64('2025-11-19 14:26:52' - toIntervalDay(number % 30) - toIntervalSecond(number % 86400) - toIntervalMillisecond(number % 1000), 9)
+FROM numbers(500000);
 SELECT
     type,
     count()

@@ -5,6 +5,7 @@ CREATE TABLE tbl (
 ENGINE = MergeTree()
 ORDER BY (a, b)
 SETTINGS index_granularity = 8192;
+INSERT INTO tbl SELECT number, number FROM numbers(81920);
 SELECT
     a,
     b

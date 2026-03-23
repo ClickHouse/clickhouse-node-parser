@@ -9,6 +9,7 @@ SETTINGS
     ratio_of_defaults_for_sparse_serialization = 1.0,
     enable_block_number_column = 1,
     enable_block_offset_column = 1;
+INSERT INTO t_prewhere_const_patches SELECT number, 0, 0, 0 FROM numbers(10000);
 -- This query with constant PREWHERE (18 is a non-zero integer, treated as true)
 -- used to cause "Can't adjust last granule" exception.
 -- Just verify it doesn't crash and returns the correct count.

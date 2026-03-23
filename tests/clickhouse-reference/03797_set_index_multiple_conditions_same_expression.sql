@@ -4,6 +4,9 @@ CREATE TABLE test_set_index_multiple_conditions (
     INDEX idx_labels mapKeys(labels) TYPE SET(0) GRANULARITY 1
 ) ENGINE = MergeTree()
 ORDER BY id;
+INSERT INTO test_set_index_multiple_conditions VALUES (1, {'a': '1', 'b': '2'});
+INSERT INTO test_set_index_multiple_conditions VALUES (2, {'c': '3', 'd': '4'});
+INSERT INTO test_set_index_multiple_conditions VALUES (3, {'a': '5', 'c': '6'});
 -- This query previously failed with:
 -- "Not found column mapKeys(labels) in block"
 SELECT id FROM test_set_index_multiple_conditions

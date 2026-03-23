@@ -4,6 +4,7 @@ CREATE TABLE minmax_idx
     i32 Int32
 ) ENGINE = MergeTree()
 ORDER BY u64;
+INSERT INTO minmax_idx VALUES (1, 2);
 SELECT * FROM minmax_idx WHERE u64 * i32 = 2;
 CREATE TABLE minmax_idx2
 (
@@ -13,4 +14,5 @@ CREATE TABLE minmax_idx2
     INDEX idx2 u64 * i32 TYPE minmax GRANULARITY 10
 ) ENGINE = MergeTree()
 ORDER BY u64;
+INSERT INTO minmax_idx2 VALUES (1, 2);
 SELECT * FROM minmax_idx2 WHERE u64 * i32 = 2;

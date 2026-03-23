@@ -17,6 +17,12 @@ ORDER BY id
 SETTINGS
     index_granularity = 1, min_bytes_for_wide_part = 0,
     min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
+INSERT INTO t_proj VALUES
+    (1, 'eu', 101),
+    (2, 'us', 102),
+    (3, 'us', 103),
+    (4, 'us', 106),
+    (5, 'asia', 200);
 -- Pick projection based on both filters
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM t_proj WHERE region = 'eu' AND user_id = 101)
@@ -48,6 +54,13 @@ ORDER BY id
 SETTINGS
     index_granularity = 16, min_bytes_for_wide_part = 0,
     min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
+INSERT INTO t_gran VALUES (0, 'top');
+INSERT INTO t_gran SELECT number + 1, 'other' FROM numbers(6);
+INSERT INTO t_gran VALUES (7, 'mid');
+INSERT INTO t_gran SELECT number + 8, 'other' FROM numbers(6);
+INSERT INTO t_gran VALUES (15, 'bot');
+-- Extra data to ensure projection index is chosen
+INSERT INTO t_gran SELECT number + 100, 'zzz' FROM numbers(1000);
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM t_gran WHERE region = 'top')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');
@@ -70,6 +83,8 @@ ORDER BY id
 SETTINGS
     index_granularity = 1, min_bytes_for_wide_part = 0,
     min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
+INSERT INTO t_partial VALUES (1, 'us'), (2, 'eu'), (3, 'cn');
+INSERT INTO t_partial VALUES (4, 'cn'), (5, 'ru'), (6, 'br');
 -- Should use projection for rows 4–6 only
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM t_partial WHERE region = 'ru')
@@ -88,6 +103,7 @@ CREATE TABLE t_repl
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test/proj', 'r1')
 ORDER BY id;
+INSERT INTO t_repl VALUES (1, 'eu'), (2, 'us'), (3, 'eu');
 CREATE TABLE t_repl2
 (
     id UInt64,

@@ -17,4 +17,5 @@ PRIMARY KEY key1, key2
 SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE `test.txt` PASSWORD '' DB currentDatabase()))
 LIFETIME(MIN 1 MAX 3600)
 LAYOUT(COMPLEX_KEY_HASHED());
+INSERT INTO `test.txt` VALUES (1, 2, 'Hello');
 SELECT dictGet(test_dict, 'value', (toUInt32(1), toUInt32(2)));

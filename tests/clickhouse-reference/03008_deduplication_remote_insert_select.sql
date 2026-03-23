@@ -1,6 +1,7 @@
 CREATE TABLE src (a UInt64, b UInt64)
     ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/03008_deduplication_remote_insert_select/src', '{replica}')
     ORDER BY tuple();
+INSERT INTO src SELECT number % 10 as a, number as b FROM numbers(100);
 SET allow_experimental_parallel_reading_from_replicas=1;
 SET max_parallel_replicas=3;
 SET parallel_replicas_for_non_replicated_merge_tree=1;
@@ -20,6 +21,9 @@ CREATE MATERIALIZED VIEW mv_dst
         uniqState(b) AS uniq_b
     FROM dst_null
     GROUP BY a;
+-- { echoOn }
+INSERT INTO dst_null
+    SELECT a, b FROM src;
 SELECT
     a,
     sumMerge(sum_b) AS sum_b,

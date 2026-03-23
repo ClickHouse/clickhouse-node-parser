@@ -10,7 +10,9 @@ JOIN system.one s3 ON s1.c = s3.dummy
 ARRAY JOIN ax;
 SET joined_subquery_requires_alias = 1;
 CREATE TABLE f (`d_ids` Array(Int64) ) ENGINE = TinyLog;
+INSERT INTO f VALUES ([1, 2]);
 CREATE TABLE d (`id` Int64, `name` String ) ENGINE = TinyLog;
+INSERT INTO d VALUES (2, 'a2'), (3, 'a3');
 SELECT d_ids, id, name FROM f LEFT ARRAY JOIN d_ids LEFT JOIN d ON d.id = d_ids ORDER BY id;
 SELECT did, id, name FROM f LEFT ARRAY JOIN d_ids as did LEFT JOIN d ON d.id = did ORDER BY id;
 SELECT id, name FROM f LEFT ARRAY JOIN d_ids as id LEFT JOIN d ON d.id = id ORDER BY id;

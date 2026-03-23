@@ -8,6 +8,9 @@ CREATE TABLE test
 )
 ENGINE = MergeTree
 ORDER BY (t, id) SETTINGS index_granularity = 4096 ;
+insert into test values ('xxx', 'x', {'content-type':'text/plain','user-agent':'bulk-tests'});
+insert into test values ('xxx', 'y', {'content-type':'application/json','user-agent':'bulk-tests'});
+insert into test select 'xxx', number, map('content-type', 'x' ) FROM numbers(1e2);
 SELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'bulk')  WHERE hasToken(h['user-agent'], 'tests') and t = 'xxx';
 SELECT count() FROM test PREWHERE hasToken(h['user-agent'], 'tests') WHERE hasToken(h['user-agent'], 'bulk')  and t = 'xxx';
 SELECT count() FROM test WHERE hasToken(h['user-agent'], 'bulk') and hasToken(h['user-agent'], 'tests') and t = 'xxx';

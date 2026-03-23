@@ -14,6 +14,7 @@ SETTINGS min_bytes_for_wide_part = 10485760,
             enable_bypass_cache_with_threshold = 1,
             bypass_cache_threshold = 100,
             disk = 's3_disk');
+INSERT INTO test SELECT number, toString(number) FROM numbers(100);
 SELECT  * FROM test FORMAT Null;
 SELECT file_segment_range_begin, file_segment_range_end, size FROM system.filesystem_cache WHERE cache_name = '02240_bypass_cache_threshold' ORDER BY file_segment_range_end, size;
 SELECT file_segment_range_begin, file_segment_range_end, size FROM system.filesystem_cache WHERE cache_name = '02240_bypass_cache_threshold';

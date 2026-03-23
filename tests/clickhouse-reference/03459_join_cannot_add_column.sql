@@ -1,6 +1,8 @@
 SET enable_analyzer = 1, max_threads = 1;
 create table t1 (id UInt32, name String) engine=MergeTree order by id;
 create table t2 (id UInt32, name String) engine=MergeTree order by id;
+insert into t1 (id, name) values (1, 'a'), (2, 'b'), (3, 'c');
+insert into t2 (id, name) values (3, 'c'), (2, 'cdasd');
 select * from t1 ORDER BY ALL;
 select * from t2 ORDER BY ALL;
 SELECT * FROM (select rowNumberInAllBlocks() + 1 as id, t1.id, t2.id from t1 left join t2 on t1.id=t2.id) ORDER BY ALL;

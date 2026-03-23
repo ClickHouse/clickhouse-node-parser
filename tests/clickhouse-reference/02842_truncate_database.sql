@@ -15,6 +15,13 @@ CREATE TABLE source_table_dictionary
     id UInt64,
     value String
 ) ENGINE = Memory();
+-- insert data into the tables
+INSERT INTO source_table_memory SELECT * FROM system.numbers LIMIT 10;
+INSERT INTO source_table_log SELECT * FROM system.numbers LIMIT 10;
+INSERT INTO source_table_tiny_log SELECT * FROM system.numbers LIMIT 10;
+INSERT INTO source_table_stripe_log SELECT * FROM system.numbers LIMIT 10;
+INSERT INTO source_table_merge_tree SELECT * FROM system.numbers LIMIT 10;
+INSERT INTO source_table_dictionary VALUES (1, 'First');
 -- create view based on the tables
 CREATE VIEW dest_view_memory (x UInt64) AS SELECT * FROM source_table_memory;
 CREATE VIEW dest_view_log (x UInt64) AS SELECT * FROM source_table_log;

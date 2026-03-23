@@ -7,6 +7,7 @@ CREATE TABLE test_indexHint_prewhere
     INDEX colB_tokens_idx tokens(colB) TYPE bloom_filter GRANULARITY 1
 )
 ENGINE = MergeTree ORDER BY id SETTINGS index_granularity = 1;
+INSERT INTO test_indexHint_prewhere SELECT number, randomPrintableASCII(30), randomPrintableASCII(40) FROM numbers(100);
 SELECT count() FROM
 (
     EXPLAIN actions = 1 SELECT * FROM test_indexHint_prewhere

@@ -6,6 +6,7 @@ CREATE TABLE source
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(ts)
 ORDER BY tuple();
+INSERT INTO source values ('2021-12-31 23:00:00', 0);
 SELECT * FROM source WHERE toYYYYMM(ts) = 202112;
 SELECT * FROM source WHERE toYear(ts) = 2021;
 SELECT * FROM source WHERE toYYYYMM(ts) = 202112 SETTINGS enable_analyzer=1;
@@ -21,6 +22,11 @@ CREATE TABLE source
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(ts)
 ORDER BY tuple();
+INSERT INTO source values ('2022-12-31', '2022-12-31 23:59:59', '2022-12-31', '2022-12-31 23:59:59.123', 0);
+INSERT INTO source values ('2023-01-01', '2023-01-01 00:00:00', '2023-01-01', '2023-01-01 00:00:00.000', 1);
+INSERT INTO source values ('2023-12-01', '2023-12-01 00:00:00', '2023-12-01', '2023-12-01 00:00:00.000', 2);
+INSERT INTO source values ('2023-12-31', '2023-12-31 23:59:59', '2023-12-31', '2023-12-31 23:59:59.123', 3);
+INSERT INTO source values ('2024-01-01', '2024-01-01 00:00:00', '2024-01-01', '2024-01-01 00:00:00.000', 4);
 SELECT count(*) FROM source WHERE toYYYYMM(dt) = 202312;
 SELECT count(*) FROM source WHERE toYYYYMM(dt) <> 202312;
 SELECT count(*) FROM source WHERE toYYYYMM(dt) < 202312;

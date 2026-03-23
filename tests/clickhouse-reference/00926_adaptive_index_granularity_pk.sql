@@ -16,6 +16,7 @@ SELECT '----00489----';
 --     └─────────────────────┴─────────────────────┘
 --
 CREATE TABLE pk (d Date DEFAULT '2000-01-01', x DateTime, y UInt64, z UInt64) ENGINE = MergeTree() PARTITION BY d ORDER BY (toStartOfMinute(x, 'UTC'), y, z) SETTINGS index_granularity_bytes=19, min_index_granularity_bytes=9, write_final_mark = 0; -- one row granule
+INSERT INTO pk (x, y, z) VALUES (1, 11, 1235), (2, 11, 4395), (3, 22, 3545), (4, 22, 6984), (5, 33, 4596), (61, 11, 4563), (62, 11, 4578), (63, 11, 3572), (64, 22, 5786), (65, 22, 5786), (66, 22, 2791), (67, 22, 2791), (121, 33, 2791), (122, 33, 2791), (123, 33, 1235), (124, 44, 4935), (125, 44, 4578), (126, 55, 5786), (127, 55, 2791), (128, 55, 1235);
 SET max_block_size = 1;
 -- Test inferred limit
 SET max_rows_to_read = 5;
@@ -30,6 +31,7 @@ SELECT toUInt32(x), y, z FROM pk WHERE (x BETWEEN toDateTime(60) AND toDateTime(
 SET max_block_size = 8192;
 SET max_rows_to_read = 0;
 CREATE TABLE merge_tree (x UInt32) ENGINE = MergeTree ORDER BY x SETTINGS index_granularity_bytes = 4, min_index_granularity_bytes=1, write_final_mark = 0;
+INSERT INTO merge_tree VALUES (0), (1);
 SET force_primary_key = 1;
 SET max_rows_to_read = 1;
 SELECT count() FROM merge_tree WHERE x = 0;
@@ -45,6 +47,8 @@ CREATE TABLE large_alter_table_00926 (
     id UInt64 CODEC(LZ4, ZSTD, NONE, LZ4HC),
     data String CODEC(ZSTD(2), LZ4HC, NONE, LZ4, LZ4)
 ) ENGINE = MergeTree() PARTITION BY somedate ORDER BY id SETTINGS min_index_granularity_bytes=30, write_final_mark = 0, min_bytes_for_wide_part = '10M', min_rows_for_wide_part = 0;
+INSERT INTO large_alter_table_00926 SELECT toDate('2019-01-01'), number, toString(number + rand()) FROM system.numbers LIMIT 300000;
 CREATE TABLE store_of_hash_00926 (hash UInt64) ENGINE = Memory();
+INSERT INTO store_of_hash_00926 SELECT sum(cityHash64(*)) FROM large_alter_table_00926;
 SELECT COUNT(hash) FROM store_of_hash_00926;
 SELECT COUNT(DISTINCT hash) FROM store_of_hash_00926;

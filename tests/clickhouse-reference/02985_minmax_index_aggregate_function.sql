@@ -13,6 +13,8 @@ CREATE TABLE t_index_agg_func
 )
 ENGINE = AggregatingMergeTree ORDER BY id
 SETTINGS index_granularity = 4;
+INSERT INTO t_index_agg_func SELECT number % 10, initializeAggregation('avgState', toUInt64(number % 20)) FROM numbers(1000);
+INSERT INTO t_index_agg_func SELECT number % 10, initializeAggregation('avgState', toUInt64(number % 20)) FROM numbers(1000, 1000);
 SELECT count() FROM system.parts WHERE table = 't_index_agg_func' AND database = currentDatabase() AND active;
 SET force_data_skipping_indices = 'idx_v';
 SET use_skip_indexes_if_final = 1;

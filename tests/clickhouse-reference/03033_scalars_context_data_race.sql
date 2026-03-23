@@ -79,4 +79,9 @@ FROM test
 WHERE insertion_time > toDateTime('2024-03-14 11:38:09')
 GROUP BY address);
 set max_insert_threads=4;
+insert into test_tmp select * from generateRandom() limit 24;
+insert into test_tmp select * from generateRandom() limit 25;
+insert into test_tmp select * from generateRandom() limit 26;
+insert into test_tmp select * from generateRandom() limit 30;
+INSERT INTO test(address, deployer, block_number, block_hash, block_timestamp, insertion_time) SELECT * FROM test_tmp;
 select count() from test;

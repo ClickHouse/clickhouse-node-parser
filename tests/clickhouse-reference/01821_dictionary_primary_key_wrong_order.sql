@@ -3,6 +3,7 @@ CREATE TABLE dictionary_primary_key_source_table
     identifier UInt64,
     v UInt64
 ) ENGINE = TinyLog;
+INSERT INTO dictionary_primary_key_source_table VALUES (20, 1);
 CREATE DICTIONARY flat_dictionary
 (
     identifier UInt64,

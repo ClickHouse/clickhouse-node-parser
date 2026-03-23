@@ -4,6 +4,9 @@ CREATE TABLE simple_key_dictionary_source_table
     value String,
     value_nullable Nullable(String)
 ) ENGINE = TinyLog;
+INSERT INTO simple_key_dictionary_source_table VALUES (1, 'First', 'First');
+INSERT INTO simple_key_dictionary_source_table VALUES (2, 'Second', NULL);
+INSERT INTO simple_key_dictionary_source_table VALUES (3, 'Third', 'Third');
 CREATE DICTIONARY simple_key_dictionary
 (
     id UInt64,
@@ -27,6 +30,9 @@ CREATE TABLE complex_key_dictionary_source_table
     value String,
     value_nullable Nullable(String)
 ) ENGINE = TinyLog;
+INSERT INTO complex_key_dictionary_source_table VALUES (1, 'key', 'First', 'First');
+INSERT INTO complex_key_dictionary_source_table VALUES (2, 'key', 'Second', NULL);
+INSERT INTO complex_key_dictionary_source_table VALUES (3, 'key', 'Third', 'Third');
 CREATE DICTIONARY complex_key_dictionary
 (
     id UInt64,
@@ -53,6 +59,9 @@ CREATE TABLE range_key_dictionary_source_table
     value_nullable Nullable(String)
 )
 ENGINE = TinyLog();
+INSERT INTO range_key_dictionary_source_table VALUES(1, toDate('2019-05-20'), toDate('2019-05-20'), 'First', 'First');
+INSERT INTO range_key_dictionary_source_table VALUES(2, toDate('2019-05-20'), toDate('2019-05-20'), 'Second', NULL);
+INSERT INTO range_key_dictionary_source_table VALUES(3, toDate('2019-05-20'), toDate('2019-05-20'), 'Third', 'Third');
 CREATE DICTIONARY range_key_dictionary
 (
     key UInt64,

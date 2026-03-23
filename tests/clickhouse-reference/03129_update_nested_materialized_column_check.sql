@@ -8,4 +8,5 @@ CREATE TABLE elements
     `nested.val_hashed` Array(UInt64) MATERIALIZED arrayMap(x -> sipHash64(x), nested.value),
 )
     ENGINE = Memory ;
+INSERT INTO elements (id,`nested.key`,`nested.value`) VALUES (5555, ['moto', 'hello'],['chocolatine', 'croissant']);
 SELECT * FROM elements ;

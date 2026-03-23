@@ -1364,6 +1364,16 @@ SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number
 SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number % 3) = 0 THEN [toFloat64(2), toFloat64(3)] ELSE [toFloat32(3), toFloat32(3)] END FROM system.numbers LIMIT 10;
 SELECT CASE WHEN (number % 2) = 0 THEN [toFloat64(1), toFloat64(2)] WHEN (number % 3) = 0 THEN [toFloat64(2), toFloat64(3)] ELSE [toFloat64(3), toFloat64(3)] END FROM system.numbers LIMIT 10;
 CREATE TABLE multi_if_check(col1 UInt64, col2 String, col3 String, col4 String) ENGINE=TinyLog;
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(1, 'A', 'AB', 'ABC');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(2, 'B', 'BC', 'BCD');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(3, 'C', 'CD', 'CDE');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(4, 'D', 'DE', 'DEF');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(5, 'E', 'EF', 'EFG');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(6, 'F', 'FG', 'FGH');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(7, 'G', 'GH', 'GHI');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(8, 'H', 'HI', 'HIJ');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(9, 'I', 'IJ', 'IJK');
+INSERT INTO multi_if_check(col1, col2, col3, col4) VALUES(10, 'J', 'JK', 'JKL');
 SELECT CASE WHEN (col1 % 2) = 0 THEN col2 WHEN (col1 % 3) = 0 THEN col3 ELSE col4 END FROM multi_if_check;
 SELECT CASE WHEN (col1 % 2) = 0 THEN col2 WHEN (col1 % 3) = 0 THEN col3 ELSE toFixedString(col4, 16) END FROM multi_if_check;
 SELECT CASE WHEN (col1 % 2) = 0 THEN col2 WHEN (col1 % 3) = 0 THEN col3 ELSE toFixedString('baz', 16) END FROM multi_if_check;
@@ -1623,6 +1633,16 @@ SELECT CASE WHEN 1 THEN 'foo' WHEN 1 THEN 'bar' ELSE 'baz' END FROM multi_if_che
 /* No CASE expression. String array clauses. */
 
 CREATE TABLE multi_if_check(col1 UInt64, col2 String, col3 String, col4 String, col5 String, col6 String, col7 String) ENGINE=TinyLog;
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(1, 'A', 'AB', 'ABC', 'ABCD', 'ABCDE', 'ABCDEF');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(2, 'B', 'BC', 'BCD', 'BCDE', 'BCDEF', 'BCDEFG');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(3, 'C', 'CD', 'CDE', 'CDEF', 'CDEFG', 'CDEFGH');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(4, 'D', 'DE', 'DEF', 'DEFG', 'DEFGH', 'DEFGHI');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(5, 'E', 'EF', 'EFG', 'EFGH', 'EFGHI', 'EFGHIJ');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(6, 'F', 'FG', 'FGH', 'FGHI', 'FGHIJ', 'FGHIJK');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(7, 'G', 'GH', 'GHI', 'GHIJ', 'GHIJK', 'GHIJKL');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(8, 'H', 'HI', 'HIJ', 'HIJK', 'HIJKL', 'HIJKLM');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(9, 'I', 'IJ', 'IJK', 'IJKL', 'IJKLM', 'IJKLMN');
+INSERT INTO multi_if_check(col1, col2, col3, col4, col5, col6, col7) VALUES(10, 'J', 'JK', 'JKL', 'JKLM', 'JKLMN', 'JKLMNO');
 SELECT CASE WHEN (col1 % 2) = 0 THEN [col2, col3] WHEN (col1 % 3) = 0 THEN [col4, col5] ELSE [col6, col7] END FROM multi_if_check;
 SELECT CASE WHEN (col1 % 2) = 0 THEN [col2, col3] WHEN (col1 % 3) = 0 THEN [col4, col5] ELSE [col6, 'bar'] END FROM multi_if_check;
 SELECT CASE WHEN (col1 % 2) = 0 THEN [col2, col3] WHEN (col1 % 3) = 0 THEN [col4, col5] ELSE ['foo', col7] END FROM multi_if_check;
@@ -1882,6 +1902,7 @@ SELECT CASE WHEN 1 THEN ['foo', 'bar'] WHEN 1 THEN ['foo', 'bar'] ELSE ['foo', '
 /* CASE expression. Numeric clauses. */
 
 CREATE TABLE multi_if_check(col1 UInt64) ENGINE=TinyLog;
+INSERT INTO multi_if_check(col1) SELECT toUInt64((number * 37 + 13) % 3) AS col1 FROM system.numbers LIMIT 10;
 SELECT CASE col1 WHEN 0 THEN 1 WHEN 1 THEN 2 ELSE 3 END FROM multi_if_check;
 /* CASE expression. String clauses. */
 

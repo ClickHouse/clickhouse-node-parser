@@ -4,6 +4,7 @@ CREATE TABLE tab (
     INDEX idx str TYPE text(tokenizer = 'array') )
 ENGINE = MergeTree()
 ORDER BY tuple();
+INSERT INTO TABLE tab (str) VALUES ('');
 CREATE TABLE tab (
     str String,
     INDEX idx str TYPE text(tokenizer = 'ngrams') )

@@ -1,4 +1,5 @@
 CREATE TABLE test_enum_string_functions(e Enum('a'=1, 'b'=2)) ENGINE=TinyLog;
+INSERT INTO test_enum_string_functions VALUES ('a');
 SELECT * from test_enum_string_functions WHERE e LIKE '%abc%';
 SELECT * from test_enum_string_functions WHERE e NOT LIKE '%abc%';
 SELECT * from test_enum_string_functions WHERE e iLike '%a%';
@@ -15,6 +16,8 @@ CREATE TABLE jsons
     `json` Enum('a', '{"a":1}')
 )
 ENGINE = Memory;
+INSERT INTO jsons VALUES ('{"a":1}');
+INSERT INTO jsons VALUES ('a');
 SELECT simpleJSONHas(json, 'foo') as res FROM jsons order by res;
 SELECT simpleJSONHas(json, 'a') as res FROM jsons order by res;
 SELECT simpleJSONExtractUInt(json, 'a') as res FROM jsons order by res;

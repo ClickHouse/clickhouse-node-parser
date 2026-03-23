@@ -9,6 +9,7 @@ ENGINE = SummingMergeTree()
 ORDER BY (some_name);
 CREATE VIEW rates01747 AS
    SELECT 'USD' as from_currency, 'EUR' as to_currency, 1.2 as rates01747;
+insert into summing_table01747 values ('name', 2, 20, 'USD'),('name', 1, 10, 'USD');
 create table dictst01747(some_name String, field1 String, field2 UInt8) Engine = Memory
 as select 'name', 'test', 33;
 CREATE DICTIONARY default.dict01747 (some_name String, field1 String, field2 UInt8)

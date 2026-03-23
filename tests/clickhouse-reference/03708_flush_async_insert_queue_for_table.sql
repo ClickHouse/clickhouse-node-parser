@@ -7,7 +7,10 @@ ORDER by id;
 set async_insert = 1;
 set wait_for_async_insert = 0;
 set wait_for_async_insert_timeout = 10000, async_insert_max_query_number = 1000, async_insert_max_data_size = 10000000, async_insert_use_adaptive_busy_timeout = 0;
+insert into `test_table with spaces` values (1, 'a'), (2, 'b'), (3, 'c');
+insert into `test_table with spaces` values (2, 'b'), (3, 'c'), (4, 'd');
 select '`test_table with spaces`', count() from `test_table with spaces`;
+insert into `test_table with spaces` values (3, 'b'), (4, 'c'), (5, 'd');
 create database `this.is.a.valid.databasename`;
 create table `this.is.a.valid.databasename`.`test_table with spaces`
 (
@@ -15,4 +18,6 @@ create table `this.is.a.valid.databasename`.`test_table with spaces`
     `value` String
 )
 ORDER by id;
+insert into `this.is.a.valid.databasename`.`test_table with spaces` values (1, 'a'), (2, 'b'), (3, 'c');
+insert into `this.is.a.valid.databasename`.`test_table with spaces` values (2, 'b'), (3, 'c'), (4, 'd');
 select '`this.is.a.valid.databasename`.`test_table with spaces`', count() from `this.is.a.valid.databasename`.`test_table with spaces`;

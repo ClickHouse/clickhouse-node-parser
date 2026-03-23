@@ -12,6 +12,7 @@ CREATE TABLE t_70015 (
     c_hmbcdw Int64,
     c_zjw Int32
 ) ENGINE = Memory;
+INSERT INTO t_70015 VALUES (1, 1, 2, 3), (2, 3, 4, 5);
 -- The problematic query pattern from the issue:
 -- if(CAST(equals(), 'Nullable(Bool)'), sign(Int64), Int64) - Int32
 SELECT if(CAST(c_izfnu = c_l8d2_b, 'Nullable(Bool)'), sign(c_izfnu), c_hmbcdw) - c_zjw AS result

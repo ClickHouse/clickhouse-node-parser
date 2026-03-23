@@ -9,5 +9,11 @@ CREATE TABLE set_array
     INDEX additional_index_array (index_array) TYPE set(10000) GRANULARITY 1
 ) ENGINE = MergeTree()
 ORDER BY (primary_key);
+INSERT INTO set_array
+select
+  toString(intDiv(number, 100000)) as primary_key,
+  array(number) as index_array
+from system.numbers
+limit 1000000;
 SET max_rows_to_read = 8192;
 select count() from set_array where has(index_array, 333);

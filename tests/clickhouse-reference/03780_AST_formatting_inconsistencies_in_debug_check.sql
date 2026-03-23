@@ -13,4 +13,5 @@ SELECT * FROM t1 JOIN t2 ON ((t1.x = t2.x) AND (t1.x IS NULL) AS e2);
 SELECT tuple(1, 'a') AS a1, NOT (tuple(1, 'a') AS a1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 CREATE TABLE tab (c1 int, c2 int, c3 int);
 CREATE TABLE tab2 (c1 int, c2 int, c3 int);
+INSERT INTO tab2 SELECT * FROM tab EXCEPT SELECT * FROM tab;
 SELECT 1,2,3 EXCEPT SELECT 1,2,3;

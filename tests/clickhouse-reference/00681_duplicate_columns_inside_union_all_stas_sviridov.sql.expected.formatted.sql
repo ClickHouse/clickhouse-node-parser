@@ -1,18 +1,1 @@
-CREATE TABLE test_00681
-(
-    x Int32
-)
-ENGINE = Log;
-
-SELECT a1
-FROM (
-        SELECT
-            x AS a1,
-            x AS a2
-        FROM test_00681
-        UNION ALL
-        SELECT
-            x,
-            x
-        FROM test_00681
-    );
+<Parse Error>

@@ -9,6 +9,7 @@ settings
     vertical_merge_algorithm_min_columns_to_activate=1,
     vertical_merge_algorithm_min_rows_to_activate=1,
     min_bytes_for_wide_part=0;
+INSERT INTO t_vertical_merges SELECT NULL, 1;
 SELECT a, b, c FROM t_vertical_merges;
 CREATE TABLE t_vertical_merges
 (
@@ -21,4 +22,5 @@ settings
     vertical_merge_algorithm_min_columns_to_activate=1,
     vertical_merge_algorithm_min_rows_to_activate=1,
     min_bytes_for_wide_part=0;
+INSERT INTO t_vertical_merges SELECT [], 1;
 SELECT a, b FROM t_vertical_merges;

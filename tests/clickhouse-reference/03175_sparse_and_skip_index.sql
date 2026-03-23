@@ -14,6 +14,18 @@ SETTINGS
     min_bytes_for_wide_part = 0,
     enable_block_number_column = 0,
     enable_block_offset_column = 0;
+-- Create at least one part
+INSERT INTO t_bloom_filter
+SELECT
+    number % 100 as key, -- 100 unique keys
+    rand() % 100 as value -- 100 unique values
+FROM numbers(15_000);
+-- And another part
+INSERT INTO t_bloom_filter
+SELECT
+    number % 100 as key, -- 100 unique keys
+    rand() % 100 as value -- 100 unique values
+FROM numbers(15_000, 15_000);
 -- Check sparse serialization
 SELECT column, serialization_kind FROM system.parts_columns WHERE database = currentDatabase() AND table = 't_bloom_filter' AND active ORDER BY column;
 SELECT COUNT() FROM t_bloom_filter WHERE key = 1;

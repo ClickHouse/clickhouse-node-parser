@@ -6,11 +6,14 @@ SET use_query_condition_cache = 0;
 SET mutations_sync = 0;
 CREATE TABLE t_lightweight_mut_3 (id UInt64, v UInt64, INDEX idx v TYPE minmax GRANULARITY 1)
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_3', '1') ORDER BY id;
+INSERT INTO t_lightweight_mut_3 VALUES (1, 1);
+INSERT INTO t_lightweight_mut_3 VALUES (2, 2000);
 SELECT id, v FROM t_lightweight_mut_3 WHERE v > 100 ORDER BY id SETTINGS force_data_skipping_indices = 'idx';
 SELECT trim(explain) AS s FROM (
     EXPLAIN indexes = 1
     SELECT id, v FROM t_lightweight_mut_3 WHERE v > 100 ORDER BY id SETTINGS force_data_skipping_indices = 'idx'
 ) WHERE s LIKE 'Granules: %';
+INSERT INTO t_lightweight_mut_3 VALUES (3, 3);
 SELECT id, v FROM t_lightweight_mut_3 WHERE v > 100 ORDER BY id SETTINGS apply_mutations_on_fly = 1;
 SELECT trim(explain) AS s FROM (
     EXPLAIN indexes = 1

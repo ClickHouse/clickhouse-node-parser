@@ -6,3 +6,4 @@ CREATE TABLE department__fuzz_0
     `name` String
 )
 ENGINE = TinyLog;
+INSERT INTO department__fuzz_0 FORMAT Values (0, NULL, 'ROOT');

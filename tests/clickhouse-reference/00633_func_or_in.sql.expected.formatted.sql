@@ -1,10 +1,1 @@
-CREATE TABLE orin_test
-(
-    c1 Int32
-)
-ENGINE = Memory;
-
-SELECT minus(c1 = 1
-    OR c1 = 2
-    OR c1 = 3, c1 = 5)
-FROM orin_test;
+<Parse Error>

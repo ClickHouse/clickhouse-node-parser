@@ -8,6 +8,11 @@ CREATE TABLE test_has_skip_minmax
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 1000;
+INSERT INTO test_has_skip_minmax
+SELECT number,
+       number % 10000,
+       toString(number)
+FROM numbers(100000);
 CREATE TABLE test_has_skip_set (
     user_id UInt32,
     event_time DateTime,
@@ -16,6 +21,11 @@ CREATE TABLE test_has_skip_set (
 ENGINE = MergeTree
 ORDER BY event_time
 SETTINGS index_granularity = 1000, add_minmax_index_for_numeric_columns=0;
+INSERT INTO test_has_skip_set 
+SELECT 
+    toUInt32(intDiv(number, 1000)) AS user_id,
+    now() - INTERVAL number MINUTE AS event_time
+FROM numbers(100000);
 CREATE TABLE test_has_skip_bloom
 (
     id UInt32,
@@ -26,3 +36,8 @@ CREATE TABLE test_has_skip_bloom
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 1000;
+INSERT INTO test_has_skip_bloom
+SELECT number,
+       concat('v_', toString(number % 100000)),
+       toString(number)
+FROM numbers(100000);

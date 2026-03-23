@@ -14,6 +14,8 @@ CREATE TABLE test_table_2
 ) ENGINE=MergeTree ORDER BY id
 SETTINGS index_granularity = 16
 ;
+INSERT INTO test_table_1 VALUES (1, 'Value_1'), (2, 'Value_2');
+INSERT INTO test_table_2 VALUES (2, 'Value_2'), (3, 'Value_3');
 SELECT '--';
 SELECT * FROM test_table_1 AS lhs LEFT JOIN test_table_2 AS rhs ON lhs.id = rhs.id WHERE rhs.id != 0;
 SELECT * FROM test_table_1 AS lhs RIGHT JOIN test_table_2 AS rhs ON lhs.id = rhs.id WHERE lhs.id != 0;

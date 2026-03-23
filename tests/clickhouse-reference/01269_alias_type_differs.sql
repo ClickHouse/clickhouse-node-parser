@@ -6,6 +6,7 @@ CREATE TABLE data_01269
 )
 ENGINE = MergeTree()
 ORDER BY key;
+INSERT INTO data_01269 VALUES (1, 0);
 -- after PR#10441
 SELECT toTypeName(alias) FROM data_01269;
 SELECT any(alias) FROM data_01269;

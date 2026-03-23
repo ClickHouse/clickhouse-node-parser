@@ -6,6 +6,7 @@ CREATE TABLE users_compact (
 ) ENGINE = MergeTree order by uid
 SETTINGS lightweight_mutation_projection_mode = 'rebuild',
 min_bytes_for_wide_part = 10485760;
+INSERT INTO users_compact VALUES (1231, 'John', 33), (1232, 'Mary', 34);
 SELECT
     age,
     count()
@@ -20,6 +21,7 @@ CREATE TABLE users_wide (
 ) ENGINE = MergeTree order by uid
 SETTINGS lightweight_mutation_projection_mode = 'rebuild',
 min_bytes_for_wide_part = 0;
+INSERT INTO users_wide VALUES (1231, 'John', 33), (1232, 'Mary', 34);
 SELECT
     age,
     count()

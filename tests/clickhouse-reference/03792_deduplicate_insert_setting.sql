@@ -5,6 +5,7 @@ ORDER BY id;
 SET async_insert = 0;
 SET deduplicate_insert = 'backward_compatible_choice';
 SET insert_deduplicate = 1;
+INSERT INTO test VALUES (1, 'one line');
 SELECT 'case: sync insert, insert_deduplicate=1 is main setting', * FROM test ORDER BY id;
 SET insert_deduplicate = 0;
 SELECT 'case: sync insert, insert_deduplicate=0 is main setting', * FROM test ORDER BY id;

@@ -6,6 +6,12 @@ CREATE TABLE distinct_lc_basic
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO distinct_lc_basic
+SELECT
+    number,
+    toString(intDiv(number, 10)),
+    toLowCardinality(toString(intDiv(number, 10)))
+FROM numbers(100000);
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_basic))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_basic));
@@ -21,6 +27,12 @@ CREATE TABLE distinct_lc_low_cardinality
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO distinct_lc_low_cardinality
+SELECT
+    number,
+    toString(number % 3),
+    toLowCardinality(toString(number % 3))
+FROM numbers(100000);
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_low_cardinality))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_low_cardinality));
@@ -36,6 +48,12 @@ CREATE TABLE distinct_lc_nullable
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO distinct_lc_nullable
+SELECT
+    number,
+    if(number % 10 = 0, NULL, toString(intDiv(number, 7))),
+    toLowCardinality(if(number % 10 = 0, NULL, toString(intDiv(number, 7))))
+FROM numbers(100000);
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_nullable))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_nullable));
@@ -70,6 +88,12 @@ CREATE TABLE distinct_lc_mixed
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO distinct_lc_mixed
+SELECT
+    number,
+    toLowCardinality(toString(intDiv(number, 10))),
+    number % 5
+FROM numbers(100000);
 SELECT
     (SELECT count() FROM (SELECT DISTINCT k1, k2 FROM distinct_lc_mixed))
   - (SELECT uniqExact(k1, k2) FROM distinct_lc_mixed);
@@ -84,6 +108,12 @@ CREATE TABLE distinct_lc_all_same
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO distinct_lc_all_same
+SELECT
+    number,
+    'x',
+    toLowCardinality('x')
+FROM numbers(100000);
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_all_same))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_all_same));
@@ -99,6 +129,12 @@ CREATE TABLE distinct_lc_sparse_nulls
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO distinct_lc_sparse_nulls
+SELECT
+    number,
+    if(number IN (0, 1, 2, 3, 4), NULL, toString(number % 1000)),
+    toLowCardinality(if(number IN (0, 1, 2, 3, 4), NULL, toString(number % 1000)))
+FROM numbers(100000);
 SELECT
     (SELECT count() FROM (SELECT DISTINCT s FROM distinct_lc_sparse_nulls))
   - (SELECT count() FROM (SELECT DISTINCT lc FROM distinct_lc_sparse_nulls));

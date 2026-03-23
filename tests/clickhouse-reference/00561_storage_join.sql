@@ -7,6 +7,7 @@ CREATE TABLE joinbug (
   val2 Int32,
   created UInt64
 ) ENGINE = MergeTree(event_date, (id, id2), 8192);
+insert into joinbug (id, id2, val, val2, created) values (1,11,91,81,123456), (2,22,92,82,123457);
 CREATE TABLE joinbug_join (
   id UInt64,
   id2 UInt64,
@@ -14,6 +15,9 @@ CREATE TABLE joinbug_join (
   val2 Int32,
   created UInt64
 ) ENGINE = Join(SEMI, LEFT, id2);
+insert into joinbug_join (id, id2, val, val2, created)
+select id, id2, val, val2, created
+from joinbug;
 select * from joinbug;
 select id, id2, val, val2, created
 from ( SELECT toUInt64(arrayJoin(range(50))) AS id2 ) js1

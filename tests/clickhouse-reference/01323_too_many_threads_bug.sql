@@ -4,6 +4,7 @@ set load_marks_asynchronously = 0;
 set allow_asynchronous_read_from_io_pool_for_merge_tree = 0;
 create table table_01323_many_parts (x UInt64) engine = MergeTree order by x partition by x % 100;
 set max_partitions_per_insert_block = 100;
+insert into table_01323_many_parts select number from numbers(100000);
 set max_threads = 16;
 set log_queries = 1;
 select x from table_01323_many_parts limit 10 format Null;

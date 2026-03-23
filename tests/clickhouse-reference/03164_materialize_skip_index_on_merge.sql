@@ -10,6 +10,8 @@ CREATE TABLE tab
     INDEX idx_b b TYPE set(3)
 )
 ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity = 4, add_minmax_index_for_numeric_columns=0;
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100);
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100);
 SELECT count() FROM tab WHERE a >= 110 AND a < 130 AND b = 2;
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes = 1 SELECT count() FROM tab WHERE a >= 110 AND a < 130 AND b = 2

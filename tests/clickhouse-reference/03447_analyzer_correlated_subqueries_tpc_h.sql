@@ -4,11 +4,13 @@ CREATE TABLE nation (
     n_regionkey  Int32,
     n_comment    String)
 ORDER BY (n_nationkey);
+
 CREATE TABLE region (
     r_regionkey  Int32,
     r_name       String,
     r_comment    String)
 ORDER BY (r_regionkey);
+
 CREATE TABLE part (
     p_partkey     Int32,
     p_name        String,
@@ -20,6 +22,7 @@ CREATE TABLE part (
     p_retailprice Decimal(15,2),
     p_comment     String)
 ORDER BY (p_partkey);
+
 CREATE TABLE supplier (
     s_suppkey     Int32,
     s_name        String,
@@ -29,6 +32,7 @@ CREATE TABLE supplier (
     s_acctbal     Decimal(15,2),
     s_comment     String)
 ORDER BY (s_suppkey);
+
 CREATE TABLE partsupp (
     ps_partkey     Int32,
     ps_suppkey     Int32,
@@ -36,6 +40,7 @@ CREATE TABLE partsupp (
     ps_supplycost  Decimal(15,2),
     ps_comment     String)
 ORDER BY (ps_partkey, ps_suppkey);
+
 CREATE TABLE customer (
     c_custkey     Int32,
     c_name        String,
@@ -46,6 +51,7 @@ CREATE TABLE customer (
     c_mktsegment  String,
     c_comment     String)
 ORDER BY (c_custkey);
+
 CREATE TABLE orders  (
     o_orderkey       Int32,
     o_custkey        Int32,
@@ -79,9 +85,23 @@ CREATE TABLE lineitem (
     l_shipmode       String,
     l_comment        String)
 ORDER BY (l_orderkey, l_linenumber);
+-- The following is an alternative order key which is not compliant with the official TPC-H rules but recommended by sec. 4.5 in
+-- "Quantifying TPC-H Choke Points and Their Optimizations":
+-- ORDER BY (l_shipdate, l_orderkey, l_linenumber);
+
+INSERT INTO nation SELECT * FROM generateRandom() LIMIT 1;
+INSERT INTO region SELECT * FROM generateRandom() LIMIT 1;
+INSERT INTO part SELECT * FROM generateRandom() LIMIT 1;
+INSERT INTO supplier SELECT * FROM generateRandom() LIMIT 1;
+INSERT INTO partsupp SELECT * FROM generateRandom() LIMIT 1;
+INSERT INTO customer SELECT * FROM generateRandom() LIMIT 1;
+INSERT INTO orders SELECT * FROM generateRandom() LIMIT 1;
+INSERT INTO lineitem SELECT * FROM generateRandom() LIMIT 1;
+
 set enable_analyzer = 1;
 set allow_experimental_correlated_subqueries = 1;
 SET enable_parallel_replicas = 0;
+
 -- Q2
 SELECT
     s_acctbal,
@@ -127,6 +147,7 @@ ORDER BY
     s_name,
     p_partkey
 FORMAT Null;
+
 -- Q4
 SELECT
     o_orderpriority,
@@ -150,6 +171,7 @@ GROUP BY
 ORDER BY
     o_orderpriority
 FORMAT Null;
+
 -- Q17
 SELECT
     sum(l_extendedprice) / 7.0 AS avg_yearly
@@ -169,6 +191,7 @@ WHERE
             l_partkey = p_partkey
     )
 FORMAT Null;
+
 -- Q20
 SELECT
     s_name,
@@ -208,6 +231,7 @@ WHERE
 ORDER BY
     s_name
 FORMAT Null;
+
 -- Q21
 SELECT
     s_name,
@@ -249,6 +273,7 @@ ORDER BY
     numwait DESC,
     s_name
 FORMAT Null;
+
 -- Q22
 SELECT
     cntrycode,

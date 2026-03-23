@@ -9,6 +9,12 @@ CREATE TABLE events
     `Payload` String,
     `Time` DateTime
 ) ENGINE = Memory;
+INSERT INTO events
+SELECT number, concat('Payload_', toString(number)), toDateTime('2024-01-01 00:00:00') + INTERVAL number MINUTES FROM numbers(500)
+UNION ALL
+SELECT 32, 'Payload_Dup', toDateTime('2024-01-01 00:10:00');
+-- Separate inserts to have several blocks in left table to perform multiple lookups
+INSERT INTO events SELECT number, concat('Payload_', toString(number)), toDateTime('2024-01-01 00:00:00') + INTERVAL number MINUTES FROM numbers(500, 500);
 CREATE TABLE attributes
 (
     `EventId` UInt64,
@@ -17,6 +23,13 @@ CREATE TABLE attributes
 )
 ENGINE = MergeTree
 ORDER BY EventId;
+INSERT INTO attributes SELECT
+    sipHash64(number, 1) % 10_000_000 AS EventId,
+    sipHash64(number, 1) % 10_000_000 AS OtherId,
+    concat('Attribute_', toString(number)) AS Attribute
+FROM numbers(1_000_000);
+INSERT INTO attributes SELECT 32 AS EventId, 32 AS OtherId, 'Attribute_Dup' AS Attribute;
+INSERT INTO attributes SELECT 1_000_001 AS EventId, NULL AS OtherId, 'Attribute_Dup' AS Attribute;
 SET query_plan_join_swap_table = 0;
 SET enable_analyzer = 1;
 SET join_algorithm = 'direct';

@@ -1,4 +1,6 @@
 create table data_01513 (key String) engine=MergeTree() order by key;
+-- 10e3 groups, 1e3 keys each
+insert into data_01513 select number%10e3 from numbers(2e6);
 -- this is enough to trigger non-reusable Chunk in Arena.
 set max_memory_usage='500M';
 set max_threads=1;

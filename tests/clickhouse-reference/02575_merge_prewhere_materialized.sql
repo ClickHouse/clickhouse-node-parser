@@ -12,6 +12,7 @@ CREATE TABLE t1
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 8192;
+INSERT INTO t1 (a) VALUES ('OK');
 CREATE TABLE t2
 (
     a String,
@@ -20,6 +21,7 @@ CREATE TABLE t2
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 8192;
+INSERT INTO t2 (a) VALUES ('OK');
 -- { echoOn }
 SELECT * FROM m PREWHERE a = 'OK' ORDER BY a, f;
 SELECT * FROM m PREWHERE f = 1 ORDER BY a, f;

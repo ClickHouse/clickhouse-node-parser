@@ -1,2 +1,3 @@
 CREATE TEMPORARY TABLE test_00724 (d Date, dt DateTime);
+INSERT INTO test_00724 VALUES (toDateTime('2000-01-01 01:02:03'), toDate('2000-01-01'));
 SELECT * FROM test_00724;

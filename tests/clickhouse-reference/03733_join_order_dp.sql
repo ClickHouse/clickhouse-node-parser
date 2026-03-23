@@ -37,6 +37,27 @@ CREATE TABLE R4 (
 ) ENGINE = MergeTree()
 PRIMARY KEY (D_ID)
 SETTINGS auto_statistics_types = 'uniq';
+-- Populate R1 (Small: 10 rows)
+INSERT INTO R1 (A_ID, A_Description) VALUES
+(1, 'Type A'), (2, 'Type B'), (3, 'Type C'), (4, 'Type D'), (5, 'Type E'),
+(6, 'Type F'), (7, 'Type G'), (8, 'Type H'), (9, 'Type I'), (10, 'Type J');
+-- Populate R4 (Small: 10 rows)
+INSERT INTO R4 (D_ID, D_LookupCode) VALUES
+(101, 'Lookup X'), (102, 'Lookup Y'), (103, 'Lookup Z'), (104, 'Lookup W'), (105, 'Lookup V'),
+(106, 'Lookup U'), (107, 'Lookup T'), (108, 'Lookup S'), (109, 'Lookup R'), (110, 'Lookup Q');
+INSERT INTO R2 (B_ID, R1_A_ID, B_Data)
+SELECT
+    number AS B_ID,
+    (number % 10) + 1 AS R1_A_ID,  -- Links to R1.A_ID 1-10
+    number / 100
+FROM numbers(1000);
+INSERT INTO R3 (C_ID, R1_A_ID, R4_D_ID, C_Value)
+SELECT
+    number AS C_ID,
+    (number % 10) + 1 AS R1_A_ID,     -- Links to R1.A_ID 1-10
+    (number % 10) + 101 AS R4_D_ID,   -- Links to R4.D_ID 101-110
+    (number * 10) AS C_Value
+FROM numbers(1000);
 SELECT sum(sipHash64(
     T1.A_Description,
     T2.B_Data,

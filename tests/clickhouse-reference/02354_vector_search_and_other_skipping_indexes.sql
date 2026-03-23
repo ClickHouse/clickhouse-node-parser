@@ -6,3 +6,4 @@ CREATE TABLE tab(
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+INSERT INTO tab VALUES ('hello world', [0.0]);

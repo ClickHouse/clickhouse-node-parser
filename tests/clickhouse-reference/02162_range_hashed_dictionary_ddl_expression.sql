@@ -4,6 +4,7 @@ CREATE TABLE 02162_test_table
     value String,
     range_value UInt64
 ) ENGINE=TinyLog;
+INSERT INTO 02162_test_table VALUES (0, 'Value', 1);
 CREATE DICTIONARY 02162_test_dictionary
 (
     id UInt64,

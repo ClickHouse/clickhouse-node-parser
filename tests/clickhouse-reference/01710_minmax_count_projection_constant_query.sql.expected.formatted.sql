@@ -1,10 +1,1 @@
-CREATE TABLE t
-(
-    n int
-)
-ENGINE = MergeTree
-ORDER BY n;
-
-SELECT 1
-FROM t
-GROUP BY 1;
+<Parse Error>

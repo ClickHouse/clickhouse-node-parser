@@ -1,4 +1,5 @@
 create table data_01279 (key String) Engine=TinyLog();
+insert into data_01279 select reinterpretAsString(number) from numbers(100000);
 set max_rows_to_group_by=10;
 set group_by_overflow_mode='any';
 set group_by_two_level_threshold=100;

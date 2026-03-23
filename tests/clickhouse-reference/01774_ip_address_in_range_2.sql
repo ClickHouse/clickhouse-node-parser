@@ -11,6 +11,10 @@ SELECT isIPAddressInRange(CAST(toIPv4('128.0.0.1'), 'Nullable(IPv4)'), '127.0.0.
 SELECT isIPAddressInRange(CAST(toIPv6('ffff::1'), 'Nullable(IPv6)'), 'ffff::/16');
 SELECT isIPAddressInRange(CAST(toIPv6('fffe::1'), 'Nullable(IPv6)'), 'ffff::/16');
 CREATE TABLE test_data_2 (cidr String) ENGINE = Memory;
+INSERT INTO test_data_2
+SELECT
+    IPv4NumToString(IPv4CIDRToRange(IPv4StringToNum('255.255.255.255'), toUInt8(number)).1) || '/' || toString(number) AS cidr
+FROM system.numbers LIMIT 33;
 SELECT sum(isIPAddressInRange(CAST(NULL, 'Nullable(String)'), cidr)) == 0 FROM test_data_2;
 SELECT sum(isIPAddressInRange(toIPv4('0.0.0.0'), cidr)) == 1 FROM test_data_2;
 SELECT sum(isIPAddressInRange(toIPv4('127.0.0.0'), cidr)) == 1 FROM test_data_2;

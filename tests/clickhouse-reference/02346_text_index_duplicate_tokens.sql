@@ -10,6 +10,7 @@ CREATE TABLE tab
     INDEX idx_s (s) TYPE text(tokenizer = ngrams(3), preprocessor = lower(s))
 )
 ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tab (s) VALUES ('Hello, world!');
 SELECT count() FROM tab WHERE s LIKE '%Hello%' OR s LIKE '%hello%';
 SELECT trim(explain) FROM
 (

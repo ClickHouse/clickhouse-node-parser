@@ -13,6 +13,11 @@ CREATE TABLE ref_prices_ckh
 )
 ENGINE = MergeTree
 ORDER BY (k1, k2);
+INSERT INTO ref_prices_ckh VALUES
+    (1, 'a', 100, 'pro'),
+    (1, 'b',  50, 'basic'),
+    (2, 'a',  75, 'plus'),
+    (3, 'c',  10, 'cheap');
 CREATE TABLE ref_items_flat
 (
     id UInt64,
@@ -21,6 +26,10 @@ CREATE TABLE ref_items_flat
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO ref_items_flat VALUES
+    (1, 'alpha', 10),
+    (2, 'beta',   5),
+    (3, 'alpha', 15);
 CREATE DICTIONARY dict_prices_ckh
 (
   k1    UInt64,
@@ -103,6 +112,12 @@ CREATE TABLE f
 )
 ENGINE = MergeTree
 ORDER BY (k1, k2, id);
+INSERT INTO f VALUES
+    (1, 'a', 1, 'x'),
+    (1, 'b', 2, 'y'),
+    (2, 'a', 3, 'z'),
+    (2, 'b', 2, 'w'),
+    (3, 'c', 1, 'u');
 SELECT k1, k2, payload
 FROM f
 WHERE dictGet('dict_prices_ckh', 'tag', (k1, k2)) = 'pro'

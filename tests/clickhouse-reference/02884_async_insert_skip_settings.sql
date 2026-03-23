@@ -9,9 +9,11 @@ SET async_insert_use_adaptive_busy_timeout=0;
 SET async_insert_busy_timeout_max_ms = 1000000;
 SET insert_deduplication_token = '1';
 SET log_comment = 'async_insert_skip_settings_1';
+INSERT INTO t_async_insert_skip_settings VALUES (1);
 SET insert_deduplication_token = '2';
 SET log_comment = 'async_insert_skip_settings_2';
 SET log_comment = 'async_insert_skip_settings_3';
+INSERT INTO t_async_insert_skip_settings VALUES (2);
 SET insert_deduplication_token = '3';
 SET log_comment = 'async_insert_skip_settings_4';
 SELECT 'pending to flush', length(entries.bytes) FROM system.asynchronous_inserts

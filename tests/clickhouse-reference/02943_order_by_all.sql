@@ -4,6 +4,7 @@ CREATE TABLE order_by_all
     b Nullable(Int32)
 )
 ENGINE = Memory;
+INSERT INTO order_by_all VALUES ('B', 3), ('C', NULL), ('D', 1), ('A', 2);
 SELECT '-- no modifiers';
 SET enable_analyzer = 0;
 SELECT a, b FROM order_by_all ORDER BY ALL;
@@ -21,6 +22,7 @@ CREATE TABLE order_by_all
     all UInt64
 )
 ENGINE = Memory;
+INSERT INTO order_by_all VALUES ('B', 3, 10), ('C', NULL, 40), ('D', 1, 20), ('A', 2, 30);
 SELECT a, b, all FROM order_by_all ORDER BY all;  -- { serverError UNEXPECTED_EXPRESSION }
 SELECT a, b, all FROM order_by_all ORDER BY all SETTINGS enable_order_by_all = false;
 SELECT a FROM order_by_all ORDER BY all;  -- { serverError UNEXPECTED_EXPRESSION }

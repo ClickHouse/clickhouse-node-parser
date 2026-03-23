@@ -4,4 +4,5 @@ CREATE TABLE t_parse_tuples
     arr Array(Array(Tuple(c1 Int32, c2 UInt8)))
 )
 ENGINE = Memory;
+INSERT INTO t_parse_tuples VALUES (1, [[]]), (2, [[(500, -10)]]), (3, [[(500, '10')]]);
 SELECT * FROM t_parse_tuples ORDER BY id;

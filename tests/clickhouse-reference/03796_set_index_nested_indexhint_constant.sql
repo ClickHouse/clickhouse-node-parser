@@ -12,6 +12,7 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY k
 SETTINGS allow_nullable_key = 1;
+INSERT INTO tab SELECT number, intDiv(number, 4096) FROM numbers(1000000);
 -- This query would previously crash with LOGICAL_ERROR
 -- because toUInt128(0) constant wasn't wrapped with __bitWrapperFunc
 SELECT DISTINCT materialize(toNullable(toUInt256(1))) FROM tab WHERE indexHint(indexHint(toUInt128(0)));

@@ -1,16 +1,1 @@
-CREATE TABLE data_01279
-(
-    key String
-)
-ENGINE = TinyLog();
-
-SET max_rows_to_group_by = 10;
-
-SET group_by_overflow_mode = 'any';
-
-SET group_by_two_level_threshold = 100;
-
-SELECT *
-FROM data_01279
-GROUP BY key
-FORMAT Null;
+<Parse Error>

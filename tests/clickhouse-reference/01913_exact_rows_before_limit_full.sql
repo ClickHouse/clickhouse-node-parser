@@ -1,4 +1,5 @@
 create table test (i int) engine MergeTree order by tuple();
+insert into test select arrayJoin(range(10000));
 set exact_rows_before_limit = 1, output_format_write_statistics = 0, max_block_size = 100;
 select * from test limit 1 FORMAT JSONCompact;
 select * from test where i < 10 group by i order by i limit 1 FORMAT JSONCompact;

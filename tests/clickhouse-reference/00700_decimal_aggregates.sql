@@ -4,6 +4,9 @@ CREATE TABLE decimal
     b Decimal64(8),
     c Decimal128(8)
 ) ENGINE = Memory;
+INSERT INTO decimal (a, b, c)
+SELECT toDecimal32(number - 50, 4), toDecimal64(number - 50, 8) / 3, toDecimal128(number - 50, 8) / 5
+FROM system.numbers LIMIT 101;
 SELECT count(a), count(b), count(c) FROM decimal;
 SELECT [min(a), max(a)], [min(b), max(b)], [min(c), max(c)] FROM decimal;
 SELECT sum(a), sum(b), sum(c), sumWithOverflow(a), sumWithOverflow(b), sumWithOverflow(c) FROM decimal;

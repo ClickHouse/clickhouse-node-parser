@@ -53,6 +53,8 @@ CREATE TABLE encryption_test
     key24 String DEFAULT substring(key, 1, 24),
     key16 String DEFAULT substring(key, 1, 16)
 ) Engine = Memory;
+INSERT INTO encryption_test (input)
+VALUES (''), ('text'), ('What Is ClickHouse? ClickHouse is a column-oriented database management system (DBMS) for online analytical processing of queries (OLAP).');
 SELECT 'aes-128-cbc' as mode, hex(aes_encrypt_mysql(mode, input, key32, iv)) FROM encryption_test;
 SELECT 'aes-192-cbc' as mode, hex(aes_encrypt_mysql(mode, input, key32, iv)) FROM encryption_test;
 SELECT 'aes-256-cbc' as mode, hex(aes_encrypt_mysql(mode, input, key32, iv)) FROM encryption_test;

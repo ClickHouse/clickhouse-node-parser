@@ -17,6 +17,8 @@ CREATE TABLE partsupp
 )
 ENGINE = MergeTree() ORDER BY (ps_partkey, ps_suppkey)
 SETTINGS auto_statistics_types='tdigest,uniq';
+INSERT INTO part SELECT number, number::String FROM numbers(100);
+INSERT INTO partsupp SELECT number/2, number%17, number FROM numbers(200);
 SET query_plan_join_swap_table = 0;
 SET use_statistics=1;
 SELECT explain FROM

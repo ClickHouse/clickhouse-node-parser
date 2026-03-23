@@ -11,6 +11,8 @@ SETTINGS index_granularity = 64,
     max_bytes_to_merge_at_max_space_in_pool = 1,
     use_const_adaptive_granularity = 1,
     index_granularity_bytes = 0;
+-- 10000 rows: 156 full granules of 64 + 1 partial granule of 16 rows
+INSERT INTO tab SELECT number, number, number FROM numbers(10000);
 -- This query triggers lazy materialization with index reader as the first reader in the chain.
 -- The bug was that the index reader reported 64 rows for the last granule (instead of 16),
 -- causing a mismatch with the actual data reader.

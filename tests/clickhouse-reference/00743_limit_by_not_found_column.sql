@@ -25,6 +25,7 @@ FROM
     LIMIT 2 BY Currency
 );
 CREATE TEMPORARY TABLE commententry1 (created_date Date, link_id String, subreddit String);
+INSERT INTO commententry1 VALUES ('2016-01-01', 'xyz', 'cpp');
 SELECT concat('http://reddit.com/r/', subreddit, '/comments/', replaceRegexpOne(link_id, 't[0-9]_', ''))
 FROM
 (

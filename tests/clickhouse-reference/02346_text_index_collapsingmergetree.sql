@@ -9,6 +9,12 @@ CREATE TABLE tab
 )
 ENGINE = CollapsingMergeTree(sign)
 ORDER BY id;
+INSERT INTO tab VALUES
+    (1, 'foo', 'foo', -1),
+    (2, 'bar', 'bar', -1);
+INSERT INTO tab VALUES
+    (1, 'foo', 'foo updated', 1),
+    (2, 'bar', 'bar updated', 1);
 SELECT '-- direct read disabled';
 SET use_skip_indexes_on_data_read = 0;
 SELECT value FROM tab WHERE hasToken(key, 'foo') ORDER BY value;

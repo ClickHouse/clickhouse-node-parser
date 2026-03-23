@@ -9,5 +9,7 @@ ORDER BY id
 SETTINGS
     enable_block_number_column = true,
     enable_block_offset_column = true;
+INSERT INTO t_shared SELECT number, number FROM numbers(10);
+INSERT INTO t_shared SELECT number, number FROM numbers(50, 10);
 SELECT name, rows  FROM system.parts WHERE database = currentDatabase() AND table = 't_shared' ORDER BY name;
 SELECT * FROM t_shared ORDER BY id;

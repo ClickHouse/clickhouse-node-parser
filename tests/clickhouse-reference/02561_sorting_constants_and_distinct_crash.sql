@@ -1,4 +1,12 @@
 CREATE TABLE test_table (string_value String) ENGINE = MergeTree ORDER BY string_value SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+insert into test_table select * from (
+	select 'test_value_1'
+	from numbers_mt(250000)
+	union all
+	select 'test_value_2'
+	from numbers_mt(2000000)
+)
+order by rand();
 select distinct
     'constant_1' as constant_value,
     count(*) over(partition by constant_value, string_value) as value_cnt

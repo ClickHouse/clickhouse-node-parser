@@ -7,4 +7,7 @@ CREATE TABLE test_table
     parent_id String
 )
 ENGINE = MergeTree ORDER BY id;
+INSERT INTO test_table VALUES ('a', '');
+INSERT INTO test_table VALUES ('b', 'a');
+INSERT INTO test_table VALUES ('c', 'a');
 SELECT '--';

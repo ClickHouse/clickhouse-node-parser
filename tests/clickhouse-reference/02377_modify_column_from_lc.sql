@@ -13,3 +13,5 @@ CREATE TABLE t_modify_from_lc_2
 )
 ENGINE = MergeTree ORDER BY tuple()
 SETTINGS min_bytes_for_wide_part = 0, index_granularity = 8192, index_granularity_bytes = '10Mi';
+INSERT INTO t_modify_from_lc_1 SELECT number, number FROM numbers(100000);
+INSERT INTO t_modify_from_lc_2 SELECT number, number FROM numbers(100000);

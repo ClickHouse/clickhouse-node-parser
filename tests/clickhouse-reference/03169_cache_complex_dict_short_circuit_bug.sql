@@ -6,6 +6,7 @@ CREATE TABLE complex_key_simple_attributes_source_short_circuit_table
     value_second String
 )
     ENGINE = TinyLog;
+INSERT INTO complex_key_simple_attributes_source_short_circuit_table VALUES(0, 'id_key_0', 'value_0', 'value_second_0');
 CREATE DICTIONARY cache_dictionary_complex_key_simple_attributes_short_circuit
 (
     `id` UInt64,

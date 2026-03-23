@@ -12,6 +12,8 @@ SETTINGS
     apply_patches_on_merge = 0,
     cleanup_delay_period = 1000,
     max_cleanup_delay_period = 1000;
+INSERT INTO t_shared SELECT number, number FROM numbers(20);
+INSERT INTO t_shared SELECT number, number FROM numbers(20, 10);
 SET mutations_sync = 2;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 1;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 0;

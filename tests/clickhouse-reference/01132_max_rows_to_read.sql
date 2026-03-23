@@ -20,6 +20,11 @@ CREATE TABLE row_limits_fail_fast
 ) ENGINE = MergeTree() ORDER BY key
 SETTINGS index_granularity = 100;
 SET max_rows_to_read = 0; -- so we don't hit row limits when populating data
+-- Insert multiple parts with significant data. Multiple parts is important because row limit checks
+-- are checked per part when determining what ranges need to be read for the query.
+INSERT INTO row_limits_fail_fast SELECT number, toString(number) FROM numbers(10000);
+INSERT INTO row_limits_fail_fast SELECT number + 10000, toString(number) FROM numbers(10000);
+INSERT INTO row_limits_fail_fast SELECT number + 20000, toString(number) FROM numbers(10000);
 SET max_rows_to_read = 1000;
 -- Should fail fast during PK filtering - query selects more rows than limit
 SELECT count() FROM row_limits_fail_fast WHERE key < 500000; -- { serverError TOO_MANY_ROWS }

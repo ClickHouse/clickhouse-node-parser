@@ -10,6 +10,9 @@ CREATE TABLE test_table
 ENGINE = MergeTree
 PARTITION BY toYYYYMMDD(timestamp)
 ORDER BY timestamp SETTINGS index_granularity = 1;
+INSERT INTO test_table(timestamp, value) SELECT toDateTime('2020-01-01 12:00:00'), 1 FROM numbers(10);
+INSERT INTO test_table(timestamp, value) SELECT toDateTime('2020-01-02 12:00:00'), 1 FROM numbers(10);
+INSERT INTO test_table(timestamp, value) SELECT toDateTime('2020-01-03 12:00:00'), 1 FROM numbers(10);
 set optimize_respect_aliases = 1;
 SELECT COUNT() = 10 FROM test_table WHERE day = '2020-01-01' SETTINGS max_rows_to_read = 10;
 SELECT t = '2020-01-03' FROM (SELECT day AS t FROM test_table WHERE t = '2020-01-03' GROUP BY t SETTINGS max_rows_to_read = 10);
@@ -63,12 +66,15 @@ ENGINE = MergeTree
 PARTITION BY tuple()
 PRIMARY KEY tuple()
 ORDER BY key_string SETTINGS index_granularity = 1;
+INSERT INTO test_index SELECT * FROM numbers(10);
 set max_rows_to_read = 1;
 SELECT COUNT() == 1 FROM test_index WHERE key_uint32 = 1;
 SELECT COUNT() == 1 FROM test_index WHERE toUInt32(key_string) = 1;
 create table pd (dt DateTime, i int, dt_m DateTime alias toStartOfMinute(dt)) engine Distributed(test_shard_localhost, currentDatabase(), 'pl');
 create table pl (dt DateTime, i int, projection p (select sum(i) group by toStartOfMinute(dt))) engine MergeTree order by dt;
+insert into pl values ('2020-10-24', 1);
 set max_rows_to_read = 2;
 select sum(i) from pd group by dt_m settings optimize_use_projections = 1, force_optimize_projection = 1;
 create temporary table t (x UInt64, y alias x);
+insert into t values (1);
 select sum(x), sum(y) from t;

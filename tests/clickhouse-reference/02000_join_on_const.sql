@@ -1,5 +1,7 @@
 CREATE TABLE t1 (id Int) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE t2 (id Int) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO t1 VALUES (1), (2);
+INSERT INTO t2 VALUES (2), (3);
 SELECT 70 = 10 * sum(t1.id) + sum(t2.id) AND count() == 4 FROM t1 JOIN t2 ON 1 = 1;
 SELECT 70 = 10 * sum(t1.id) + sum(t2.id) AND count() == 4 FROM t1 JOIN t2 ON 1;
 SELECT 70 = 10 * sum(t1.id) + sum(t2.id) AND count() == 4 FROM t1 JOIN t2 ON 2 = 2 AND 3 = 3;

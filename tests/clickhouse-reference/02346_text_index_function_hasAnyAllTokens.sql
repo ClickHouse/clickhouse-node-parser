@@ -13,6 +13,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY (id);
+INSERT INTO tab VALUES (1, 'b', 'b', ['c']), (2, 'c', 'c', ['c']), (3, '', '', ['']);
 -- Must accept two arguments
 SELECT id FROM tab WHERE hasAnyTokens(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT id FROM tab WHERE hasAnyTokens('a', 'b', 'c'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
@@ -88,6 +89,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO tab VALUES (1, 'hello world'), (2, 'goodbye'), (3, 'hello moon');
 -- { echoOn }
 SELECT id FROM tab WHERE hasAnyTokens(s, ['hello']) ORDER BY id;
 SELECT id FROM tab WHERE hasAnyTokens(s, ['moon', 'goodbye']) ORDER BY id;
@@ -103,6 +105,7 @@ CREATE TABLE tab (
 )
 ENGINE=MergeTree()
 ORDER BY (id);
+INSERT INTO tab VALUES(1, toFixedString('bar', 3)), (2, toFixedString('foo', 3));
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(text, ['bar']);
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(text, ['bar']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(text, 'bar');
@@ -116,6 +119,14 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY (id);
+INSERT INTO tab(id, message)
+VALUES
+    (1, 'abc+ def- foo!'),
+    (2, 'abc+ def- bar?'),
+    (3, 'abc+ baz- foo!'),
+    (4, 'abc+ baz- bar?'),
+    (5, 'abc+ zzz- foo!'),
+    (6, 'abc+ zzz- bar?');
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['abc']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['ab']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['foo']);
@@ -149,6 +160,13 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY (id);
+INSERT INTO tab
+VALUES
+(1, 'abcdef'),
+(2, 'bcdefg'),
+(3, 'cdefgh'),
+(4, 'defghi'),
+(5, 'efghij');
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['efgh']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['efg']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['cdef']);
@@ -179,6 +197,13 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY (id);
+INSERT INTO tab
+VALUES
+(1, '  a  bc d'),
+(2, '()()a()bc()d'),
+(3, ',()a(),bc,(),d,'),
+(4, '\\a\n\\bc\\d\n'),
+(5, '\na\n\\bc\\d\\');
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['a']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['bc']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['d']);
@@ -211,6 +236,12 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY (id);
+INSERT INTO tab
+VALUES
+(1, 'abc def'),
+(2, 'abc fgh'),
+(3, 'def efg'),
+(4, 'abcdef');
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['def']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['abc', 'def']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['abcdef']);
@@ -222,6 +253,9 @@ SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, ['abcdef']);
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'abc');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'abc def');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'abcdef ');
+INSERT INTO tab VALUES
+    (1, 'hello world'),
+    (2, 'hello world, hello everyone');
 SELECT count() FROM tab WHERE hasAnyTokens(message, ['hello']);
 SELECT count() FROM tab WHERE hasAnyTokens(message, ['hello', 'hello']);
 SELECT count() FROM tab WHERE hasAnyTokens(message, 'hello hello');
@@ -294,6 +328,10 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY (id)
 SETTINGS index_granularity = 1;
+INSERT INTO tab SELECT number, 'Hello, ClickHouse' FROM numbers(1024);
+INSERT INTO tab SELECT number, 'Hello, World' FROM numbers(1024);
+INSERT INTO tab SELECT number, 'Hallo, ClickHouse' FROM numbers(1024);
+INSERT INTO tab SELECT number, 'ClickHouse is fast, really fast!' FROM numbers(1024);
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes=1
     SELECT count() FROM tab WHERE hasAnyTokens(message, ['Click'])
@@ -447,6 +485,16 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY (id)
 SETTINGS index_granularity = 1;
+INSERT INTO tab
+SELECT
+    number,
+    CASE
+        WHEN modulo(number, 4) = 0 THEN 'Hello, ClickHouse'
+        WHEN modulo(number, 4) = 1 THEN 'Hello, World'
+        WHEN modulo(number, 4) = 2 THEN 'Hallo, ClickHouse'
+        WHEN modulo(number, 4) = 3 THEN 'ClickHouse is the fast, really fast!'
+    END
+FROM numbers(1024);
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes=1
     SELECT count() FROM tab WHERE hasAnyTokens(message, ['Hello', 'World'])

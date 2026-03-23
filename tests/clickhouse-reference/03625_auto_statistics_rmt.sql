@@ -13,6 +13,8 @@ SETTINGS
     enable_block_number_column = 0,
     enable_block_offset_column = 0,
     auto_statistics_types = 'uniq,minmax';
+INSERT INTO test_table SELECT number, if (rand() % 100 = 0, 'foo', ''), rand() % 2, rand() % 2 FROM numbers(100000);
+INSERT INTO test_table SELECT number, if (rand() % 100 = 0, 'bar', ''), rand() % 2 + 5, rand() % 2 + 5 FROM numbers(100000);
 SELECT name, column, type, statistics, estimates.cardinality, estimates.min, estimates.max
 FROM system.parts_columns
 WHERE database = currentDatabase() AND table = 'test_table' AND active

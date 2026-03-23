@@ -1,4 +1,5 @@
 CREATE TABLE src (k UInt64, s FixedString(11)) ENGINE = Memory;
+INSERT INTO src VALUES (1, 'Hello\0World');
 CREATE DICTIONARY dict
 (
     k UInt64,

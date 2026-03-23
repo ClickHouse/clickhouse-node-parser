@@ -28,6 +28,7 @@ SELECT multiMatchAny('test', ['.{4,4}midfix{1,51}']); -- { serverError HYPERSCAN
 -- test that the check is implemented in all functions which use vectorscan
 
 CREATE TABLE t(c String) Engine=MergeTree() ORDER BY c;
+INSERT INTO t VALUES('Hallo Welt');
 SELECT multiMatchAny('Hallo Welt', ['.{51}']); -- { serverError HYPERSCAN_CANNOT_SCAN_TEXT }
 SELECT multiMatchAny(c, ['.{51}']) FROM t; -- { serverError HYPERSCAN_CANNOT_SCAN_TEXT }
 SELECT multiMatchAnyIndex('Hallo Welt', ['.{51}']); -- { serverError HYPERSCAN_CANNOT_SCAN_TEXT }

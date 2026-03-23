@@ -12,5 +12,7 @@ CREATE TABLE IF NOT EXISTS t
 ENGINE = MergeTree
 PARTITION BY toDate(d)
 ORDER BY id;
+insert into joint VALUES ('00000000-0000-0000-0000-000000000000', 'yo');
+insert into t VALUES ('00000000-0000-0000-0000-000000000000', now());
 SELECT id FROM t
 ANY LEFT JOIN joint ON t.id = joint.id;

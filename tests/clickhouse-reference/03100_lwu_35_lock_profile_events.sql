@@ -4,6 +4,7 @@ ORDER BY id
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 SET enable_lightweight_update = 1;
 SET lightweight_delete_mode = 'lightweight_update_force';
+INSERT INTO t_lwu_lock_profile_events SELECT number FROM numbers(100000);
 SELECT count() FROM t_lwu_lock_profile_events;
 SELECT ProfileEvents['PatchesAcquireLockTries'], ProfileEvents['PatchesAcquireLockMicroseconds'] > 0
 FROM system.query_log

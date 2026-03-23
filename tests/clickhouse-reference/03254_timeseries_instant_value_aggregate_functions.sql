@@ -9,6 +9,11 @@ CREATE TABLE t_resampled_timeseries
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY (step, metric_id, grid_timestamp);
+INSERT INTO t_resampled_timeseries(step, metric_id, grid_timestamp, samples) VALUES
+(10, 42, '2024-12-12 12:00:10', (['2024-12-12 12:00:09', '2024-12-12 12:00:07'], [100, 90])),
+(10, 42, '2024-12-12 12:00:20', (['2024-12-12 12:00:19'], [110])),
+(10, 42, '2024-12-12 12:00:30', (['2024-12-12 12:00:29', '2024-12-12 12:00:23'], [100, 100])),
+(10, 42, '2024-12-12 12:00:40', (['2024-12-12 12:00:39', '2024-12-12 12:00:38'], [90, 100]));
 -- Test with DateTime64
 
 CREATE TABLE t_resampled_timeseries_64
@@ -20,6 +25,11 @@ CREATE TABLE t_resampled_timeseries_64
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY (step, metric_id, grid_timestamp);
+INSERT INTO t_resampled_timeseries_64(step, metric_id, grid_timestamp, samples) VALUES
+(10, 142, '2024-12-12 12:00:10', (['2024-12-12 12:00:09.100', '2024-12-12 12:00:08.600'], [100, 90])),
+(10, 142, '2024-12-12 12:00:20', (['2024-12-12 12:00:19.100'], [110])),
+(10, 142, '2024-12-12 12:00:30', (['2024-12-12 12:00:29.300', '2024-12-12 12:00:23.400'], [100, 100])),
+(10, 142, '2024-12-12 12:00:40', (['2024-12-12 12:00:39.400', '2024-12-12 12:00:38.500'], [90, 100]));
 -- Tests to validate block header compatibility in queries with parallel replicas
 SET serialize_query_plan=1, prefer_localhost_replica = false;
 SELECT

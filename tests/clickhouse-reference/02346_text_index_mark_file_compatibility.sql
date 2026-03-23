@@ -14,4 +14,11 @@ ENGINE = MergeTree
 ORDER BY i
 SETTINGS index_granularity_bytes = 0, -- non-adaptive granularity
          min_bytes_for_wide_part = 0; -- avoid warning about non-adaptive granularity being incompatible with compact part format
+INSERT INTO tab
+SELECT
+    2,
+    multiIf(number % 3 = 0, 'aa',
+            number % 3 = 1, 'bb',
+            'cc') AS str
+FROM numbers(1024000);
 SELECT count() FROM tab WHERE hasToken(str, 'aa'); -- this must not return an error

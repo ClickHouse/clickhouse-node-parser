@@ -9,6 +9,14 @@ AS
     GROUP BY number;
 SELECT sum(id) FROM test FORMAT Null;
 SELECT argMaxMerge(amax) FROM test FORMAT Null;
+INSERT INTO test
+    SELECT number, argMaxState(number::String, '2023-04-12 16:23:01'::DateTime)
+    FROM numbers(9)
+    GROUP BY number;
+INSERT INTO test
+SELECT number, argMaxState(number::String, '2023-04-12 16:23:01'::DateTime)
+FROM numbers(990)
+GROUP BY number;
 SELECT 'UInt64',
        read_rows,
        read_bytes

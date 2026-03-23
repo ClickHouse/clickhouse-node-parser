@@ -10,6 +10,7 @@ ORDER BY src;
 CREATE TABLE alias_bug_dist
 AS alias_bug
 ENGINE = Distributed('test_shard_localhost', currentDatabase(), 'alias_bug', rand());
+INSERT INTO alias_bug VALUES ('SOURCE1');
 -- OK
 SELECT theAlias,CAST(NULL, 'Nullable(String)') AS src FROM alias_bug LIMIT 1 FORMAT Null;
 -- Not OK

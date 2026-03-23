@@ -15,6 +15,7 @@ SETTINGS
     vertical_merge_algorithm_min_rows_to_activate = 1,
     vertical_merge_algorithm_min_columns_to_activate = 1,
     vertical_merge_optimize_lightweight_delete = 1;
+INSERT INTO t_lwu_deletes_vertical SELECT number, rand(), rand(), randomPrintableASCII(10), randomPrintableASCII(10) FROM numbers(100000);
 SET enable_lightweight_update = 1;
 SET lightweight_delete_mode = 'lightweight_update_force';
 SELECT count() FROM t_lwu_deletes_vertical;

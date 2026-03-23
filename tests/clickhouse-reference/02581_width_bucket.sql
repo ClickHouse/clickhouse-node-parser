@@ -6,6 +6,7 @@ CREATE TABLE mytable
     count   UInt64,
     PRIMARY KEY (operand, low, high, count)
 ) ENGINE = MergeTree();
+INSERT INTO mytable VALUES (3, -100, 200, 10), (0, 0, 10, 4), (3, 0, 10, 3), (4.333, 1, 11, 3), (4.34, 1, 11, 3), (-7.6, -10, 0, 4), (-6, -5, -1, 2), (1, 3, 0, 1), (3, 2, 5, 0);
 SELECT operand, low, high, count, WIDTH_BUCKET(operand, low, high, count) FROM mytable WHERE count != 0;
 SELECT '----------';
 -- zero is not valid for count

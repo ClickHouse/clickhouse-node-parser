@@ -4,6 +4,7 @@ CREATE TABLE test_table
     id UInt64,
     value String
 ) ENGINE=MergeTree ORDER BY tuple();
+INSERT INTO test_table VALUES (0, 'Value');
 SELECT 1 UNION ALL SELECT 1;
 SELECT '--';
 SELECT 1 UNION DISTINCT SELECT 1 UNION ALL SELECT 1;

@@ -14,6 +14,12 @@ CREATE TABLE ref_colors
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO ref_colors VALUES
+    (1, 'red',   5),
+    (2, 'blue',  7),
+    (3, 'red',  12),
+    (4, 'green', 0),
+    (5, 'Rose',  9);
 CREATE DICTIONARY colors
 (
   id   UInt64,
@@ -31,6 +37,12 @@ CREATE TABLE t
 )
 ENGINE = MergeTree
 ORDER BY color_id;
+INSERT INTO t VALUES
+    (1, 'a'),
+    (2, 'b'),
+    (3, 'c'),
+    (4, 'd'),
+    (5, 'R');
 SELECT color_id, payload
 FROM t
 WHERE dictGetString('colors', 'name', color_id) = 'red'

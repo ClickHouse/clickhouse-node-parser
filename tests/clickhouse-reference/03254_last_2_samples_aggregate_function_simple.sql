@@ -30,6 +30,13 @@ AS SELECT
     initializeAggregation('timeSeriesLastTwoSamplesState', timestamp, value) AS samples
 FROM t_raw_timeseries
 ORDER BY metric_id, grid_timestamp;
+-- Insert some data
+INSERT INTO t_raw_timeseries(metric_id, timestamp, value)
+SELECT
+    number%10 AS metric_id,
+    '2024-12-12 12:00:00'::DateTime64(3, 'UTC') + interval ((number/10)%100)*900 millisecond as timestamp,
+     number%3+number%29 AS value
+FROM numbers(1000);
 -- Check raw data
 SELECT *
 FROM t_raw_timeseries

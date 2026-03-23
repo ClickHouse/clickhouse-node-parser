@@ -23,6 +23,8 @@ CREATE TABLE t_collisions
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS replace_long_file_name_to_hash = 0;
+INSERT INTO t_collisions VALUES (1, 1);
+INSERT INTO t_collisions VALUES (2, 2);
 SELECT * FROM t_collisions ORDER BY e798545eefc8b7a1c2c81ff00c064ad8;
 CREATE TABLE t_collisions
 (

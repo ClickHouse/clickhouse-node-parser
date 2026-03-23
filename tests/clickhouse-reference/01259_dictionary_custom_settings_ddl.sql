@@ -8,6 +8,7 @@ CREATE TABLE table_for_dict
 )
 ENGINE = MergeTree()
 ORDER BY key_column;
+INSERT INTO table_for_dict VALUES (100500, 10000000, 'Hello world');
 CREATE DATABASE ordinary_db;
 CREATE DICTIONARY ordinary_db.dict1
 (

@@ -15,6 +15,8 @@ CREATE TABLE tab2 (
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+INSERT INTO tab1 SELECT number AS id FROM numbers(1000000);
+INSERT INTO tab2 VALUES(1);
 -- Should return 1
 SELECT count()
 FROM tab1
@@ -22,3 +24,4 @@ WHERE id IN (
     SELECT filter_id
     FROM tab2
 );
+INSERT INTO tab2 VALUES(100001);

@@ -10,6 +10,7 @@ CREATE TABLE partslost_2 (x String) ENGINE=ReplicatedMergeTree('/clickhouse/tabl
     SETTINGS min_rows_for_wide_part = 0, min_bytes_for_wide_part = 0, old_parts_lifetime = 1,
     cleanup_delay_period = 1, cleanup_delay_period_random_add = 1, cleanup_thread_preferred_points_per_iteration=0,
     index_granularity = 8192, index_granularity_bytes = '10Mi';
+INSERT INTO partslost_0 SELECT toString(number) AS x from system.numbers LIMIT 10000;
 SET mutations_sync = 2;
 -- In worst case doesn't check anything, but it's not flaky
 select sleep(3) FORMAT Null;

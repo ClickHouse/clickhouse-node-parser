@@ -7,6 +7,7 @@ CREATE TABLE tab
     INDEX idx col type text(tokenizer='array')
 )
 ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tab VALUES ('config');
 SELECT count() FROM tab WHERE col = 'config';
 SELECT trim(explain) FROM
 (

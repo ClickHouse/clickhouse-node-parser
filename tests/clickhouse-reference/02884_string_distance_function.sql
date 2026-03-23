@@ -18,6 +18,8 @@ CREATE TABLE t
     s1 String,
     s2 String
 ) ENGINE = MergeTree ORDER BY s1;
+-- actual test cases
+INSERT INTO t VALUES ('', '') ('abc', '') ('', 'abc') ('abc', 'abc') ('abc', 'ab') ('abc', 'bc') ('clickhouse', 'mouse') ('我是谁', 'Tom') ('Jerry', '我是谁') ('我是谁', '我是我');
 SELECT 'byteHammingDistance', s1, s2, byteHammingDistance(s1, s2) FROM t ORDER BY ALL;
 SELECT 'editDistance', s1, s2, editDistance(s1, s2) FROM t ORDER BY ALL;
 SELECT 'editDistanceUTF8', s1, s2, editDistanceUTF8(s1, s2) FROM t ORDER BY ALL;

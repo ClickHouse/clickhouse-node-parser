@@ -6,6 +6,8 @@ CREATE TABLE uin_value_details
 )
 ENGINE = MergeTree()
 ORDER BY ds;
+INSERT INTO uin_value_details (ds, uin, value) values ('2023-12-26', 105, 5), ('2023-12-26', 104, 4), ('2023-12-26', 103, 3);
+INSERT INTO uin_value_details (ds, uin, value) values ('2023-12-27', 10000001, 7), ('2023-12-27', 10000002, 3);
 select numericIndexedVectorShortDebugString(groupNumericIndexedVectorState(uin, value)) from uin_value_details;
 select groupNumericIndexedVector(uin, value) from uin_value_details;
 select numericIndexedVectorAllValueSum(groupNumericIndexedVectorState(uin, value)) from uin_value_details;

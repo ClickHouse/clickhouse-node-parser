@@ -8,6 +8,7 @@ SETTINGS min_bytes_for_wide_part = 0,
     primary_key_lazy_load = 0,
     serialization_info_version = 'basic',
     storage_policy = 's3_cache';
+INSERT INTO t_lightweight_mut_5 VALUES (1, 'a', 'b');
 SELECT s1 FROM t_lightweight_mut_5 ORDER BY id;
 SELECT s2 FROM t_lightweight_mut_5 ORDER BY id;
 SELECT s1, s2 FROM t_lightweight_mut_5 ORDER BY id;

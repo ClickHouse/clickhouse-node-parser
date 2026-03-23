@@ -7,7 +7,9 @@ CREATE TABLE nested
         types Array(Enum8('PU' = 1, 'US' = 2, 'OTHER' = 3))
     )
 ) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO nested VALUES (['Hello', 'World'], [['a'], ['b', 'c']], [['PU', 'US'], ['OTHER']]);
 SELECT * FROM nested;
+INSERT INTO nested VALUES (['GoodBye'], [['1', '2']], [['PU', 'US', 'OTHER']]);
 SELECT * FROM nested ORDER BY column.name;
 CREATE TABLE nested
 (

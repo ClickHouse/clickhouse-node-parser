@@ -4,4 +4,5 @@ set max_bytes_before_external_group_by = 1000000000;
 set max_bytes_ratio_before_external_group_by = 0;
 set group_by_two_level_threshold = 100;
 set min_insert_block_size_rows = 100;
+insert into t select number from numbers(300);
 select count() from (select y from t_mv group by y);

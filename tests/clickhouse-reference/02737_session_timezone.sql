@@ -12,6 +12,8 @@ SELECT toDateTime('2002-12-12 23:23:23') AS dt, toString(dt) SETTINGS session_ti
 SELECT toDateTime64('2002-12-12 23:23:23.123', 3) AS dt64, toString(dt64) SETTINGS session_timezone = 'Asia/Phnom_Penh';
 -- Create a table and test that DateTimes are processed correctly on insert
 CREATE TABLE test_tz_setting (d DateTime('UTC')) Engine=Memory AS SELECT toDateTime('2000-01-01 00:00:00');
+INSERT INTO test_tz_setting VALUES ('2000-01-01 01:00:00'); -- this is parsed using timezone from `d` column
+INSERT INTO test_tz_setting VALUES (toDateTime('2000-01-02 02:00:00')); -- this is parsed using `session_timezone`
 -- Test parsing in WHERE filter, shall have the same logic as insert
 SELECT d FROM test_tz_setting WHERE d == '2000-01-01 01:00:00'; -- 1 row expected
 SELECT d FROM test_tz_setting WHERE d == toDateTime('2000-01-01 02:00:00'); -- 0 rows expected

@@ -4,6 +4,7 @@
 
 SET optimize_trivial_insert_select = 1;
 CREATE TABLE test_move_partition_throttling (key UInt64 CODEC(NONE)) ENGINE = MergeTree ORDER BY tuple() SETTINGS storage_policy='local_remote';
+INSERT INTO test_move_partition_throttling SELECT number FROM numbers(1e6);
 SELECT disk_name, partition, rows FROM system.parts WHERE database = currentDatabase() AND table = 'test_move_partition_throttling' and active;
 -- (8e6-1600000)/1600000=4.0
 SELECT query_kind, query_duration_ms>4e3 FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND query_kind = 'Alter';

@@ -11,6 +11,7 @@
 
 SET query_plan_join_swap_table = 'true', join_algorithm = 'hash', query_plan_use_new_logical_join_step = 0, enable_analyzer = 1;
 CREATE TABLE t0 (c0 Int32) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO TABLE t0 (c0) VALUES (1);
 -- Original failing query from the stress test
 SELECT 1 FROM t0 FULL JOIN (SELECT 0 AS c0) tx ON t0.c0 = tx.c0
 PASTE JOIN (SELECT 0 AS c0, 1 AS c1) ty ORDER BY ty.c0, ty.c1;
@@ -21,6 +22,8 @@ PASTE JOIN (SELECT 0 AS c0, 1 AS c1) ty ORDER BY ty.c0, ty.c1;
 SELECT * FROM t0 FULL JOIN (SELECT 0 AS c0) tx ON t0.c0 = tx.c0
 PASTE JOIN (SELECT 0 AS c0, 1 AS c1) ty ORDER BY ty.c0, ty.c1
 SETTINGS join_use_nulls = 1;
+-- Multiple rows to exercise non-joined rows from both sides of the FULL JOIN
+INSERT INTO TABLE t0 (c0) SELECT number FROM numbers(10);
 SELECT count(), sum(t0_c0), sum(tx_c0), sum(ty_c0), sum(ty_c1)
 FROM (
     SELECT t0.c0 AS t0_c0, tx.c0 AS tx_c0, ty.c0 AS ty_c0, ty.c1 AS ty_c1

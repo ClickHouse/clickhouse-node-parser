@@ -1,6 +1,7 @@
 CREATE TABLE test_table (`n` UInt64, `s` String)
 ENGINE = MergeTree
 PRIMARY KEY n ORDER BY n SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+INSERT INTO test_table SELECT number, concat('some string ', CAST(number, 'String')) FROM numbers(1000000);
 -- Create row policy that doesn't use any column
 CREATE ROW POLICY test_filter_policy ON test_table USING False TO ALL;
 -- Run query under default user so that always false row_level_filter is added that doesn't require any columns

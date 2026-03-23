@@ -1,4 +1,5 @@
 CREATE TABLE 02131_rptable (x UInt8) ENGINE = MergeTree ORDER BY x;
+INSERT INTO 02131_rptable VALUES (1), (2), (3), (4);
 SELECT * FROM 02131_rptable;
 CREATE ROW POLICY 02131_filter_1 ON 02131_rptable USING x=1 AS permissive TO ALL;
 CREATE ROW POLICY 02131_filter_2 ON 02131_rptable USING x=2 AS permissive TO ALL;

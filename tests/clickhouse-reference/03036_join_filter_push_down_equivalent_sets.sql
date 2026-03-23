@@ -12,6 +12,8 @@ CREATE TABLE test_table_2
     id UInt64,
     value String
 ) ENGINE=MergeTree ORDER BY id SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+INSERT INTO test_table_1 SELECT number, number FROM numbers(10);
+INSERT INTO test_table_2 SELECT number, number FROM numbers(10);
 SELECT '--';
 SELECT lhs.id, rhs.id, lhs.value, rhs.value FROM test_table_1 AS lhs INNER JOIN test_table_2 AS rhs ON lhs.id = rhs.id
 WHERE lhs.id = 5;

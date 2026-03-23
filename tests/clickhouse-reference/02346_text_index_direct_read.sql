@@ -12,6 +12,8 @@ SET enable_analyzer = 0; -- To produce consistent explain outputs
 CREATE TABLE tab(k UInt64, text String, INDEX idx(text) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1)
             ENGINE = MergeTree() ORDER BY k
             SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi';
+INSERT INTO tab VALUES (101, 'Alick a01'),
+                       (102, 'Blick a02');
 ----------------------------------------------------
 
 SELECT 'Test hasToken:', count() FROM tab WHERE hasToken(text, 'Alick');

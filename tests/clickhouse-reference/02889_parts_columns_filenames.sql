@@ -5,6 +5,7 @@ SETTINGS
     replace_long_file_name_to_hash = 1,
     max_file_name_length = 8,
     ratio_of_defaults_for_sparse_serialization = 0.9;
+INSERT INTO t_parts_columns_filenames SELECT number, 0, 0, range(number % 5), range(number % 5) FROM numbers(10);
 SELECT * FROM t_parts_columns_filenames ORDER BY id;
 SELECT name, column, type, serialization_kind, substreams, filenames
 FROM system.parts_columns

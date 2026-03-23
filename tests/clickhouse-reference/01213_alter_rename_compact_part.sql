@@ -12,6 +12,7 @@ ORDER BY key
 settings index_granularity = 8,
 min_rows_for_wide_part = 10,
 min_bytes_for_wide_part = '10G';
+INSERT INTO table_with_compact_parts SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number), toString(number) from numbers(9);
 SELECT value1 FROM table_with_compact_parts WHERE key = 1;
 SELECT renamed_value1 FROM table_with_compact_parts WHERE key = 1;
 SELECT * FROM table_with_compact_parts WHERE key = 1 FORMAT TSVWithNames;

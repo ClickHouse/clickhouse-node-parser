@@ -1,5 +1,20 @@
 SET parallel_replicas_local_plan=1;
 CREATE TABLE foo (id UInt8, path String) engine = MergeTree ORDER BY (path) SETTINGS index_granularity=1;
+INSERT INTO foo VALUES (1, 'xxx|yyy'),
+(2, 'xxx(zzz'),
+(3, 'xxx)zzz'),
+(4, 'xxx^zzz'),
+(5, 'xxx$zzz'),
+(6, 'xxx.zzz'),
+(7, 'xxx[zzz'),
+(8, 'xxx]zzz'),
+(9, 'xxx?zzz'),
+(10, 'xxx*zzz'),
+(11, 'xxx+zzz'),
+(12, 'xxx\\zzz'),
+(13, 'xxx{zzz'),
+(14, 'xxx}zzz'),
+(15, 'xxx-zzz');
 -- check if also escaped sequence are properly extracted
 SELECT trimLeft(explain) FROM (EXPLAIN PLAN indexes=1 SELECT id FROM foo WHERE match(path, '^xxx\\(zzz')) WHERE explain like '%Condition%';
 SELECT count() FROM foo WHERE match(path, '^xxx\\(zzz') SETTINGS force_primary_key = 1;

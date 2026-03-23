@@ -11,4 +11,5 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree ORDER BY id
 SETTINGS min_bytes_for_wide_part = 0, vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1;
+INSERT INTO tab SELECT number, 'c1' || toString(number), 'c2' || toString(number + 1) FROM numbers(10000);
 SELECT count() FROM tab WHERE hasAllTokens(c1, 'c11') AND hasAllTokens(c2, 'c21');

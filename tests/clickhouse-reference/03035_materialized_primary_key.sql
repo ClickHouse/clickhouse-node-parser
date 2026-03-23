@@ -3,6 +3,7 @@ CREATE TABLE test
     id UInt64,
     value String
 ) ENGINE=MergeTree ORDER BY id;
+INSERT INTO test VALUES (1, 'Alice'), (2, 'Bob');
 CREATE MATERIALIZED VIEW test_mv
 (
     id UInt64,

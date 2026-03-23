@@ -1,4 +1,5 @@
 CREATE TABLE decimal_in_float_test ( `a` Decimal(18, 0), `b` Decimal(36, 2) ) ENGINE = Memory;
+INSERT INTO decimal_in_float_test VALUES ('33', '44.44');
 SELECT toDecimal32(1.555,3) IN (1.5551);
 SELECT toDecimal32(1.555,3) IN (1.5551,1.555);
 SELECT toDecimal32(1.555,3) IN (1.5551,1.555000);

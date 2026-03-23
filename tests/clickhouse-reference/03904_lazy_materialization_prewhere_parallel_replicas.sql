@@ -13,6 +13,8 @@ SET parallel_replicas_local_plan = 1;
 SET parallel_replicas_min_number_of_rows_per_replica = 0;
 CREATE TABLE t_lazy_mat_prewhere_parallel (a UInt64, b UInt64, c UInt64, d UInt64)
 ENGINE = MergeTree() PARTITION BY b ORDER BY a;
+INSERT INTO t_lazy_mat_prewhere_parallel SELECT number, number % 2, number, number % 3 FROM numbers(0, 100);
+INSERT INTO t_lazy_mat_prewhere_parallel SELECT number, number % 2, number, number % 3 FROM numbers(100, 100);
 -- { echoOn }
 -- The failing query from the stress test: aliases with expressions + WHERE that becomes PREWHERE
 SELECT a + 1 AS a, b AS b, c + 1 AS c, d + 1 AS d FROM t_lazy_mat_prewhere_parallel WHERE d > 1 ORDER BY c LIMIT 3;

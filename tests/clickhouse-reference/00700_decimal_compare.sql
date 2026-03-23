@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS decimal
     i Decimal128(18),
     j dec(4,2)
 ) ENGINE = Memory;
+INSERT INTO decimal (a, b, c, d, e, f, g, h, i, j) VALUES (42, 42, 42, 0.42, 0.42, 0.42, 42.42, 42.42, 42.42, 42.42);
+INSERT INTO decimal (a, b, c, d, e, f, g, h, i, j) VALUES (-42, -42, -42, -0.42, -0.42, -0.42, -42.42, -42.42, -42.42, -42.42);
 SELECT a > toFloat64(0) FROM decimal ORDER BY a;
 SELECT g > toFloat32(0) FROM decimal ORDER BY g;
 SELECT a > '0.0' FROM decimal ORDER BY a;

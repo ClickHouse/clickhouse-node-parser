@@ -5,6 +5,7 @@ CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict
 )
 ENGINE = MergeTree()
 ORDER BY key_column;
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_for_dict VALUES (1, 1.1);
 CREATE DICTIONARY IF NOT EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict_exists
 (
   key_column UInt64,

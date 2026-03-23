@@ -1,5 +1,6 @@
 SET optimize_read_in_order = 1, query_plan_read_in_order = 1, enable_analyzer = 1;
 create table tab (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by ((a + b) * c, sin(a / b));
+insert into tab select number, number, number, number from numbers(5);
 -- { echoOn }
 
 -- Exact match, single key
@@ -59,6 +60,7 @@ select * from (explain plan actions = 1 select * from (select *, a / b as y from
 -- { echoOff }
 
 create table tab2 (x DateTime, y UInt32, z UInt32) engine = MergeTree order by (x, y);
+insert into tab2 select toDate('2020-02-02') + number, number, number from numbers(4);
 -- { echoOn }
 
 select * from tab2 order by toTimeZone(toTimezone(x, 'UTC'), 'CET'), intDiv(intDiv(y, -2), -3);
@@ -70,8 +72,11 @@ select * from (explain plan actions = 1 select * from tab2 where toTimezone(x, '
 -- { echoOff }
 
 create table tab3 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by ((a + b) * c, sin(a / b));
+insert into tab3 select number, number, number, number from numbers(5);
 create table tab4 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by sin(a / b);
+insert into tab4 select number, number, number, number from numbers(5);
 create table tab5 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by (a + b) * c;
+insert into tab5 select number, number, number, number from numbers(5);
 -- { echoOn }
 
 -- Union (not fully supported)

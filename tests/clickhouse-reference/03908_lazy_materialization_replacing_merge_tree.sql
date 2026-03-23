@@ -12,6 +12,13 @@ CREATE TABLE t_lm_replacing
     data String
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (domain, timestamp);
+INSERT INTO t_lm_replacing
+SELECT
+    toDateTime('2025-01-01') + number,
+    '172.16.96.212:5432',
+    [(toString(number), 'val')],
+    repeat('x', 100)
+FROM numbers(300);
 -- This exact combination (WHERE + ORDER BY DESC + small LIMIT) was the failing pattern
 SELECT count() FROM (
     SELECT * FROM t_lm_replacing

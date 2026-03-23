@@ -48,6 +48,7 @@ SELECT format('The {0} to all questions is {1}.', 'answer', materialize([(0,0),(
 SELECT format('The {0} to all questions is {1}.', 'answer', materialize([[(20, 20), (50, 20), (50, 50), (20, 50)], [(30, 30), (50, 50), (50, 30)]] :: Polygon));
 SELECT format('The {0} to all questions is {1}.', 'answer', materialize([[[(0, 0), (10, 0), (10, 10), (0, 10)]], [[(20, 20), (50, 20), (50, 50), (20, 50)],[(30, 30), (50, 50), (50, 30)]]] :: MultiPolygon));
 CREATE TABLE format_nested(attrs Nested(k String, v String)) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO format_nested VALUES (['foo', 'bar'], ['qaz', 'qux']);
 SELECT format('The {0} to all questions is {1}.', attrs.k, attrs.v) FROM format_nested;
 SELECT format('The {0} to all questions is {1}', NULL, NULL);
 SELECT format('The {0} to all questions is {1}', NULL, materialize(NULL :: Nullable(UInt64)));

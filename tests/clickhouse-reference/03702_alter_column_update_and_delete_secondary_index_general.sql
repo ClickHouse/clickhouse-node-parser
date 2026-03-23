@@ -20,6 +20,10 @@ CREATE TABLE test_wide (
 )
 ENGINE = MergeTree ORDER BY a
 SETTINGS min_bytes_for_wide_part = 0;
+INSERT INTO test_compact VALUES (1, 1, 4);
+INSERT INTO test_wide VALUES (1, 1, 4);
+INSERT INTO test_compact VALUES (1, 100, 6);
+INSERT INTO test_wide VALUES (1, 100, 6);
 SELECT 'COMPACT BEFORE', * from test_compact;
 SELECT 'WIDE BEFORE', * from test_wide;
 SELECT 'COMPACT AFTER UPDATE', * from test_compact;

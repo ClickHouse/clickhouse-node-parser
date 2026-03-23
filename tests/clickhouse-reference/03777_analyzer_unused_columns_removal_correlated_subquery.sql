@@ -19,6 +19,7 @@ CREATE TABLE lineitem (
     l_shipmode       String,
     l_comment        String)
 ORDER BY (l_orderkey, l_linenumber);
+INSERT INTO lineitem SELECT * FROM generateRandom() LIMIT 1;
 CREATE TABLE part (
     p_partkey     Int32,
     p_name        String,
@@ -30,6 +31,7 @@ CREATE TABLE part (
     p_retailprice Decimal(15,2),
     p_comment     String)
 ORDER BY (p_partkey);
+INSERT INTO part SELECT * FROM generateRandom() LIMIT 1;
 SELECT
     sum(l_extendedprice) / 7.0 AS avg_yearly
 FROM

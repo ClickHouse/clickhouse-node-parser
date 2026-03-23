@@ -11,8 +11,10 @@ SETTINGS
     enable_block_number_column = 1,
     enable_block_offset_column = 1,
     apply_patches_on_merge = 0;
+INSERT INTO t_shared VALUES (1, 2) (3, 4);
 SELECT name, rows from system.parts WHERE database = currentDatabase() AND table = 't_shared' AND active ORDER BY name;
 SELECT * FROM t_shared ORDER BY id;
+INSERT INTO t_shared VALUES (5, 6);
 SELECT mapSort(mapFilter((k, v) -> k IN ('ReadTasksWithAppliedPatches', 'PatchesAppliedInAllReadTasks', 'PatchesMergeAppliedInAllReadTasks', 'PatchesJoinAppliedInAllReadTasks'), ProfileEvents))
 FROM system.query_log
 WHERE current_database = currentDatabase() AND query LIKE '%SELECT * FROM t_shared ORDER BY id%' AND type = 'QueryFinish'

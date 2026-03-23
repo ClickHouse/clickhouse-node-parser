@@ -1,5 +1,7 @@
 create table t(a Int64, b Int64) engine = MergeTree ORDER BY tuple();
 create table s(a Int64, b Int64) engine = MergeTree ORDER BY tuple();
+insert into t values (1,1), (2,2);
+insert into s values (1,1);
 set join_use_nulls = 1;
 select * from t left outer join s using (a,b) order by t.a;
 select * from t join s using (a,b);

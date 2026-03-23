@@ -6,4 +6,6 @@ CREATE TABLE smta
 )
 ENGINE = SummingMergeTree
 ORDER BY k;
+insert into smta(k, city) values (1, 'x');
 select k, city from smta;
+insert into smta(k, city) values (1, 'y');

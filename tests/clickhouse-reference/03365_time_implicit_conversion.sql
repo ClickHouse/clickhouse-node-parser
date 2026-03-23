@@ -5,4 +5,5 @@ CREATE TABLE dt
     `event_id` UInt8
 )
 ENGINE = TinyLog;
+INSERT INTO dt VALUES ('100:00:00', 1), (12453, 3);
 SELECT * FROM dt WHERE time = '100:00:00';

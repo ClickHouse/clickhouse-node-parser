@@ -42,6 +42,12 @@ CREATE TABLE hex_data
     witver UInt8
 )
 ENGINE = Memory;
+INSERT INTO hex_data VALUES
+    ('bc', '6687112a6eadb4d88d29c7a45da56eff0c23b0e14e757d408e', 0),
+    ('tb', '8f8cdd4364bb7dca11c49743da2c4b54062fa0388bbf924078', 1),
+    ('bc', '50b80d45cc275f36eb5fb2c22a93f6a4e83ba9380e55c67f6a', 15),
+    ('tb', 'b103a1937c6e2fb9de707a4be02d5d39e217b4bca7ce3c9c12', 0),
+    ('bcrt', '95eb334ff82ef8ad76151c29094abdae6c9e8bb8244523e347', 2);
 -- test const hrp with column data
 SELECT bech32Encode('bc', unhex(data)) FROM hex_data limit 1;
 -- test const data with column hrp
@@ -57,6 +63,9 @@ CREATE TABLE bech32_test
     witver UInt8
 )
 ENGINE = Memory;
+INSERT INTO bech32_test
+SELECT hrp, data, CAST(hrp, 'FixedString(4)'), CAST(data, 'FixedString(50)'), witver
+FROM hex_data;
 SELECT
     bech32Encode(hrp, unhex(data)) AS enc,
     bech32Encode(hrp, unhex(data), witver) AS enc_witver,
@@ -103,12 +112,20 @@ CREATE TABLE addresses
     address String
 )
 ENGINE = Memory;
+INSERT INTO addresses VALUES
+    ('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4'),
+    ('tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx'),
+    ('bc1pw508d6qejxtdg4y5r3zarvary0c5xw7kj9wkru'),
+    ('tb1pw508d6qejxtdg4y5r3zarvary0c5xw7kcr49c0');
 CREATE TABLE bech32_test
 (
     address String,
     address_fixed FixedString(45)
 )
 ENGINE = Memory;
+INSERT INTO bech32_test
+SELECT address, CAST(address, 'FixedString(45)')
+FROM addresses;
 SELECT
     address,
     bech32Decode(address).1 AS hrp,

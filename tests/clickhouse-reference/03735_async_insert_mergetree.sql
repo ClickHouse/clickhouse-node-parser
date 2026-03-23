@@ -11,6 +11,9 @@ create table src_table
 engine = MergeTree
 order by id
 SETTINGS non_replicated_deduplication_window = 10000;
+insert into src_table values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
+insert into src_table values (1, 'Alice');
+insert into src_table values (2, 'Bob');
 -- Expecting 2
 select 'src_table', count(*) from src_table;
 create table dst_1_0
@@ -60,6 +63,7 @@ as select * from dst_1_0;
 create materialized view mv_2_01
 TO dst_2_01
 as select * from dst_1_1;
+insert into src_table values (3, 'Charlie'), (4, 'David'), (3, 'Charlie');
 select * from src_table order by all;
 -- Expecting 2
 select 'dst_1_0', count(*) from dst_1_0;

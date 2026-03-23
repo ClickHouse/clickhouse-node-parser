@@ -5,6 +5,7 @@ SETTINGS
     min_bytes_for_wide_part = 0,
     enable_block_number_column = 0,
     enable_block_offset_column = 0;
+INSERT INTO t_sparse_columns_clear SELECT [number], 0 FROM numbers(1000);
 SELECT column, serialization_kind FROM system.parts_columns
 WHERE database = currentDatabase() AND table = 't_sparse_columns_clear' AND active
 ORDER BY column;

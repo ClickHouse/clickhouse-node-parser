@@ -1,4 +1,5 @@
 CREATE TABLE view (id UInt32, value String) ENGINE=ReplicatedMergeTree('/test/2449/{database}', '1') ORDER BY id;
+INSERT INTO view VALUES (1, 'v');
 CREATE DICTIONARY dict (id UInt32, value String)
 PRIMARY KEY id
 SOURCE(CLICKHOUSE(host 'localhost' port tcpPort() user 'default' db currentDatabase() table 'view'))
@@ -11,4 +12,6 @@ CREATE TABLE table
 ENGINE = MergeTree()
 ORDER BY tuple();
 SELECT * FROM dictionary('dict');
+-- check that table is not readonly
+INSERT INTO view VALUES (2, 'a');
 SELECT * FROM dictionary('dict') ORDER BY id;

@@ -10,13 +10,16 @@ SET max_threads=4, max_block_size=128;
 SET automatic_parallel_replicas_min_bytes_per_replica=0;
 -- External aggregation is not supported at the moment, i.e., no statistics will be reported
 SET max_bytes_before_external_group_by=0, max_bytes_ratio_before_external_group_by=0;
+INSERT INTO t SELECT toString(number), number FROM numbers(1e4);
 --set send_logs_level='trace', send_logs_source_regexp = 'optimize';
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_0'; -- empty cache, don't apply optimization, collect stats
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_1'; -- stats available, don't apply since no benefit
 set send_logs_level='none';
+INSERT INTO t SELECT 'ololokekkekkek' || toString(number % 10), number FROM numbers(5e5);
 --set send_logs_level='trace', send_logs_source_regexp = 'optimize';
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_2'; -- stats available, but we have to recollect since data grew, don't apply
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_3'; -- stats available, apply
+INSERT INTO t SELECT 'ololokekkekkek' || toString(number % 10), number FROM numbers(5e5 + 100000);
 --set send_logs_level='trace', send_logs_source_regexp = 'optimize';
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_4'; -- stats available, but we have to recollect since data grew, don't apply
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_5'; -- stats available, apply

@@ -1,5 +1,7 @@
 CREATE TABLE t_mem (a Int32, b Int32) ENGINE = Memory;
 CREATE TABLE t_mt (a Int32, b Int32) ENGINE = MergeTree ORDER BY a SETTINGS index_granularity = 1024, index_granularity_bytes = '10Mi';
+INSERT INTO t_mem SELECT number, sipHash64(number, 1) FROM numbers(5_000);
+INSERT INTO t_mt SELECT number, sipHash64(number, 2) FROM numbers(5_000);
 CREATE VIEW t_view AS SELECT a, b, 'aaa_' || toString(a) FROM t_mt;
 CREATE TEMPORARY TABLE start_ts AS ( SELECT now() AS ts );
 SET enable_parallel_replicas = 0;

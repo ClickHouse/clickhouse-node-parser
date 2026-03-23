@@ -9,6 +9,8 @@ CREATE TABLE test
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+-- do one insert to make sure we can insert into the table
+INSERT INTO test(str, column_with_codec) VALUES ('test', 'test2');
 SELECT str, column_with_alias, valid_column_1, valid_column_2 FROM test;
 CREATE TABLE test2
 (
@@ -18,6 +20,7 @@ CREATE TABLE test2
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/03224_invalid_alter/{database}/{table}', 'r1')
 ORDER BY tuple();
+INSERT INTO test2(str, column_with_codec) VALUES ('test2', 'test22');
 SELECT str, column_with_alias, valid_column_1, valid_column_2 FROM test2;
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier} ON CLUSTER test_shard_localhost ENGINE = Atomic;
 CREATE TABLE test3 ON CLUSTER test_shard_localhost
@@ -28,6 +31,7 @@ CREATE TABLE test3 ON CLUSTER test_shard_localhost
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/03224_invalid_alter/{database}_atomic/{table}', 'r1')
 ORDER BY tuple();
+INSERT INTO test3(str, column_with_codec) VALUES ('test3', 'test32');
 SELECT str, column_with_alias, valid_column_1, valid_column_2 FROM test3;
 CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier} ENGINE = Replicated('/clickhouse/03224_invalid_alter/{database}_replicated', 'shard1', 'replica1') FORMAT Null;
 CREATE TABLE test4
@@ -39,4 +43,5 @@ CREATE TABLE test4
 ENGINE = ReplicatedMergeTree()
 ORDER BY tuple()
 FORMAT Null;
+INSERT INTO test4(str, column_with_codec) VALUES ('test4', 'test42');
 SELECT str, column_with_alias, valid_column_1, valid_column_2 FROM test4;

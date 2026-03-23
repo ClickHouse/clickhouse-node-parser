@@ -6,6 +6,7 @@ CREATE TABLE test_if_type_mismatch (
     c_u37 Float64,
     c_d9n_3 Int32
 ) ENGINE = MergeTree() ORDER BY c_d9n_3;
+INSERT INTO test_if_type_mismatch VALUES (1, 1.5, 'a', 'b', 2.0, 1), (10, 5.5, 'c', 'd', 1.0, 2);
 -- Test case 1: Simple if with UInt64 literal (fits in Int64) and Int32 column
 SELECT toTypeName(if(rand() % 2, floor(4373163444658715090), c_f7nvvq)) FROM test_if_type_mismatch LIMIT 1;
 -- Test case 2: Case expression (which uses if internally)

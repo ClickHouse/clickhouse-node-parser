@@ -8,6 +8,16 @@ CREATE TABLE my_first_table
 )
 ENGINE = MergeTree()
 PRIMARY KEY (user_id, timestamp);
+INSERT INTO my_first_table (user_id, job_id, message, timestamp, metric) VALUES
+    (101, 101,'Hello, ClickHouse!',                                 now(),       1   ),
+    (101, 102,'Granules are the smallest chunks of data read',      now() + 5,   3 )
+    (102, 101,'Insert a lot of rows per batch',                     yesterday(), 2 ),
+    (102, 101,'Test1', today(),     1  ),
+    (102, 101,'Test2', today(),     2  ),
+    (102, 101,'Test3', today(),     2  ),
+    (102, 102,'Test4', today(),     4  ),
+    (102, 103,'Test5', today(),     4  ),
+    (102, 103,'Test6', today(),     1  );
 SET enable_analyzer = 1;
 SELECT 1 AS constant, user_id, job_id, sum(metric)
 FROM my_first_table

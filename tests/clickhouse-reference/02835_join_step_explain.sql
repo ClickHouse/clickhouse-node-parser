@@ -13,5 +13,7 @@ CREATE TABLE test_table_2
     value_1 String,
     value_2 UInt64
 ) ENGINE=MergeTree ORDER BY id;
+INSERT INTO test_table_1 VALUES (0, 'Value', 0);
+INSERT INTO test_table_2 VALUES (0, 'Value', 0);
 SET query_plan_join_swap_table = 'false';
 SELECT '--';

@@ -1,4 +1,13 @@
 create table rmt (n int, m int) engine=ReplicatedMergeTree('/test/02439/{shard}/{database}', '{replica}') partition by n order by n;
+insert into rmt select number, number from numbers(50);
+insert into rmt values (1, 2);
+insert into rmt values (1, 3);
+insert into rmt values (1, 4);
+insert into rmt values (1, 5);
+insert into rmt values (1, 6);
+insert into rmt values (1, 7);
+insert into rmt values (1, 8);
+insert into rmt values (1, 9);
 set optimize_throw_if_noop=1;
 select sleepEachRow(3) as higher_probability_of_reproducing_the_issue format Null;
 -- it should not list unneeded partitions where we cannot merge anything

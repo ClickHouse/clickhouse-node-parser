@@ -8,3 +8,6 @@ SELECT COUNT(*) FROM system.query_cache;
 
 -- CREATE
 CREATE TABLE eligible_test (a String) ENGINE=MergeTree ORDER BY a; --  SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown
+-- INSERT
+INSERT INTO eligible_test VALUES('a', 'b'); -- SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown
+INSERT INTO eligible_test SELECT * FROM eligible_test SETTINGS use_query_cache = true;

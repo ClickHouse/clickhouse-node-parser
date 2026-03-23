@@ -1,4 +1,6 @@
 create table data (key Int, value Int) engine=MergeTree() order by key;
+insert into data select *, *+1000000 from numbers(100000);
+insert into data select *, *+1000000 from numbers(100000, 200000);
 -- { echo }
 select part_name from mergeTreeAnalyzeIndexes(currentDatabase(), data, key >= 1000);
 select ranges from mergeTreeAnalyzeIndexes(currentDatabase(), data, key >= 1000);

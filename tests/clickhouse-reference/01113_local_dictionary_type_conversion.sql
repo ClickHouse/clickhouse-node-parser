@@ -4,6 +4,9 @@ CREATE TABLE table_for_dict (
   SomeID Int32
 )
 ENGINE = Memory();
+
+INSERT INTO table_for_dict VALUES ('First', 'WINDOWS', 1), ('Second', 'LINUX', 2);
+
 CREATE DICTIONARY dict_with_conversion
 (
   CompanyID String DEFAULT '',
@@ -14,4 +17,5 @@ PRIMARY KEY CompanyID
 SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_for_dict' DB currentDatabase()))
 LIFETIME(MIN 1 MAX 20)
 LAYOUT(COMPLEX_KEY_HASHED());
+
 SELECT * FROM dict_with_conversion ORDER BY CompanyID;

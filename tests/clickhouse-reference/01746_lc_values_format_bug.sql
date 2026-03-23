@@ -5,4 +5,5 @@ CREATE TABLE lc_test
 ENGINE = MergeTree
 PARTITION BY tuple()
 ORDER BY id;
+insert into lc_test values (toString('a'));
 select id from lc_test;

@@ -16,6 +16,7 @@ SETTINGS
     vertical_merge_algorithm_min_columns_to_activate = 1,
     vertical_merge_optimize_lightweight_delete = 1,
     ratio_of_defaults_for_sparse_serialization = 1.0;
+INSERT INTO t_lwd_vertical SELECT number, rand(), rand(), rand(), rand() FROM numbers(100000);
 SET lightweight_delete_mode = 'alter_update';
 SELECT count() FROM t_lwd_vertical;
 SELECT count() FROM system.parts_columns WHERE database = currentDatabase() AND table = 't_lwd_vertical' AND active AND partition_id = 'all' AND column = '_row_exists';

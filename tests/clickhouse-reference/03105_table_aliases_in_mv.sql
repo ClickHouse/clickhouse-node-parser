@@ -11,6 +11,8 @@ CREATE TABLE user (
 )
 ENGINE = MergeTree()
 ORDER BY (user_id);
+INSERT INTO event VALUES ('2020-05-01 00:00:01', 'install', '1'), ('2020-05-01 00:00:02', 'install', '2'), ('2020-05-01 00:00:03', 'install', '3');
+INSERT INTO user VALUES ('1', 'type_1'), ('2', 'type_2'), ('3', 'type_3');
 CREATE MATERIALIZED VIEW mv
 (
     `event_time` DateTime,

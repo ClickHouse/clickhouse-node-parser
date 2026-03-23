@@ -1,4 +1,6 @@
 CREATE TABLE t (x Decimal(18, 3)) ENGINE = MergeTree ORDER BY x;
+INSERT INTO t VALUES (1.1);
 SELECT * FROM t WHERE toUInt64(x) = 1;
 CREATE TABLE t (x DateTime64(3)) ENGINE = MergeTree ORDER BY x;
+INSERT INTO t VALUES (1000);
 SELECT x::UInt64 FROM t WHERE toUInt64(x) = 1;

@@ -8,6 +8,7 @@ AS SELECT x FROM test_00687;
 create MATERIALIZED VIEW mv_group (x String)
 ENGINE = MergeTree Partition by tuple() order by tuple()
 AS SELECT x FROM test_00687 group by x;
+insert into test_00687 values ('stest'), ('stest');
 select * from mv_bad;
 SELECT '---';
 select * from mv_good;

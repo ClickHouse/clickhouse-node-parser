@@ -4,6 +4,7 @@ CREATE TABLE point_test
     `coord` Point
 )
 ENGINE = Memory;
+INSERT INTO point_test FORMAT Values ('one', (0.12,46.45)), ('two', (0,0)), ('three',(1,0)), ('four', (0,1));
 CREATE VIEW point_test_parameterized AS
 SELECT *
 FROM point_test

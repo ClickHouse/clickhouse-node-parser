@@ -12,6 +12,10 @@ CREATE TABLE test_b
     EventDate Date DEFAULT toDate(EventTime),
     EventTime DateTime
 ) ENGINE = MergeTree(EventDate, EventTime, 8192);
+INSERT INTO test_a (OldColumn, EventTime) VALUES('1', now());
+INSERT INTO test_b (OldColumn, NewColumn, EventTime) VALUES('1', '1a', now());
+INSERT INTO test_b (OldColumn, NewColumn, EventTime) VALUES('2', '2a', now());
+INSERT INTO test_a (OldColumn, NewColumn, EventTime) VALUES('2', '2a', now());
 SELECT NewColumn
 FROM test_a
 INNER JOIN

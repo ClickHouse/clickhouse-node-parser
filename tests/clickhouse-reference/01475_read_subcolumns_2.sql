@@ -12,6 +12,7 @@ CREATE TABLE subcolumns
     nested Nested(col1 String, col2 Nullable(UInt32))
 )
 ENGINE = MergeTree order by tuple() SETTINGS min_bytes_for_wide_part = '10M';
+INSERT INTO subcolumns VALUES (([1, NULL], 2, 'a'), ['foo', NULL, 'bar'], [['123'], ['456', '789']], 'qqqq', ['zzz', 'xxx'], [42, 43]);
 SELECT * FROM subcolumns;
 SELECT t.a, t.u, t.s, nested.col1, nested.col2, lc FROM subcolumns;
 SELECT t.a.size0, t.a.null, t.u, t.s, t.s.null FROM subcolumns;

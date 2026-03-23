@@ -1,14 +1,1 @@
-CREATE TABLE t_s3_compressed_blocks
-(
-    id UInt64,
-    s String CODEC(NONE)
-)
-ENGINE = MergeTree
-ORDER BY id
-SETTINGS storage_policy = 's3_cache', min_bytes_for_wide_part = 0;
-
-SET max_threads = 1;
-
-SELECT count()
-FROM t_s3_compressed_blocks
-WHERE NOT ignore(s);
+<Parse Error>

@@ -4,4 +4,5 @@ INDEX map_fixed_values_ngrambf mapKeys(map_fixed) TYPE ngrambf_v1(4, 256, 2, 0) 
 ENGINE = MergeTree
 ORDER BY row_id
 SETTINGS index_granularity = 1;
+INSERT INTO 02538_bf_ngrambf_map_values_test VALUES (1, {'a': 'a'}, {'b': 'b'});
 SELECT * FROM 02538_bf_ngrambf_map_values_test PREWHERE (map['']) = 'V2V\0V2V2V2V2V2V2' WHERE (map[NULL]) = 'V2V\0V2V2V2V2V2V2V2V\0V2V2V2V2V2V2V2V\0V2V2V2V2V2V2V2V\0V2V2V2V2V2V2' SETTINGS force_data_skipping_indices = 'map_values_ngrambf';

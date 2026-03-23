@@ -8,6 +8,10 @@ create table stack(item_id Int64, brand_id Int64, rack_id Int64, dt DateTime, ex
 Engine = MergeTree
 partition by toYYYYMM(dt)
 order by (brand_id, toStartOfHour(dt)) SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+insert into stack
+select number%99991, number%11, number%1111, toDateTime('2020-01-01 00:00:00')+number/100,
+   toDateTime('2020-02-01 00:00:00')+number/10, intDiv(number,100)+1
+from numbers_mt(1000000);
 select '---- arrays ----';
 select cityHash64( toString( groupArray (tuple(*) ) )) from (
     select brand_id, rack_id, arrayJoin(arraySlice(arraySort(groupArray(quantity)),1,2)) quantity

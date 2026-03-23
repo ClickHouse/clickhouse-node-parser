@@ -7,3 +7,4 @@ CREATE table test
 )
 ENGINE = MergeTree
 ORDER BY (ts);
+INSERT INTO test (v) FORMAT Values ('VALUE1');

@@ -14,6 +14,24 @@ CREATE TABLE stored_aggregates
 	GroupArray	AggregateFunction(groupArray, String)
 )
 ENGINE = AggregatingMergeTree(d, (d, k1, k2), 8192);
+INSERT INTO stored_aggregates
+SELECT
+	toDate('2014-06-01') AS d,
+	intDiv(number, 100) AS k1,
+	toString(intDiv(number, 10)) AS k2,
+	sumState(number) AS Sum,
+	avgState(number) AS Avg,
+	uniqState(toUInt64(number % 7)) AS Uniq,
+	anyState(toString(number)) AS Any,
+	anyIfState(toString(number), number % 7 = 0) AS AnyIf,
+	quantilesState(0.5, 0.9)(number) AS Quantiles,
+	groupArrayState(toString(number)) AS GroupArray
+FROM
+(
+	SELECT * FROM system.numbers LIMIT 1000
+)
+GROUP BY d, k1, k2
+ORDER BY d, k1, k2;
 SELECT d, k1, k2,
 	sumMerge(Sum), avgMerge(Avg), uniqMerge(Uniq),
 	anyMerge(Any), anyIfMerge(AnyIf),

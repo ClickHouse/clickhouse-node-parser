@@ -4,6 +4,7 @@ CREATE TABLE s
    value String
 )
 ENGINE = Memory;
+INSERT INTO s VALUES(1, 'OK');
 CREATE DICTIONARY dict
 (
    id UInt64,

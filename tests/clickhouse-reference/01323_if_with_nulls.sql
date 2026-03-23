@@ -27,6 +27,7 @@ FROM (SELECT 1 k, toInt8(1) a_num) AS x
 LEFT JOIN (SELECT 2 k, toInt8(1) b_num) AS y
 USING (k);
 CREATE TABLE test_nullable_float_issue7347 (ne UInt64,test Nullable(Float64)) ENGINE = MergeTree() PRIMARY KEY (ne) ORDER BY (ne);
+INSERT INTO test_nullable_float_issue7347 VALUES (1,NULL);
 SELECT test, toTypeName(test), IF(test = 0, 1, 0) FROM test_nullable_float_issue7347;
 -- test case from https://github.com/ClickHouse/ClickHouse/issues/10846
 

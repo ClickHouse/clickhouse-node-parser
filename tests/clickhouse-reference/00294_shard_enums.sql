@@ -7,9 +7,14 @@ create table enums (
     e Enum8('world' = 2, 'hello' = 1), sign Enum8('minus' = -1, 'plus' = 1),
     letter Enum16('a' = 0, 'b' = 1, 'c' = 2, '*' = -256)
 ) engine = MergeTree(d, k, 1);
+-- insert default values
+insert into enums (k) values (0);
 select * from enums;
+insert into enums (e, sign, letter) values ('!', 'plus', 'b');
 select * from enums ORDER BY _part;
+insert into enums (letter, e) values ('c', 'world');
 create table enums (e Enum8('a' = 0, 'b' = 1, 'c' = 2, 'd' = 3)) engine = TinyLog;
+insert into enums values ('d'), ('b'), ('a'), ('c'), ('a'), ('d');
 -- ORDER BY
 select * from enums order by e;
 select * from enums order by e desc;

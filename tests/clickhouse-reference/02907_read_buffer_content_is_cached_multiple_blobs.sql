@@ -6,5 +6,6 @@
 CREATE TABLE t(a UInt64)
 ENGINE = Log
 SETTINGS disk = 's3_cache';
+INSERT INTO t SELECT number FROM numbers_mt(1e6);
 -- First of all the cache should be warmed up
 SELECT * FROM t FORMAT Null;

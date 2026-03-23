@@ -6,6 +6,8 @@ CREATE TABLE literal_alias_misclassification
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO literal_alias_misclassification values(1, 'a', 1);
+INSERT INTO literal_alias_misclassification values(2, 'b', 2);
 SELECT 'const' AS r, b 
 FROM
   ( SELECT a AS r, b FROM literal_alias_misclassification ) AS t1

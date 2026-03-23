@@ -9,6 +9,8 @@ SETTINGS
     old_parts_lifetime=0,
     index_granularity=8192
 ;
+-- This triggers adjustment of the granules that was introduced in PR#17120
+INSERT INTO adaptive_table SELECT number, randomPrintableASCII(if(number BETWEEN 8192-30 AND 8192, 102400, 1)) FROM system.numbers LIMIT 16384;
 SELECT 'marks', marks FROM system.parts WHERE table = 'adaptive_table' AND database = currentDatabase() AND active FORMAT CSV;
 -- This works correctly, since it does not read any marks
 SELECT 'optimize_trivial_count_query', count() FROM adaptive_table SETTINGS

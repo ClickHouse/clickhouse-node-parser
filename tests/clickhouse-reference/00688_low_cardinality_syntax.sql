@@ -5,6 +5,12 @@ create table lc_int8_0 (val LowCardinality(Int8)) engine = Memory;
 create table lc_null_int8_0 (val LowCardinality(Nullable(Int8))) engine = Memory;
 create table lc_fix_str_0 (str LowCardinality(FixedString(2))) engine = Memory;
 create table lc_null_fix_str_0 (str LowCardinality(Nullable(FixedString(2)))) engine = Memory;
+insert into lc_str_0 select 'a';
+insert into lc_null_str_0 select 'a';
+insert into lc_int8_0 select 1;
+insert into lc_null_int8_0 select 1;
+insert into lc_fix_str_0 select 'ab';
+insert into lc_null_fix_str_0 select 'ab';
 select str from lc_str_0;
 select str from lc_null_str_0;
 select val from lc_int8_0;
@@ -19,3 +25,4 @@ select (toLowCardinality(z) as val) || 'b'  from (select arrayJoin(['c', 'd']) a
 create table lc_str_uuid(str1 String, str2 LowCardinality(String), str3 LowCardinality(String)) ENGINE=Memory;
 select toUUID(str1), toUUID(str2), toUUID(str3) from lc_str_uuid;
 select toUUID(str1, '', NULL), toUUID(str2, '', NULL), toUUID(str3, '', NULL) from lc_str_uuid;
+insert into lc_str_uuid values ('61f0c404-5cb3-11e7-907b-a6006ad3dba0', '61f0c404-5cb3-11e7-907b-a6006ad3dba0', '61f0c404-5cb3-11e7-907b-a6006ad3dba0');

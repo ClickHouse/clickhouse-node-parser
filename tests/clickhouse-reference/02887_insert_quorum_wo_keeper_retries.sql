@@ -3,4 +3,6 @@ CREATE TABLE quorum2(x UInt32) ENGINE ReplicatedMergeTree('/clickhouse/tables/{d
 SET insert_keeper_fault_injection_probability=0;
 SET insert_keeper_max_retries = 0;
 SET insert_quorum = 2;
+INSERT INTO quorum1 VALUES (1), (2), (3), (4), (5); -- {serverError UNKNOWN_STATUS_OF_INSERT}
+INSERT INTO quorum1 VALUES (6), (7), (8), (9), (10);
 SELECT count() FROM quorum1;

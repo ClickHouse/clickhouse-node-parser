@@ -11,6 +11,7 @@ SET allow_experimental_analyzer = 1;
 
 SELECT '--- with move to PREWHERE';
 CREATE TABLE tab (a Int64, b Int64) ENGINE = MergeTree ORDER BY a SETTINGS add_minmax_index_for_numeric_columns=0;
+INSERT INTO tab SELECT number, number FROM numbers(1_000_000); -- 1 mio rows sounds like a lot but the QCC doesn't cache anything for less data
 SELECT count(*) FROM tab WHERE b = 10_000 FORMAT Null SETTINGS use_query_condition_cache = true;
 SELECT
     ProfileEvents['QueryConditionCacheHits'],

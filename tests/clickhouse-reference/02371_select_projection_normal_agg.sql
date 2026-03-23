@@ -20,6 +20,26 @@ CREATE TABLE rng
     `duration_raw` UInt64
 )
 ENGINE = GenerateRandom(1024);
+INSERT INTO video_log SELECT
+  toUnixTimestamp('2022-07-22 01:00:00')
+  + (rowNumberInAllBlocks() / 20000),
+  user_id_raw % 100000000 AS user_id,
+  device_id_raw % 200000000 AS device_id,
+  domain_raw % 100,
+  (bytes_raw % 1024) + 128,
+  (duration_raw % 300) + 100
+FROM rng
+LIMIT 1728000;
+INSERT INTO video_log SELECT
+  toUnixTimestamp('2022-07-22 01:00:00')
+  + (rowNumberInAllBlocks() / 20000),
+  user_id_raw % 100000000 AS user_id,
+  100 AS device_id,
+  domain_raw % 100,
+  (bytes_raw % 1024) + 128,
+  (duration_raw % 300) + 100
+FROM rng
+LIMIT 10;
 CREATE TABLE video_log_result
 (
     `hour` DateTime,
@@ -30,6 +50,13 @@ ENGINE = MergeTree
 PARTITION BY toDate(hour)
 ORDER BY sum_bytes
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+INSERT INTO video_log_result SELECT
+    toStartOfHour(datetime) AS hour,
+    sum(bytes),
+    avg(duration)
+FROM video_log
+WHERE (toDate(hour) = '2022-07-22') AND (device_id = '100') --(device_id = '100') Make sure it's not good and doesn't go into prewhere.
+GROUP BY hour;
 SELECT
     equals(sum_bytes1, sum_bytes2),
     equals(avg_duration1, avg_duration2)

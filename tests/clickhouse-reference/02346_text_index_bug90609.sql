@@ -8,6 +8,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO tab VALUES ('Alick a01');
 SELECT 1
 FROM
 (

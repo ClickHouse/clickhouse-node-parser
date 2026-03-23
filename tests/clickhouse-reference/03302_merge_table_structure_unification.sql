@@ -11,6 +11,8 @@ CREATE TABLE test_b
     c Array(Nullable(String)),
     d DateTime('UTC') DEFAULT now(),
 ) ENGINE = Memory;
+INSERT INTO test_a VALUES (1, 'Hello', ['World']);
+INSERT INTO test_b VALUES (-1, ['Goodbye'], '2025-01-01 02:03:04');
 CREATE TABLE test_merge ENGINE = Merge(currentDatabase(), '^test_');
 -- TODO: defaults are not calculated
 SELECT * FROM test_merge ORDER BY a;

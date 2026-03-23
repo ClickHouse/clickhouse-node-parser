@@ -10,7 +10,13 @@ CREATE MATERIALIZED VIEW with_deduplication_mv UUID '00000510-1000-4000-8000-000
 CREATE MATERIALIZED VIEW without_deduplication_mv UUID '00000510-1000-4000-8000-000000000002'
     ENGINE = ReplicatedAggregatingMergeTree('/clickhouse/tables/{database}/test_00510/without_deduplication_mv', 'r1') ORDER BY dummy
     AS SELECT 0 AS dummy, countState(x) AS cnt FROM without_deduplication;
+INSERT INTO with_deduplication VALUES (42);
+INSERT INTO with_deduplication VALUES (43);
+INSERT INTO without_deduplication VALUES (42);
+INSERT INTO without_deduplication VALUES (43);
 SELECT count() FROM with_deduplication;
 SELECT count() FROM without_deduplication;
 SELECT countMerge(cnt) FROM with_deduplication_mv;
 SELECT countMerge(cnt) FROM without_deduplication_mv;
+INSERT INTO `.inner_id.00000510-1000-4000-8000-000000000001` SELECT 0 AS dummy, arrayReduce('countState', [toUInt32(42)]) AS cnt;
+INSERT INTO `.inner_id.00000510-1000-4000-8000-000000000002` SELECT 0 AS dummy, arrayReduce('countState', [toUInt32(42)]) AS cnt;

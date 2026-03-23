@@ -9,3 +9,4 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY key;
+INSERT INTO tab VALUES (1, 'Hello World');

@@ -1,5 +1,1 @@
-CREATE TABLE t0
-(
-    c0 Tuple()
-)
-ENGINE = Memory();
+<Parse Error>

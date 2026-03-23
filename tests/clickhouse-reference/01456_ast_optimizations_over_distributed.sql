@@ -9,6 +9,7 @@ SELECT transform(number, [1, 2], ['google', 'censor.net'], 'other') FROM numbers
 SELECT number > 0 ? 'censor.net' : 'google' FROM numbers(1);
 CREATE TABLE local_table (number UInt64) ENGINE = Memory;
 CREATE TABLE dist AS local_table ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), local_table);
+INSERT INTO local_table SELECT number FROM numbers(1);
 SELECT uniq(bitNot(number)) FROM dist;
 SELECT sum(number + 1) FROM dist;
 SELECT transform(number, [1, 2], ['google', 'censor.net'], 'other') FROM dist;

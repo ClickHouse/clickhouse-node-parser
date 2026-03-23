@@ -7,4 +7,6 @@ CREATE TABLE t
 ENGINE = SummingMergeTree()
 PARTITION BY d
 ORDER BY (d, s);
+INSERT INTO t (d, s, c) VALUES ('2020-01-01', 'ABC', 1);
+INSERT INTO t (d, s, c) VALUES ('2020-01-01', 'ABC', 2);
 SELECT * FROM t;

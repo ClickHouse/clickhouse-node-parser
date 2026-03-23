@@ -10,6 +10,7 @@ create table test_table as test_table_sharded
 engine=Distributed(test_cluster_two_shards, currentDatabase(), test_table_sharded, hash);
 SET distributed_product_mode = 'local';
 SET distributed_foreground_insert = 1;
+INSERT INTO test_table VALUES ('2020-04-20', 'Hello', 123);
 SELECT
   text,
   uniqExactIf(hash, hash IN (

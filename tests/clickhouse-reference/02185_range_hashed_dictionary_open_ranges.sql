@@ -6,6 +6,7 @@ CREATE TABLE 02185_range_dictionary_source_table
     value String
 )
 ENGINE = TinyLog;
+INSERT INTO 02185_range_dictionary_source_table VALUES (0, NULL, 5000, 'Value0'), (0, 5001, 10000, 'Value1'), (0, 10001, NULL, 'Value2');
 SELECT * FROM 02185_range_dictionary_source_table;
 CREATE DICTIONARY 02185_range_dictionary
 (

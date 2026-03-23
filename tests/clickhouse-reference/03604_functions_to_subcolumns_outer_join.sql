@@ -1,5 +1,7 @@
 CREATE TABLE users (uid Int16, name String, age Int16) ENGINE = Memory;
+INSERT INTO users VALUES (1231, 'John', 33);
 CREATE table users_ext(uid Int16, nullableStringCol Nullable(String)) ENGINE = Memory;
+INSERT INTO users_ext VALUES (123, NULL);
 SELECT nullableStringCol IS NOT NULL FROM users LEFT JOIN users_ext ON users_ext.uid = users.uid;
 SELECT count(nullableStringCol) FROM users LEFT JOIN users_ext ON users_ext.uid = users.uid;
 SELECT nullableStringCol IS NULL FROM users LEFT JOIN users_ext ON users_ext.uid = users.uid;

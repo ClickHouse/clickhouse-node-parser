@@ -1,6 +1,9 @@
 CREATE TABLE t1(k UInt32, v String) ENGINE ReplicatedMergeTree('/02898_parallel_replicas/{database}/test_tbl', 'r1') ORDER BY k;
 CREATE TABLE t2(k UInt32, v String) ENGINE ReplicatedMergeTree('/02898_parallel_replicas/{database}/test_tbl', 'r2') ORDER BY k;
 CREATE TABLE t3(k UInt32, v String) ENGINE ReplicatedMergeTree('/02898_parallel_replicas/{database}/test_tbl', 'r3') ORDER BY k;
+insert into t1 select number, toString(number) from numbers(1000, 1000);
+insert into t2 select number, toString(number) from numbers(2000, 1000);
+insert into t3 select number, toString(number) from numbers(3000, 1000);
 SET enable_parallel_replicas=1, max_parallel_replicas=3, cluster_for_parallel_replicas='test_cluster_one_shard_three_replicas_localhost';
 SET parallel_replicas_local_plan=0; -- corresponding logs about total rows are written only during interaction with remote nodes
 -- but with local plan a query execution can be finished locally even before we get response from remote node

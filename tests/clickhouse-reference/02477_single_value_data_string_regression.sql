@@ -9,6 +9,7 @@ CREATE TABLE argmaxstate_hex_small
     `state` String
 )
 ENGINE = TinyLog;
+INSERT into argmaxstate_hex_small VALUES ('22.8.5.29','0B0000003031323334353637383900010000000000000000'), ('22.8.6.71','0A00000030313233343536373839010000000000000000');
 -- Assert that the current version will write the same as 22.8.5 (last known good 22.8 minor)
 SELECT
     (SELECT hex(argMaxState('0123456789', number)) FROM numbers(1)) = state
@@ -27,6 +28,7 @@ CREATE TABLE argmaxstate_hex_large
     `state` String
 )
 ENGINE = TinyLog;
+INSERT into argmaxstate_hex_large VALUES ('22.8.5.29','350000004142434445464748494A4B4C4D4E4F505152535455565758595A6162636465666768696A6B6C6D6E6F707172737475767778797A00010000000000000000'), ('22.8.6.71','340000004142434445464748494A4B4C4D4E4F505152535455565758595A6162636465666768696A6B6C6D6E6F707172737475767778797A010000000000000000');
 SELECT
     (SELECT hex(argMaxState('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', number)) FROM numbers(1)) = state
 FROM argmaxstate_hex_large
@@ -43,6 +45,7 @@ CREATE TABLE argmaxstate_hex_empty
     `state` String
 )
 ENGINE = TinyLog;
+INSERT into argmaxstate_hex_empty VALUES ('22.8.5.29','0100000000010000000000000000'), ('22.8.6.71','00000000010000000000000000');
 SELECT
     (SELECT hex(argMaxState('', number)) FROM numbers(1)) = state
 FROM argmaxstate_hex_empty
@@ -84,5 +87,9 @@ SELECT 'fuzz3', finalizeAggregation(CAST(unhex('04000000' || '30313233' || '00' 
 SELECT 'fuzz4', finalizeAggregation(CAST(unhex('04000000' || '30313233' || '00'), 'AggregateFunction(argMax, String, UInt64)')) as x, length(x); -- { serverError INCORRECT_DATA }
 SELECT 'fuzz5', finalizeAggregation(CAST(unhex('0100000000000000000FFFFFFFF0'), 'AggregateFunction(argMax, UInt64, String)')); -- { serverError INCORRECT_DATA }
 create table aggr (n int, s AggregateFunction(max, String)) engine=MergeTree order by n;
+insert into aggr select 1, maxState('');
+insert into aggr select 2, maxState('\0');
+insert into aggr select 3, maxState('\0\0\0\0');
+insert into aggr select 4, maxState('abrac\0dabra\0');
 select n, maxMerge(s) as x, length(x) from aggr group by n order by n;
 select maxMerge(s) as x, length(x) from aggr;

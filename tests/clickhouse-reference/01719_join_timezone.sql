@@ -1,4 +1,5 @@
 CREATE TABLE test (timestamp DateTime('UTC'), i UInt8) Engine=MergeTree() PARTITION BY toYYYYMM(timestamp) ORDER BY (i);
+INSERT INTO test values ('2020-05-13 16:38:45', 1);
 SELECT
     toTimeZone(timestamp, 'America/Sao_Paulo') AS converted,
     timestamp AS original

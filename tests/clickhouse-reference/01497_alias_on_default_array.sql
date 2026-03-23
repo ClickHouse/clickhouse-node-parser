@@ -7,5 +7,6 @@ CREATE TABLE test_new_col
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO test_new_col (_csv) VALUES ('a1;b1;c1;d1'), ('a2;b2;c2;d2'), ('a3;b3;c3;d3');
 SELECT csv_col1, csv_col2 FROM test_new_col ORDER BY csv_col1;
 SELECT csv_col3 FROM test_new_col ORDER BY csv_col3;

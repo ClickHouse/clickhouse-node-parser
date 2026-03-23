@@ -16,4 +16,5 @@ AS SELECT
   test2,
   test3
 FROM source_table;
+INSERT INTO source_table (date, datetime, zoneId) VALUES ('2018-12-10', '2018-12-10 23:59:59', 1);
 SELECT * from table_view;

@@ -8,6 +8,8 @@ CREATE TABLE t_skip_index_insert
 ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity = 4, add_minmax_index_for_numeric_columns=0;
 SET enable_analyzer = 1;
 SET materialize_skip_indexes_on_insert = 0;
+INSERT INTO t_skip_index_insert SELECT number, number / 50 FROM numbers(100);
+INSERT INTO t_skip_index_insert SELECT number, number / 50 FROM numbers(100, 100);
 SELECT count() FROM t_skip_index_insert WHERE a >= 110 AND a < 130 AND b = 2;
 SET mutations_sync = 2;
 SELECT count(), sum(ProfileEvents['MergeTreeDataWriterSkipIndicesCalculationMicroseconds'])

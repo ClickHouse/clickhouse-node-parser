@@ -12,3 +12,10 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO tab (id, parent) VALUES
+  ('uuid1', 'uuid2'),
+  ('uuid3', 'uuid4'),
+  ('uuid4', 'uuid2'),
+  ('uuid2', 'empty'),
+  ('uuid5', 'uuid2'),
+  ('uuid6', 'uuid4');

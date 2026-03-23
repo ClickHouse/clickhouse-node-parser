@@ -16,6 +16,12 @@ CREATE TABLE table_with_version_replicated_2
 )
 ENGINE ReplicatedVersionedCollapsingMergeTree('/clickhouse/' || currentDatabase() || '/test_01511/{shard}/t', '2_{replica}', sign, version)
 ORDER BY key;
+INSERT INTO table_with_version_replicated_1 VALUES (1, '1', 1, -1);
+INSERT INTO table_with_version_replicated_1 VALUES (2, '2', 2, -1);
 SELECT * FROM table_with_version_replicated_1 ORDER BY key;
+INSERT INTO TABLE table_with_version_replicated_1 VALUES(1, '1', 1, 1);
+INSERT INTO TABLE table_with_version_replicated_1 VALUES(1, '1', 2, 1);
 SELECT * FROM table_with_version_replicated_1 FINAL ORDER BY key;
+INSERT INTO TABLE table_with_version_replicated_1 VALUES(3, '3', 65555, 1);
+INSERT INTO TABLE table_with_version_replicated_1 VALUES(3, '3', 65555, -1);
 SELECT * FROM table_with_version_replicated_2 FINAL ORDER BY key;

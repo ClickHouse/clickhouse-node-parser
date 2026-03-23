@@ -1,5 +1,11 @@
 CREATE TABLE t_parquet_prefetcher_read_big_at (a Int32, c String)
 ENGINE = S3(s3_conn, filename='test_03723_parquet_prefetcher_read_big_at', format='Parquet');
+-- Create parquet file
+INSERT INTO t_parquet_prefetcher_read_big_at
+    SELECT number, toString(number)
+    FROM system.numbers
+    LIMIT 1
+SETTINGS s3_truncate_on_insert=1;
 -- Trigger reading from it
 SELECT *
 FROM t_parquet_prefetcher_read_big_at

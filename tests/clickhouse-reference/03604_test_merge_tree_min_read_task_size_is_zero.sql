@@ -5,3 +5,4 @@ CREATE TABLE `03604_test` (c0 Int)
 ENGINE = MergeTree()
 ORDER BY tuple()
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
+INSERT INTO TABLE `03604_test` (c0) VALUES (1);

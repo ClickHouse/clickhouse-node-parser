@@ -1,4 +1,5 @@
 CREATE TABLE t_subcolumns_join (id UInt64) ENGINE=MergeTree ORDER BY tuple();
+INSERT INTO t_subcolumns_join SELECT number as number FROM numbers(10000);
 SELECT
     count()
 FROM (SELECT number FROM numbers(10)) as tbl LEFT JOIN t_subcolumns_join ON number = id

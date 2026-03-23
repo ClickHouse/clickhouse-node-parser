@@ -17,6 +17,10 @@ CREATE TABLE join_test
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO nested_test
+VALUES ('Hello', [1,2], [10,20]), ('World', [3,4,5], [30,40,50]), ('Goodbye', [], []);
+INSERT INTO join_test
+VALUES (1,1),(2,4),(3,20),(4,40);
 SELECT s
 FROM nested_test AS t1
 ARRAY JOIN nest

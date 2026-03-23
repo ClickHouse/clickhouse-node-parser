@@ -2,6 +2,7 @@ create table data_01223 (key Int) Engine=Memory();
 create table dist_layer_01223 as data_01223 Engine=Distributed(test_cluster_two_shards, currentDatabase(), data_01223);
 create table dist_01223 as data_01223 Engine=Distributed(test_cluster_two_shards, currentDatabase(), dist_layer_01223);
 select * from dist_01223;
+insert into data_01223 select * from numbers(3);
 select distinct * from dist_01223 order by key;
 select * from dist_01223 group by key order by key;
 select * from dist_01223 group by key order by key limit 1;
@@ -14,6 +15,8 @@ select * from cluster(test_cluster_two_shards, currentDatabase(), dist_01223) or
 select * from cluster(test_cluster_two_shards, currentDatabase(), dist_01223) group by key order by key;
 select a.key, b.key from (SELECT toInt32(number) key from numbers(2)) a left join (select distinct * from dist_01223) b using key order by b.key;
 select a.key, b.key from (SELECT toInt32(number) key from numbers(2)) a right join (select distinct * from dist_01223) b using key order by b.key;
+-- more data for GROUP BY
+insert into data_01223 select number%3 from numbers(30);
 select * from dist_01223 group by key order by key settings
 group_by_two_level_threshold=1,
 group_by_two_level_threshold_bytes=1;

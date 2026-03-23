@@ -19,6 +19,9 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY (id)
 SETTINGS index_granularity = 128;
+INSERT INTO tab SELECT number, 'text_pl_1' FROM numbers(64);
+INSERT INTO tab SELECT number, 'text_pl_2' FROM numbers(64);
+INSERT INTO tab SELECT number, 'text_pl_3' FROM numbers(64);
 CREATE VIEW text_index_cache_stats AS (
   SELECT
     concat('cache_hits = ', ProfileEvents['TextIndexPostingsCacheHits'], ', cache_misses = ', ProfileEvents['TextIndexPostingsCacheMisses'])

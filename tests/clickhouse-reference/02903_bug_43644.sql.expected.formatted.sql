@@ -1,14 +1,1 @@
-CREATE TABLE tab
-(
-    machine_id UInt64,
-    name String,
-    timestamp DateTime
-)
-ENGINE = MergeTree
-ORDER BY machine_id
-PARTITION BY toYYYYMM(timestamp);
-
-SELECT toStartOfInterval(timestamp, toIntervalSecond(300)) AS ts
-FROM tab
-WHERE ts > '2022-11-24 11:19:00'
-GROUP BY ts;
+<Parse Error>

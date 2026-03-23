@@ -8,7 +8,10 @@ CREATE TABLE tab(c0 LowCardinality(FixedString(9)) CODEC(DoubleDelta(2))) ENGINE
 
 SET enable_time_time64_type = 1;
 CREATE TABLE tab(c0 Time CODEC(DoubleDelta)) ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO TABLE tab (c0) VALUES ('100:00:00');
 CREATE TABLE tab(c0 Nullable(Time) CODEC(DoubleDelta)) ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO TABLE tab(c0) VALUES ('100:00:00');
+INSERT INTO TABLE tab(c0) VALUES (NULL);
 -- LowCardinality(Nullable(Time)) is rejected
 CREATE TABLE tab(c0 LowCardinality(Nullable(Time)) CODEC(DoubleDelta)) ENGINE = MergeTree() ORDER BY tuple(); -- { serverError BAD_ARGUMENTS }
 CREATE TABLE tab(c0 LowCardinality(Nullable(Time)) CODEC(DoubleDelta(2))) ENGINE = MergeTree() ORDER BY tuple();  -- { serverError BAD_ARGUMENTS }

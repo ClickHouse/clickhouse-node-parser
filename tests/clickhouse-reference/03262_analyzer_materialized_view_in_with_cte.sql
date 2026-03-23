@@ -46,4 +46,5 @@ WHERE id IN (
     SELECT max_id
     FROM id_set
 );
+INSERT INTO mv_test ( id, ref_id, display) values ( 1, 2, 'test');
 SELECT * FROM mv_test_target;

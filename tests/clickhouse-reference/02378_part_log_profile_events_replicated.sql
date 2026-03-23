@@ -12,6 +12,7 @@ PARTITION BY x >= 128
 -- SYSTEM STOP MERGES part_log_profile_events_r2;
 
 SET max_block_size = 64, max_insert_block_size = 64, min_insert_block_size_rows = 64;
+INSERT INTO part_log_profile_events_r1 SELECT number FROM numbers(1000);
 SELECT
     count() > 1
     AND SUM(ProfileEvents['ZooKeeperTransactions']) >= 4

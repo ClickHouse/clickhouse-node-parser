@@ -23,5 +23,6 @@ FROM
     FROM src
 )
 WHERE data_joined.id != 42;
+INSERT INTO src VALUES ([tuple(1), tuple(2)], 0), ([], 1), ([tuple(42)], 2);
 SELECT * FROM src;
 SELECT * FROM dst;

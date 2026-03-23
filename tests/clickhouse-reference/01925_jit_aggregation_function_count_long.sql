@@ -9,4 +9,5 @@ CREATE TABLE test_table
     value UInt8,
     value_nullable Nullable(UInt8)
 ) ENGINE=TinyLog;
+INSERT INTO test_table SELECT number % 3, number, if (number % 2 == 0, number, NULL) FROM system.numbers LIMIT 120;
 SELECT id, count(value), count(value_nullable) FROM test_table GROUP BY id ORDER BY id;

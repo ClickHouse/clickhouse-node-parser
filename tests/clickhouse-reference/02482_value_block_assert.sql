@@ -8,6 +8,10 @@ CREATE TABLE range_key_dictionary_source_table__fuzz_323
     `value_nullable` UUID
 )
 ENGINE = TinyLog;
+INSERT INTO range_key_dictionary_source_table__fuzz_323 FORMAT Values
+(1, toDate('2019-05-20'), toDate('2019-05-20'), 'First', 'First'); -- { error CANNOT_PARSE_INPUT_ASSERTION_FAILED }
+
+
 CREATE TABLE complex_key_dictionary_source_table__fuzz_267
 (
     `id` Decimal(38, 30),
@@ -16,3 +20,5 @@ CREATE TABLE complex_key_dictionary_source_table__fuzz_267
     `value_nullable` Nullable(UUID)
 )
 ENGINE = TinyLog;
+INSERT INTO complex_key_dictionary_source_table__fuzz_267 FORMAT Values
+(1, 'key', 'First', 'First'); -- { error CANNOT_READ_ARRAY_FROM_TEXT }

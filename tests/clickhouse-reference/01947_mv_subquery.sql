@@ -16,6 +16,8 @@ LEFT JOIN
     GROUP BY id
 ) _a
 USING (id);
+-- Inserting 2 numbers should require 2 calls to sleep
+INSERT into src SELECT number + 100 as id, 1 FROM numbers(2);
 SELECT '1947 #1 CHECK - TRUE' as test,
        ProfileEvents['SleepFunctionCalls'] as sleep_calls,
        ProfileEvents['SleepFunctionMicroseconds'] as sleep_microseconds
@@ -58,6 +60,8 @@ LEFT JOIN
     GROUP BY id
 ) _a
 USING (id);
+-- Inserting 2 numbers should require 2 calls to sleep
+INSERT into src SELECT number + 200 as id, 1 FROM numbers(2);
 SELECT '1947 #1 CHECK - FALSE' as test,
        ProfileEvents['SleepFunctionCalls'] as sleep_calls,
        ProfileEvents['SleepFunctionMicroseconds'] as sleep_microseconds

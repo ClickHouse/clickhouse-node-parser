@@ -58,6 +58,8 @@ as select id, sum(c) as c from dst_1_0 GROUP BY id;
 create materialized view mv_2_01
 TO dst_2_01
 as select id, sum(c) as c from dst_1_1 GROUP BY id;
+insert into src_table values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
+insert into src_table values (3, 'Charlie'), (4, 'David'), (3, 'Charlie');
 -- Expecting 8
 select 'src_table', count(*) from src_table;
 select * from src_table order by all;

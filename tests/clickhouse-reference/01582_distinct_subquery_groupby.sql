@@ -1,4 +1,5 @@
 CREATE TABLE t (a String, b Int) ENGINE = TinyLog;
+INSERT INTO t VALUES ('a', 0), ('a', 1), ('b', 0);
 SELECT * FROM t;
 SELECT '---';
 CREATE TABLE d (a String, b Int) ENGINE = Distributed(test_shard_localhost, currentDatabase(), t);

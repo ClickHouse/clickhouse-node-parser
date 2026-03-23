@@ -4,6 +4,7 @@ CREATE TABLE 02188_test_dictionary_source
     value String
 )
 ENGINE=TinyLog;
+INSERT INTO 02188_test_dictionary_source VALUES (0, 'Value');
 CREATE DICTIONARY 02188_test_dictionary_simple_primary_key
 (
     id UInt64,

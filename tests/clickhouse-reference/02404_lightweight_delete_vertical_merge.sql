@@ -12,6 +12,7 @@ SETTINGS
     min_bytes_for_wide_part = 1,
     enable_block_number_column = 0,
     enable_block_offset_column = 0;
+INSERT INTO lwd_test SELECT number AS id, toString(number) AS value FROM numbers(10);
 SELECT * FROM lwd_test ORDER BY id, value;
 SELECT name, part_type
 FROM system.parts
@@ -22,3 +23,7 @@ FROM system.parts_columns
 WHERE (database = currentDatabase()) AND (table = 'lwd_test') AND active
 ORDER BY name, column;
 SET mutations_sync = 0;
+-- add another part that doesn't have deleted rows
+INSERT INTO lwd_test SELECT number AS id, toString(number+100) AS value FROM numbers(10);
+-- add another part that doesn't have deleted rows
+INSERT INTO lwd_test SELECT number AS id, toString(number+200) AS value FROM numbers(10);

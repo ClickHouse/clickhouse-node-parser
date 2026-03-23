@@ -11,6 +11,7 @@ CREATE TABLE database_for_dict.table_for_dict
 )
 ENGINE = MergeTree()
 ORDER BY key_column;
+INSERT INTO database_for_dict.table_for_dict SELECT number, number % 17, toString(number * number), number / 2.0 from numbers(100);
 CREATE DICTIONARY database_for_dict.dict1
 (
   key_column UInt64 DEFAULT 0,
@@ -35,6 +36,7 @@ SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'dict1' D
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(HASHED());
 SELECT count(*) FROM database_for_dict.dict2;
+INSERT INTO database_for_dict.table_for_dict SELECT number, number % 17, toString(number * number), number / 2.0 from numbers(100, 100);
 CREATE DICTIONARY database_for_dict.dict3
 (
   key_column UInt64 DEFAULT 0,
@@ -47,6 +49,7 @@ SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'dict2' D
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(HASHED());
 SELECT count(*) FROM database_for_dict.dict3;
+INSERT INTO database_for_dict.table_for_dict SELECT number, number % 17, toString(number * number), number / 2.0 from numbers(200, 100);
 CREATE DICTIONARY database_for_dict.dict4
 (
   key_column UInt64 DEFAULT 0,

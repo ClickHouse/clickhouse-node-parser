@@ -5,6 +5,7 @@ CREATE TABLE test_table
     value String,
     value_array Array(UInt64)
 ) ENGINE=MergeTree ORDER BY id;
+INSERT INTO test_table VALUES (0, 'Value_0', [1,2,3]);
 -- { echoOn }
 
 SELECT * FROM test_table ARRAY JOIN value_array;

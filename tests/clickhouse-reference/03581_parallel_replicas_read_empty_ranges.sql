@@ -13,6 +13,7 @@ create table 03581_data (
 engine = MergeTree
 order by key
 settings index_granularity = 10;
+insert into 03581_data select number, number, number from numbers(1000);
 select 'Primary key:', count() from 03581_data where key = 2000;
 select 'Skip index MinMax:', count() from 03581_data where val_minmax = 2000;
 select 'Skip index Set:', count() from 03581_data where val_set = 2000;

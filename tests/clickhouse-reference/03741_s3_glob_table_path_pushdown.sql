@@ -3,6 +3,10 @@
 
 SET s3_truncate_on_insert = 1,
     s3_list_object_keys_size = 100;
+INSERT INTO FUNCTION s3(s3_conn, url = 'http://localhost:11111/test/03741_data/file1.parquet', format = Parquet) SELECT number FROM numbers(10);
+INSERT INTO FUNCTION s3(s3_conn, url = 'http://localhost:11111/test/03741_data/file2.parquet', format = Parquet) SELECT number FROM numbers(10);
+INSERT INTO FUNCTION s3(s3_conn, url = 'http://localhost:11111/test/03741_data/nested/file3.parquet', format = Parquet) SELECT number FROM numbers(10);
+INSERT INTO FUNCTION s3(s3_conn, url = 'http://localhost:11111/test/03741_data/nested/file4.parquet', format = Parquet) SELECT number FROM numbers(10);
 CREATE TABLE 03741_data ( number UInt64 )
 ENGINE = S3(s3_conn, url = 'http://localhost:11111/test/03741_data/**', format = Parquet);
 CREATE TABLE 03741_filter ( path String ) ENGINE = MergeTree ORDER BY tuple()

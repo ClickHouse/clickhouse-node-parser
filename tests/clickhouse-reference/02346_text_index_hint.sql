@@ -11,6 +11,7 @@ CREATE TABLE tab
     s String,
     INDEX idx (s) TYPE text(tokenizer = splitByNonAlpha) GRANULARITY 4
 ) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tab SELECT number FROM numbers(100000);
 SELECT count() FROM tab WHERE s = '5555';
 SELECT trim(explain) FROM
 (

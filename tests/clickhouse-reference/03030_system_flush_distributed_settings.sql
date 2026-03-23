@@ -5,4 +5,7 @@ create materialized view mv to data as select key, uniqExact(value::String) uniq
 create table dist_out as data engine=Distributed(test_shard_localhost, currentDatabase(), data);
 set prefer_localhost_replica=0;
 SET optimize_trivial_insert_select = 1;
+-- due to pushing to MV with aggregation the query needs ~300MiB
+-- but it will be done in background via "system flush distributed"
+insert into dist_in select number/100, number from system.numbers limit 3e6 settings max_block_size=3e6, max_memory_usage='100Mi';
 select count() from dist_out;

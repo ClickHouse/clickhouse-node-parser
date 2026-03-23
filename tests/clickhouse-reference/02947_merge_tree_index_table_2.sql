@@ -21,6 +21,9 @@ SETTINGS
     write_marks_for_substreams_in_compact_parts=0,
     serialization_info_version = 'basic',
     compact_parts_max_granules_to_buffer = 1;
+INSERT INTO t_merge_tree_index SELECT number % 5, number, 0, ['foo', 'bar'], ['aaa', 'bbb', 'ccc'], [11, 22, 33], (number, number), number FROM numbers(10);
+INSERT INTO t_merge_tree_index SELECT number % 5, number, number, 10, ['foo', 'bar'], ['aaa', 'bbb', 'ccc'], [11, 22, 33], (number, number), number FROM numbers(5);
+INSERT INTO t_merge_tree_index SELECT number % 5, number, number, 10, ['foo', 'bar'], ['aaa', 'bbb', 'ccc'], [11, 22, 33], (number, number), number FROM numbers(10);
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_merge_tree_index) ORDER BY part_name, mark_number FORMAT PrettyCompactNoEscapesMonoBlock;
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_merge_tree_index, with_marks = true) ORDER BY part_name, mark_number FORMAT PrettyCompactNoEscapesMonoBlock;
 SET describe_compact_output = 1;

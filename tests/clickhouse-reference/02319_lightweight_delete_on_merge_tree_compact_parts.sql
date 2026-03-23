@@ -1,9 +1,11 @@
 CREATE TABLE merge_table_standard_delete(id Int32, name String) ENGINE = MergeTree order by id settings min_bytes_for_wide_part=10000000;
+INSERT INTO merge_table_standard_delete select number, toString(number) from numbers(100);
 SELECT COUNT(), part_type FROM system.parts WHERE database = currentDatabase() AND table = 'merge_table_standard_delete' AND active GROUP BY part_type ORDER BY part_type;
 SET mutations_sync = 0;
 SET check_query_single_value_result = 1;
 SELECT COUNT() FROM merge_table_standard_delete;
 create table t_light(a int, b int, c int, index i_c(b) type minmax granularity 4) engine = MergeTree order by a partition by c % 5 settings min_bytes_for_wide_part=10000000;
+INSERT INTO t_light SELECT number, number, number FROM numbers(10);
 SELECT COUNT(), part_type FROM system.parts WHERE database = currentDatabase() AND table = 't_light' AND active GROUP BY part_type ORDER BY part_type;
 SELECT '-----lightweight mutation type-----';
 SELECT command, is_done FROM system.mutations WHERE database = currentDatabase() AND table = 't_light';
@@ -12,4 +14,5 @@ select * from t_light order by a;
 select table, partition, name, rows from system.parts where database = currentDatabase() AND active and table ='t_light' order by name;
 select table, partition, name, rows from system.parts where database = currentDatabase() AND active and table ='t_light' and rows > 0 order by name;
 CREATE TABLE t_large(a UInt32, b int) ENGINE=MergeTree order BY a settings min_bytes_for_wide_part=0, index_granularity=8192, index_granularity_bytes='10Mi';
+INSERT INTO t_large SELECT number + 1, number + 1  FROM numbers(100000);
 SELECT * FROM t_large WHERE a in (1,1000,1005,50000) order by a;

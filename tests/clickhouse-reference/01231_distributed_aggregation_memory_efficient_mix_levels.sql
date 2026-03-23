@@ -5,6 +5,8 @@ create database if not exists shard_0;
 create database if not exists shard_1;
 create table shard_0.shard_01231_distributed_aggregation_memory_efficient (x UInt64) engine = MergeTree order by x;
 create table shard_1.shard_01231_distributed_aggregation_memory_efficient (x UInt64) engine = MergeTree order by x;
+insert into shard_0.shard_01231_distributed_aggregation_memory_efficient select * from numbers(1);
+insert into shard_1.shard_01231_distributed_aggregation_memory_efficient select * from numbers(10);
 create table ma_dist (x UInt64) ENGINE =  Distributed(test_cluster_two_shards_different_databases, '', 'shard_01231_distributed_aggregation_memory_efficient');
 set distributed_aggregation_memory_efficient = 1;
 set group_by_two_level_threshold = 2;

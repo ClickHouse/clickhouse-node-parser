@@ -7,5 +7,7 @@ CREATE TABLE compress_table
 )
 ENGINE = MergeTree()
 ORDER BY key;
+INSERT INTO compress_table VALUES(1, '1', '1', '1');
 SELECT * FROM compress_table;
+INSERT INTO compress_table VALUES(2, '2', '2', '2');
 SELECT * FROM compress_table ORDER BY key;

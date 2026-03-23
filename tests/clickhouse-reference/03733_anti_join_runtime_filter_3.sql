@@ -2,6 +2,12 @@ SET enable_analyzer = 1;
 SET enable_join_runtime_filters = 1;
 CREATE TABLE nation(n_nationkey Int32, n_name String) ENGINE MergeTree ORDER BY n_nationkey;
 CREATE TABLE customer(c_custkey Int32, c_nationkey Int32) ENGINE MergeTree ORDER BY c_custkey;
+INSERT INTO nation VALUES (5,'ETHIOPIA'),(6,'FRANCE'),(7,'GERMANY');
+INSERT INTO customer SELECT number, 5 FROM numbers(500);
+INSERT INTO customer SELECT number, 6 FROM numbers(6000);
+INSERT INTO customer SELECT number, 7 FROM numbers(70000);
+INSERT INTO customer SELECT number, 201 FROM numbers(1);
+INSERT INTO customer SELECT number, 202 FROM numbers(2);
 SET enable_parallel_replicas=0;
 SET query_plan_join_swap_table=0;
 -- 1 element in filter

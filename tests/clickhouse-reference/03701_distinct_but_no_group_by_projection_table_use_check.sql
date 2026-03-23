@@ -6,6 +6,9 @@ CREATE TABLE tab (
   )
 ) ENGINE = MergeTree
 order by tuple();
+INSERT INTO tab
+SELECT number, number % 3, number % 5, number % 7
+FROM numbers_mt(30);
 SELECT DISTINCT x, z FROM tab;
 SELECT DISTINCT z FROM tab;
 SELECT DISTINCT x, y FROM tab;
@@ -18,6 +21,9 @@ CREATE TABLE tab (
   )
 ) ENGINE = MergeTree
 order by tuple();
+INSERT INTO tab
+SELECT number, number % 3, number % 5
+FROM numbers_mt(30);
 SELECT DISTINCT x / 2, y % 10 FROM tab;
 SELECT DISTINCT x / 2 FROM tab;
 SELECT DISTINCT x / 2, y FROM tab;

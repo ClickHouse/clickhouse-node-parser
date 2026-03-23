@@ -21,6 +21,12 @@ CREATE TABLE t3
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO t1 SELECT * REPLACE(1 as fid, 2 as tid) 
+FROM generateRandom(1, 2, 2) LIMIT 1000;
+INSERT INTO t2 SELECT * REPLACE(1 as id, 'OPEN' as status, NULL as resource_id) 
+FROM generateRandom(1, 2, 2) LIMIT 1000;
+INSERT INTO t3 SELECT * REPLACE('BACKLOG' as status, 2 as id) 
+FROM generateRandom(1, 2, 2) LIMIT 1000;
 SET enable_parallel_replicas = 0;
 SET enable_analyzer = 1;
 SELECT 1

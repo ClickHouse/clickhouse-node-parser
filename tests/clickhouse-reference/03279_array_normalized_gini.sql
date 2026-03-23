@@ -9,6 +9,7 @@ CREATE TABLE t
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO t VALUES ([0.9, 0.3, 0.8, 0.7], [6, 1, 0, 2]), ([0.9, 0.3, 0.8, 0.7], [6, 1, 0, 2]), ([0.9, 0.3, 0.8, 0.7], [6, 1, 0, 2]), ([0.9, 0.3, 0.8, 0.7], [6, 1, 0, 2]);
 SELECT arrayNormalizedGini(a1, a2) FROM t;
 SELECT arrayNormalizedGini(a1, [6, 1, 0, 2]) FROM t;
 SELECT arrayNormalizedGini([0.9, 0.3, 0.8, 0.7], a2) FROM t;

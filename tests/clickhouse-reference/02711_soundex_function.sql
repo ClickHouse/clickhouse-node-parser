@@ -13,6 +13,7 @@ SELECT soundex('S3344mith0000');
 SELECT soundex('Smith');
 SELECT '---';
 CREATE TABLE tab (col String) Engine=MergeTree ORDER BY col;
+INSERT INTO tab VALUES ('') ('12345') ('341Jons54326ton') ('A2222222') ('Fairdale') ('Faredale') ('Jon1s2o3n') ('Jonson') ('Jonston') ('M\acDonald22321') ('MacDonald') ('S3344mith0000') ('Smith');
 SELECT soundex(col) FROM tab;
 -- negative tests
 SELECT soundex(toFixedString('Smith', 5)); -- { serverError ILLEGAL_COLUMN }

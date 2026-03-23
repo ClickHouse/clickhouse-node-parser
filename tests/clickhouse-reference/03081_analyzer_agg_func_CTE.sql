@@ -7,3 +7,4 @@ CREATE TABLE test
 )
 ENGINE = MergeTree
 ORDER BY dt;
+insert into test values ('2020-01-01', 'text1'), ('2019-01-01', 'text2'), ('1900-01-01', 'text3');

@@ -7,6 +7,7 @@ set enable_parallel_replicas = 0;
 set prefer_localhost_replica=1;
 set optimize_aggregation_in_order=0, optimize_read_in_order=0;
 CREATE TABLE tab0 (x UInt32, y UInt32) engine = MergeTree order by x SETTINGS add_minmax_index_for_numeric_columns=0;
+insert into tab0 select number, number from numbers(8192 * 123);
 select * from (explain indexes=1, actions=1, distributed=1
     select * from (select * from remote('127.0.0.{1,2}', currentDatabase(), tab0)) where x = 42
 );
@@ -58,6 +59,7 @@ CREATE TABLE tab1
     INDEX ngrams colAlias TYPE ngrambf_v1(3, 2097152, 3, 0) GRANULARITY 10,
 )
 ENGINE = MergeTree ORDER BY recordTimestamp SETTINGS add_minmax_index_for_numeric_columns=0;
+INSERT INTO tab1 SELECT * FROM generateRandom('tenant String, recordTimestamp Int64, responseBody String') LIMIT 10;
 select * from (explain indexes=1, distributed=1
     select * from (select * from remote('127.0.0.{1,2}', currentDatabase(), tab1)) where (tenant,recordTimestamp) IN (
     select tenant,recordTimestamp from remote('127.0.0.{1,2}', currentDatabase(), tab1) where colAlias like '%abcd%'

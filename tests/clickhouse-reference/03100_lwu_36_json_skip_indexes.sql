@@ -7,6 +7,9 @@ CREATE TABLE test (
 ENGINE = MergeTree()
 ORDER BY (id)
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1, index_granularity = 1;
+INSERT INTO test VALUES (1, '{"name":"foo", "age":15}');
+INSERT INTO test VALUES (2, '{"name":"boo", "age":15}');
+INSERT INTO test VALUES (3, '{"name":"bar", "age":15}');
 SET enable_lightweight_update = 1;
 SELECT * FROM test
 WHERE document.name = 'aaa' OR document.name = 'boo'

@@ -7,6 +7,9 @@ CREATE TABLE 01754_dictionary_db.complex_key_simple_attributes_source_table
    value_second String
 )
 ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO 01754_dictionary_db.complex_key_simple_attributes_source_table VALUES(0, 'id_key_0', 'value_0', 'value_second_0');
+INSERT INTO 01754_dictionary_db.complex_key_simple_attributes_source_table VALUES(1, 'id_key_1', 'value_1', 'value_second_1');
+INSERT INTO 01754_dictionary_db.complex_key_simple_attributes_source_table VALUES(2, 'id_key_2', 'value_2', 'value_second_2');
 CREATE DICTIONARY 01754_dictionary_db.direct_dictionary_complex_key_simple_attributes
 (
    id UInt64,
@@ -35,6 +38,9 @@ CREATE TABLE 01754_dictionary_db.complex_key_complex_attributes_source_table
    value_second Nullable(String)
 )
 ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO 01754_dictionary_db.complex_key_complex_attributes_source_table VALUES(0, 'id_key_0', 'value_0', 'value_second_0');
+INSERT INTO 01754_dictionary_db.complex_key_complex_attributes_source_table VALUES(1, 'id_key_1', 'value_1', NULL);
+INSERT INTO 01754_dictionary_db.complex_key_complex_attributes_source_table VALUES(2, 'id_key_2', 'value_2', 'value_second_2');
 CREATE DICTIONARY 01754_dictionary_db.direct_dictionary_complex_key_complex_attributes
 (
     id UInt64,

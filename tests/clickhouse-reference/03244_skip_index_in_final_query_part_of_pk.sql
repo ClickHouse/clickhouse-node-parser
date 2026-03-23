@@ -15,6 +15,8 @@ CREATE TABLE tab
 ENGINE = ReplacingMergeTree
 ORDER BY (id1, id2)
 SETTINGS index_granularity = 4;
+INSERT INTO tab SELECT number/100, number, number FROM numbers(1000);
+INSERT INTO tab SELECT number/50, number, number * 5 FROM numbers(1000);
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes=1 SELECT count(*) FROM tab FINAL WHERE v = 222
 )
@@ -28,4 +30,5 @@ CREATE TABLE t0
     c0 Int64,
     INDEX i1 c0 TYPE set(0)
 ) ENGINE = SummingMergeTree() PARTITION BY (c0) ORDER BY (c0);
+INSERT INTO TABLE t0 (c0) SELECT number FROM numbers(10);
 SELECT rank() OVER () FROM t0 FINAL WHERE t0.c0 > 0.1 FORMAT null;

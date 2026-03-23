@@ -1,7 +1,10 @@
 CREATE TABLE realtimedrep (`amount` Int32) ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO realtimedrep FORMAT Values (100);
 CREATE TABLE realtimedistributed (`amount` Int32) ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), realtimedrep, rand());
 CREATE TABLE realtimebuff__fuzz_19 (`amount` UInt32) ENGINE = Buffer(currentDatabase(), 'realtimedistributed', 16, 3600, 36000, 10000, 1000000, 10000000, 100000000);
+INSERT INTO realtimebuff__fuzz_19 FORMAT Values (101);
 CREATE TABLE realtimebuff__fuzz_20 (`amount` Nullable(Int32)) ENGINE = Buffer(currentDatabase(), 'realtimedistributed', 16, 3600, 36000, 10000, 1000000, 10000000, 100000000);
+INSERT INTO realtimebuff__fuzz_20 FORMAT Values (101);
 SELECT amount FROM realtimebuff__fuzz_19 t1 ORDER BY ALL;
 SELECT amount + 1 FROM realtimebuff__fuzz_19 t1 ORDER BY ALL;
 SELECT amount + 1 FROM realtimebuff__fuzz_20 t1 ORDER BY ALL;

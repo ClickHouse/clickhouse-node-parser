@@ -10,6 +10,7 @@ CREATE TABLE test_table
     id UInt64,
     value Tuple(value_0_level_0 Tuple(value_0_level_1 String, value_1_level_1 String), value_1_level_0 String)
 ) ENGINE=MergeTree ORDER BY id;
+INSERT INTO test_table VALUES (0, (('value_0_level_1', 'value_1_level_1'), 'value_1_level_0'));
 SELECT '--';
 SELECT * FROM test_table;
 SELECT id, value FROM test_table;
@@ -30,6 +31,7 @@ CREATE TABLE test_table
     id UInt64,
     value Nested (value_0_level_0 Nested(value_0_level_1 String, value_1_level_1 String), value_1_level_0 String)
 ) ENGINE=MergeTree ORDER BY id;
+INSERT INTO test_table VALUES (0, [[('value_0_level_1', 'value_1_level_1')]], ['value_1_level_0']);
 SELECT value.value_0_level_0 AS value_alias, value_alias.value_0_level_1, value_alias.value_1_level_1 FROM test_table;
 SELECT value.value_0_level_0 AS value_alias, value_alias.* FROM test_table;
 SELECT value.value_0_level_0 AS value_alias, value_alias.* APPLY toString FROM test_table;

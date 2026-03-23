@@ -19,6 +19,18 @@ FROM
     ))
 )
 WHERE (explain LIKE '%Name%') OR (explain LIKE '%Description%') OR (explain LIKE '%Parts%') OR (explain LIKE '%Granules%') OR (explain LIKE '%Range%');
+-- bar# will be parsed differently by different tokenizers, e.g. splitbyString -> 'bar#'; splitByNonAlpha -> 'bar'
+-- we want to test that the search functions will use the same tokenizer on un-materialized column parts
+INSERT INTO tab(id, message)
+VALUES
+    (1, 'abc def foo'),
+    (2, 'abc def bar#'),
+    (3, 'abc baz foo');
+INSERT INTO tab(id, message)
+VALUES
+    (4, 'abc baz bar'),
+    (5, 'abc zzz foo'),
+    (6, 'abc zzz bar');
 -- { echoOn }
 SELECT * FROM explain_indexes;
 --

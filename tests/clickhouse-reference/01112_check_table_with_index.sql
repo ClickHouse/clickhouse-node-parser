@@ -4,3 +4,4 @@ CREATE TABLE check_table_with_indices (
   data String,
   INDEX a (id) type minmax GRANULARITY 3
 ) ENGINE = MergeTree() ORDER BY id;
+INSERT INTO check_table_with_indices VALUES (0, 'test'), (1, 'test2');

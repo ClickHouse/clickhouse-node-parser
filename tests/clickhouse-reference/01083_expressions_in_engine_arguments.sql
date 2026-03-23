@@ -7,6 +7,7 @@ CREATE TABLE merge (n Int8) ENGINE = Merge('', lower('DISTRIBUTED'));
 CREATE TABLE merge_tf as merge(currentDatabase(), '.*');
 CREATE TABLE distributed (n Int8) ENGINE = Distributed(test_shard_localhost, currentDatabase(), 'fi' || 'le');
 CREATE TABLE distributed_tf as cluster('test' || '_' || 'shard_localhost', '', 'buf' || 'fer');
+INSERT INTO buffer VALUES (1);
 CREATE TABLE url (n UInt64, col String) ENGINE=URL
 (
     replace

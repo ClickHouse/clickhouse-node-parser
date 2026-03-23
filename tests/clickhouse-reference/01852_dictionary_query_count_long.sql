@@ -3,6 +3,7 @@ CREATE TABLE simple_key_source_table_01862
     id UInt64,
     value String
 ) ENGINE = Memory();
+INSERT INTO simple_key_source_table_01862 VALUES (1, 'First');
 CREATE DICTIONARY simple_key_flat_dictionary_01862
 (
     id UInt64,
@@ -71,6 +72,7 @@ CREATE TABLE complex_key_source_table_01862
     id_key String,
     value String
 ) ENGINE = Memory();
+INSERT INTO complex_key_source_table_01862 VALUES (1, 'FirstKey', 'First');
 CREATE DICTIONARY complex_key_hashed_dictionary_01862
 (
     id UInt64,
@@ -116,6 +118,7 @@ CREATE TABLE range_key_source_table_01862
     first Date,
     last Date
 ) ENGINE = Memory();
+INSERT INTO range_key_source_table_01862 VALUES (1, 'First', today(), today());
 CREATE DICTIONARY simple_key_range_hashed_dictionary_01862
 (
     id UInt64,
@@ -136,6 +139,7 @@ CREATE TABLE ip_trie_source_table_01862
     prefix String,
     value String
 ) ENGINE = Memory();
+INSERT INTO ip_trie_source_table_01862 VALUES ('127.0.0.0/8', 'First');
 CREATE DICTIONARY ip_trie_dictionary_01862
 (
     prefix String,
@@ -155,7 +159,16 @@ CREATE TABLE polygons_01862 (
     key Array(Array(Array(Tuple(Float64, Float64)))),
     name String
 ) ENGINE = Memory;
+INSERT INTO polygons_01862 VALUES ([[[(3, 1), (0, 1), (0, -1), (3, -1)]]], 'Click East');
+INSERT INTO polygons_01862 VALUES ([[[(-1, 1), (1, 1), (1, 3), (-1, 3)]]], 'Click North');
+INSERT INTO polygons_01862 VALUES ([[[(-3, 1), (-3, -1), (0, -1), (0, 1)]]], 'Click South');
+INSERT INTO polygons_01862 VALUES ([[[(-1, -1), (1, -1), (1, -3), (-1, -3)]]], 'Click West');
 CREATE TABLE points_01862 (x Float64, y Float64) ENGINE = Memory;
+INSERT INTO points_01862 VALUES ( 0.1,  0.0);
+INSERT INTO points_01862 VALUES (-0.1,  0.0);
+INSERT INTO points_01862 VALUES ( 0.0,  1.1);
+INSERT INTO points_01862 VALUES ( 0.0, -1.1);
+INSERT INTO points_01862 VALUES ( 3.0,  3.0);
 CREATE DICTIONARY polygon_dictionary_01862
 (
     key Array(Array(Array(Tuple(Float64, Float64)))),

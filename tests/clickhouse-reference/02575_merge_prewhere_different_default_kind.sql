@@ -14,6 +14,7 @@ CREATE TABLE t1
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 8192;
+INSERT INTO t1 (a) VALUES ('OK');
 -- { echoOn }
 -- for pure PREWHERE it is not addressed yet.
 SELECT * FROM m PREWHERE a = 'OK';
@@ -31,3 +32,4 @@ CREATE TABLE t2
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 8192;
+INSERT INTO t2 (a) VALUES ('OK');

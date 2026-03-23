@@ -11,3 +11,4 @@ CREATE TABLE test_skip_idx (
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 1, index_granularity_bytes = 0, min_bytes_for_wide_part = 0;
+INSERT INTO test_skip_idx SELECT number FROM system.numbers LIMIT 5 OFFSET 1;

@@ -26,6 +26,7 @@ CREATE TABLE defaults
     i32 Int32,
     i64 Int64
 ) ENGINE = Memory();
+INSERT INTO defaults values (3, 12, 4, 56, 3, 12, -4, 56) (2, 10, 21, 20, 2, 10, -21, 20) (1, 4, 9, 5, 1, 4, -9, 5) (0, 5, 7, 7, 0, 5, -7, 7);
 SELECT space(30::UInt8) FROM defaults;
 SELECT space(30::UInt16) FROM defaults;
 SELECT space(30::UInt32) FROM defaults;

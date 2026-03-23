@@ -3,6 +3,7 @@ CREATE TABLE test_table
     id UInt64,
     value Date32
 ) ENGINE=TinyLog;
+INSERT INTO test_table VALUES (0, toDate32('2019-05-05'));
 CREATE DICTIONARY test_dictionary
 (
     id UInt64,

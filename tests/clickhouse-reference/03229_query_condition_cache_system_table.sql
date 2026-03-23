@@ -6,6 +6,7 @@
 
 SET allow_experimental_analyzer = 1;
 CREATE TABLE tab (a Int64, b Int64) ENGINE = MergeTree ORDER BY a;
+INSERT INTO tab SELECT number, number FROM numbers(1_000_000); -- 1 mio rows sounds like a lot but the QCC doesn't cache anything if there is less data
 SELECT '--- with move to PREWHERE';
 SET optimize_move_to_prewhere = true;
 SELECT count(*) FROM tab WHERE b = 10_000 SETTINGS use_query_condition_cache = true FORMAT Null;

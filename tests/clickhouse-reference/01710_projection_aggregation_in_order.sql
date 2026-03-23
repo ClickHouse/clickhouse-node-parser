@@ -14,6 +14,11 @@ CREATE TABLE normal
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO normal SELECT
+    number,
+    toDateTime('2021-12-06 00:00:00') + number,
+    number
+FROM numbers(100000);
 SET force_optimize_projection=1;
 SET optimize_use_projections=1, optimize_aggregation_in_order=1, enable_parallel_replicas=0;
 SET optimize_aggregation_in_order=0;
@@ -34,3 +39,8 @@ CREATE TABLE agg
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO agg SELECT
+    1,
+    toDateTime('2021-12-06 00:00:00') + number,
+    number
+FROM numbers(100000);

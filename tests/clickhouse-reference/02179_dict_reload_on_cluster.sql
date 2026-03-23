@@ -9,6 +9,7 @@ PRIMARY KEY key
 SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'dict_data' PASSWORD '' DB 'dict_db_02179'))
 LIFETIME(MIN 0 MAX 0)
 LAYOUT(FLAT());
+INSERT INTO dict_db_02179.dict_data VALUES(1,11);
 SELECT query_count FROM system.dictionaries WHERE database = 'dict_db_02179' AND name = 'dict';
 SELECT dictGetUInt64('dict_db_02179.dict', 'val', toUInt64(0));
 SET distributed_ddl_output_mode='throw';

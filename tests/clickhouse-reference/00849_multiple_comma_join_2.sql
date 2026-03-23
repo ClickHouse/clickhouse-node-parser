@@ -69,6 +69,12 @@ SELECT countIf(explain like '%COMMA%' OR explain like '%CROSS%'), countIf(explai
     EXPLAIN QUERY TREE SELECT t1.a FROM t1 JOIN t2 USING a CROSS JOIN t3) SETTINGS enable_analyzer = 1;
 SELECT countIf(explain like '%COMMA%' OR explain like '%CROSS%'), countIf(explain like '%INNER%') FROM (
     EXPLAIN QUERY TREE SELECT t1.a FROM t1 JOIN t2 ON t1.a = t2.a CROSS JOIN t3) SETTINGS enable_analyzer = 1;
+-- {echoOff}
+
+INSERT INTO t1 values (1,1), (2,2), (3,3), (4,4);
+INSERT INTO t2 values (1,1), (1, Null);
+INSERT INTO t3 values (1,1), (1, Null);
+INSERT INTO t4 values (1,1), (1, Null);
 SET enable_analyzer = 1;
 SELECT * FROM t1, t2
 ORDER BY t1.a, t2.b;

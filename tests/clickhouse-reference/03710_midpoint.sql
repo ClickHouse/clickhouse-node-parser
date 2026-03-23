@@ -12,6 +12,9 @@ CREATE TABLE midpoint_test
     d64  Decimal64(3)
 )
 ENGINE = Memory;
+INSERT INTO midpoint_test VALUES
+    (1, 10, 100, -1, -10, -100, 1.5, 10.5, 1.234, 10.987),
+    (100, 200, 300, 50, 150, 250, 10.0, 20.0, 100.123, 200.456);
 -- ===============================================================
 -- Integer types (signed, unsigned, mixed)
 -- ===============================================================
@@ -99,6 +102,11 @@ CREATE TABLE midpoint_nullable_test
     c Int32
 )
 ENGINE = Memory;
+INSERT INTO midpoint_nullable_test VALUES
+    (1,    3,    10),
+    (NULL, 3,    10),
+    (1,    NULL, 10),
+    (NULL, NULL, 10);
 SELECT a, b, midpoint(a, b) AS result, toTypeName(result) AS type
 FROM midpoint_nullable_test
 ORDER BY ifNull(a, -999), ifNull(b, -999);
@@ -156,6 +164,15 @@ CREATE TABLE midpoint_nullable3_test
     c Nullable(Int32)
 )
 ENGINE = Memory;
+INSERT INTO midpoint_nullable3_test VALUES
+    (1,    3,    5),
+    (NULL, 3,    5),
+    (1,    NULL, 5),
+    (1,    3,    NULL),
+    (NULL, NULL, 5),
+    (NULL, 3,    NULL),
+    (1,    NULL, NULL),
+    (NULL, NULL, NULL);
 SELECT
     a, b, c,
     midpoint(a, b, c) AS result,

@@ -65,6 +65,7 @@ SELECT countIfArray([1, NULL], [1, 0]) AS x FROM remote('127.0.0.{1,2}', numbers
 SELECT countIfArrayIf([1, NULL], [1, 0], 1) AS x FROM remote('127.0.0.{1,2}', numbers(3));
 SELECT countIfArrayArray([[1, NULL]], [[1, 0]]) AS x FROM remote('127.0.0.{1,2}', numbers(3));
 CREATE TABLE t1 (`n` UInt64) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO t1 SELECT * FROM numbers(10);
 SET
 enable_parallel_replicas=1,
     max_parallel_replicas=2,

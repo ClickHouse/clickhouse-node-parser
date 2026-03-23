@@ -15,6 +15,12 @@ CREATE TABLE tab
 ENGINE = MergeTree()
 ORDER BY (id)
 SETTINGS index_granularity = 1;
+INSERT INTO tab SELECT number, ['abc'], ['abc'] FROM numbers(512);
+INSERT INTO tab SELECT number, ['foo'], ['foo'] FROM numbers(512);
+INSERT INTO tab SELECT number, ['bar'], ['bar'] FROM numbers(512);
+INSERT INTO tab SELECT number, ['foo', 'bar'], ['foo', 'bar'] FROM numbers(512);
+INSERT INTO tab SELECT number, ['foo', 'baz'], ['foo', 'baz'] FROM numbers(512);
+INSERT INTO tab SELECT number, ['bar', 'baz'], ['bar', 'baz'] FROM numbers(512);
 SELECT '-- with String';
 SELECT count() FROM tab WHERE has(arr, 'foo');
 SELECT count() FROM tab WHERE has(arr, 'bar');

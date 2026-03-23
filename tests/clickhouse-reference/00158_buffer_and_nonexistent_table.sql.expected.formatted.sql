@@ -1,10 +1,1 @@
-CREATE DATABASE IF NOT EXISTS {CLICKHOUSE_DATABASE:Identifier};
-
-CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.mt_buffer_00158
-(
-    d Date DEFAULT today(),
-    x UInt64
-)
-ENGINE = Buffer({CLICKHOUSE_DATABASE:Identifier}, mt_00158, 16, 100, 100, 1000000, 1000000, 1000000000, 1000000000);
-
-SET send_logs_level = 'fatal'; -- Supress "Destination table test2.mt doesn't exist. Block of data is discarded."
+<Parse Error>

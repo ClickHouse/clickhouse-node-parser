@@ -9,6 +9,7 @@ CREATE TABLE merge_tree_table
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+INSERT INTO merge_tree_table VALUES(toDate('2016-03-01'), 4, 0, 0, 1486392);
 SELECT count() FROM merge_tree_table;
 CREATE TABLE distributed_tbl
 (

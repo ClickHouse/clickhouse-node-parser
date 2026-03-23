@@ -17,6 +17,7 @@ FORMAT PrettyCompactNoEscapes;
 SELECT name, is_in_partition_key, is_in_sorting_key, is_in_primary_key, is_in_sampling_key
 FROM system.columns WHERE table = 'check_system_tables' AND database = currentDatabase()
 FORMAT PrettyCompactNoEscapes;
+INSERT INTO check_system_tables VALUES (1, 1, 1);
 SELECT total_bytes_uncompressed, total_bytes, total_rows FROM system.tables WHERE name = 'check_system_tables' AND database = currentDatabase();
 -- Check VersionedCollapsingMergeTree
 CREATE TABLE check_system_tables
@@ -42,6 +43,7 @@ CREATE TABLE check_system_tables
   ) ENGINE = MergeTree(Event, intHash32(UserId), (Counter, Event, intHash32(UserId)), 8192);
 CREATE TABLE check_system_tables (key UInt8) ENGINE = TinyLog();
 SELECT total_bytes, total_rows FROM system.tables WHERE name = 'check_system_tables' AND database = currentDatabase();
+INSERT INTO check_system_tables VALUES (1);
 CREATE TABLE check_system_tables (key UInt8) ENGINE = Log();
 CREATE TABLE check_system_tables (key UInt8) ENGINE = StripeLog();
 CREATE TABLE check_system_tables (key UInt16) ENGINE = Memory();
@@ -54,8 +56,11 @@ CREATE TABLE check_system_tables (key UInt16) ENGINE = Buffer(
     100, 100, /* min_rows /max_rows */
     0,   1e6  /* min_bytes/max_bytes */
 );
+INSERT INTO check_system_tables SELECT * FROM numbers_mt(50);
 SELECT lifetime_bytes, lifetime_rows FROM system.tables WHERE name = 'check_system_tables' AND database = currentDatabase();
+INSERT INTO check_system_tables SELECT * FROM numbers_mt(101); -- direct block write (due to min_rows exceeded)
 CREATE TABLE check_system_tables Engine=Set() AS SELECT * FROM numbers(50);
+INSERT INTO check_system_tables SELECT number+50 FROM numbers(50);
 CREATE TABLE check_system_tables Engine=Join(ANY, LEFT, number) AS SELECT * FROM numbers(50);
 SELECT total_bytes BETWEEN 5000 AND 15000, total_rows FROM system.tables WHERE name = 'check_system_tables' AND database = currentDatabase();
 -- Build MergeTree table for Materialized view

@@ -97,6 +97,8 @@ CREATE TABLE uk_mortgage_rates (
     bank Decimal32(2)
 )
 ENGINE Memory();
+INSERT INTO uk_mortgage_rates VALUES ('2004-02-29', 5.02, 4.9, 4);
+INSERT INTO uk_mortgage_rates VALUES ('2004-03-31', 5.11, 4.91, 4);
 CREATE DICTIONARY uk_mortgage_rates_dict (
     date DateTime64,
     variable Decimal32(2),

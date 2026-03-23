@@ -1,6 +1,9 @@
 CREATE TABLE t1(k UInt32, v String) ENGINE ReplicatedMergeTree('/02946_parallel_replicas/{database}/test_tbl', 'r1') ORDER BY k;
 CREATE TABLE t2(k UInt32, v String) ENGINE ReplicatedMergeTree('/02946_parallel_replicas/{database}/test_tbl', 'r2') ORDER BY k;
 CREATE TABLE t3(k UInt32, v String) ENGINE ReplicatedMergeTree('/02946_parallel_replicas/{database}/test_tbl', 'r3') ORDER BY k;
+insert into t1 select number % 4, toString(number) from numbers(1000, 1000);
+insert into t2 select number % 4, toString(number) from numbers(2000, 1000);
+insert into t3 select number % 4, toString(number) from numbers(3000, 1000);
 -- w/o parallel replicas
 SELECT
     k,

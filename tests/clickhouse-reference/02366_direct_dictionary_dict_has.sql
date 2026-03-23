@@ -10,6 +10,17 @@ CREATE TABLE test_lookup_table
    lookup_key UInt64,
 )
 ENGINE = Memory;
+INSERT INTO test_table VALUES(0, 'value_0');
+INSERT INTO test_lookup_table VALUES(0, 0);
+INSERT INTO test_lookup_table VALUES(1, 0);
+INSERT INTO test_lookup_table VALUES(2, 0);
+INSERT INTO test_lookup_table VALUES(3, 1);
+INSERT INTO test_lookup_table VALUES(4, 0);
+INSERT INTO test_lookup_table VALUES(5, 1);
+INSERT INTO test_lookup_table VALUES(6, 0);
+INSERT INTO test_lookup_table VALUES(7, 2);
+INSERT INTO test_lookup_table VALUES(8, 1);
+INSERT INTO test_lookup_table VALUES(9, 0);
 CREATE DICTIONARY test_dictionary
 (
    id UInt64,

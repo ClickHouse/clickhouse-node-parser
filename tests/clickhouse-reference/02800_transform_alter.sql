@@ -12,6 +12,8 @@ CREATE TABLE updates
 )
 ENGINE = MergeTree
 ORDER BY x;
+INSERT INTO test_xy(x, y) VALUES (1, 'a1'), (2, 'a2'), (3, 'a3');
+INSERT INTO updates(x, y) VALUES  (2, 'b2'), (3, 'b3');
 SELECT x, y,
     transform(x,
         (select groupArray(x) from (select x, y from updates order by x) t1),

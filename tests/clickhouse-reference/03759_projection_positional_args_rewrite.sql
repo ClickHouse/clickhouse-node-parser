@@ -11,6 +11,7 @@ CREATE TABLE test_proj_positional
 )
 ENGINE = MergeTree
 ORDER BY a;
+INSERT INTO test_proj_positional VALUES (1, 'x'), (2, 'y');
 SET enable_positional_arguments_for_projections = 0;
 SELECT * FROM test_proj_positional ORDER BY a;
 CREATE TABLE test_proj_positional
@@ -20,3 +21,4 @@ CREATE TABLE test_proj_positional
 )
 ENGINE = MergeTree
 ORDER BY a;
+INSERT INTO test_proj_positional VALUES (3, 'z'), (4, 'w');

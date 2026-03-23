@@ -15,5 +15,6 @@ CREATE TABLE test_table
     value_1 Array(UInt8),
     value_2 Array(UInt8),
 ) ENGINE=MergeTree ORDER BY tuple();
+INSERT INTO test_table VALUES (0, [1, 2, 3], [1, 2, 3, 4]);
 SELECT id, arrayJoin(value_1) FROM test_table;
 SELECT id, arrayJoin(value_1) AS a, a FROM test_table;

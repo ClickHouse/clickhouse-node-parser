@@ -1,4 +1,5 @@
 CREATE TABLE t1 (key UInt64, a UInt8, b String, c Float64) ENGINE = MergeTree() ORDER BY key;
+INSERT INTO t1 SELECT number, number, toString(number), number from numbers(4);
 CREATE DICTIONARY dict_flat (key UInt64 DEFAULT 0, a UInt8 DEFAULT 42, b String DEFAULT 'x', c Float64 DEFAULT 42.0)
 PRIMARY KEY key
 SOURCE(CLICKHOUSE(TABLE 't1'))

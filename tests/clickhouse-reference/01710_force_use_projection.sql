@@ -3,3 +3,4 @@ set optimize_use_projections = 1, force_optimize_projection = 1;
 set parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 select sum(eventcnt) eventcnt, d1 from tp group by d1;
 select avg(eventcnt) eventcnt, d1 from tp group by d1;
+insert into tp values (1, 2, 3);

@@ -8,6 +8,7 @@
 
 SET enable_analyzer = 1;
 CREATE TABLE tab0 (x UInt32, y UInt32) ENGINE = MergeTree ORDER BY x;
+INSERT INTO tab0 SELECT number, number FROM numbers(100);
 -- Test GLOBAL IN with nullable subquery (materialize(toNullable(...)))
 -- This used to crash because when building external table from a ready set,
 -- the set elements (non-nullable) were written directly without converting

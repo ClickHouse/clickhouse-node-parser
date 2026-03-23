@@ -1,16 +1,1 @@
-CREATE TABLE t
-(
-    i Int32
-)
-ENGINE = MergeTree
-ORDER BY tuple()
-PARTITION BY i
-SETTINGS index_granularity = 1;
-
-SELECT arraySort(groupArray(i))
-FROM t
-WHERE tuple(i, i) NOT IN (tuple(1, 2));
-
-SELECT arraySort(groupArray(i))
-FROM t
-WHERE NOT has([tuple(1, 2)], (i, i));
+<Parse Error>

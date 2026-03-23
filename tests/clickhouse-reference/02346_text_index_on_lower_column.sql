@@ -9,6 +9,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO tab (text) VALUES ('Hello, world!');
 SELECT count() FROM tab WHERE hasToken(text, 'Hello');
 SELECT trim(explain) FROM
 (

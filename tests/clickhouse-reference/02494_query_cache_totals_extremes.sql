@@ -1,4 +1,5 @@
 CREATE TABLE tbl (key UInt64, agg UInt64) ENGINE = MergeTree ORDER BY key;
+INSERT INTO tbl VALUES (1, 3), (2, 2), (1, 4), (1, 1);
 SELECT key, sum(agg) FROM tbl GROUP BY key WITH totals ORDER BY key SETTINGS use_query_cache = 1;
 SELECT count(*) FROM system.query_cache;
 SELECT '---';

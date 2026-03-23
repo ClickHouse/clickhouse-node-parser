@@ -7,3 +7,4 @@ CREATE TABLE t_remove_sample_by(id UInt64) ENGINE = Memory;
 CREATE TABLE t_remove_sample_by(id String)
 ENGINE = MergeTree ORDER BY id SAMPLE BY id
 SETTINGS check_sample_column_is_correct = 0;
+INSERT INTO t_remove_sample_by VALUES (1);

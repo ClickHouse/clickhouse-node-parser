@@ -4,6 +4,7 @@ SET send_logs_level='error';
 CREATE TABLE tmp_01683 (n Int8) ENGINE=Memory;
 CREATE TABLE dist_01683 (n UInt64) Engine=Distributed(test_cluster_two_shards, currentDatabase(), tmp_01683, n);
 SET distributed_foreground_insert=1;
+INSERT INTO dist_01683 VALUES (1),(2);
 SET distributed_foreground_insert=0;
 -- TODO: cover distributed_background_insert_batch=1
 

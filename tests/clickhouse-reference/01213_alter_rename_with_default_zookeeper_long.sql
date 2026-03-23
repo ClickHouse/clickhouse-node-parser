@@ -9,6 +9,7 @@ CREATE TABLE table_rename_with_default
 ENGINE = MergeTree()
 PARTITION BY date
 ORDER BY key;
+INSERT INTO table_rename_with_default (date, key, value1) SELECT toDateTime(toDate('2019-10-01') + number % 3, 'Asia/Istanbul'), number, toString(number)  from numbers(9);
 SELECT * FROM table_rename_with_default WHERE key = 1 FORMAT TSVWithNames;
 SELECT value2 FROM table_rename_with_default WHERE key = 1;
 SELECT value3 FROM table_rename_with_default WHERE key = 1;
@@ -22,4 +23,5 @@ CREATE TABLE table_rename_with_ttl
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test_01213/table_rename_with_ttl', '1')
 ORDER BY tuple()
 TTL date2 + INTERVAL 500 MONTH;
+INSERT INTO table_rename_with_ttl SELECT toDateTime(toDate('2019-10-01') + number % 3, 'Asia/Istanbul'), toDateTime(toDate('2018-10-01') + number % 3, 'Asia/Istanbul'), toString(number), toString(number) from numbers(9);
 SELECT * FROM table_rename_with_ttl WHERE value1 = '1' FORMAT TSVWithNames;

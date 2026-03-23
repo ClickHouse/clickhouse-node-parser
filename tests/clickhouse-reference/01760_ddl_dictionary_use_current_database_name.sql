@@ -4,6 +4,8 @@ CREATE TABLE ddl_dictonary_test_source
    value UInt64
 )
 ENGINE = TinyLog;
+INSERT INTO ddl_dictonary_test_source VALUES (0, 0);
+INSERT INTO ddl_dictonary_test_source VALUES (1, 1);
 CREATE DICTIONARY ddl_dictionary_test
 (
    id UInt64,

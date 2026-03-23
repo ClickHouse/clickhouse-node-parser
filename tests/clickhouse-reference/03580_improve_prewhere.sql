@@ -15,6 +15,13 @@ CREATE TABLE test_improve_prewhere (
     date Date STATISTICS(CountMin),
 ) ENGINE = MergeTree()
 ORDER BY primary_key;
+INSERT INTO test_improve_prewhere
+SELECT
+    hex(number % 100) AS primary_key,
+    arrayElement(['hello', 'world', 'test', 'example', 'sample'], number % 5 + 1) AS normal_column,
+    number % 1000 + 1 AS value,
+    toDate('2025-08-01') + number AS date
+FROM numbers(100000);
 -- { echoOn }
 -- Condition: lower(primary_key) = '00' can't make use of primary key index. It shouldn't be moved to the end of prewhere conditions.
 select trimLeft(explain) from (

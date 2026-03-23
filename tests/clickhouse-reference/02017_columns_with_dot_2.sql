@@ -6,4 +6,5 @@ CREATE TABLE test_nested
 )
 ENGINE = MergeTree()
 ORDER BY id;
+INSERT INTO test_nested VALUES('123', 'asd', [1,2]);
 SELECT * FROM test_nested;

@@ -13,6 +13,7 @@ CREATE TABLE test_table_unsigned_values
 
     weight UInt64
 ) ENGINE=TinyLog;
+INSERT INTO test_table_unsigned_values SELECT number % 3, number, number, number, number, number % 3 FROM system.numbers LIMIT 120;
 SELECT
     id,
     avgWeighted(value1, weight),
@@ -31,6 +32,7 @@ CREATE TABLE test_table_signed_values
 
     weight UInt64
 ) ENGINE=TinyLog;
+INSERT INTO test_table_signed_values SELECT number % 3, number, number, number, number, number % 3 FROM system.numbers LIMIT 120;
 SELECT
     id,
     avgWeighted(value1, weight),
@@ -47,6 +49,7 @@ CREATE TABLE test_table_float_values
 
     weight UInt64
 ) ENGINE=TinyLog;
+INSERT INTO test_table_float_values SELECT number % 3, number, number, number % 3 FROM system.numbers LIMIT 120;
 SELECT id, avgWeighted(value1, weight), avgWeighted(value2, weight) FROM test_table_float_values GROUP BY id ORDER BY id;
 CREATE TABLE test_table_nullable_unsigned_values
 (
@@ -59,6 +62,7 @@ CREATE TABLE test_table_nullable_unsigned_values
 
     weight UInt64
 ) ENGINE=TinyLog;
+INSERT INTO test_table_nullable_unsigned_values SELECT number % 3, number, number, number, number, number % 3 FROM system.numbers LIMIT 120;
 SELECT
     id,
     avgWeighted(value1, weight),
@@ -77,6 +81,7 @@ CREATE TABLE test_table_nullable_signed_values
 
     weight UInt64
 ) ENGINE=TinyLog;
+INSERT INTO test_table_nullable_signed_values SELECT number % 3, number, number, number, number, number % 3 FROM system.numbers LIMIT 120;
 SELECT
     id,
     avgWeighted(value1, weight),
@@ -93,6 +98,7 @@ CREATE TABLE test_table_nullable_float_values
 
     weight UInt64
 ) ENGINE=TinyLog;
+INSERT INTO test_table_nullable_float_values SELECT number % 3, number, number, number % 3 FROM system.numbers LIMIT 120;
 SELECT id, avgWeighted(value1, weight), avgWeighted(value2, weight) FROM test_table_nullable_float_values GROUP BY id ORDER BY id;
 CREATE TABLE test_table_null_specifics
 (
@@ -105,6 +111,9 @@ CREATE TABLE test_table_null_specifics
     weight UInt64,
     weight_nullable Nullable(UInt64)
 ) ENGINE=TinyLog;
+INSERT INTO test_table_null_specifics VALUES (0, 1, 1, NULL, 1, 1);
+INSERT INTO test_table_null_specifics VALUES (0, 2, NULL, NULL, 2, NULL);
+INSERT INTO test_table_null_specifics VALUES (0, 3, 3, NULL, 3, 3);
 SELECT
     id,
     avgWeighted(value1, weight),

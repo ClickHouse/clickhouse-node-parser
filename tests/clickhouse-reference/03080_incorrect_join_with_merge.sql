@@ -26,6 +26,8 @@ CREATE TABLE second_table
     id2 String
 )
 ENGINE = Distributed('test_shard_localhost', currentDatabase(), 'second_table_lr');
+INSERT INTO first_table VALUES ('1', '2'), ('3', '4');
+INSERT INTO second_table VALUES ('1', '2'), ('3', '4');
 CREATE TABLE two_tables
 (
     id String,

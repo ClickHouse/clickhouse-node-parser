@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS agg_table
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY (xxx, time);
+INSERT INTO agg_table SELECT toDateTime('2020-10-01 19:20:30'), 'hello', ([any(number)], sum(number)), sum(number),
+    sumMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))) FROM numbers(10);
 SELECT * FROM agg_table;
 SELECT if(xxx = 'x', ([2], 3), ([3], 4)) FROM agg_table;
 SELECT if(xxx = 'x', ([2], 3), ([3], 4, 'q', 'w', 7)) FROM agg_table; --{ serverError NO_COMMON_TYPE }

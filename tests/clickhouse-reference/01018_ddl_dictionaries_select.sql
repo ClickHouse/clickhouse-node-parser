@@ -11,6 +11,7 @@ CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict
 )
 ENGINE = MergeTree()
 ORDER BY key_column;
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_for_dict SELECT number, number % 17, toString(number * number), number / 2.0 from numbers(100);
 CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1
 (
   key_column UInt64 DEFAULT 0,

@@ -1,4 +1,5 @@
 create table data (key Int, value Int) engine=MergeTree() order by key settings add_minmax_index_for_numeric_columns=0;
+insert into data select *, *+1000000 from numbers(100000);
 -- { echo }
 select * from mergeTreeAnalyzeIndexes(currentDatabase(), data);
 select * from mergeTreeAnalyzeIndexes(currentDatabase(), data, key = 8193);

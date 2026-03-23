@@ -17,5 +17,16 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+INSERT INTO tab VALUES
+    (DEFAULT),
+    (DEFAULT);
 SELECT count() FROM tab WHERE col OR col IS NULL;
+INSERT INTO tab VALUES
+    (DEFAULT),
+    (DEFAULT),
+    (TRUE);
+INSERT INTO tab VALUES
+    (DEFAULT),
+    (DEFAULT),
+    (FALSE);
 set secondary_indices_enable_bulk_filtering = 0;

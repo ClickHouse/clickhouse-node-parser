@@ -5,6 +5,7 @@ CREATE TABLE table_02916
 )
 ENGINE = MergeTree
 ORDER BY ID;
+INSERT INTO table_02916 VALUES (1234, 'abcd');
 CREATE TABLE table_02916_distributed
 (
     `ID` UInt32,

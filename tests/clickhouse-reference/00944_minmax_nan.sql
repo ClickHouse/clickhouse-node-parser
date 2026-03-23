@@ -6,6 +6,14 @@ CREATE TABLE tab (
 )
 ENGINE = MergeTree()
 ORDER BY id; -- This is important. We want to have additional primary index that does not use the column `col`.
+INSERT INTO tab VALUES
+    (1, 1.0),
+    (2, inf),
+    (3, 2.0),
+    (4, -inf),
+    (5, 3.0),
+    (6, nan),
+    (7, -nan);
 SELECT count() FROM tab WHERE col = nan;
 SELECT count() FROM tab WHERE col <> nan;
 SELECT count() FROM tab WHERE col = -nan;

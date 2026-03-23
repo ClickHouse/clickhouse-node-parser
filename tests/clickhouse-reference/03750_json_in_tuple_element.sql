@@ -12,6 +12,7 @@ select ['{"a" : 42}']::Array(JSON(a UInt32))[1].a;
 select materialize(['{"a" : 42}'])::Array(JSON)[1].a;
 select materialize(['{"a" : 42}'])::Array(JSON(a UInt32))[1].a;
 create table test (json JSON(a UInt32)) engine=Memory;
+insert into test values ('{"a" : 42, "b" : "s1", "c" : [{"d" : 1}, {"d" : 2}, {"d" : 3}]}');
 select tupleElement(json, 'a') from test;
 select tupleElement(json, 'b') from test;
 select tupleElement(json, 'c') from test;

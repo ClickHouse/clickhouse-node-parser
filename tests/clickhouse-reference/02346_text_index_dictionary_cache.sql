@@ -19,6 +19,12 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY (id)
 SETTINGS index_granularity = 128;
+--- The text index would have two dictionary blocks.
+INSERT INTO tab
+SELECT
+    number,
+    concat('text_', leftPad(toString(number), 3, '0'))
+FROM numbers(256);
 CREATE VIEW text_index_cache_stats AS (
   SELECT
     concat('cache_hits = ', toString(ProfileEvents['TextIndexDictionaryBlockCacheHits']), ', cache_misses = ', toString(ProfileEvents['TextIndexDictionaryBlockCacheMisses']))

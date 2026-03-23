@@ -1,15 +1,19 @@
 -- simple test case
 create table if not exists replacing_mt (x String) engine=ReplacingMergeTree() ORDER BY x;
+insert into replacing_mt values ('abc');
 -- expected output is 2 because final is turned off
 select count() from replacing_mt;
 set final = 1;
 -- JOIN test cases
 create table if not exists lhs (x String) engine=ReplacingMergeTree() ORDER BY x;
 create table if not exists rhs (x String) engine=ReplacingMergeTree() ORDER BY x;
+insert into lhs values ('abc');
+insert into rhs values ('abc');
 set final = 0;
 -- expected output is 4 because select_final == 0
 select count() from lhs inner join rhs on lhs.x = rhs.x;
 create table if not exists regular_mt_table (x String) engine=MergeTree() ORDER BY x;
+insert into regular_mt_table values ('abc');
 -- expected output is 1, it should silently ignore final modifier
 select count() from regular_mt_table;
 -- view test
@@ -21,6 +25,14 @@ select count() from nv_regular_mt_table;
 create table if not exists left_table (id UInt64, val_left String) engine=ReplacingMergeTree() ORDER BY id;
 create table if not exists middle_table (id UInt64, val_middle String) engine=MergeTree() ORDER BY id;
 create table if not exists right_table (id UInt64, val_right String) engine=ReplacingMergeTree() ORDER BY id;
+insert into left_table values (1,'a');
+insert into left_table values (1,'b');
+insert into left_table values (1,'c');
+insert into middle_table values (1,'a');
+insert into middle_table values (1,'b');
+insert into right_table values (1,'a');
+insert into right_table values (1,'b');
+insert into right_table values (1,'c');
 -- expected output
 -- 1 c a c
 -- 1 c b c
@@ -35,6 +47,9 @@ select left_table.id,val_left, val_middle, val_right from left_table
 ORDER BY left_table.id, val_left, val_middle, val_right;
 create table if not exists right_table_local (id UInt64, val_right String) engine=ReplacingMergeTree() ORDER BY id;
 create table if not exists right_table engine=Distributed('test_shard_localhost', currentDatabase(), right_table_local) AS right_table_local;
+insert into right_table_local values (1,'a');
+insert into right_table_local values (1,'b');
+insert into right_table_local values (1,'c');
 SET prefer_localhost_replica=0;
 -- expected output:
 -- 1 c 1 a 1 c
@@ -48,6 +63,14 @@ create table if not exists table_to_merge_a (id UInt64, val String) engine=Repla
 create table if not exists table_to_merge_b (id UInt64, val String) engine=MergeTree() ORDER BY id;
 create table if not exists table_to_merge_c (id UInt64, val String) engine=ReplacingMergeTree() ORDER BY id;
 CREATE TABLE merge_table Engine=Merge(currentDatabase(), '^(table_to_merge_[a-z])$') AS table_to_merge_a;
+insert into table_to_merge_a values (1,'a');
+insert into table_to_merge_a values (1,'b');
+insert into table_to_merge_a values (1,'c');
+insert into table_to_merge_b values (2,'a');
+insert into table_to_merge_b values (2,'b');
+insert into table_to_merge_c values (3,'a');
+insert into table_to_merge_c values (3,'b');
+insert into table_to_merge_c values (3,'c');
 -- expected output:
 -- 1 c, 2 a, 2 b, 3 c
 SELECT * FROM merge_table ORDER BY id, val;

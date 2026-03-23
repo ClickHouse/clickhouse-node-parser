@@ -7,4 +7,5 @@ SELECT sumOrNull(n) FROM defaults;
 SELECT count(n) FROM defaults;
 SELECT countOrNull(n) FROM defaults;
 SET aggregate_functions_null_for_empty=1;
+INSERT INTO defaults SELECT * FROM numbers(10);
 SET aggregate_functions_null_for_empty=0;

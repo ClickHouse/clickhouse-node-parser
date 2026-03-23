@@ -5,6 +5,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 PRIMARY KEY tuple();
+INSERT INTO tab VALUES (['a', 'b']);
 SELECT '---';
 SELECT table, name, type
 FROM system.data_skipping_indices

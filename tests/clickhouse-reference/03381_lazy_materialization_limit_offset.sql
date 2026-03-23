@@ -5,6 +5,7 @@
 
 set max_block_size = 20000;
 create table test (x UInt64, json String) engine=MergeTree order by x;
+insert into test select number, toJSONString(map('key' || multiIf(number < 60000, number % 2, number < 120000, number % 2 + 2, number % 2 + 4), 'value' || number)) from numbers(200000);
 set optimize_read_in_order=0; -- disabling read in order optimization leads to error
 select json from test order by x limit 10 offset 120000;
 select json.key0, json.key1, json.key2, json.key3, json.key4, json.key5 from test order by x limit 10 offset 120000;

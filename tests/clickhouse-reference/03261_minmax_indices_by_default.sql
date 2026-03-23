@@ -13,6 +13,7 @@ SETTINGS add_minmax_index_for_numeric_columns = true,
          add_minmax_index_for_temporal_columns = true,
          index_granularity = 8192,
          index_granularity_bytes = 10485760;
+INSERT INTO tbl1 VALUES (1,1,1), (2,2,2), (3,3,3);
 -- Expect x_idx and two implicit minmax indices
 SELECT name, type, expr, data_compressed_bytes FROM system.data_skipping_indices WHERE table = 'tbl1' AND database = currentDatabase();
 -- Check that users cannot create explicit minmax indices with the names of internal minmax indices

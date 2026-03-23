@@ -10,6 +10,8 @@ CREATE TABLE test_multiple_array_join (
         value String
     )
 ) Engine=MergeTree ORDER BY id;
+INSERT INTO test_multiple_array_join VALUES (1, ['Thomas', 'Michel'], ['Aquinas', 'Foucault'], ['profession', 'alive'], ['philosopher', 'no']);
+INSERT INTO test_multiple_array_join VALUES (2, ['Thomas', 'Nicola'], ['Edison', 'Tesla'], ['profession', 'alive'], ['inventor', 'no']);
 SELECT *
 FROM test_multiple_array_join
 ARRAY JOIN person

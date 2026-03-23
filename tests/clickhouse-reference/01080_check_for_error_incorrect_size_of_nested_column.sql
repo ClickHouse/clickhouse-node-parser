@@ -1,4 +1,5 @@
 CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.test_table_01080 (dim_key Int64, dim_id String) ENGINE = MergeTree Order by (dim_key);
+insert into {CLICKHOUSE_DATABASE:Identifier}.test_table_01080 values(1,'test1');
 CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.test_dict_01080 ( dim_key Int64, dim_id String )
 PRIMARY KEY dim_key
 source(clickhouse(host 'localhost' port tcpPort() user 'default' password '' db currentDatabase() table 'test_table_01080'))

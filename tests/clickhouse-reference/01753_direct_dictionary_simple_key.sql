@@ -6,6 +6,9 @@ CREATE TABLE 01753_dictionary_db.simple_key_simple_attributes_source_table
    value_second String
 )
 ENGINE = TinyLog;
+INSERT INTO 01753_dictionary_db.simple_key_simple_attributes_source_table VALUES(0, 'value_0', 'value_second_0');
+INSERT INTO 01753_dictionary_db.simple_key_simple_attributes_source_table VALUES(1, 'value_1', 'value_second_1');
+INSERT INTO 01753_dictionary_db.simple_key_simple_attributes_source_table VALUES(2, 'value_2', 'value_second_2');
 CREATE DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_simple_attributes
 (
    id UInt64,
@@ -32,6 +35,9 @@ CREATE TABLE 01753_dictionary_db.simple_key_complex_attributes_source_table
    value_second Nullable(String)
 )
 ENGINE = TinyLog;
+INSERT INTO 01753_dictionary_db.simple_key_complex_attributes_source_table VALUES(0, 'value_0', 'value_second_0');
+INSERT INTO 01753_dictionary_db.simple_key_complex_attributes_source_table VALUES(1, 'value_1', NULL);
+INSERT INTO 01753_dictionary_db.simple_key_complex_attributes_source_table VALUES(2, 'value_2', 'value_second_2');
 CREATE DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_complex_attributes
 (
    id UInt64,
@@ -56,6 +62,10 @@ CREATE TABLE 01753_dictionary_db.simple_key_hierarchy_table
     id UInt64,
     parent_id UInt64
 ) ENGINE = TinyLog();
+INSERT INTO 01753_dictionary_db.simple_key_hierarchy_table VALUES (1, 0);
+INSERT INTO 01753_dictionary_db.simple_key_hierarchy_table VALUES (2, 1);
+INSERT INTO 01753_dictionary_db.simple_key_hierarchy_table VALUES (3, 1);
+INSERT INTO 01753_dictionary_db.simple_key_hierarchy_table VALUES (4, 2);
 CREATE DICTIONARY 01753_dictionary_db.direct_dictionary_simple_key_hierarchy
 (
    id UInt64,

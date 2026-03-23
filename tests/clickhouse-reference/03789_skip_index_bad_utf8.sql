@@ -4,5 +4,7 @@ CREATE TABLE test (
 )
     ENGINE = MergeTree ORDER BY tuple()
     SETTINGS add_minmax_index_for_numeric_columns=0,  min_bytes_for_wide_part=1000;
+INSERT INTO test SELECT number FROM numbers(1); -- Compact / packed
+INSERT INTO test SELECT number FROM numbers(10000); -- Wide
 SELECT count() FROM test;
 SELECT min(`col_\xFF\0привет���`), max(`col_\xFF\0привет���`) FROM test;

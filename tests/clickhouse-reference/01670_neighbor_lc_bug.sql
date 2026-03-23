@@ -21,6 +21,7 @@ CREATE TABLE neighbor_test
 ENGINE = MergeTree
 PARTITION BY tuple()
 ORDER BY rowNr;
+INSERT INTO neighbor_test VALUES (1, 'String 1', 'String 1'), (2, 'String 1', 'String 1'), (3, 'String 2', 'String 2');
 SELECT
     rowNr,
     val_string,

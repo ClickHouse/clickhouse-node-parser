@@ -15,6 +15,13 @@ AS SELECT
     uniqState(UserID)               AS Users
 FROM visits_null
 GROUP BY CounterID, StartDate;
+INSERT INTO visits_null
+SELECT
+    CounterID,
+    StartDate,
+    Sign,
+    UserID
+FROM test.visits;
 SELECT
     StartDate,
     sumMerge(Visits)                AS Visits,

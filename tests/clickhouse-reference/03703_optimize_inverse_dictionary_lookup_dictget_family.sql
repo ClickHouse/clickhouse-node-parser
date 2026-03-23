@@ -26,6 +26,15 @@ CREATE TABLE ref_table_all
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO ref_table_all VALUES
+    (1, 'alpha', -8, -16, -32, -64, 8, 16, 32, 64, 10.0, 20.0,
+     '2025-01-01', '2025-01-01 10:00:00',
+     '00000000-0000-0000-0000-000000000001',
+     '192.168.0.1', '2001:db8::1'),
+    (2, 'beta', -7, -15, -31, -63, 9, 17, 33, 65, 11.0, 21.0,
+     '2026-01-01', '2026-01-01 15:00:00',
+     '00000000-0000-0000-0000-000000000002',
+     '10.0.0.3', '2001:db8::2');
 CREATE DICTIONARY dictionary_all
 (
   id   UInt64,
@@ -57,6 +66,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO tab VALUES (1,'x'),(2,'y'),(99,'z');
 SELECT id, payload FROM tab
 WHERE dictGet('dictionary_all', 'name', id) = 'alpha'
 ORDER BY id, payload;

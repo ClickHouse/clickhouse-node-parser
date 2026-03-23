@@ -3,6 +3,7 @@ CREATE TABLE defaults_on_defaults (
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+INSERT INTO defaults_on_defaults values (1);
 SELECT 1 from defaults_on_defaults where length(`Arr.C2`) = 0;
 SELECT 1 from defaults_on_defaults where length(`Arr.C3`) = 0;
 SELECT 1 from defaults_on_defaults where length(`Arr.C4`) = 0;

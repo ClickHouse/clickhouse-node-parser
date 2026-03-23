@@ -6,6 +6,7 @@ CREATE TABLE constCondOptimization
     n Int64
 )
 ENGINE = MergeTree ORDER BY (time, n) SETTINGS index_granularity = 1;
+INSERT INTO constCondOptimization (n) SELECT number FROM system.numbers LIMIT 10000;
 -- The queries should use index.
 SET max_rows_to_read = 2;
 -- Prevent remote replicas from skipping index analysis in Parallel Replicas. Otherwise, they may return full ranges and trigger max_rows_to_read validation failures.

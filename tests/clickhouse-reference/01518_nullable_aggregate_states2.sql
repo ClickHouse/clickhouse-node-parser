@@ -13,6 +13,36 @@ CREATE TABLE testNullableStates (
    int16 Nullable(Int16),
    int8 Nullable(Int8))
 ENGINE=MergeTree PARTITION BY toStartOfDay(ts) ORDER BY id;
+INSERT INTO testNullableStates SELECT
+    toDateTime('2020-01-01 00:00:00') + number AS ts,
+    toString(number % 999) AS id,
+    toString(number) AS string,
+    number / 333 AS float64,
+    number / 333 AS float32,
+    number / 333 AS decimal325,
+    toDate(ts),
+    ts,
+    ts,
+    number,
+    toInt32(number),
+    toInt16(number),
+    toInt8(number)
+FROM numbers(100000);
+INSERT INTO testNullableStates SELECT
+    toDateTime('2020-01-01 00:00:00') + number AS ts,
+    toString(number % 999 - 5) AS id,
+    NULL AS string,
+    NULL AS float64,
+    NULL AS float32,
+    NULL AS decimal325,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+FROM numbers(500);
 CREATE TABLE testNullableStatesAgg
 (
     `ts` DateTime,
@@ -57,6 +87,48 @@ CREATE TABLE testNullableStatesAgg
 ENGINE = AggregatingMergeTree()
 PARTITION BY toStartOfDay(ts)
 ORDER BY id;
+insert into testNullableStatesAgg
+select
+   ts DateTime,
+   id String,
+   minState(string) stringMin,
+   maxState(string) stringMax,
+   minState(float64) float64Min,
+   maxState(float64) float64Max,
+   avgState(float64) float64Avg,
+   sumState(float64) float64Sum,
+   minState(float32) float32Min,
+   maxState(float32) float32Max,
+   avgState(float32) float32Avg,
+   sumState(float32) float32Sum,
+   minState(decimal325) decimal325Min,
+   maxState(decimal325) decimal325Max,
+   avgState(decimal325) decimal325Avg,
+   sumState(decimal325) decimal325Sum,
+   minState(date) dateMin,
+   maxState(date) dateMax,
+   minState(datetime) datetimeMin,
+   maxState(datetime) datetimeMax,
+   minState(datetime64) datetime64Min,
+   maxState(datetime64) datetime64Max,
+   minState(int64) int64Min,
+   maxState(int64) int64Max,
+   avgState(int64) int64Avg,
+   sumState(int64) int64Sum,
+   minState(int32) int32Min,
+   maxState(int32) int32Max,
+   avgState(int32) int32Avg,
+   sumState(int32) int32Sum,
+   minState(int16) int16Min,
+   maxState(int16) int16Max,
+   avgState(int16) int16Avg,
+   sumState(int16) int16Sum,
+   minState(int8) int8Min,
+   maxState(int8) int8Max,
+   avgState(int8) int8Avg,
+   sumState(int8) int8Sum
+from testNullableStates
+group by ts, id;
 select count() from testNullableStates;
 select count() from testNullableStatesAgg;
 select ' ---- select without states ---- ';

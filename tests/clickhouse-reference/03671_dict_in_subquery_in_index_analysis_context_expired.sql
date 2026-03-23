@@ -1,5 +1,7 @@
 CREATE TABLE info (iid UInt32) ENGINE = MergeTree() ORDER BY iid;
+INSERT INTO info (iid) VALUES (1);
 CREATE TABLE ids (id Int64) ENGINE = MergeTree() ORDER BY ();
+INSERT INTO ids (id) VALUES (1);
 CREATE DICTIONARY dict
 (
     id Int64,

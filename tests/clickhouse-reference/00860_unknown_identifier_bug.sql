@@ -12,6 +12,7 @@ CREATE TABLE appointment_events
     _set_at UInt32,
     _job_requisition_id String
 ) ENGINE = Memory;
+INSERT INTO appointment_events (_appointment_id, _set_at, _status) values (1, 1, 'Created'), (2, 2, 'Created');
 SELECT A._appointment_id,
        A._id,
        A._status,

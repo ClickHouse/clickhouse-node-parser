@@ -25,6 +25,8 @@ CREATE TABLE t
 	f1 Float32,
 	f2 Float32
 )ENGINE = Memory;
+INSERT INTO t values (-1.5, -1.5, -1.5, -1.5, 1.5, 1.5);
+INSERT INTO t values (1.5, 1.5, 1.5, 1.5, -1.5, -1.5);
 SELECT d1 > f1 FROM t ORDER BY f1;
 SELECT d2 > f1 FROM t ORDER BY f1;
 SELECT d3 > f1 FROM t ORDER BY f1;

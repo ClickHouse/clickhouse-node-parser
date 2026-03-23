@@ -4,6 +4,7 @@ CREATE TABLE t_01411(
     arr Array(LowCardinality(String)) default [str]
 ) ENGINE = MergeTree()
 ORDER BY tuple() SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+INSERT INTO t_01411 (str) SELECT concat('asdf', toString(number % 10000)) FROM numbers(1000000);
 SELECT count() FROM t_01411 WHERE str = 'asdf337';
 SELECT count() FROM t_01411 WHERE arr[1] = 'asdf337';
 SELECT count() FROM t_01411 WHERE has(arr, 'asdf337');
@@ -16,6 +17,7 @@ CREATE TABLE t_01411_num(
     arr Array(LowCardinality(Int64)) default [num]
 ) ENGINE = MergeTree()
 ORDER BY tuple() SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+INSERT INTO t_01411_num (num) SELECT number % 1000 FROM numbers(1000000);
 SELECT count() FROM t_01411_num WHERE num = 42;
 SELECT count() FROM t_01411_num WHERE arr[1] = 42;
 SELECT count() FROM t_01411_num WHERE has(arr, 42);

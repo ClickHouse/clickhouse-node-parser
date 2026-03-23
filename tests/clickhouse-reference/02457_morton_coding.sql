@@ -17,6 +17,17 @@ select mortonEncode(65534, 65533);
 select mortonDecode(2, 4294967286);
 select mortonEncode(4294967286);
 select mortonDecode(1, 4294967286);
+insert into morton_numbers_02457
+select n1.number, n2.number, n3.number, n4.number, n5.number, n6.number, n7.number, n8.number
+from numbers(256-4, 4) n1
+    cross join numbers(256-4, 4) n2
+    cross join numbers(256-4, 4) n3
+    cross join numbers(256-4, 4) n4
+    cross join numbers(256-4, 4) n5
+    cross join numbers(256-4, 4) n6
+    cross join numbers(256-4, 4) n7
+    cross join numbers(256-4, 4) n8
+;
 create table morton_numbers_1_02457(
     n1 UInt64,
     n2 UInt64,
@@ -29,6 +40,16 @@ create table morton_numbers_1_02457(
 )
     Engine=MergeTree()
     ORDER BY n1 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+insert into morton_numbers_1_02457
+select untuple(mortonDecode(8, mortonEncode(n1, n2, n3, n4, n5, n6, n7, n8)))
+from morton_numbers_02457;
+insert into morton_numbers_02457
+select n1.number, n2.number, n3.number, n4.number, 0, 0, 0, 0
+from numbers(pow(2, 16)-8,8) n1
+    cross join numbers(pow(2, 16)-8, 8) n2
+    cross join numbers(pow(2, 16)-8, 8) n3
+    cross join numbers(pow(2, 16)-8, 8) n4
+;
 create table morton_numbers_2_02457(
     n1 UInt64,
     n2 UInt64,
@@ -37,9 +58,22 @@ create table morton_numbers_2_02457(
 )
     Engine=MergeTree()
     ORDER BY n1 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+insert into morton_numbers_2_02457
+select untuple(mortonDecode(4, mortonEncode(n1, n2, n3, n4)))
+from morton_numbers_02457;
+insert into morton_numbers_02457
+select n1.number, n2.number, 0, 0, 0, 0, 0, 0
+from numbers(pow(2, 32)-8,8) n1
+    cross join numbers(pow(2, 32)-8, 8) n2
+    cross join numbers(pow(2, 32)-8, 8) n3
+    cross join numbers(pow(2, 32)-8, 8) n4
+;
 create table morton_numbers_3_02457(
     n1 UInt64,
     n2 UInt64
 )
     Engine=MergeTree()
     ORDER BY n1 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+insert into morton_numbers_3_02457
+select untuple(mortonDecode(2, mortonEncode(n1, n2)))
+from morton_numbers_02457;

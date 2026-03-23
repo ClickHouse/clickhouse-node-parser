@@ -7,6 +7,9 @@ CREATE TABLE decimal
     d Date,
     w UInt64
 ) ENGINE = Memory;
+INSERT INTO decimal (a, b, c, f, d, w)
+SELECT toDecimal32(number - 50, 4), toDecimal64(number - 50, 8) / 3, toDecimal128(number - 50, 8) / 5, number/2, addDays(toDate('2024-01-01'), number), number
+FROM system.numbers LIMIT 101;
 SELECT medianExactWeightedInterpolated(a, 1),
     medianExactWeightedInterpolated(b, 2),
     medianExactWeightedInterpolated(c, 3) as x,

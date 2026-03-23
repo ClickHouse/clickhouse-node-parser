@@ -1,4 +1,5 @@
 CREATE TABLE range_filter_custom_range_test (k UInt64) ENGINE=MergeTree ORDER BY k;
+INSERT INTO range_filter_custom_range_test SELECT number + 5 from numbers(10);
 SELECT count()
 FROM
 (
@@ -112,6 +113,7 @@ FROM
         parallel_replicas_custom_key_range_upper = 13
 );
 CREATE TABLE range_filter_custom_range_test_2 (k UInt64) ENGINE=MergeTree ORDER BY k;
+INSERT INTO range_filter_custom_range_test_2 SELECT number from numbers(13);
 SET send_logs_level = 'error'; -- failed connection tries are ok, `parallel_replicas` cluster contains 1 unavailable node
 SELECT count()
 FROM
@@ -128,6 +130,7 @@ FROM
         parallel_replicas_custom_key_range_upper = 13
 );
 CREATE TABLE range_filter_custom_range_test_3 (k UInt64) ENGINE=MergeTree ORDER BY k;
+INSERT INTO range_filter_custom_range_test_3 SELECT number from numbers(4);
 SELECT count()
 FROM
 (

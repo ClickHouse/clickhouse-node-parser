@@ -1,4 +1,5 @@
 CREATE TABLE datetime (d DateTime('UTC')) ENGINE = Memory;
+INSERT INTO datetime(d) VALUES(toDateTime('2016-06-15 23:00:00', 'UTC'));
 SELECT quantile(0.2)(d) FROM datetime;
 SELECT quantiles(0.2)(d) FROM datetime;
 SELECT quantileDeterministic(0.2)(d, 1) FROM datetime;

@@ -5,10 +5,14 @@ SET max_threads = 1;
 -- data should be inserted into Distributed table synchronously
 SET distributed_foreground_insert = 1;
 CREATE TABLE mem1 (key Int) Engine=Memory();
+INSERT INTO mem1 VALUES (10);
 CREATE TABLE dist_1 AS mem1 Engine=Distributed(test_shard_localhost, currentDatabase(), mem1);
+INSERT INTO dist_1 VALUES (20);
 CREATE TABLE mem2 (key Int) Engine=Memory();
+INSERT INTO mem2 VALUES (100);
 CREATE TABLE dist_2 AS mem2 Engine=Distributed(test_cluster_two_shards_localhost, currentDatabase(), mem2);
 CREATE TABLE mem3 (key Int, _shard_num String) Engine=Memory();
+INSERT INTO mem3 VALUES (100, 'foo');
 CREATE TABLE dist_3 AS mem3 Engine=Distributed(test_shard_localhost, currentDatabase(), mem3);
 SELECT * FROM remote('127.0.0.1', system.one);
 SELECT * FROM remote('127.0.0.{1,2}', system.one);

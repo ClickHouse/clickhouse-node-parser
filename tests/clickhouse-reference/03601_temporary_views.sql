@@ -1,4 +1,5 @@
 CREATE TEMPORARY TABLE t_src (id UInt32, val String) ENGINE = Memory;
+INSERT INTO t_src VALUES (1,'a'), (2,'b'), (3,'c');
 CREATE TEMPORARY VIEW tview_basic AS
 SELECT id, upper(val) AS u
 FROM t_src

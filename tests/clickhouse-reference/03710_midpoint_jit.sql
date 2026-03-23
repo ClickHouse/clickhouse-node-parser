@@ -6,6 +6,13 @@ CREATE TABLE midpoint_jit
     yf Float64
 )
 ENGINE = Memory;
+INSERT INTO midpoint_jit
+SELECT
+    number,
+    number + 1,
+    toFloat64(number) + 0.25,
+    toFloat64(number) + 0.75,
+FROM numbers(1000000);
 SELECT sum(midpoint(midpoint(xi, yi), midpoint(yi, xi))) AS s
 FROM midpoint_jit
 SETTINGS
@@ -30,6 +37,13 @@ SETTINGS
     compile_expressions = 1,
     min_count_to_compile_expression = 0,
     log_comment = 'midpoint_jit_float_1';
+INSERT INTO midpoint_jit
+SELECT
+    -(number),
+    -(number + 1),
+    -(toFloat64(number) + 0.25),
+    -(toFloat64(number) + 0.75),
+FROM numbers(1000000);
 SELECT sum(midpoint(midpoint(xi, yi), midpoint(yi, xi))) AS s
 FROM midpoint_jit
 SETTINGS

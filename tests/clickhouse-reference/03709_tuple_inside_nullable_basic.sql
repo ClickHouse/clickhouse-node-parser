@@ -7,6 +7,13 @@ CREATE TABLE tuple_test
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO tuple_test (id, tup, n) VALUES
+    (1, tuple(11, 'alpha'), 100),
+    (2, NULL,                200),
+    (3, tuple(33, 'gamma'),  NULL),
+    (4, tuple(44, 'delta'),  400),
+    (5, tuple(11, 'beta'),   500),
+    (6, NULL,                NULL);
 SELECT id, tup, n, isNull(tup), isNull(n)
 FROM tuple_test
 ORDER BY id;
@@ -381,6 +388,12 @@ CREATE TABLE test_nullable_tuple
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO test_nullable_tuple VALUES
+    (('Alice', 100)),
+    (NULL),
+    (('Bob', 200)),
+    (NULL),
+    (('Charlie', 300));
 SELECT
     tupleElement(data, 1), tupleElement(data, 1), tupleElement(data, 2)
 FROM test_nullable_tuple;

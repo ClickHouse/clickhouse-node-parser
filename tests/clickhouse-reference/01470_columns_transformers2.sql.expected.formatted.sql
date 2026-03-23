@@ -1,18 +1,1 @@
-CREATE TABLE columns_transformers
-(
-    i int,
-    j int,
-    k int,
-    a_bytes int,
-    b_bytes int,
-    c_bytes int
-)
-ENGINE = TinyLog;
-
-SELECT
-    * EXCEPT('bytes'),
-    COLUMNS('bytes') APPLY(formatReadableSize)
-FROM columns_transformers;
-
-SELECT * APPLY(x -> argMax(x, number))
-FROM numbers(1);
+<Parse Error>

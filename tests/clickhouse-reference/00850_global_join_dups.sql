@@ -1,6 +1,7 @@
 CREATE TABLE t_local (dummy UInt8) ENGINE = Memory;
 CREATE TABLE t1_00850 (dummy UInt8) ENGINE = Distributed(test_shard_localhost, currentDatabase(), 't_local');
 CREATE TABLE t2_00850 (dummy UInt8) ENGINE = Distributed(test_shard_localhost, currentDatabase(), 't_local');
+INSERT INTO t_local VALUES (1);
 SET joined_subquery_requires_alias = 0;
 SELECT * FROM t1_00850
 GLOBAL INNER JOIN

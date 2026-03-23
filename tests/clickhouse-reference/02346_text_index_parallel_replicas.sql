@@ -16,6 +16,9 @@ CREATE TABLE tab
     INDEX idx_str str TYPE text(tokenizer = splitByNonAlpha) GRANULARITY 8
 )
 ENGINE = MergeTree ORDER BY id PARTITION BY id;
+INSERT INTO tab SELECT 1, arrayStringConcat(arrayMap(x -> toString(number + x * 2), range(5)), ' ') FROM numbers(0, 100000);
+INSERT INTO tab SELECT 2, arrayStringConcat(arrayMap(x -> toString(number + x * 2), range(5)), ' ') FROM numbers(100000, 100000);
+INSERT INTO tab SELECT 3, arrayStringConcat(arrayMap(x -> toString(number + x * 2), range(5)), ' ') FROM numbers(200000, 100000);
 SELECT count(), sum(id) FROM tab WHERE hasAnyTokens(str, ['34567', '134567', '234567']);
 SELECT count(), sum(id) FROM tab WHERE str LIKE '% 34567 %';
 SELECT

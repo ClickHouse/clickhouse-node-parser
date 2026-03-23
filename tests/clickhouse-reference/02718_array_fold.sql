@@ -19,6 +19,7 @@ SELECT arrayFold( acc,x -> acc+x,  range(number), number) FROM system.numbers LI
 SELECT arrayFold( acc,x -> arrayPushFront(acc,x),  range(number), emptyArrayUInt64()) FROM system.numbers LIMIT 5;
 SELECT arrayFold( acc,x -> x%2 ? arrayPushFront(acc,x) : arrayPushBack(acc,x),  range(number), emptyArrayUInt64()) FROM system.numbers LIMIT 5;
 CREATE TABLE tab (line String, patterns Array(String)) ENGINE = MergeTree ORDER BY line;
+INSERT INTO tab VALUES ('abcdef', ['c']), ('ghijkl', ['h', 'k']), ('mnopqr', ['n']);
 SELECT
     line,
     patterns,
@@ -26,6 +27,7 @@ SELECT
 FROM tab
 ORDER BY line;
 CREATE TABLE tab (line String) ENGINE = Memory();
+INSERT INTO tab VALUES ('xxx..yyy..'), ('..........'), ('..xx..yyy.'), ('..........'), ('xxx.......');
 SELECT
     line,
     splitByNonAlpha(line),

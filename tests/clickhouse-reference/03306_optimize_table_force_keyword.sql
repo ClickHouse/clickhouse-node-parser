@@ -1,4 +1,6 @@
 CREATE TABLE tab (x UInt32) ENGINE = MergeTree ORDER BY x;
+INSERT INTO tab values (1);
+INSERT INTO tab values (2);
 SELECT count(*)
 FROM system.parts
 WHERE database = currentDatabase()

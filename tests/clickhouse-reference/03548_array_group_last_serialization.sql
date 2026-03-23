@@ -22,6 +22,9 @@ AS SELECT
   groupArrayLastState(1)(v0) AS v00
 FROM t0
 GROUP BY k0;
+INSERT INTO t0 SELECT * FROM generateRandom(2, 9) LIMIT 9;
 SELECT v00 FROM t1 ORDER BY k0 FORMAT JSONEachRow;
 CREATE TABLE t_memory (k Int, v AggregateFunction(groupArrayLast(1), Nullable(String))) ENGINE = Memory;
+INSERT INTO t_memory SELECT 1, groupArrayLastState(1)(*) FROM values('v Nullable(String)', null);
+INSERT INTO t_memory SELECT 2, groupArrayLastState(1)(*) FROM values('v Nullable(String)', 'foo');
 SELECT v FROM t_memory ORDER BY k FORMAT JSONEachRow;

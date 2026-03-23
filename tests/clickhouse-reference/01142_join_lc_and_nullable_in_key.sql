@@ -1,5 +1,7 @@
 CREATE TABLE t (`x` UInt32, `lc` LowCardinality(String)) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE nr (`x` Nullable(UInt32), `lc` Nullable(String)) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO t VALUES (1, 'l');
+INSERT INTO nr VALUES (2, NULL);
 SET join_use_nulls = 0;
 SELECT x, lc, r.lc, toTypeName(r.lc) FROM t AS l LEFT JOIN nr AS r USING (x) ORDER BY x;
 SELECT x, lc, r.lc, toTypeName(r.lc) FROM t AS l RIGHT JOIN nr AS r USING (x) ORDER BY x;

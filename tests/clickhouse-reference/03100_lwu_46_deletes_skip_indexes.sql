@@ -8,6 +8,7 @@ CREATE TABLE t_lwd_indexes
 )
 ENGINE = MergeTree ORDER BY tuple()
 SETTINGS index_granularity = 128, index_granularity_bytes = '10M', min_bytes_for_wide_part = 0, enable_block_number_column = 1, enable_block_offset_column = 1;
+INSERT INTO t_lwd_indexes SELECT number, 'v' || toString(number) FROM numbers(10000);
 SELECT count() FROM t_lwd_indexes WHERE key = 1000 SETTINGS force_data_skipping_indices = 'idx_key';
 SELECT trim(explain) FROM
 (

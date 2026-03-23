@@ -46,6 +46,15 @@ CREATE TABLE test_first_truthy
     c Nullable(String),
     d Array(Int32)
 ) ENGINE = Memory;
+INSERT INTO test_first_truthy VALUES
+(NULL, 0, NULL, []),
+(0, NULL, '', []),
+(NULL, NULL, NULL, []),
+(0, 0, '', []),
+(1, 0, '', []),
+(0, 2, '', []),
+(0, 0, 'hello', []),
+(0, 0, '', [1, 2, 3]);
 SELECT
     a, b,
     firstNonDefault(a, b) AS result,

@@ -1,5 +1,6 @@
 set enable_analyzer = 1;
 set allow_experimental_correlated_subqueries = 1;
+
 CREATE TABLE orders  (
     o_orderkey       Int32,
     o_custkey        Int32,
@@ -11,6 +12,9 @@ CREATE TABLE orders  (
     o_shippriority   Int32,
     o_comment        String)
 ORDER BY (o_orderkey);
+
+INSERT INTO orders SELECT * FROM generateRandom() LIMIT 10;
+
 CREATE TABLE lineitem (
     l_orderkey       Int32,
     l_partkey        Int32,
@@ -29,6 +33,7 @@ CREATE TABLE lineitem (
     l_shipmode       String,
     l_comment        String)
 ORDER BY (l_orderkey, l_linenumber);
+
 SELECT
     o_orderpriority,
     count(*) AS order_count

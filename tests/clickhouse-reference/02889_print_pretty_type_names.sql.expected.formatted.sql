@@ -1,12 +1,1 @@
-CREATE TABLE test
-(
-    a Tuple(b String, c Tuple(d Nullable(UInt64), e Array(UInt32), f Array(Tuple(g String, h Map(String, Array(Tuple(i String, j UInt64))))), k Date), l Nullable(String))
-)
-ENGINE = Memory;
-
-SET print_pretty_type_names = 1;
-
-SELECT toTypeName(a)
-FROM test
-LIMIT 1
-FORMAT TSVRaw;
+<Parse Error>

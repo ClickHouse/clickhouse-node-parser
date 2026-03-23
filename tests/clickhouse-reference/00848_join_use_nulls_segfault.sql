@@ -3,6 +3,8 @@ SET enable_analyzer = 1;
 CREATE TABLE t1_00848 ( id String ) ENGINE = Memory;
 CREATE TABLE t2_00848 ( id Nullable(String) ) ENGINE = Memory;
 CREATE TABLE t3_00848 ( id Nullable(String), not_id Nullable(String) ) ENGINE = Memory;
+insert into t1_00848 values ('l');
+insert into t3_00848 (id) values ('r');
 SELECT *, toTypeName(t1.id), toTypeName(t3.id) FROM t1_00848 t1 ANY LEFT JOIN t3_00848 t3 ON t1.id = t3.id ORDER BY t1.id, t3.id;
 SELECT *, toTypeName(t1.id), toTypeName(t3.id) FROM t1_00848 t1 ANY FULL JOIN t3_00848 t3 ON t1.id = t3.id ORDER BY t1.id, t3.id;
 SELECT *, toTypeName(t2.id), toTypeName(t3.id) FROM t2_00848 t2 ANY FULL JOIN t3_00848 t3 ON t2.id = t3.id ORDER BY t2.id, t3.id;

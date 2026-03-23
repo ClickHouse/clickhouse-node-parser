@@ -20,5 +20,8 @@ PRIMARY KEY (valueDate, bb_ticker, ric)
 ORDER BY (valueDate, bb_ticker, ric)
 SETTINGS index_granularity = 111, index_granularity_bytes = 0, compress_primary_key = 0;
 SET send_logs_level = 'warning';
+INSERT INTO tab1(valueDate, bb_ticker, ric)
+    SELECT today(), number%1111, number%111111
+    FROM numbers(1e4);
 -- No exception/assert & no rows.
 SELECT * FROM tab1 FINAL WHERE ric = 'BOWNU.O';

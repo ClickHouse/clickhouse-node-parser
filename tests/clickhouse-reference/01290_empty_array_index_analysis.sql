@@ -6,6 +6,7 @@ CREATE TABLE count_lc_test
 )
 ENGINE = MergeTree
 ORDER BY (s, arr);
+INSERT INTO count_lc_test(num, arr) VALUES (1,[]),(2,['a']),(3,['a','b','c']),(4,['aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']);
 SELECT '--- notEmpty';
 select * from count_lc_test where notEmpty(arr);
 select * from count_lc_test where empty(arr);

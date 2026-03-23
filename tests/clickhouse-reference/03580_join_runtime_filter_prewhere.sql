@@ -1,5 +1,7 @@
 CREATE TABLE nation(n_nationkey Int32, n_name String) ENGINE MergeTree ORDER BY n_nationkey SETTINGS auto_statistics_types='uniq,tdigest';
 CREATE TABLE customer(c_custkey Int32, c_nationkey Int32) ENGINE MergeTree ORDER BY c_custkey SETTINGS auto_statistics_types='uniq,tdigest';
+INSERT INTO nation VALUES (5,'ETHIOPIA'),(6,'FRANCE'),(7,'GERMANY');
+INSERT INTO customer SELECT number, 5 FROM numbers(500);
 SET enable_analyzer=1;
 SET enable_parallel_replicas=0;
 SET join_algorithm = 'hash,parallel_hash';

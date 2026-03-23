@@ -18,4 +18,5 @@ ENGINE = MergeTree
 PARTITION BY i % 4
 ORDER BY a
 SETTINGS index_granularity = 8192;
+INSERT INTO tab SELECT number, number, number FROM numbers(8192 * 10);
 SELECT * FROM tab WHERE text = '1000' SETTINGS use_query_condition_cache = 0, optimize_use_projections = 1, optimize_use_projection_filtering = 1;

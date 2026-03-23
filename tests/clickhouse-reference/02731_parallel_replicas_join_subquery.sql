@@ -9,6 +9,12 @@ CREATE TABLE join_inner_table
 )
 ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/join_inner_table', 'r1')
 ORDER BY (id, number, key);
+INSERT INTO join_inner_table
+SELECT
+    '833c9e22-c245-4eb5-8745-117a9a1f26b1'::UUID as id,
+    rowNumberInAllBlocks()::String as key,
+    * FROM generateRandom('number Int64, value1 String, value2 String, time Int64', 1, 10, 2)
+LIMIT 100;
 SET max_parallel_replicas = 3;
 SET cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
 SET joined_subquery_requires_alias = 0;
@@ -71,6 +77,12 @@ CREATE TABLE join_outer_table
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/join_outer_table', 'r1')
 ORDER BY (id, time, key);
+INSERT INTO join_outer_table
+SELECT
+    '833c9e22-c245-4eb5-8745-117a9a1f26b1'::UUID as id,
+        (rowNumberInAllBlocks() % 10)::String as key,
+        * FROM generateRandom('otherValue1 String, otherValue2 String, time Int64', 1, 10, 2)
+LIMIT 100;
 SELECT
     value1,
     value2,

@@ -5,6 +5,7 @@ CREATE TABLE t0 (
 ENGINE=MergeTree()
 PRIMARY KEY key
 PARTITION BY key % 2;
+INSERT INTO t0 VALUES (0, 0);
 CREATE DICTIONARY d0 (
     key Int32,
     value Int32

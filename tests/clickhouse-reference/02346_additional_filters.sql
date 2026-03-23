@@ -1,5 +1,6 @@
 SET max_rows_to_read = 0;
 create table table_1 (x UInt32, y String) engine = MergeTree order by x;
+insert into table_1 values (1, 'a'), (2, 'bb'), (3, 'ccc'), (4, 'dddd');
 CREATE TABLE distr_table (x UInt32, y String) ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), 'table_1');
 -- { echoOn }
 
@@ -43,6 +44,7 @@ select * from v_numbers settings additional_table_filters={'system.numbers' : 'n
 -- { echoOff }
 
 create table table_2 (x UInt32, y String) engine = MergeTree order by x;
+insert into table_2 values (4, 'dddd'), (5, 'eeeee'), (6, 'ffffff'), (7, 'ggggggg');
 create materialized view mv_table to table_2 (x UInt32, y String) as select * from table_1;
 -- additional filter for inner tables for Materialized View does not work because it does not create internal interpreter
 -- probably it is expected

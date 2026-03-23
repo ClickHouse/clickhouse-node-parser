@@ -1,5 +1,7 @@
 CREATE TABLE tab_with_primary_key_index (id UInt32, a UInt32) ENGINE = MergeTree ORDER BY id;
+INSERT INTO tab_with_primary_key_index SELECT number, number % 2 ? 1 : number FROM numbers(10);
 CREATE TABLE tab_with_primary_key_index_and_skipping_index (id UInt32, a UInt32, INDEX idx a TYPE set(0)) ENGINE = MergeTree ORDER BY id;
+INSERT INTO tab_with_primary_key_index_and_skipping_index SELECT number, number % 2 ? 1 : number FROM numbers(10);
 -- Check that information_schema.tables.index_length is larger than 0 for both tables
 SELECT if(index_length > 0, 'OK', 'FAIL')
 FROM information_schema.tables

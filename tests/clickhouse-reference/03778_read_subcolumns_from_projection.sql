@@ -12,5 +12,6 @@ CREATE TABLE test (
     )
 ) ENGINE = MergeTree()
 ORDER BY z SETTINGS index_granularity=1;
+INSERT INTO test SELECT 'x_' || number, tuple('y_' || number), 'z_' || number FROM numbers(5);
 SELECT count() FROM test WHERE x = 'x_1' and y.s = 'y_1';
 SELECT x, y.s, z FROM test WHERE x = 'x_1' and y.s = 'y_1';

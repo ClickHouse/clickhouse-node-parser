@@ -1,5 +1,6 @@
 set allow_deprecated_syntax_for_merge_tree=1;
 create table test54378 (part_date Date, pk_date Date, date Date) Engine=MergeTree(part_date, pk_date, 8192);
+insert into test54378 values ('2018-04-19', '2018-04-19', '2018-04-19');
 select 111 from test54378 where part_date = '2018-04-19';
 select 112 from test54378 where part_date in ('2018-04-19');
 select 113 from test54378 where pk_date in ('2018-04-19');

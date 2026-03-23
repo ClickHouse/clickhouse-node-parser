@@ -28,6 +28,62 @@ CREATE TABLE simple_agf_summing_mt
 )
 ENGINE = SummingMergeTree
 ORDER BY a;
+INSERT INTO simple_agf_summing_mt SELECT
+    number % 51 AS a,
+    minState(number),
+    min(number),
+    maxState(number),
+    max(number),
+    sumState(number),
+    sum(number),
+    sumWithOverflowState(number),
+    sumWithOverflow(number),
+    groupBitAndState(number + 111111111),
+    groupBitAnd(number + 111111111),
+    groupBitOrState(number + 111111111),
+    groupBitOr(number + 111111111),
+    groupBitXorState(number + 111111111),
+    groupBitXor(number + 111111111),
+    groupArrayArrayState([toUInt64(number % 1000)]),
+    groupArrayArray([toUInt64(number % 1000)]),
+    groupUniqArrayArrayState([toUInt64(number % 500)]),
+    groupUniqArrayArray([toUInt64(number % 500)]),
+    sumMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    sumMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    minMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    minMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    maxMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    maxMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13))))
+FROM numbers(10000)
+GROUP BY a;
+INSERT INTO simple_agf_summing_mt SELECT
+    number % 1151 AS a,
+    minState(number),
+    min(number),
+    maxState(number),
+    max(number),
+    sumState(number),
+    sum(number),
+    sumWithOverflowState(number),
+    sumWithOverflow(number),
+    groupBitAndState(number + 111111111),
+    groupBitAnd(number + 111111111),
+    groupBitOrState(number + 111111111),
+    groupBitOr(number + 111111111),
+    groupBitXorState(number + 111111111),
+    groupBitXor(number + 111111111),
+    groupArrayArrayState([toUInt64(number % 1000)]),
+    groupArrayArray([toUInt64(number % 1000)]),
+    groupUniqArrayArrayState([toUInt64(number % 500)]),
+    groupUniqArrayArray([toUInt64(number % 500)]),
+    sumMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    sumMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    minMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    minMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    maxMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    maxMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13))))
+FROM numbers(10000)
+GROUP BY a;
 SELECT cityHash64(groupArray(cityHash64(*))) FROM (
   SELECT
     a % 31 AS g,
@@ -72,3 +128,31 @@ SELECT cityHash64(groupArray(cityHash64(*))) FROM (
   ORDER BY g
 );
 SELECT '---mutation---';
+INSERT INTO simple_agf_summing_mt SELECT
+    number % 11151 AS a,
+    minState(number),
+    min(number),
+    maxState(number),
+    max(number),
+    sumState(number),
+    sum(number),
+    sumWithOverflowState(number),
+    sumWithOverflow(number),
+    groupBitAndState((number % 3) + 111111110),
+    groupBitAnd((number % 3) + 111111110),
+    groupBitOrState(number + 111111111),
+    groupBitOr(number + 111111111),
+    groupBitXorState(number + 111111111),
+    groupBitXor(number + 111111111),
+    groupArrayArrayState([toUInt64(number % 100)]),
+    groupArrayArray([toUInt64(number % 100)]),
+    groupUniqArrayArrayState([toUInt64(number % 50)]),
+    groupUniqArrayArray([toUInt64(number % 50)]),
+    sumMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    sumMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    minMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    minMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    maxMapState((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13)))),
+    maxMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13))))
+FROM numbers(10000)
+GROUP BY a;

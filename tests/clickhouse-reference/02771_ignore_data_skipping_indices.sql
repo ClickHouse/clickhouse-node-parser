@@ -9,6 +9,7 @@ CREATE TABLE data_02771
 )
 Engine=MergeTree()
 ORDER BY key;
+INSERT INTO data_02771 VALUES (1, 2, 3);
 SELECT * FROM data_02771;
 SELECT * FROM data_02771 SETTINGS ignore_data_skipping_indices=''; -- { serverError CANNOT_PARSE_TEXT }
 SELECT * FROM data_02771 SETTINGS ignore_data_skipping_indices='x_idx';

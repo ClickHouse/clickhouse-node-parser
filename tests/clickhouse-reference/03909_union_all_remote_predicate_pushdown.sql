@@ -2,6 +2,7 @@ CREATE TABLE t_union_remote
 (
     key UInt64
 ) ENGINE = MergeTree() ORDER BY key;
+INSERT INTO t_union_remote VALUES (1), (2), (3);
 SELECT count()
 FROM
 (

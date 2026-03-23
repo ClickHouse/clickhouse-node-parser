@@ -26,6 +26,7 @@ CREATE TABLE test_ntile
     id Int32
 )
 ENGINE = Memory;
+INSERT INTO test_ntile VALUES (1), (2), (3), (4), (5), (6);
 SELECT
     id,
     ntile(1) OVER (ORDER BY id ASC) AS a,

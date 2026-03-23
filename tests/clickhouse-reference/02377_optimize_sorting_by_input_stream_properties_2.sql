@@ -1,4 +1,6 @@
 create table tab (x UInt32, y UInt32) engine = MergeTree order by x;
+insert into tab select number, number from numbers(10);
+insert into tab select number + 10, number + 10 from numbers(10);
 set optimize_sorting_by_input_stream_properties=1;
 set optimize_aggregation_in_order=1;
 set enable_memory_bound_merging_of_aggregation_results=1;

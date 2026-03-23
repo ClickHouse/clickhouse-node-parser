@@ -1,5 +1,7 @@
 CREATE TABLE t1 (a Int32, b Int32 ALIAS 1) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO t1 VALUES (1), (2), (3);
 CREATE TABLE t2 (a Int32, b Int32 ALIAS 1) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO t2 VALUES (2), (3), (4);
 -- { echoOn }
 
 SELECT b FROM t1;

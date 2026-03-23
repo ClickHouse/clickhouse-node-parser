@@ -17,14 +17,22 @@ CREATE TABLE test1
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(time)
 ORDER BY (key, id, time);
+
+INSERT INTO test1 VALUES ('id0', now(), 3, false);
+
 SELECT last_value(value) OVER (PARTITION BY id ORDER BY time ASC) as last_value
 FROM test1
 WHERE (key = 3);
+
 SELECT last_value(value) OVER (ORDER BY time ASC) as last_value
 FROM test1
 WHERE (key = 3);
+
 SELECT last_value(value) OVER (PARTITION BY id ORDER BY time ASC) as last_value
 FROM test1;
+
+
+
 CREATE TABLE test2
 (
     time DateTime,
@@ -32,5 +40,6 @@ CREATE TABLE test2
 )
 ENGINE = MergeTree
 ORDER BY (time) AS SELECT 0, '';
+
 SELECT any(value) OVER (ORDER BY time ASC) FROM test2;
 SELECT last_value(value) OVER (ORDER BY time ASC) FROM test2;

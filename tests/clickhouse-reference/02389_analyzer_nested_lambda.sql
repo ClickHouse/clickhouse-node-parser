@@ -17,6 +17,7 @@ CREATE TABLE test_table
     id UInt64,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO test_table VALUES (0, 'Value');
 SELECT arrayMap(x -> x + arrayMap(x -> id, [1])[1], [1,2,3]) FROM test_table;
 SELECT arrayMap(x -> x + arrayMap(x -> x + id, [1])[1], [1,2,3]) FROM test_table;
 SELECT arrayMap(x -> x + arrayMap(y -> x + y + id, [1])[1], [1,2,3]) FROM test_table;

@@ -8,6 +8,9 @@ CREATE TABLE date_table
 )
 ENGINE = MergeTree()
 ORDER BY CountryID;
+INSERT INTO date_table VALUES(1, '1', toDate('2019-05-05'), toDate('2019-05-20'), 0.33);
+INSERT INTO date_table VALUES(1, '1', toDate('2019-05-21'), toDate('2019-05-30'), 0.42);
+INSERT INTO date_table VALUES(2, '2', toDate('2019-05-21'), toDate('2019-05-30'), 0.46);
 CREATE DICTIONARY range_dictionary
 (
   CountryID UInt64,
@@ -44,6 +47,7 @@ CREATE TABLE date_table
 )
 ENGINE = MergeTree()
 ORDER BY CountryID;
+INSERT INTO date_table VALUES(2, '2', toDate('2019-05-21'), toDate('2019-05-30'), NULL);
 CREATE DICTIONARY range_dictionary_nullable
 (
   CountryID UInt64,

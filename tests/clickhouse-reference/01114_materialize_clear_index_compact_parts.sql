@@ -11,6 +11,7 @@ CREATE TABLE minmax_compact
 PARTITION BY i32
 ORDER BY u64
 SETTINGS index_granularity = 2, index_granularity_bytes = '10Mi', min_rows_for_wide_part = 1000000, add_minmax_index_for_numeric_columns=0;
+INSERT INTO minmax_compact VALUES (0, 2, 1), (1, 1, 1), (2, 1, 1), (3, 1, 1), (4, 1, 1), (5, 2, 1), (6, 1, 2), (7, 1, 2), (8, 1, 2), (9, 1, 2);
 SET mutations_sync = 1;
 set max_rows_to_read = 8;
 SELECT count() FROM minmax_compact WHERE i64 = 2;

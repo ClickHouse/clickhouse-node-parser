@@ -1,2 +1,3 @@
 CREATE TABLE t_inter_02233 (n Int32) ENGINE = MergeTree ORDER BY n;
+INSERT INTO t_inter_02233 VALUES (1),(3),(3),(6),(6),(6);
 SELECT n, count() AS m FROM t_inter_02233 GROUP BY n ORDER BY n WITH FILL INTERPOLATE ( m AS m + 1 );

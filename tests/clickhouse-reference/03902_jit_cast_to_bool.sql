@@ -5,6 +5,7 @@
 SET compile_expressions = 1;
 SET min_count_to_compile_expression = 0;
 CREATE TABLE test_jit_bool (a Int64, b Int64) ENGINE = MergeTree ORDER BY a;
+INSERT INTO test_jit_bool SELECT number, number % 3 FROM numbers(100);
 -- Test CAST to Bool with JIT
 SELECT CAST(a, 'Bool') AS result FROM test_jit_bool WHERE a < 3 ORDER BY a;
 -- Test CAST to Nullable(Bool) with JIT - this was crashing before the fix

@@ -1,5 +1,6 @@
 SET enable_analyzer = 1;
 CREATE TABLE t1 (key UInt8) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO t1 VALUES (1),(2);
 SET join_algorithm = 'full_sorting_merge';
 SELECT key FROM ( SELECT key FROM t1 ) AS t1 JOIN ( SELECT key FROM t1 ) AS t2 ON t1.key = t2.key WHERE key;
 SELECT key FROM ( SELECT 1 AS key ) AS t1 JOIN ( SELECT 1 AS key ) AS t2 ON t1.key = t2.key WHERE key;

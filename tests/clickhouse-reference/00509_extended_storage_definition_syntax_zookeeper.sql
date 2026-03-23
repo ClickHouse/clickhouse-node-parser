@@ -6,16 +6,25 @@ CREATE TABLE replicated_with_sampling(x UInt8)
     ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_00509/replicated_with_sampling', 'r1')
     ORDER BY x
     SAMPLE BY x;
+INSERT INTO replicated_with_sampling VALUES (1), (128);
 SELECT sum(x) FROM replicated_with_sampling SAMPLE 1/2;
 CREATE TABLE replacing(d Date, x UInt32, s String) ENGINE = ReplacingMergeTree ORDER BY x PARTITION BY d;
+INSERT INTO replacing VALUES ('2017-10-23', 1, 'a');
+INSERT INTO replacing VALUES ('2017-10-23', 1, 'b');
+INSERT INTO replacing VALUES ('2017-10-23', 1, 'c');
 SELECT * FROM replacing;
 CREATE TABLE replicated_collapsing(d Date, x UInt32, sign Int8)
     ENGINE = ReplicatedCollapsingMergeTree('/clickhouse/tables/{database}/test_00509/replicated_collapsing', 'r1', sign)
     PARTITION BY toYYYYMM(d) ORDER BY d;
+INSERT INTO replicated_collapsing VALUES ('2017-10-23', 1, 1);
+INSERT INTO replicated_collapsing VALUES ('2017-10-23', 1, -1), ('2017-10-23', 2, 1);
 SELECT * FROM replicated_collapsing;
 CREATE TABLE replicated_versioned_collapsing(d Date, x UInt32, sign Int8, version UInt8)
     ENGINE = ReplicatedVersionedCollapsingMergeTree('/clickhouse/tables/{database}/test_00509/replicated_versioned_collapsing', 'r1', sign, version)
     PARTITION BY toYYYYMM(d) ORDER BY (d, version);
+INSERT INTO replicated_versioned_collapsing VALUES ('2017-10-23', 1, 1, 0);
+INSERT INTO replicated_versioned_collapsing VALUES ('2017-10-23', 1, -1, 0), ('2017-10-23', 2, 1, 0);
+INSERT INTO replicated_versioned_collapsing VALUES ('2017-10-23', 1, -1, 1), ('2017-10-23', 2, 1, 2);
 SELECT * FROM replicated_versioned_collapsing;
 CREATE TABLE with_settings(x UInt32)
     ENGINE ReplicatedMergeTree('/clickhouse/tables/{database}/test_00509/with_settings', 'r1')

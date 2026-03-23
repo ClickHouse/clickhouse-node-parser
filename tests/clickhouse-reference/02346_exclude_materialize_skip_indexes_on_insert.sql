@@ -10,6 +10,8 @@ CREATE TABLE tab
     INDEX `id,x_b` b TYPE set(3)
 )
 ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity = 4, add_minmax_index_for_numeric_columns=0;
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100)
+SETTINGS exclude_materialize_skip_indexes_on_insert='!@#$^#$&#$$%$,,.,3.45,45.';  -- { serverError CANNOT_PARSE_TEXT }
 CREATE VIEW explain_indexes
 AS SELECT trimLeft(explain) AS explain
 FROM
@@ -23,7 +25,11 @@ FROM
 )
 WHERE (explain LIKE '%Name%') OR (explain LIKE '%Description%') OR (explain LIKE '%Parts%') OR (explain LIKE '%Granules%') OR (explain LIKE '%Range%');
 SET exclude_materialize_skip_indexes_on_insert='idx_a';
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100);
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100);
 SELECT * FROM explain_indexes;
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100) SETTINGS exclude_materialize_skip_indexes_on_insert='`id,x_b`';
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100) SETTINGS exclude_materialize_skip_indexes_on_insert='`id,x_b`';
 SELECT count()
 FROM system.query_log
 WHERE current_database = currentDatabase()

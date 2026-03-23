@@ -44,6 +44,7 @@ CREATE TABLE test
 (
     x Nullable(Int32)
 ) ENGINE = Log;
+INSERT INTO test VALUES(1), (0), (null);
 SELECT * FROM test;
 SELECT x FROM test WHERE x != 0;
 SELECT x FROM test WHERE x != 0 OR isNull(x);

@@ -16,6 +16,14 @@ CREATE TABLE test_lazy_read_in_order
     e UInt64
 ) ENGINE = MergeTree()
       ORDER BY a;
+-- Insert test data
+INSERT INTO test_lazy_read_in_order
+SELECT number,
+       repeat('b', 100),
+       repeat('c', 100),
+       repeat('d', 100),
+       number * 2
+FROM numbers(1000);
 SELECT trimLeft(explain)
 FROM (
     EXPLAIN PLAN actions=1
@@ -123,6 +131,18 @@ CREATE TABLE test_correctness
     data  String
 ) ENGINE = MergeTree()
       ORDER BY id;
+-- Insert data in non-sequential order to test sorting
+INSERT INTO test_correctness
+VALUES (5, 'five', 50, 'data5'),
+       (2, 'two', 20, 'data2'),
+       (8, 'eight', 80, 'data8'),
+       (1, 'one', 10, 'data1'),
+       (9, 'nine', 90, 'data9'),
+       (3, 'three', 30, 'data3'),
+       (7, 'seven', 70, 'data7'),
+       (4, 'four', 40, 'data4'),
+       (6, 'six', 60, 'data6'),
+       (10, 'ten', 100, 'data10');
 -- With both optimizations enabled
 SELECT id, value, score
 FROM test_correctness

@@ -10,6 +10,8 @@ CREATE TABLE data_01660 (key Int) Engine=MergeTree() ORDER BY key;
 SELECT _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660';
 SELECT name, _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660';
 SELECT name, active FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660';
+INSERT INTO data_01660 VALUES (0);
+INSERT INTO data_01660 VALUES (1);
 SELECT name, _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' ORDER BY name;
 SELECT name, active FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' ORDER BY name;
 SELECT count(), _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' GROUP BY _state ORDER BY _state;

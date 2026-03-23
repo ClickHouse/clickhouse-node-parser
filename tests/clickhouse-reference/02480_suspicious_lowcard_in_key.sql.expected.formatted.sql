@@ -1,12 +1,1 @@
-SET allow_suspicious_low_cardinality_types = 1;
-
-CREATE TABLE test
-(
-    val LowCardinality(Float32)
-)
-ENGINE = MergeTree
-ORDER BY val;
-
-SELECT count()
-FROM test
-WHERE toUInt64(val) = -1; -- { serverError CANNOT_CONVERT_TYPE }
+<Parse Error>

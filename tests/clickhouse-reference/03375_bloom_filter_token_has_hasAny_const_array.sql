@@ -9,6 +9,8 @@ CREATE TABLE bloom_filter_has_const_array
 ENGINE = MergeTree
 ORDER BY ()
 SETTINGS index_granularity=1;
+INSERT INTO bloom_filter_has_const_array
+VALUES ('a', ['a','a']), ('b', ['b','b']), ('c', ['c','c']), ('d',['d','e']);
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes = 1
     SELECT bf

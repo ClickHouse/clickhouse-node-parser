@@ -6,6 +6,7 @@ SELECT l.id, l.name, r.val
 FROM t_left AS l
 LEFT JOIN t_right AS r ON l.id = r.id;
 SELECT '--';
+INSERT INTO t_left VALUES (5000, 'Left'), (6000, 'Left2');
 SELECT l.id, l.name, r.val
 FROM t_left AS l
 INNER JOIN t_right AS r ON l.id = r.id

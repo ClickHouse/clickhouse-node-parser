@@ -3,6 +3,24 @@ CREATE TABLE test_json_decimal_precision
     id UInt32,
     json_data String
 ) ENGINE = Memory;
+-- Insert test data with decimal values that could lose precision
+INSERT INTO test_json_decimal_precision VALUES
+(1, '{"dec": 111244542.003}'),
+(2, '{"dec": "111244542.003"}'),
+(3, '{"dec": 123.4567890123456789}'),
+(4, '{"dec": "123.4567890123456789"}'),
+(5, '{"dec": 0.0000000000000001}'),
+(6, '{"dec": "0.0000000000000001"}'),
+(7, '{"dec": 999999999999999.9999999999999999}'),
+(8, '{"dec": "999999999999999.9999999999999999"}'),
+(9, '{"dec": 1.23456789012345678901234567890123456789}'),
+(10, '{"dec": "1.23456789012345678901234567890123456789"}'),
+(11, '{"dec": 0.00000000000000000000000000000000000001}'),
+(12, '{"dec": "0.00000000000000000000000000000000000001"}'),
+(13, '{"dec": 0.1}'),
+(14, '{"dec": "0.1"}'),
+(15, '{"dec": 0.123456789012345678901234567890123456789}'),
+(16, '{"dec": "0.123456789012345678901234567890123456789"}');
 -- Test 1: Verify that JSONExtract preserves precision for numeric JSON values
 SELECT 
     'Test 1: JSONExtract with numeric JSON values' as test_name,

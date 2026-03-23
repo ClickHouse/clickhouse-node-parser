@@ -1,10 +1,1 @@
-SET input_format_values_interpret_expressions = 0;
-
-CREATE TEMPORARY TABLE t
-(
-    x DateTime('UTC')
-);
-
-SELECT x
-FROM t
-ORDER BY x ASC;
+<Parse Error>

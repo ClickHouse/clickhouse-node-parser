@@ -1,5 +1,7 @@
 SET send_logs_level = 'fatal';
 CREATE TABLE add_aggregate(a UInt32, b UInt32) ENGINE = Memory;
+INSERT INTO add_aggregate VALUES(1, 2);
+INSERT INTO add_aggregate VALUES(3, 1);
 SELECT countMerge(x + y) FROM (SELECT countState(a) as x, countState(b) as y from add_aggregate);
 SELECT sumMerge(x + y), sumMerge(x), sumMerge(y) FROM (SELECT sumState(a) as x, sumState(b) as y from add_aggregate);
 SELECT sumMerge(x) FROM (SELECT sumState(a) + countState(b) as x FROM add_aggregate); -- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }

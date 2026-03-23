@@ -6,6 +6,7 @@ CREATE TABLE defaults
     predict1 Float64,
     predict2 Float64
 ) ENGINE = Memory;
+insert into defaults values (-3.273, -1.452, 4.267, 20.0, 40.0), (0.121, -0.615, 4.290, 20.0, 40.0);
 create table model engine = Memory as select stochasticLinearRegressionState(0.1, 0.0, 2, 'SGD')(target, param1, param2) as state from defaults;
 select ans < -61.374 and ans > -61.375 from
 (with (select state from remote('127.0.0.1', currentDatabase(), model)) as model select evalMLMethod(model, predict1, predict2) as ans from remote('127.0.0.1', currentDatabase(), defaults));

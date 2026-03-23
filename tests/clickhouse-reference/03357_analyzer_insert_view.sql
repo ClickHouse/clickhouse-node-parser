@@ -34,4 +34,5 @@ WHERE id NOT IN
         FROM event
     )
 );
+INSERT INTO input VALUES ('{"id":5}');
 SELECT * FROM deduplicate_mv FORMAT Null;

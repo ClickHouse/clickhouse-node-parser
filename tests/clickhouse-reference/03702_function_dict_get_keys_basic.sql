@@ -4,6 +4,9 @@ CREATE TABLE dict_src_neg
     u64  UInt64,
     i32n Nullable(Int32)
 ) ENGINE = Memory;
+INSERT INTO dict_src_neg VALUES
+    (1, 7, NULL),
+    (2, 42, -10);
 CREATE DICTIONARY dict_neg
 (
     id   UInt64,
@@ -28,6 +31,10 @@ CREATE TABLE dict_src_simple_kv
     id   UInt64,
     attr Int32
 ) ENGINE = Memory;
+INSERT INTO dict_src_simple_kv VALUES
+    (1, 10),
+    (2, 10),
+    (3, 20);
 CREATE DICTIONARY dict_simple_kv
 (
     id   UInt64,
@@ -45,6 +52,10 @@ CREATE TABLE dict_src_complex2_kv
     k2   String,
     attr Int32
 ) ENGINE = Memory;
+INSERT INTO dict_src_complex2_kv VALUES
+    (1, 'a', 10),
+    (2, 'b', 10),
+    (3, 'c', 20);
 CREATE DICTIONARY dict_complex2_kv
 (
     k1   UInt64,
@@ -62,6 +73,9 @@ CREATE TABLE dict_src_complex1_kv
     k1   UInt64,
     attr Int32
 ) ENGINE = Memory;
+INSERT INTO dict_src_complex1_kv VALUES
+    (10, 1),
+    (20, 1);
 CREATE DICTIONARY dict_complex1_kv
 (
     k1   UInt64,
@@ -85,6 +99,11 @@ CREATE TABLE dict_src_complex_wide_kv
     a8 DateTime64(3),
     attr Int32
 ) ENGINE = Memory;
+INSERT INTO dict_src_complex_wide_kv VALUES
+    (1, -1, 'x', toDate('2000-01-02'), toUUID('01234567-89ab-cdef-0123-456789abcdef'),
+     toIPv4('1.2.3.4'), toIPv6('2001:db8::1'), toDateTime64('2025-10-10 03:04:05', 3), 10),
+    (2, -2, 'y', toDate('2000-01-03'), toUUID('89abcdef-0123-4567-89ab-cdef01234567'),
+     toIPv4('5.6.7.8'), toIPv6('2001:db8::2'), toDateTime64('2025-10-10 03:04:05', 3), 20);
 CREATE DICTIONARY dict_complex_wide_kv
 (
     a1 UInt64,
@@ -127,6 +146,31 @@ CREATE TABLE dict_src_types
     n_i32 Nullable(Int32),
     n_str Nullable(String)
 ) ENGINE = Memory;
+INSERT INTO dict_src_types VALUES
+(1,
+  toInt8(-128), toUInt8(0), toInt64(-9223372036854775808), toUInt64(0),
+  toFloat32(-1.5), toFloat64(-1.5),
+  toDecimal32(-123.456, 3), toDecimal64(-123.456, 3),
+  toDate('2025-01-01'), toDateTime('2025-01-01 00:00:00'), toDateTime64('2025-01-01 00:00:00', 3),
+  toUUID('00000000-0000-0000-0000-000000000000'),
+  toIPv4('0.0.0.0'), toIPv6('::'),
+  '', [], [], NULL, NULL),
+(2,
+  toInt8(0), toUInt8(127), toInt64(0), toUInt64(42),
+  toFloat32(1.5), toFloat64(42.25),
+  toDecimal32(1.234, 3), toDecimal64(42.500, 3),
+  toDate('2000-01-02'), toDateTime('2000-01-02 03:04:05'), toDateTime64('2000-01-02 03:04:05', 3),
+  toUUID('01234567-89ab-cdef-0123-456789abcdef'),
+  toIPv4('1.2.3.4'), toIPv6('2001:db8::1'),
+  'alpha', [1,2], [[1,2],[3]], 0, 'x'),
+(3,
+  toInt8(127), toUInt8(255), toInt64(9223372036854775807), toUInt64(18446744073709551615),
+  CAST('inf' AS Float32), CAST('nan' AS Float64),
+  toDecimal32(123.999, 3), toDecimal64(9999999.999, 3),
+  toDate('2106-02-07'), toDateTime('2106-02-07 06:28:15'), toDateTime64('2106-02-07 06:28:15', 3),
+  toUUID('89abcdef-0123-4567-89ab-cdef01234567'),
+  toIPv4('255.255.255.255'), toIPv6('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'),
+  'beta', [9,8,7], [[4],[5,6]], NULL, 'y');
 CREATE DICTIONARY dict_types
 (
     id   UInt64,
@@ -192,6 +236,11 @@ CREATE TABLE dict_src_valexpr
     i32n  Nullable(Int32),
     u64   UInt64
 ) ENGINE = Memory;
+INSERT INTO dict_src_valexpr VALUES
+    (1, 'alpha', 10, 42),
+    (2, 'beta', 10, 100),
+    (3, 'gamma', -5, 42),
+    (4, 'alpha', NULL, 7);
 CREATE DICTIONARY dict_valexpr
 (
     id    UInt64,
@@ -223,6 +272,8 @@ CREATE TABLE dict_src_match
     id  UInt64,
     grp String
 ) ENGINE = Memory;
+INSERT INTO dict_src_match VALUES
+    (1, 'A'), (2, 'A'), (3, 'B'), (4, 'C');
 CREATE DICTIONARY dict_match
 (
     id  UInt64,

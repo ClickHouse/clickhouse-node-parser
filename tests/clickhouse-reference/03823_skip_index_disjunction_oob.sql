@@ -8,6 +8,7 @@ CREATE TABLE t_skip_index_disj_oob
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 4;
+INSERT INTO t_skip_index_disj_oob SELECT number, number FROM numbers(200);
 -- 9 groups of (a = X AND b = X) connected by OR produce 35 RPN elements:
 -- 9 * 3 (leaf, leaf, AND) + 8 OR = 35, exceeding the limit of 32.
 -- optimize_min_equality_disjunction_chain_length = 100 prevents OR-to-IN conversion.

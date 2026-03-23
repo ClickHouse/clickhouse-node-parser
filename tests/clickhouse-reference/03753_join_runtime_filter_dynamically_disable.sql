@@ -2,6 +2,11 @@
 
 CREATE TABLE nation(n_nationkey Int32, n_name String) ENGINE MergeTree ORDER BY n_nationkey;
 CREATE TABLE customer(c_custkey Int32, c_nationkey Int32, c_nationkey_copy Int32) ENGINE MergeTree ORDER BY c_custkey SETTINGS index_granularity=10;
+INSERT INTO nation VALUES (5,'ETHIOPIA'),(6,'FRANCE'),(7,'GERMANY'),(100,'UNKNOWN');
+INSERT INTO customer SELECT number, 5, 5 FROM numbers(1000);
+INSERT INTO customer SELECT number, 6, 6 FROM numbers(1000);
+INSERT INTO customer SELECT number, 7, 7 FROM numbers(1000);
+INSERT INTO customer SELECT number, 100, 100 FROM numbers(10);
 SET enable_analyzer=1;
 SET enable_join_runtime_filters=1;
 SET enable_parallel_replicas=0;

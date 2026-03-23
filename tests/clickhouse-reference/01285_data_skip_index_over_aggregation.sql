@@ -7,8 +7,10 @@ CREATE TABLE data_01285 (
 )
 ENGINE=AggregatingMergeTree()
 ORDER BY key;
+INSERT INTO data_01285 SELECT 1, number FROM numbers(2);
 SELECT * FROM data_01285;
 SELECT * FROM data_01285 WHERE assumeNotNull(value) = 1;
+INSERT INTO data_01285 SELECT 1, number FROM numbers(4);
 SELECT * FROM data_01285 ORDER BY ALL;
 SELECT * FROM data_01285 WHERE assumeNotNull(value) = 1 ORDER BY ALL;
 SELECT * FROM data_01285 WHERE assumeNotNull(value) = 3 ORDER BY ALL;

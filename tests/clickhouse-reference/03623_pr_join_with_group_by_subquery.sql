@@ -1,5 +1,8 @@
 create table users (id Int64, name String) engine=ReplicatedMergeTree('/clickhouse/{database}/tables/03623_users', 'r1') order by tuple();
 create table messages (id Int64, user_id Int64, text String) engine=ReplicatedMergeTree('/clickhouse/{database}/tables/03623_messages', 'r1') order by tuple();
+insert into users select number, concat('user_', toString(number)) from numbers(10);
+insert into users select 11, concat('user_', toString(11));
+insert into messages select 100+number, number, concat('message_', toString(number)) from numbers(11);
 SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
 SELECT '-- subquery INNER JOIN table';
 SELECT

@@ -6,4 +6,5 @@ CREATE TABLE test
 )
 Engine = ReplicatedMergeTree('/clickhouse/tables/{database}/test/test_table', '1')
 ORDER BY (c_id, p_id);
+INSERT INTO test SELECT '1', '11', '111' FROM numbers(5);
 SELECT * from test format Null;

@@ -6,6 +6,7 @@ CREATE TABLE dst_table ENGINE = MergeTree ORDER BY number AS SELECT number FROM 
 CREATE TABLE src_table AS dst_table ENGINE = Null;
 SET param_dst_table = 'dst_table';
 CREATE MATERIALIZED VIEW mv_table TO {dst_table:Identifier} AS SELECT * FROM src_table;
+INSERT INTO src_table SELECT 42;
 SELECT * FROM dst_table ORDER BY number;
 CREATE TABLE dst_table (`number` UInt32) ENGINE = MergeTree ORDER BY number;
 SET param_src_table = 'src_table';
@@ -16,4 +17,5 @@ WHERE number NOT IN (
     SELECT number
     FROM {dst_table:Identifier}
 );
+INSERT INTO src_table SELECT 2;
 SELECT * FROM dst_table ORDER BY number ASC;

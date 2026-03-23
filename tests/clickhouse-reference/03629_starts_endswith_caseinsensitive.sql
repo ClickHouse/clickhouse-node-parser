@@ -16,6 +16,7 @@ SELECT endsWithCaseInsensitiveUTF8('中国', '国'), endsWithCaseInsensitiveUTF8
 SELECT startsWithCaseInsensitive('中国', '\xe4'), startsWithCaseInsensitiveUTF8('中国', '\xe4');
 SELECT endsWithCaseInsensitive('中国', '\xbd'), endsWithCaseInsensitiveUTF8('中国', '\xbd');
 CREATE TABLE tab(S1 String, S2 String, S3 FixedString(4)) ENGINE=Memory;
+INSERT INTO tab values ('1a', 'a', 'AbA'), ('22', 'A', 'ab'), ('中国', '中', '国');
 SELECT COUNT() FROM tab WHERE startsWithCaseInsensitive(S1, '1');
 SELECT COUNT() FROM tab WHERE startsWithCaseInsensitive(S2, '中');
 SELECT COUNT() FROM tab WHERE startsWithCaseInsensitive(S3, '国');

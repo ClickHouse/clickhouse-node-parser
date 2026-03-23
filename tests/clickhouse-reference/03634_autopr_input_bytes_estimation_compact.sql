@@ -8,6 +8,7 @@ SET enable_analyzer=1;
 SET max_bytes_before_external_group_by=0, max_bytes_ratio_before_external_group_by=0;
 -- Statistics are disabled to avoid accounting for them in `ReadCompressedBytes`
 CREATE TABLE t(a UInt64, s String, d Date) ENGINE=MergeTree PARTITION BY toYYYYMM(d) ORDER BY a SETTINGS auto_statistics_types='', index_granularity=8192, min_bytes_for_wide_part = 1e18;
+INSERT INTO t SELECT number, toString(number), today() - INTERVAL (number % 30) DAY FROM numbers(1e6);
 SELECT a FROM t FORMAT Null SETTINGS log_comment='query_1';
 SELECT s FROM t FORMAT Null SETTINGS log_comment='query_2';
 SELECT s, d FROM t FORMAT Null SETTINGS log_comment='query_3';

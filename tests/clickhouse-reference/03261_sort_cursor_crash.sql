@@ -1,8 +1,10 @@
 CREATE TABLE t0 (c0 Int) ENGINE = AggregatingMergeTree() ORDER BY tuple();
+INSERT INTO TABLE t0 (c0) VALUES (1);
 SELECT 42 FROM t0 FINAL PREWHERE t0.c0 = 1;
 CREATE TABLE t0 (c0 Int) ENGINE = SummingMergeTree() ORDER BY tuple();
 SELECT 43 FROM t0 FINAL PREWHERE t0.c0 = 1;
 CREATE TABLE t0 (c0 Int) ENGINE = ReplacingMergeTree() ORDER BY tuple();
 SELECT 44 FROM t0 FINAL PREWHERE t0.c0 = 1;
 CREATE TABLE t1 (a0 UInt8, c0 Int32, c1 UInt8) ENGINE = AggregatingMergeTree() ORDER BY tuple();
+INSERT INTO TABLE t1 (a0, c0, c1) VALUES (1, 1, 1);
 SELECT 45 FROM t1 FINAL PREWHERE t1.c0 = t1.c1;

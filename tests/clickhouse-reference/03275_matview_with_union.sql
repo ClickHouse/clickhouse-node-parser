@@ -64,5 +64,6 @@ SELECT * FROM (
 )
 ORDER BY step, rounded_event_time, key SETTINGS query_plan_remove_redundant_sorting = 0;
 set optimize_on_insert = 1;
+INSERT INTO src SELECT toDateTime('2020-10-01 00:00:00') + number, number % 100, number from numbers(1000);
 SELECT count() FROM dst;
 SELECT count(), key FROM dst WHERE step = 30 group by key ORDER BY key LIMIT 5;

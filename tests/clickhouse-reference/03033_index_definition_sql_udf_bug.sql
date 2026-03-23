@@ -9,5 +9,6 @@ CREATE TABLE t4_2
 ENGINE = MergeTree
 ORDER BY col1
 ;
+INSERT INTO t4_2 (col1, col2, col3) SELECT number, number, number FROM numbers(10);
 SELECT * FROM t4_2 WHERE test_func_1(col1, col3, col1) = 6
 SETTINGS force_data_skipping_indices = 'ind4';

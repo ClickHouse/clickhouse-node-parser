@@ -8,6 +8,14 @@ CREATE TABLE test_limit_by_all_old_planner (
     value Int32,
     name String
 ) ENGINE = Memory;
+INSERT INTO test_limit_by_all_old_planner VALUES 
+(1, 'A', 100, 'item1'),
+(1, 'A', 200, 'item2'),
+(1, 'B', 300, 'item3'),
+(2, 'A', 400, 'item4'),
+(2, 'A', 500, 'item5'),
+(2, 'B', 600, 'item6'),
+(3, 'C', 700, 'item7');
 -- Test 1: Test that LIMIT BY ALL throws an exception when using the old planner
 -- This tests the changes in TreeWriter.cpp
 SELECT id, category, value, name
@@ -85,6 +93,8 @@ FROM
 )
 GROUP BY d, category
 ORDER BY d, category;
+-- Test 13: NULL key handling
+INSERT INTO test_limit_by_all_old_planner VALUES (4, NULL, 10, 'n1'), (4, NULL, 20, 'n2');
 SELECT id, category
 FROM test_limit_by_all_old_planner
 ORDER BY id, category NULLS FIRST, value

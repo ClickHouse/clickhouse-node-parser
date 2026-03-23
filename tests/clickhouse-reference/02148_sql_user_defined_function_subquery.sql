@@ -6,5 +6,6 @@ SELECT 02148_test_function(1);
 CREATE FUNCTION 02148_test_function_nested AS (x) -> 02148_test_function(x + 2);
 SELECT 02148_test_function_nested(1);
 CREATE TABLE 02148_test_table (id UInt64, value String) ENGINE=TinyLog;
+INSERT INTO 02148_test_table VALUES (0, 'Value');
 CREATE FUNCTION 02148_test_function AS () -> (SELECT * FROM 02148_test_table LIMIT 1);
 CREATE OR REPLACE FUNCTION 02148_test_function AS () -> (SELECT value FROM 02148_test_table LIMIT 1);

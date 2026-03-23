@@ -1001,4 +1001,7 @@ b498	Int64	,
 b499	Int64	,
 b500	Int64	  
 ) ENGINE = Memory;
+
+insert into t(c1) values(1);
+
 SELECT count() FROM (SELECT tuple(*) FROM t);

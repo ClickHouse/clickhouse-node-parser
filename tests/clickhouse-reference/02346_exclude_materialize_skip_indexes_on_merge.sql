@@ -11,6 +11,7 @@ CREATE TABLE tab
     INDEX `id,x_b` b TYPE set(3) -- weird but legal idx name just to make sure it works with setting
 )
 ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity = 4, materialize_skip_indexes_on_merge = 1, add_minmax_index_for_numeric_columns=0;
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100);
 CREATE VIEW explain_indexes
 AS SELECT trimLeft(explain) AS explain
 FROM
@@ -23,4 +24,5 @@ FROM
     ))
 )
 WHERE (explain LIKE '%Name%') OR (explain LIKE '%Description%') OR (explain LIKE '%Parts%') OR (explain LIKE '%Granules%') OR (explain LIKE '%Range%');
+INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100);
 SELECT * FROM explain_indexes;

@@ -10,6 +10,7 @@ create table test_bm_join(
 ENGINE = MergeTree()
 ORDER BY(dim,id)
 SETTINGS index_granularity = 8192;
+insert into test_bm VALUES (1,1),(2,2),(3,3),(4,4);
 select
 	dim ,
 	sum(idnum)

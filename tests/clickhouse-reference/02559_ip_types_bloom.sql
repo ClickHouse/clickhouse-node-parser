@@ -8,4 +8,5 @@ CREATE TABLE ip_bloom
 )
 ENGINE = MergeTree
 ORDER BY a;
+INSERT INTO ip_bloom VALUES (1, '1.1.1.1', '::1');
 SELECT * FROM ip_bloom;

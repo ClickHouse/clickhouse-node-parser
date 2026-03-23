@@ -14,6 +14,14 @@ CREATE TABLE tab (
     col_lowcardinality_nullable_fixedstring LowCardinality(Nullable(FixedString(32)))
 ) ENGINE = MergeTree()
 ORDER BY col_string;
+INSERT INTO tab VALUES 
+    (1, 'apple', 'fruit', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa'),
+    (2, 'application', 'software', 'bbb', 'bbb', 'bbb', 'bbb', 'bbb', 'bbb'),
+    (3, 'apply', 'verb', 'ccc', 'ccc', 'ccc', 'ccc', 'ccc', 'ccc'),
+    (4, 'banana', 'fruit', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa'),
+    (5, 'band', 'music', 'bbb', 'bbb', 'bbb', 'bbb', 'bbb', 'bbb'),
+    (6, 'Test', 'other', 'ccc', 'ccc', 'ccc', 'ccc', 'ccc', 'ccc'),
+    (7, 'A-Test', 'another', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa');
 SELECT '-- Test LIKE perfect prefix on String column - should be rewritten';
 SELECT count() FROM tab WHERE col_string LIKE 'app%';
 SELECT count() FROM tab WHERE col_string LIKE 'app%' SETTINGS optimize_rewrite_like_perfect_affix = 0;

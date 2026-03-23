@@ -11,6 +11,7 @@ SELECT substring(toFixedString(toString(number), 4), 1, number % 5) FROM system.
 SELECT substring(toFixedString(toString(number), 4), 1 + number % 5) FROM system.numbers LIMIT 995, 10;
 SELECT substring(toFixedString(toString(number), 4), 1 + number % 5, 1 + number % 3) FROM system.numbers LIMIT 995, 10;
 CREATE TABLE tab(e8 Enum8('hello' = -5, 'world' = 15), e16 Enum16('shark' = -999, 'eagle' = 9999)) ENGINE MergeTree ORDER BY tuple();
+INSERT INTO TABLE tab VALUES ('hello', 'shark'), ('world', 'eagle');
 -- positive offsets (slice from left)
 SELECT substring(e8, 1), substring (e16, 1) FROM tab;
 SELECT substring(e8, 2, 10), substring (e16, 2, 10) FROM tab;
@@ -41,6 +42,7 @@ SELECT substring(cast('abcdefgh' AS FixedString(8)), materialize(2), -2);
 SELECT substring(cast('abcdefgh' AS FixedString(8)), 2, materialize(-2));
 SELECT substring(cast('abcdefgh' AS FixedString(8)), materialize(2), materialize(-2));
 CREATE TABLE tab (s String, l Int8, r Int8) ENGINE = Memory;
+INSERT INTO tab VALUES ('abcdefgh', 2, -2), ('12345678', 3, -3);
 SELECT substring(s, 2, -2) FROM tab;
 SELECT substring(s, l, -2) FROM tab;
 SELECT substring(s, 2, r) FROM tab;
@@ -64,6 +66,7 @@ CREATE TABLE t
     l Int8,
     r Int8
 ) ENGINE = Memory;
+INSERT INTO t VALUES ('abcdefgh', -2, -2),('12345678', -3, -3);
 SELECT substring(s, -2, -2) FROM t;
 SELECT substring(s, l, -2) FROM t;
 SELECT substring(s, -2, r) FROM t;

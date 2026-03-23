@@ -2,6 +2,9 @@ SET analyzer_compatibility_join_using_top_level_identifier = 1;
 CREATE TABLE t1 (id String, val String) ENGINE = MergeTree() ORDER BY id;
 CREATE TABLE t2 (id String, code String) ENGINE = MergeTree() ORDER BY id;
 CREATE TABLE t3 (id String, code String) ENGINE = MergeTree() ORDER BY id;
+INSERT INTO t1 VALUES ('a', 'v'), ('b', 'w');
+INSERT INTO t2 VALUES ('b', 'c');
+INSERT INTO t3 VALUES ('a_1', 'c'), ('b_1', 'd');
 SET enable_analyzer = 1;
 SELECT t1.id || '_1' AS id, t1.val
 FROM t1

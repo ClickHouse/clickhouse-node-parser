@@ -1,5 +1,6 @@
 SET use_variant_as_common_type = 0;
 create table table_map (a Map(String, String), b String, c Array(String), d Array(String)) engine = Memory;
+insert into table_map values ({'name':'zhangsan', 'age':'10'}, 'name', ['name', 'age'], ['zhangsan', '10']), ({'name':'lisi', 'gender':'female'},'age',['name', 'gender'], ['lisi', 'female']);
 select mapContains(a, 'name') from table_map;
 select mapContains(a, 'gender') from table_map;
 select mapContains(a, 'abc') from table_map;
@@ -9,6 +10,7 @@ select mapKeys(a) from table_map;
 select mapFromArrays(c, d) from table_map;
 -- Map(UInt8, UInt8)
 create table table_map (a Map(UInt8, Int), b UInt8, c UInt32, d Array(String), e Array(String)) engine = MergeTree order by tuple();
+insert into table_map select map(number, number), number, number, [number, number, number], [number*2, number*3, number*4] from numbers(1000, 3);
 select mapContains(a, b), mapContains(a, c), mapContains(a, 233) from table_map;
 select mapContains(a, 'aaa') from table_map; -- { serverError NO_COMMON_TYPE }
 select mapContains(b, 'aaa') from table_map; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

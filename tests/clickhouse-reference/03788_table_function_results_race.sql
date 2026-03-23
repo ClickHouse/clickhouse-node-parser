@@ -11,4 +11,7 @@ CROSS JOIN numbers(10) AS n;
 SET max_block_size = 100, min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0;
 SET parallel_view_processing = 1;
 SET max_threads = 8, max_insert_threads = 8;
+-- Insert enough data to trigger parallel processing.
+-- This should cause multiple threads to call executeTableFunction concurrently.
+INSERT INTO source SELECT number FROM numbers(10000);
 SELECT count() FROM dest;

@@ -9,4 +9,5 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO tab VALUES (0, 'a');
 SELECT * FROM tab WHERE str == 'b' AND 1.0;

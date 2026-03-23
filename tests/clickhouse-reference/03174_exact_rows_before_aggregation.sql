@@ -2,6 +2,7 @@
 
 set rows_before_aggregation = 1, exact_rows_before_limit = 1, output_format_write_statistics = 0, max_block_size = 100;
 create table test (i int) engine MergeTree order by tuple();
+insert into test select arrayJoin(range(10000));
 select * from test where i < 10 group by i order by i FORMAT JSONCompact;
 select * from test where i < 10 group by i order by i FORMAT XML;
 select * from test group by i having i in (10, 11, 12) order by i FORMAT JSONCompact;

@@ -1,5 +1,7 @@
 -- disable merge
 create table test (i int, j int, projection p (select *, _part_offset order by j)) engine MergeTree order by i settings index_granularity = 1, max_bytes_to_merge_at_max_space_in_pool = 1;
+-- make 5 parts
+insert into test select number, 10 - number from numbers(5);
 -- verify _part_starting_offset and _part_offset in parent part and projection
 select _part, _part_starting_offset, _part_offset from test order by all;
 select _part, _part_starting_offset, _part_offset from test where j = 8 order by all;

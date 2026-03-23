@@ -17,6 +17,7 @@ SELECT count() FROM (SELECT * FROM remote('127.0.0.2', system.numbers) LIMIT 100
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE test_local (date Date, value UInt32) ENGINE = MergeTree(date, date, 8192);
 CREATE TABLE test_distributed AS test_local ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), test_local, rand());
+INSERT INTO test_local SELECT '2000-08-01', number as value from numbers(50000);
 SELECT count() FROM (SELECT * FROM test_distributed) SETTINGS max_rows_to_read_leaf = 40000; -- { serverError TOO_MANY_ROWS }
 SELECT count() FROM (SELECT * FROM test_distributed) SETTINGS max_bytes_to_read_leaf = 40000; -- { serverError TOO_MANY_BYTES }
 SELECT count() FROM (SELECT * FROM test_distributed) SETTINGS max_rows_to_read = 60000; -- { serverError TOO_MANY_ROWS }

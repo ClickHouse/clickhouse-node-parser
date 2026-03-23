@@ -7,6 +7,7 @@ CREATE TABLE database_for_dict_01268.table_for_dict1
 )
 ENGINE = MergeTree()
 ORDER BY key_column;
+INSERT INTO database_for_dict_01268.table_for_dict1 VALUES (100500, 10000000, 'Hello world');
 CREATE TABLE database_for_dict_01268.table_for_dict2
 (
   region_id UInt64,
@@ -15,6 +16,11 @@ CREATE TABLE database_for_dict_01268.table_for_dict2
 )
 ENGINE = MergeTree()
 ORDER BY region_id;
+INSERT INTO database_for_dict_01268.table_for_dict2 VALUES (1, 0, 'Russia');
+INSERT INTO database_for_dict_01268.table_for_dict2 VALUES (2, 1, 'Moscow');
+INSERT INTO database_for_dict_01268.table_for_dict2 VALUES (3, 2, 'Center');
+INSERT INTO database_for_dict_01268.table_for_dict2 VALUES (4, 0, 'Great Britain');
+INSERT INTO database_for_dict_01268.table_for_dict2 VALUES (5, 4, 'London');
 CREATE TABLE database_for_dict_01268.table_for_dict3
 (
   region_id UInt64,
@@ -23,6 +29,11 @@ CREATE TABLE database_for_dict_01268.table_for_dict3
 )
 ENGINE = MergeTree()
 ORDER BY region_id;
+INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (1, 0.5, 'Russia');
+INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (2, 1.6, 'Moscow');
+INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (3, 2.3, 'Center');
+INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (4, 0.2, 'Great Britain');
+INSERT INTO database_for_dict_01268.table_for_dict3 VALUES (5, 4.9, 'London');
 CREATE DATABASE db_01268;
 CREATE DICTIONARY db_01268.dict1
 (

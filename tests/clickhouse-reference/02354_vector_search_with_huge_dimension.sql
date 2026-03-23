@@ -11,6 +11,11 @@ CREATE TABLE tab(
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 2;
+INSERT INTO tab
+    SELECT number,
+           number * 100,
+           CAST(arrayWithConstant(32768, number / 10) as Array(Float32))
+    FROM numbers(10);
 SELECT '-- Plan must contain vector index usage';
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes = 1

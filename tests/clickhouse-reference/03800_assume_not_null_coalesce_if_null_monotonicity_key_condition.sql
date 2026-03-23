@@ -8,6 +8,15 @@ CREATE TABLE test
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS index_granularity = 1;
+INSERT INTO test VALUES
+    (1, toDateTime64('2024-12-28 00:00:00', 3)),
+    (2, toDateTime64('2024-12-29 00:00:00', 3)),
+    (3, toDateTime64('2024-12-30 00:00:00', 3)),
+    (4, toDateTime64('2025-01-01 00:00:00', 3)),
+    (5, toDateTime64('2025-01-02 00:00:00', 3)),
+    (6, toDateTime64('2025-01-03 00:00:00', 3)),
+    (7, toDateTime64('2025-01-04 00:00:00', 3)),
+    (8, toDateTime64('2025-01-05 00:00:00', 3));
 CREATE VIEW view_assume AS
 SELECT
     id,
@@ -46,6 +55,12 @@ CREATE TABLE test_non_null
 ENGINE = MergeTree()
 ORDER BY ts
 SETTINGS index_granularity = 1, allow_nullable_key = 1;
+INSERT INTO test_non_null VALUES
+    (toDateTime64('2026-01-01 00:00:00', 3)),
+    (toDateTime64('2026-01-02 00:00:00', 3)),
+    (toDateTime64('2026-01-03 00:00:00', 3)),
+    (toDateTime64('2026-01-04 00:00:00', 3)),
+    (toDateTime64('2026-01-05 00:00:00', 3));
 SELECT *
 FROM test_non_null
 WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3)
@@ -65,6 +80,12 @@ CREATE TABLE test_null
 ENGINE = MergeTree()
 ORDER BY ts
 SETTINGS index_granularity = 1, allow_nullable_key = 1;
+INSERT INTO test_null VALUES
+    (toDateTime64('2026-01-01 00:00:00', 3)),
+    (toDateTime64('2026-01-02 00:00:00', 3)),
+    (NULL),
+    (toDateTime64('2026-01-03 00:00:00', 3)),
+    (toDateTime64('2026-01-04 00:00:00', 3));
 SELECT *
 FROM test_null
 WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3)
@@ -84,6 +105,12 @@ CREATE TABLE test_null_rev
 ENGINE = MergeTree()
 ORDER BY (ts DESC)
 SETTINGS index_granularity = 1, allow_nullable_key = 1, allow_experimental_reverse_key = 1;
+INSERT INTO test_null_rev VALUES
+    (toDateTime64('2026-01-01 00:00:00', 3)),
+    (toDateTime64('2026-01-02 00:00:00', 3)),
+    (NULL),
+    (toDateTime64('2026-01-03 00:00:00', 3)),
+    (toDateTime64('2026-01-04 00:00:00', 3));
 SELECT *
 FROM test_null_rev
 WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3)
@@ -106,6 +133,13 @@ CREATE TABLE test_lc_left_inf
 ENGINE = MergeTree()
 ORDER BY (a, ts)
 SETTINGS index_granularity = 1, allow_nullable_key = 1;
+INSERT INTO test_lc_left_inf VALUES
+    (1, 0),
+    (1, 0),
+    (1, 0),
+    (2, 0),
+    (2, 0),
+    (2, 2000);
 SELECT *
 FROM test_lc_left_inf
 WHERE assumeNotNull(ts) >= 1000

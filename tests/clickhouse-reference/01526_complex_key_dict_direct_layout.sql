@@ -7,6 +7,7 @@ CREATE TABLE db_01526.table_for_dict1
 )
 ENGINE = MergeTree()
 ORDER BY (key_column, second_column);
+INSERT INTO db_01526.table_for_dict1 VALUES (1, 2, 'aaa'), (1, 3, 'bbb'), (2, 3, 'ccc');
 CREATE DICTIONARY db_01526.dict1
 (
   key_column UInt64 DEFAULT 0,

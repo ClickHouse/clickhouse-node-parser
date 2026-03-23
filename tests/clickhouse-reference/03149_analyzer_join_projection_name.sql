@@ -9,6 +9,8 @@ PRIMARY KEY gid, gname
 LAYOUT(COMPLEX_KEY_HASHED())
 SOURCE(CLICKHOUSE(TABLE 'groups' DATABASE currentDatabase()))
 LIFETIME(MIN 0 MAX 0);
+INSERT INTO groups VALUES ('1', 'Group1');
+INSERT INTO users VALUES (1231, 'John', '1', 'Group1');
 SELECT u.uid, u.name, u.gid, u.gname
 FROM users u left join groups_dict g using gid, gname
 format PrettyCompactMonoBlock;

@@ -6,4 +6,5 @@ CREATE TABLE test_00615
     key String,
     data Nullable(Int8)
 ) ENGINE = MergeTree(dt, (id, key, dt), 8192);
+INSERT INTO test_00615 (dt,id, key,data) VALUES ('2000-01-01', 100, 'key', 100500);
 SELECT * FROM test_00615 ORDER BY data NULLS FIRST;

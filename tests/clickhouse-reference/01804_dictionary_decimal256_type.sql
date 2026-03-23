@@ -3,6 +3,7 @@ CREATE TABLE dictionary_decimal_source_table
     id UInt64,
     decimal_value Decimal256(5)
 ) ENGINE = TinyLog;
+INSERT INTO dictionary_decimal_source_table VALUES (1, 5.0);
 CREATE DICTIONARY flat_dictionary
 (
     id UInt64,
@@ -47,6 +48,7 @@ CREATE TABLE ip_trie_dictionary_decimal_source_table
     prefix String,
     decimal_value Decimal256(5)
 ) ENGINE = TinyLog;
+INSERT INTO ip_trie_dictionary_decimal_source_table VALUES ('127.0.0.0', 5.0);
 CREATE DICTIONARY ip_trie_dictionary
 (
     prefix String,
@@ -62,6 +64,7 @@ CREATE TABLE dictionary_decimal_polygons_source_table
     key Array(Array(Array(Tuple(Float64, Float64)))),
     decimal_value Decimal256(5)
 ) ENGINE = TinyLog;
+INSERT INTO dictionary_decimal_polygons_source_table VALUES ([[[(0, 0), (0, 1), (1, 1), (1, 0)]]], 5.0);
 CREATE DICTIONARY polygon_dictionary
 (
     key Array(Array(Array(Tuple(Float64, Float64)))),

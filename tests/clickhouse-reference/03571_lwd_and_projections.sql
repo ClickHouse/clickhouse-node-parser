@@ -13,3 +13,5 @@ CREATE TABLE weird_projections(
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/tables/test', '1')
 ORDER BY (account_id)
 SETTINGS index_granularity = 8192, lightweight_mutation_projection_mode = 'rebuild';
+INSERT INTO weird_projections SELECT 134 as account_id, toString(account_id) as user_id FROM numbers(10000);
+INSERT INTO weird_projections SELECT 132 as account_id, toString(account_id) as user_id FROM numbers(10000);

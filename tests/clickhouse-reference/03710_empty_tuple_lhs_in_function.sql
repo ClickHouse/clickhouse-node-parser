@@ -11,6 +11,7 @@ SELECT [tuple()] IN [()];
 SELECT tuple() IN (((tuple())));
 SELECT tuple() IN [(((tuple())))];
 CREATE TABLE test_empty_tuple (t Tuple()) ENGINE = Memory;
+INSERT INTO test_empty_tuple VALUES (tuple()), (tuple()), (tuple());
 SELECT t FROM test_empty_tuple WHERE t IN (tuple());
 SELECT t FROM test_empty_tuple WHERE t IN [tuple()];
 SELECT t FROM test_empty_tuple WHERE t IN [()];

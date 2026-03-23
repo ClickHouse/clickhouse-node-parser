@@ -12,3 +12,5 @@ CREATE TABLE secret
 )
 ENGINE = MergeTree()
 ORDER BY s;
+INSERT INTO normal VALUES (1, '');
+INSERT INTO secret VALUES ('secret');

@@ -6,4 +6,6 @@ set distributed_foreground_insert = 1;
 CREATE TABLE t (`A` Int64) ENGINE = MergeTree() ORDER BY tuple();
 CREATE TABLE t_d AS t ENGINE = Distributed(test_shard_localhost, currentDatabase(), t);
 CREATE MATERIALIZED VIEW t_v ENGINE = MergeTree() ORDER BY tuple() AS SELECT A FROM t LEFT JOIN ( SELECT toInt64(dummy) AS A FROM system.one ) js2 USING (A);
+INSERT INTO t_d SELECT number FROM numbers(2);
 SELECT * FROM t_v ORDER BY A;
+INSERT INTO t SELECT number+2 FROM numbers(2);

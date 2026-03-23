@@ -3,4 +3,7 @@
 
 set allow_experimental_dynamic_type = 1;
 create table test (id UInt64, d Dynamic) engine=MergeTree order by id settings min_rows_for_wide_part=1, min_bytes_for_wide_part=1, lock_acquire_timeout_for_background_operations=600;
+insert into test select number, number from numbers(200000);
+insert into test select number, 'str_' || toString(number) from numbers(200000, 200000);
+insert into test select number, range(number % 10 + 1) from numbers(400000, 200000);
 select count(), dynamicType(d) from test group by dynamicType(d) order by count(), dynamicType(d);

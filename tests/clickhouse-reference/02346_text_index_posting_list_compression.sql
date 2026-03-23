@@ -33,6 +33,58 @@ CREATE TABLE tab_uncompressed
 )
 ENGINE = MergeTree
 ORDER BY ts;
+INSERT INTO tab_bitpacking
+SELECT
+    '2026-01-09 10:00:00',
+    multiIf(number % 3 = 0, 'aa',
+            number % 3 = 1, 'bb',
+            'cc') AS str
+FROM numbers(10000);
+INSERT INTO tab_uncompressed
+SELECT
+    '2026-01-09 11:00:00',
+    multiIf(number % 3 = 0, 'aa',
+            number % 3 = 1, 'bb',
+            'cc') AS str
+FROM numbers(10000);
+INSERT INTO tab_bitpacking
+SELECT
+    '2026-01-09 12:00:00',
+    multiIf(number < 129, 'tail129',
+            number = 129, 'single',
+            'noise') AS str
+FROM numbers(512);
+INSERT INTO tab_uncompressed
+SELECT
+    '2026-01-09 13:00:00',
+    multiIf(number < 129, 'tail129',
+            number = 129, 'single',
+            'noise') AS str
+FROM numbers(512);
+INSERT INTO tab_bitpacking
+SELECT
+    '2026-01-09 14:00:00',
+    if(number < 1003, 'mid1003', 'noise') AS str
+FROM numbers(1500);
+INSERT INTO tab_uncompressed
+SELECT
+    '2026-01-09 15:00:00',
+    if(number < 1003, 'mid1003', 'noise') AS str
+FROM numbers(1500);
+INSERT INTO tab_bitpacking
+SELECT
+    '2026-01-09 16:00:00',
+    multiIf(number IN (0, 777), 'rare2',
+            number IN (1, 2, 3, 4, 5), 'rare5',
+            'noise') AS str
+FROM numbers(2000);
+INSERT INTO tab_uncompressed
+SELECT
+    '2026-01-09 17:00:00',
+    multiIf(number IN (0, 777), 'rare2',
+            number IN (1, 2, 3, 4, 5), 'rare5',
+            'noise') AS str
+FROM numbers(2000);
 -- Validates that a very large/high-frequency posting list is decoded correctly by checking the count in the compressed table matches the uncompressed baseline.
 
 SELECT

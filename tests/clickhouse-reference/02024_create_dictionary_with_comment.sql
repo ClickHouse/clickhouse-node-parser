@@ -10,6 +10,8 @@ CREATE TABLE source_table
     id UInt64,
     value String
 ) ENGINE = Memory();
+INSERT INTO source_table VALUES (1, 'First');
+INSERT INTO source_table VALUES (2, 'Second');
 CREATE DICTIONARY 2024_dictionary_with_comment
 (
     id UInt64,

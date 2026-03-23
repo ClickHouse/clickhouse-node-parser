@@ -13,6 +13,7 @@ a4 alias arrayMap(x -> toString(x), range(3)), a5 alias a4, a6 alias a5,
 `struct.a5` alias `struct.a4`,
 `struct.a6` alias `struct.a5`
 ) engine=MergeTree(date, id, 1);
+insert into aliases_test (id) values (0);
 select '-- Ensure ALIAS columns are not selected by asterisk';
 select * from aliases_test;
 select d1, a1, a2, a3, a4, a5, a6 from aliases_test;

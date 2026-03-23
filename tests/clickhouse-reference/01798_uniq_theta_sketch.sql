@@ -49,6 +49,9 @@ CREATE TABLE decimal
 ) ENGINE = Memory;
 SELECT (uniqTheta(a), uniqTheta(b), uniqTheta(c))
 FROM (SELECT * FROM decimal ORDER BY a);
+INSERT INTO decimal (a, b, c)
+SELECT toDecimal32(number - 50, 4), toDecimal64(number - 50, 8) / 3, toDecimal128(number - 50, 8) / 5
+FROM system.numbers LIMIT 101;
 set optimize_injective_functions_inside_uniq = 1;
 set optimize_injective_functions_inside_uniq = 0;
 -- simple
@@ -60,6 +63,15 @@ CREATE TABLE stored_aggregates
     UniqThetaSketch AggregateFunction(uniqTheta, UInt64)
 )
 ENGINE = AggregatingMergeTree(d, d, 8192);
+INSERT INTO stored_aggregates
+SELECT
+    toDate('2014-06-01') AS d,
+    uniqState(number) AS Uniq,
+    uniqThetaState(number) AS UniqThetaSketch
+FROM
+(
+    SELECT * FROM system.numbers LIMIT 1000
+);
 SELECT uniqMerge(Uniq), uniqThetaMerge(UniqThetaSketch) FROM stored_aggregates;
 SELECT d, uniqMerge(Uniq), uniqThetaMerge(UniqThetaSketch) FROM stored_aggregates GROUP BY d ORDER BY d;
 -- complex
@@ -72,6 +84,19 @@ CREATE TABLE stored_aggregates
     UniqThetaSketch	AggregateFunction(uniqTheta, UInt64)
 )
 ENGINE = AggregatingMergeTree(d, (d, k1, k2), 8192);
+INSERT INTO stored_aggregates
+SELECT
+	toDate('2014-06-01') AS d,
+	intDiv(number, 100) AS k1,
+	toString(intDiv(number, 10)) AS k2,
+	uniqState(toUInt64(number % 7)) AS Uniq,
+    uniqThetaState(toUInt64(number % 7)) AS UniqThetaSketch
+FROM
+(
+	SELECT * FROM system.numbers LIMIT 1000
+)
+GROUP BY d, k1, k2
+ORDER BY d, k1, k2;
 SELECT d, k1, k2,
 	uniqMerge(Uniq), uniqThetaMerge(UniqThetaSketch)
 FROM stored_aggregates
@@ -98,4 +123,6 @@ create materialized view summing_merge_tree_aggregate_function (
 as select d, k, sum(c) as c, uniqState(u) as un, uniqThetaState(u) as ut
 from summing_merge_tree_null
 group by d, k;
+-- prime number 53 to avoid resonanse between %3 and %53
+insert into summing_merge_tree_null select number % 3, 1, number % 53 from numbers(999999);
 select k, sum(c), uniqMerge(un), uniqThetaMerge(ut) from summing_merge_tree_aggregate_function group by k order by k;

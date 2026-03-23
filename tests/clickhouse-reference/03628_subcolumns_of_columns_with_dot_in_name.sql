@@ -1,4 +1,5 @@
 create table test (`my.json` JSON) engine=Memory;
+insert into test select '{"a" : 42}';
 select my.json.a from test settings enable_analyzer=1;
 select `my.json`.a from test settings enable_analyzer=1;
 select my.json.a from test settings enable_analyzer=0;
@@ -15,9 +16,11 @@ create table test
     index idx2 my.json.b::Int64 type minmax,
     projection prj1 (select my.json, my.json.a, my.json.b order by my.json.a, my.json.b::Int32)
 ) engine=MergeTree order by (my.json.a, my.json.b::Int32, my.json.a + 42, my.json.b::Int32 + 42);
+insert into test (my.json) select '{"a" : 42, "b" : 42}';
 select * from test;
 select * from test order by my.json.a;
 select * from test order by my.json.b::Int32;
+insert into test (my.json) select '{"a" : 43, "b" : 43}';
 create table test
 (
     `my.tuple` Tuple(a UInt32),
@@ -26,4 +29,6 @@ create table test
     index idx1 my.tuple.a type minmax,
     projection prj1 (select my.tuple, my.tuple.a order by my.tuple.a)
 ) engine=MergeTree order by (my.tuple.a, my.tuple.a + 42);
+insert into test (my.tuple) select tuple(42);
 select * from test order by my.tuple.a;
+insert into test (my.tuple) select tuple(43);

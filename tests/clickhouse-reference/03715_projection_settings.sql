@@ -4,6 +4,7 @@ CREATE TABLE t(
 )
 ENGINE = MergeTree()
 ORDER BY x SETTINGS index_granularity = 999999999, index_granularity_bytes = 99999999999, use_const_adaptive_granularity = 0, min_bytes_for_wide_part = 0;
+INSERT INTO t SETTINGS max_insert_block_size = 2000000 SELECT number, toString(number) FROM numbers(10000) SETTINGS max_block_size = 2000000;
 SELECT marks FROM system.projection_parts WHERE active AND database = currentDatabase() AND table = 't' AND name = 'p3';
 SELECT marks FROM system.projection_parts WHERE active AND database = currentDatabase() AND table = 't' AND name = 'p4';
 SELECT name, settings FROM system.projections WHERE database = currentDatabase() AND table = 't' ORDER BY name;

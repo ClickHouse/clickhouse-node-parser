@@ -2,13 +2,16 @@ SET allow_experimental_alias_table_engine = 1;
 -- Create source table
 CREATE TABLE source_table (id UInt32, name String, value Float64)
 ENGINE = MergeTree ORDER BY id;
+INSERT INTO source_table VALUES (1, 'one', 10.1), (2, 'two', 20.2), (3, 'three', 30.3);
 CREATE TABLE alias_syntax_1 ENGINE = Alias('source_table');
 SELECT * FROM alias_syntax_1 ORDER BY id;
 CREATE TABLE alias_syntax_2 ENGINE = Alias(currentDatabase(), 'source_table');
 SELECT * FROM alias_syntax_2 ORDER BY id;
+INSERT INTO alias_syntax_1 VALUES (4, 'four', 40.4);
 SELECT count() FROM source_table;
 SELECT count() FROM alias_syntax_1;
 SELECT count() FROM alias_syntax_2;
+INSERT INTO alias_syntax_2 VALUES (5, 'five', 50.5);
 CREATE TABLE alias_syntax_3 (id UInt32, name String, value Float64) ENGINE = Alias('source_table'); -- { serverError BAD_ARGUMENTS }
 CREATE TABLE base_table (id UInt32, value String) ENGINE = MergeTree ORDER BY id;
 CREATE TABLE alias_1 ENGINE = Alias('base_table');

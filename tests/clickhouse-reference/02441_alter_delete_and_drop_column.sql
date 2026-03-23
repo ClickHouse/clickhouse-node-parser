@@ -3,6 +3,7 @@
 
 create table mut (n int, m int, k int) engine=ReplicatedMergeTree('/test/02441/{database}/mut', '1') order by n;
 set insert_keeper_fault_injection_probability=0;
+insert into mut values (1, 2, 3), (10, 20, 30);
 -- a funny way to wait for a MUTATE_PART to be assigned
 select sleepEachRow(2) from url('http://localhost:8123/?param_tries={1..10}&query=' || encodeURLComponent(
             'select 1 where ''MUTATE_PART'' not in (select type from system.replication_queue where database=''' || currentDatabase() || ''' and table=''mut'')'

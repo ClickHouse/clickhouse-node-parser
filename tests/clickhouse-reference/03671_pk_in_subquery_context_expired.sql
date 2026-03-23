@@ -6,6 +6,7 @@ CREATE TABLE tbl
 )
 ENGINE = MergeTree
 ORDER BY (id1, id2, v);
+INSERT INTO tbl VALUES ('a', 'b', 1);
 CREATE TABLE join_engine
 (
     `id1` LowCardinality(String),
@@ -13,6 +14,7 @@ CREATE TABLE join_engine
     `v` Int64
 )
 ENGINE = Join(ANY, LEFT, id1, id2);
+INSERT INTO join_engine VALUES ('a', 'b', 1);
 --
 -- The same as before, but without relying on enable_global_with_statement
 --

@@ -1,6 +1,8 @@
 SET enable_analyzer = 1;
 CREATE TABLE t1 (x Nullable(Int32), y Nullable(Int32)) ENGINE = Memory;
+INSERT INTO t1 VALUES (1, 1), (2, 2), (NULL, NULL);
 CREATE TABLE t2 (x Nullable(Int32), y Nullable(Int32)) ENGINE = Memory;
+INSERT INTO t2 VALUES (2, 2), (3, 3), (NULL, NULL);
 SELECT e2 FROM t1 FULL OUTER JOIN t2
 ON (
     (((t1.y = t2.y) OR ((t1.y IS NULL) AND (t2.y IS NULL))) AND (COALESCE(t1.x, 0) != 2))

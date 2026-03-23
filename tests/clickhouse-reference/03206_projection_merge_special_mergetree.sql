@@ -4,6 +4,7 @@ CREATE TABLE tp (
     eventcnt UInt64,
     PROJECTION p (select sum(eventcnt), type group by type)
 ) engine = MergeTree order by type;
+INSERT INTO tp SELECT number%3, 1 FROM numbers(3);
 CREATE TABLE tp (
     type Int32,
     eventcnt UInt64,

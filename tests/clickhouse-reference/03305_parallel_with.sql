@@ -1,5 +1,10 @@
 CREATE TABLE table1(x Int32) ENGINE=MergeTree order by x
 PARALLEL WITH
 CREATE TABLE table2(y Int32) ENGINE=MergeTree order by y;
+INSERT INTO table1 SELECT number FROM numbers(3)
+PARALLEL WITH
+INSERT INTO table1 SELECT number FROM numbers(10, 2)
+PARALLEL WITH
+INSERT INTO table2 SELECT number FROM numbers(20, 1);
 SELECT * FROM table1 ORDER BY x;
 SELECT * FROM table2 ORDER BY y;

@@ -3,6 +3,8 @@
 -- no-random-settings: a lot of settings influence task sizes, so it is simple to disable randomization completely
 
 CREATE TABLE t(a UInt64, s String) ENGINE = MergeTree ORDER BY a SETTINGS storage_policy = 's3_cache', min_rows_for_wide_part = 10000, min_bytes_for_wide_part = 0;
+INSERT INTO t SELECT *, randomString(100) FROM numbers_mt(3_000_000);
+INSERT INTO t SELECT *, randomString(100) FROM numbers(1_000);
 -- The problem with too small task sizes specifically happens when we have compact parts.
 -- Because for them we don't know individual column sizes, see `calculateMinMarksPerTask()` function.
 SELECT

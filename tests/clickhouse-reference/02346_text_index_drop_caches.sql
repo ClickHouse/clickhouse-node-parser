@@ -10,6 +10,7 @@ CREATE TABLE tab
     INDEX idx(s) TYPE text(tokenizer = sparseGrams(3, 10))
 )
 ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tab SELECT 'tkn' || toString(number) || 'nkt' FROM numbers(200000);
 SELECT count() FROM tab WHERE s LIKE '%888%' SETTINGS use_skip_indexes = 0;
 SELECT count() FROM tab WHERE hasAnyTokens(s, '888');
 SELECT

@@ -11,6 +11,30 @@ set max_block_size = 100000;
 set max_insert_threads = 1;
 set max_execution_time = 300;
 SET session_timezone = 'UTC';
+-- Try all the types.
+insert into function file('02892.orc')
+    with 5000 - number as n
+select
+    number,
+    intDiv(n, 11)::Int8 as i8,
+    n::Int16 i16,
+    n::Int32 as i32,
+    n::Int64 as i64,
+
+    toDate32(n*500000) as date32,
+    toDateTime64(n*1e6, 3) as dt64_ms,
+    toDateTime64(n*1e6, 6) as dt64_us,
+    toDateTime64(n*1e6, 9) as dt64_ns,
+    toDateTime64(n*1e6, 0) as dt64_s,
+    toDateTime64(n*1e6, 2) as dt64_cs,
+    (n/1000)::Float32 as f32,
+    (n/1000)::Float64 as f64,
+    n::String as s,
+    n::String::FixedString(9) as fs,
+    n::Decimal32(3)/1234 as d32,
+    n::Decimal64(10)/12345678 as d64,
+    n::Decimal128(20)/123456789012345 as d128
+    from numbers(10000);
 -- Go over all types individually
 -- { echoOn }
 select count(), sum(number) from file('02892.orc') where indexHint(i8 in (10, 15, -6));
@@ -66,6 +90,18 @@ select count(), sum(number) from file('02892.orc') where indexHint(i8 == 10 or 1
 select count(), min(i8), max(i8) from file('02892.orc') where (i8 == 10 or 1 == 1);
 select count(), sum(number) from file('02892.orc') where indexHint(i8 < 0);
 select count(), min(i8), max(i8) from file('02892.orc') where (i8 < 0);
+-- { echoOff }
+
+-- Nullable and LowCardinality.
+insert into function file('02892.orc') select
+    number,
+    if(number%234 == 0, NULL, number) as sometimes_null,
+    toNullable(number) as never_null,
+    if(number%345 == 0, number::String, NULL) as mostly_null,
+    toLowCardinality(if(number%234 == 0, NULL, number)) as sometimes_null_lc,
+    toLowCardinality(toNullable(number)) as never_null_lc,
+    toLowCardinality(if(number%345 == 0, number::String, NULL)) as mostly_null_lc
+    from numbers(1000);
 -- { echoOn }
 select count(), sum(number) from file('02892.orc') where indexHint(sometimes_null is NULL);
 select count(), min(sometimes_null), max(sometimes_null) from file('02892.orc') where (sometimes_null is NULL);
@@ -91,6 +127,15 @@ select count(), sum(number) from file('02892.orc') where indexHint(sometimes_nul
 select count(), min(sometimes_null), max(sometimes_null) from file('02892.orc') where (sometimes_null < 150);
 select count(), sum(number) from file('02892.orc') where indexHint(sometimes_null_lc < 150);
 select count(), min(sometimes_null_lc), max(sometimes_null_lc) from file('02892.orc') where (sometimes_null_lc < 150);
+-- { echoOff }
+
+-- Settings that affect the table schema or contents.
+insert into function file('02892.orc') select
+    number,
+    if(number%234 == 0, NULL, number + 100) as positive_or_null,
+    if(number%234 == 0, NULL, -number - 100) as negative_or_null,
+    if(number%234 == 0, NULL, 'I am a string') as string_or_null
+    from numbers(1000);
 -- { echoOn }
 select count(), sum(number) from file('02892.orc') where indexHint(positive_or_null < 50); -- quirk with infinities
 select count(), min(positive_or_null), max(positive_or_null) from file('02892.orc') where (positive_or_null < 50);

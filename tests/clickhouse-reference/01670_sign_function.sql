@@ -8,6 +8,7 @@ CREATE TABLE test(
 	n4 Float64,
 	n5 Decimal32(5)
 ) ENGINE = Memory;
+INSERT INTO test VALUES (1, 2, -0.0001, 1.5, 0.5) (-2, 0, 2.5, -4, -5) (4, 5, 5, 0, 7);
 SELECT sign(n1) FROM test;
 SELECT sign(n2) FROM test;
 SELECT sign(n3) FROM test;

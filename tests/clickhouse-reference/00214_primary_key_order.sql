@@ -1,5 +1,6 @@
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE primary_key (d Date DEFAULT today(), x Int8) ENGINE = MergeTree(d, -x, 1);
+INSERT INTO primary_key (x) VALUES (1), (2), (3);
 SELECT x FROM primary_key ORDER BY x;
 SELECT 'a', -x FROM primary_key WHERE -x < -3;
 SELECT 'b', -x FROM primary_key WHERE -x < -2;

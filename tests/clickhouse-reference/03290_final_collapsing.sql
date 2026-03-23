@@ -4,6 +4,7 @@ CREATE TABLE t_final_collapsing
   sign Int8
 )
 ENGINE = CollapsingMergeTree(sign) ORDER BY key;
+INSERT INTO t_final_collapsing VALUES (5, -1);
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 0, split_intersecting_parts_ranges_into_layers_final = 0;
 SELECT count() FROM t_final_collapsing FINAL;
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 0, split_intersecting_parts_ranges_into_layers_final = 1;
@@ -16,3 +17,4 @@ CREATE TABLE t_final_collapsing
   version UInt64
 )
 ENGINE = VersionedCollapsingMergeTree(sign, version) ORDER BY key;
+INSERT INTO t_final_collapsing VALUES (5, -1, 1);

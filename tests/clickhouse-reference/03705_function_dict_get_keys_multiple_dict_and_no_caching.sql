@@ -5,6 +5,12 @@ CREATE TABLE src_products
     brand String
 )
 ENGINE = Memory;
+INSERT INTO src_products VALUES
+    (1, 'catA', 'brandX'),
+    (2, 'catA', 'brandY'),
+    (3, 'catB', 'brandX'),
+    (4, 'catC', 'brandZ'),
+    (5, 'catB', 'brandZ');
 CREATE TABLE src_geo
 (
     country String,
@@ -13,6 +19,12 @@ CREATE TABLE src_geo
     code UInt32
 )
 ENGINE = Memory;
+INSERT INTO src_geo VALUES
+    ('US', 'NYC',     'UTC-5', 10001),
+    ('US', 'Chicago', 'UTC-6', 60601),
+    ('FR', 'Paris',   'UTC+1', 75000),
+    ('DE', 'Berlin',  'UTC+1', 10115),
+    ('JP', 'Tokyo',   'UTC+9', 100000);
 CREATE DICTIONARY dict_products
 (
     id UInt64,
@@ -41,6 +53,10 @@ CREATE TABLE inputs
     target_timezone String
 )
 ENGINE = Memory;
+INSERT INTO inputs VALUES
+    ('catA', 'brandX', 'UTC+1'),
+    ('catB', 'brandZ', 'UTC+9'),
+    ('catX', 'brandX', 'UTC-6');
 SELECT
     target_category,
     target_brand,

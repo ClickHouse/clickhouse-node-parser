@@ -10,6 +10,7 @@ CREATE TABLE test_03789 (
     id UInt64
 ) ENGINE = MergeTree
 ORDER BY (tenant, event_time, id);
+INSERT INTO test_03789 SELECT toString(number % 10), now() - number, number FROM numbers(1000);
 SELECT count() > 0 FROM (
     EXPLAIN actions=1 SELECT * FROM test_03789 WHERE tenant='5' ORDER BY event_time DESC LIMIT 5
 ) WHERE explain LIKE '%InReverseOrder%';

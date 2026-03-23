@@ -237,3 +237,13 @@ CREATE TABLE temporaryfiles_metrics
 )
 ENGINE = MergeTree
 ORDER BY metric;
+INSERT INTO background_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM background_dict) ;
+INSERT INTO ddlworker_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM ddlworker_dict) ;
+INSERT INTO distrcache_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM distrcache_dict) ;
+INSERT INTO drop_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM drop_dict) ;
+INSERT INTO filesystem_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM filesystem_dict) ;
+INSERT INTO kafka_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM kafka_dict) ;
+INSERT INTO mergetree_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM mergetree_dict) ;
+INSERT INTO parts_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM parts_dict) ;
+INSERT INTO storages3_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM storages3_dict) ;
+INSERT INTO temporaryfiles_metrics SELECT metric, value FROM system.metrics WHERE metric IN (SELECT metric FROM temporaryfiles_dict) ;

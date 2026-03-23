@@ -23,6 +23,7 @@ SELECT
     timestamp t, sum(value) v
 FROM landing
 GROUP BY t;
+INSERT INTO landing SELECT 1 as timestamp, 1 AS value FROM numbers(10) ORDER BY ALL;
 SELECT sleep(3);
 SELECT table, name, error FROM system.part_log
 WHERE database = currentDatabase() and error != 389

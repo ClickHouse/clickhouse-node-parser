@@ -1,4 +1,7 @@
 create table utf8_overlap (str String) engine=Memory();
+-- { echoOn }
+-- NOTE: total string size should be > 16 (sizeof(__m128i))
+insert into utf8_overlap values ('\xe2'), ('Foo⚊BarBazBam'), ('\xe2'), ('Foo⚊BarBazBam');
 -- NOTE: regression test for introduced bug
 -- https://github.com/ClickHouse/ClickHouse/issues/42756
 SELECT lowerUTF8('КВ АМ И СЖ');

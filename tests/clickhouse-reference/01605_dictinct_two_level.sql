@@ -8,6 +8,8 @@ CREATE TABLE distinct_two_level (
     domain String,
     subdomain String
 ) ENGINE = MergeTree ORDER BY time;
+INSERT INTO distinct_two_level SELECT 1546300800000, 'test.com', concat('foo', toString(number % 10000)) from numbers(10000);
+INSERT INTO distinct_two_level SELECT 1546300800000, concat('test.com', toString(number / 10000)) , concat('foo', toString(number % 10000)) from numbers(10000);
 SELECT
     domain, arrayUniq(groupArraySample(5, 11111)(DISTINCT subdomain)) AS example_subdomains
 FROM distinct_two_level

@@ -27,6 +27,8 @@ AS SELECT
     sum(number) AS sum_amount
 FROM landing
 GROUP BY hour;
+INSERT INTO landing VALUES ('2022-09-01 12:23:34', 42);
+INSERT INTO landing VALUES ('2022-09-01 12:23:34', 42),('2023-09-01 12:23:34', 42);
 SELECT * FROM landing FINAL ORDER BY time;
 SELECT * FROM mv FINAL ORDER BY hour;
 /*
@@ -86,6 +88,8 @@ SELECT
     countState() AS occurences
 FROM landing
 GROUP BY pk1, pk2, pk4, pk3;
+INSERT INTO landing (time, pk1, pk2, pk4, pk3)
+VALUES ('2023-01-01 00:00:00','org-1','prod','login','user'),('2023-01-01 00:00:00','org-1','prod','login','user'),('2023-01-01 00:00:00','org-1','prod','login','user'),('2023-02-01 00:00:00','org-1','stage','login','user'),('2023-02-01 00:00:00','org-1','prod','login','account'),('2023-02-01 00:00:00','org-1','prod','checkout','user'),('2023-03-01 00:00:00','org-1','prod','login','account'),('2023-03-01 00:00:00','org-1','prod','login','account');
 SELECT
     pk1,
     pk2,

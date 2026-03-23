@@ -2,7 +2,10 @@ CREATE TABLE insert_dedup_token (
     id Int32, val UInt32
 ) ENGINE=MergeTree() ORDER BY id
 SETTINGS non_replicated_deduplication_window=0xFFFFFFFF;
+INSERT INTO insert_dedup_token VALUES(0, 1000);
 SELECT * FROM insert_dedup_token ORDER BY id;
 set insert_deduplication_token = '\x61\x00\x62';
+INSERT INTO insert_dedup_token VALUES(1, 1001);
+INSERT INTO insert_dedup_token VALUES(2, 1002);
 set insert_deduplication_token = '\x61\x00\x63';
 set insert_deduplication_token = '';

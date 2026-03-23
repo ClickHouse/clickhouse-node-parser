@@ -13,6 +13,16 @@ CREATE TABLE tab
     s                   String,
 ) Engine = MergeTree() ORDER BY tuple() PARTITION BY u64_minmax
 SETTINGS min_bytes_for_wide_part = 0, auto_statistics_types = '';
+-- Insert looooots of parts (1000)
+INSERT INTO tab
+SELECT number % 1000,
+       number % 1000,
+       number % 99,
+       number % 1000,
+       number % 1000,
+       number % 2,
+       toString(number % 1000)
+FROM system.numbers LIMIT 10000;
 SELECT * FROM tab
 WHERE u64_countmin > 3500 and u64_countmin < 3600
 FORMAT NULL

@@ -24,4 +24,6 @@ LIFETIME(1)
 LAYOUT(COMPLEX_KEY_HASHED());
 select 'view' src,* FROM TestTbl_view;
 select 'dict' src,* FROM TestTblDict ;
+insert into TestTbl values(1, '2022-10-20', 'first');
 SELECT sleep(3) from numbers(4) settings max_block_size= 1 format Null;
+insert into TestTbl values(1, '2022-10-21', 'second');

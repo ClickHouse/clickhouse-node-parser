@@ -4,6 +4,7 @@ CREATE TABLE test_table
     id UInt64,
     value String
 ) ENGINE=MergeTree ORDER BY id;
+INSERT INTO test_table VALUES (0, 'Value');
 SELECT grouping(id) AS grouping_id, grouping(value) AS grouping_value, id, value FROM test_table
 GROUP BY id, value ORDER BY grouping_id, grouping_value;
 SELECT grouping(id) AS grouping_id, grouping(value) AS grouping_value, id, value FROM test_table

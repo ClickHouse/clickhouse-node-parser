@@ -8,6 +8,11 @@ CREATE TABLE kv
 ENGINE = ReplacingMergeTree
 ORDER BY key
 SETTINGS index_granularity = 32, index_granularity_bytes = 1024;
+INSERT INTO kv SELECT
+    number,
+    number + 100,
+    toString(number)
+FROM numbers(2048);
 SELECT *
 FROM kv
 WHERE value = 442;

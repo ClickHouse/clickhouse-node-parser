@@ -1,4 +1,5 @@
 CREATE TABLE test_lc_pk (s String) engine = MergeTree ORDER BY s;
+INSERT INTO test_lc_pk SELECT toString(number) FROM numbers(1e6);
 SELECT trimLeft(explain)
 FROM
 (

@@ -4,6 +4,7 @@ CREATE TABLE `01945.db`.test_dictionary_values
 	id UInt64,
 	value String
 ) ENGINE=TinyLog;
+INSERT INTO `01945.db`.test_dictionary_values VALUES (0, 'Value');
 CREATE DICTIONARY `01945.db`.test_dictionary
 (
     id UInt64,

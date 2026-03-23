@@ -13,6 +13,8 @@ CREATE TABLE t_lc_join_b
     key LowCardinality(String),
     id UInt64
 ) ENGINE = MergeTree() ORDER BY key;
+INSERT INTO t_lc_join_a VALUES ('a', 1), ('b', 2), ('c', 3), ('a', 4), ('b', 5);
+INSERT INTO t_lc_join_b VALUES ('a', 100), ('b', 200), ('c', 300);
 SELECT a.key, sum(a.value), any(b.id)
 FROM t_lc_join_a a
 INNER JOIN t_lc_join_b b ON a.key = b.key

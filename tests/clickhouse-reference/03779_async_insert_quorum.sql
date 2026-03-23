@@ -6,7 +6,13 @@ set wait_for_async_insert = 0;
 set async_insert_deduplicate = 1;
 set wait_for_async_insert_timeout = 10000, async_insert_max_query_number = 1000, async_insert_max_data_size = 10000000, async_insert_use_adaptive_busy_timeout = 0;
 set insert_quorum_parallel=0;
+INSERT INTO table1 VALUES (1); -- { serverError  UNSUPPORTED_PARAMETER }
 set insert_quorum_parallel=1;
+INSERT INTO table1 VALUES (2);
+INSERT INTO table1 VALUES (3);
+INSERT INTO table2 VALUES (2);
+INSERT INTO table2 VALUES (3);
+INSERT INTO table2 VALUES (4);
 SELECT 'q1', x FROM table1 ORDER BY all;
 SELECT 'q2', x FROM table2 ORDER BY all;
 SELECT
@@ -23,3 +29,4 @@ WHERE
     AND has(tables, current_database() || '.table2')
 ORDER BY event_time DESC FORMAT Vertical;
 set wait_for_async_insert=1, insert_quorum_timeout=1;
+INSERT INTO table2 VALUES (5); -- { serverError UNKNOWN_STATUS_OF_INSERT }

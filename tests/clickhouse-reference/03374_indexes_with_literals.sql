@@ -10,6 +10,7 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity=1, add_minmax_index_for_numeric_columns=0;
+INSERT INTO test SELECT number FROM numbers(1000);
 CREATE TABLE test
 (
     `x` Int64,

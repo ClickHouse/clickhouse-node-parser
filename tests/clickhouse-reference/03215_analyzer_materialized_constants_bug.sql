@@ -7,3 +7,4 @@ CREATE TABLE test__fuzz_21
 )
 ENGINE = MergeTree
 ORDER BY x;
+INSERT INTO test__fuzz_21 VALUES (1), (2), (3);

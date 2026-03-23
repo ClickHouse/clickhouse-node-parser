@@ -12,6 +12,7 @@ create table rmt (n int) engine=ReplicatedMergeTree('/test/01158/{database}/rmt'
         cleanup_delay_period=86400,
         max_cleanup_delay_period=86400,
         replicated_can_become_leader=0;
+insert into rmt values (1);
 select address, type, has_watch, op_num, path, is_ephemeral, is_sequential, version, requests_size, request_idx, error, watch_type,
        watch_state, path_created, stat_version, stat_cversion, stat_dataLength, stat_numChildren
 from system.zookeeper_log where path like '/test/01158/' || currentDatabase() || '/rmt/log%' and op_num not in (3, 4, 12, 500)

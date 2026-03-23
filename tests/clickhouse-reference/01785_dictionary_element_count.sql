@@ -4,6 +4,7 @@ CREATE TABLE 01785_db.simple_key_source_table
     id UInt64,
     value String
 ) ENGINE = TinyLog();
+INSERT INTO 01785_db.simple_key_source_table VALUES (1, 'First');
 CREATE DICTIONARY 01785_db.simple_key_flat_dictionary
 (
     id UInt64,
@@ -43,6 +44,7 @@ CREATE TABLE 01785_db.complex_key_source_table
     id_key String,
     value String
 ) ENGINE = TinyLog();
+INSERT INTO 01785_db.complex_key_source_table VALUES (1, 'FirstKey', 'First');
 CREATE DICTIONARY 01785_db.complex_key_hashed_dictionary
 (
     id UInt64,

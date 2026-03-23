@@ -8,6 +8,7 @@ CREATE TABLE dt
     `event_id` UInt8
 )
 ENGINE = TinyLog;
+INSERT INTO dt VALUES ('100:00:00', 1), (12453, 3);
 SELECT max(time) FROM dt;
 SELECT min(time) FROM dt;
 SELECT avg(time) FROM dt;
@@ -66,6 +67,10 @@ CREATE TABLE nullable_date_test (
     t Nullable(Time),
     t64 Nullable(Time64(3))
 ) ENGINE = Memory;
+INSERT INTO nullable_date_test VALUES 
+    ('2020-01-01', '2020-01-01', '2020-01-01 00:00:00', '2020-01-01 00:00:00.000', '01:00:00', '01:00:00.000'),
+    (NULL, NULL, NULL, NULL, NULL, NULL),
+    ('2020-01-03', '2020-01-03', '2020-01-01 00:00:02', '2020-01-01 00:00:00.002', '03:00:00', '03:00:00.000');
 SELECT avg(d), avg(d32), avg(dt), avg(dt64), avg(t), avg(t64) FROM nullable_date_test FORMAT Vertical;
 SELECT avgOrNull(d), avgOrNull(d32), avgOrNull(dt), avgOrNull(dt64), avgOrNull(t), avgOrNull(t64) FROM nullable_date_test FORMAT Vertical;
 SELECT avg(d) FROM nullable_date_test WHERE d IS NULL;
@@ -75,6 +80,10 @@ CREATE TABLE avgif_date_test (
     t Time,
     flag UInt8
 ) ENGINE = Memory;
+INSERT INTO avgif_date_test VALUES 
+    ('2020-01-01', '2020-01-01 00:00:00', '01:00:00', 1),
+    ('2020-01-02', '2020-01-01 00:00:01', '02:00:00', 0),
+    ('2020-01-03', '2020-01-01 00:00:02', '03:00:00', 1);
 SELECT avgIf(d, flag = 1), avgIf(dt, flag = 1), avgIf(t, flag = 1) FROM avgif_date_test;
 SELECT avgIf(d, flag = 99) FROM avgif_date_test;
 CREATE TABLE groupby_date_test (
@@ -83,6 +92,11 @@ CREATE TABLE groupby_date_test (
     dt DateTime('UTC'),
     t Time
 ) ENGINE = Memory;
+INSERT INTO groupby_date_test VALUES 
+    ('A', '2020-01-01', '2020-01-01 00:00:00', '01:00:00'),
+    ('A', '2020-01-03', '2020-01-01 00:00:02', '03:00:00'),
+    ('B', '2020-06-15', '2020-06-15 12:00:00', '12:00:00'),
+    ('B', '2020-06-17', '2020-06-15 12:00:02', '14:00:00');
 SELECT grp, avg(d), avg(dt), avg(t) FROM groupby_date_test GROUP BY grp ORDER BY grp;
 SELECT avg(d) FROM (
     SELECT addDays(toDate('2020-01-01'), number) AS d FROM numbers(10)
@@ -173,10 +187,13 @@ SELECT avg(d) FROM (SELECT addDays(toDate('2020-01-01'), number) AS d FROM numbe
 SELECT avg(dt) FROM (SELECT addSeconds(toDateTime('2020-01-01 00:00:00', 'UTC'), number) AS dt FROM numbers(100));
 SELECT avg(dt64) FROM (SELECT addSeconds(toDateTime64('2020-01-01 00:00:00.000', 3, 'UTC'), number) AS dt64 FROM numbers(100));
 CREATE TABLE jit_time_test (t Time, t64 Time64(3)) ENGINE = Memory;
+INSERT INTO jit_time_test SELECT CAST(number AS Time), CAST(number AS Time64(3)) FROM numbers(100);
 SELECT avg(t) FROM jit_time_test;
 SELECT avg(t64) FROM jit_time_test;
 SET compile_aggregate_expressions = 0;
 CREATE TABLE negative_time_test (t Time) ENGINE = Memory;
+-- Insert -3600 (=-1h), 3600 (=1h), 10800 (=3h) -> avg = 3600 = 1h
+INSERT INTO negative_time_test SELECT toTime(-3600 + number * 7200) FROM numbers(3);
 SELECT avg(t) FROM negative_time_test;
 CREATE TABLE mv_source (grp UInt8, d Date, dt DateTime('UTC'), t Time) ENGINE = MergeTree ORDER BY grp;
 CREATE TABLE mv_target (
@@ -189,4 +206,6 @@ CREATE MATERIALIZED VIEW mv_view TO mv_target AS
 SELECT 1 AS grp, avgState(d) AS d_avg, avgState(dt) AS dt_avg, avgState(t) AS t_avg
 FROM mv_source
 GROUP BY grp;
+INSERT INTO mv_source VALUES (1, '2020-01-01', '2020-01-01 00:00:00', '01:00:00');
+INSERT INTO mv_source VALUES (1, '2020-01-03', '2020-01-01 00:00:02', '03:00:00');
 SELECT avgMerge(d_avg), avgMerge(dt_avg), avgMerge(t_avg) FROM mv_target;

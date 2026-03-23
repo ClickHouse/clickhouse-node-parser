@@ -12,4 +12,5 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY i
 SETTINGS index_granularity = 4,index_granularity_bytes = 0, min_bytes_for_wide_part = 0;
+INSERT INTO tab SELECT 100, 'aaa'; -- Single-granule part, which contained rows less than index_granularity.
 SELECT i FROM tab WHERE s = 'aaa';

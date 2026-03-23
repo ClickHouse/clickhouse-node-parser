@@ -47,6 +47,7 @@ CREATE TEMPORARY TABLE aliased
     x UInt8 DEFAULT 0,
     y ALIAS x + 1
 );
+INSERT INTO aliased VALUES (10);
 SELECT y FROM aliased;
 CREATE TEMPORARY TABLE aliased2
 (
@@ -60,4 +61,5 @@ CREATE TEMPORARY TABLE aliased3
     y ALIAS z + 1,
     z ALIAS x + 1
 );
+INSERT INTO aliased3 VALUES (10);
 SELECT x, y, z FROM aliased3;

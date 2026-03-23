@@ -14,6 +14,20 @@ CREATE TABLE combinator_argMin_table_r1
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03128/combinator_argMin_table', 'r1')
 ORDER BY (id);
+INSERT INTO combinator_argMin_table_r1
+    SELECT
+        number % 10 as id,
+        number as value,
+        '2024-01-01 00:00:00' + INTERVAL number SECOND
+    FROM
+        numbers(100);
+INSERT INTO combinator_argMin_table_r1
+    SELECT
+        number % 10 as id,
+        number * 10 as value,
+        '2024-01-01 00:00:00' + INTERVAL number SECOND
+    FROM
+        numbers(100);
 -- We check replication by creating another replica
 CREATE TABLE combinator_argMin_table_r2
 (

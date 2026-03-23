@@ -7,6 +7,7 @@ CREATE TABLE right
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+insert into right select [''], [''], toString(number) from numbers(1000);
 SELECT COUNT() AS x
 FROM
 (

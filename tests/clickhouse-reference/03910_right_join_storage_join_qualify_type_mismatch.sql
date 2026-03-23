@@ -16,6 +16,8 @@ SET enable_analyzer = 1;
 SET query_plan_use_new_logical_join_step = 0;
 CREATE TABLE t1 (x Nullable(UInt32), str String) ENGINE = Memory;
 CREATE TABLE right_join (x UInt32, s String) ENGINE = Join(ALL, RIGHT, x);
+INSERT INTO t1 VALUES (1, 'a'), (2, 'b'), (NULL, 'c');
+INSERT INTO right_join VALUES (1, 'A'), (3, 'C');
 SELECT *
 FROM t1 RIGHT JOIN right_join USING (x)
 QUALIFY x = 1;

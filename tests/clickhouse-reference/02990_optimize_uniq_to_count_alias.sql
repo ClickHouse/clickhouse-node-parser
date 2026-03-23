@@ -36,4 +36,5 @@ CREATE TABLE users
 )
 ENGINE = ReplacingMergeTree
 ORDER BY (id, name);
+INSERT INTO users VALUES (1, 'pufit'), (1, 'pufit2'), (1, 'pufit3');
 SELECT uniqExact(id) FROM ( SELECT id FROM users WHERE id = 1 GROUP BY id, name );

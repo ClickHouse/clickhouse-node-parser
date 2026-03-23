@@ -16,6 +16,9 @@ CREATE TABLE IF NOT EXISTS decimal
     n FixED(12, 6),
     o fixed(8, 6)
 ) ENGINE = Memory;
+INSERT INTO decimal (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO decimal (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) VALUES (42, 42, 42, 0.42, 0.42, 0.42, 42.42, 42.42, 42.42, 42.42, 42.42, 42.42, 42.42, 42.42, 42.42);
+INSERT INTO decimal (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) VALUES (-42, -42, -42, -0.42, -0.42, -0.42, -42.42, -42.42, -42.42, -42.42, -42.42, -42.42, -42.42, -42.42, -42.42);
 SELECT a + a, a - a, a * a, a / a, intDiv(a, a), intDivOrZero(a, a) FROM decimal WHERE a = 42;
 SELECT b + b, b - b, b * b, b / b, intDiv(b, b), intDivOrZero(b, b) FROM decimal WHERE b = 42;
 SELECT c + c, c - c, c * c, c / c, intDiv(c, c), intDivOrZero(c, c) FROM decimal WHERE c = 42;

@@ -1,12 +1,1 @@
-CREATE DATABASE test_02771;
-
-CREATE TABLE test_02771.t
-(
-    x UInt8
-)
-ENGINE = MergeTree()
-ORDER BY x;
-
-SELECT t.x
-FROM test_02771.t
-ORDER BY t.x ASC;
+<Parse Error>

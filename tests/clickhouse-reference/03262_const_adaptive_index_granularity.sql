@@ -8,6 +8,8 @@ SETTINGS min_bytes_for_wide_part = 0,
     enable_index_granularity_compression = 1,
     use_const_adaptive_granularity = 0,
     enable_vertical_merge_algorithm = 0;
+INSERT INTO t_index_granularity SELECT number, 'a' FROM numbers(15);
+INSERT INTO t_index_granularity SELECT number, repeat('a', 2048) FROM numbers(15, 15);
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_index_granularity) ORDER BY ALL;
 SELECT name, index_granularity_bytes_in_memory FROM system.parts WHERE database = currentDatabase() AND table = 't_index_granularity' AND active;
 CREATE TABLE t_index_granularity (id UInt64, s String)

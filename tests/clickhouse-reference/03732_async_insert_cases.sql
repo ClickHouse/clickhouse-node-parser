@@ -21,8 +21,13 @@ order by id;
 create materialized view 03732_table_mv
 TO 03732_table_mv_dst
 as select * from 03732_table;
+insert into 03732_table values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
 select count(*) from 03732_table;        -- Expecting 3
 select count(*) from 03732_table_mv_dst;     -- Expecting 3
+insert into 03732_table values (3, 'Charlie'), (4, 'David'), (3, 'Charlie');
+insert into 03732_table settings insert_deduplication_token='token1' values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
+insert into 03732_table settings insert_deduplication_token='token1' values (1, 'Alice'), (1, 'Alice'), (2, 'Bob');
+insert into 03732_table settings insert_deduplication_token='token2' values (3, 'Charlie'), (4, 'David'), (3, 'Charlie');
 create table 03732_table_join
 (
     id   UInt32,
@@ -30,6 +35,8 @@ create table 03732_table_join
 )
 engine = ReplicatedMergeTree('/clickhouse/tables/test/{database}/03732_table_join', 'replica1')
 order by id;
+insert into 03732_table_join values (1, 'Smith'), (2, 'Johnson');
+insert into 03732_table_join values (3, 'Williams'), (4, 'Brown');
 create table 03732_table_join_mv_dst
 (
     id      UInt32,

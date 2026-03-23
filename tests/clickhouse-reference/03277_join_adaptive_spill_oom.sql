@@ -2,6 +2,9 @@
 create table adaptive_spill_03277_1 (`k` String, `x` String ) Engine=Memory;
 create table adaptive_spill_03277_2 (`k` String, `x` String ) Engine=Memory;
 create table adaptive_spill_03277_3 (`k` String, `x` String ) Engine=Memory;
+insert into adaptive_spill_03277_1 select cast(rand() as String) as k, cast(rand() as String) as x from numbers(1000000);
+insert into adaptive_spill_03277_2 select cast(rand() as String) as k, cast(rand() as String) as x from numbers(1000000);
+insert into adaptive_spill_03277_3 select cast(rand() as String) as k, cast(rand() as String) as x from numbers(1000000);
 set max_threads=1;
 set join_algorithm='grace_hash';
 set max_memory_usage=314572800;

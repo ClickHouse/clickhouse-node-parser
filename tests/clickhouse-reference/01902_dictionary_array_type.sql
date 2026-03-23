@@ -3,6 +3,7 @@ CREATE TABLE dictionary_array_source_table
     id UInt64,
     array_value Array(Int64)
 ) ENGINE=TinyLog;
+INSERT INTO dictionary_array_source_table VALUES (0, [0, 1, 2]);
 CREATE DICTIONARY flat_dictionary
 (
     id UInt64,
@@ -64,6 +65,7 @@ PRIMARY KEY prefix
 SOURCE(CLICKHOUSE(HOST 'localhost' port tcpPort() TABLE 'ip_trie_dictionary_array_source_table'))
 LIFETIME(MIN 10 MAX 1000)
 LAYOUT(IP_TRIE());
+INSERT INTO ip_trie_dictionary_array_source_table VALUES ('127.0.0.0', [0, 1, 2]);
 SELECT dictGet('ip_trie_dictionary', 'array_value', tuple(IPv4StringToNum('127.0.0.0')));
 SELECT dictGet('ip_trie_dictionary', 'array_value', tuple(IPv4StringToNum('128.0.0.0')));
 SELECT dictGetOrDefault('ip_trie_dictionary', 'array_value', tuple(IPv4StringToNum('128.0.0.0')), [2,3,4]);
@@ -72,6 +74,7 @@ CREATE TABLE polygon_dictionary_array_source_table
     key Array(Array(Array(Tuple(Float64, Float64)))),
     array_value Array(Int64)
 ) ENGINE = TinyLog;
+INSERT INTO polygon_dictionary_array_source_table VALUES ([[[(0, 0), (0, 1), (1, 1), (1, 0)]]], [0, 1, 2]);
 CREATE DICTIONARY polygon_dictionary
 (
     key Array(Array(Array(Tuple(Float64, Float64)))),
@@ -92,6 +95,7 @@ CREATE TABLE range_dictionary_array_source_table
   array_value Array(Int64)
 )
 ENGINE = TinyLog;
+INSERT INTO range_dictionary_array_source_table VALUES(1, toDate('2019-05-05'), toDate('2019-05-20'), [0, 1, 2]);
 CREATE DICTIONARY range_dictionary
 (
   key UInt64,

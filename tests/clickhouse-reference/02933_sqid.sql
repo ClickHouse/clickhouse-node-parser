@@ -19,5 +19,6 @@ SELECT sqidEncode(materialize(1::UInt8), materialize(2::UInt16), materialize(3::
 SELECT sqidEncode(toNullable(materialize(1)), toLowCardinality(materialize(2)));
 SELECT sqidDecode('invalid sqid');
 CREATE TABLE tab (id String) ENGINE = MergeTree ORDER BY id;
+INSERT INTO tab SELECT * FROM generateRandom() LIMIT 1000000;
 SELECT sqidDecode(id) FROM tab FORMAT Null;
 SELECT sqid(1, 2);

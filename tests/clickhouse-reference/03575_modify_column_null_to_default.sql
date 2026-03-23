@@ -4,6 +4,7 @@ CREATE TABLE nullable_test(
     my_int_nullable_with_default2 Nullable(UInt32) DEFAULT 11,
     my_text_lc_nullable LowCardinality(Nullable(String)),
 ) ORDER BY tuple();
+INSERT INTO nullable_test VALUES (NULL, NULL, NULL, NULL), (1, 1, 1, 'A');
 -- { echoOn }
 
 SELECT * from nullable_test ORDER BY ALL;

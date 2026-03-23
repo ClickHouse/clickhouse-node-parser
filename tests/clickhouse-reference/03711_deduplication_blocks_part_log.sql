@@ -7,6 +7,8 @@ CREATE TABLE 03710_database.03711_join_with
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+INSERT INTO 03710_database.03711_join_with VALUES (1, 'a1'), (1, 'b1'), (1, 'c1');
+INSERT INTO 03710_database.03711_join_with VALUES (2, 'a2'), (2, 'b2'), (2, 'c2');
 CREATE TABLE 03710_database.03711_table
 (
     id UInt32
@@ -41,6 +43,7 @@ SET max_block_size=1;
 SET max_insert_block_size=1;
 SET min_insert_block_size_rows=0;
 SET min_insert_block_size_bytes=0;
+INSERT INTO 03710_database.03711_table VALUES (1), (2);
 SELECT table, name, argMax(part_type, event_time_microseconds), argMax(deduplication_block_ids, event_time_microseconds) FROM system.part_log
 WHERE
     table IN ['03711_join_with', '03711_table', '03711_mv_table_1', '03711_mv_table_2']

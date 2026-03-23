@@ -6,6 +6,7 @@ CREATE TABLE test_table
 )
 ENGINE = SummingMergeTree()
 ORDER BY key;
+INSERT INTO test_table Values(1,0,'');
 SELECT count() FROM test_table;
 CREATE TABLE test_table
 (
@@ -23,7 +24,10 @@ CREATE TABLE test_table
 )
 ENGINE = CoalescingMergeTree()
 ORDER BY key;
+INSERT INTO test_table Values(1, 1,  'x');
 SELECT * FROM test_table FINAL ORDER BY ALL;
+INSERT INTO test_table Values(1, 2,  'y');
+INSERT INTO test_table Values(1, 3,  'z');
 CREATE TABLE test_table
 (
     key UInt32,
@@ -31,7 +35,10 @@ CREATE TABLE test_table
 )
 ENGINE = CoalescingMergeTree()
 ORDER BY key;
+INSERT INTO test_table VALUES(1,6);
+INSERT INTO test_table VALUES(1,NULL);
 select * from test_table final;
+INSERT INTO test_table VALUES(1,6), (1,NULL);
 select ' -- AggregatingMergeTree --\n' format TSVRaw;
 CREATE TABLE test_table
 (
@@ -42,6 +49,19 @@ CREATE TABLE test_table
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY key;
+INSERT INTO test_table(key, A) values(1, 1);
+--SELECT * FROM test_table final format PrettyCompact; 
+INSERT INTO test_table(key, B) values(1, '2020-01-01');
+--SELECT * FROM test_table final format PrettyCompact; 
+INSERT INTO test_table(key, C) values(1, 'a');
+--SELECT * FROM test_table final format PrettyCompact; 
+INSERT INTO test_table(key, B) values(1, '2022-01-01');
+--SELECT * FROM test_table final format PrettyCompact; 
+INSERT INTO test_table(key, A) values(1, 5);
+--SELECT * FROM test_table final format PrettyCompact; 
+INSERT INTO test_table(key, B) values(1, Null);
+--SELECT * FROM test_table final format PrettyCompact; 
+INSERT INTO test_table(key, A, C) values(1, Null, Null);
 select '\n\n -- CoalescingMergeTree --\n' format TSVRaw;
 CREATE TABLE test_table
 (
@@ -65,6 +85,23 @@ CREATE TABLE electric_vehicle_state
 )
 ENGINE = CoalescingMergeTree
 ORDER BY vin;
+-- ① Initial battery and firmware readings
+INSERT INTO electric_vehicle_state VALUES
+('5YJ3E1EA7KF000001', 82, NULL, NULL, '2024.14.5', NULL, NULL);
+-- ② GPS reports in later
+INSERT INTO electric_vehicle_state VALUES
+('5YJ3E1EA7KF000001', NULL, 37.7749, -122.4194, NULL, NULL, NULL);
+-- ③ Sensor update: temperature + speed
+INSERT INTO electric_vehicle_state VALUES
+('5YJ3E1EA7KF000001', NULL, NULL, NULL, NULL, 22.5, 67.3);
+-- ④ Battery drops to 78%
+INSERT INTO electric_vehicle_state VALUES
+('5YJ3E1EA7KF000001', 78, NULL, NULL, NULL, NULL, NULL);
+-- ⑤ Another car, initial firmware and temp readings
+INSERT INTO electric_vehicle_state VALUES
+('5YJ3E1EA7KF000099', NULL, NULL, NULL, '2024.14.5', 19.2, NULL);
+INSERT INTO electric_vehicle_state VALUES
+('5YJ3E1EA7KF000099', NULL, NULL, NULL, '2025.38.46', 19.3, NULL);
 SELECT
     vin,
     battery_level AS batt,
@@ -83,3 +120,5 @@ CREATE TABLE test_table
 )
 ENGINE = CoalescingMergeTree()
 ORDER BY key;
+INSERT INTO test_table VALUES(1,6, NULL);
+INSERT INTO test_table VALUES(1,NULL, [1]);

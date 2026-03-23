@@ -5,6 +5,11 @@ CREATE TABLE bloom_filter_sizing_pk(
   -- Very high granularity to have one filter per part.
   INDEX key_bf key TYPE bloom_filter(0.01) GRANULARITY 2147483648
 ) ENGINE=MergeTree ORDER BY key SETTINGS add_minmax_index_for_numeric_columns=0;
+INSERT INTO bloom_filter_sizing_pk
+SELECT
+number % 100 as key, -- 100 unique keys
+number as value -- whatever
+FROM numbers(100_000);
 SELECT COUNT() from bloom_filter_sizing_pk WHERE key = 1;
 -- Check bloom filter size. According to https://hur.st/bloomfilter/?n=100&p=0.01 for 100 keys it should be less that 200B
 SELECT COUNT() from system.parts where database = currentDatabase() AND table = 'bloom_filter_sizing_pk' and secondary_indices_uncompressed_bytes > 200 and active;
@@ -16,6 +21,12 @@ CREATE TABLE bloom_filter_sizing_sec(
   -- Very high granularity to have one filter per part.
   INDEX key_bf key2 TYPE bloom_filter(0.01) GRANULARITY 2147483648
 ) ENGINE=MergeTree ORDER BY key1 SETTINGS add_minmax_index_for_numeric_columns=0;
+INSERT INTO bloom_filter_sizing_sec
+SELECT
+number % 100 as key1, -- 100 unique keys
+rand() % 100 as key2, -- 100 unique keys
+number as value -- whatever
+FROM numbers(100_000);
 SELECT COUNT() from bloom_filter_sizing_sec WHERE key1 = 1;
 -- Check bloom filter size. According to https://hur.st/bloomfilter/?n=100&p=0.01 for 100 keys it should be less that 200B
 SELECT COUNT() from system.parts where database = currentDatabase() AND table = 'bloom_filter_sizing_sec' and secondary_indices_uncompressed_bytes > 200 and active;

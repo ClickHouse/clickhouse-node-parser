@@ -1,4 +1,5 @@
 create table test_10m (key Int, value Int) engine=MergeTree() order by key partition by key % 200 settings distributed_index_analysis_min_parts_to_activate=0, distributed_index_analysis_min_indexes_size_to_activate=0;
+insert into test_10m select number, number*100 from numbers(1e6) settings max_partitions_per_insert_block=200, max_block_size=1e6;
 set allow_experimental_parallel_reading_from_replicas=0;
 set parallel_replicas_for_non_replicated_merge_tree=1;
 set parallel_replicas_index_analysis_only_on_coordinator=1;

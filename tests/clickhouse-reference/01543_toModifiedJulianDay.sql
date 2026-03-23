@@ -10,5 +10,6 @@ SELECT toModifiedJulianDayOrNull('unparsable');
 SELECT toModifiedJulianDayOrNull('1999-02-29');
 SELECT toModifiedJulianDayOrNull('1999-13-32');
 CREATE TABLE toModifiedJulianDay_test (d String) ENGINE = Memory;
+INSERT INTO toModifiedJulianDay_test VALUES ('1858-11-16'), ('1858-11-17'), ('2020-11-01');
 SELECT toModifiedJulianDay(d) FROM toModifiedJulianDay_test;
 CREATE TABLE toModifiedJulianDay_test (d FixedString(10)) ENGINE = Memory;

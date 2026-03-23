@@ -8,6 +8,12 @@ CREATE TABLE bug_table
 ENGINE =  MergeTree
 PARTITION BY toYYYYMM(date_column)
 ORDER BY (c1, c2);
+INSERT INTO bug_table values
+    (toDate(now()),hex(rand()),hex(now())),
+    (toDate(now()),hex(rand()),hex(now())),
+    (toDate(now()),hex(rand()),hex(now())),
+    (toDate(now()),hex(rand()),hex(now())),
+    (toDate(now()),hex(rand()),hex(now()));
 CREATE TABLE distributed_bug_table
 (
 date_column Date,

@@ -9,6 +9,10 @@ CREATE TABLE test_grouping_sets_predicate
 )
 ENGINE=MergeTree
 ORDER BY day_;
+INSERT INTO test_grouping_sets_predicate SELECT
+    toDate('2023-01-05') AS day_,
+    'hello, world'
+FROM numbers (10);
 SELECT '---Explain Syntax---';
 SELECT *
 FROM

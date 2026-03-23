@@ -9,6 +9,25 @@ select
       left outer join t1 as ref_1
       on (ref_0.c2 = ref_1.c8) ;
 create table t5 (pkey UInt32, c52 UInt32, c56 String, primary key(pkey))engine = MergeTree;
+insert into t0 values (null);
+insert into t0 values ('');
+insert into t1 values (59, '');
+insert into t5 values (12000, null, '');
+insert into t5 values  (22000, null, null);
+insert into t5 values  (24000, 14, 'YLq?');
+insert into t5 values  (30000, 0, '-');
+insert into t5 values  (33000, null, 'Wm@c');
+insert into t5 values (37000, 0, 'IB');
+insert into t5 values (38000,  59, '');
+insert into t5 values (56000, 0, null);
+insert into t5 values (64000, 74, '');
+insert into t5 values (72000, 36, 'q:/');
+insert into t5 values (79000, null, '[P');
+insert into t5 values (82000, 0, 'V-Qr');
+insert into t5 values (88000, 44, '1Z ');
+insert into t5 values (94000, 15, 'G]A5');
+insert into t5 values (96000, -0, 'C8');
+insert into t5 values (97000, 56,  null);
 select
     count(*)
   from

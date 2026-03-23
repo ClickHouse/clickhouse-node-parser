@@ -7,6 +7,9 @@ CREATE TABLE simple_key_simple_attributes_source_table
     value_second String
 )
     ENGINE = TinyLog;
+INSERT INTO simple_key_simple_attributes_source_table VALUES(0, 'value_0', 'value_second_0');
+INSERT INTO simple_key_simple_attributes_source_table VALUES(1, 'value_1', 'value_second_1');
+INSERT INTO simple_key_simple_attributes_source_table VALUES(2, 'value_2', 'value_second_2');
 CREATE DICTIONARY direct_dictionary_simple_key_simple_attributes
 (
     `id` UInt64,

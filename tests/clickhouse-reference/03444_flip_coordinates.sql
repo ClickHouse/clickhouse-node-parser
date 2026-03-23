@@ -16,4 +16,10 @@ SELECT flipCoordinates(readWkt('POINT(-73.935242 40.730610)'));
 SELECT flipCoordinates(readWkt('POLYGON((-180 -90, 180 -90, 180 90, -180 90, -180 -90))'));
 SELECT flipCoordinates(materialize(readWkt('POINT(5 10)'))) FROM numbers(3);
 CREATE TABLE test_geom (id UInt32, geom Geometry) ENGINE = Memory;
+INSERT INTO test_geom VALUES
+    (1, readWkt('POINT(10 20)')),
+    (2, readWkt('LINESTRING(1 2, 3 4)')),
+    (3, readWkt('POLYGON((0 0, 5 0, 5 5, 0 5, 0 0))')),
+    (4, readWkt('POINT(30 40)')),
+    (5, readWkt('MULTIPOLYGON(((0 0, 2 0, 2 2, 0 2, 0 0)))'));
 SELECT id, flipCoordinates(geom) FROM test_geom ORDER BY id;

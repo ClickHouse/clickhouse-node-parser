@@ -11,6 +11,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY key;
+INSERT INTO tab VALUES (1, 'foo'), (2, 'BAR'), (3, 'Baz');
 SELECT count() FROM tab WHERE hasToken(val, 'foo');
 SELECT count() FROM tab WHERE hasToken(val, 'BAR');
 SELECT count() FROM tab WHERE hasToken(val, 'Baz');
@@ -44,6 +45,7 @@ CREATE TABLE tab
     INDEX idx(val) TYPE text(tokenizer = 'splitByNonAlpha', preprocessor = lower(val))
 )
 ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tab VALUES (1, ['foo']), (2, ['BAR']), (3, ['Baz']);
 CREATE TABLE tab
 (
     key UInt64,

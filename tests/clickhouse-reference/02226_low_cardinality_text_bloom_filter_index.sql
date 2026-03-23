@@ -14,6 +14,10 @@ CREATE TABLE bf_ngram_lowcard_test
     INDEX lc_ngram lc TYPE ngrambf_v1(4,256,2,0) GRANULARITY 1,
     INDEX lc_fixed_ngram lc_fixed TYPE ngrambf_v1(4,256,2,0) GRANULARITY 1
 ) Engine=MergeTree() ORDER BY row_id SETTINGS index_granularity = 1;
+INSERT INTO bf_tokenbf_lowcard_test VALUES (1, 'K1', 'K1ZZZZZZ'), (2, 'K2', 'K2ZZZZZZ');
+INSERT INTO bf_ngram_lowcard_test VALUES (1, 'K1', 'K1ZZZZZZ'), (2, 'K2', 'K2ZZZZZZ');
+INSERT INTO bf_tokenbf_lowcard_test VALUES (3, 'abCD3ef', 'abCD3ef'), (4, 'abCD4ef', 'abCD4ef');
+INSERT INTO bf_ngram_lowcard_test   VALUES (3, 'abCD3ef', 'abCD3ef'), (4, 'abCD4ef', 'abCD4ef');
 SELECT * FROM bf_tokenbf_lowcard_test WHERE like(lc, 'K1') SETTINGS force_data_skipping_indices='lc_bf_tokenbf';
 SELECT * FROM bf_tokenbf_lowcard_test WHERE like(lc, 'K2') SETTINGS force_data_skipping_indices='lc_bf_tokenbf';
 SELECT * FROM bf_tokenbf_lowcard_test WHERE like(lc, 'K3') SETTINGS force_data_skipping_indices='lc_bf_tokenbf';

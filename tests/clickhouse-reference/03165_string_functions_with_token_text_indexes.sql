@@ -8,6 +8,7 @@ CREATE TABLE 03165_token_bf
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO 03165_token_bf VALUES(1, 'Service is not ready');
 SELECT trim(explain)
 FROM (
     EXPLAIN indexes = 1 SELECT * FROM 03165_token_bf WHERE startsWith(message, 'Serv')
@@ -71,6 +72,7 @@ CREATE TABLE 03165_token_ft
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO 03165_token_ft VALUES(1, 'Service is not ready');
 SELECT trim(explain)
 FROM (
     EXPLAIN indexes = 1 SELECT * FROM 03165_token_ft WHERE startsWith(message, 'Serv')

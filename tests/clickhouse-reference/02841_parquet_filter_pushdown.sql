@@ -8,6 +8,42 @@ set max_block_size = 100000;
 set max_insert_threads = 1;
 set input_format_parquet_bloom_filter_push_down = 0;
 set input_format_parquet_page_filter_push_down = 0;
+-- Try all the types.
+insert into function file('02841.parquet')
+    -- Use negative numbers to test sign extension for signed types and lack of sign extension for
+    -- unsigned types.
+    with 5000 - number as n select
+
+    number,
+
+    intDiv(n, 11)::UInt8 as u8,
+    n::UInt16 u16,
+    n::UInt32 as u32,
+    n::UInt64 as u64,
+    intDiv(n, 11)::Int8 as i8,
+    n::Int16 i16,
+    n::Int32 as i32,
+    n::Int64 as i64,
+
+    toDate32(n*500000) as date32,
+    toDateTime64(n*1e6, 3) as dt64_ms,
+    toDateTime64(n*1e6, 6) as dt64_us,
+    toDateTime64(n*1e6, 9) as dt64_ns,
+    toDateTime64(n*1e6, 0) as dt64_s,
+    toDateTime64(n*1e6, 2) as dt64_cs,
+
+    (n/1000)::Float32 as f32,
+    (n/1000)::Float64 as f64,
+
+    n::String as s,
+    n::String::FixedString(9) as fs,
+
+    n::Decimal32(3)/1234 as d32,
+    n::Decimal64(10)/12345678 as d64,
+    n::Decimal128(20)/123456789012345 as d128,
+    n::Decimal256(40)/123456789012345/678901234567890 as d256
+
+    from numbers(10000);
 select count(), sum(number) from file('02841.parquet') where indexHint(u8 in (10, 15, 250));
 select count(), sum(number) from file('02841.parquet') where indexHint(i8 between -3 and 2);
 select count(), sum(number) from file('02841.parquet') where indexHint(u16 between 4000 and 61000 or u16 == 42);
@@ -38,7 +74,18 @@ select count(), sum(number) from file('02841.parquet') where indexHint(u8 < 0);
 select count(), sum(number) from file('02841.parquet') where indexHint(u64 + 1000000 == 1001000);
 select count(), sum(number) from file('02841.parquet') where indexHint(u64 + 1000000 == 1001000) settings input_format_parquet_filter_push_down = 0;
 select count(), sum(number) from file('02841.parquet') where indexHint(u32 + 1000000 == 999000);
+insert into function file('02841.parquet')
+    select arrayStringConcat(range(number*1000000)) as s from numbers(2);
 select count() from file('02841.parquet') where indexHint(s > '');
+insert into function file('02841.parquet') select
+    number,
+    if(number%234 == 0, NULL, number) as sometimes_null,
+    toNullable(number) as never_null,
+    if(number%345 == 0, number::String, NULL) as mostly_null,
+    toLowCardinality(if(number%234 == 0, NULL, number)) as sometimes_null_lc,
+    toLowCardinality(toNullable(number)) as never_null_lc,
+    toLowCardinality(if(number%345 == 0, number::String, NULL)) as mostly_null_lc
+    from numbers(1000);
 select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null is NULL);
 select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null_lc is NULL);
 select count(), sum(number) from file('02841.parquet') where indexHint(mostly_null is not NULL);
@@ -52,6 +99,12 @@ select count(), sum(number) from file('02841.parquet') where indexHint(never_nul
 -- Quirk with infinities: this reads too much because KeyCondition represents NULLs as infinities.
 select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null < 150);
 select count(), sum(number) from file('02841.parquet') where indexHint(sometimes_null_lc < 150);
+insert into function file('02841.parquet') select
+    number,
+    if(number%234 == 0, NULL, number + 100) as positive_or_null,
+    if(number%234 == 0, NULL, -number - 100) as negative_or_null,
+    if(number%234 == 0, NULL, 'I am a string') as string_or_null
+    from numbers(1000);
 select count(), sum(number) from file('02841.parquet') where indexHint(positive_or_null < 50); -- quirk with infinities
 select count(), sum(number) from file('02841.parquet', Parquet, 'number UInt64, positive_or_null UInt64') where indexHint(positive_or_null < 50);
 select count(), sum(number) from file('02841.parquet') where indexHint(negative_or_null > -50);
@@ -60,5 +113,7 @@ select count(), sum(number) from file('02841.parquet') where indexHint(string_or
 -- Parquet index analysis doesn't support empty() function yet
 select count(), sum(number) from file('02841.parquet', Parquet, 'number UInt64, string_or_null String') where indexHint(string_or_null == '') settings optimize_empty_string_comparisons = 0;
 select count(), sum(number) from file('02841.parquet', Parquet, 'number UInt64, nEgAtIvE_oR_nUlL Int64') where indexHint(nEgAtIvE_oR_nUlL > -50) settings input_format_parquet_case_insensitive_column_matching = 1;
+insert into function file('02841.parquet') select 42 as x;
 select * from file('02841.parquet', Parquet, 'x Nullable(String)') where x not in (1);
+insert into function file('t.parquet', Parquet, 'x String') values ('1'), ('100'), ('2');
 select * from file('t.parquet', Parquet, 'x Int64') where x >= 3;

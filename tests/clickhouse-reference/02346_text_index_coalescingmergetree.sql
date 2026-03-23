@@ -8,6 +8,12 @@ CREATE TABLE tab
 )
 ENGINE = CoalescingMergeTree()
 ORDER BY id;
+INSERT INTO tab VALUES
+    (1, 'foo', 'foo'),
+    (2, 'bar', NULL);
+INSERT INTO tab VALUES
+    (1, 'foo', NULL),
+    (2, 'bar', 'bar');
 SELECT '-- direct read disabled';
 SET use_skip_indexes_on_data_read = 0;
 SELECT value FROM tab WHERE hasToken(key, 'foo') ORDER BY value;

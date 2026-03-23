@@ -4,6 +4,12 @@ CREATE TABLE dict_src_big
     grp       String,
     grp_round String
 ) ENGINE = Memory;
+INSERT INTO dict_src_big
+SELECT
+    number AS id,
+    toString(number) AS grp,
+    toString(number % 2000) AS grp_round
+FROM numbers(100000);
 CREATE DICTIONARY dict_big
 (
     id        UInt64,

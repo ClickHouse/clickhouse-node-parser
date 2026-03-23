@@ -5,6 +5,7 @@ CREATE TABLE test_local
     `f` String ALIAS 'f'
 )
 ENGINE = Memory;
+INSERT INTO test_local VALUES (1);
 SELECT e, f
 FROM remote('127.0.0.{1,2}', currentDatabase(), test_local)
 ORDER BY a;

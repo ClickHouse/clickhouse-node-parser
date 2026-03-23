@@ -5,4 +5,5 @@ WITH
     subquery_on_source AS (SELECT col1 AS aliased FROM test_table),
     output AS (SELECT * FROM test_table WHERE col1 IN (SELECT aliased FROM subquery_on_source))
 SELECT * FROM output;
+INSERT INTO test_table VALUES (2);
 SELECT * FROM test_mv;

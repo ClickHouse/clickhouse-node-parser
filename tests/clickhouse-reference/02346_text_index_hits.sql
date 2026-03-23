@@ -11,6 +11,7 @@ ORDER BY (CounterID, EventDate);
 SET enable_full_text_index = 1;
 SET use_query_condition_cache = 0;
 SET max_insert_threads = 4;
+INSERT INTO hits_text SELECT CounterID, EventDate, UserID,SearchPhrase, URL FROM test.hits;
 SET use_skip_indexes = 0;
 SET use_skip_indexes_on_data_read = 0;
 SET force_data_skipping_indices = '';

@@ -6,3 +6,5 @@ SET query_plan_join_swap_table = false;
 SET correlated_subqueries_default_join_kind = 'left';
 CREATE TABLE a(c1 Int64, c2 Int64, c3 Int64, c4 Int64) ENGINE = MergeTree() ORDER BY ();
 CREATE TABLE b(c1 Int64, c2 Int64, c3 Int64, c4 Int64) ENGINE = MergeTree() ORDER BY ();
+INSERT INTO a VALUES (1, 1, 1, 1), (2, 1, 1, 2);
+INSERT INTO b VALUES (1, 1, 1, 1), (1, 2, 2, 1);

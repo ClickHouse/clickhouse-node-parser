@@ -59,6 +59,8 @@ CREATE TABLE encryption_test
     key24 String DEFAULT substring(key, 1, 24),
     key16 String DEFAULT substring(key, 1, 16)
 ) Engine = Memory;
+INSERT INTO encryption_test (input)
+VALUES (''), ('text'), ('What Is ClickHouse? ClickHouse is a column-oriented database management system (DBMS) for online analytical processing of queries (OLAP).');
 SELECT 'aes-128-cbc' as mode, aes_decrypt_mysql(mode, aes_encrypt_mysql(mode, input, key, iv), key, iv) == input FROM encryption_test;
 SELECT 'aes-192-cbc' as mode, aes_decrypt_mysql(mode, aes_encrypt_mysql(mode, input, key, iv), key, iv) == input FROM encryption_test;
 SELECT 'aes-256-cbc' as mode, aes_decrypt_mysql(mode, aes_encrypt_mysql(mode, input, key, iv), key, iv) == input FROM encryption_test;
@@ -93,6 +95,7 @@ CREATE TABLE decrypt_null (
   encrypted String,
   iv String
 ) ENGINE = Memory;
+INSERT INTO decrypt_null VALUES ('2022-08-02 00:00:00', 1, encrypt('aes-256-gcm', 'value1', 'keykeykeykeykeykeykeykeykeykey01', 'iv1'), 'iv1'), ('2022-09-02 00:00:00', 2, encrypt('aes-256-gcm', 'value2', 'keykeykeykeykeykeykeykeykeykey02', 'iv2'), 'iv2'), ('2022-09-02 00:00:01', 3, encrypt('aes-256-gcm', 'value3', 'keykeykeykeykeykeykeykeykeykey03', 'iv3'), 'iv3');
 SELECT dt, user_id FROM decrypt_null WHERE (user_id > 0) AND (decrypt('aes-256-gcm', encrypted, 'keykeykeykeykeykeykeykeykeykey02', iv) = 'value2'); --{serverError OPENSSL_ERROR}
 SELECT dt, user_id FROM decrypt_null WHERE (user_id > 0) AND (tryDecrypt('aes-256-gcm', encrypted, 'keykeykeykeykeykeykeykeykeykey02', iv) = 'value2');
 SELECT dt, user_id, (tryDecrypt('aes-256-gcm', encrypted, 'keykeykeykeykeykeykeykeykeykey02', iv)) as value FROM decrypt_null ORDER BY user_id;

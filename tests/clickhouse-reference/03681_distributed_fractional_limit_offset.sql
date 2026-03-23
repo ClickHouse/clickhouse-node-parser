@@ -14,6 +14,7 @@ CREATE TABLE test__fuzz_2_local
 ENGINE = MergeTree
 ORDER BY k
 SETTINGS index_granularity = 1;
+INSERT INTO test__fuzz_2_local VALUES (1),(2),(3);
 CREATE TABLE test__fuzz_2_dist AS test__fuzz_2_local
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), test__fuzz_2_local, rand());
 SET enable_analyzer = 0;

@@ -14,6 +14,9 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree ORDER BY id PARTITION BY id
 SETTINGS storage_policy = 's3_cache';
+INSERT INTO tab SELECT 1, arrayStringConcat(arrayMap(x -> toString(number + x * 2), range(5)), ' ') FROM numbers(0, 100000);
+INSERT INTO tab SELECT 2, arrayStringConcat(arrayMap(x -> toString(number + x * 2), range(5)), ' ') FROM numbers(100000, 100000);
+INSERT INTO tab SELECT 3, arrayStringConcat(arrayMap(x -> toString(number + x * 2), range(5)), ' ') FROM numbers(200000, 100000);
 SELECT count(), sum(id) FROM tab WHERE hasAnyTokens(str, ['34567', '134567', '234567']);
 SELECT
     ProfileEvents['RemoteFSPrefetchedReads'] > 0

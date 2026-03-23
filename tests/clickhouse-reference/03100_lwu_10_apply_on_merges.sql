@@ -8,5 +8,6 @@ SETTINGS
     apply_patches_on_merge = 1,
     shared_merge_tree_disable_merges_and_mutations_assignment = 1,
     max_replicated_mutations_in_queue = 0;
+INSERT INTO t_lwu_merges SELECT number, number, 'c' || number FROM numbers(10000);
 SELECT sum(u), countIf(endsWith(s, '_foo')) FROM t_lwu_merges SETTINGS apply_patch_parts = 0;
 SELECT sum(u), countIf(endsWith(s, '_foo')) FROM t_lwu_merges SETTINGS apply_patch_parts = 1;

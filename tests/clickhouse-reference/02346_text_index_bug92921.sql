@@ -6,3 +6,5 @@ CREATE TABLE tab
     PROJECTION p (SELECT s ORDER BY s)
 )
 ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO TABLE tab (s) VALUES (['A']);
+INSERT INTO TABLE tab (s) VALUES (['B']);

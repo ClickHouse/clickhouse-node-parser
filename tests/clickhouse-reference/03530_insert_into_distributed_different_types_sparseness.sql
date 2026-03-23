@@ -1,4 +1,5 @@
 create table sparse (key String) engine=MergeTree order by () settings ratio_of_defaults_for_sparse_serialization=0.01;
+insert into sparse select ''::String from numbers(100);
 select dumpColumnStructure(*) from sparse limit 1;
 -- we need a table that supports sparse columns as intermediate, hence MergeTree
 create table intermediate (key String) engine=MergeTree order by ();
@@ -9,5 +10,6 @@ create materialized view mv_non_sparse to non_sparse_remote as select * from int
 create table log (key String) engine=Log;
 create table log_remote as remote('127.1', currentDatabase(), log);
 create materialized view mv_log to log as select * from intermediate;
+insert into intermediate select * from sparse;
 select count() from non_sparse;
 select count() from mv_log;

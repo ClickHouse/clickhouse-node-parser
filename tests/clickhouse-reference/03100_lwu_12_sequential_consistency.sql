@@ -13,6 +13,7 @@ SETTINGS
     enable_block_offset_column = 1;
 SET update_sequential_consistency = 1;
 SET select_sequential_consistency = 0;
+INSERT INTO t_lwu_sequential_1 VALUES (1, 'abc'), (2, 'def');
 SET select_sequential_consistency = 1;
 SELECT * FROM t_lwu_sequential_1 ORDER BY id SETTINGS apply_patch_parts = 0;
 SELECT * FROM t_lwu_sequential_1 ORDER BY id SETTINGS apply_patch_parts = 1;

@@ -3,6 +3,10 @@ CREATE TABLE tt2 (a UInt32, b UInt32 ALIAS a * 2) ENGINE = Memory;
 CREATE TABLE tt3 (a UInt32, b UInt32 ALIAS c, c UInt32) ENGINE = Memory;
 CREATE TABLE tt4 (a UInt32, b UInt32 ALIAS 12) ENGINE = Memory;
 CREATE TABLE tt_m (a UInt32, b UInt32) ENGINE = Merge(currentDatabase(), 'tt1|tt2|tt3|tt4');
+INSERT INTO tt1 VALUES (1);
+INSERT INTO tt2 VALUES (2);
+INSERT INTO tt3(a, c) VALUES (3, 4);
+INSERT INTO tt4 VALUES (5);
 -- { echo  }
 SELECT * FROM tt_m order by a;
 SELECT * FROM tt_m WHERE b != 0 order by b, a;

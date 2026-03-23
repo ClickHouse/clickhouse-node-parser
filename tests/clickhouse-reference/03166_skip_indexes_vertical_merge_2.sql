@@ -20,4 +20,5 @@ ORDER BY a SETTINGS
     min_bytes_for_full_part_storage = 0,
     enable_block_number_column = 0,
     enable_block_offset_column = 0;
+INSERT INTO t_ind_merge_2 SELECT number, number, rand(), rand(), rand(), rand() FROM numbers(1000);
 SET max_rows_to_read = 0; -- system.text_log can be really big

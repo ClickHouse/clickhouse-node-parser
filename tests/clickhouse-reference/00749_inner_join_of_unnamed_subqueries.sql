@@ -1,6 +1,8 @@
 set joined_subquery_requires_alias = 0;
 CREATE TABLE left_table(APIKey Int32, SomeColumn String) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO left_table VALUES(1, 'somestr');
 CREATE TABLE right_table(APIKey Int32, EventValueForPostback String) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO right_table VALUES(1, 'hello'), (2, 'WORLD');
 SELECT
     APIKey,
     ConversionEventValue

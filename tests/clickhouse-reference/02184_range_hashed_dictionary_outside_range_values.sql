@@ -8,6 +8,7 @@ CREATE TABLE 02184_range_dictionary_source_table
     value_2 String
 )
 ENGINE = TinyLog;
+INSERT INTO 02184_range_dictionary_source_table VALUES (1, 0, 18446744073709551615, 'value0', 'value1', 'value2');
 CREATE DICTIONARY 02184_range_dictionary
 (
     id UInt64,

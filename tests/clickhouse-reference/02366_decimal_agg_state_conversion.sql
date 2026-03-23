@@ -40,6 +40,7 @@ FROM
     FROM producer_02366
 )
 GROUP BY id;
+INSERT INTO producer_02366 (*) VALUES (19, '.1');
 SELECT
     id,
     finalizeAggregation(dec)

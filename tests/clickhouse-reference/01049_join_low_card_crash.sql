@@ -1,5 +1,7 @@
 CREATE TABLE Alpha (foo String, bar UInt64) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE Beta (foo LowCardinality(String), baz UInt64) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO Alpha VALUES ('a', 1);
+INSERT INTO Beta VALUES ('a', 2), ('b', 3);
 SELECT * FROM Alpha FULL JOIN (SELECT 'b' as foo) js2 USING (foo) ORDER BY foo;
 SELECT * FROM Alpha FULL JOIN Beta USING (foo) ORDER BY foo;
 SELECT * FROM Alpha FULL JOIN Beta ON Alpha.foo = Beta.foo ORDER BY foo;

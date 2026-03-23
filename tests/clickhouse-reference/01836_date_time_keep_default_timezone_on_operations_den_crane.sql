@@ -10,3 +10,4 @@ engine = AggregatingMergeTree  order by p;
 create materialized view tt_mv to tt as 
 select p, minState(now() - interval 30 minute) as tmin
 from tt_null group by p;
+insert into tt_null values('x');

@@ -1,4 +1,5 @@
 create table t7 (c57 UInt32) engine = MergeTree order by c57;
+insert into t7 values (1);
 SELECT
 (
 select count(*) 

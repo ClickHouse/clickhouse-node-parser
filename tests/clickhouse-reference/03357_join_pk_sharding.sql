@@ -4,6 +4,9 @@ SET use_statistics = 0;
 create table tab_l (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by (a * 2, b + c);
 create table tab_m (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by (c + d, b * 2);
 create table tab_r (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by (a * 2, c * 2);
+insert into tab_l select number, number, number, number from numbers(1e6);
+insert into tab_m select number, number, number, number from numbers(1e6);
+insert into tab_r select number, number, number, number from numbers(1e6);
 --select explain e from (explain actions = 1 )
 --where e like '%ReadFromMergeTree%' or e like '%Expression%' or e like '%Join%' or e like '%Clauses%' or e like '%Sharding%';
 

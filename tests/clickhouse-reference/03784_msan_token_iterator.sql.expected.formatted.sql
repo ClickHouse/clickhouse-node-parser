@@ -1,5 +1,1 @@
-CREATE TABLE t0
-(
-    c0 Int,
-    INDEX i1 substring(sipHash128(c0), 1, 4) TYPE ngrambf_v1(1, 8, 1, 0)
-);
+<Parse Error>

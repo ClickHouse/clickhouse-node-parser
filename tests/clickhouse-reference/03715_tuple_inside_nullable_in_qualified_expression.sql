@@ -7,6 +7,10 @@ CREATE TABLE qualified_match_nullable_tuple_direct
     t  Nullable(Tuple(a Int32, s String))
 )
 ENGINE = TinyLog;
+INSERT INTO qualified_match_nullable_tuple_direct VALUES
+    (1, (1, 'a')),
+    (2, NULL),
+    (3, (3, 'c'));
 SELECT
     id,
     t.*,
@@ -27,6 +31,12 @@ CREATE TABLE qualified_match_join_right
 )
 ENGINE = MergeTree
 ORDER BY x;
+INSERT INTO qualified_match_join_left VALUES
+    (1, (1, 'a')),
+    (2, (2, 'b'));
+INSERT INTO qualified_match_join_right VALUES
+    (2, (2, 'b')),
+    (3, (3, 'c'));
 SET join_use_nulls = 1;
 SELECT
     coalesce(qualified_match_join_left.x, qualified_match_join_right.x) AS x,

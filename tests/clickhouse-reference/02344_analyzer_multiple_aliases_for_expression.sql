@@ -4,6 +4,7 @@ CREATE TABLE test_table
     id UInt64,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO test_table VALUES (0, 'Value');
 SELECT 1 AS value, 1 AS value;
 SELECT id AS value, id AS value FROM test_table;
 SELECT (SELECT 1) AS subquery, (SELECT 1) AS subquery;

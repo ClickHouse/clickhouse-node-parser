@@ -1,4 +1,5 @@
 create table t (a Int8, val Float32) engine = Memory();
+insert into t values (1,1.1), (1,1.2), (2,2.1);
 SET enable_optimize_predicate_expression = 0;
 SELECT * FROM (
     SELECT a, t1.val as val1, t2.val as val2

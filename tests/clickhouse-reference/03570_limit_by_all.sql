@@ -8,6 +8,14 @@ CREATE TABLE test_limit_by_all (
     value Int32,
     name String
 ) ENGINE = Memory;
+INSERT INTO test_limit_by_all VALUES 
+(1, 'A', 100, 'item1'),
+(1, 'A', 200, 'item2'),
+(1, 'B', 300, 'item3'),
+(2, 'A', 400, 'item4'),
+(2, 'A', 500, 'item5'),
+(2, 'B', 600, 'item6'),
+(3, 'C', 700, 'item7');
 -- Test 1: Basic LIMIT BY ALL usage
 SELECT id, category, value 
 FROM test_limit_by_all 
@@ -87,6 +95,7 @@ SELECT count()
 FROM test_limit_by_all
 LIMIT 1 BY ALL; -- { serverError 62 }
 CREATE TABLE test_limit_by_all_tags (id Int32, tags Array(String)) ENGINE = Memory;
+INSERT INTO test_limit_by_all_tags VALUES (1, ['x','y']), (2, ['y']), (3, ['z']);
 SELECT t.id, tag
 FROM test_limit_by_all AS t
 LEFT JOIN test_limit_by_all_tags AS g USING (id)
@@ -124,6 +133,8 @@ GROUP BY id, category
 HAVING c >= 1
 ORDER BY id, c DESC, category
 LIMIT 1 BY ALL;
+-- NULL key handling
+INSERT INTO test_limit_by_all VALUES (4, NULL, 10, 'n1'), (4, NULL, 20, 'n2');
 SELECT id, category
 FROM test_limit_by_all
 ORDER BY id, category NULLS FIRST, value

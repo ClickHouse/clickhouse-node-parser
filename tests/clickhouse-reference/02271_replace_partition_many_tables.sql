@@ -5,6 +5,7 @@ CREATE TABLE replace_partition_source
 ENGINE = ReplicatedMergeTree('/test/02271_replace_partition_many/{database}/source', '1')
 PARTITION BY key
 ORDER BY tuple();
+INSERT INTO replace_partition_source VALUES (1);
 CREATE TABLE replace_partition_dest1
 (
     key UInt64

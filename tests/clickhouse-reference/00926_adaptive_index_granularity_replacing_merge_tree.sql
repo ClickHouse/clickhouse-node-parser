@@ -12,8 +12,10 @@ CREATE TABLE zero_rows_per_granule (
            vertical_merge_algorithm_min_columns_to_activate=0,
            min_bytes_for_wide_part = 0,
            min_bytes_for_full_part_storage = 0;
+INSERT INTO zero_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2000), ('2018-05-16', 2, 3000, 4000), ('2018-05-17', 3, 5000, 6000), ('2018-05-18', 4, 7000, 8000);
 SELECT COUNT(*) FROM zero_rows_per_granule;
 SELECT distinct(marks) from system.parts WHERE table = 'zero_rows_per_granule' and database=currentDatabase() and active=1;
+INSERT INTO zero_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
 SELECT COUNT(*) FROM zero_rows_per_granule FINAL;
 SELECT sum(marks) from system.parts WHERE table = 'zero_rows_per_granule' and database=currentDatabase() and active=1;
 SELECT '-----';
@@ -31,8 +33,10 @@ CREATE TABLE two_rows_per_granule (
            vertical_merge_algorithm_min_columns_to_activate=0,
            min_bytes_for_wide_part = 0,
            min_bytes_for_full_part_storage = 0;
+INSERT INTO two_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2000), ('2018-05-16', 2, 3000, 4000), ('2018-05-17', 3, 5000, 6000), ('2018-05-18', 4, 7000, 8000);
 SELECT COUNT(*) FROM two_rows_per_granule FINAL;
 SELECT distinct(marks) from system.parts WHERE table = 'two_rows_per_granule' and database=currentDatabase() and active=1;
+INSERT INTO two_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
 CREATE TABLE four_rows_per_granule (
   p Date,
   k UInt64,
@@ -47,8 +51,10 @@ CREATE TABLE four_rows_per_granule (
            vertical_merge_algorithm_min_columns_to_activate=0,
            min_bytes_for_wide_part = 0,
            min_bytes_for_full_part_storage = 0;
+INSERT INTO four_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2000), ('2018-05-16', 2, 3000, 4000), ('2018-05-17', 3, 5000, 6000), ('2018-05-18', 4, 7000, 8000);
 SELECT COUNT(*) FROM four_rows_per_granule;
 SELECT distinct(marks) from system.parts WHERE table = 'four_rows_per_granule' and database=currentDatabase() and active=1;
+INSERT INTO four_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
 SELECT sleep(0.5) Format Null;
 SELECT COUNT(*) FROM four_rows_per_granule FINAL;
 CREATE TABLE huge_granularity_small_blocks (
@@ -63,8 +69,10 @@ CREATE TABLE huge_granularity_small_blocks (
            vertical_merge_algorithm_min_columns_to_activate=0,
            min_bytes_for_wide_part = 0,
            min_bytes_for_full_part_storage = 0;
+INSERT INTO huge_granularity_small_blocks (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2000), ('2018-05-16', 2, 3000, 4000), ('2018-05-17', 3, 5000, 6000), ('2018-05-18', 4, 7000, 8000);
 SELECT COUNT(*) FROM huge_granularity_small_blocks;
 SELECT distinct(marks) from system.parts WHERE table = 'huge_granularity_small_blocks' and database=currentDatabase() and active=1;
+INSERT INTO huge_granularity_small_blocks (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
 SELECT COUNT(*) FROM huge_granularity_small_blocks FINAL;
 CREATE TABLE adaptive_granularity_alter (
   p Date,
@@ -80,6 +88,9 @@ CREATE TABLE adaptive_granularity_alter (
            vertical_merge_algorithm_min_columns_to_activate=0,
            min_bytes_for_wide_part = 0,
            min_bytes_for_full_part_storage = 0;
+INSERT INTO adaptive_granularity_alter (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2000), ('2018-05-16', 2, 3000, 4000), ('2018-05-17', 3, 5000, 6000), ('2018-05-18', 4, 7000, 8000);
 SELECT COUNT(*) FROM adaptive_granularity_alter;
 SELECT distinct(marks) from system.parts WHERE table = 'adaptive_granularity_alter' and database=currentDatabase() and active=1;
+INSERT INTO adaptive_granularity_alter (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 42, 42, 42);
+INSERT INTO adaptive_granularity_alter (p, k, v1, v2) VALUES ('2018-05-15', 100, 1000, 'aaaa'), ('2018-05-16', 101, 3000, 'bbbb'), ('2018-05-17', 102, 5000, 'cccc'), ('2018-05-19', 103, 7000, 'dddd');
 SELECT k, v2 FROM adaptive_granularity_alter WHERE k >= 100 OR k = 42;

@@ -1,5 +1,1 @@
-CREATE TABLE t
-(
-    x Bool
-)
-ENGINE = Memory();
+<Parse Error>

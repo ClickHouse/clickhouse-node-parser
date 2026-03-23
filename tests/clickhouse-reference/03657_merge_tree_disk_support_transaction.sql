@@ -1,6 +1,7 @@
 -- Tags: no-ordinary-database, no-fasttest, no-encrypted-storage, no-async-insert
 
 CREATE OR REPLACE TABLE t (x INT) ENGINE=MergeTree ORDER BY x;
+INSERT INTO TABLE t VALUES (1);
 CREATE OR REPLACE TABLE t (x INT) ENGINE=MergeTree ORDER BY x SETTINGS disk='local_disk';
 CREATE OR REPLACE TABLE t (x INT) ENGINE=MergeTree ORDER BY x SETTINGS disk='local_disk_2';
 CREATE OR REPLACE TABLE t (x INT) ENGINE=MergeTree ORDER BY x SETTINGS disk='local_disk_3';

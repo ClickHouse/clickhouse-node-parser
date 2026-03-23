@@ -4,6 +4,7 @@ create table dict_table
     `dateField` Date,
     `float64Field` Float64
 ) Engine Log();
+insert into dict_table values ('SomeStr', toDate('2021-01-01'), 1.1), ('SomeStr2', toDate('2021-01-02'), 2.2);
 create dictionary dict
 (
     `strField` String,
@@ -21,6 +22,7 @@ create table data_table
     `strField1` String,
     `strField2` String
 ) Engine Log();
+insert into data_table values (1.1, 1.2, 'SomeStr', 'SomeStr'), (2.1, 2.2, 'SomeStr2', 'SomeStr2');
 select round(
         float64Field1 * if(strField1 != '', 1.0, dictGetFloat64('dict', 'float64Field', (strField1, toDate('2021-01-01'))))
         + if(strField2 != '', 1.0, dictGetFloat64('dict', 'float64Field', (strField2, toDate('2021-01-01')))) * if(isFinite(float64Field2), float64Field2, 0),

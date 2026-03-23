@@ -6,6 +6,8 @@ CREATE TEMPORARY TABLE table_merge_tree_02525
 ENGINE = MergeTree
 ORDER BY id
 PRIMARY KEY id;
+INSERT INTO table_merge_tree_02525 VALUES (1, 'a'), (2, 'b');
+INSERT INTO table_merge_tree_02525 VALUES (3, 'c');
 SELECT * FROM table_merge_tree_02525;
 -- Check that temporary table with MergeTree is not sent to remote servers
 -- The query with remote() should not fail
@@ -16,6 +18,7 @@ CREATE TEMPORARY TABLE table_log_02525
     info String
 )
 ENGINE = Log;
+INSERT INTO table_log_02525 VALUES (1, 'a'), (2, 'b'), (3, 'c');
 SELECT * FROM table_log_02525;
 CREATE TEMPORARY TABLE table_stripe_log_02525
 (
@@ -23,6 +26,7 @@ CREATE TEMPORARY TABLE table_stripe_log_02525
     info String
 )
 ENGINE = StripeLog;
+INSERT INTO table_stripe_log_02525 VALUES (1, 'a'), (2, 'b'), (3, 'c');
 SELECT * FROM table_stripe_log_02525;
 CREATE TEMPORARY TABLE table_tiny_log_02525
 (
@@ -30,6 +34,7 @@ CREATE TEMPORARY TABLE table_tiny_log_02525
     info String
 )
 ENGINE = TinyLog;
+INSERT INTO table_tiny_log_02525 VALUES (1, 'a'), (2, 'b'), (3, 'c');
 SELECT * FROM table_tiny_log_02525;
 CREATE TEMPORARY TABLE table_replicated_merge_tree_02525
 (

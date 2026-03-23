@@ -533,6 +533,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY key;
+INSERT INTO tab VALUES (1, 'foo', toFixedString('foo', 3)), (2, 'bar', toFixedString('bar', 3)), (3, 'baz', toFixedString('baz', 3));
 SELECT count() FROM tab WHERE str = 'foo' SETTINGS force_data_skipping_indices='idx';
 SELECT count() FROM tab WHERE str_fixed = toFixedString('foo', 3) SETTINGS force_data_skipping_indices='idx_fixed';
 CREATE TABLE tab
@@ -557,6 +558,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY key;
+INSERT INTO tab VALUES (1, ['foo'], [toFixedString('foo', 3)]), (2, ['bar'], [toFixedString('bar', 3)]), (3, ['baz'], [toFixedString('baz', 3)]);
 SELECT count() FROM tab WHERE has(arr, 'foo') SETTINGS force_data_skipping_indices='idx';
 SELECT count() FROM tab WHERE has(arr_fixed, toFixedString('foo', 3)) SETTINGS force_data_skipping_indices='idx_fixed';
 CREATE TABLE tab
@@ -571,6 +573,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY key;
+INSERT INTO tab VALUES (1, {'foo' : 'foo'}, {'foo' : 'foo'}), (2, {'bar' : 'bar'}, {'bar' : 'bar'});
 SELECT count() FROM tab WHERE mapContainsKey(map, 'foo') SETTINGS force_data_skipping_indices='idx_keys';
 SELECT count() FROM tab WHERE mapContainsKey(map_fixed, toFixedString('foo', 3)) SETTINGS force_data_skipping_indices='idx_keys_fixed';
 SELECT count() FROM tab WHERE has(mapValues(map), 'foo') SETTINGS force_data_skipping_indices='idx_values';

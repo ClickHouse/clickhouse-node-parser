@@ -4,6 +4,18 @@ CREATE TABLE moving_sum_num (
   v UInt64
 )
 ENGINE = MergeTree ORDER BY (k, dt);
+INSERT INTO moving_sum_num
+  SELECT 'b' k, toDateTime('2001-02-03 00:00:00')+number as dt, number as v
+  FROM system.numbers
+  LIMIT 5
+  UNION ALL
+  SELECT 'a' k, toDateTime('2001-02-03 00:00:00')+number as dt, number as v
+  FROM system.numbers
+  LIMIT 5;
+INSERT INTO moving_sum_num
+  SELECT 'b' k, toDateTime('2001-02-03 01:00:00')+number as dt, 5+number as v
+  FROM system.numbers
+  LIMIT 5;
 SELECT * FROM moving_sum_num ORDER BY k,dt FORMAT TabSeparatedWithNames;
 -- Result of function 'groupArrayMovingSum' depends on the order of merging
 -- aggregate states which is implementation defined in external aggregation.

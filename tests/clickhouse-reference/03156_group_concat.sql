@@ -6,6 +6,7 @@ CREATE TABLE test_groupConcat
     p_array Array(Int32)
 ) ENGINE = MergeTree ORDER BY id;
 SET max_insert_threads = 1, max_threads = 1, min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0;
+INSERT INTO test_groupConcat VALUES (0, 95, 'abc', [1, 2, 3]), (1, NULL, 'a', [993, 986, 979, 972]), (2, 123, 'makson95', []);
 SELECT * FROM test_groupConcat;
 SELECT groupConcat(p_int) FROM test_groupConcat;
 SELECT groupConcat(p_string) FROM test_groupConcat;
@@ -35,4 +36,5 @@ CREATE TABLE test_groupConcat
     id UInt64,
     p_int Int32,
 ) ENGINE = MergeTree ORDER BY id;
+INSERT INTO test_groupConcat SELECT number, number FROM numbers(100000) SETTINGS min_insert_block_size_rows = 2000;
 SELECT length(groupConcat(p_int)) FROM test_groupConcat;

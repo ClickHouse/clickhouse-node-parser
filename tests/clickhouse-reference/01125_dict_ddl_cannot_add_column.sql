@@ -5,6 +5,7 @@ CREATE TABLE date_table
   start Date,
   end Date
 ) Engine = Memory();
+INSERT INTO date_table VALUES(1, '1', toDate('2019-01-05'), toDate('2020-01-10'));
 CREATE DICTIONARY somedict
 (
   id UInt32,

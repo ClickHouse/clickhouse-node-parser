@@ -6,6 +6,7 @@ CREATE TABLE table_with_lc_key
 )
 ENGINE MergeTree()
 ORDER BY (enum_key, lc_key);
+INSERT INTO table_with_lc_key VALUES(1, 'hello', 'world');
 SELECT * FROM table_with_lc_key WHERE enum_key > 0 and lc_key like 'h%';
 CREATE TABLE table_with_string_key
 (
@@ -15,4 +16,5 @@ CREATE TABLE table_with_string_key
 )
 ENGINE MergeTree()
 ORDER BY (int_key, str_key);
+INSERT INTO table_with_string_key VALUES(1, 'hello', 'world');
 SELECT * FROM table_with_string_key WHERE int_key > 0 and str_key like 'h%';

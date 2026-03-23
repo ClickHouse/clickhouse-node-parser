@@ -23,6 +23,17 @@ SELECT
     sum(volume) volume
 FROM fx_1m
 GROUP BY symbol, dt_close;
+-- insert sample data
+INSERT INTO fx_1m
+SELECT
+    'EURUSD',
+    toDateTime64('2022-12-12 12:00:00', 3, 'UTC') + number,
+    number + randCanonical(),
+    number + randCanonical(),
+    number + randCanonical(),
+    number + randCanonical(),
+    number + randCanonical()
+FROM numbers(1000000);
 -- segmentation fault (filter on dt_close column)
 SELECT
     dt_close,

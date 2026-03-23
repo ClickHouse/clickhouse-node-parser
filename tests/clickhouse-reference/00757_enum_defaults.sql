@@ -1,8 +1,10 @@
 CREATE TABLE auto_assign_enum (x enum('a', 'b')) ENGINE=MergeTree() order by x;
+INSERT INTO auto_assign_enum VALUES('a'), ('b');
 select * from auto_assign_enum;
 select CAST(x, 'Int8') from auto_assign_enum;
 select * from auto_assign_enum where x = 1;
 CREATE TABLE auto_assign_enum1 (x enum('a' = -1000, 'b')) ENGINE=MergeTree() order by x;
+INSERT INTO auto_assign_enum1 VALUES('a'), ('b');
 select * from auto_assign_enum1;
 select CAST(x, 'Int16') from auto_assign_enum1;
 select * from auto_assign_enum1 where x = -999;
@@ -17,5 +19,6 @@ CREATE TABLE auto_assign_enum2 (x Enum8(
                      '60','61','62','63','64','65','66','67','68','69','6A','6B','6C','6D','6E','6F',
                      '70','71','72','73','74','75','76','77','78','79','7A','7B','7C','7D','7E','7F'
                      )) ENGINE=MergeTree() order by x;
+INSERT INTO auto_assign_enum2 VALUES('7F');
 select CAST(x, 'Int8') from auto_assign_enum2;
 CREATE TABLE auto_assign_enum3 (x enum('a', 'b', NULL)) ENGINE=MergeTree() order by x; -- { serverError UNEXPECTED_AST_STRUCTURE }

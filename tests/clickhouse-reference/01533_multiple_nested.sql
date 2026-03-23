@@ -10,6 +10,8 @@ CREATE TABLE nested
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS min_bytes_for_wide_part = 0;
+INSERT INTO nested VALUES ([(1, 'q'), (2, 'w'), (3, 'e')], [(4, [('a', 5), ('s', 6), ('d', 7)])], [([(8, 9), (10, 11)], [('z', 'x'), ('c', 'v')])]);
+INSERT INTO nested VALUES ([(12, 'qq')], [(4, []), (5, [('b', 6), ('n', 7)])], [([], []), ([(44, 55), (66, 77)], [])]);
 SELECT * FROM nested;
 SELECT col1.a, col1.s FROM nested;
 SELECT col2.a, col2.n, col2.n.s, col2.n.b FROM nested;
@@ -32,6 +34,7 @@ CREATE TABLE nested
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS min_bytes_for_wide_part = 0;
+INSERT INTO nested SELECT number, arrayMap(x -> (x, arrayMap(y -> (toString(y * x), y + x), range(number % 17))), range(number % 19)) FROM numbers(100000);
 SELECT id % 10, sum(length(col1)), sumArray(arrayMap(x -> length(x), col1.n.b)) FROM nested GROUP BY id % 10;
 SELECT arraySum(col1.a), arrayMap(x -> x * x * 2, col1.a) FROM nested ORDER BY id LIMIT 5;
 SELECT untuple(arrayJoin(arrayJoin(col1.n))) FROM nested ORDER BY id LIMIT 10 OFFSET 10;

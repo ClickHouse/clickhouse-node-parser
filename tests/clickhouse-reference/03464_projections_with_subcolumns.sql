@@ -11,6 +11,7 @@ create table test (
     projection p2 (select t order by t.a),
     projection p3 (select json order by json.c[].d.:Int64),
 ) engine=MergeTree order by tuple() settings index_granularity=1;
+insert into test select number, toJSONString(map('a', number, 'b', 'str', 'c', [toJSONString(map('d', number::UInt32))::JSON])), tuple(number, number) from numbers(100) settings use_variant_as_common_type=1, output_format_json_quote_64bit_integers=0;
 select trimLeft(*) from (explain indexes=1 select json from test where json.a = 1) where explain like '%ReadFromMergeTree%';
 select json from test where json.a = 1;
 select trimLeft(*) from (explain indexes=1 select t from test where t.a = 1) where explain like '%ReadFromMergeTree%';

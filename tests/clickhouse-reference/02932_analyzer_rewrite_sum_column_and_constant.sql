@@ -10,6 +10,12 @@ CREATE TABLE test_table
     float64 Float64,
     decimal32 Decimal32(5),
 ) ENGINE=MergeTree ORDER BY uint64;
+-- Use Float64 numbers divisible by 1/16 (or some other small power of two), so that their sum doesn't depend on summation order.
+INSERT INTO test_table VALUES (1, 1.125, 1.11);
+INSERT INTO test_table VALUES (2, 2.250, 2.22);
+INSERT INTO test_table VALUES (3, 3.375, 3.33);
+INSERT INTO test_table VALUES (4, 4.500, 4.44);
+INSERT INTO test_table VALUES (5, 5.625, 5.55);
 -- { echoOn }
 SELECT sum(uint64 + 1 AS i) from test_table where i > 0;
 SELECT sum(uint64 + 1) AS j from test_table having j > 0;

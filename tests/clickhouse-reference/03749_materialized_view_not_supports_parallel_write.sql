@@ -8,3 +8,4 @@ CREATE MATERIALIZED VIEW merge_tree_to_set TO test_set (c0 Int) AS (SELECT * FRO
 CREATE TABLE t0 (c0 Int) ENGINE = Log;
 CREATE TABLE t1 (c0 Int) ENGINE = Memory;
 CREATE MATERIALIZED VIEW v0 TO t0 (c0 Int) AS (SELECT t1.* IS NULL c0 FROM t1);
+INSERT INTO TABLE t1 (c0) SELECT c0 FROM generateRandom('c0 Int', 1, 1, 0) LIMIT 1;

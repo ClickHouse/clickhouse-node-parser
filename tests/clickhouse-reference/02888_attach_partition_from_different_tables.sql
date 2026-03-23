@@ -6,6 +6,7 @@ CREATE TABLE attach_partition_t1 (
 )
 ENGINE = MergeTree
 ORDER BY a;
+INSERT INTO attach_partition_t1 SELECT number, toString(number) FROM numbers(10);
 CREATE TABLE attach_partition_t2 (
 	a UInt32,
 	b String,
@@ -27,6 +28,7 @@ CREATE TABLE attach_partition_t3 (
 )
 ENGINE = MergeTree
 ORDER BY a;
+INSERT INTO attach_partition_t3 SELECT number, toString(number) FROM numbers(10);
 CREATE TABLE attach_partition_t4 (
 	a UInt32,
 	b String,
@@ -54,6 +56,7 @@ CREATE TABLE attach_partition_t5 (
 )
 ENGINE = MergeTree
 ORDER BY a;
+INSERT INTO attach_partition_t5 SELECT number, toString(number) FROM numbers(10);
 CREATE TABLE attach_partition_t6 (
 	a UInt32,
 	b String,

@@ -11,5 +11,11 @@ CREATE TABLE table_for_rename
 ENGINE = MergeTree()
 PARTITION BY date
 ORDER BY key;
+INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(9);
+INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number) from numbers(9); --{serverError VIOLATED_CONSTRAINT}
 SELECT * FROM table_for_rename ORDER BY key;
 SELECT '-- insert after rename --';
+INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(10, 10);
+INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number) from numbers(10, 10); --{serverError VIOLATED_CONSTRAINT}
+INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(20,10);
+INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number), toString(number + 2) from numbers(20, 10); --{serverError VIOLATED_CONSTRAINT}

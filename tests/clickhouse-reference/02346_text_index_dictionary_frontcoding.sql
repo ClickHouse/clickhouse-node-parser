@@ -9,6 +9,7 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree()
 ORDER BY id;
+INSERT INTO tab VALUES (0, 'foo', 'foo'), (1, 'bar', 'bar'), (2, 'baz', 'baz'), (3, 'foo bar', 'foo bar'), (4, 'foo baz', 'foo baz'), (5, 'bar baz', 'bar baz'), (6, 'abc', 'abc'), (7, 'def', 'def');
 SELECT count() FROM tab WHERE hasToken(text_raw, 'foo');
 SELECT count() FROM tab WHERE hasToken(text_fc, 'foo');
 SELECT count() FROM tab WHERE hasToken(text_raw, 'bar');

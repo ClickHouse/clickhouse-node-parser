@@ -8,6 +8,10 @@ CREATE TABLE t_coalesce (
     v6 SimpleAggregateFunction(anyLast, Variant(String, UInt64)),
     v7 SimpleAggregateFunction(anyLast, Dynamic)
 ) ENGINE = AggregatingMergeTree() ORDER BY k;
+INSERT INTO t_coalesce (k) VALUES (1);
+INSERT INTO t_coalesce (k, v1) VALUES (1, 'Hello');
+INSERT INTO t_coalesce (k, v2) VALUES (1, 'Annnnnnnnnnnnnnnnnnn');
+INSERT INTO t_coalesce (k, v3, v4, v5, v6, v7) VALUES (1, ['a', 'b'], {'a': 'b'}, '{"a": "b"}', '{"a": 1}', '{"a": "b"}');
 SELECT k, v1, v2, v3, v4, v5, v6, v7 FROM t_coalesce FINAL;
 CREATE TABLE t_coalesce2 (
     k UInt64,
@@ -19,4 +23,7 @@ CREATE TABLE t_coalesce2 (
     v6 SimpleAggregateFunction(any, Variant(String, UInt64)),
     v7 SimpleAggregateFunction(any, Dynamic)
 ) ENGINE = AggregatingMergeTree() ORDER BY k;
+INSERT INTO t_coalesce2 (k, v3, v4, v5, v6, v7) VALUES (1, ['a', 'b'], {'a': 'b'}, '{"a": "b"}', '{"a": 1}', '{"a": "b"}');
+INSERT INTO t_coalesce2 (k, v1) VALUES (1, 'Hello');
+INSERT INTO t_coalesce2 (k, v2) VALUES (1, 'Annnnnnnnnnnnnnnnnnn');
 SELECT k, v1, v2, v3, v4, v5, v6, v7 FROM t_coalesce2 FINAL;

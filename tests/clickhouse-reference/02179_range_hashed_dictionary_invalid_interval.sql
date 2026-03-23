@@ -5,6 +5,9 @@ CREATE TABLE 02179_test_table
     start Int64,
     end Int64
 ) Engine = TinyLog;
+INSERT INTO 02179_test_table VALUES (0, 'Value', 10, 0);
+INSERT INTO 02179_test_table VALUES (0, 'Value', 15, 10);
+INSERT INTO 02179_test_table VALUES (0, 'Value', 15, 20);
 CREATE DICTIONARY 02179_test_dictionary
 (
     id UInt64,

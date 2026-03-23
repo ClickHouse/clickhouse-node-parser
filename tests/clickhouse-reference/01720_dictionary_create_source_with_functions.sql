@@ -5,6 +5,7 @@ CREATE TABLE 01720_dictionary_db.dictionary_source_table
     value String
 )
 ENGINE = TinyLog;
+INSERT INTO 01720_dictionary_db.dictionary_source_table VALUES (1, 'First');
 CREATE DICTIONARY 01720_dictionary_db.dictionary
 (
     key UInt64,

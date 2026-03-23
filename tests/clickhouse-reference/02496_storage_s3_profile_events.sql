@@ -1,6 +1,7 @@
 CREATE TABLE t_s3_events_02496 (a UInt64)
 ENGINE = S3(s3_conn, filename = 'test_02496_{_partition_id}', format = Parquet)
 PARTITION BY a;
+INSERT INTO t_s3_events_02496 SELECT number FROM numbers(10) SETTINGS s3_truncate_on_insert=1;
 SET max_threads = 1;
 SET parallel_replicas_for_cluster_engines = 0;
 SELECT count() FROM s3(s3_conn, filename = 'test_02496_*', format = Parquet, structure = 'a UInt64');

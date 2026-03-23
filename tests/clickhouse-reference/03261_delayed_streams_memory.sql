@@ -3,6 +3,7 @@ ENGINE = MergeTree
 ORDER BY id PARTITION BY id % 50
 SETTINGS min_bytes_for_wide_part = 0, ratio_of_defaults_for_sparse_serialization = 1.0, serialization_info_version = 'basic', max_compress_block_size = '1M', storage_policy = 's3_cache', auto_statistics_types = '';
 SET max_insert_delayed_streams_for_parallel_write = 55;
+INSERT INTO t_100_columns (id) SELECT number FROM numbers(100);
 SELECT if (memory_usage < 300000000, 'Ok', format('Fail: memory usage {}', formatReadableSize(memory_usage)))
 FROM system.query_log
 WHERE current_database = currentDatabase() AND query LIKE 'INSERT INTO t_100_columns%' AND type = 'QueryFinish';

@@ -7,6 +7,8 @@ CREATE TABLE tab
     INDEX idx_s(s) TYPE text(tokenizer = sparseGrams(3, 20, 5), preprocessor = lower(s))
 )
 ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tab (s) VALUES ('Hello, world!');
+INSERT INTO tab (s) VALUES ('ClickHouse is the fastest OLAP database');
 SELECT sparseGrams(lower('the fastest OLAP database'), 3, 20, 5);
 SELECT s FROM tab WHERE s LIKE '%the fastest OLAP database%';
 SELECT trim(explain) FROM

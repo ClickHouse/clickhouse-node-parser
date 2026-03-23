@@ -10,6 +10,7 @@ CREATE TABLE test_table
     id UInt64,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO test_table VALUES (0, 'Value');
 SELECT * FROM test_table;
 SELECT COLUMNS(id) FROM test_table;
 SELECT COLUMNS(id), COLUMNS(value) FROM test_table;
@@ -24,6 +25,7 @@ CREATE TABLE 02339_db.test_table
     id UInt64,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO 02339_db.test_table VALUES (0, 'Value');
 SELECT 02339_db.test_table.* FROM 02339_db.test_table;
 SELECT 02339_db.test_table.COLUMNS(id) FROM 02339_db.test_table;
 SELECT 02339_db.test_table.COLUMNS(id), 02339_db.test_table.COLUMNS(value) FROM 02339_db.test_table;

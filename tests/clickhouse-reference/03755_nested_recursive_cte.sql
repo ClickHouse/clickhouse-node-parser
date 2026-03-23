@@ -1,4 +1,5 @@
 CREATE TABLE t0 (x Int32) ENGINE = Memory;
+INSERT INTO t0 VALUES (1);
 -- The original problematic query pattern - inner CTE references outer CTE
 -- Using count() to get deterministic output regardless of how many rows are produced before hitting the limit
 SET max_recursive_cte_evaluation_depth = 5;

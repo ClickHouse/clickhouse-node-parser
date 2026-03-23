@@ -7,3 +7,4 @@ SET optimize_qbit_distance_function_reads = false;
 -- https://github.com/ClickHouse/ClickHouse/issues/88362
 
 CREATE TABLE qbit (id UInt32, vec QBit(BFloat16, 1)) ENGINE = Memory;
+INSERT INTO qbit VALUES (1, [toBFloat16(1)]);

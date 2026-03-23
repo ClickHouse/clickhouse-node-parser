@@ -24,6 +24,8 @@ CREATE TABLE b1 (
     id UInt32
 )
 ENGINE = Distributed('test_shard_localhost', currentDatabase(), b1_replicated, id);
+INSERT INTO a1 (day, id) VALUES ('2019-01-01', 9), ('2019-01-01', 10), ('2019-01-02', 10), ('2019-01-01', 11);
+INSERT INTO b1 (day, id) VALUES ('2019-01-01', 9), ('2019-01-01', 10), ('2019-01-02', 11), ('2019-01-01', 11);
 SET distributed_product_mode='local';
 SELECT id, count()
 FROM a1 AS a1

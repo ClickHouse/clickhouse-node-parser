@@ -25,6 +25,11 @@ ORDER BY (event_date, id)
 SETTINGS
     index_granularity = 1, min_bytes_for_wide_part = 0,
     min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
+INSERT INTO test_simple_projection VALUES (1, '2023-01-01', 101, 'https://example.com/page1', 'europe');
+INSERT INTO test_simple_projection VALUES (2, '2023-01-01', 102, 'https://example.com/page2', 'us_west');
+INSERT INTO test_simple_projection VALUES (3, '2023-01-02', 106, 'https://example.com/page3', 'us_west');
+INSERT INTO test_simple_projection VALUES (4, '2023-01-02', 107, 'https://example.com/page4', 'us_west');
+INSERT INTO test_simple_projection VALUES (5, '2023-01-03', 104, 'https://example.com/page5', 'asia');
 -- aggressively use projection index
 SET min_table_rows_to_use_projection_index = 0;
 SELECT trimLeft(explain)
@@ -63,6 +68,13 @@ ORDER BY id
 SETTINGS
     index_granularity = 16, min_bytes_for_wide_part = 0,
     min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
+INSERT INTO test_projection_granule_edge_cases VALUES (0, 'top_region', 100);
+INSERT INTO test_projection_granule_edge_cases SELECT number + 1, 'other_region', 101 FROM numbers(6);
+INSERT INTO test_projection_granule_edge_cases VALUES (7, 'mid_region', 102);
+INSERT INTO test_projection_granule_edge_cases SELECT number + 8, 'other_region', 103 FROM numbers(6);
+INSERT INTO test_projection_granule_edge_cases VALUES (15, 'bol_region', 104);
+-- add more data to ensure projection index is triggered during query planning
+INSERT INTO test_projection_granule_edge_cases SELECT number + 100, 'unknown_region', 999 FROM numbers(1000);
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM test_projection_granule_edge_cases WHERE region = 'top_region')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');
@@ -85,6 +97,8 @@ ORDER BY id
 SETTINGS
     index_granularity = 1, min_bytes_for_wide_part = 0,
     min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
+INSERT INTO test_partial_projection VALUES (1, 'us'), (2, 'eu'), (3, 'cn');
+INSERT INTO test_partial_projection VALUES (4, 'cn'), (5, 'ru'), (6, 'br');
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM test_partial_projection WHERE region = 'ru')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');

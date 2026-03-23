@@ -12,6 +12,7 @@ SETTINGS
     index_granularity = 64, 
     index_granularity_bytes = '10M', 
     min_bytes_for_wide_part = 0;
+INSERT INTO test_table_72265_1 SELECT number, number FROM numbers(10000);
 SELECT count() FROM test_table_72265_1 WHERE (a > 100) AND ((a % 2) = toUInt128(0));
 CREATE TABLE test_table_72265_2
 (
@@ -21,4 +22,5 @@ ENGINE = MergeTree
 PARTITION BY part
 ORDER BY part
 SETTINGS allow_nullable_key = 1;
+INSERT INTO test_table_72265_2 (part) FORMAT Values (1);
 SELECT * FROM test_table_72265_2 PREWHERE part = toUInt128(1);

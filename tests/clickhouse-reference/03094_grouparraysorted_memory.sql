@@ -8,6 +8,7 @@ CREATE TABLE 03094_grouparrysorted_dest
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY (ServiceName);
+
 CREATE TABLE 03094_grouparrysorted_src
 (
     ServiceName String,
@@ -18,6 +19,7 @@ CREATE TABLE 03094_grouparrysorted_src
 )
 ENGINE = MergeTree()
 ORDER BY ();
+
 CREATE MATERIALIZED VIEW 03094_grouparrysorted_mv TO 03094_grouparrysorted_dest
 AS SELECT
    ServiceName,
@@ -29,3 +31,6 @@ AS SELECT
 FROM 03094_grouparrysorted_src
 GROUP BY
     ServiceName;
+
+
+INSERT INTO 03094_grouparrysorted_src SELECT * FROM generateRandom() LIMIT 500000;

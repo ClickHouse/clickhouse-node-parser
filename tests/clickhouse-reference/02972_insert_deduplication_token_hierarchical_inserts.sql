@@ -72,6 +72,7 @@ ENGINE = MergeTree ORDER BY tuple() SETTINGS non_replicated_deduplication_window
 CREATE MATERIALIZED VIEW mv_4_2 TO ds_4_2 as
 SELECT '4_2' l, t, v
 FROM mv_3_1;
+INSERT INTO landing SELECT 1 as timestamp, 1 AS value FROM numbers(10) ORDER BY ALL;
 SELECT sleep(3);
 SELECT table, name, error FROM system.part_log
 WHERE database = currentDatabase() and error != 389

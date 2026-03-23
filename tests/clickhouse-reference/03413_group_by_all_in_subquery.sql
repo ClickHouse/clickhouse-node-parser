@@ -7,6 +7,7 @@ CREATE TABLE t
 )
 ENGINE = MergeTree
 ORDER BY id;
+INSERT INTO t VALUES (1, 2, 3);
 CREATE TABLE t_dist AS t
 ENGINE = Distributed(test_cluster_two_shards_localhost, currentDatabase(), t, id);
 SELECT a

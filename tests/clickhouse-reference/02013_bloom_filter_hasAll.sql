@@ -6,6 +6,7 @@ CREATE TABLE bftest (
 )
 Engine=MergeTree
 ORDER BY k;
+INSERT INTO bftest (k, x) SELECT number, arrayMap(i->rand64()%565656, range(10)) FROM numbers(1000);
 -- index is not used, but query should still work
 SELECT count() FROM bftest WHERE hasAll(x, materialize([1,2,3])) FORMAT Null;
 -- verify the expression in WHERE works on non-index col the same way as on index cols

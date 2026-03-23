@@ -12,6 +12,7 @@ CREATE TABLE tab (
 )
 ENGINE = MergeTree()
 ORDER BY (id);
+INSERT INTO tab VALUES(1, 'bar'), (2, 'foo');
 SELECT '-- Plain text index search functions';
 SELECT count() FROM tab WHERE hasAnyTokens(text, ['']);
 SELECT count() FROM tab WHERE hasAllTokens(text, ['']);

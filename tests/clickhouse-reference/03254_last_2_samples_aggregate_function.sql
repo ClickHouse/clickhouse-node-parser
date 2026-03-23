@@ -87,6 +87,8 @@ FROM
 )
 ORDER BY step, metric_id, grid_timestamp
 SETTINGS query_plan_remove_redundant_sorting = 0;
+-- Insert some data
+INSERT INTO t_raw_timeseries(metric_id, timestamp, value) SELECT number%10 AS metric_id, '2024-12-12 12:00:00'::DateTime64(3, 'UTC') + interval ((number/10)%100)*900 millisecond as timestamp, number AS value FROM numbers(1000);
 SELECT *
 FROM t_raw_timeseries
 WHERE metric_id IN (3,7) AND timestamp BETWEEN '2024-12-12 12:00:07' AND '2024-12-12 12:00:13'

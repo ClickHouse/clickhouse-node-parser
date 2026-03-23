@@ -6,6 +6,7 @@ CREATE TABLE Test_00584 (
     a Int64
 )
 ENGINE = MergeTree(createdDate, str, 8192);
+INSERT INTO Test_00584 VALUES ('2000-01-01', 'hello', 'A', 123);
 SET max_threads = 1;
 CREATE VIEW TestView AS
     SELECT str, key, sumIf(a, 0) AS sum

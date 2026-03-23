@@ -1,4 +1,5 @@
 CREATE TABLE 02183_dictionary_test_table (id UInt64) ENGINE=TinyLog;
+INSERT INTO 02183_dictionary_test_table VALUES (0), (1);
 SELECT * FROM 02183_dictionary_test_table;
 CREATE DICTIONARY 02183_flat_dictionary
 (
@@ -65,6 +66,7 @@ CREATE TABLE ip_trie_dictionary_source_table
 (
     prefix String
 ) ENGINE = TinyLog;
+INSERT INTO ip_trie_dictionary_source_table VALUES ('127.0.0.0');
 CREATE DICTIONARY 02183_ip_trie_dictionary
 (
     prefix String
@@ -80,6 +82,7 @@ CREATE TABLE 02183_polygon_dictionary_source_table
 (
     key Array(Array(Array(Tuple(Float64, Float64))))
 ) ENGINE = TinyLog;
+INSERT INTO 02183_polygon_dictionary_source_table VALUES ([[[(0, 0), (0, 1), (1, 1), (1, 0)]]]);
 CREATE DICTIONARY 02183_polygon_dictionary
 (
     key Array(Array(Array(Tuple(Float64, Float64))))
@@ -98,6 +101,7 @@ CREATE TABLE 02183_range_dictionary_source_table
   end UInt64
 )
 ENGINE = TinyLog;
+INSERT INTO 02183_range_dictionary_source_table VALUES(0, 0, 1);
 CREATE DICTIONARY 02183_range_dictionary
 (
   key UInt64,

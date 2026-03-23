@@ -10,6 +10,7 @@ CREATE TABLE users_compact (
     projection p2 (select age, name group by age, name)
 ) ENGINE = MergeTree order by uid
 SETTINGS min_bytes_for_wide_part = 10485760;
+INSERT INTO users_compact VALUES (1231, 'John', 33);
 SELECT * FROM users_compact ORDER BY uid;
 -- all_1_1_0_2
 SELECT
@@ -21,6 +22,7 @@ SELECT
     name, parent_name
 FROM system.projection_parts
 WHERE (database = currentDatabase()) AND (`table` = 'users_compact') AND (active = 1);
+INSERT INTO users_compact VALUES (6666, 'Ksenia', 48), (8888, 'Alice', 50);
 -- expecting projection p1, p2
 SELECT
     name, parent_name
@@ -34,6 +36,7 @@ CREATE TABLE users_wide (
     projection p2 (select age, name group by age, name)
 ) ENGINE = MergeTree order by uid
 SETTINGS min_bytes_for_wide_part = 0;
+INSERT INTO users_wide VALUES (1231, 'John', 33);
 SELECT * FROM users_wide ORDER BY uid;
 -- all_1_1_0_2
 SELECT
@@ -45,6 +48,7 @@ SELECT
     name, parent_name
 FROM system.projection_parts
 WHERE (database = currentDatabase()) AND (`table` = 'users_wide') AND (active = 1);
+INSERT INTO users_wide VALUES (6666, 'Ksenia', 48), (8888, 'Alice', 50);
 -- expecting projection p1, p2
 SELECT
     name, parent_name

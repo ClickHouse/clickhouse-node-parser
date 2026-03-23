@@ -5,6 +5,10 @@ CREATE TABLE mem_test
 )
 ENGINE = Memory;
 SET max_block_size = 3;
+INSERT INTO mem_test SELECT
+    number,
+    number
+FROM numbers(100);
 SELECT *
 FROM mem_test
 FORMAT Null;

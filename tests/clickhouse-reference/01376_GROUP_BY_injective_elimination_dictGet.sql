@@ -9,6 +9,7 @@ CREATE TABLE dictdb_01376.table_for_dict
   value Float64
 )
 ENGINE = Memory();
+INSERT INTO dictdb_01376.table_for_dict VALUES (1, 1.1);
 CREATE DICTIONARY IF NOT EXISTS dictdb_01376.dict_exists
 (
   key_column UInt64,

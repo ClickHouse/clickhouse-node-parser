@@ -7,6 +7,7 @@ CREATE TABLE t_dict_dist_local
     id Int64,
     c String
 ) ENGINE = MergeTree() ORDER BY id;
+INSERT INTO t_dict_dist_local VALUES (1, 'same'), (2, 'same');
 CREATE DICTIONARY d_dict_dist
 (
     id Int64,

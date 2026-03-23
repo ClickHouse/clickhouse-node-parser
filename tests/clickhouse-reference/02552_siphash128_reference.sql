@@ -203,6 +203,7 @@ select sipHash128ReferenceKeyed(toUInt64(0), '1'); -- { serverError BAD_ARGUMENT
 SELECT hex(sipHash128Reference()) = hex(reverse(unhex('1CE422FEE7BD8DE20000000000000000'))) or hex(sipHash128()) = '1CE422FEE7BD8DE20000000000000000';
 SELECT hex(sipHash128ReferenceKeyed()) = hex(reverse(unhex('1CE422FEE7BD8DE20000000000000000'))) or hex(sipHash128Keyed()) = '1CE422FEE7BD8DE20000000000000000';
 CREATE TABLE tab (key Tuple(UInt64, UInt64), val UInt64) ENGINE=Memory;
+INSERT INTO tab VALUES ((2, 2), 4);
 -- these two statements must produce the same result
 SELECT hex(sipHash128ReferenceKeyed(key, val)) FROM tab;
 SELECT hex(sipHash128ReferenceKeyed(key, 4::UInt64)) FROM tab;
@@ -213,9 +214,15 @@ SELECT hex(sipHash128Reference(tuple(*))) FROM sipHashKeyed_test;
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(0), toUInt64(0)), tuple(*))) FROM sipHashKeyed_test;
 SELECT hex(sipHash128ReferenceKeyed((toUInt64(0), toUInt64(0)), a, b)) FROM sipHashKeyed_test;
 CREATE TABLE sipHashKeyed_keys (key Tuple(UInt64, UInt64), val UInt64) ENGINE=Memory;
+INSERT INTO sipHashKeyed_keys VALUES ((2, 2), 4);
+INSERT INTO sipHashKeyed_keys VALUES ((4, 4), 4);
 SELECT hex(sipHash128ReferenceKeyed(key, val)) FROM sipHashKeyed_keys ORDER by key;
 CREATE TABLE sipHashKeyed_keys (key0 UInt64, key1 UInt64, val UInt64) ENGINE=Memory;
+INSERT INTO sipHashKeyed_keys VALUES (2, 2, 4);
+INSERT INTO sipHashKeyed_keys VALUES (4, 4, 4);
 SELECT hex(sipHash128ReferenceKeyed((key0, key1), val)) FROM sipHashKeyed_keys ORDER by key0;
 SELECT hex(sipHash128ReferenceKeyed((2::UInt64, 2::UInt64), val)) FROM sipHashKeyed_keys ORDER by val;
 CREATE TABLE sipHashKeyed_keys (key0 UInt64, key1 UInt64) ENGINE=Memory;
+INSERT INTO sipHashKeyed_keys VALUES (2, 2);
+INSERT INTO sipHashKeyed_keys VALUES (4, 4);
 SELECT hex(sipHash128ReferenceKeyed((key0, key1), 4::UInt64)) FROM sipHashKeyed_keys ORDER by key0;

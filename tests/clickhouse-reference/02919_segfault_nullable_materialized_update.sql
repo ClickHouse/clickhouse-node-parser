@@ -5,4 +5,5 @@ CREATE TABLE crash_02919 (
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+INSERT INTO crash_02919 VALUES (0);
 SELECT b, c, d FROM crash_02919;

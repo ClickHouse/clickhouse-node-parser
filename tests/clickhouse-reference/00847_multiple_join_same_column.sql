@@ -1,6 +1,9 @@
 create table t(a Int64, b Int64) engine = TinyLog;
 create table s(a Int64, b Int64) engine = TinyLog;
 create table y(a Int64, b Int64) engine = TinyLog;
+insert into t values (1,1), (2,2);
+insert into s values (1,1);
+insert into y values (1,1);
 select t.a, s.b, s.a, s.b, y.a, y.b from t
 left join s on (t.a = s.a and t.b = s.b)
 left join y on (y.a = s.a and y.b = s.b)

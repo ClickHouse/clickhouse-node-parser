@@ -3,6 +3,7 @@ CREATE TABLE dict_src
     id  UInt64,
     grp String
 ) ENGINE = Memory;
+INSERT INTO dict_src VALUES (1, 'blue');
 CREATE DICTIONARY colors
 (
     id  UInt64,
@@ -14,6 +15,7 @@ LAYOUT(HASHED())
 LIFETIME(0);
 SELECT dictGetKeys('colors', 'grp', 'blue') AS keys
 FROM numbers(1);
+INSERT INTO dict_src VALUES (2, 'blue');
 CREATE TABLE src_products
 (
     id UInt64,
@@ -21,6 +23,12 @@ CREATE TABLE src_products
     brand String
 )
 ENGINE = Memory;
+INSERT INTO src_products VALUES
+    (1, 'catA', 'brandX'),
+    (2, 'catA', 'brandY'),
+    (3, 'catB', 'brandX'),
+    (4, 'catC', 'brandZ'),
+    (5, 'catB', 'brandZ');
 CREATE DICTIONARY dict_products
 (
     id UInt64,
@@ -38,6 +46,10 @@ CREATE TABLE inputs
     target_timezone String
 )
 ENGINE = Memory;
+INSERT INTO inputs VALUES
+    ('catA', 'brandX', 'UTC+1'),
+    ('catB', 'brandZ', 'UTC+9'),
+    ('catX', 'brandX', 'UTC-6');
 SELECT
     target_category,
     dictGetKeys('dict_products', 'category', target_category) AS product_ids_by_category_before

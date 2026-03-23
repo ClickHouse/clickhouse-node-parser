@@ -23,3 +23,4 @@ partition by
   toDate (datetime_value)
 order by
   bool_value;
+insert into proj values (1, 1, 1, 1, '2012-10-24 21:30:00', 'ab');

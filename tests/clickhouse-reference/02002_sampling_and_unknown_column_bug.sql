@@ -5,6 +5,7 @@ CREATE TABLE sessions
 ENGINE = MergeTree
 ORDER BY user_id 
 SAMPLE BY user_id;
+insert into sessions values(1);
 SELECT
     sum(user_id * _sample_factor) 
 FROM sessions

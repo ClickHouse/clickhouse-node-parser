@@ -12,6 +12,7 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 1;
+INSERT INTO tab VALUES (1, 'Well, Hello ClickHouse !'), (2, 'Well, Hello World !'), (3, 'Good Weather !'), (4, 'Say Hello !'), (5, 'Its An OLAP Database'), (6, 'True World Champion');
 SELECT * FROM tab WHERE match(str, ' Hello (ClickHouse|World) ') ORDER BY id;
 -- Read 2/6 granules
 -- Required string: ' Hello '

@@ -10,5 +10,9 @@ set parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, 
 set optimize_use_projection_filtering = 1;
 create table t (i int, j int, projection p (select * order by j)) engine MergeTree order by tuple()
 settings index_granularity = 1, add_minmax_index_for_numeric_columns=0, max_bytes_to_merge_at_max_space_in_pool = 1; -- disable merge
+-- The following data is constructed in a way to verifies that query condition
+-- cache no longer has key collisions for projection parts
+insert into t select 20, number from numbers(10);
+insert into t select 1, number + 1 from numbers(10);
 select j from t where j > 3 and i = 20 order by j settings max_threads = 1, use_query_condition_cache = 1, query_condition_cache_store_conditions_as_plaintext = 1;
 select part_name from system.query_condition_cache order by part_name;

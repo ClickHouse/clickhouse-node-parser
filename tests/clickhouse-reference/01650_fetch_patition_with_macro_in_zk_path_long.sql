@@ -1,6 +1,7 @@
 CREATE TABLE test_01640(i Int64, d Date, s String)
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/{shard}/tables/test_01640','{replica}')
 PARTITION BY toYYYYMM(d) ORDER BY i;
+insert into test_01640 values (1, '2021-01-01','some');
 CREATE TABLE restore_01640(i Int64, d Date, s String)
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/{shard}/tables/restore_01640','{replica}')
 PARTITION BY toYYYYMM(d) ORDER BY i;

@@ -14,6 +14,8 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY (id);
+INSERT INTO tab VALUES (0, {'K0':'V0', 'K1':'V1'}, {'K0':'V0', 'K1':'V1'});
+INSERT INTO tab VALUES (1, {'K1':'V1', 'K2':'V2'}, {'K1':'V1', 'K2':'V2'});
 SELECT '-- mapContains support';
 SELECT count() FROM tab WHERE mapContains(map, 'K0');
 SELECT count() FROM tab WHERE mapContains(map, 'K1');
@@ -272,6 +274,8 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY (id);
+INSERT INTO tab VALUES (0, {'a b c':'d e f', 'g h i':'j k l'}, {'a b c':'d e f', 'g h i':'j k l'});
+INSERT INTO tab VALUES (1, {'g h i':'j k l', 'm n o':'p q r'}, {'g h i':'j k l', 'm n o':'p q r'});
 SELECT count() from tab WHERE mapContainsKeyLike(map, '% b %');
 SELECT count() from tab WHERE mapContainsKeyLike(map, '% h %');
 SELECT count() from tab WHERE mapContainsKeyLike(map, '% n %');

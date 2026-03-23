@@ -3,6 +3,7 @@ CREATE TABLE 02155_test_table
     id UInt64,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO 02155_test_table VALUES (0, 'Value');
 CREATE DICTIONARY 02155_test_dictionary
 (
     id UInt64,

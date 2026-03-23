@@ -5,6 +5,7 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY x.b
 SETTINGS index_granularity = 1;
+INSERT INTO test VALUES ((1, 'hello')), ((2, 'World'));
 SELECT * FROM test ORDER BY x;
 SELECT * FROM test ORDER BY x.a;
 SELECT * FROM test ORDER BY x.b;

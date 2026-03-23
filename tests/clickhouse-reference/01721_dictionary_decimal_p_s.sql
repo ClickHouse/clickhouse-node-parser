@@ -6,6 +6,13 @@ Decimal128_ Decimal(25,8),
 Decimal256_ Decimal(76,37)
 )
 ENGINE = Memory;
+insert into table_decimal_dict
+select number,
+       number / 3,
+       number / 3,
+       number / 3,
+       number / 3
+from numbers(5000);
 CREATE DICTIONARY IF NOT EXISTS decimal_dict (
 	KeyField UInt64 DEFAULT 9999999,
 	Decimal32_ Decimal(5,4) DEFAULT 0.11,

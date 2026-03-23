@@ -9,5 +9,6 @@ CREATE TABLE defaults
 (
     s FixedString(20)
 )ENGINE = Memory();
+INSERT INTO defaults SELECT s FROM generateRandom('s FixedString(20)', 1, 1, 1) LIMIT 20;
 SELECT hex(SHA512(s)) FROM defaults;
 SELECT hex(SHA512_256(s)) FROM defaults;

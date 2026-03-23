@@ -7,6 +7,8 @@ CREATE TABLE tab
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(timestamp)
 ORDER BY machine_id;
+insert into tab(machine_id, name, timestamp)
+select 1, 'a_name', '2022-11-24 12:00:00';
 SELECT
   toStartOfInterval(timestamp, INTERVAL 300 SECOND) AS ts
 FROM tab

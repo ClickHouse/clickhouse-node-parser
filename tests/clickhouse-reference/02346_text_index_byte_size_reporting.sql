@@ -9,6 +9,7 @@ CREATE TABLE tab
 )
 ENGINE MergeTree
 ORDER BY tuple();
+INSERT INTO tab (s) SELECT number FROM numbers(10000);
 SELECT
     sum(secondary_indices_compressed_bytes) <= sum(secondary_indices_uncompressed_bytes)
         ? 'OK'

@@ -5,6 +5,7 @@ ORDER BY id
 SETTINGS
     enable_block_number_column = 1,
     enable_block_offset_column = 1;
+INSERT INTO t_shared VALUES (1, 11, 'foo') (2, 22, 'bar') (3, 33, 'sss');
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 0;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 1;
 SELECT * FROM t_shared PREWHERE c2 = 'aaa' AND c1 = 111;

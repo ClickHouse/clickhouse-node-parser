@@ -46,6 +46,31 @@ CreateQuery distributed_01099_b (children 2)
     Function rand (children 1)
      ExpressionList
 
+InsertQuery   (children 2)
+ Identifier local_01099_a
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal UInt64_3
+
+InsertQuery   (children 2)
+ Identifier distributed_01099_b
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier distributed_01099_a
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -196,6 +221,23 @@ Set
 
 Set
 
+InsertQuery   (children 2)
+ Identifier distributed_01099_b
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function urlCluster (children 1)
+        ExpressionList (children 4)
+         Literal 'test_cluster_two_shards'
+         Literal 'http://localhost:8123/?query=select+{1,2,3}+format+TSV'
+         Literal 'TSV'
+         Literal 's String'
+
 Set
 
 CreateQuery local_01099_c (children 3)
@@ -219,6 +261,30 @@ CreateQuery distributed_01099_c (children 2)
     Function rand (children 1)
      ExpressionList
 
+InsertQuery   (children 3)
+ Function clusterAllReplicas (children 1)
+  ExpressionList (children 3)
+   Literal 'test_shard_localhost'
+   Function currentDatabase (children 1)
+    ExpressionList
+   Literal 'distributed_01099_c'
+ ExpressionList (children 1)
+  Identifier n
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function remote (alias tx) (children 1)
+        ExpressionList (children 2)
+         Literal 'localhost'
+         Function numbers (children 1)
+          ExpressionList (children 1)
+           Literal UInt64_5
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -228,3 +294,30 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier distributed_01099_c
+
+InsertQuery   (children 2)
+ Identifier distributed_01099_b
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Function concat (alias url) (children 1)
+      ExpressionList (children 2)
+       Literal 'http://localhost:8123/?query='
+       Literal 'select+{1,2,3}+format+TSV'
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function urlCluster (children 1)
+        ExpressionList (children 4)
+         Literal 'test_cluster_two_shards'
+         Subquery (children 1)
+          SelectWithUnionQuery (children 1)
+           ExpressionList (children 1)
+            SelectQuery (children 1)
+             ExpressionList (children 1)
+              Identifier url
+         Literal 'TSV'
+         Literal 's String'

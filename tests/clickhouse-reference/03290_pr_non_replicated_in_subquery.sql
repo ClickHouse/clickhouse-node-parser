@@ -1,4 +1,5 @@
 CREATE TABLE table1 (number UInt64) ENGINE=MergeTree ORDER BY number;
+INSERT INTO table1 SELECT number FROM numbers(300);
 SELECT count()
 FROM
 (

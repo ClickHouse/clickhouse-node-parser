@@ -4,6 +4,7 @@ CREATE TABLE map_test_index_map_keys
     map Map(String, String),
     INDEX map_bloom_filter_keys mapKeys(map) TYPE bloom_filter GRANULARITY 1
 ) Engine=MergeTree() ORDER BY row_id SETTINGS index_granularity = 1;
+INSERT INTO map_test_index_map_keys VALUES (0, {'K0':'V0'}), (1, {'K1':'V1'});
 SELECT * FROM map_test_index_map_keys WHERE map['K0'] = 'V0' SETTINGS force_data_skipping_indices='map_bloom_filter_keys';
 SELECT * FROM map_test_index_map_keys WHERE map['K2'] = 'V2' SETTINGS force_data_skipping_indices='map_bloom_filter_keys';
 SELECT * FROM map_test_index_map_keys WHERE map['K3'] = '';
@@ -31,6 +32,7 @@ CREATE TABLE map_test_index_map_values
     map Map(String, String),
     INDEX map_bloom_filter_values mapValues(map) TYPE bloom_filter GRANULARITY 1
 ) Engine=MergeTree() ORDER BY row_id SETTINGS index_granularity = 1;
+INSERT INTO map_test_index_map_values VALUES (0, {'K0':'V0'}), (1, {'K1':'V1'});
 SELECT * FROM map_test_index_map_values WHERE map['K0'] = 'V0' SETTINGS force_data_skipping_indices='map_bloom_filter_values';
 SELECT * FROM map_test_index_map_values WHERE map['K2'] = 'V2' SETTINGS force_data_skipping_indices='map_bloom_filter_values';
 SELECT * FROM map_test_index_map_values WHERE map['K3'] = '';

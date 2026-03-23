@@ -2,6 +2,7 @@ CREATE TABLE 02680_datetime64_monotonic_check (`t` DateTime64(3), `x` Nullable(D
 ENGINE = MergeTree
 PARTITION BY toYYYYMMDD(t)
 ORDER BY x SETTINGS allow_nullable_key = 1;
+INSERT INTO 02680_datetime64_monotonic_check VALUES (toDateTime64('2023-03-13 00:00:00', 3, 'Asia/Jerusalem'), 123);
 SELECT toHour(toTimeZone(t, 'UTC')) AS toHour_UTC, toHour(toTimeZone(t, 'Asia/Jerusalem')) AS toHour_Israel, count()
 FROM 02680_datetime64_monotonic_check
 WHERE toHour_Israel = 0
@@ -11,4 +12,5 @@ CREATE TABLE 02680_datetime_monotonic_check_lc (`timestamp` LowCardinality(UInt3
 ENGINE = MergeTree
 ORDER BY timestamp
 SETTINGS index_granularity = 1;
+INSERT INTO 02680_datetime_monotonic_check_lc VALUES (2);
 SELECT toDateTime(timestamp, 'Asia/Jerusalem') FROM 02680_datetime_monotonic_check_lc WHERE toHour(toDateTime(timestamp, 'Asia/Jerusalem')) = 2;

@@ -7,6 +7,9 @@ CREATE TABLE 03400_users
 )
 ENGINE = ReplacingMergeTree(version)
 ORDER BY (uid, name);
+INSERT INTO 03400_users VALUES (111, 'John', 33, 1);
+INSERT INTO 03400_users VALUES (111, 'John', 33, 2);
+INSERT INTO 03400_users VALUES (8888, 'Alice', 50, 1);
 CREATE TABLE 03400_dist_users AS 03400_users
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), 03400_users);
 SET max_threads=1;

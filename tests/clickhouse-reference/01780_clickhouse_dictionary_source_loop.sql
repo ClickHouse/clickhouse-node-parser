@@ -22,6 +22,7 @@ CREATE TABLE 01780_db.dict3_source
     id UInt64,
     value String
 ) ENGINE = TinyLog;
+INSERT INTO 01780_db.dict3_source VALUES (1, '1'), (2, '2'), (3, '3');
 CREATE DICTIONARY 01780_db.dict3
 (
     id UInt64,

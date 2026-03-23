@@ -2,6 +2,7 @@ SET enable_analyzer = 1;
 CREATE TABLE 02668_logical_optimizer
 (a Int32, b LowCardinality(String))
 ENGINE=Memory;
+INSERT INTO 02668_logical_optimizer VALUES (1, 'test'), (2, 'test2'), (3, 'another');
 -- Chain of OR equals
 SET optimize_min_equality_disjunction_chain_length = 2;
 SELECT * FROM 02668_logical_optimizer WHERE a = 1 OR 3 = a OR 1 = a;

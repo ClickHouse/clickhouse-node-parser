@@ -8,13 +8,16 @@ AS
 WITH (SELECT '\d[a-z]') AS constant_value
 SELECT extractAll(concat(toString(number), 'a'), assumeNotNull(constant_value)) AS arr
 FROM test_table;
+INSERT INTO test_table VALUES (0);
 SELECT * FROM test_mv ORDER BY arr;
 SELECT '--';
+INSERT INTO test_table VALUES (1);
 CREATE TABLE regex_test_table
 (
     regex String
 )
 ENGINE = MergeTree ORDER BY regex;
+INSERT INTO regex_test_table VALUES ('\d[a-z]');
 CREATE MATERIALIZED VIEW test_mv ENGINE=MergeTree ORDER BY arr
 AS
 WITH (SELECT regex FROM regex_test_table) AS constant_value

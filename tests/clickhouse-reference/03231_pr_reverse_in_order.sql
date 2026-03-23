@@ -8,6 +8,9 @@ CREATE TABLE checks
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/checks', '{replica}')
 ORDER BY check_start_time;
+INSERT INTO checks SELECT 'asan', if(number % 2, 'success', 'fail'), toDateTime('2024-06-07 00:00:01') + INTERVAL number HOUR, '02221_parallel_replicas_bug', 'FAIL' from numbers(100);
+INSERT INTO checks SELECT 'asan', if(number % 2, 'success', 'fail'), toDateTime('2024-06-06 00:00:02') + INTERVAL number HOUR, '02221_parallel_replicas_bug', 'FAIL' from numbers(100);
+INSERT INTO checks SELECT 'asan', if(number % 2, 'success', 'fail'), toDateTime('2024-06-05 00:00:03') + INTERVAL number HOUR, '02221_parallel_replicas_bug', 'FAIL' from numbers(100);
 SELECT trimBoth(explain)
 FROM
 (

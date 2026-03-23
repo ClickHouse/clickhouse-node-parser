@@ -5,6 +5,7 @@ CREATE TABLE dictionary_source_table
     v2 Nullable(String),
     v3 Nullable(UInt64)
 ) ENGINE=TinyLog;
+INSERT INTO dictionary_source_table VALUES (0, 'zero', 'zero', 0), (1, 'one', NULL, 1);
 CREATE DICTIONARY flat_dictionary
 (
     id UInt64,
@@ -69,6 +70,7 @@ CREATE TABLE range_dictionary_source_table
     end Nullable(Date),
     val Nullable(UInt64)
 ) ENGINE=TinyLog;
+INSERT INTO range_dictionary_source_table VALUES (0, '2023-01-01', Null, Null), (1, '2022-11-09', '2022-12-08', 1);
 CREATE DICTIONARY range_hashed_dictionary
 (
     id UInt64,
@@ -123,6 +125,7 @@ CREATE TABLE ip_dictionary_source_table
     asn UInt32,
     cca2 String
 ) ENGINE=TinyLog;
+INSERT INTO ip_dictionary_source_table VALUES (0, '202.79.32.0/20', 17501, 'NP'), (1, '2620:0:870::/48', 3856, 'US'), (2, '2a02:6b8:1::/48', 13238, 'RU');
 CREATE DICTIONARY ip_dictionary
 (
     id UInt64,
@@ -143,6 +146,7 @@ CREATE TABLE polygon_dictionary_source_table
     key Array(Array(Array(Tuple(Float64, Float64)))),
     name Nullable(String)
 ) ENGINE=TinyLog;
+INSERT INTO polygon_dictionary_source_table VALUES([[[(3, 1), (0, 1), (0, -1), (3, -1)]]], 'East'), ([[[(-3, 1), (-3, -1), (0, -1), (0, 1)]]], 'West');
 CREATE DICTIONARY polygon_dictionary
 (
     key Array(Array(Array(Tuple(Float64, Float64)))),
@@ -153,6 +157,7 @@ SOURCE(CLICKHOUSE(TABLE 'polygon_dictionary_source_table'))
 LIFETIME(0)
 LAYOUT(POLYGON());
 CREATE TABLE points (x Float64, y Float64) ENGINE=TinyLog;
+INSERT INTO points VALUES (0.5, 0), (-0.5, 0), (10,10);
 SELECT tuple(x, y) as key, dictGetOrDefault('polygon_dictionary', 'name', key, intDiv(1, y))
 FROM points;
 CREATE TABLE regexp_dictionary_source_table
@@ -163,6 +168,12 @@ CREATE TABLE regexp_dictionary_source_table
     keys   Array(String),
     values Array(String),
 ) ENGINE=TinyLog;
+INSERT INTO regexp_dictionary_source_table VALUES (1, 0, 'Linux/(\d+[\.\d]*).+tlinux', ['name', 'version'], ['TencentOS', '\1']);
+INSERT INTO regexp_dictionary_source_table VALUES (2, 0, '(\d+)/tclwebkit(\d+[\.\d]*)', ['name', 'version', 'comment'], ['Android', '$1', 'test $1 and $2']);
+INSERT INTO regexp_dictionary_source_table VALUES (3, 2, '33/tclwebkit', ['version'], ['13']);
+INSERT INTO regexp_dictionary_source_table VALUES (4, 2, '3[12]/tclwebkit', ['version'], ['12']);
+INSERT INTO regexp_dictionary_source_table VALUES (5, 2, '3[12]/tclwebkit', ['version'], ['11']);
+INSERT INTO regexp_dictionary_source_table VALUES (6, 2, '3[12]/tclwebkit', ['version'], ['10']);
 create dictionary regexp_dict
 (
     regexp String,

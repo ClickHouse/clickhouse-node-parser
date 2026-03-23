@@ -79,6 +79,7 @@ select (dummy IN (toUInt8(2),)), * from dist_01756 where dummy in (0, 2) format 
 -- different type
 select 'different types -- prohibited';
 create table data_01756_str (key String) engine=Memory();
+insert into data_01756_str values (0)(1);
 -- SELECT
 --     cityHash64(0) % 2,
 --     cityHash64(2) % 2

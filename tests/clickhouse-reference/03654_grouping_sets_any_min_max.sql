@@ -6,6 +6,12 @@ FROM (SELECT 10 AS num1, 20 AS num2)
 GROUP BY GROUPING SETS ((num1), ())
 ORDER BY grouping(num1) DESC;
 CREATE TABLE users (uid Int16, name String, age Int16, ts DateTime) ENGINE=MergeTree order by tuple();
+INSERT INTO users VALUES (1231, 'John', 1, toDateTime('2025-10-11 12:13:14'));
+INSERT INTO users VALUES (1231, 'John', 2, toDateTime('2025-10-11 12:13:14') + 1);
+INSERT INTO users VALUES (1231, 'John', 3 , toDateTime('2025-10-11 12:13:14') + 2);
+INSERT INTO users VALUES (6666, 'Ksenia', 1, toDateTime('2025-10-11 12:13:14') + 3);
+INSERT INTO users VALUES (6666, 'Ksenia', 2, toDateTime('2025-10-11 12:13:14') + 4);
+INSERT INTO users VALUES (8888, 'Alice', 1, toDateTime('2025-10-11 12:13:14') + 5);
 select arrayStringConcat(groupArray('-')) from numbers(67);
 -- Query A
 select 

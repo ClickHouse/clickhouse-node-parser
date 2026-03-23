@@ -2,6 +2,7 @@ set group_by_two_level_threshold = 100000;
 set enable_positional_arguments = 1;
 set enable_analyzer = 1;
 create table test(x1 Int, x2 Int, x3 Int) engine=Memory();
+insert into test values (1, 10, 100), (10, 1, 10), (100, 100, 1);
 -- { echo }
 select x3, x2, x1 from test order by 1;
 select x3, x2, x1 from test order by -3;
@@ -26,6 +27,7 @@ select 1 + max(x1), x2 from test group by 1, 2; -- { serverError ILLEGAL_TYPE_OF
 select max(x1), x2 from test group by -2, -1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 select 1 + max(x1), x2 from test group by -2, -1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 create table test2(x1 Int, x2 Int, x3 Int) engine=Memory;
+insert into test2 values (1, 10, 100), (10, 1, 10), (100, 100, 1);
 select x1, x1 * 2, max(x2), max(x3) from test2 group by 2, 1, x1 order by 1, 2, 4 desc, 3 asc;
 select x1, x1 * 2, max(x2), max(x3) from test2 group by 2, 1, x1 order by 1, 2, -1 desc, -2 asc;
 select a, b, c, d, e, f  from (select 44 a, 88 b, 13 c, 14 d, 15 e, 16 f) t group by 1,2,3,4,5,6 order by a;
@@ -36,6 +38,8 @@ select b from (select 5 as a, 'Hello' as b order by a);
 select b from (select 5 as a, 'Hello' as b group by a);
 select b from (select 5 as a, 'Hello' as b order by 1);
 create table tp2(first_col String, second_col Int32) engine = MergeTree() order by tuple();
+insert into tp2 select 'bbb', 1;
+insert into tp2 select 'aaa', 2;
 select count(*) from (select first_col, count(second_col) from tp2 group by 1);
 select total from (select first_col, count(second_col) as total from tp2 group by 1);
 select first_col from (select first_col, second_col as total from tp2 order by 1 desc);

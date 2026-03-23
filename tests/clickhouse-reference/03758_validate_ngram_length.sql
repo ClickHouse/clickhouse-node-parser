@@ -1,2 +1,3 @@
 CREATE TABLE t0 (c0 String) ENGINE = MergeTree() ORDER BY tuple();
+INSERT INTO TABLE t0 (c0) VALUES ('a');
 SELECT c0 FROM t0;

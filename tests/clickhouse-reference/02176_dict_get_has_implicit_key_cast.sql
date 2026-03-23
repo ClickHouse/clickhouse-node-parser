@@ -3,6 +3,7 @@ CREATE TABLE 02176_test_simple_key_table
     id UInt64,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO 02176_test_simple_key_table VALUES (0, 'Value');
 CREATE DICTIONARY 02176_test_simple_key_dictionary
 (
     id UInt64,
@@ -25,6 +26,7 @@ CREATE TABLE 02176_test_complex_key_table
     id_key String,
     value String
 ) ENGINE=TinyLog;
+INSERT INTO 02176_test_complex_key_table VALUES (0, '0', 'Value');
 CREATE DICTIONARY 02176_test_complex_key_dictionary
 (
     id UInt64,

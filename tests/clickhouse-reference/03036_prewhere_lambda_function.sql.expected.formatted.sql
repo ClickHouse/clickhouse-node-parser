@@ -1,10 +1,1 @@
-CREATE TABLE t
-(
-    A Array(Int64)
-)
-ENGINE = MergeTree
-ORDER BY tuple();
-
-SELECT *
-FROM t
-PREWHERE arrayExists(x -> x = 5, A);
+<Parse Error>

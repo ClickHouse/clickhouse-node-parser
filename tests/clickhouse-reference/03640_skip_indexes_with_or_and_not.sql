@@ -13,6 +13,13 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 PRIMARY KEY(id);
+INSERT INTO tab VALUES
+  (1, {'key1':'1'}, {'key1':'1','key2':'2'}),
+  (2, {'key1':'1','key2':'2'}, {'key1':'1'}),
+  (3, {'key1':'1','key2':'2','key3':'3'}, {}),
+  (4, {'key1':'1','key2':'2'}, {'key1':'1'}),
+  (5, {'key1':'1'}, {'key3':'3'}),
+  (6, {'key1':'1'}, {'key1':'1'});
 SELECT *
 FROM tab
 WHERE (mapContains(map1, 'key2') OR mapContains(map2, 'key2')) AND (NOT mapContains(map2, 'key3'))

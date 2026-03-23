@@ -1,6 +1,8 @@
 CREATE DATABASE 01914_db ENGINE=Atomic;
 CREATE TABLE 01914_db.table_1 (id UInt64, value String) ENGINE=TinyLog;
 CREATE TABLE 01914_db.table_2 (id UInt64, value String) ENGINE=TinyLog;
+INSERT INTO 01914_db.table_1 VALUES (1, 'Table1');
+INSERT INTO 01914_db.table_2 VALUES (2, 'Table2');
 CREATE DICTIONARY 01914_db.dictionary_1 (id UInt64, value String)
 PRIMARY KEY id
 LAYOUT(DIRECT())

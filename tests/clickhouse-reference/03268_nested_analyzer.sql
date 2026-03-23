@@ -18,5 +18,6 @@ CREATE TABLE test
     “struct.y” ALIAS [1],
 )
 ENGINE = Memory;
+insert into test (x) values (0);
 select * from test array join struct;
 select x, struct.x, struct.y from test array join struct;

@@ -8,6 +8,8 @@ create table test1
 engine = MergeTree
 order by c
 settings index_granularity = 8192, min_index_granularity_bytes = 1024, index_granularity_bytes = 10485760, add_minmax_index_for_numeric_columns=0; -- default settings, prevent randomization in tests
+insert into test1 select * from numbers(10);
+insert into test1 select * from numbers(11, 20);
 create table test2
 (
     c UInt32,
@@ -18,3 +20,5 @@ create table test2
 engine = MergeTree
 order by c
 settings index_granularity = 8192, min_index_granularity_bytes = 1024, index_granularity_bytes = 10485760, add_minmax_index_for_numeric_columns=0; -- default settings, prevent randomization in tests
+insert into test2 select * from numbers(10);
+insert into test2 select * from numbers(11, 20);

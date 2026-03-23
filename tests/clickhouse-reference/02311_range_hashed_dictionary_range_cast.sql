@@ -5,6 +5,7 @@ CREATE TABLE dictionary_source_table
     end UInt64,
     value String
 ) Engine = TinyLog;
+INSERT INTO dictionary_source_table values (1, 0, 18446744073709551615, 'Value');
 CREATE DICTIONARY range_hashed_dictionary
 (
     key UInt64,

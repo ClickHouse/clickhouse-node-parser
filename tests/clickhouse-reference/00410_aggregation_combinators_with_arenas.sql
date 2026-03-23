@@ -1,5 +1,6 @@
 SET allow_deprecated_error_prone_window_functions = 1;
 CREATE TABLE arena (k UInt8, d String) ENGINE = Memory;
+INSERT INTO arena SELECT number % 10 AS k, hex(intDiv(number, 10) % 1000) AS d FROM system.numbers LIMIT 10000000;
 SELECT length(groupUniqArrayIf(d, d != hex(0))) FROM arena GROUP BY k;
 SELECT length(groupUniqArrayMerge(ds)) FROM (SELECT k, groupUniqArrayState(d) AS ds FROM arena GROUP BY k) GROUP BY k;
 SELECT length(arrayReduce('groupUniqArray', [[1, 2], [1],  emptyArrayUInt8(), [1], [1, 2]]));

@@ -24,10 +24,59 @@ SET max_insert_block_size_bytes = 8;
 -- Turn off squashing
 SET min_insert_block_size_rows = 0;
 SET min_insert_block_size_bytes = 0;
+INSERT INTO test_max_insert_bytes FORMAT CSV
+1
+2
+3
+4
+5
+6
+7
+8
+
+-- Disable max_insert_block_bytes 
+SET max_insert_block_size_bytes = 0;
 -- Set min_insert_block_size_rows and min_insert_block_size_bytes to 2 and 16 so that blocks are formed by 2
 SET min_insert_block_size_rows = 2;
 SET min_insert_block_size_bytes = 16;
+INSERT INTO test_min_insert_rows_bytes FORMAT CSV
+1
+2
+3
+4
+5
+6
+7
+8
+
+-- Disable min_insert_block_size_bytes
+-- Set min_insert_block_size_rows to 4
+SET min_insert_block_size_rows = 4;
+INSERT INTO test_min_insert_rows FORMAT CSV
+1
+2
+3
+4
+5
+6
+7
+8
+
+-- Disable min_insert_block_size_rows
+-- Set min_insert_block_size_bytes to 32
+SET min_insert_block_size_rows = 0;
 SET min_insert_block_size_bytes = 32;
+INSERT INTO test_min_insert_bytes FORMAT CSV
+1
+2
+3
+4
+5
+6
+7
+8
+
+SYSTEM FLUSH LOGS query_log, part_log;
 -- We expect to see 8 parts inserted
 SELECT count()  
 FROM system.part_log 

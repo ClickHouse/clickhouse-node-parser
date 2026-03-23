@@ -1,4 +1,5 @@
 CREATE TABLE test (x UInt8, y UInt8 DEFAULT x + 1) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO test (x) VALUES (1), (2), (3);
 SELECT * FROM test ORDER BY x, y;
 CREATE TABLE test (x UInt8, y UInt8 MATERIALIZED x + 1) ENGINE = MergeTree ORDER BY tuple();
 SELECT x, y FROM test ORDER BY x, y;

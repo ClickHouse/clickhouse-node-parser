@@ -10,4 +10,5 @@ CREATE TABLE test_projection_deduplicate
 )
 ENGINE = MergeTree
 PRIMARY KEY id;
+INSERT INTO test_projection_deduplicate VALUES (1, 'one');
 SELECT * FROM test_projection_deduplicate;

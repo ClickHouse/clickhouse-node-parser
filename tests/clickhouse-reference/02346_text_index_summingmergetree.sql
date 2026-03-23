@@ -8,6 +8,9 @@ CREATE TABLE tab
 )
 ENGINE = SummingMergeTree()
 ORDER BY id;
+INSERT INTO tab VALUES
+    (1, 'foo', 1),
+    (2, 'bar', 2);
 SELECT '-- direct read disabled';
 SET use_skip_indexes_on_data_read = 0;
 SELECT sum(value) FROM tab WHERE hasToken(key, 'foo');

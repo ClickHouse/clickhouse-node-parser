@@ -4,6 +4,7 @@ CREATE TABLE events0 (
     begin Float64,
     value Int32
 ) ENGINE = MergeTree ORDER BY begin;
+INSERT INTO events0 VALUES (1.0, 0), (3.0, 1), (6.0, 2), (8.0, 3);
 SELECT p.ts, e.value
 FROM
     (SELECT number :: Float64 AS ts FROM numbers(10)) p
@@ -23,6 +24,7 @@ CREATE TABLE events (
     begin Float64,
     value Int32
 ) ENGINE = MergeTree ORDER BY (key, begin);
+INSERT INTO events VALUES (1, 1.0, 0), (1, 3.0, 1), (1, 6.0, 2), (1, 8.0, 3), (2, 0.0, 10), (2, 7.0, 20), (2, 11.0, 30);
 CREATE TABLE probes (
     key Int32,
     ts Float64

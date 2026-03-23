@@ -10,6 +10,7 @@ CREATE TABLE database_for_dict_01018.table_for_dict
 )
 ENGINE = MergeTree()
 ORDER BY key_column;
+INSERT INTO database_for_dict_01018.table_for_dict VALUES (1, 100, 'Hello world');
 CREATE DATABASE db_01018;
 CREATE DICTIONARY db_01018.dict1
 (

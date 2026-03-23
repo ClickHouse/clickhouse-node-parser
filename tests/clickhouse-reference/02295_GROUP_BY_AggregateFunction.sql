@@ -5,6 +5,7 @@ create table data_02295 (
     a Int64,
     grp_aggreg AggregateFunction(groupArrayArray, Array(UInt64))
 ) engine = MergeTree() order by a;
+insert into data_02295 select 0 b, intDiv(number, 2) a, groupArrayArrayState([toUInt64(number)]) from numbers(4) group by a, b;
 -- { echoOn }
 SELECT grp_aggreg FROM data_02295 GROUP BY a, grp_aggreg ORDER BY a SETTINGS optimize_aggregation_in_order = 0 FORMAT JSONEachRow;
 SELECT grp_aggreg FROM data_02295 GROUP BY a, grp_aggreg ORDER BY a SETTINGS optimize_aggregation_in_order = 1 FORMAT JSONEachRow;

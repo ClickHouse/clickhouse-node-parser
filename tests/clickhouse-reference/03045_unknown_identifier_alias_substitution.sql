@@ -13,3 +13,4 @@ CREATE TEMPORARY TABLE repl_tbl
 ENGINE = ReplacingMergeTree(ts)
 ORDER BY `key`;
 set prefer_column_name_to_alias = 1;
+INSERT INTO repl_tbl (key) SELECT number FROM numbers(10);

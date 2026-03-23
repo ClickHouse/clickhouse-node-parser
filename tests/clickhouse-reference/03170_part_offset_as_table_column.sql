@@ -5,6 +5,8 @@ CREATE TABLE test_table
 )
 ENGINE = MergeTree
 ORDER BY key;
+INSERT INTO test_table (key) SELECT number
+FROM numbers(10);
 set enable_analyzer=0;
 SELECT *
 FROM test_table;

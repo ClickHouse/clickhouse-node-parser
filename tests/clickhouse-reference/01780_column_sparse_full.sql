@@ -5,6 +5,18 @@ SETTINGS index_granularity = 32,
     ratio_of_defaults_for_sparse_serialization = 0.1,
     enable_block_number_column = 0,
     enable_block_offset_column = 0;
+INSERT INTO t_sparse_full
+SELECT
+    number,
+    if (number % 10 = 0, number, 0),
+    if (number % 7 = 0, toString(number), '')
+FROM numbers(1000);
+INSERT INTO t_sparse_full
+SELECT
+    number,
+    number,
+    toString(number)
+FROM numbers(500);
 SELECT name, column, serialization_kind
 FROM system.parts_columns WHERE table = 't_sparse_full' AND database = currentDatabase() AND active
 ORDER BY name, column;

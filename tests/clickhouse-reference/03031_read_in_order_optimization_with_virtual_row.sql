@@ -16,6 +16,18 @@ ORDER BY (x, y, z)
 SETTINGS index_granularity = 8192,
 index_granularity_bytes = 10485760,
 add_minmax_index_for_numeric_columns=0;
+INSERT INTO t SELECT
+    number,
+    number,
+    number,
+    number
+FROM numbers(8192 * 3);
+INSERT INTO t SELECT
+    number + (8192 * 3),
+    number + (8192 * 3),
+    number + (8192 * 3),
+    number
+FROM numbers(8192 * 3);
 -- Expecting 2 virtual rows + one chunk (8192) for result + one extra chunk for next consumption in merge transform (8192),
 -- both chunks come from the same part.
 SELECT x
@@ -93,6 +105,7 @@ LIMIT 1;
 CREATE TABLE fixed_prefix(a UInt32, b UInt32)
 ENGINE = MergeTree ORDER BY (a, b)
 SETTINGS index_granularity = 3;
+INSERT INTO fixed_prefix VALUES (0, 100), (1, 2), (1, 3), (1, 4), (2, 5);
 SELECT a, b
 FROM fixed_prefix
 WHERE a = 1
@@ -114,6 +127,9 @@ CREATE TABLE function_pk
 )
 ENGINE = MergeTree ORDER BY (A, -B)
 SETTINGS index_granularity = 1;
+INSERT INTO function_pk values(1,1);
+INSERT INTO function_pk values(1,3);
+INSERT INTO function_pk values(1,2);
 SELECT *
 FROM function_pk
 ORDER BY (A,-B) ASC
@@ -133,6 +149,11 @@ ENGINE = MergeTree
 ORDER BY (a, b)
 SETTINGS index_granularity = 8192,
 index_granularity_bytes = '10Mi';
+INSERT INTO distinct_in_order SELECT
+    number % number,
+    number % 5,
+    number % 10
+FROM numbers(1, 1000000);
 SELECT DISTINCT a
 FROM distinct_in_order
 ORDER BY a ASC
