@@ -29,4 +29,6 @@ SELECT c0
 FROM t1
 ORDER BY c0 ASC; -- { serverError UNKNOWN_TABLE }
 
+ALTER TABLE t1 APPLY DELETED MASK; -- { serverError UNKNOWN_TABLE }
+
 DROP TABLE t1; -- { serverError UNKNOWN_TABLE }

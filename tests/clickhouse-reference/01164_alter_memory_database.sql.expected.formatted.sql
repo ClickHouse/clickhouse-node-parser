@@ -19,4 +19,6 @@ CREATE TABLE test_1164_memory.r2
 ENGINE = ReplicatedMergeTree('/test/01164/{database}/t', '2')
 ORDER BY n;
 
+ALTER TABLE test_1164_memory.r1 ADD COLUMN m int;
+
 DROP DATABASE test_1164_memory;

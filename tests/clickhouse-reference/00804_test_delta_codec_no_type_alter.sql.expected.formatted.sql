@@ -18,3 +18,7 @@ FROM `system`.`columns`
 WHERE database = currentDatabase()
     AND table = 'delta_codec_for_alter'
     AND name = 'x';
+
+ALTER TABLE delta_codec_for_alter MODIFY COLUMN x CODEC(Delta, LZ4);
+
+ALTER TABLE delta_codec_for_alter MODIFY COLUMN x UInt64 CODEC(Delta, LZ4);

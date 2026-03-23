@@ -13,6 +13,8 @@ PARTITION BY APIKey;
 
 INSERT INTO test_prewhere_default_column;
 
+ALTER TABLE test_prewhere_default_column ADD COLUMN OperatingSystem UInt64 DEFAULT SessionType + 1;
+
 SELECT OperatingSystem
 FROM test_prewhere_default_column
 PREWHERE SessionType = 42;

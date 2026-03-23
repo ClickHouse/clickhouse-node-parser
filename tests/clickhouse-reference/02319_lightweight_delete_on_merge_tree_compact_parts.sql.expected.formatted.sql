@@ -65,6 +65,12 @@ ORDER BY part_type ASC;
 
 SELECT '-----lightweight mutation type-----';
 
+ALTER TABLE t_light MATERIALIZE INDEX i_c SETTINGS mutations_sync = 2;
+
+ALTER TABLE t_light UPDATE b = -1 WHERE a < 3 SETTINGS mutations_sync = 2;
+
+ALTER TABLE t_light DROP INDEX i_c SETTINGS mutations_sync = 2;
+
 SELECT
     command,
     is_done
@@ -117,6 +123,10 @@ INSERT INTO t_large SELECT
     number + 1,
     number + 1
 FROM numbers(100000);
+
+ALTER TABLE t_large UPDATE b = -2 WHERE and(greaterOrEquals(a, 1000), lessOrEquals(a, 1005)) SETTINGS mutations_sync = 2;
+
+ALTER TABLE t_large DELETE WHERE a = 1 SETTINGS mutations_sync = 2;
 
 SELECT *
 FROM t_large

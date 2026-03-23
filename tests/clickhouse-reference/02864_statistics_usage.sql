@@ -16,5 +16,9 @@ CREATE TABLE tab
 SETTINGS auto_statistics_types = '';
 INSERT INTO tab select number, -number FROM system.numbers LIMIT 10000;
 SELECT replaceRegexpAll(explain, '__table1\.', '') FROM (EXPLAIN actions=1 SELECT count(*) FROM tab WHERE b < 10 and a < 10) WHERE explain LIKE '%Prewhere%'; -- checks a first, then b (statistics used)
+ALTER TABLE tab DROP STATISTICS a, b;
 SELECT name, column, statistics from system.parts_columns where (database = currentDatabase()) AND (table = 'tab');
+ALTER TABLE tab ADD STATISTICS a, b TYPE tdigest;
+ALTER TABLE tab MATERIALIZE STATISTICS ALL;
+ALTER TABLE tab RENAME COLUMN b TO c;
 SELECT replaceRegexpAll(explain, '__table1\.', '') FROM (EXPLAIN actions=1 SELECT count(*) FROM tab WHERE c < 10 and a < 10) WHERE explain LIKE '%Prewhere%'; -- checks a first, then c (statistics used)

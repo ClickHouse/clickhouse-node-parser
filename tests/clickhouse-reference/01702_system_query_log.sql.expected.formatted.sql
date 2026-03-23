@@ -60,6 +60,24 @@ SET log_profile_events = false;
 
 SET DEFAULT ROLE sqllt_role TO sqllt_user;
 
+ALTER TABLE sqllt.table ADD COLUMN new_col UInt32 DEFAULT 123456789;
+
+ALTER TABLE sqllt.table COMMENT COLUMN new_col 'dummy column with a comment';
+
+ALTER TABLE sqllt.table DROP COLUMN new_col;
+
+ALTER TABLE sqllt.table MODIFY COLUMN new_col DateTime DEFAULT '2015-05-18 07:40:13';
+
+ALTER TABLE sqllt.table MODIFY COLUMN new_col;
+
+ALTER TABLE sqllt.table RENAME COLUMN new_col TO the_new_col;
+
+ALTER TABLE sqllt.table DROP COLUMN the_new_col;
+
+ALTER TABLE sqllt.table UPDATE i = i + 1 WHERE 1;
+
+ALTER TABLE sqllt.table DELETE WHERE i > 65535;
+
 DROP TABLE sqllt.table;
 
 SET log_comment = '';

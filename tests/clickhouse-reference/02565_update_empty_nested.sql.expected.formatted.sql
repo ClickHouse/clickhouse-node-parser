@@ -16,6 +16,10 @@ INSERT INTO t_update_empty_nested SELECT
     range(number % 10)
 FROM numbers(100000);
 
+ALTER TABLE t_update_empty_nested ADD COLUMN `nested.arr2` Array(UInt64);
+
+ALTER TABLE t_update_empty_nested UPDATE `nested.arr2` = `nested.arr1` WHERE 1;
+
 SELECT *
 FROM t_update_empty_nested
 FORMAT Null;

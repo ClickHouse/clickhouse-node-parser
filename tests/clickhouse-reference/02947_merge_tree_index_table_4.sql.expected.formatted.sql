@@ -32,6 +32,8 @@ INSERT INTO t_merge_tree_index SELECT
     number
 FROM numbers(10);
 
+ALTER TABLE t_merge_tree_index ADD COLUMN c UInt64 AFTER b;
+
 INSERT INTO t_merge_tree_index SELECT
     number % 5,
     number,

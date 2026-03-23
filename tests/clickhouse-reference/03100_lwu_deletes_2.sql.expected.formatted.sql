@@ -34,4 +34,8 @@ FROM lwd_test
 ORDER BY id ASC
 LIMIT 1;
 
+ALTER TABLE lwd_test UPDATE value = 'v' WHERE id % 2 == 0;
+
+ALTER TABLE lwd_test DELETE WHERE id % 3 == 0;
+
 DROP TABLE lwd_test;

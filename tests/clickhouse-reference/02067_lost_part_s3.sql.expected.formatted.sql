@@ -33,11 +33,17 @@ INSERT INTO partslost_0 SELECT toString(number) AS x
 FROM `system`.numbers
 LIMIT 10000;
 
+ALTER TABLE partslost_0 ADD INDEX idx x TYPE tokenbf_v1(285000, 3, 12345) GRANULARITY 3;
+
 SET mutations_sync = 2;
+
+ALTER TABLE partslost_0 MATERIALIZE INDEX idx;
 
 -- In worst case doesn't check anything, but it's not flaky
 SELECT sleep(3)
 FORMAT Null;
+
+ALTER TABLE partslost_0 DROP INDEX idx;
 
 SELECT count()
 FROM partslost_0;

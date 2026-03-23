@@ -24,6 +24,28 @@ CREATE TABLE t1
 ENGINE = MergeTree()
 ORDER BY pk;
 
+ALTER TABLE t1 (MODIFY COLUMN a Float64 TTL toDateTime(b) + toIntervalMonth(viewExplain('EXPLAIN', 'actions = 1', (
+    SELECT
+        toIntervalMonth(1),
+        2
+    FROM t1__fuzz_26
+    GROUP BY
+        toFixedString('%Prewhere%', 10),
+        toNullable(12)
+    WITH ROLLUP
+)), 1)) SETTINGS allow_experimental_parallel_reading_from_replicas = 1; -- { serverError UNKNOWN_FUNCTION }
+
+ALTER TABLE t1 (MODIFY COLUMN a Float64 TTL toDateTime(b) + toIntervalMonth(viewExplain('EXPLAIN', 'actions = 1', (
+    SELECT
+        toIntervalMonth(1),
+        2
+    FROM t1__fuzz_26
+    GROUP BY
+        toFixedString('%Prewhere%', 10),
+        toNullable(12)
+    WITH ROLLUP
+)), 1)) SETTINGS allow_experimental_parallel_reading_from_replicas = 0; -- { serverError UNKNOWN_FUNCTION }
+
 DROP TABLE t1;
 
 DROP TABLE t1__fuzz_26;

@@ -44,4 +44,6 @@ SELECT
 FROM source
 GROUP BY (day, card_id);
 
+ALTER TABLE source ON CLUSTER test_shard_localhost MODIFY SETTING ttl_only_drop_parts = 1;
+
 DROP TABLE IF EXISTS mview, source;

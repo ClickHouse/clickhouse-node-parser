@@ -22,10 +22,27 @@ FROM numbers(3);
 
 SET mutations_sync = 2;
 
+ALTER TABLE tp_1 ADD PROJECTION pp (SELECT
+    x,
+    count()
+GROUP BY x);
+
 INSERT INTO tp_1 SELECT
     number,
     number
 FROM numbers(4);
+
+-- Here we have a part with written projection pp
+ALTER TABLE tp_1 DROP PARTITION '0';
+
+-- Move part to detached
+ALTER TABLE tp_1 DROP PROJECTION pp;
+
+-- Remove projection from table metadata
+ALTER TABLE tp_1 DROP PROJECTION pp;
+
+-- Now, we don't load projection pp for attached part, but it is written on disk
+ALTER TABLE tp_1 ATTACH PARTITION '0';
 
 -- Now, DROP TABLE triggers part removal
 DROP TABLE tp_1;

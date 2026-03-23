@@ -19,6 +19,10 @@ ENGINE = Buffer(currentDatabase(), buf_dest, 16, 86400, 86400, 2000000, 20000000
 
 INSERT INTO buf (timestamp);
 
+ALTER TABLE buf_dest ADD COLUMN s String;
+
+ALTER TABLE buf ADD COLUMN s String;
+
 SELECT *
 FROM buf;
 

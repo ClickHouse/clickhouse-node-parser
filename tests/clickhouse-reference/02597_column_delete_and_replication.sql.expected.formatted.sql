@@ -24,6 +24,18 @@ INSERT INTO test SELECT
     '22'
 FROM numbers(3);
 
+-- this mutation will run in background and will block next mutation
+ALTER TABLE test UPDATE d = concat(d, throwIf(1)) WHERE 1;
+
+-- this mutation cannot be started until previuos ALTER finishes (in background), and will lead to DROP COLUMN failed with BAD_ARGUMENTS
+ALTER TABLE test ADD COLUMN x UInt32 DEFAULT 0;
+
+ALTER TABLE test UPDATE d = concat(d, '1') WHERE x = 42;
+
+ALTER TABLE test DROP COLUMN x SETTINGS mutations_sync = 2; --{serverError BAD_ARGUMENTS}
+
+ALTER TABLE test UPDATE x = x + 1 WHERE 1 SETTINGS mutations_sync = 2;
+
 SELECT *
 FROM test
 FORMAT Null;

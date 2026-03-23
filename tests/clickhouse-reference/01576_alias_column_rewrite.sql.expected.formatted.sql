@@ -143,6 +143,10 @@ WHERE day1 = '2020-01-04'
 GROUP BY day1
 SETTINGS max_rows_to_read = 10;
 
+ALTER TABLE test_table ADD COLUMN `array` Array(UInt8) DEFAULT [1, 2, 3];
+
+ALTER TABLE test_table ADD COLUMN `struct.key` Array(UInt8) DEFAULT [2, 4, 6], ADD COLUMN `struct.value` Array(UInt8) ALIAS `array`;
+
 SET max_rows_to_read = 10;
 
 SELECT count() == 10

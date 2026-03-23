@@ -132,6 +132,32 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_alter1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "index_granularity",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4096"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError READONLY_SETTING }"
+    ]
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -140,6 +166,29 @@
         "table": "replicated_table_for_alter2"
       }
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_alter1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "use_minimalistic_part_header_in_zookeeper",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "kind": "insert",
@@ -180,6 +229,37 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_alter2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "parts_to_throw_insert",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "parts_to_delay_insert",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -201,6 +281,56 @@
         "table": "replicated_table_for_alter1"
       }
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_alter1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "Data2",
+          "type": {
+            "name": "UInt64"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          },
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          },
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "kind": "drop",
@@ -313,6 +443,133 @@
             "id"
           ]
         }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_reset_setting1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "index_granularity",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4096"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError READONLY_SETTING }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_reset_setting1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "merge_with_ttl_timeout",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_reset_setting2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "merge_with_ttl_timeout",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "200"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_reset_setting1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "check_delay_period",
+          "unknown_setting"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- don't execute alter with incorrect setting"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_reset_setting1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "merge_with_ttl_timeout"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_table_for_reset_setting2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "merge_with_ttl_timeout"
+        ]
       }
     ]
   }

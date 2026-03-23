@@ -118,5 +118,115 @@
     "trailingComments": [
       "-- { serverError BAD_ARGUMENTS }"
     ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_column_should_not_allow_compression"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "user_id",
+          "codec": [
+            {
+              "name": "LZ4HC",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_column_should_not_allow_compression"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "user_id_hashed",
+          "codec": [
+            {
+              "name": "LZ4HC",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_column_should_not_allow_compression"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "user_id_hashed_1",
+          "type": {
+            "name": "UInt64"
+          },
+          "defaultKind": "ALIAS",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "cityHash64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "user_id"
+                ]
+              }
+            ],
+            "parenthesized": true
+          },
+          "codec": [
+            {
+              "name": "LZ4HC",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   }
 ]

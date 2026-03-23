@@ -25,6 +25,8 @@ FROM
 ARRAY JOIN n
 WHERE like(n.x, '%Hello%');
 
+ALTER TABLE alter_00147 ADD COLUMN `n.y` Array(UInt64);
+
 INSERT INTO alter_00147 (`n.x`);
 
 SELECT *

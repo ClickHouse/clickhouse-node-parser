@@ -7,4 +7,5 @@ SET min_insert_block_size_rows = 1;
 SET max_block_size = 1;
 SET max_parts_to_move = 5;
 INSERT INTO t SELECT number from numbers(10);
+ALTER TABLE t MOVE PARTITION tuple() TO TABLE t2; -- { serverError TOO_MANY_PARTS }
 SET max_parts_to_move = 15;

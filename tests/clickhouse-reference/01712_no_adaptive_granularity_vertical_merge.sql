@@ -11,3 +11,4 @@ vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_
 INSERT INTO old_school_table VALUES (1, '1');
 INSERT INTO old_school_table VALUES (2, '2');
 SELECT * FROM old_school_table ORDER BY key;
+ALTER TABLE old_school_table MODIFY SETTING vertical_merge_algorithm_min_rows_to_activate = 10000, vertical_merge_algorithm_min_columns_to_activate = 10000;

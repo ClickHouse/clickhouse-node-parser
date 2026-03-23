@@ -15,3 +15,8 @@ INSERT INTO tab SELECT
     number,
     [randCanonical(), randCanonical()]
 FROM numbers(10000);
+
+-- Create index
+ALTER TABLE tab ADD INDEX idx_vec vec TYPE vector_similarity('hnsw', 'cosineDistance', 2, 'f32', 64, 400);
+
+ALTER TABLE tab MATERIALIZE INDEX idx_vec SETTINGS mutations_sync = 2;

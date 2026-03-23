@@ -15,6 +15,10 @@ PARTITION BY i;
 
 INSERT INTO t;
 
+ALTER TABLE t DROP PARTITION 1;
+
+ALTER TABLE t ATTACH PARTITION 1;
+
 SELECT count()
 FROM `system`.projection_parts
 WHERE database = currentDatabase()

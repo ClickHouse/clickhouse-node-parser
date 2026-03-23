@@ -23,6 +23,7 @@ ORDER BY key;
 INSERT INTO table_with_version_replicated_1 VALUES (1, '1', 1, -1);
 INSERT INTO table_with_version_replicated_1 VALUES (2, '2', 2, -1);
 SELECT * FROM table_with_version_replicated_1 ORDER BY key;
+ALTER TABLE table_with_version_replicated_1 MODIFY COLUMN version UInt32 SETTINGS replication_alter_partitions_sync=2;
 INSERT INTO TABLE table_with_version_replicated_1 VALUES(1, '1', 1, 1);
 INSERT INTO TABLE table_with_version_replicated_1 VALUES(1, '1', 2, 1);
 SELECT * FROM table_with_version_replicated_1 FINAL ORDER BY key;

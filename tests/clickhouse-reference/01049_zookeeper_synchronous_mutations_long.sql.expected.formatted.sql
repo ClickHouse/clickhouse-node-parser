@@ -26,6 +26,8 @@ INSERT INTO table_for_synchronous_mutations1 SELECT
     number
 FROM numbers(100000);
 
+ALTER TABLE table_for_synchronous_mutations1 UPDATE v1 = v1 + 1 WHERE 1 SETTINGS mutations_sync = 2;
+
 SELECT is_done
 FROM `system`.mutations
 WHERE database = currentDatabase()
@@ -46,6 +48,8 @@ INSERT INTO table_for_synchronous_mutations_no_replication SELECT
     number,
     number
 FROM numbers(100000);
+
+ALTER TABLE table_for_synchronous_mutations_no_replication UPDATE v1 = v1 + 1 WHERE 1 SETTINGS mutations_sync = 2;
 
 SELECT is_done
 FROM `system`.mutations

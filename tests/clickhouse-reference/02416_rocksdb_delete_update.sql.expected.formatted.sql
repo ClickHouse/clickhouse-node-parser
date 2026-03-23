@@ -18,7 +18,15 @@ ORDER BY key ASC;
 
 SELECT '-----------';
 
+ALTER TABLE `02416_rocksdb` DELETE WHERE key >= 4;
+
 SELECT count()
 FROM `02416_rocksdb`;
 
 INSERT INTO `02416_rocksdb`;
+
+ALTER TABLE `02416_rocksdb` UPDATE value = 'Another' WHERE key > 2;
+
+ALTER TABLE `02416_rocksdb` UPDATE key = key * 10 WHERE 1 = 1; -- { serverError BAD_ARGUMENTS }
+
+ALTER TABLE `02416_rocksdb` UPDATE value2 = value2 * 10 + 2 WHERE 1 = 1;

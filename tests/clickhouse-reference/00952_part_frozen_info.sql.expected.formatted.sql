@@ -17,6 +17,10 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'part_info';
 
+ALTER TABLE part_info FREEZE PARTITION '1970-10-02';
+
+ALTER TABLE part_info FREEZE;
+
 INSERT INTO part_info;
 
 SELECT *

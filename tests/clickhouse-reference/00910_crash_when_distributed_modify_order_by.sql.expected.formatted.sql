@@ -25,6 +25,8 @@ CREATE TABLE union2
 )
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), 'union1');
 
+ALTER TABLE union2 MODIFY ORDER BY a; -- { serverError NOT_IMPLEMENTED }
+
 DROP TABLE union1;
 
 DROP TABLE union2;

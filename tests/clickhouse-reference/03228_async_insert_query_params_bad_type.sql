@@ -5,5 +5,6 @@ SET async_insert = 1;
 SET wait_for_async_insert = 1;
 INSERT INTO t_async_insert_params VALUES ({p1:UInt64}); -- { serverError  BAD_QUERY_PARAMETER }
 INSERT INTO t_async_insert_params VALUES ({p1:String}); -- { serverError  TYPE_MISMATCH }
+ALTER TABLE t_async_insert_params MODIFY COLUMN id String;
 SELECT * FROM t_async_insert_params ORDER BY id;
 DROP TABLE t_async_insert_params;

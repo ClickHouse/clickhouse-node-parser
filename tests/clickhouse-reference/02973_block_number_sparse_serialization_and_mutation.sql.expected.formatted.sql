@@ -30,6 +30,8 @@ FROM numbers(1);
 
 SET alter_sync = 2;
 
+ALTER TABLE table_with_some_columns DROP COLUMN value0;
+
 INSERT INTO table_with_some_columns SELECT rand()
 FROM numbers(1);
 

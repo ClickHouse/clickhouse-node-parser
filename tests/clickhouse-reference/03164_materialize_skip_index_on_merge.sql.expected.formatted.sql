@@ -53,6 +53,8 @@ FROM `system`.data_skipping_indices
 WHERE database = currentDatabase()
     AND table = 'tab';
 
+ALTER TABLE tab MODIFY SETTING materialize_skip_indexes_on_merge = 0;
+
 SELECT
     count(),
     sum(ProfileEvents['MergeTreeDataWriterSkipIndicesCalculationMicroseconds'])
@@ -62,5 +64,11 @@ WHERE current_database = currentDatabase()
     AND type = 'QueryFinish';
 
 SET mutations_sync = 2;
+
+ALTER TABLE tab MATERIALIZE INDEX idx_a;
+
+ALTER TABLE tab MATERIALIZE INDEX idx_b;
+
+ALTER TABLE tab RESET SETTING materialize_skip_indexes_on_merge;
 
 DROP TABLE tab;

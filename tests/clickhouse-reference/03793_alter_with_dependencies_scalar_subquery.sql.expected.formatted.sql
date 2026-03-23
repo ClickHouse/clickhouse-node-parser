@@ -18,6 +18,12 @@ INSERT INTO foo_without_dependencies (ts, x) SELECT
 FROM `system`.numbers
 LIMIT 10;
 
+ALTER TABLE foo_without_dependencies UPDATE x = 10 WHERE x = (
+    SELECT x
+    FROM foo_without_dependencies
+    WHERE x = 4
+);
+
 SELECT
     'foo_without_dependencies',
     x
@@ -42,6 +48,12 @@ INSERT INTO foo_with_index (ts, x) SELECT
     number + 1
 FROM `system`.numbers
 LIMIT 10;
+
+ALTER TABLE foo_with_index UPDATE x = 10 WHERE x = (
+    SELECT x
+    FROM foo_with_index
+    WHERE x = 4
+);
 
 SELECT
     'foo_with_index',
@@ -68,6 +80,12 @@ INSERT INTO foo_with_projection (ts, x) SELECT
     number + 1
 FROM `system`.numbers
 LIMIT 10;
+
+ALTER TABLE foo_with_projection UPDATE x = 10 WHERE x = (
+    SELECT x
+    FROM foo_with_projection
+    WHERE x = 4
+);
 
 SELECT
     'foo_with_projection',

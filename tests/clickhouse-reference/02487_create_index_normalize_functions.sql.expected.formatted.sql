@@ -6,6 +6,8 @@ CREATE TABLE rmt
 ENGINE = ReplicatedMergeTree('/test/02487/{database}/rmt', '1')
 ORDER BY n;
 
+ALTER TABLE rmt ADD INDEX idx1 date(ts) TYPE MinMax GRANULARITY 1;
+
 CREATE INDEX idx2 ON rmt (date(ts)) TYPE MinMax GRANULARITY 1;
 
 CREATE TABLE rmt2

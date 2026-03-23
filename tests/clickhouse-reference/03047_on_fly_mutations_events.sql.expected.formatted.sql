@@ -20,8 +20,16 @@ INSERT INTO t_lightweight_mut_7 SELECT
     number
 FROM numbers(100000);
 
+ALTER TABLE t_lightweight_mut_7 UPDATE v = 3 WHERE id % 5 = 0;
+
+ALTER TABLE t_lightweight_mut_7 DELETE WHERE v % 3 = 0;
+
 SELECT count()
 FROM t_lightweight_mut_7;
+
+ALTER TABLE t_lightweight_mut_7 UPDATE v = v WHERE 1 SETTINGS mutations_sync = 2;
+
+ALTER TABLE t_lightweight_mut_7 UPDATE v = v * v WHERE 1;
 
 SELECT
     1,

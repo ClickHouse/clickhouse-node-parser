@@ -11,6 +11,7 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY id;
 INSERT INTO tab VALUES (1, 'A');
+ALTER TABLE tab ADD INDEX idx_text lower(s1) TYPE text(tokenizer = splitByNonAlpha);
 INSERT INTO tab VALUES (2, 'B');
 SELECT id FROM tab WHERE hasAllTokens(lower(s1), 'a') ORDER BY id;
 SELECT id FROM tab WHERE hasAllTokens(lower(s1), 'b') ORDER BY id;
@@ -23,6 +24,7 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY id;
 INSERT INTO tab VALUES (1, 'A', 'B');
+ALTER TABLE tab ADD INDEX idx_text concat(s1, ' ', s2) TYPE text(tokenizer = splitByNonAlpha);
 INSERT INTO tab VALUES (2, 'C', 'D');
 SELECT id FROM tab WHERE hasAllTokens(concat(s1, ' ', s2), 'A');
 SELECT id FROM tab WHERE hasAllTokens(concat(s1, ' ', s2), 'D');

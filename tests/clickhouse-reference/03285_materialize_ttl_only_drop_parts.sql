@@ -8,4 +8,6 @@ INSERT INTO test_03285_mat_ttl SELECT number, randomString(10), now() FROM numbe
 SET mutations_sync=1;
 SELECT 'Rows in parts', SUM(rows) FROM system.parts WHERE database = currentDatabase() AND table = 'test_03285_mat_ttl' AND active;
 SELECT 'Count', count() FROM test_03285_mat_ttl;
+ALTER TABLE test_03285_mat_ttl MODIFY TTL event_time + INTERVAL 1 MONTH SETTINGS mutations_sync = 1;
+ALTER TABLE test_03285_mat_ttl MODIFY TTL event_time - INTERVAL 3 MONTH SETTINGS mutations_sync = 1;
 DROP TABLE test_03285_mat_ttl;

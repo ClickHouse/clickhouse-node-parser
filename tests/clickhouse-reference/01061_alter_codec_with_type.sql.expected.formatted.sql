@@ -16,6 +16,8 @@ FROM `system`.`columns`
 WHERE table = 'alter_bug'
     AND database = currentDatabase();
 
+ALTER TABLE alter_bug MODIFY COLUMN epoch DEFAULT toUInt64(_time_dec) CODEC(Delta, LZ4);
+
 SELECT
     name,
     type,

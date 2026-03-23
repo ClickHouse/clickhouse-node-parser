@@ -45,6 +45,8 @@ WHERE database = currentDatabase()
     AND table = 't_shared'
 ORDER BY name ASC;
 
+ALTER TABLE t_shared APPLY PATCHES SETTINGS mutations_sync = 2;
+
 SELECT ProfileEvents['ReadTasksWithAppliedPatches']
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

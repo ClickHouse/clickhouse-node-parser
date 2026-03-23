@@ -15,6 +15,8 @@ INSERT INTO tab (c);
 
 INSERT INTO tab (c);
 
+ALTER TABLE tab ADD STATISTICS c TYPE countmin;
+
 SELECT 1
 FROM tab
 WHERE tab.c = 0;

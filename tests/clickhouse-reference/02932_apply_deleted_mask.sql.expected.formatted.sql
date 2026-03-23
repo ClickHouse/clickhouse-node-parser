@@ -30,4 +30,8 @@ WHERE database = currentDatabase()
     AND table = 't_materialize_delete'
     AND active;
 
+ALTER TABLE t_materialize_delete APPLY DELETED MASK;
+
+ALTER TABLE t_materialize_delete APPLY DELETED MASK IN PARTITION 5;
+
 DROP TABLE t_materialize_delete;

@@ -11,3 +11,5 @@ CREATE TABLE t_object_storage_update
 ENGINE = S3(s3_conn, filename = concat(currentDatabase(), '_test_03903_alter_update.parquet'), `format` = Parquet);
 
 INSERT INTO t_object_storage_update;
+
+ALTER TABLE t_object_storage_update UPDATE c0 = 1 WHERE true; -- { serverError NOT_IMPLEMENTED }

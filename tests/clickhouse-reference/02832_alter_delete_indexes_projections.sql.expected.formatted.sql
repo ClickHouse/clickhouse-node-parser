@@ -21,6 +21,8 @@ SELECT count()
 FROM t_delete_skip_index
 WHERE y IN (4, 5);
 
+ALTER TABLE t_delete_skip_index DELETE WHERE x < 8192;
+
 DROP TABLE IF EXISTS t_delete_projection;
 
 CREATE TABLE t_delete_projection
@@ -47,3 +49,5 @@ FROM t_delete_projection
 SETTINGS
     optimize_use_projections = 0,
     force_optimize_projection = 1;
+
+ALTER TABLE t_delete_projection DELETE WHERE x < 8192;

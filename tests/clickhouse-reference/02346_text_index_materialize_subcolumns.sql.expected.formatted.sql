@@ -14,6 +14,14 @@ INSERT INTO tab (data);
 
 SET mutations_sync = 2;
 
+ALTER TABLE tab ADD INDEX a_idx data.a TYPE text(tokenizer = splitByNonAlpha);
+
+ALTER TABLE tab MATERIALIZE INDEX a_idx;
+
+ALTER TABLE tab ADD INDEX b_idx data.b::String TYPE text(tokenizer = splitByNonAlpha);
+
+ALTER TABLE tab MATERIALIZE INDEX b_idx;
+
 SELECT sum(secondary_indices_compressed_bytes) > 0
 FROM `system`.parts
 WHERE database = currentDatabase()
@@ -42,6 +50,8 @@ ORDER BY tuple()
 SETTINGS min_bytes_for_wide_part = 100000000;
 
 INSERT INTO tab (id);
+
+ALTER TABLE tab ADD COLUMN data JSON(a String);
 
 SELECT column
 FROM `system`.parts_columns

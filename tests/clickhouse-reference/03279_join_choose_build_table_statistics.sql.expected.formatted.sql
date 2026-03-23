@@ -66,6 +66,10 @@ FORMAT Null;
 
 SET mutations_sync = 2;
 
+ALTER TABLE sales ADD STATISTICS date TYPE CountMin;
+
+ALTER TABLE sales MATERIALIZE STATISTICS date;
+
 SELECT *
 FROM
     products

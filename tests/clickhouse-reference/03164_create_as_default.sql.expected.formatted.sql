@@ -14,6 +14,8 @@ INSERT INTO src_table (sipTimestamp);
 
 CREATE TABLE copied_table AS src_table;
 
+ALTER TABLE copied_table RENAME COLUMN sipTimestamp TO timestamp;
+
 SELECT
     name,
     default_expression

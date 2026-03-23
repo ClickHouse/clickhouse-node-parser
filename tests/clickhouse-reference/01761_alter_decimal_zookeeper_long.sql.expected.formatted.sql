@@ -17,4 +17,6 @@ SELECT *
 FROM test_alter_decimal
 ORDER BY n ASC;
 
+ALTER TABLE test_alter_decimal MODIFY COLUMN d Decimal(18, 8);
+
 INSERT INTO test_alter_decimal;

@@ -12,6 +12,8 @@ ENGINE = MergeTree(d, d, 8192);
 
 INSERT INTO `prewhere`;
 
+ALTER TABLE `prewhere` ADD COLUMN a1 String AFTER a;
+
 INSERT INTO `prewhere`;
 
 SELECT

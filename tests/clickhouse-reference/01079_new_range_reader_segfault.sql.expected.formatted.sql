@@ -11,6 +11,8 @@ ORDER BY a;
 INSERT INTO t SELECT if(number < 20, 0, 1)
 FROM numbers(50);
 
+ALTER TABLE t ADD COLUMN s String DEFAULT 'foo';
+
 SELECT s
 FROM t
 PREWHERE a != 1

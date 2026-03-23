@@ -56,6 +56,10 @@ FROM numbers(100, 100);
 SELECT *
 FROM explain_indexes;
 
+ALTER TABLE tab MATERIALIZE INDEX idx_a;
+
+ALTER TABLE tab MATERIALIZE INDEX `id,x_b`;
+
 INSERT INTO tab SELECT
     number,
     number / 50

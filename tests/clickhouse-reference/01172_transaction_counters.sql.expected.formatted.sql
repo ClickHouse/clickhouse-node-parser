@@ -101,6 +101,8 @@ SELECT
 
 INSERT INTO txn_counters (n);
 
+ALTER TABLE txn_counters DROP PARTITION ID 'all';
+
 SELECT
     indexOf((
         SELECT arraySort(groupUniqArray(tid))

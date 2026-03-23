@@ -36,12 +36,18 @@ INSERT INTO mt_compact (a, s, n.x, lc) SELECT
     toString(number)
 FROM numbers(5);
 
+ALTER TABLE mt_compact DROP COLUMN `n.y`;
+
+ALTER TABLE mt_compact ADD COLUMN `n.y` Array(String) DEFAULT ['qwqw'] AFTER `n.x`;
+
 SELECT *
 FROM mt_compact
 ORDER BY
     a ASC,
     s ASC
 LIMIT 10;
+
+ALTER TABLE mt_compact UPDATE b = 42 WHERE 1 SETTINGS mutations_sync = 2;
 
 SELECT *
 FROM mt_compact

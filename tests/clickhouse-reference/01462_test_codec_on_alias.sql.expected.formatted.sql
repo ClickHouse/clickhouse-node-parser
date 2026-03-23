@@ -17,3 +17,7 @@ CREATE TABLE compression_codec_on_alias
 ENGINE = MergeTree()
 ORDER BY c1
 PARTITION BY c0; -- success
+
+ALTER TABLE compression_codec_on_alias ADD COLUMN c3 ALIAS c2 CODEC(ZSTD) AFTER c2; -- { serverError BAD_ARGUMENTS }
+
+ALTER TABLE compression_codec_on_alias ADD COLUMN c2 UInt64 CODEC(ZSTD) AFTER c1; -- success

@@ -34,6 +34,10 @@ FROM (
     )
 WHERE like(`explain`, '%Replacing%');
 
+ALTER TABLE t_optimize_level DROP PARTITION tuple();
+
+ALTER TABLE t_optimize_level ATTACH PARTITION tuple();
+
 SELECT name
 FROM `system`.parts
 WHERE database = currentDatabase()

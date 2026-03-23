@@ -154,15 +154,21 @@ DROP TABLE 03720_deletes_string;
 DROP TABLE IF EXISTS 03720_updates;
 CREATE TABLE 03720_updates (k1 UInt32, k2 UInt32, val String) ENGINE=EmbeddedRocksDB PRIMARY KEY (k1, k2);
 INSERT INTO 03720_updates VALUES (1, 1, 'original'), (1, 2, 'data'), (2, 1, 'test');
+-- Update using ALTER TABLE
+ALTER TABLE 03720_updates UPDATE val = 'updated' WHERE k1 = 1 AND k2 = 1;
+ALTER TABLE 03720_updates UPDATE val = 'modified' WHERE k1 = 1 AND k2 = 2;
 SELECT val FROM 03720_updates WHERE (k1, k2) = (1, 1); -- Should be 'updated'
 SELECT val FROM 03720_updates WHERE (k1, k2) = (1, 2); -- Should be 'modified'
 SELECT val FROM 03720_updates WHERE (k1, k2) = (2, 1); -- Should be 'test'
 SELECT COUNT(*) FROM 03720_updates; -- Should be 3
+-- Update with tuple equality
+ALTER TABLE 03720_updates UPDATE val = 'changed' WHERE (k1, k2) = (2, 1);
 DROP TABLE 03720_updates;
 -- UPDATE with three-column primary key
 DROP TABLE IF EXISTS 03720_updates_three_col;
 CREATE TABLE 03720_updates_three_col (k1 UInt32, k2 UInt32, k3 UInt32, val String) ENGINE=EmbeddedRocksDB PRIMARY KEY (k1, k2, k3);
 INSERT INTO 03720_updates_three_col VALUES (1, 1, 1, 'v1'), (1, 1, 2, 'v2'), (1, 2, 1, 'v3');
+ALTER TABLE 03720_updates_three_col UPDATE val = 'updated_v1' WHERE (k1, k2, k3) = (1, 1, 1);
 SELECT val FROM 03720_updates_three_col WHERE (k1, k2, k3) = (1, 1, 1); -- Should be 'updated_v1'
 SELECT COUNT(*) FROM 03720_updates_three_col; -- Should be 3
 DROP TABLE 03720_updates_three_col;
@@ -170,6 +176,7 @@ DROP TABLE 03720_updates_three_col;
 DROP TABLE IF EXISTS 03720_updates_string;
 CREATE TABLE 03720_updates_string (k1 String, k2 String, val UInt32) ENGINE=EmbeddedRocksDB PRIMARY KEY (k1, k2);
 INSERT INTO 03720_updates_string VALUES ('foo', 'bar', 100), ('foo', 'baz', 200);
+ALTER TABLE 03720_updates_string UPDATE val = 999 WHERE k1 = 'foo' AND k2 = 'bar';
 SELECT val FROM 03720_updates_string WHERE (k1, k2) = ('foo', 'bar'); -- Should be 999
 SELECT COUNT(*) FROM 03720_updates_string; -- Should be 2
 DROP TABLE 03720_updates_string;

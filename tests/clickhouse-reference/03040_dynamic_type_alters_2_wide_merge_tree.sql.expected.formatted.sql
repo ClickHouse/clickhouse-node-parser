@@ -20,6 +20,8 @@ INSERT INTO test SELECT
     number
 FROM numbers(3);
 
+ALTER TABLE test ADD COLUMN d Dynamic SETTINGS mutations_sync = 1;
+
 SELECT
     count(),
     dynamicType(d)
@@ -74,6 +76,8 @@ SELECT
 FROM test
 ORDER BY x ASC;
 
+ALTER TABLE test RENAME COLUMN d TO d1 SETTINGS mutations_sync = 1;
+
 SELECT
     count(),
     dynamicType(d1)
@@ -113,6 +117,8 @@ SELECT
     d1.`Array(Dynamic)`.Date
 FROM test
 ORDER BY x ASC;
+
+ALTER TABLE test RENAME COLUMN d1 TO d2 SETTINGS mutations_sync = 1;
 
 SELECT
     count(),

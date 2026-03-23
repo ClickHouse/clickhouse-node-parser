@@ -11,6 +11,8 @@ ORDER BY tuple();
 INSERT INTO t_missed_subcolumns SELECT *
 FROM numbers(10);
 
+ALTER TABLE t_missed_subcolumns ADD COLUMN y Nullable(UInt32);
+
 INSERT INTO t_missed_subcolumns SELECT
     number,
     if(number % 2, NULL, number)
@@ -36,6 +38,8 @@ ENGINE = MergeTree
 ORDER BY id;
 
 INSERT INTO t_missed_subcolumns;
+
+ALTER TABLE t_missed_subcolumns ADD COLUMN `n.b` Array(Nullable(String));
 
 INSERT INTO t_missed_subcolumns;
 
@@ -74,7 +78,11 @@ ORDER BY id;
 
 INSERT INTO t_missed_subcolumns;
 
+ALTER TABLE t_missed_subcolumns ADD COLUMN t Tuple(a String, b String) DEFAULT ('foo', 'bar');
+
 INSERT INTO t_missed_subcolumns;
+
+ALTER TABLE t_missed_subcolumns ADD COLUMN arr Array(Nullable(UInt64)) DEFAULT [1, NULL, 3];
 
 INSERT INTO t_missed_subcolumns;
 

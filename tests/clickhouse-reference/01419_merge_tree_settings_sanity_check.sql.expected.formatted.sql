@@ -43,4 +43,6 @@ ENGINE = MergeTree()
 ORDER BY (eventday, user_id)
 PARTITION BY toYYYYMM(eventday);
 
+ALTER TABLE mytable_local MODIFY SETTING number_of_free_entries_in_pool_to_execute_mutation = 100; -- { serverError BAD_ARGUMENTS }
+
 DROP TABLE mytable_local;

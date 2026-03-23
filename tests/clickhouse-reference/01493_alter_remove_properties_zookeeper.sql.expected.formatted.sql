@@ -29,6 +29,12 @@ TTL column_comment + toIntervalMonth(2);
 
 INSERT INTO r_prop_table1 (column_codec, column_comment, column_ttl);
 
+ALTER TABLE r_prop_table1 MODIFY COLUMN column_comment;
+
+ALTER TABLE r_prop_table2 MODIFY COLUMN column_codec;
+
+ALTER TABLE r_prop_table2 MODIFY COLUMN column_default;
+
 INSERT INTO r_prop_table1 (column_codec, column_comment, column_ttl);
 
 SELECT
@@ -37,6 +43,10 @@ SELECT
     column_ttl
 FROM r_prop_table1
 ORDER BY column_ttl ASC;
+
+ALTER TABLE r_prop_table2 MODIFY COLUMN column_ttl;
+
+ALTER TABLE r_prop_table1 REMOVE TTL;
 
 INSERT INTO r_prop_table1 (column_codec, column_comment, column_ttl);
 

@@ -174,7 +174,7 @@ function getLeadingKeyword(statement) {
 }
 
 function isSupportedStatement(statement) {
-  return ['SELECT', 'SET', 'CREATE', 'USE', 'INSERT', 'DROP'].includes(getLeadingKeyword(statement));
+  return ['SELECT', 'SET', 'CREATE', 'USE', 'INSERT', 'DROP', 'ALTER'].includes(getLeadingKeyword(statement));
 }
 
 /**

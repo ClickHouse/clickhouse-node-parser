@@ -44,6 +44,8 @@ SETTINGS disk = disk(type = web, endpoint = 'https://raw.githubusercontent.com/C
 SELECT count()
 FROM uk_price_paid;
 
+ALTER TABLE uk_price_paid MODIFY SETTING table_disk = 0; -- { serverError TABLE_IS_READ_ONLY }
+
 -- drop does not hung
 DROP TABLE uk_price_paid;
 
@@ -54,3 +56,5 @@ CREATE TABLE test_table_disk_is_immutable
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
+ALTER TABLE test_table_disk_is_immutable MODIFY SETTING table_disk = 1; -- { serverError READONLY_SETTING }

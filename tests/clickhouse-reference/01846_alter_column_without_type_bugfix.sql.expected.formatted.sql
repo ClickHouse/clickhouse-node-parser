@@ -8,4 +8,8 @@ CREATE TABLE alter_test
 ENGINE = ReplacingMergeTree(b)
 ORDER BY a;
 
+ALTER TABLE alter_test MODIFY COLUMN b DateTime DEFAULT now();
+
+ALTER TABLE alter_test MODIFY COLUMN b DEFAULT now() + 1;
+
 DROP TABLE alter_test;

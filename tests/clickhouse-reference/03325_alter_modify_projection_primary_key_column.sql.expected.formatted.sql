@@ -16,6 +16,8 @@ INSERT INTO test SELECT
     number
 FROM numbers(100000);
 
+ALTER TABLE test MODIFY COLUMN x UInt64;
+
 SELECT *
 FROM test
 WHERE x = 10;

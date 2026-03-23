@@ -13,6 +13,8 @@ INSERT INTO t_vertical_merges SELECT
     NULL,
     1;
 
+ALTER TABLE t_vertical_merges ADD COLUMN c String;
+
 SELECT
     a,
     b,
@@ -31,6 +33,8 @@ SETTINGS vertical_merge_algorithm_min_columns_to_activate = 1, vertical_merge_al
 INSERT INTO t_vertical_merges SELECT
     [],
     1;
+
+ALTER TABLE t_vertical_merges DROP COLUMN b;
 
 SELECT
     a,

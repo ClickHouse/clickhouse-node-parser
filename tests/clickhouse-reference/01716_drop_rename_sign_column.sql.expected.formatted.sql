@@ -10,3 +10,7 @@ ENGINE = CollapsingMergeTree(s)
 ORDER BY k;
 
 INSERT INTO signed_table (k, v, s);
+
+ALTER TABLE signed_table DROP COLUMN s; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE signed_table RENAME COLUMN s TO s1; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}

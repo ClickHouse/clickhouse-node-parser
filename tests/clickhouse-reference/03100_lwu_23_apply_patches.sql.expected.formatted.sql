@@ -38,6 +38,8 @@ ORDER BY
     b ASC,
     c ASC;
 
+ALTER TABLE t_apply_patches APPLY PATCHES;
+
 SELECT
     b,
     c,
@@ -89,6 +91,8 @@ GROUP BY
 ORDER BY
     b ASC,
     c ASC;
+
+ALTER TABLE t_apply_patches_smt APPLY PATCHES;
 
 SELECT
     ProfileEvents['MutationSomePartColumns'],

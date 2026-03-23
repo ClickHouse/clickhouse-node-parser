@@ -9,6 +9,8 @@ CREATE TABLE test_table_replicated
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_table_replicated', '1_replica')
 ORDER BY id;
 
+ALTER TABLE test_table_replicated ADD COLUMN insert_time DateTime;
+
 SELECT
     name,
     version
@@ -49,5 +51,7 @@ WHERE path = (
     )
     AND name = 'metadata_version'
 FORMAT Vertical;
+
+ALTER TABLE test_table_replicated_second ADD COLUMN insert_time_updated DateTime;
 
 DROP TABLE test_table_replicated_second;

@@ -24,6 +24,9 @@ INSERT INTO t2 SELECT
     number
 FROM numbers(100);
 
+ALTER TABLE t2 ADD PROJECTION proj (SELECT id2
+ORDER BY id2 ASC);
+
 SELECT s
 FROM
     t1 AS lhs

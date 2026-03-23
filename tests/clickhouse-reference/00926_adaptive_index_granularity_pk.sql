@@ -56,5 +56,6 @@ CREATE TABLE large_alter_table_00926 (
 INSERT INTO large_alter_table_00926 SELECT toDate('2019-01-01'), number, toString(number + rand()) FROM system.numbers LIMIT 300000;
 CREATE TABLE store_of_hash_00926 (hash UInt64) ENGINE = Memory();
 INSERT INTO store_of_hash_00926 SELECT sum(cityHash64(*)) FROM large_alter_table_00926;
+ALTER TABLE large_alter_table_00926 MODIFY COLUMN data CODEC(NONE, LZ4, LZ4HC, ZSTD);
 SELECT COUNT(hash) FROM store_of_hash_00926;
 SELECT COUNT(DISTINCT hash) FROM store_of_hash_00926;

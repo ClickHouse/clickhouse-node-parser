@@ -22,6 +22,8 @@ CREATE TABLE attach_partition_t2
 ENGINE = MergeTree
 ORDER BY a;
 
+ALTER TABLE attach_partition_t2 REPLACE PARTITION tuple() FROM attach_partition_t1; -- { serverError BAD_ARGUMENTS }
+
 -- test different projection name
 CREATE TABLE attach_partition_t3
 (
@@ -52,6 +54,8 @@ CREATE TABLE attach_partition_t4
 ENGINE = MergeTree
 ORDER BY a;
 
+ALTER TABLE attach_partition_t4 REPLACE PARTITION tuple() FROM attach_partition_t3; -- { serverError BAD_ARGUMENTS }
+
 -- check attach with same index and projection
 CREATE TABLE attach_partition_t5
 (
@@ -81,6 +85,8 @@ CREATE TABLE attach_partition_t6
 )
 ENGINE = MergeTree
 ORDER BY a;
+
+ALTER TABLE attach_partition_t6 REPLACE PARTITION tuple() FROM attach_partition_t5;
 
 SELECT *
 FROM attach_partition_t6

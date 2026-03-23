@@ -13,6 +13,12 @@ INSERT INTO mutations_and_escaping_1648 (d, e);
 
 INSERT INTO mutations_and_escaping_1648 (d, e);
 
+-- slow mutation
+ALTER TABLE mutations_and_escaping_1648 UPDATE e = CAST('foo', 'Enum8(''foo'' = 1, ''bar'' = 2)') WHERE d = '2018-01-02'
+AND sleepEachRow(1) = 0;
+
+ALTER TABLE mutations_and_escaping_1648 UPDATE e = CAST('foo', 'Enum8(''foo'' = 1, ''bar'' = 2)') WHERE d = '2018-01-02' SETTINGS mutations_sync = 1;
+
 SELECT e
 FROM mutations_and_escaping_1648
 ORDER BY d ASC;

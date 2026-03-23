@@ -30,6 +30,9 @@ FROM numbers(2000, 1000);
 
 SET mutations_sync = 2;
 
+ALTER TABLE t_delete_empty_part_rmt DELETE WHERE a = 2
+OR b < 500;
+
 SELECT count()
 FROM t_delete_empty_part_rmt;
 

@@ -18,3 +18,9 @@ FROM `system`.parts
 WHERE table = 'test'
     AND active
     AND database = currentDatabase();
+
+ALTER TABLE test DROP PART 'all_1_1_1';
+
+ALTER TABLE test ATTACH PART 'all_1_1_1';
+
+ALTER TABLE test ATTACH PARTITION tuple();

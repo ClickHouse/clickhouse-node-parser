@@ -32,13 +32,21 @@ WHERE table = 'mt_with_pk'
 
 INSERT INTO mt_with_pk (d, x, y, z, `n.Age`, `n.Name`);
 
+ALTER TABLE mt_with_pk MODIFY COLUMN y Array(String);
+
 INSERT INTO mt_with_pk (d, x, y, z, `n.Age`, `n.Name`);
+
+ALTER TABLE mt_with_pk UPDATE w = 0 WHERE 1 SETTINGS mutations_sync = 2;
+
+ALTER TABLE mt_with_pk UPDATE y = ['q', 'q', 'q'] WHERE 1 SETTINGS mutations_sync = 2;
 
 SELECT sum(w)
 FROM mt_with_pk;
 
 SELECT DISTINCT (y)
 FROM mt_with_pk;
+
+ALTER TABLE mt_with_pk ADD INDEX idx1 z + w TYPE minmax GRANULARITY 1;
 
 INSERT INTO mt_with_pk (d, x, y, z, `n.Age`, `n.Name`, w);
 
@@ -60,13 +68,25 @@ SETTINGS index_granularity_bytes = 10000, write_final_mark = 1;
 
 INSERT INTO alter_attach;
 
+ALTER TABLE alter_attach DROP PARTITION 1;
+
+ALTER TABLE alter_attach ADD COLUMN s String;
+
 INSERT INTO alter_attach;
+
+ALTER TABLE alter_attach ATTACH PARTITION 1;
 
 SELECT *
 FROM alter_attach
 ORDER BY x ASC;
 
+ALTER TABLE alter_attach DROP PARTITION 2;
+
+ALTER TABLE alter_attach DROP COLUMN s;
+
 INSERT INTO alter_attach;
+
+ALTER TABLE alter_attach ATTACH PARTITION 2;
 
 DROP TABLE IF EXISTS alter_update_00806;
 
@@ -83,6 +103,8 @@ SETTINGS index_granularity_bytes = 10000, write_final_mark = 1;
 INSERT INTO alter_update_00806 (d, e);
 
 INSERT INTO alter_update_00806 (d, e);
+
+ALTER TABLE alter_update_00806 UPDATE e = CAST('foo', 'Enum8(''foo'' = 1, ''bar'' = 2)') WHERE d = '2018-01-02' SETTINGS mutations_sync = 2;
 
 SELECT e
 FROM alter_update_00806

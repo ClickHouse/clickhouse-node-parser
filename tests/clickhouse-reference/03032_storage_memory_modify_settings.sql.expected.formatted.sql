@@ -21,6 +21,8 @@ FROM `system`.tables
 WHERE name = 'memory'
     AND database = currentDatabase(); -- 17408 in total
 
+ALTER TABLE memory MODIFY SETTING min_bytes_to_keep = 4096, max_bytes_to_keep = 16384;
+
 INSERT INTO memory SELECT *
 FROM numbers(3000, 10000); -- 65536 bytes
 
@@ -38,6 +40,8 @@ SELECT total_rows
 FROM `system`.tables
 WHERE name = 'memory'
     AND database = currentDatabase(); -- 1100 in total
+
+ALTER TABLE memory MODIFY SETTING min_rows_to_keep = 100, max_rows_to_keep = 1000;
 
 INSERT INTO memory SELECT *
 FROM numbers(1000, 500); -- 500 rows
@@ -59,5 +63,13 @@ FROM numbers(2000, 70); -- 70 rows
 
 INSERT INTO memory SELECT *
 FROM numbers(3000, 1100); -- 1100 rows
+
+ALTER TABLE memory MODIFY SETTING min_rows_to_keep = 100; -- { serverError SETTING_CONSTRAINT_VIOLATION }
+
+ALTER TABLE memory MODIFY SETTING min_bytes_to_keep = 100; -- { serverError SETTING_CONSTRAINT_VIOLATION }
+
+ALTER TABLE memory MODIFY SETTING max_rows_to_keep = 1000;
+
+ALTER TABLE memory MODIFY SETTING max_bytes_to_keep = 1000;
 
 DROP TABLE memory;

@@ -221,6 +221,9 @@ SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, min_bytes_for_full_
 
 INSERT INTO test_partial_projection;
 
+ALTER TABLE test_partial_projection ADD PROJECTION region_proj (SELECT _part_offset
+ORDER BY region ASC);
+
 INSERT INTO test_partial_projection;
 
 SELECT trimLeft(`explain`)

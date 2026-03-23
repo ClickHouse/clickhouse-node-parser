@@ -39,6 +39,7 @@ select 4, arraySort(groupArray(n)) from rmt1;
 select 5, arraySort(groupArray(n)) from rmt1;
 select 6, arraySort(groupArray(n)) from rmt2;
 insert into rmt1 values (123);
+alter table rmt1 update n=10 where n=123 settings mutations_sync=1;
 -- trigger log rotation, rmt1 will be lost
 insert into rmt2 values (20);
 insert into rmt2 values (30);
@@ -55,6 +56,7 @@ insert into rmt1 values (200);
 insert into rmt2 values (200);
 -- create a gap in block numbers by dropping part
 insert into rmt2 values (300);
+alter table rmt2 drop part 'all_19_19_0';   -- remove 200
 insert into rmt2 values (400);
 insert into rmt2 values (500);
 insert into rmt2 values (600);

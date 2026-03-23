@@ -46,6 +46,8 @@ WHERE (like(`explain`, '%Name%'))
 -- we want to test that the search functions will use the same tokenizer on un-materialized column parts
 INSERT INTO tab (id, message);
 
+ALTER TABLE tab ADD INDEX idx message TYPE text(tokenizer = 'splitByString') GRANULARITY 1;
+
 INSERT INTO tab (id, message);
 
 -- { echoOn }
@@ -94,6 +96,8 @@ WHERE hasAllTokens(message, ['abc', 'fo']);
 
 -- { echoOff }
 DROP TABLE tab;
+
+ALTER TABLE tab ADD INDEX idx message TYPE text(tokenizer = 'splitByNonAlpha');
 
 SELECT arraySort(groupArray(id))
 FROM tab

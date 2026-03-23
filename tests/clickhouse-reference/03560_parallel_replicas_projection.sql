@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS normal
 ENGINE = MergeTree
 ORDER BY tuple() settings index_granularity=1;
 INSERT INTO normal select number as key, number as value from numbers(10000);
+ALTER TABLE normal ADD PROJECTION p_normal (SELECT key, value ORDER BY key);
 INSERT INTO normal select number as key, number as value from numbers(10000, 100);
 SET parallel_replicas_only_with_analyzer = 0;
 SET optimize_use_projections = 1, optimize_aggregation_in_order = 0;
@@ -27,6 +28,7 @@ CREATE TABLE agg
 ENGINE = MergeTree
 ORDER BY tuple() settings index_granularity=1;
 INSERT INTO agg SELECT number AS key, number AS value FROM numbers(100);
+ALTER TABLE agg ADD PROJECTION p_agg (SELECT key, sum(value) GROUP BY key);
 INSERT INTO agg SELECT number AS key, number AS value FROM numbers(100, 100);
 SELECT trimLeft(replaceRegexpAll(explain, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas')) FROM (explain SELECT sum(value) AS v FROM agg where key > 90 AND key < 110) WHERE explain LIKE '%ReadFromMergeTree%' OR explain LIKE '%ReadFromRemoteParallelReplicas%' SETTINGS enable_analyzer = 1;
 SELECT sum(value) AS v FROM agg where key > 90 AND key < 110;

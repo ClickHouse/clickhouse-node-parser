@@ -17,5 +17,6 @@ INSERT INTO table_with_some_columns SELECT rand(), number + 10 from numbers(1000
 INSERT INTO table_with_some_columns SELECT rand(), number + 10 from numbers(1);
 INSERT INTO table_with_some_columns SELECT rand(), number+222222222 from numbers(1);
 set alter_sync = 2;
+ALTER TABLE table_with_some_columns DROP COLUMN value0;
 INSERT INTO table_with_some_columns SELECT rand() from numbers(1);
 SELECT *, _block_number FROM table_with_some_columns where not ignore(*) Format Null;

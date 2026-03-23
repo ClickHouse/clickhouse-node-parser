@@ -9,6 +9,8 @@ CREATE TABLE check_comments
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00753/comments', 'r1')
 ORDER BY column_name1;
 
+ALTER TABLE check_comments COMMENT COLUMN column_name1 'another comment';
+
 SELECT *
 FROM `system`.`columns`
 WHERE table = 'check.comments'

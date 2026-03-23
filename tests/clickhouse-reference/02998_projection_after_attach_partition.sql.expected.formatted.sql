@@ -25,6 +25,12 @@ PRIMARY KEY user_id
 PARTITION BY user_id
 SETTINGS index_granularity = 1;
 
+ALTER TABLE visits_order ADD PROJECTION user_name_projection (SELECT *
+ORDER BY user_name ASC);
+
+ALTER TABLE visits_order_dst ADD PROJECTION user_name_projection (SELECT *
+ORDER BY user_name ASC);
+
 INSERT INTO visits_order SELECT
     2,
     'user2',
@@ -42,6 +48,8 @@ INSERT INTO visits_order SELECT
     'yet_another_user2',
     number * 3
 FROM numbers(1, 10);
+
+ALTER TABLE visits_order_dst REPLACE PARTITION ID '2' FROM visits_order;
 
 SET enable_analyzer = 0;
 

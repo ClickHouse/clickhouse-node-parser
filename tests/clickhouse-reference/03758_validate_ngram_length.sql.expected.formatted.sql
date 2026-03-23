@@ -9,5 +9,15 @@ ORDER BY tuple();
 
 INSERT INTO t0 (c0);
 
+ALTER TABLE t0 ADD INDEX i0 c0 TYPE ngrambf_v1(0, 1, 1, 1); -- { serverError BAD_ARGUMENTS }
+
+ALTER TABLE t0 ADD INDEX i0 c0 TYPE ngrambf_v1(-1, 1, 1, 1); -- { serverError BAD_ARGUMENTS }
+
+ALTER TABLE t0 ADD INDEX i0 c0 TYPE ngrambf_v1(18446744073709551616, 1, 1, 1); -- { serverError BAD_GET }
+
+ALTER TABLE t0 ADD INDEX i1 c0 TYPE ngrambf_v1(8, 1, 1, 1);
+
+ALTER TABLE t0 ADD INDEX i2 c0 TYPE ngrambf_v1(9, 1, 1, 1);
+
 SELECT c0
 FROM t0;

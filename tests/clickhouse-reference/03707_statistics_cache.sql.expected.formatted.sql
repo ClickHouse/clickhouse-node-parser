@@ -30,6 +30,10 @@ INSERT INTO sc_core SELECT
     if(number % 20 = 0, NULL, toFloat64(rand()) / 4294967296.0)
 FROM numbers(60000);
 
+ALTER TABLE sc_core ADD STATISTICS v TYPE TDigest;
+
+ALTER TABLE sc_core MATERIALIZE STATISTICS ALL;
+
 ------------------------------------------------------------
 -- SUM() must not trigger statistics
 ------------------------------------------------------------
@@ -48,6 +52,10 @@ INSERT INTO sc_unused SELECT
     number,
     number % 100
 FROM numbers(50000);
+
+ALTER TABLE sc_unused ADD STATISTICS val TYPE MinMax;
+
+ALTER TABLE sc_unused MATERIALIZE STATISTICS ALL;
 
 SELECT sum(val)
 FROM sc_unused
@@ -82,6 +90,10 @@ INSERT INTO st_cm_lc SELECT
     number,
     if(number % 4 = 0, 'PROMO', concat('X', toString(number % 1000)))
 FROM numbers(60000);
+
+ALTER TABLE st_cm_lc ADD STATISTICS cat TYPE CountMin;
+
+ALTER TABLE st_cm_lc MATERIALIZE STATISTICS ALL;
 
 SELECT count()
 FROM st_cm_lc
@@ -133,6 +145,14 @@ INSERT INTO sj_b SELECT
     number,
     if(number % 5 = 0, 'PROMO', 'OTHER')
 FROM numbers(60000);
+
+ALTER TABLE sj_a ADD STATISTICS id TYPE Uniq;
+
+ALTER TABLE sj_b ADD STATISTICS id TYPE Uniq;
+
+ALTER TABLE sj_a MATERIALIZE STATISTICS ALL;
+
+ALTER TABLE sj_b MATERIALIZE STATISTICS ALL;
 
 SELECT count()
 FROM

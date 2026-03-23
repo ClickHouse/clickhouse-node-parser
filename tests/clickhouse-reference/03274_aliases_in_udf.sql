@@ -14,7 +14,11 @@ CREATE TABLE IF NOT EXISTS test_table
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+ALTER TABLE test_table ADD COLUMN mat_a String MATERIALIZED 03274_test_function(metadata_a);
+ALTER TABLE test_table MATERIALIZE COLUMN `mat_a`;
+ALTER TABLE test_table ADD COLUMN mat_b String MATERIALIZED 03274_test_function(metadata_b); -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 SET skip_redundant_aliases_in_udf = 1;
+ALTER TABLE test_table MATERIALIZE COLUMN `mat_b`;
 INSERT INTO test_table SELECT 'a', 'b';
 SELECT mat_a FROM test_table;
 SELECT mat_b FROM test_table;

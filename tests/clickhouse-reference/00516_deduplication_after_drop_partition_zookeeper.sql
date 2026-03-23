@@ -7,6 +7,7 @@ INSERT INTO deduplication_by_partition VALUES ('2000-01-01', 1);
 INSERT INTO deduplication_by_partition VALUES ('2000-01-01', 2), ('2000-01-01', 3);
 INSERT INTO deduplication_by_partition VALUES ('2000-02-01', 3), ('2000-02-01', 4), ('2000-02-01', 5);
 SELECT * FROM deduplication_by_partition ORDER BY d, x;
+ALTER TABLE deduplication_by_partition DROP PARTITION 200001;
 INSERT INTO deduplication_by_partition VALUES ('2000-01-01', 4);
 INSERT INTO deduplication_by_partition VALUES ('2000-02-01', 6), ('2000-02-01', 7);
 DROP TABLE deduplication_by_partition;

@@ -34,3 +34,8 @@ TO dst
 AS
 SELECT *
 FROM src;
+
+ALTER TABLE mv MODIFY QUERY WITH 'dict' AS dict_name
+
+SELECT dictGetInt32(dict_name, 'value', key)
+FROM src;

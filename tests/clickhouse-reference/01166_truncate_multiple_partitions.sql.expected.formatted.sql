@@ -20,6 +20,16 @@ SELECT
     sum(n)
 FROM trunc;
 
+ALTER TABLE trunc DROP PARTITION ALL;
+
+ALTER TABLE trunc ATTACH PARTITION ID '0';
+
+ALTER TABLE trunc ATTACH PARTITION ID '1';
+
+ALTER TABLE trunc ATTACH PARTITION ID '2';
+
+ALTER TABLE trunc ATTACH PARTITION ID '3';
+
 DROP TABLE trunc;
 
 SET default_table_engine = 'MergeTree';

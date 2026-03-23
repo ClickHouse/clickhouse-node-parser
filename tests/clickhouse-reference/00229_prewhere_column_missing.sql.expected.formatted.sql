@@ -14,6 +14,8 @@ INSERT INTO prewhere_column_missing (x);
 SELECT *
 FROM prewhere_column_missing;
 
+ALTER TABLE prewhere_column_missing ADD COLUMN arr Array(UInt64);
+
 SELECT
     *,
     arraySum(arr) AS s
@@ -47,6 +49,8 @@ SELECT
     length(arr) AS l
 FROM prewhere_column_missing
 PREWHERE l = 0;
+
+ALTER TABLE prewhere_column_missing ADD COLUMN hash_x UInt64 DEFAULT intHash64(x);
 
 SELECT *
 FROM prewhere_column_missing

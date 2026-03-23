@@ -7,6 +7,8 @@ CREATE TABLE t0
 ENGINE = MergeTree
 ORDER BY tuple();
 
+ALTER TABLE t0 MODIFY COLUMN c0 Int TTL indexHint(*); -- { serverError UNKNOWN_IDENTIFIER }
+
 DROP TABLE t0;
 
 DROP TABLE IF EXISTS `02577_keepermap_delete_update`;

@@ -9,6 +9,8 @@ CREATE TABLE nested_test
 ENGINE = MergeTree
 ORDER BY x;
 
+ALTER TABLE nested_test ADD COLUMN `nest.col3` Array(LowCardinality(String));
+
 INSERT INTO nested_test (x, `nest.col1`, `nest.col2`);
 
 SELECT *

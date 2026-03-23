@@ -19,6 +19,7 @@ create table has_final_mark (i int, j int) engine MergeTree partition by i % 2 o
 create table mixed_final_mark (i int, j int) engine MergeTree partition by i % 2 order by j settings index_granularity = 10;
 set max_rows_to_read = 100000;
 insert into has_final_mark select number, number from numbers(10000);
+alter table mixed_final_mark attach partition 1 from has_final_mark;
 set max_rows_to_read = 2;
 select min(j) from has_final_mark;
 select min(j) from mixed_final_mark;

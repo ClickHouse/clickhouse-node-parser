@@ -26,3 +26,5 @@ SELECT *
 FROM p
 ORDER BY i ASC
 SETTINGS max_partitions_to_read = 0; -- unlimited
+
+ALTER TABLE p MODIFY SETTING max_partitions_to_read = 2;

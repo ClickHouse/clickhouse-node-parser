@@ -12,4 +12,6 @@ SETTINGS enable_vertical_merge_algorithm = 1, vertical_merge_algorithm_min_rows_
 
 INSERT INTO `03250_avoid_prefetch`;
 
+ALTER TABLE `03250_avoid_prefetch` DELETE WHERE id = 1;
+
 INSERT INTO `03250_avoid_prefetch`;

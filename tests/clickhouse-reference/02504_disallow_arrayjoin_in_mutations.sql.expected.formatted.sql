@@ -13,4 +13,6 @@ INSERT INTO test_02504;
 SELECT *
 FROM test_02504;
 
+ALTER TABLE test_02504 UPDATE b = 33 WHERE arrayJoin([1, 2]) = a; -- { serverError UNEXPECTED_EXPRESSION}
+
 DROP TABLE test_02504;

@@ -17,6 +17,7 @@ SELECT * FROM alias_2 ORDER BY id;
 INSERT INTO alias_1 VALUES (4, 'four');
 SELECT * FROM source_table ORDER BY id;
 INSERT INTO alias_2 VALUES (5, 'five');
+ALTER TABLE alias_1 ADD COLUMN status String DEFAULT 'active';
 SELECT id, value, status FROM source_table ORDER BY id;
 INSERT INTO alias_1 VALUES (6, 'six', 'inactive');
 SELECT count() FROM source_table;
@@ -33,7 +34,10 @@ INSERT INTO alias_4 VALUES (12, 'twelve', 'active');
 SELECT count() AS parts_after FROM system.parts
 WHERE database = currentDatabase() AND table = 'source_table' AND active;
 SELECT count() FROM alias_4;
+ALTER TABLE alias_4 MODIFY SETTING max_bytes_to_merge_at_max_space_in_pool = 1000000;
+ALTER TABLE alias_4 UPDATE value = 'updated' WHERE id = 1 SETTINGS mutations_sync = 1;
 SELECT id, value, status FROM source_table WHERE id = 1;
+ALTER TABLE alias_4 DELETE WHERE id = 2 SETTINGS mutations_sync = 1;
 SELECT count() FROM source_table WHERE id = 2;
 DROP TABLE IF EXISTS source_partitioned;
 DROP TABLE IF EXISTS alias_part;
@@ -42,6 +46,9 @@ CREATE TABLE source_partitioned (date Date, id UInt32, value String)
 CREATE TABLE alias_part ENGINE = Alias('source_partitioned');
 INSERT INTO alias_part VALUES ('2024-01-15', 1, 'january'), ('2024-02-15', 2, 'february'), ('2024-03-15', 3, 'march');
 SELECT count() FROM alias_part;
+ALTER TABLE alias_part DETACH PARTITION '202401';
+ALTER TABLE alias_part ATTACH PARTITION '202401';
+ALTER TABLE alias_part DROP PARTITION '202403';
 INSERT INTO alias_4 SELECT id + 100, value, status FROM source_table WHERE id <= 10;
 SELECT count() FROM source_table WHERE id > 100;
 -- Test: EXCHANGE TABLES
@@ -77,12 +84,18 @@ CREATE TABLE metadata_target (id UInt32, value String) ENGINE = MergeTree ORDER 
 CREATE TABLE metadata_alias ENGINE = Alias('metadata_target');
 INSERT INTO metadata_target VALUES (1, 'one'), (2, 'two');
 SELECT * FROM metadata_alias ORDER BY id;
+-- ALTER target table DIRECTLY (not through alias)
+ALTER TABLE metadata_target ADD COLUMN extra String DEFAULT 'data1';
 SELECT name FROM system.columns WHERE database = currentDatabase() AND table = 'metadata_alias' ORDER BY name;
 -- INSERT through alias with new column should work
 INSERT INTO metadata_alias VALUES (3, 'three', 'data3');
+ALTER TABLE metadata_target ADD COLUMN num UInt32 DEFAULT 0;
+ALTER TABLE metadata_target MODIFY COLUMN extra String DEFAULT 'data2';
 -- Insert with all columns
 INSERT INTO metadata_alias VALUES (4, 'four', DEFAULT, 100);
 SELECT id, value, extra, num FROM metadata_alias WHERE id = 4;
+-- DROP COLUMN on target
+ALTER TABLE metadata_target DROP COLUMN num;
 -- INSERT after DROP should work (without dropped column)
 INSERT INTO metadata_alias VALUES (5, 'five', 'data5');
 SELECT id, value, extra FROM metadata_alias WHERE id = 5;

@@ -34,6 +34,24 @@ CREATE TABLE replacing
 ENGINE = ReplacingMergeTree(ver, is_deleted)
 ORDER BY key;
 
+ALTER TABLE replacing MODIFY COLUMN ver String; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE replacing MODIFY COLUMN ver Int128;
+
+ALTER TABLE replacing MODIFY COLUMN is_deleted String; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE replacing MODIFY COLUMN is_deleted UInt16; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE replacing MODIFY COLUMN is_deleted Int8; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE replacing DROP COLUMN ver; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE replacing DROP COLUMN is_deleted; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE replacing RENAME COLUMN ver TO ver2; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE replacing RENAME COLUMN is_deleted TO is_deleted2; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
 CREATE TABLE collapsing_wrong
 (
     key Int64,
@@ -65,6 +83,14 @@ CREATE TABLE collapsing
 )
 ENGINE = CollapsingMergeTree(sign)
 ORDER BY key;
+
+ALTER TABLE collapsing MODIFY COLUMN sign String; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE collapsing DROP COLUMN sign; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE collapsing RENAME COLUMN sign TO sign2; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE collapsing MODIFY COLUMN sign MODIFY SETTING max_compress_block_size = 123456; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
 
 CREATE TABLE versioned_collapsing_wrong
 (

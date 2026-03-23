@@ -27,3 +27,5 @@ FROM test_view
 ORDER BY
     f1 ASC,
     f2 ASC;
+
+ALTER TABLE test_view DELETE WHERE pk = 2; --{serverError NOT_IMPLEMENTED}

@@ -37,4 +37,8 @@ SELECT
     count()
 FROM test_03285_mat_ttl;
 
+ALTER TABLE test_03285_mat_ttl MODIFY TTL event_time + toIntervalMonth(1) SETTINGS mutations_sync = 1;
+
+ALTER TABLE test_03285_mat_ttl MODIFY TTL event_time - toIntervalMonth(3) SETTINGS mutations_sync = 1;
+
 DROP TABLE test_03285_mat_ttl;

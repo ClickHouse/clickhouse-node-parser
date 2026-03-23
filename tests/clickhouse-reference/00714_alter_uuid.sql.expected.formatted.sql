@@ -28,6 +28,10 @@ PARTITION BY toDate(created_at);
 
 INSERT INTO uuid;
 
+ALTER TABLE uuid MODIFY COLUMN id0 UUID;
+
+ALTER TABLE uuid MODIFY COLUMN id1 UUID;
+
 SELECT
     id0,
     id1

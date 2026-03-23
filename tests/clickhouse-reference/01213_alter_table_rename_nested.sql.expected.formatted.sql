@@ -27,6 +27,10 @@ SELECT n.y
 FROM table_for_rename_nested
 WHERE key = 7;
 
+ALTER TABLE table_for_rename_nested RENAME COLUMN `n.x` TO `n.renamed_x`;
+
+ALTER TABLE table_for_rename_nested RENAME COLUMN `n.y` TO `n.renamed_y`;
+
 SELECT
     key,
     n.renamed_x
@@ -38,3 +42,12 @@ SELECT
     n.renamed_y
 FROM table_for_rename_nested
 WHERE key = 7;
+
+ALTER TABLE table_for_rename_nested RENAME COLUMN `n.renamed_x` TO not_nested_x; --{serverError BAD_ARGUMENTS}
+
+ALTER TABLE table_for_rename_nested RENAME COLUMN `n.renamed_x` TO `q.renamed_x`; --{serverError BAD_ARGUMENTS}
+
+ALTER TABLE table_for_rename_nested RENAME COLUMN value1 TO `q.renamed_x`; --{serverError BAD_ARGUMENTS}
+
+-- Currently not implemented
+ALTER TABLE table_for_rename_nested RENAME COLUMN n TO renamed_n; --{serverError NOT_IMPLEMENTED}

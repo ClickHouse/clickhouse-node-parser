@@ -13,6 +13,8 @@ SETTINGS index_granularity = 8192;
 
 INSERT INTO t1 (date, s1, s2);
 
+ALTER TABLE t1 ADD COLUMN s3 String DEFAULT concat(s2, '_', s1);
+
 INSERT INTO t1 (date, s1, s2);
 
 SELECT

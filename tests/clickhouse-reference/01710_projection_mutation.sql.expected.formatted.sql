@@ -22,3 +22,6 @@ INSERT INTO t SELECT
     today() + (number % 30),
     number
 FROM numbers(1000);
+
+ALTER TABLE t UPDATE value = 0 WHERE (value > 0)
+AND (created_at >= '2021-12-21') SETTINGS optimize_use_projections = 1;

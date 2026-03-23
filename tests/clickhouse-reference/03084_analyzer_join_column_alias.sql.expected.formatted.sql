@@ -16,6 +16,8 @@ SELECT
     'website' AS event_source,
     '2023-01-01 00:00:00'::DateTime AS timestamp;
 
+ALTER TABLE t2 ADD COLUMN date Date ALIAS toDate(timestamp);
+
 SELECT any(t2.date) AS any_val
 FROM
     t1 AS t1

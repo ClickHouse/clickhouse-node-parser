@@ -7,6 +7,8 @@ CREATE TABLE old_syntax_01071_test
 )
 ENGINE = MergeTree(date, id, 8192);
 
+ALTER TABLE old_syntax_01071_test ADD INDEX id_minmax id TYPE minmax GRANULARITY 1; -- { serverError BAD_ARGUMENTS }
+
 CREATE TABLE new_syntax_01071_test
 (
     date Date,
@@ -14,6 +16,8 @@ CREATE TABLE new_syntax_01071_test
 )
 ENGINE = MergeTree()
 ORDER BY id;
+
+ALTER TABLE new_syntax_01071_test ADD INDEX id_minmax id TYPE minmax GRANULARITY 1;
 
 DROP TABLE IF EXISTS old_syntax_01071_test;
 

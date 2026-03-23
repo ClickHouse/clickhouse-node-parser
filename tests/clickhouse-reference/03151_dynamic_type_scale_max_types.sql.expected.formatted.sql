@@ -22,3 +22,9 @@ SELECT
     isDynamicElementInSharedData(n2)
 FROM to_table
 ORDER BY `ALL` ASC;
+
+ALTER TABLE to_table MODIFY COLUMN n2 Dynamic(max_types = 5);
+
+ALTER TABLE to_table MODIFY COLUMN n2 Dynamic(max_types = 0);
+
+ALTER TABLE to_table MODIFY COLUMN n2 Dynamic(max_types = 500); -- { serverError UNEXPECTED_AST_STRUCTURE }

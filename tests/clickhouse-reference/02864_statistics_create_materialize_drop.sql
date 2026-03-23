@@ -14,3 +14,7 @@ CREATE TABLE tab
     pk String,
 ) Engine = MergeTree() ORDER BY pk;
 INSERT INTO tab select number, number, number, toDateTime(number), generateUUIDv4() FROM system.numbers LIMIT 10000;
+ALTER TABLE tab DROP STATISTICS a, b, c, d;
+ALTER TABLE tab ADD STATISTICS b TYPE countmin, uniq;
+ALTER TABLE tab MATERIALIZE STATISTICS b;
+ALTER TABLE tab DROP STATISTICS b;

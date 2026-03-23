@@ -22,6 +22,8 @@ SELECT * FROM sales, products
 WHERE sales.product_id = products.id AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_no_idx' FORMAT Null;
 SET mutations_sync = 2;
+ALTER TABLE sales ADD INDEX date_idx date TYPE minmax GRANULARITY 1;
+ALTER TABLE sales MATERIALIZE INDEX date_idx;
 SELECT * FROM products, sales
 WHERE sales.product_id = products.id AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_idx' FORMAT Null;

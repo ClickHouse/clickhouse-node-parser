@@ -10,6 +10,12 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS add_minmax_index_for_numeric_columns = 0, min_bytes_for_wide_part = 1000, alter_column_secondary_index_mode = 'throw';
 
+ALTER TABLE test DROP COLUMN x; -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
+
+ALTER TABLE test MODIFY SETTING alter_column_secondary_index_mode = 'compatibility';
+
+ALTER TABLE test MODIFY SETTING alter_column_secondary_index_mode = 'rebuild';
+
 INSERT INTO test (x) SELECT number
 FROM numbers(1); -- Compact / packed
 
@@ -21,6 +27,8 @@ SELECT
     min(x),
     max(x)
 FROM test;
+
+ALTER TABLE test DROP COLUMN x; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT
     'alias_after_clear',

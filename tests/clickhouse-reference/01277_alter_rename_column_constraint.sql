@@ -15,8 +15,12 @@ ORDER BY key;
 INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(9);
 INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number) from numbers(9); --{serverError VIOLATED_CONSTRAINT}
 SELECT * FROM table_for_rename ORDER BY key;
+ALTER TABLE table_for_rename RENAME COLUMN value1 TO value4;
+ALTER TABLE table_for_rename RENAME COLUMN value2 TO value5;
 SELECT '-- insert after rename --';
 INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(10, 10);
 INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number) from numbers(10, 10); --{serverError VIOLATED_CONSTRAINT}
+ALTER TABLE table_for_rename RENAME COLUMN value4 TO value1;
+ALTER TABLE table_for_rename RENAME COLUMN value5 TO value2;
 INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(20,10);
 INSERT INTO table_for_rename SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number), toString(number + 2) from numbers(20, 10); --{serverError VIOLATED_CONSTRAINT}

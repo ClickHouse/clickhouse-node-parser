@@ -255,6 +255,40 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "af_avg1",
+          "type": {
+            "name": "AggregateFunction",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "avg"
+                }
+              },
+              {
+                "kind": "type",
+                "type": {
+                  "name": "UInt8"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -337,6 +371,68 @@
         "parts": [
           "af_avg1"
         ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "af_gua",
+          "type": {
+            "name": "AggregateFunction",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "groupUniqArray"
+                }
+              },
+              {
+                "kind": "type",
+                "type": {
+                  "name": "String"
+                }
+              }
+            ]
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "groupUniqArrayState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "---"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "---"
+                  }
+                ],
+                "source": "['---', '---']"
+              }
+            ]
+          }
+        }
       }
     ]
   },

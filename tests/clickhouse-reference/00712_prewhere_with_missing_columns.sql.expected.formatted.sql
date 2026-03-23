@@ -13,6 +13,8 @@ INSERT INTO mergetree_00712;
 SELECT *
 FROM mergetree_00712;
 
+ALTER TABLE mergetree_00712 ADD COLUMN y UInt8 DEFAULT 0;
+
 INSERT INTO mergetree_00712;
 
 SELECT *

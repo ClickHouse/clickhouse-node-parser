@@ -15,8 +15,12 @@ INSERT INTO compress_table;
 SELECT *
 FROM compress_table;
 
+ALTER TABLE compress_table MODIFY COLUMN value3 CODEC(Default);
+
 INSERT INTO compress_table;
 
 SELECT *
 FROM compress_table
 ORDER BY key ASC;
+
+ALTER TABLE compress_table MODIFY COLUMN value2 CODEC(Default(5)); --{serverError BAD_ARGUMENTS}

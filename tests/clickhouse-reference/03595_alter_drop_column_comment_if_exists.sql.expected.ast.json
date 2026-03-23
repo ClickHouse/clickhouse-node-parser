@@ -48,6 +48,118 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_drop_comment"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "c0"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "c0",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "this comment should be silently ignored"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 1: DROP COLUMN + COMMENT COLUMN IF EXISTS (should succeed)",
+      "-- This was previously failing with \"Cannot find column c0 in ColumnsDescription\""
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_drop_comment"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "non_existent_column",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "this should be ignored"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 2: COMMENT COLUMN IF EXISTS on non-existent column (should succeed)"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_drop_comment"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "non_existent_column",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "this should fail"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 3: COMMENT COLUMN without IF EXISTS on non-existent column (should fail)"
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_FOUND_COLUMN_IN_BLOCK }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_drop_comment"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "c1"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "c1",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "dropped column comment"
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "c2",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "existing column comment"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 4: Multiple operations with IF EXISTS"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -180,6 +292,40 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_drop_comment_mt"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "status"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "status",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "dropped status column"
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "value",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "existing value column"
+        }
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {
@@ -214,6 +360,33 @@
     },
     "leadingComments": [
       "-- Test edge case: try to drop and comment the same column without IF EXISTS (should fail)"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_fail"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "c0"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "c0",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "this should fail"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_FOUND_COLUMN_IN_BLOCK }"
     ]
   },
   {

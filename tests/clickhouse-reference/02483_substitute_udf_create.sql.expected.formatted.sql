@@ -26,9 +26,15 @@ ORDER BY id ASC;
 
 CREATE FUNCTION `02483_plustwo` AS a -> a + 2;
 
+ALTER TABLE `02483_substitute_udf` MODIFY COLUMN number UInt32 DEFAULT `02483_plustwo`(id);
+
 INSERT INTO `02483_substitute_udf` (id, number);
 
 CREATE FUNCTION `02483_plusthree` AS a -> a + 3;
+
+ALTER TABLE `02483_substitute_udf` DROP COLUMN number;
+
+ALTER TABLE `02483_substitute_udf` ADD COLUMN new_number UInt32 DEFAULT `02483_plusthree`(id);
 
 INSERT INTO `02483_substitute_udf` (id, new_number);
 

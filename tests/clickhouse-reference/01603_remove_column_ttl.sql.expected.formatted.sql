@@ -20,6 +20,8 @@ SELECT
 FROM table_with_column_ttl
 ORDER BY UserID ASC;
 
+ALTER TABLE table_with_column_ttl MODIFY COLUMN Age;
+
 INSERT INTO table_with_column_ttl;
 
 DROP TABLE table_with_column_ttl;

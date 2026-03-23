@@ -6,7 +6,10 @@ set mutations_sync = 2;
 -- check that ttl info was updated after mutation.
 create table ttl (i Int, a Int, s String) engine = MergeTree order by i;
 insert into ttl values (1, 1, 'a') (2, 1, 'b') (3, 1, 'c') (4, 1, 'd');
+alter table ttl modify ttl a % 2 = 0 ? today() - 10 : toDate('2100-01-01');
+alter table ttl materialize ttl;
 select * from ttl order by i;
+alter table ttl update a = 0 where i % 2 = 0;
 drop table ttl;
 -- check that skip index is updated after column was modified by ttl.
 create table ttl (i Int, a Int, s String default 'b' ttl a % 2 = 0 ? today() - 10 : toDate('2100-01-01'),
@@ -20,4 +23,5 @@ create table ttl (i Int, s String) engine = MergeTree order by i ttl toDate('200
 create table ttl (a Int, b Int, c Int default 42 ttl d, d Date, index ind (b * c) type minmax granularity 1)
 engine = MergeTree order by a;
 insert into ttl values (1, 2, 3, '2100-01-01');
+alter table ttl update d = '2000-01-01' where 1;
 select * from ttl;

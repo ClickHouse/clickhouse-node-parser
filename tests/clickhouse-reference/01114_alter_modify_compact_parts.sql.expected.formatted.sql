@@ -23,5 +23,7 @@ INSERT INTO mt_compact SELECT
     toString(number)
 FROM numbers(1000);
 
+ALTER TABLE mt_compact MODIFY COLUMN s UInt64;
+
 SELECT sum(s)
 FROM mt_compact;

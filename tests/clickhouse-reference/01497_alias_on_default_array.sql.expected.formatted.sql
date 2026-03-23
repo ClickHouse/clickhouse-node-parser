@@ -18,6 +18,8 @@ SELECT
 FROM test_new_col
 ORDER BY csv_col1 ASC;
 
+ALTER TABLE test_new_col ADD COLUMN csv_col3 String DEFAULT csv_as_array[3];
+
 SELECT csv_col3
 FROM test_new_col
 ORDER BY csv_col3 ASC;

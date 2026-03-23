@@ -37,6 +37,10 @@ SELECT
 FROM to_table
 ORDER BY `ALL` ASC;
 
+ALTER TABLE to_table MODIFY COLUMN n2 Dynamic(max_types = 1);
+
+ALTER TABLE to_table MODIFY COLUMN n2 Dynamic(max_types = 10);
+
 DROP TABLE null_table;
 
 DROP VIEW dummy_rmv;

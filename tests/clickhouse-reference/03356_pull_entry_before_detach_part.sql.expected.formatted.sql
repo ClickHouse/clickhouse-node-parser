@@ -12,3 +12,5 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03356/t1', '1')
 ORDER BY tuple();
 
 INSERT INTO t1;
+
+ALTER TABLE t1 DROP PART 'all_0_0_0';

@@ -29,11 +29,19 @@ FROM partitions
 WHERE EventDate < toDate('2015-01-01')
     OR EventDate >= toDate('2015-02-01');
 
+ALTER TABLE partitions DROP PARTITION 201501;
+
+ALTER TABLE partitions ATTACH PARTITION 201501;
+
+ALTER TABLE partitions DROP PARTITION 201403;
+
 INSERT INTO partitions SELECT
     EventDate + UserID % 365 AS EventDate,
     CounterID
 FROM test.hits
 WHERE CounterID = 1704509
     AND toStartOfMonth(EventDate) = toDate('2014-03-01');
+
+ALTER TABLE partitions ATTACH PARTITION 201403;
 
 DROP TABLE partitions;

@@ -35,6 +35,7 @@ VALUES
     (1, 'abc def foo'),
     (2, 'abc def bar#'),
     (3, 'abc baz foo');
+ALTER TABLE tab ADD INDEX  idx(`message`) TYPE text(tokenizer = 'splitByString') GRANULARITY 1;
 INSERT INTO tab(id, message)
 VALUES
     (4, 'abc baz bar'),
@@ -58,6 +59,7 @@ SELECT arraySort(groupArray(id)) FROM tab WHERE hasAllTokens(message, ['abc', 'f
 -- { echoOff }
 
 DROP TABLE tab;
+ALTER TABLE tab ADD INDEX  idx(`message`) TYPE text(tokenizer = 'splitByNonAlpha');
 SELECT arraySort(groupArray(id)) FROM tab WHERE hasAnyTokens(message, ['bar$']); -- test default tokenizer
 SELECT arraySort(groupArray(id)) FROM tab WHERE hasAnyTokens(message, tokens('bar$', 'splitByNonAlpha'));
 SELECT arraySort(groupArray(id)) FROM tab WHERE hasAllTokens(message, ['bar$']); -- test default tokenizer

@@ -41,6 +41,8 @@ FROM (
     )
 WHERE like(s, 'Granules: %');
 
+ALTER TABLE t_lightweight_mut_3 UPDATE v = 1000 WHERE id = 1;
+
 INSERT INTO t_lightweight_mut_3;
 
 SELECT

@@ -5,6 +5,7 @@ INSERT INTO alter_00147 (`n.x`) VALUES (['Hello', 'World']);
 SELECT * FROM alter_00147;
 SELECT * FROM alter_00147 ARRAY JOIN n;
 SELECT * FROM alter_00147 ARRAY JOIN n WHERE n.x LIKE '%Hello%';
+ALTER TABLE alter_00147 ADD COLUMN n.y Array(UInt64);
 INSERT INTO alter_00147 (`n.x`) VALUES (['Hello2', 'World2']);
 SELECT * FROM alter_00147 ORDER BY n.x;
 SELECT * FROM alter_00147 ARRAY JOIN n ORDER BY n.x;

@@ -34,6 +34,11 @@ INSERT INTO t (c1, c18) SELECT
     negate(number)
 FROM numbers(2000000);
 
+ALTER TABLE t ADD PROJECTION p_norm (SELECT *
+ORDER BY c1 ASC);
+
+ALTER TABLE t MATERIALIZE PROJECTION p_norm SETTINGS mutations_sync = 1;
+
 SET optimize_use_projections = 1, max_rows_to_read = 3;
 
 SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;

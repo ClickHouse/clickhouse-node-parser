@@ -32,4 +32,22 @@ WHERE database = currentDatabase()
 
 SELECT '-------------------------------------------------------------------------';
 
+ALTER TABLE test MODIFY SETTING vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1;
+
+ALTER TABLE test ADD COLUMN x Array(UInt32);
+
+ALTER TABLE test DROP COLUMN int;
+
+ALTER TABLE test RENAME COLUMN t TO tt;
+
+ALTER TABLE test DROP COLUMN str, RENAME COLUMN x TO str;
+
+ALTER TABLE test MODIFY COLUMN tt Tuple(a UInt32, b Array(String), c UInt32);
+
+ALTER TABLE test UPDATE tt = tuple(42, ['a'], 42) WHERE 1;
+
+ALTER TABLE test RENAME COLUMN `nested.a` TO `nested.aa`;
+
+ALTER TABLE test RENAME COLUMN `nested.aa` TO `nested.aaa`, RENAME COLUMN `nested.b` TO `nested.bbb`;
+
 DROP TABLE test;

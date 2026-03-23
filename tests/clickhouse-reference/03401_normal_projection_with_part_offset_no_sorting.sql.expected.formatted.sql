@@ -38,6 +38,14 @@ INNER JOIN mergeTreeProjection(currentDatabase(), test, p) AS r
     USING (a)
 SETTINGS enable_analyzer = 1;
 
+ALTER TABLE test ADD PROJECTION p2 (SELECT
+    a,
+    b,
+    _part_offset
+ORDER BY b ASC);
+
+ALTER TABLE test MATERIALIZE PROJECTION p2 SETTINGS mutations_sync = 2;
+
 SELECT sum(l._part_offset = r._parent_part_offset)
 FROM
     test AS l

@@ -31,14 +31,22 @@ INSERT INTO merge_tree_deduplication (key, value) VALUES (9, '9');
 INSERT INTO merge_tree_deduplication (key, value) VALUES (10, '10');
 INSERT INTO merge_tree_deduplication (key, value) VALUES (11, '11');
 INSERT INTO merge_tree_deduplication (key, value) VALUES (12, '12');
+ALTER TABLE merge_tree_deduplication DROP PART '77_9_9_0'; -- some old part
 SELECT key, value FROM merge_tree_deduplication WHERE key = 10;
+ALTER TABLE merge_tree_deduplication DROP PART '77_13_13_0'; -- fresh part
 SELECT key, value FROM merge_tree_deduplication WHERE key = 12;
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (11, '11', 88);
+ALTER TABLE merge_tree_deduplication DROP PARTITION 77;
 SELECT part, key, value FROM merge_tree_deduplication ORDER BY key, part;
+-- Alters....
+
+ALTER TABLE merge_tree_deduplication MODIFY SETTING non_replicated_deduplication_window = 2;
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (1, '1', 33);
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (2, '2', 33);
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (3, '3', 33);
 SELECT * FROM merge_tree_deduplication WHERE part = 33 ORDER BY key;
+ALTER TABLE merge_tree_deduplication MODIFY SETTING non_replicated_deduplication_window = 0;
+ALTER TABLE merge_tree_deduplication MODIFY SETTING non_replicated_deduplication_window = 3;
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (1, '1', 44);
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (2, '2', 44);
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (3, '3', 44);
@@ -55,6 +63,7 @@ ORDER BY key
 SETTINGS disk='s3_plain_rewritable';
 INSERT INTO merge_tree_no_deduplication (key, value) VALUES (1, '1');
 SELECT * FROM merge_tree_no_deduplication ORDER BY key;
+ALTER TABLE merge_tree_no_deduplication MODIFY SETTING non_replicated_deduplication_window = 3;
 INSERT INTO merge_tree_no_deduplication (key, value) VALUES (2, '2');
 INSERT INTO merge_tree_no_deduplication (key, value) VALUES (3, '3');
 INSERT INTO merge_tree_no_deduplication (key, value) VALUES (4, '4');

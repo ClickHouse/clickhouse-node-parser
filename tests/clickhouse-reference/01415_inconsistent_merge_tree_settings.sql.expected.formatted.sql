@@ -16,4 +16,6 @@ INSERT INTO t;
 SELECT *
 FROM t;
 
+ALTER TABLE t UPDATE s = 'world' WHERE x = 1;
+
 DROP TABLE t;

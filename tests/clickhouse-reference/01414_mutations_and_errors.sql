@@ -11,3 +11,5 @@ ORDER BY tuple();
 INSERT INTO mutation_table SELECT toDate('2019-10-01'), number, '42' FROM numbers(100);
 INSERT INTO mutation_table SELECT toDate('2019-10-02'), number, 'Hello' FROM numbers(100);
 SELECT distinct(value) FROM mutation_table ORDER BY value;
+ALTER TABLE mutation_table MODIFY COLUMN value UInt64 SETTINGS mutations_sync = 2; --{serverError UNFINISHED}
+ALTER TABLE mutation_table MODIFY COLUMN value String SETTINGS mutations_sync = 2;

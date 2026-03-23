@@ -27,6 +27,8 @@ LAYOUT(HASHED());
 SELECT *
 FROM d0;
 
+ALTER TABLE t0 ADD COLUMN key2 Int32 DEFAULT dictGetOrDefault('d0', 'value', 0, 1); -- {serverError INFINITE_LOOP}
+
 DROP DICTIONARY d0;
 
 DROP TABLE t0;

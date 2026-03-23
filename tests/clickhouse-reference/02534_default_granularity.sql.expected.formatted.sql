@@ -18,3 +18,5 @@ CREATE TABLE users_02534
 )
 ENGINE = MergeTree
 ORDER BY id;
+
+ALTER TABLE users_02534 ADD INDEX bf_idx name TYPE minmax;

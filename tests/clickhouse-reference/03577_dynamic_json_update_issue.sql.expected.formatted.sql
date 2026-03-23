@@ -16,7 +16,11 @@ INSERT INTO test_updates SELECT
     '{"a" : 42}'
 FROM numbers(10);
 
+ALTER TABLE test_updates (UPDATE json = '{"a" : [1, 2, 3]}' WHERE id >= 5);
+
 SELECT *
 FROM test_updates;
+
+ALTER TABLE test_updates (UPDATE json = '{"a" : [1, 2, 3]}' WHERE 5 >= id);
 
 DROP TABLE test_updates;

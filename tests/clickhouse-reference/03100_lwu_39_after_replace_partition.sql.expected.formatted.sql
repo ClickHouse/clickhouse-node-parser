@@ -12,6 +12,8 @@ SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 
 INSERT INTO t_lwu_replace (c0);
 
+ALTER TABLE t_lwu_replace REPLACE PARTITION ID '0' FROM t_lwu_replace;
+
 SELECT *
 FROM t_lwu_replace
 ORDER BY c0 ASC;

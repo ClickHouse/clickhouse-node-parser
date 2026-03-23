@@ -28,6 +28,8 @@ SET insert_quorum = 2, insert_quorum_parallel = 0, insert_quorum_timeout = 300e3
 
 INSERT INTO mutations_and_quorum1;
 
+ALTER TABLE mutations_and_quorum1 DELETE WHERE something = 'test1' SETTINGS mutations_sync = 2;
+
 SELECT COUNT()
 FROM mutations_and_quorum1;
 

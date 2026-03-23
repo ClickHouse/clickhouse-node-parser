@@ -161,5 +161,61 @@
         "table": "src"
       }
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_QUERY",
+        "query": {
+          "kind": "select",
+          "with": [
+            {
+              "kind": "cteExpr",
+              "name": "dict_name",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "dict"
+              }
+            }
+          ],
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "dictGetInt32",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dict_name"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "value"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "key"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "src"
+          }
+        }
+      }
+    ]
   }
 ]

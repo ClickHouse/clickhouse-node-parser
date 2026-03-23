@@ -12,6 +12,8 @@ ORDER BY id;
 
 INSERT INTO t_lightweight_mut_2;
 
+ALTER TABLE t_lightweight_mut_2 UPDATE v = rand() WHERE 1;
+
 SELECT *
 FROM t_lightweight_mut_2; -- { serverError BAD_ARGUMENTS }
 
@@ -25,5 +27,10 @@ WHERE database = currentDatabase()
     AND table = 't_lightweight_mut_2'
     AND NOT is_done
     AND NOT is_killed;
+
+ALTER TABLE t_lightweight_mut_2 UPDATE v = (
+    SELECT sum(number)
+    FROM numbers(100)
+) WHERE 1;
 
 DROP TABLE t_lightweight_mut_2;

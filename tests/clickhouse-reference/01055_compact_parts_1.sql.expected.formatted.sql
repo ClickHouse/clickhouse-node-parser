@@ -8,6 +8,8 @@ ORDER BY a
 PARTITION BY a
 SETTINGS index_granularity_bytes = 0;
 
+ALTER TABLE mt_compact MODIFY SETTING min_rows_for_wide_part = 1000; -- { serverError NOT_IMPLEMENTED }
+
 CREATE TABLE mt_compact_2
 (
     a Int,
@@ -19,6 +21,8 @@ PARTITION BY a
 SETTINGS min_rows_for_wide_part = 1000;
 
 INSERT INTO mt_compact_2;
+
+ALTER TABLE mt_compact REPLACE PARTITION 1 FROM mt_compact_2; -- { serverError BAD_ARGUMENTS }
 
 DROP TABLE mt_compact;
 
@@ -35,3 +39,8 @@ ENGINE = MergeTree
 ORDER BY a
 PARTITION BY a
 SETTINGS index_granularity_bytes = 0, min_rows_for_wide_part = 1000;
+
+-- Check that alter of other settings works
+ALTER TABLE mt_compact MODIFY SETTING parts_to_delay_insert = 300;
+
+ALTER TABLE mt_compact MODIFY SETTING min_rows_for_wide_part = 0;

@@ -19,3 +19,11 @@ INSERT INTO tab SELECT
 FROM numbers(20);
 
 SET mutations_sync = 2;
+
+ALTER TABLE tab DELETE WHERE x > 1000
+AND y IN (
+    SELECT sum(number + 1)
+    FROM numbers_mt(1e7)
+    GROUP BY number % 2
+    WITH TOTALS
+);

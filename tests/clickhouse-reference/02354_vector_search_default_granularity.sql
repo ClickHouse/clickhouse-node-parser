@@ -9,3 +9,4 @@ SELECT granularity FROM system.data_skipping_indices WHERE database = currentDat
 -- After ALTER TABLE
 DROP TABLE tab;
 CREATE TABLE tab (id Int32, vec Array(Float32)) ENGINE = MergeTree ORDER BY id;
+ALTER TABLE tab ADD INDEX idx(vec) TYPE vector_similarity('hnsw', 'L2Distance', 1);

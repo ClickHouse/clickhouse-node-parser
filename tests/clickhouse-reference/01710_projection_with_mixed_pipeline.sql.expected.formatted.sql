@@ -11,6 +11,8 @@ SETTINGS index_granularity = 8;
 INSERT INTO t SELECT number
 FROM numbers(100);
 
+ALTER TABLE t ADD PROJECTION p (SELECT uniqHLL12(x));
+
 INSERT INTO t SELECT number + 100
 FROM numbers(100);
 

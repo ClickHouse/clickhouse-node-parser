@@ -15,7 +15,11 @@ INSERT INTO test (x, y);
 
 INSERT INTO test (x, y);
 
+ALTER TABLE test DROP PARTITION 2;
+
 SET mutations_sync = 1;
+
+ALTER TABLE test UPDATE z = concat(x, y) WHERE 1;
 
 SELECT *
 FROM test

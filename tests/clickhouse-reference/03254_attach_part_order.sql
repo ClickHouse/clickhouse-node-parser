@@ -24,4 +24,6 @@ INSERT INTO test_table VALUES (toDate('2024-10-24'), 1, '/index', 112);
 INSERT INTO test_table VALUES (toDate('2024-10-24'), 1, '/index', 113);
 INSERT INTO test_table VALUES (toDate('2024-10-24'), 1, '/index', 114);
 INSERT INTO test_table VALUES (toDate('2024-10-24'), 1, '/index', 115);
+ALTER TABLE test_table DETACH PARTITION 202410;
+ALTER TABLE test_table ATTACH PARTITION 202410;
 SELECT id, visits FROM test_table FINAL ORDER BY id FORMAT Vertical;

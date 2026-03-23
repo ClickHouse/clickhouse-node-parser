@@ -27,9 +27,13 @@ SELECT count()
 FROM test_03096
 WHERE b = 0;
 
+ALTER TABLE test_03096 UPDATE b = 100 WHERE b = 0 SETTINGS mutations_sync = 2;
+
 SELECT
     latest_fail_reason == '',
     is_done == 1
 FROM `system`.mutations
 WHERE table = 'test_03096'
     AND database = currentDatabase();
+
+ALTER TABLE test_03096 UPDATE b = 123 WHERE c = 0 SETTINGS mutations_sync = 2;

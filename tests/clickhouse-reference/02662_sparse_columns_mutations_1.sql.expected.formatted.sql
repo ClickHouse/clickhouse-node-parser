@@ -35,10 +35,14 @@ SELECT
     arraySort(groupUniqArray(s))
 FROM t_sparse_mutations_1;
 
+ALTER TABLE t_sparse_mutations_1 MODIFY COLUMN s Nullable(String);
+
 INSERT INTO t_sparse_mutations_1 SELECT
     2,
     number,
     if(number % 21 = 0, 'foo', '')
 FROM numbers(10000);
+
+ALTER TABLE t_sparse_mutations_1 MODIFY COLUMN s String DEFAULT '';
 
 DROP TABLE t_sparse_mutations_1;

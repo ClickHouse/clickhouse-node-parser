@@ -18,6 +18,16 @@ INSERT INTO test SELECT
     '111'
 FROM numbers(5);
 
+ALTER TABLE test UPDATE d = d + throwIf(1) WHERE 1 SETTINGS mutations_sync = 0;
+
+ALTER TABLE test ADD COLUMN x UInt32 DEFAULT 0 SETTINGS mutations_sync = 0;
+
+ALTER TABLE test UPDATE d = x + 1 WHERE 1 SETTINGS mutations_sync = 0;
+
+ALTER TABLE test DROP COLUMN x SETTINGS mutations_sync = 2; -- { serverError BAD_ARGUMENTS }
+
+ALTER TABLE test UPDATE x = x + 1 WHERE 1 SETTINGS mutations_sync = 2;
+
 SELECT *
 FROM test
 FORMAT Null;

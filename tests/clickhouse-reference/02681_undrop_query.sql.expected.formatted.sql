@@ -37,6 +37,8 @@ ORDER BY id;
 
 INSERT INTO `02681_undrop_detach`;
 
+ALTER TABLE `02681_undrop_detach` UPDATE num = 2 WHERE id = 1;
+
 SELECT command
 FROM `system`.mutations
 WHERE table = '02681_undrop_detach'

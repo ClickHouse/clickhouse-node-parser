@@ -26,4 +26,6 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity_bytes = 0;
 
+ALTER TABLE tab ADD INDEX vec_idx1 vec TYPE vector_similarity('hnsw', 'cosineDistance', 1); -- { serverError INVALID_SETTING_VALUE }
+
 DROP TABLE tab;

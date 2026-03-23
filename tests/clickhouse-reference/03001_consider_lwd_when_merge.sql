@@ -6,3 +6,4 @@ INSERT INTO lwd_merge SELECT number FROM numbers(10000);
 INSERT INTO lwd_merge SELECT number FROM numbers(10000, 10000);
 SET optimize_throw_if_noop = 1;
 SELECT count() FROM system.parts WHERE database = currentDatabase() AND table = 'lwd_merge' AND active = 1;
+ALTER TABLE lwd_merge MODIFY SETTING exclude_deleted_rows_for_part_size_in_merge = 1;

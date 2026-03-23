@@ -89,6 +89,9 @@ INSERT INTO tt1 SELECT
     repeat('blob_', number % 10)
 FROM numbers(1000);
 
+ALTER TABLE tt1 ADD PROJECTION proj_v (SELECT *
+ORDER BY v ASC);
+
 INSERT INTO tt1 SELECT
     number,
     toString(number),

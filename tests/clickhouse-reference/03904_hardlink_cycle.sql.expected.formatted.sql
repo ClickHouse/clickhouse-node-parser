@@ -18,4 +18,10 @@ SETTINGS
 
 SET mutations_sync = 2, alter_sync = 2;
 
+ALTER TABLE hardlink_cycle RENAME COLUMN b TO c;
+
+ALTER TABLE hardlink_cycle RENAME COLUMN c TO d;
+
+ALTER TABLE hardlink_cycle RENAME COLUMN d TO e;
+
 DROP TABLE hardlink_cycle;

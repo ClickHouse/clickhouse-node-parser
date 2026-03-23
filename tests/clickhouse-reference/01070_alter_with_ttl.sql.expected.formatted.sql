@@ -10,6 +10,10 @@ ENGINE = MergeTree
 ORDER BY i
 TTL toDate('2020-05-05');
 
+ALTER TABLE alter_ttl ADD COLUMN s String;
+
+ALTER TABLE alter_ttl MODIFY COLUMN s String TTL toDate('2020-01-01');
+
 DROP TABLE alter_ttl;
 
 CREATE TABLE alter_ttl
@@ -20,3 +24,5 @@ CREATE TABLE alter_ttl
 ENGINE = MergeTree
 ORDER BY d
 TTL d + toIntervalMonth(1);
+
+ALTER TABLE alter_ttl MODIFY COLUMN s String TTL d + toIntervalDay(1);

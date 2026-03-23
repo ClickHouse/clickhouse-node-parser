@@ -9,6 +9,8 @@ SET mutations_sync=1;
 -- { echoOn }
 SELECT 'Rows in parts', SUM(rows) FROM system.parts WHERE database = currentDatabase() AND table = 'lwd_test_02521' AND active;
 SELECT 'Count', count() FROM lwd_test_02521;
+ALTER TABLE lwd_test_02521 MODIFY TTL event_time + INTERVAL 1 MONTH SETTINGS mutations_sync = 1;
+ALTER TABLE lwd_test_02521 DELETE WHERE id >= 40000 SETTINGS mutations_sync = 1;
 -- { echoOff }
 
 DROP TABLE lwd_test_02521;

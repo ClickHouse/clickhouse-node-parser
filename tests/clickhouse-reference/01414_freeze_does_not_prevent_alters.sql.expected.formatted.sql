@@ -25,6 +25,14 @@ WHERE database = currentDatabase()
 
 SELECT '---';
 
+ALTER TABLE t FREEZE;
+
 SET mutations_sync = 1;
+
+ALTER TABLE t UPDATE s = 'goodbye' WHERE k = 1;
+
+ALTER TABLE t MODIFY COLUMN s Enum('goodbye' = 1, 'world' = 2);
+
+ALTER TABLE t MODIFY COLUMN s Enum('hello' = 1, 'world' = 2);
 
 DROP TABLE t;

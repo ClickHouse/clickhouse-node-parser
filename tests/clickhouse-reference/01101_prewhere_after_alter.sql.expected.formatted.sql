@@ -27,6 +27,8 @@ INSERT INTO test_b (OldColumn, NewColumn, EventTime);
 
 INSERT INTO test_b (OldColumn, NewColumn, EventTime);
 
+ALTER TABLE test_a ADD COLUMN NewColumn String DEFAULT '' AFTER OldColumn;
+
 INSERT INTO test_a (OldColumn, NewColumn, EventTime);
 
 SELECT NewColumn

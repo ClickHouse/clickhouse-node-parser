@@ -23,6 +23,9 @@ CREATE TABLE eligible_test
 ENGINE = MergeTree
 ORDER BY a; --  SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown
 
+-- ALTER
+ALTER TABLE eligible_test ADD COLUMN b String SETTINGS use_query_cache = true;
+
 -- INSERT
 INSERT INTO eligible_test; -- SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown
 

@@ -16,9 +16,15 @@ ORDER BY i;
 
 INSERT INTO ttl;
 
+ALTER TABLE ttl MODIFY TTL if(a % 2 = 0, today() - 10, toDate('2100-01-01'));
+
+ALTER TABLE ttl MATERIALIZE TTL;
+
 SELECT *
 FROM ttl
 ORDER BY i ASC;
+
+ALTER TABLE ttl UPDATE a = 0 WHERE i % 2 = 0;
 
 DROP TABLE ttl;
 
@@ -67,6 +73,8 @@ ENGINE = MergeTree
 ORDER BY a;
 
 INSERT INTO ttl;
+
+ALTER TABLE ttl UPDATE d = '2000-01-01' WHERE 1;
 
 SELECT *
 FROM ttl;

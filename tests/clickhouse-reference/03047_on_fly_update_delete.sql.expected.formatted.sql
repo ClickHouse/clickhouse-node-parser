@@ -33,6 +33,10 @@ WHERE database = currentDatabase()
 
 SET mutations_sync = 0;
 
+ALTER TABLE t_lightweight_mut_6 UPDATE v = v * 2 WHERE id % 5 = 0;
+
+ALTER TABLE t_lightweight_mut_6 DELETE WHERE id % 3 = 0;
+
 SELECT
     count(),
     sum(v)
@@ -51,6 +55,8 @@ SELECT
 FROM t_lightweight_mut_6
 PREWHERE id % 5 = 0
 SETTINGS apply_mutations_on_fly = 0;
+
+ALTER TABLE t_lightweight_mut_6 UPDATE v = v WHERE 1;
 
 SELECT count()
 FROM `system`.mutations

@@ -24,6 +24,8 @@ GROUP BY
     i
 FORMAT Null;
 
+ALTER TABLE t02006 ON CLUSTER test_shard_localhost ADD COLUMN f UInt64 FORMAT Null;
+
 DROP TABLE IF EXISTS tt02006 ON CLUSTER test_shard_localhost FORMAT Null;
 
 SET enable_analyzer = 1;

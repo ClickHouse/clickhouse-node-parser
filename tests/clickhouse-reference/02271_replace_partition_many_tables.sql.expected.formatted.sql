@@ -51,6 +51,10 @@ ENGINE = ReplicatedMergeTree('/test/02271_replace_partition_many/{database}/dest
 ORDER BY tuple()
 PARTITION BY key;
 
+ALTER TABLE replace_partition_dest1 REPLACE PARTITION 1 FROM replace_partition_source;
+
+ALTER TABLE replace_partition_dest2 REPLACE PARTITION 1 FROM replace_partition_source;
+
 SELECT sleep(3)
 FORMAT Null;
 

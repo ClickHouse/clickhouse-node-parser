@@ -11,5 +11,9 @@ ORDER BY key;
 
 INSERT INTO alter_drop_version;
 
+ALTER TABLE alter_drop_version DROP COLUMN ver; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE alter_drop_version RENAME COLUMN ver TO rev; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
 SELECT *
 FROM alter_drop_version;

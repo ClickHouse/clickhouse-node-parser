@@ -47,6 +47,8 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM not_partitioned_replica2_00502;
 
+ALTER TABLE not_partitioned_replica1_00502 DROP PARTITION ID 'all';
+
 DROP TABLE not_partitioned_replica1_00502;
 
 DROP TABLE not_partitioned_replica2_00502;
@@ -98,6 +100,8 @@ ORDER BY name ASC;
 
 SELECT sum(x)
 FROM partitioned_by_week_replica2;
+
+ALTER TABLE partitioned_by_week_replica1 DROP PARTITION '1999-12-27';
 
 DROP TABLE partitioned_by_week_replica1;
 
@@ -152,6 +156,8 @@ ORDER BY name ASC;
 SELECT sum(y)
 FROM partitioned_by_tuple_replica2_00502;
 
+ALTER TABLE partitioned_by_tuple_replica1_00502 DROP PARTITION ID '20000101-1';
+
 DROP TABLE partitioned_by_tuple_replica1_00502;
 
 DROP TABLE partitioned_by_tuple_replica2_00502;
@@ -203,6 +209,8 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM partitioned_by_string_replica2;
 
+ALTER TABLE partitioned_by_string_replica1 DROP PARTITION 'bbb';
+
 DROP TABLE partitioned_by_string_replica1;
 
 DROP TABLE partitioned_by_string_replica2;
@@ -242,6 +250,8 @@ ORDER BY name ASC;
 SELECT *
 FROM without_fixed_size_columns_replica2
 ORDER BY s ASC;
+
+ALTER TABLE without_fixed_size_columns_replica1 DROP PARTITION 1;
 
 DROP TABLE without_fixed_size_columns_replica1;
 

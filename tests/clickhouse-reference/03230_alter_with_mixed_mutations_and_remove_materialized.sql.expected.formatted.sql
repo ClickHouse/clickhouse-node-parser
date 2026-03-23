@@ -25,6 +25,9 @@ ORDER BY
     table ASC,
     name ASC;
 
+-- DROP INDEX is important to make the mutation not a pure metadata mutation
+ALTER TABLE a DROP INDEX some_index, MODIFY COLUMN y SETTINGS alter_sync = 2, mutations_sync = 2;
+
 SELECT
     'AFTER',
     table,

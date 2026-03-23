@@ -33,6 +33,8 @@ WHERE data_joined.id != 42;
 
 INSERT INTO src;
 
+ALTER TABLE src DROP COLUMN dummy;
+
 SELECT *
 FROM src;
 

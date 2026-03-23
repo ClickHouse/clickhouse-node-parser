@@ -70,6 +70,29 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "no_order"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ],
+          "parenthesized": true
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {
@@ -145,6 +168,51 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "old_style"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "y",
+          "type": {
+            "name": "UInt32"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          ],
+          "source": "(x, y)"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {
@@ -208,6 +276,254 @@
           "parts": [
             "y"
           ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "negate",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "val"
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": "(x, y, -val)"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Can't add an expression with existing column to ORDER BY. */"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "z",
+          "type": {
+            "name": "UInt32"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "negate",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "z"
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": "(x, y, -z)"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Can't add an expression with existing column to ORDER BY. */"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "nonexistent"
+              ]
+            }
+          ],
+          "source": "(x, y, nonexistent)"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Can't add nonexistent column to ORDER BY. */"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Can't modyfy ORDER BY so that it is no longer a prefix of the PRIMARY KEY. */"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "z",
+          "type": {
+            "name": "UInt32"
+          }
+        },
+        "afterColumn": "y"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "negate",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "z"
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": "(x, y, -z)"
         }
       }
     ]

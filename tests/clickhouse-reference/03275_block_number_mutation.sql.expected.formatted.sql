@@ -16,6 +16,8 @@ INSERT INTO t_block_number_delete SELECT
     now() - toIntervalMinute(number)
 FROM numbers(10);
 
+ALTER TABLE t_block_number_delete DELETE WHERE x < 2;
+
 SELECT
     count(),
     sum(x)

@@ -60,6 +60,8 @@ CREATE TABLE mt
 ENGINE = MergeTree()
 ORDER BY key;
 
+ALTER TABLE mt DELETE WHERE 1;
+
 SELECT
     'system.mutations',
     count()

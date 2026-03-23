@@ -18,11 +18,15 @@ INSERT INTO columns_with_multiple_streams;
 SELECT *
 FROM columns_with_multiple_streams;
 
+ALTER TABLE columns_with_multiple_streams MODIFY COLUMN field1 Nullable(UInt8);
+
 INSERT INTO columns_with_multiple_streams;
 
 SELECT *
 FROM columns_with_multiple_streams
 ORDER BY field0 ASC;
+
+ALTER TABLE columns_with_multiple_streams MODIFY COLUMN field3 CODEC(Delta, Default);
 
 INSERT INTO columns_with_multiple_streams;
 
@@ -44,11 +48,15 @@ INSERT INTO columns_with_multiple_streams_compact;
 SELECT *
 FROM columns_with_multiple_streams_compact;
 
+ALTER TABLE columns_with_multiple_streams_compact MODIFY COLUMN field1 Nullable(UInt8);
+
 INSERT INTO columns_with_multiple_streams_compact;
 
 SELECT *
 FROM columns_with_multiple_streams_compact
 ORDER BY field0 ASC;
+
+ALTER TABLE columns_with_multiple_streams_compact MODIFY COLUMN field3 CODEC(Delta, Default);
 
 INSERT INTO columns_with_multiple_streams_compact;
 

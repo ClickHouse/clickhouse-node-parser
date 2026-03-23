@@ -12,6 +12,14 @@ SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO src;
 
+ALTER TABLE src DROP PARTITION tuple();
+
+ALTER TABLE src MODIFY COLUMN B Nullable(String);
+
+ALTER TABLE src ATTACH PARTITION tuple();
+
+ALTER TABLE src UPDATE C = 'test1' WHERE 1 SETTINGS mutations_sync = 2;
+
 SELECT *
 FROM src;
 
@@ -26,6 +34,12 @@ ORDER BY A
 SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO src;
+
+ALTER TABLE src MODIFY COLUMN A LowCardinality(String);
+
+ALTER TABLE src MODIFY COLUMN C LowCardinality(String);
+
+ALTER TABLE src RENAME COLUMN B TO D;
 
 SELECT '-----';
 

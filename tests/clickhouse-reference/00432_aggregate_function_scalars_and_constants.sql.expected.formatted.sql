@@ -23,6 +23,8 @@ FROM agg_func_col
 GROUP BY k
 ORDER BY k ASC;
 
+ALTER TABLE agg_func_col ADD COLUMN af_avg1 AggregateFunction(avg, UInt8);
+
 SELECT
     k,
     sumMerge(d),
@@ -32,6 +34,8 @@ GROUP BY k
 ORDER BY k ASC;
 
 INSERT INTO agg_func_col (k, af_avg1);
+
+ALTER TABLE agg_func_col ADD COLUMN af_gua AggregateFunction(groupUniqArray, String) DEFAULT arrayReduce('groupUniqArrayState', ['---', '---']);
 
 SELECT
     k,

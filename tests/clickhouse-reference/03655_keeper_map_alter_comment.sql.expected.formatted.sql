@@ -30,4 +30,6 @@ SELECT
 FROM `system`.zookeeper
 WHERE path = concat('/clickhouse/databases/', currentDatabase(), '/metadata');
 
+ALTER TABLE `03655_keepermap` COMMENT COLUMN k 'some comment';
+
 DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};

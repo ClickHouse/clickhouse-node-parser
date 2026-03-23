@@ -13,6 +13,10 @@ SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 INSERT INTO t_lwu_add_column (a) SELECT number
 FROM numbers(100000);
 
+ALTER TABLE t_lwu_add_column ADD COLUMN b UInt64;
+
+ALTER TABLE t_lwu_add_column ADD COLUMN c Array(String);
+
 SELECT
     a % 6 AS n,
     sum(b),

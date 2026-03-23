@@ -34,4 +34,8 @@ INSERT INTO t2_local;
 
 INSERT INTO t2_local;
 
+ALTER TABLE t1_local ON CLUSTER test_shard_localhost REPLACE PARTITION 'partition1' FROM t2_local;
+
+ALTER TABLE t1_local ON CLUSTER test_shard_localhost MOVE PARTITION 'partition2' TO TABLE t2_local;
+
 DROP DATABASE `02028_db` ON CLUSTER test_shard_localhost;

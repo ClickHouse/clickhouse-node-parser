@@ -13,6 +13,8 @@ INSERT INTO multidimensional;
 SELECT *
 FROM multidimensional;
 
+ALTER TABLE multidimensional ADD COLUMN t Tuple(String, Array(Nullable(String)), Tuple(UInt32, Date));
+
 INSERT INTO multidimensional (t);
 
 SELECT *

@@ -15,6 +15,7 @@ select 'system.rocksdb', count()>0 from system.rocksdb where exists(select 1) an
 select 'system.databases', count() from system.databases where exists(select 1) and database = currentDatabase();
 drop table if exists mt;
 create table mt (key Int) engine=MergeTree() order by key;
+alter table mt delete where 1;
 select 'system.mutations', count() from system.mutations where exists(select 1) and database = currentDatabase();
 drop table if exists rep1;
 drop table if exists rep2;

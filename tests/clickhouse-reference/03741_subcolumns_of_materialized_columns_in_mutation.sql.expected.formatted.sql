@@ -10,6 +10,8 @@ ORDER BY tuple();
 
 INSERT INTO test SELECT '{"a" : 42}';
 
+ALTER TABLE test UPDATE s = '{}' WHERE json.a = 42 SETTINGS mutations_sync = 1;
+
 SELECT *
 FROM test;
 

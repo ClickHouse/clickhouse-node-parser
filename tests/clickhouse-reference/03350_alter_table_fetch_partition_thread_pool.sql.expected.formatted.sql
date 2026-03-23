@@ -32,6 +32,8 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'data1';
 
+ALTER TABLE data2 FETCH PARTITION tuple() FROM '/tables/{database}/data1';
+
 SELECT
     'detached parts in data2',
     count()

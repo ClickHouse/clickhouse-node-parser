@@ -20,6 +20,8 @@ INSERT INTO tab SELECT
     concat('v', toString(number))
 FROM numbers(100000);
 
+ALTER TABLE tab ADD INDEX idx_text text TYPE text(tokenizer = ngrams(3));
+
 INSERT INTO tab SELECT
     number,
     concat('v', toString(number + 1000000))
@@ -56,5 +58,10 @@ WHERE ilike(`explain`, '%Granules%');
 
 -- ------------------------------------------------------------
 SET mutations_sync = 2;
+
+ALTER TABLE tab DROP INDEX idx_text;
+
+-- ------------------------------------------------------------
+ALTER TABLE tab MATERIALIZE INDEX idx_text;
 
 DROP TABLE tab;

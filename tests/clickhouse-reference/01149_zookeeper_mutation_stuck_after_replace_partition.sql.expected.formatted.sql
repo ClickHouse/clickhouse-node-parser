@@ -50,6 +50,12 @@ ORDER BY
 
 SET mutations_sync = 1;
 
+ALTER TABLE rmt UPDATE s = concat('s', toString(n)) WHERE 1;
+
+ALTER TABLE rmt REPLACE PARTITION '0' FROM mt;
+
+ALTER TABLE rmt DROP COLUMN s;
+
 SELECT
     mutation_id,
     command,
@@ -65,6 +71,8 @@ DROP TABLE rmt;
 SET replication_alter_partitions_sync = 0;
 
 INSERT INTO rmt;
+
+ALTER TABLE rmt DROP PARTITION '0';
 
 SET replication_alter_partitions_sync = 1;
 

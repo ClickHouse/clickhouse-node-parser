@@ -22,6 +22,8 @@ ORDER BY
     d ASC,
     x ASC;
 
+ALTER TABLE deduplication_by_partition DROP PARTITION 200001;
+
 INSERT INTO deduplication_by_partition;
 
 INSERT INTO deduplication_by_partition;

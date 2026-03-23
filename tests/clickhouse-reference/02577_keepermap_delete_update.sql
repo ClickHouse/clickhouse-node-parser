@@ -5,5 +5,10 @@ CREATE TABLE 02577_keepermap_delete_update (key UInt64, value String, value2 UIn
 INSERT INTO 02577_keepermap_delete_update VALUES (1, 'Some string', 0), (2, 'Some other string', 0), (3, 'random', 0), (4, 'random2', 0);
 SELECT *, _version FROM 02577_keepermap_delete_update ORDER BY key;
 SELECT '-----------';
+ALTER TABLE 02577_keepermap_delete_update DELETE WHERE key >= 4;
 SELECT count() FROM 02577_keepermap_delete_update;
 INSERT INTO 02577_keepermap_delete_update VALUES (1, 'String', 10), (2, 'String', 20), (3, 'String', 30), (4, 'String', 40);
+ALTER TABLE 02577_keepermap_delete_update UPDATE value = 'Another' WHERE key > 2;
+ALTER TABLE 02577_keepermap_delete_update UPDATE key = key * 10 WHERE 1 = 1; -- { serverError BAD_ARGUMENTS }
+ALTER TABLE 02577_keepermap_delete_update UPDATE value2 = value2 * 10 + 2 WHERE value2 < 100;
+ALTER TABLE 02577_keepermap_delete_update ON CLUSTER test_shard_localhost UPDATE value2 = value2 * 10 + 2 WHERE value2 < 100; -- { serverError BAD_ARGUMENTS }

@@ -27,6 +27,8 @@ SELECT d
 FROM attach_r1
 ORDER BY d ASC;
 
+ALTER TABLE attach_r2 DROP PARTITION 201402;
+
 DROP TABLE attach_r1;
 
 DROP TABLE attach_r2;

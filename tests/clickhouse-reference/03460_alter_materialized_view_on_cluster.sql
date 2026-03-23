@@ -2,7 +2,9 @@
 -- ^ due to the usage of ON CLUSTER queries
 
 SET distributed_ddl_output_mode = 'none', enable_analyzer = true;
+
 drop table if exists source, mview;
+
 CREATE TABLE source
 (
     timestamp DateTime,
@@ -11,6 +13,7 @@ CREATE TABLE source
 )
 ENGINE = MergeTree Partition by toYYYYMM(timestamp)
 ORDER BY _id TTL toDateTime(timestamp + toIntervalDay(7));
+
 CREATE MATERIALIZED VIEW mview on cluster test_shard_localhost
 ENGINE =  SummingMergeTree ORDER BY (day, card_id)
 as SELECT
@@ -18,7 +21,9 @@ as SELECT
     card_id,
     count(*) AS card_view
 FROM source GROUP BY (day, card_id);
+
 DROP TABLE mview;
+
 CREATE MATERIALIZED VIEW mview on cluster test_shard_localhost
 (
     day Date,
@@ -31,4 +36,7 @@ as SELECT
     card_id,
     count(*) AS card_view
 FROM source GROUP BY (day, card_id);
+
+alter table source on cluster test_shard_localhost MODIFY SETTING ttl_only_drop_parts = 1;
+
 drop table if exists mview, source;

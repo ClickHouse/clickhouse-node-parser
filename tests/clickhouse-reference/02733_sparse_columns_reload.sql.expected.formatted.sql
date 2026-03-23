@@ -18,4 +18,6 @@ SELECT count()
 FROM t_sparse_reload
 WHERE NOT ignore(*);
 
+ALTER TABLE t_sparse_reload MODIFY SETTING ratio_of_defaults_for_sparse_serialization = 1.0;
+
 DROP TABLE t_sparse_reload;

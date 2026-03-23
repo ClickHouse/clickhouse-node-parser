@@ -8,3 +8,5 @@ CREATE TABLE table2
 Engine = MergeTree()
 PARTITION BY toYYYYMM(EventDate)
 ORDER BY Id;
+ALTER TABLE table2 MODIFY COLUMN `Value` DEFAULT 'some_string'; --{serverError CANNOT_PARSE_TEXT}
+ALTER TABLE table2 ADD COLUMN `Value2` DEFAULT 'some_string'; --{serverError BAD_ARGUMENTS}

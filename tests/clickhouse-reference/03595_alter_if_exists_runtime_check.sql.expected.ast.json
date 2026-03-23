@@ -43,12 +43,62 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_if_exists"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "c0"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "c0"
+      }
+    ],
+    "leadingComments": [
+      "-- This should succeed - first DROP removes c0, second DROP with IF EXISTS should be silently ignored"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {
       "kind": "tableRef",
       "table": "test_alter_if_exists"
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_if_exists"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "c0"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "c0",
+          "type": {
+            "name": "Int64"
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- This should succeed - DROP removes c0, MODIFY with IF EXISTS should be silently ignored"
+    ]
   },
   {
     "kind": "createTable",
@@ -77,6 +127,29 @@
     },
     "leadingComments": [
       "-- Test 3: RENAME COLUMN IF EXISTS with column deleted by previous command"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_if_exists"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "x"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "x",
+        "newName": "z"
+      }
+    ],
+    "leadingComments": [
+      "-- This should succeed - DROP removes x, RENAME with IF EXISTS should be silently ignored"
     ]
   }
 ]

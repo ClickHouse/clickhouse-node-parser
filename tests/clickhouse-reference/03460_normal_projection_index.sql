@@ -107,6 +107,7 @@ SETTINGS
     index_granularity = 1, min_bytes_for_wide_part = 0,
     min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
 INSERT INTO test_partial_projection VALUES (1, 'us'), (2, 'eu'), (3, 'cn');
+ALTER TABLE test_partial_projection ADD PROJECTION region_proj (SELECT _part_offset ORDER BY region);
 INSERT INTO test_partial_projection VALUES (4, 'cn'), (5, 'ru'), (6, 'br');
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM test_partial_projection WHERE region = 'ru')

@@ -33,4 +33,12 @@ ORDER BY
     name ASC,
     column ASC;
 
+ALTER TABLE t_alter_auto_statistics MODIFY SETTING auto_statistics_types = 'minmax, uniq, tdigest';
+
+ALTER TABLE t_alter_auto_statistics MATERIALIZE STATISTICS ALL;
+
+ALTER TABLE t_alter_auto_statistics MODIFY SETTING auto_statistics_types = 'minmax, uniq, countmin';
+
 INSERT INTO t_alter_auto_statistics;
+
+ALTER TABLE t_alter_auto_statistics DROP STATISTICS ALL;

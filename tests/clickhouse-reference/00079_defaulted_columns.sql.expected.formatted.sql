@@ -49,6 +49,8 @@ ENGINE = MergeTree(date, key, 8192);
 
 INSERT INTO defaulted (payload);
 
+ALTER TABLE defaulted ADD COLUMN payload_length UInt64 MATERIALIZED length(payload);
+
 SELECT
     *,
     payload_length
@@ -62,6 +64,14 @@ SELECT
 FROM defaulted
 ORDER BY payload ASC;
 
+ALTER TABLE defaulted MODIFY COLUMN payload_length DEFAULT length(payload);
+
 SELECT *
 FROM defaulted
 ORDER BY payload ASC;
+
+ALTER TABLE defaulted MODIFY COLUMN payload_length DEFAULT length(payload) % 65535;
+
+ALTER TABLE defaulted MODIFY COLUMN payload_length UInt16 DEFAULT length(payload);
+
+ALTER TABLE defaulted DROP COLUMN payload_length;

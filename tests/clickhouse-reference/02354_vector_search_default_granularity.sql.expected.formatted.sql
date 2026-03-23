@@ -28,3 +28,5 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree
 ORDER BY id;
+
+ALTER TABLE tab ADD INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 1);

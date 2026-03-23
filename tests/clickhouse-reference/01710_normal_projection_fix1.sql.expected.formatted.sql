@@ -12,6 +12,9 @@ SETTINGS add_minmax_index_for_numeric_columns = 0;
 
 INSERT INTO t;
 
+ALTER TABLE t ADD PROJECTION x (SELECT *
+ORDER BY j ASC);
+
 INSERT INTO t;
 
 INSERT INTO t;

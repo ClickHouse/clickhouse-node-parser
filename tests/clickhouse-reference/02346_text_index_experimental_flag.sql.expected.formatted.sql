@@ -25,4 +25,6 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY tuple();
 
+ALTER TABLE tab ADD INDEX idx1 str TYPE text(tokenizer = 'splitByNonAlpha'); -- { serverError SUPPORT_IS_DISABLED }
+
 DROP TABLE tab;

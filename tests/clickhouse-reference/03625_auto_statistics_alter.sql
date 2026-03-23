@@ -16,4 +16,8 @@ SELECT column, type, statistics, estimates.cardinality, estimates.min, estimates
 FROM system.parts_columns
 WHERE table = 't_alter_auto_statistics' AND database = currentDatabase() AND active = 1
 ORDER BY name, column;
+ALTER TABLE t_alter_auto_statistics MODIFY SETTING auto_statistics_types = 'minmax, uniq, tdigest';
+ALTER TABLE t_alter_auto_statistics MATERIALIZE STATISTICS ALL;
+ALTER TABLE t_alter_auto_statistics MODIFY SETTING auto_statistics_types = 'minmax, uniq, countmin';
 INSERT INTO t_alter_auto_statistics VALUES (2, 2, 'yyy');
+ALTER TABLE t_alter_auto_statistics CLEAR STATISTICS ALL;

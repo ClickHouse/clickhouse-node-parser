@@ -55,6 +55,12 @@ WHERE active
 GROUP BY table
 ORDER BY table ASC;
 
+-- Switch to compressed and uncompressed
+-- Test wide part
+ALTER TABLE test_02381 MODIFY SETTING compress_marks = true, compress_primary_key = true;
+
+ALTER TABLE test_02381_compress MODIFY SETTING compress_marks = false, compress_primary_key = false;
+
 SELECT *
 FROM test_02381_compress
 WHERE a = 10000
@@ -78,6 +84,8 @@ ORDER BY (a, b)
 SETTINGS auto_statistics_types = '';
 
 INSERT INTO test_02381_compact;
+
+ALTER TABLE test_02381_compact MODIFY SETTING compress_marks = true, compress_primary_key = true;
 
 INSERT INTO test_02381_compact;
 

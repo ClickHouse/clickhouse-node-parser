@@ -19,6 +19,8 @@ SET apply_patch_parts = 1;
 
 SET apply_mutations_on_fly = 1;
 
+ALTER TABLE t_lwu_on_fly UPDATE b = 20 WHERE a = 2 SETTINGS mutations_sync = 0;
+
 SELECT *
 FROM t_lwu_on_fly
 ORDER BY id ASC;

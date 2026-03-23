@@ -558,6 +558,13 @@ PRIMARY KEY (k1, k2);
 
 INSERT INTO `03720_updates`;
 
+-- Update using ALTER TABLE
+ALTER TABLE `03720_updates` UPDATE val = 'updated' WHERE k1 = 1
+AND k2 = 1;
+
+ALTER TABLE `03720_updates` UPDATE val = 'modified' WHERE k1 = 1
+AND k2 = 2;
+
 SELECT val
 FROM `03720_updates`
 WHERE (k1, k2) = (1, 1); -- Should be 'updated'
@@ -572,6 +579,9 @@ WHERE (k1, k2) = (2, 1); -- Should be 'test'
 
 SELECT COUNT(*)
 FROM `03720_updates`; -- Should be 3
+
+-- Update with tuple equality
+ALTER TABLE `03720_updates` UPDATE val = 'changed' WHERE (k1, k2) = (2, 1);
 
 DROP TABLE `03720_updates`;
 
@@ -589,6 +599,8 @@ ENGINE = EmbeddedRocksDB
 PRIMARY KEY (k1, k2, k3);
 
 INSERT INTO `03720_updates_three_col`;
+
+ALTER TABLE `03720_updates_three_col` UPDATE val = 'updated_v1' WHERE (k1, k2, k3) = (1, 1, 1);
 
 SELECT val
 FROM `03720_updates_three_col`
@@ -612,6 +624,9 @@ ENGINE = EmbeddedRocksDB
 PRIMARY KEY (k1, k2);
 
 INSERT INTO `03720_updates_string`;
+
+ALTER TABLE `03720_updates_string` UPDATE val = 999 WHERE k1 = 'foo'
+AND k2 = 'bar';
 
 SELECT val
 FROM `03720_updates_string`

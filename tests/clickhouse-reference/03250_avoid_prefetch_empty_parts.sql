@@ -8,4 +8,5 @@ SETTINGS enable_vertical_merge_algorithm = 1, vertical_merge_algorithm_min_rows_
 vertical_merge_algorithm_min_bytes_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1,
 min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1, remove_empty_parts = 0, storage_policy = 's3_no_cache';
 INSERT INTO 03250_avoid_prefetch VALUES (1, 'test');
+ALTER TABLE 03250_avoid_prefetch DELETE WHERE id = 1;
 INSERT INTO 03250_avoid_prefetch VALUES (2, 'test');

@@ -13,6 +13,8 @@ FROM numbers(142);
 
 INSERT INTO t0 (c0);
 
+ALTER TABLE t0 DROP COLUMN c0;
+
 INSERT INTO t0 (c0) SELECT 'abc'
 FROM numbers(196);
 

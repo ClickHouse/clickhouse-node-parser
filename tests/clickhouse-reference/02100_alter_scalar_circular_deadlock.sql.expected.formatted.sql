@@ -17,8 +17,20 @@ LIMIT 10;
 
 SET mutations_sync = 1;
 
+ALTER TABLE foo UPDATE x = 1 WHERE x = (
+    SELECT x
+    FROM foo
+    WHERE x = 4
+);
+
 SELECT sum(x) == 42
 FROM foo;
+
+ALTER TABLE foo UPDATE x = 1 WHERE x IN (
+    SELECT x
+    FROM foo
+    WHERE x != 0
+);
 
 SELECT sum(x) == 9
 FROM foo;
@@ -38,8 +50,20 @@ INSERT INTO bar (ts, x) SELECT
 FROM `system`.numbers_mt
 LIMIT 10;
 
+ALTER TABLE bar UPDATE x = 1 WHERE x = (
+    SELECT x
+    FROM bar
+    WHERE x = 4
+);
+
 SELECT sum(x) == 42
 FROM bar;
+
+ALTER TABLE bar UPDATE x = 1 WHERE x IN (
+    SELECT x
+    FROM bar
+    WHERE x != 0
+);
 
 SELECT sum(x) == 9
 FROM bar;

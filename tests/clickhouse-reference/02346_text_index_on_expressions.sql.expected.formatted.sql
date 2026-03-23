@@ -15,6 +15,8 @@ ORDER BY id;
 
 INSERT INTO tab;
 
+ALTER TABLE tab ADD INDEX idx_text lower(s1) TYPE text(tokenizer = splitByNonAlpha);
+
 INSERT INTO tab;
 
 SELECT id
@@ -37,6 +39,8 @@ ENGINE = MergeTree
 ORDER BY id;
 
 INSERT INTO tab;
+
+ALTER TABLE tab ADD INDEX idx_text concat(s1, ' ', s2) TYPE text(tokenizer = splitByNonAlpha);
 
 INSERT INTO tab;
 

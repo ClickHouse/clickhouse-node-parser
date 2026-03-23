@@ -28,3 +28,5 @@ FROM `system`.data_skipping_indices
 WHERE database = current_database()
     AND table = 'test_alter'
 ORDER BY name ASC;
+
+ALTER TABLE test_alter MODIFY COLUMN b String;

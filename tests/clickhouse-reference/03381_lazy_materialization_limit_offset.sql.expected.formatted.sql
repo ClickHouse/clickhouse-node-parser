@@ -18,6 +18,8 @@ INSERT INTO test SELECT
     toJSONString(map(concat('key', multiIf(number < 60000, number % 2, number < 120000, number % 2 + 2, number % 2 + 4)), concat('value', number)))
 FROM numbers(200000);
 
+ALTER TABLE test MODIFY COLUMN json JSON SETTINGS mutations_sync = 1;
+
 SET optimize_read_in_order = 0; -- disabling read in order optimization leads to error
 
 SELECT json

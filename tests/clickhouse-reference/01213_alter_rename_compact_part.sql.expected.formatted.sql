@@ -25,6 +25,8 @@ SELECT value1
 FROM table_with_compact_parts
 WHERE key = 1;
 
+ALTER TABLE table_with_compact_parts RENAME COLUMN value1 TO renamed_value1;
+
 SELECT renamed_value1
 FROM table_with_compact_parts
 WHERE key = 1;
@@ -33,6 +35,8 @@ SELECT *
 FROM table_with_compact_parts
 WHERE key = 1
 FORMAT TSVWithNames;
+
+ALTER TABLE table_with_compact_parts RENAME COLUMN value2 TO renamed_value2, RENAME COLUMN value3 TO renamed_value3;
 
 SELECT
     renamed_value2,

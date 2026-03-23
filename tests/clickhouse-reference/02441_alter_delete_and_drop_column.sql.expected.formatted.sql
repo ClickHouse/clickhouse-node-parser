@@ -13,6 +13,8 @@ SET insert_keeper_fault_injection_probability = 0;
 
 INSERT INTO mut;
 
+ALTER TABLE mut DELETE WHERE n = 10;
+
 -- a funny way to wait for a MUTATE_PART to be assigned
 SELECT sleepEachRow(2)
 FROM url(concat('http://localhost:8123/?param_tries={1..10}&query=', encodeURLComponent(concat('select 1 where ''MUTATE_PART'' not in (select type from system.replication_queue where database=''', currentDatabase(), ''' and table=''mut'')'))), 'LineAsString', 's String')
@@ -20,6 +22,8 @@ SETTINGS
     max_threads = 1,
     http_make_head_request = 0
 FORMAT Null;
+
+ALTER TABLE mut DROP COLUMN k SETTINGS alter_sync = 0;
 
 -- a funny way to wait for ALTER_METADATA to disappear from the replication queue
 SELECT sleepEachRow(2)

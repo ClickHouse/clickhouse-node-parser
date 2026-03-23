@@ -31,6 +31,12 @@ WHERE key1 = 1
     AND key2 = 1
     AND key3 = 1;
 
+ALTER TABLE table_for_rename_pk RENAME COLUMN key1 TO renamed_key1; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE table_for_rename_pk RENAME COLUMN key3 TO renamed_key3; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE table_for_rename_pk RENAME COLUMN key2 TO renamed_key2; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
 DROP TABLE IF EXISTS table_for_rename_with_primary_key;
 
 CREATE TABLE table_for_rename_with_primary_key
@@ -56,3 +62,9 @@ INSERT INTO table_for_rename_with_primary_key SELECT
     toString(number),
     toString(number)
 FROM numbers(9);
+
+ALTER TABLE table_for_rename_with_primary_key RENAME COLUMN key1 TO renamed_key1; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE table_for_rename_with_primary_key RENAME COLUMN key2 TO renamed_key2; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE table_for_rename_with_primary_key RENAME COLUMN key3 TO renamed_key3; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}

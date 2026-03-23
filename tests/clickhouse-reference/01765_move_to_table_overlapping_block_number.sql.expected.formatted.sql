@@ -28,6 +28,8 @@ INSERT INTO t_dst;
 
 INSERT INTO t_src;
 
+ALTER TABLE t_src MOVE PARTITION 1 TO TABLE t_dst;
+
 SELECT
     *,
     _part

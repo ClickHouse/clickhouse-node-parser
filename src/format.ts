@@ -1,6 +1,7 @@
 import {
   AccessControlName,
   AccessControlSettingsItem,
+  AlterStatement,
   ASTNode,
   CTE,
   ColumnTransformer,
@@ -285,6 +286,10 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
     }
     case 'drop':
       return formatStatement(node, indent);
+    case 'alter':
+      return formatAlterStatement(node, indent);
+    case 'alterCommand':
+      return formatAlterCommand(node, indent);
     // CTE nodes — format inline
     case 'cteSubquery':
       return `${quoteIdent(node.name)} AS (\n${formatStatement(node.query, indent + '  ')}\n${indent})`;
@@ -421,6 +426,9 @@ function formatStatement(stmt: Statement, indent: string): string {
     if (stmt.format) result += ` FORMAT ${stmt.format}`;
     return result;
   }
+  if (stmt.kind === 'alter') {
+    return formatAlterStatement(stmt, indent);
+  }
   if (stmt.kind === 'parallelWith') {
     return stmt.queries.map((q) => formatStatement(q, indent)).join(`\nPARALLEL WITH\n`);
   }
@@ -548,6 +556,212 @@ function formatAccessControlSettings(
 
 function formatUseStatement(stmt: UseStatement, indent: string): string {
   return `${indent}USE ${stmt.database}`;
+}
+
+function formatAlterPartitionExpr(
+  part: import('./ast').AlterPartitionExpr,
+  indent: string,
+): string {
+  if (part.partitionKind === 'all') return 'ALL';
+  if (part.partitionKind === 'id')
+    return `ID ${formatExpr(part.id as import('./ast').Expression, indent)}`;
+  return formatExpr(part.expr, indent);
+}
+
+function formatAlterCommand(cmd: import('./ast').AlterCommand, indent: string): string {
+  switch (cmd.commandType) {
+    case 'ADD_COLUMN': {
+      let s = `ADD COLUMN ${formatTableElement(cmd.column, '')}`;
+      if (cmd.afterColumn) s += ` AFTER ${quoteIdent(cmd.afterColumn)}`;
+      return s;
+    }
+    case 'DROP_COLUMN': {
+      let s = `DROP COLUMN ${quoteIdent(cmd.columnName)}`;
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'MODIFY_COLUMN': {
+      let s = `MODIFY COLUMN ${formatTableElement(cmd.column, '')}`;
+      if (cmd.columnSettingOp) {
+        if (cmd.columnSettingOp.op === 'MODIFY_SETTING' && cmd.columnSettingOp.settings) {
+          s += ` MODIFY SETTING ${formatSettingsList(cmd.columnSettingOp.settings, indent)}`;
+        } else if (cmd.columnSettingOp.op === 'RESET_SETTING' && cmd.columnSettingOp.names) {
+          s += ` RESET SETTING ${cmd.columnSettingOp.names.map(quoteIdent).join(', ')}`;
+        }
+      }
+      if (cmd.afterColumn) s += ` AFTER ${quoteIdent(cmd.afterColumn)}`;
+      return s;
+    }
+    case 'RENAME_COLUMN':
+      return `RENAME COLUMN ${quoteIdent(cmd.oldName)} TO ${quoteIdent(cmd.newName)}`;
+    case 'COMMENT_COLUMN':
+      return `COMMENT COLUMN ${quoteIdent(cmd.columnName)} ${formatExpr(cmd.comment, indent)}`;
+    case 'MATERIALIZE_COLUMN': {
+      let s = `MATERIALIZE COLUMN ${quoteIdent(cmd.columnName)}`;
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'ADD_INDEX': {
+      // formatTableElement includes "INDEX name expr TYPE ...", so just prefix with "ADD"
+      let s = `ADD ${formatTableElement(cmd.index, '')}`;
+      if (cmd.afterIndex) s += ` AFTER ${quoteIdent(cmd.afterIndex)}`;
+      return s;
+    }
+    case 'DROP_INDEX': {
+      let s = `DROP INDEX ${quoteIdent(cmd.indexName)}`;
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'MATERIALIZE_INDEX': {
+      let s = `MATERIALIZE INDEX ${quoteIdent(cmd.indexName)}`;
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'ADD_PROJECTION': {
+      // formatTableElement includes "PROJECTION name (...)", so just prefix with "ADD"
+      let s = `ADD ${formatTableElement(cmd.projection, '')}`;
+      if (cmd.afterProjection) s += ` AFTER ${quoteIdent(cmd.afterProjection)}`;
+      return s;
+    }
+    case 'DROP_PROJECTION': {
+      let s = `DROP PROJECTION ${quoteIdent(cmd.projectionName)}`;
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'MATERIALIZE_PROJECTION': {
+      let s = `MATERIALIZE PROJECTION ${quoteIdent(cmd.projectionName)}`;
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'ADD_CONSTRAINT':
+      // formatTableElement includes "CONSTRAINT name CHECK expr", so just prefix with "ADD"
+      return `ADD ${formatTableElement(cmd.constraint, '')}`;
+    case 'DROP_CONSTRAINT':
+      return `DROP CONSTRAINT ${quoteIdent(cmd.constraintName)}`;
+    case 'ADD_STATISTICS':
+    case 'MODIFY_STATISTICS': {
+      const kw = cmd.commandType === 'ADD_STATISTICS' ? 'ADD' : 'MODIFY';
+      const cols = cmd.statColumns.map(quoteIdent).join(', ');
+      const types = cmd.statTypes.map(formatIndexType).join(', ');
+      return `${kw} STATISTICS ${cols} TYPE ${types}`;
+    }
+    case 'DROP_STATISTICS':
+      if (cmd.statColumns && cmd.statColumns.length > 0)
+        return `DROP STATISTICS ${cmd.statColumns.map(quoteIdent).join(', ')}`;
+      return 'DROP STATISTICS ALL';
+    case 'MATERIALIZE_STATISTICS':
+      if (cmd.statColumns && cmd.statColumns.length > 0)
+        return `MATERIALIZE STATISTICS ${cmd.statColumns.map(quoteIdent).join(', ')}`;
+      return 'MATERIALIZE STATISTICS ALL';
+    case 'UPDATE': {
+      const assigns = cmd.assignments
+        .map((a) => `${quoteIdent(a.column)} = ${formatExpr(a.expr, indent)}`)
+        .join(', ');
+      let s = `UPDATE ${assigns}`;
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      s += ` WHERE ${formatExpr(cmd.where, indent)}`;
+      return s;
+    }
+    case 'DELETE': {
+      let s = 'DELETE';
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      s += ` WHERE ${formatExpr(cmd.where, indent)}`;
+      return s;
+    }
+    case 'DROP_PARTITION':
+      if (cmd.partName) return `DROP PART ${formatExpr(cmd.partName, indent)}`;
+      if (cmd.partition) return `DROP PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return 'DROP PARTITION';
+    case 'ATTACH_PARTITION':
+      if (cmd.partName) return `ATTACH PART ${formatExpr(cmd.partName, indent)}`;
+      if (cmd.partition)
+        return `ATTACH PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return 'ATTACH PARTITION';
+    case 'DROP_DETACHED_PARTITION':
+      return `DROP DETACHED PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+    case 'REPLACE_PARTITION':
+      return `REPLACE PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)} FROM ${formatTableRef(cmd.fromTable)}`;
+    case 'MOVE_PARTITION': {
+      let s = `MOVE PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      if (cmd.moveDest) {
+        if (cmd.moveDest.destType === 'TABLE')
+          s += ` TO TABLE ${formatTableRef(cmd.moveDest.table)}`;
+        else s += ` TO ${cmd.moveDest.destType} ${formatExpr(cmd.moveDest.value, indent)}`;
+      }
+      return s;
+    }
+    case 'FETCH_PARTITION': {
+      let s = `FETCH PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      if (cmd.fromPath) s += ` FROM ${formatExpr(cmd.fromPath, indent)}`;
+      return s;
+    }
+    case 'FREEZE_PARTITION':
+      return `FREEZE PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+    case 'FREEZE_ALL':
+      return 'FREEZE';
+    case 'MODIFY_TTL': {
+      const ttlStr = cmd.ttl
+        .map((item) => {
+          let s = formatExpr(item.expr, indent);
+          if (item.where) s += ` WHERE ${formatExpr(item.where, indent)}`;
+          return s;
+        })
+        .join(', ');
+      return `MODIFY TTL ${ttlStr}`;
+    }
+    case 'REMOVE_TTL':
+      return 'REMOVE TTL';
+    case 'REMOVE_SAMPLE_BY':
+      return 'REMOVE SAMPLE BY';
+    case 'MATERIALIZE_TTL': {
+      let s = 'MATERIALIZE TTL';
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'MODIFY_ORDER_BY':
+      return `MODIFY ORDER BY ${formatExpr(cmd.expr, indent)}`;
+    case 'MODIFY_SAMPLE_BY':
+      return `MODIFY SAMPLE BY ${formatExpr(cmd.expr, indent)}`;
+    case 'MODIFY_SETTING':
+      return `MODIFY SETTING ${formatSettingsList(cmd.settings, indent)}`;
+    case 'RESET_SETTING':
+      return `RESET SETTING ${cmd.settingNames.map(quoteIdent).join(', ')}`;
+    case 'MODIFY_QUERY':
+      return `MODIFY QUERY ${formatStatement(cmd.query, indent)}`;
+    case 'MODIFY_COMMENT':
+      return `MODIFY COMMENT ${formatExpr(cmd.comment, indent)}`;
+    case 'APPLY_DELETED_MASK': {
+      let s = 'APPLY DELETED MASK';
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'APPLY_PATCHES': {
+      let s = 'APPLY PATCHES';
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+    case 'REWRITE_PARTS': {
+      let s = 'REWRITE PARTS';
+      if (cmd.partition) s += ` IN PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      return s;
+    }
+  }
+}
+
+function formatAlterStatement(stmt: AlterStatement, indent: string): string {
+  let result = `${indent}ALTER TABLE ${formatTableRef(stmt.table)}`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  result += ` ${stmt.commands
+    .map((cmd) => {
+      const s = formatAlterCommand(cmd, indent);
+      return cmd.parenthesized ? `(${s})` : s;
+    })
+    .join(', ')}`;
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  if (stmt.format) result += ` FORMAT ${stmt.format}`;
+  return result;
 }
 
 function formatSystemStatement(stmt: SystemStatement, indent: string): string {
@@ -1153,12 +1367,14 @@ function formatDataType(dt: import('./ast').DataType): string {
 }
 
 function formatCodecItems(items: import('./ast').CodecItem[]): string {
+  const fmtCodecName = (name: string) =>
+    /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name) ? name : quoteIdent(name);
   const parts = items.map((c) => {
     if (c.args !== undefined && c.args.length > 0) {
-      return `${c.name}(${c.args.map((a) => formatExpr(a, '')).join(', ')})`;
+      return `${fmtCodecName(c.name)}(${c.args.map((a) => formatExpr(a, '')).join(', ')})`;
     }
-    if (c.args !== undefined) return `${c.name}()`;
-    return c.name;
+    if (c.args !== undefined) return `${fmtCodecName(c.name)}()`;
+    return fmtCodecName(c.name);
   });
   return parts.join(', ');
 }
@@ -1202,8 +1418,8 @@ function formatTableElement(el: import('./ast').TableElement, indent: string): s
       return result;
     }
     case 'projectionDef': {
-      if (el.projectionIndex) {
-        return `${indent}PROJECTION ${quoteIdent(el.name)} INDEX ${el.projectionIndex.column} TYPE ${el.projectionIndex.typeName}`;
+      if (el.indexExpr) {
+        return `${indent}PROJECTION ${quoteIdent(el.name)} INDEX ${formatExpr(el.indexExpr, indent)} TYPE ${el.indexType ? formatIndexType(el.indexType) : ''}`;
       }
       let projResult = `${indent}PROJECTION ${quoteIdent(el.name)} (${formatStatement(el.query!, indent)})`;
       const projSettings = (el as Record<string, unknown>).projectionSettings as

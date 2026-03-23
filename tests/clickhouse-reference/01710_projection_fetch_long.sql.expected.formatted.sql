@@ -43,6 +43,12 @@ INSERT INTO tp_1 SELECT
     number
 FROM numbers(5);
 
+-- test projection creation, materialization, clear and drop
+ALTER TABLE tp_1 ADD PROJECTION pp (SELECT
+    x,
+    count()
+GROUP BY x);
+
 SELECT count()
 FROM `system`.projection_parts
 WHERE database = currentDatabase()
@@ -53,9 +59,15 @@ WHERE database = currentDatabase()
 -- all other three operations are mutations
 SET mutations_sync = 2;
 
+ALTER TABLE tp_1 MATERIALIZE PROJECTION pp;
+
+ALTER TABLE tp_1 DROP PROJECTION pp;
+
 SELECT *
 FROM `system`.projection_parts
 WHERE database = currentDatabase()
     AND table = 'tp_2'
     AND name = 'pp'
     AND active;
+
+ALTER TABLE tp_1 DROP PROJECTION pp;

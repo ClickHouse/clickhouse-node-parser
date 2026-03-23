@@ -36,6 +36,9 @@ FROM test_tolowcardinality_nullable
 WHERE toLowCardinality(str) = 'a'
 ORDER BY id ASC;
 
+-- Mutation that also uses the partition key
+ALTER TABLE test_tolowcardinality_nullable DELETE WHERE id = 1 SETTINGS mutations_sync = 2;
+
 SELECT *
 FROM test_tolowcardinality_nullable
 ORDER BY id ASC;

@@ -17,4 +17,5 @@ SETTINGS min_bytes_for_wide_part = 0, enable_vertical_merge_algorithm = 0; -- TO
 INSERT INTO tab SELECT number, -number FROM system.numbers LIMIT 10000;
 SELECT replaceRegexpAll(explain, '__table1\.', '') FROM (EXPLAIN actions=1 SELECT count(*) FROM tab WHERE b < 10 and a < 10) WHERE explain LIKE '%Prewhere%'; -- checks b first, then a (statistics not used)
 SET mutations_sync = 2;
+ALTER TABLE tab MATERIALIZE STATISTICS a, b;
 DROP TABLE tab;

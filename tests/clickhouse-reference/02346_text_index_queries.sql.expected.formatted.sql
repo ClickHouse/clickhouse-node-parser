@@ -142,6 +142,8 @@ INSERT INTO tab;
 
 INSERT INTO tab;
 
+ALTER TABLE tab ADD INDEX af s TYPE text(tokenizer = ngrams(2)) GRANULARITY 1 SETTINGS mutations_sync = 2;
+
 -- check text index was created
 SELECT
     name,

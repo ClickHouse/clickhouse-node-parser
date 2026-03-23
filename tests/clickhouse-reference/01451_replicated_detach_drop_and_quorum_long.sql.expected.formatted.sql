@@ -31,15 +31,22 @@ WHERE table = 'replica2'
     AND database = currentDatabase()
     AND active = 1;
 
+ALTER TABLE replica2 DROP PART 'all_0_0_0';
+
 SELECT *
 FROM replica1;
 
 SELECT *
 FROM replica2;
 
+-- drop of empty partition works
+ALTER TABLE replica2 DROP PARTITION ID 'all';
+
 SET insert_quorum = 2, insert_quorum_parallel = 0;
 
 INSERT INTO replica2 SETTINGS insert_keeper_fault_injection_probability = 0;
+
+ALTER TABLE replica1 DROP PART 'all_2_2_0'; --{serverError NOT_IMPLEMENTED}
 
 SELECT name
 FROM `system`.parts
@@ -54,3 +61,6 @@ FROM replica1;
 SET insert_quorum_parallel = 1;
 
 INSERT INTO replica2 SETTINGS insert_keeper_fault_injection_probability = 0;
+
+-- should work, parallel quorum nodes exists only during insert
+ALTER TABLE replica1 DROP PART 'all_3_3_0';

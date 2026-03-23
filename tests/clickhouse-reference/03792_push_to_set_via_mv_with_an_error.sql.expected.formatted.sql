@@ -39,3 +39,5 @@ ENGINE = Set()
 AS
 (SELECT c1
 FROM tab);
+
+ALTER TABLE tab DROP COLUMN c1;

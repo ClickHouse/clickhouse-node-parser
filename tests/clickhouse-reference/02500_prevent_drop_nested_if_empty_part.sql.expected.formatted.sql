@@ -11,6 +11,10 @@ ORDER BY tuple();
 
 INSERT INTO `02500_nested` (nes.a, nes.b);
 
+ALTER TABLE `02500_nested` ADD COLUMN z Int32;
+
+ALTER TABLE `02500_nested` DROP COLUMN nes; -- { serverError BAD_ARGUMENTS }
+
 DROP TABLE `02500_nested`;
 
 CREATE TABLE `02500_nested`

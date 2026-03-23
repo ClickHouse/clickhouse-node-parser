@@ -14,6 +14,7 @@ insert into shard_0.from_1 select number + 40 from numbers(10);
 insert into shard_0.from_1 select number + 50 from numbers(10);
 create table shard_0.to (x UInt32) engine = ReplicatedMergeTree('/clickhouse/tables/to_' || currentDatabase(), '0') order by x settings old_parts_lifetime=1, max_cleanup_delay_period=1, cleanup_delay_period=1, max_parts_to_merge_at_once=2, shared_merge_tree_disable_merges_and_mutations_assignment=1;
 create table shard_1.to (x UInt32) engine = ReplicatedMergeTree('/clickhouse/tables/to_' || currentDatabase(), '1') order by x settings old_parts_lifetime=1, max_cleanup_delay_period=1, cleanup_delay_period=1, max_parts_to_merge_at_once=2;
+alter table shard_0.from_1 on cluster test_cluster_two_shards_different_databases move partition tuple() to table shard_0.to format Null settings distributed_ddl_output_mode='never_throw', distributed_ddl_task_timeout = 1;
 select name, active from system.parts where database='shard_0' and table='to' and active order by name;
 -- If moved parts are not merged by OPTIMIZE or background merge restart
 -- can log Warning about metadata version on disk. It's normal situation

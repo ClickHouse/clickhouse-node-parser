@@ -48,6 +48,26 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+ALTER TABLE `02581_trips` UPDATE description = '5' WHERE id IN (
+    SELECT ((number * 10 + 5))::UInt32
+    FROM numbers(10000000)
+) SETTINGS mutations_sync = 0;
+
+ALTER TABLE `02581_trips` UPDATE description = '6' WHERE id IN (
+    SELECT ((number * 10 + 6))::UInt32
+    FROM numbers(10000000)
+) SETTINGS mutations_sync = 0;
+
+ALTER TABLE `02581_trips` DELETE WHERE id IN (
+    SELECT ((number * 10 + 7))::UInt32
+    FROM numbers(10000000)
+) SETTINGS mutations_sync = 0;
+
+ALTER TABLE `02581_trips` UPDATE description = '8' WHERE id IN (
+    SELECT ((number * 10 + 8))::UInt32
+    FROM numbers(10000000)
+) SETTINGS mutations_sync = 0;
+
 -- Wait for mutations to finish
 SELECT count()
 FROM `02581_trips`

@@ -38,4 +38,11 @@ CREATE TABLE test_proj_positional
 ENGINE = MergeTree
 ORDER BY a;
 
+ALTER TABLE test_proj_positional ADD PROJECTION test_projection (SELECT
+    b,
+    a
+GROUP BY
+    1,
+    2);
+
 INSERT INTO test_proj_positional;

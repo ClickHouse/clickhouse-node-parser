@@ -6,6 +6,7 @@ CREATE TABLE test_table_replicated
     id UInt64,
     value String
 ) ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/test_table_replicated', '1_replica') ORDER BY id;
+ALTER TABLE test_table_replicated ADD COLUMN insert_time DateTime;
 SELECT name, version FROM system.zookeeper
 WHERE path = (SELECT zookeeper_path FROM system.replicas WHERE database = currentDatabase() AND table = 'test_table_replicated')
 AND name = 'metadata' FORMAT Vertical;
@@ -21,4 +22,5 @@ SELECT '--';
 SELECT name, value FROM system.zookeeper
 WHERE path = (SELECT replica_path FROM system.replicas WHERE database = currentDatabase() AND table = 'test_table_replicated_second')
 AND name = 'metadata_version' FORMAT Vertical;
+ALTER TABLE test_table_replicated_second ADD COLUMN insert_time_updated DateTime;
 DROP TABLE test_table_replicated_second;

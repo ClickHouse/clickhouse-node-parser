@@ -31,6 +31,10 @@ CREATE TABLE merge_distributed
 )
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), merge_distributed1);
 
+ALTER TABLE merge_distributed1 ADD COLUMN dummy String AFTER CounterID;
+
+ALTER TABLE merge_distributed ADD COLUMN dummy String AFTER CounterID;
+
 INSERT INTO merge_distributed1;
 
 SELECT
@@ -39,6 +43,11 @@ SELECT
 FROM merge_distributed
 WHERE dummy <> ''
 LIMIT 10;
+
+ALTER TABLE merge_distributed DROP COLUMN dummy;
+
+--error: should fall, because there is no `dummy1` column
+ALTER TABLE merge_distributed ADD COLUMN dummy1 String AFTER CounterID;
 
 SELECT
     CounterID,

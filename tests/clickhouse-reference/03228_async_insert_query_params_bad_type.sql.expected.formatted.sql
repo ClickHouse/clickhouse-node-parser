@@ -17,6 +17,8 @@ INSERT INTO t_async_insert_params; -- { serverError  BAD_QUERY_PARAMETER }
 
 INSERT INTO t_async_insert_params; -- { serverError  TYPE_MISMATCH }
 
+ALTER TABLE t_async_insert_params MODIFY COLUMN id String;
+
 SELECT *
 FROM t_async_insert_params
 ORDER BY id ASC;

@@ -12,4 +12,10 @@ ORDER BY id;
 
 SET flatten_nested = 1;
 
+ALTER TABLE nested_table ADD COLUMN second Nested(c Int8, d String) AFTER id;
+
+ALTER TABLE nested_table ADD COLUMN third Nested(e Int8, f String);
+
+ALTER TABLE nested_table ADD COLUMN fourth Nested(g Int8, h String);
+
 DROP TABLE nested_table;

@@ -15,6 +15,8 @@ INSERT INTO table_00609 SELECT
 FROM `system`.numbers
 LIMIT 100000;
 
+ALTER TABLE table_00609 ADD COLUMN def UInt64 DEFAULT val + 1;
+
 SELECT *
 FROM table_00609
 PREWHERE val > 2
@@ -61,3 +63,5 @@ FROM table_00609
 PREWHERE val > 2
 FORMAT Null
 SETTINGS max_block_size = 80000;
+
+ALTER TABLE table_00609 ADD COLUMN def UInt64;

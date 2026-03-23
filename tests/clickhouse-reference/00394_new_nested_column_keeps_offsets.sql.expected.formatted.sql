@@ -17,6 +17,8 @@ INSERT INTO alter_00394;
 
 INSERT INTO alter_00394;
 
+ALTER TABLE alter_00394 ADD COLUMN `n.i8` Array(Int8) AFTER i32;
+
 SELECT
     `n.i8`,
     `n.ui8`,

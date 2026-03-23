@@ -11,6 +11,8 @@ PARTITION BY id;
 
 INSERT INTO mutation_table (id, price);
 
+ALTER TABLE mutation_table UPDATE price = 150 WHERE id = 1 SETTINGS mutations_sync = 2;
+
 SELECT *
 FROM mutation_table;
 
@@ -32,8 +34,18 @@ ORDER BY
     dt ASC,
     name ASC;
 
-INSERT INTO mutation_table (name, dt);
+ALTER TABLE mutation_table UPDATE dt = toDateOrNull('2020-08-02') WHERE name = 'car' SETTINGS mutations_sync = 2;
 
 INSERT INTO mutation_table (name, dt);
 
 INSERT INTO mutation_table (name, dt);
+
+ALTER TABLE mutation_table UPDATE dt = toDateOrNull('2020-08-03') WHERE name = 'car'
+AND isNull(dt) SETTINGS mutations_sync = 2;
+
+ALTER TABLE mutation_table UPDATE dt = toDateOrNull('2020-08-04') WHERE name = 'car'
+OR isNull(dt) SETTINGS mutations_sync = 2;
+
+INSERT INTO mutation_table (name, dt);
+
+ALTER TABLE mutation_table UPDATE dt = NULL WHERE isNotNull(name) SETTINGS mutations_sync = 2;

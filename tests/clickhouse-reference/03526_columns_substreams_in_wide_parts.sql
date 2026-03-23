@@ -15,4 +15,13 @@ SETTINGS min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1, vertical_merge
 INSERT INTO test SELECT 42, 'str', tuple(42, [1, 2, 3]), '{"a" : 42, "b" : ["a", "b", "c"], "d" : "Hello", "e" : 42, "f" : [{"g" : 42, "k" : [1, 2, 3]}]}', [1, 2, 3], [1, 2, 3];
 SELECT column, type, substreams, filenames FROM system.parts_columns where database=currentDatabase() and table = 'test' and active;
 SELECT '-------------------------------------------------------------------------';
+ALTER TABLE test MODIFY SETTING vertical_merge_algorithm_min_rows_to_activate=1, vertical_merge_algorithm_min_columns_to_activate=1;
+ALTER TABLE test ADD COLUMN x Array(UInt32);
+ALTER TABLE test DROP COLUMN int;
+ALTER TABLE test RENAME COLUMN t TO tt;
+ALTER TABLE test DROP COLUMN str, RENAME COLUMN x TO str;
+ALTER TABLE test MODIFY COLUMN tt Tuple(a UInt32, b Array(String), c UInt32);
+ALTER TABLE test UPDATE tt = tuple(42, ['a'], 42) WHERE 1;
+ALTER TABLE test RENAME COLUMN nested.a to nested.aa;
+ALTER TABLE test RENAME COLUMN nested.aa to nested.aaa, RENAME COLUMN nested.b to nested.bbb;
 DROP TABLE test;

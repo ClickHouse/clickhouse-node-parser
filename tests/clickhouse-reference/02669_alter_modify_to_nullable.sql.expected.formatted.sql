@@ -42,6 +42,8 @@ FROM t_modify_to_nullable;
 
 SET mutations_sync = 2;
 
+ALTER TABLE t_modify_to_nullable MODIFY COLUMN s Nullable(String);
+
 SELECT
     part_name,
     read_rows

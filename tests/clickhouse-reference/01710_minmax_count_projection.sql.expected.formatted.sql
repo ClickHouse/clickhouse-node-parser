@@ -110,6 +110,8 @@ INSERT INTO has_final_mark SELECT
     number
 FROM numbers(10000);
 
+ALTER TABLE mixed_final_mark REPLACE PARTITION 1 FROM has_final_mark;
+
 SET max_rows_to_read = 2;
 
 SELECT min(j)

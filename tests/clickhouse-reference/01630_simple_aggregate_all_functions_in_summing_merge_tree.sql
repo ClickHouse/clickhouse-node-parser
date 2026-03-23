@@ -129,6 +129,9 @@ SELECT cityHash64(groupArray(cityHash64(*))) FROM (
   ORDER BY g
 );
 SELECT '---mutation---';
+ALTER TABLE simple_agf_aggregating_mt
+    DELETE WHERE (a % 3) = 0
+SETTINGS mutations_sync = 1;
 INSERT INTO simple_agf_aggregating_mt SELECT
     number % 11151 AS a,
     minState(number),

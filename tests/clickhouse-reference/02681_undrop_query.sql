@@ -11,6 +11,7 @@ drop table 02681_undrop_mergetree sync;
 drop table if exists 02681_undrop_detach sync;
 create table 02681_undrop_detach (id Int32, num Int32) Engine=MergeTree() order by id;
 insert into 02681_undrop_detach values (1, 1);
+alter table 02681_undrop_detach update num = 2 where id = 1;
 select command from system.mutations where table='02681_undrop_detach' and database=currentDatabase() limit 1;
 drop table 02681_undrop_detach sync;
 drop table if exists 02681_undrop_uuid_on_cluster on cluster test_shard_localhost sync format Null;

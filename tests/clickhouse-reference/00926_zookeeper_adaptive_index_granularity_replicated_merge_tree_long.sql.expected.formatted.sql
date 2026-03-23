@@ -153,7 +153,11 @@ WHERE table = 'adaptive_granularity_alter2'
     AND database = currentDatabase()
     AND active = 1;
 
+ALTER TABLE adaptive_granularity_alter2 MODIFY COLUMN v1 Int16;
+
 INSERT INTO adaptive_granularity_alter1 (p, k, v1, v2);
+
+ALTER TABLE adaptive_granularity_alter1 MODIFY COLUMN v2 String;
 
 INSERT INTO adaptive_granularity_alter1 (p, k, v1, v2);
 

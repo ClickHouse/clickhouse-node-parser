@@ -17,6 +17,7 @@ select 6, system.parts.name, txn_counters.creation_tid = system.parts.creation_t
 select 7, name, removal_tid, removal_csn from system.parts where database=currentDatabase() and table='txn_counters' and active order by system.parts.name;
 select 8, transactionID().3 == serverUUID();
 insert into txn_counters(n) values (5);
+alter table txn_counters drop partition id 'all';
 select indexOf((select arraySort(groupUniqArray(tid)) from system.transactions_info_log where database=currentDatabase() and table='txn_counters'), tid),
        type,
        thread_id!=0,

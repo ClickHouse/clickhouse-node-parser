@@ -17,6 +17,8 @@ INSERT INTO table_with_single_pk SELECT
     toString(number % 10)
 FROM numbers(10000000);
 
+ALTER TABLE table_with_single_pk DELETE WHERE key % 77 = 0 SETTINGS mutations_sync = 1;
+
 -- Memory usage for all mutations must be almost constant and less than
 -- read_bytes
 SELECT arrayDistinct(groupArray(if(read_bytes >= peak_memory_usage, [1], [read_bytes, peak_memory_usage])))
@@ -44,6 +46,8 @@ INSERT INTO table_with_multi_pk SELECT
     toDateTime('2019-10-01 00:00:00'),
     toString(number % 10)
 FROM numbers(10000000);
+
+ALTER TABLE table_with_multi_pk DELETE WHERE key1 % 77 = 0 SETTINGS mutations_sync = 1;
 
 -- Memory usage for all mutations must be almost constant and less than
 -- read_bytes
@@ -73,6 +77,8 @@ INSERT INTO table_with_function_pk SELECT
     toString(number % 10)
 FROM numbers(10000000);
 
+ALTER TABLE table_with_function_pk DELETE WHERE key1 % 77 = 0 SETTINGS mutations_sync = 1;
+
 -- Memory usage for all mutations must be almost constant and less than
 -- read_bytes
 SELECT arrayDistinct(groupArray(if(read_bytes >= peak_memory_usage, [1], [read_bytes, peak_memory_usage])))
@@ -100,6 +106,8 @@ INSERT INTO table_without_pk SELECT
     toDateTime('2019-10-01 00:00:00'),
     toString(number % 10)
 FROM numbers(10000000);
+
+ALTER TABLE table_without_pk DELETE WHERE key1 % 77 = 0 SETTINGS mutations_sync = 1;
 
 -- Memory usage for all mutations must be almost constant and less than
 -- read_bytes

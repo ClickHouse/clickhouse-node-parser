@@ -19,6 +19,8 @@ WHERE table = 'metric_log'
     AND peak_memory_usage > 1000000000
 FORMAT Vertical;
 
+ALTER TABLE metric_log MODIFY SETTING max_merge_delayed_streams_for_parallel_write = 10000;
+
 SELECT
     'max_merge_delayed_streams_for_parallel_write=1000' AS test,
     count() AS count

@@ -17,6 +17,7 @@ SET apply_patch_parts = 1;
 SET max_threads = 1;
 SELECT * FROM t_shared ORDER BY id;
 SELECT name, rows FROM system.parts WHERE database = currentDatabase() AND table = 't_shared' ORDER BY name;
+ALTER TABLE t_shared APPLY PATCHES SETTINGS mutations_sync = 2;
 SELECT ProfileEvents['ReadTasksWithAppliedPatches']
 FROM system.query_log
 WHERE current_database = currentDatabase() AND query = 'SELECT * FROM t_shared ORDER BY id;' AND type = 'QueryFinish'

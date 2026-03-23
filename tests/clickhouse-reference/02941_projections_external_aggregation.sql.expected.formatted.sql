@@ -17,6 +17,16 @@ INSERT INTO t_proj_external SELECT
     number
 FROM numbers(50000);
 
+ALTER TABLE t_proj_external ADD PROJECTION aaaa (SELECT
+    k1,
+    k2,
+    k3,
+    sum(value)
+GROUP BY
+    k1,
+    k2,
+    k3);
+
 INSERT INTO t_proj_external SELECT
     1,
     number % 2,
@@ -95,3 +105,5 @@ SETTINGS
     max_bytes_before_external_group_by = 1,
     max_bytes_ratio_before_external_group_by = 0,
     group_by_two_level_threshold = 1;
+
+ALTER TABLE t_proj_external MATERIALIZE PROJECTION aaaa SETTINGS mutations_sync = 2;

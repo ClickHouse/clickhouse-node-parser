@@ -7,5 +7,9 @@ INSERT INTO 02707_keepermap_delete_update VALUES (1, 'Some string', 0), (2, 'Som
 SELECT *, _version, _version FROM 02707_keepermap_delete_update ORDER BY key;
 SELECT '-----------';
 SELECT *, _version FROM 02707_keepermap_delete_update ORDER BY key;
+ALTER TABLE 02707_keepermap_delete_update DELETE WHERE key >= 4;
 SELECT count() FROM 02707_keepermap_delete_update;
 INSERT INTO 02707_keepermap_delete_update VALUES (1, 'String', 10), (2, 'String', 20), (3, 'String', 30), (4, 'String', 40);
+ALTER TABLE 02707_keepermap_delete_update UPDATE value = 'Another' WHERE key > 2;
+ALTER TABLE 02707_keepermap_delete_update UPDATE key = key * 10 WHERE 1 = 1; -- { serverError BAD_ARGUMENTS }
+ALTER TABLE 02707_keepermap_delete_update UPDATE value2 = value2 * 10 + 2 WHERE value2 < 100;

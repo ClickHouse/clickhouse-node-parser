@@ -15,4 +15,8 @@ INSERT INTO data (key);
 
 INSERT INTO data (key);
 
+ALTER TABLE data ADD COLUMN `features_legacy_Map.id` Array(UInt8), ADD COLUMN `features_legacy_Map.count` Array(UInt32);
+
+ALTER TABLE data DROP COLUMN legacy_features_Map SETTINGS mutations_sync = 2;
+
 DROP TABLE data;

@@ -16,6 +16,7 @@ SETTINGS
 INSERT INTO t_shared SELECT number, number FROM numbers(20);
 INSERT INTO t_shared SELECT number, number FROM numbers(20, 10);
 SET mutations_sync = 2;
+ALTER TABLE t_shared APPLY PATCHES, UPDATE c1 = 2000 WHERE id % 10 = 0;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 1;
 SELECT * FROM t_shared ORDER BY id SETTINGS apply_patch_parts = 0;
 SELECT name, rows FROM system.parts WHERE database = currentDatabase() AND table = 't_shared' AND active ORDER BY name;

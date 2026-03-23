@@ -41,6 +41,10 @@ INSERT INTO test_table;
 
 INSERT INTO test_table;
 
+ALTER TABLE test_table DROP PARTITION 202410;
+
+ALTER TABLE test_table ATTACH PARTITION 202410;
+
 SELECT
     id,
     visits

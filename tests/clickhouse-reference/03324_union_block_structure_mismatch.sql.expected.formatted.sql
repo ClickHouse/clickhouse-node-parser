@@ -15,6 +15,9 @@ ORDER BY tuple();
 INSERT INTO t0 SELECT number
 FROM numbers(1);
 
+ALTER TABLE t0 ADD PROJECTION x (SELECT i
+ORDER BY i ASC) SETTINGS mutations_sync = 2;
+
 -- With force_optimize_projection=1, the projection code path is exercised.
 -- The fix causes it to safely skip the optimization and return PROJECTION_NOT_USED error
 -- instead of crashing with "Block structure mismatch in UnionStep".

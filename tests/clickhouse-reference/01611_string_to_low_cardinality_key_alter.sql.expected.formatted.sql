@@ -11,10 +11,18 @@ ORDER BY (enum_key, lc_key);
 
 INSERT INTO table_with_lc_key;
 
+ALTER TABLE table_with_lc_key MODIFY COLUMN lc_key String;
+
 SELECT *
 FROM table_with_lc_key
 WHERE enum_key > 0
     AND like(lc_key, 'h%');
+
+ALTER TABLE table_with_lc_key MODIFY COLUMN enum_key Enum('x' = 2, 'y' = 1, 'z' = 3);
+
+ALTER TABLE table_with_lc_key MODIFY COLUMN enum_key Enum16('x' = 2, 'y' = 1, 'z' = 3); --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE table_with_lc_key MODIFY COLUMN enum_key Int8;
 
 DROP TABLE IF EXISTS table_with_string_key;
 
@@ -29,7 +37,11 @@ ORDER BY (int_key, str_key);
 
 INSERT INTO table_with_string_key;
 
+ALTER TABLE table_with_string_key MODIFY COLUMN str_key LowCardinality(String);
+
 SELECT *
 FROM table_with_string_key
 WHERE int_key > 0
     AND like(str_key, 'h%');
+
+ALTER TABLE table_with_string_key MODIFY COLUMN int_key Enum8('y' = 1, 'x' = 2); --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}

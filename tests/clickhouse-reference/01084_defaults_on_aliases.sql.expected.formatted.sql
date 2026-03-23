@@ -25,6 +25,8 @@ WHERE col1 = 1;
 SELECT col3
 FROM table_with_defaults_on_aliases; -- important to check without WHERE
 
+ALTER TABLE table_with_defaults_on_aliases ADD COLUMN col4 UInt64 DEFAULT col2 * col3;
+
 INSERT INTO table_with_defaults_on_aliases (col1);
 
 SELECT *
@@ -38,6 +40,8 @@ SELECT
     col4
 FROM table_with_defaults_on_aliases
 WHERE col1 = 2;
+
+ALTER TABLE table_with_defaults_on_aliases ADD COLUMN col5 UInt64 ALIAS col2 * col4;
 
 INSERT INTO table_with_defaults_on_aliases (col1);
 
@@ -53,3 +57,5 @@ SELECT
     col5
 FROM table_with_defaults_on_aliases
 WHERE col1 = 3;
+
+ALTER TABLE table_with_defaults_on_aliases ADD COLUMN col6 UInt64 MATERIALIZED col2 * col4;

@@ -8,6 +8,11 @@ CREATE TABLE pr_t
 ENGINE = MergeTree
 ORDER BY a;
 
+ALTER TABLE pr_t ADD PROJECTION p_agg (SELECT
+    a,
+    sum(b)
+GROUP BY a);
+
 INSERT INTO pr_t SELECT
     number % 1000,
     number % 1000

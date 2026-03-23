@@ -74,6 +74,8 @@ FROM test
 WHERE is_deleted = 0
 ORDER BY uid ASC;
 
+ALTER TABLE test MODIFY SETTING clean_deleted_rows = 'Never';
+
 DROP TABLE IF EXISTS testCleanupR1;
 
 CREATE TABLE testCleanupR1

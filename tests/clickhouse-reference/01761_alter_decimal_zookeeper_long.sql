@@ -8,4 +8,5 @@ ORDER BY tuple();
 INSERT INTO test_alter_decimal VALUES (1, toDecimal32(5, 5));
 INSERT INTO test_alter_decimal VALUES (2, toDecimal32(6, 6));
 SELECT * FROM test_alter_decimal ORDER BY n;
+ALTER TABLE test_alter_decimal MODIFY COLUMN d Decimal(18, 8);
 INSERT INTO test_alter_decimal VALUES (3, toDecimal32(7, 7));

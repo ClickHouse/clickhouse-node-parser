@@ -8,4 +8,6 @@ CREATE TABLE add_materialized_column_after
 ENGINE = MergeTree
 ORDER BY x;
 
+ALTER TABLE add_materialized_column_after ADD COLUMN y String MATERIALIZED toString(x) AFTER x;
+
 DROP TABLE add_materialized_column_after;

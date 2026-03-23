@@ -27,6 +27,8 @@ SET mutations_sync = 2;
 
 SET alter_sync = 2;
 
+ALTER TABLE t_sparse_columns_clear DROP COLUMN v;
+
 DROP TABLE t_sparse_columns_clear;
 
 SET max_rows_to_read = 0; -- system.text_log can be really big

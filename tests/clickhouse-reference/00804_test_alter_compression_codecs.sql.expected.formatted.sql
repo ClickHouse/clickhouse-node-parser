@@ -21,6 +21,8 @@ SELECT *
 FROM alter_compression_codec
 ORDER BY id ASC;
 
+ALTER TABLE alter_compression_codec ADD COLUMN alter_column String DEFAULT 'default_value' CODEC(ZSTD);
+
 SELECT compression_codec
 FROM `system`.`columns`
 WHERE database = currentDatabase()
@@ -31,15 +33,21 @@ INSERT INTO alter_compression_codec;
 
 INSERT INTO alter_compression_codec;
 
+ALTER TABLE alter_compression_codec MODIFY COLUMN alter_column CODEC(NONE);
+
 INSERT INTO alter_compression_codec;
 
 INSERT INTO alter_compression_codec;
 
 SET allow_suspicious_codecs = 1;
 
+ALTER TABLE alter_compression_codec MODIFY COLUMN alter_column CODEC(ZSTD, LZ4HC, LZ4, LZ4, NONE);
+
 INSERT INTO alter_compression_codec;
 
 INSERT INTO alter_compression_codec;
+
+ALTER TABLE alter_compression_codec MODIFY COLUMN alter_column FixedString(100);
 
 DROP TABLE IF EXISTS alter_bad_codec;
 
@@ -50,6 +58,10 @@ CREATE TABLE alter_bad_codec
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+
+ALTER TABLE alter_bad_codec ADD COLUMN alter_column DateTime DEFAULT '2019-01-01 00:00:00' CODEC(gbdgkjsdh); -- { serverError UNKNOWN_CODEC }
+
+ALTER TABLE alter_bad_codec ADD COLUMN alter_column DateTime DEFAULT '2019-01-01 00:00:00' CODEC(ZSTD(100)); -- { serverError ILLEGAL_CODEC_PARAMETER }
 
 DROP TABLE IF EXISTS large_alter_table_00804;
 
@@ -83,6 +95,8 @@ ENGINE = Memory();
 
 INSERT INTO store_of_hash_00804 SELECT sum(cityHash64(*))
 FROM large_alter_table_00804;
+
+ALTER TABLE large_alter_table_00804 MODIFY COLUMN data CODEC(NONE, LZ4, LZ4HC, ZSTD);
 
 SELECT compression_codec
 FROM `system`.`columns`

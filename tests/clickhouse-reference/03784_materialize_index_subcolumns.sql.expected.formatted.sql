@@ -11,6 +11,14 @@ INSERT INTO t_index (data);
 
 SET mutations_sync = 2;
 
+ALTER TABLE t_index ADD INDEX a_idx data.a TYPE minmax;
+
+ALTER TABLE t_index MATERIALIZE INDEX a_idx;
+
+ALTER TABLE t_index ADD INDEX b_idx data.b::UInt64 TYPE minmax;
+
+ALTER TABLE t_index MATERIALIZE INDEX b_idx;
+
 SELECT sum(secondary_indices_compressed_bytes) > 0
 FROM `system`.parts
 WHERE database = currentDatabase()
@@ -36,6 +44,8 @@ ORDER BY tuple()
 SETTINGS min_bytes_for_wide_part = 100000000;
 
 INSERT INTO t_index (id);
+
+ALTER TABLE t_index ADD COLUMN data JSON(a UInt64);
 
 SELECT column
 FROM `system`.parts_columns

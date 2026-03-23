@@ -34,9 +34,16 @@ INSERT INTO t_mt;
 
 INSERT INTO t_mt;
 
+ALTER TABLE t_mt ADD COLUMN value String SETTINGS mutations_sync = 2;
+
 INSERT INTO t_mt;
 
 INSERT INTO t_mt;
+
+-- now let's try to remove ColumnsDescription with old structure
+ALTER TABLE t_mt DROP PART 'all_1_1_0';
+
+ALTER TABLE t_mt DROP PART 'all_2_2_0';
 
 -- system.metrics
 SELECT value > 0

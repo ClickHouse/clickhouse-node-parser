@@ -13,6 +13,7 @@ CREATE TABLE tp (
     PROJECTION p (select sum(eventcnt), type group by type)
 ) engine = MergeTree order by type
 SETTINGS deduplicate_merge_projection_mode = 'drop';
+ALTER TABLE tp MODIFY SETTING deduplicate_merge_projection_mode = 'throw';
 -- test irregular merge tree
 CREATE TABLE tp (
     type Int32,
@@ -47,3 +48,5 @@ CREATE TABLE tp (
     type Int32,
     eventcnt UInt64
 ) engine = ReplacingMergeTree order by type;
+ALTER TABLE tp ADD PROJECTION p (SELECT sum(eventcnt), type GROUP BY type);  -- { serverError SUPPORT_IS_DISABLED }
+ALTER TABLE tp MODIFY SETTING deduplicate_merge_projection_mode = 'drop';

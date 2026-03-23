@@ -18,6 +18,8 @@ INSERT INTO test SELECT
     number
 FROM numbers(3);
 
+ALTER TABLE test ADD COLUMN d Dynamic(max_types = 3) SETTINGS mutations_sync = 1;
+
 SELECT
     count(),
     dynamicType(d)
@@ -72,17 +74,23 @@ SELECT
 FROM test
 ORDER BY x ASC;
 
+ALTER TABLE test MODIFY COLUMN d Dynamic(max_types = 1) SETTINGS mutations_sync = 1;
+
 INSERT INTO test SELECT
     number,
     number,
     multiIf(number % 4 == 0, number, number % 4 == 1, concat('str_', toString(number)), number % 4 == 2, toDate(number), NULL)
 FROM numbers(15, 4);
 
+ALTER TABLE test MODIFY COLUMN d Dynamic(max_types = 3) SETTINGS mutations_sync = 1;
+
 INSERT INTO test SELECT
     number,
     number,
     multiIf(number % 4 == 0, number, number % 4 == 1, concat('str_', toString(number)), number % 4 == 2, toDate(number), NULL)
 FROM numbers(19, 4);
+
+ALTER TABLE test MODIFY COLUMN y Dynamic SETTINGS mutations_sync = 1;
 
 SELECT
     x,

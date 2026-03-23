@@ -18,6 +18,8 @@ FROM test
 GROUP BY type
 ORDER BY type ASC;
 
+ALTER TABLE test MODIFY COLUMN type Enum('x', 'y');
+
 INSERT INTO test;
 
 DROP TABLE test;

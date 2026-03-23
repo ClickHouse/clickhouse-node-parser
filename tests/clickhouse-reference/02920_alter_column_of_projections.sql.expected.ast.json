@@ -157,6 +157,66 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "age",
+          "type": {
+            "name": "Nullable",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "Int32"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Cannot ALTER, which breaks key column of projection."
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "i",
+          "type": {
+            "name": "Int32"
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Cannot ALTER, uniq(Int16) is not compatible with uniq(Int32)."
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_CONVERT_TYPE }"
+    ]
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -167,6 +227,29 @@
           "value": "0"
         }
       }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "j",
+          "type": {
+            "name": "Int32"
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Can ALTER, count(Int16) is compatible with count(Int32)."
     ]
   },
   {
@@ -221,6 +304,39 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "j",
+          "type": {
+            "name": "Int64"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Another ALTER to wait for."
     ]
   },
   {

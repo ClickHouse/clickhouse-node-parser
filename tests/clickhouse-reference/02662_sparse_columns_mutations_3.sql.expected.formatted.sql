@@ -29,6 +29,8 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+ALTER TABLE t_sparse_mutations_3 MODIFY COLUMN s Tuple(UInt64, UInt64, String, String, String);
+
 SELECT
     type,
     serialization_kind,
@@ -50,6 +52,8 @@ SELECT
     groupUniqArray(s.5)
 FROM t_sparse_mutations_3;
 
+ALTER TABLE t_sparse_mutations_3 MODIFY COLUMN s Tuple(UInt64, UInt64, UInt64, UInt64, String);
+
 SELECT
     sum(s.1),
     sum(s.2),
@@ -59,5 +63,7 @@ SELECT
 FROM t_sparse_mutations_3;
 
 SET mutations_sync = 2;
+
+ALTER TABLE t_sparse_mutations_3 MODIFY COLUMN s Tuple(Nullable(UInt64), Nullable(UInt64), Nullable(UInt64), Nullable(UInt64), Nullable(String));
 
 DROP TABLE t_sparse_mutations_3;

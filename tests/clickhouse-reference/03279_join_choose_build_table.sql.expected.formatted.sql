@@ -63,6 +63,10 @@ FORMAT Null;
 
 SET mutations_sync = 2;
 
+ALTER TABLE sales ADD INDEX date_idx date TYPE minmax GRANULARITY 1;
+
+ALTER TABLE sales MATERIALIZE INDEX date_idx;
+
 SELECT *
 FROM
     products

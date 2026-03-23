@@ -60,6 +60,8 @@ SELECT
     dictGetKeys('dict_products', 'category', target_category) AS product_ids_by_category_before
 FROM inputs
 ORDER BY target_category, target_brand, target_timezone;
+ALTER TABLE src_products DELETE WHERE category = 'catA'
+    SETTINGS mutations_sync = 1;
 SELECT
     target_category,
     dictGetKeys('dict_products', 'category', target_category) AS product_ids_by_category_after

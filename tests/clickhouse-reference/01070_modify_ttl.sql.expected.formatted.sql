@@ -22,6 +22,8 @@ INSERT INTO ttl;
 
 SET mutations_sync = 2;
 
+ALTER TABLE ttl MODIFY TTL d + toIntervalDay(1);
+
 SELECT *
 FROM ttl
 ORDER BY a ASC;
@@ -36,9 +38,17 @@ ORDER BY i;
 
 INSERT INTO ttl;
 
+ALTER TABLE ttl MODIFY TTL if(i % 2 = 0, today() - 10, toDate('2100-01-01'));
+
 SELECT *
 FROM ttl
 ORDER BY i ASC;
+
+ALTER TABLE ttl MODIFY TTL toDate('2000-01-01');
+
+ALTER TABLE ttl MODIFY COLUMN s String TTL if(i % 2 = 0, today() - 10, toDate('2100-01-01'));
+
+ALTER TABLE ttl MODIFY COLUMN s String TTL toDate('2000-01-01');
 
 CREATE TABLE ttl
 (
@@ -51,11 +61,15 @@ ORDER BY i;
 
 INSERT INTO ttl;
 
+ALTER TABLE ttl MODIFY TTL if(i % 3 = 0, today() - 10, toDate('2100-01-01'));
+
 SELECT
     i,
     s
 FROM ttl
 ORDER BY i ASC;
+
+ALTER TABLE ttl MODIFY COLUMN s String TTL d + toIntervalMonth(1);
 
 CREATE TABLE ttl
 (
@@ -67,6 +81,8 @@ ENGINE = MergeTree
 ORDER BY i;
 
 INSERT INTO ttl;
+
+ALTER TABLE ttl MODIFY COLUMN s String TTL if(i % 3 = 0, today() - 10, toDate('2100-01-01')), MODIFY COLUMN t String TTL if(i % 3 = 1, today() - 10, toDate('2100-01-01'));
 
 SELECT
     i,
@@ -90,3 +106,5 @@ CREATE TABLE ttl
 )
 ENGINE = MergeTree
 ORDER BY i;
+
+ALTER TABLE ttl MODIFY COLUMN s String TTL toDate('2000-01-02');

@@ -13,5 +13,10 @@ CREATE TABLE test
 Engine = ReplicatedMergeTree('/clickhouse/tables/{database}/test/test_table', '1')
 ORDER BY (c_id, p_id);
 INSERT INTO test SELECT '1', '11', '111' FROM numbers(5);
+ALTER TABLE test UPDATE d = d + throwIf(1) where 1 SETTINGS mutations_sync=0;
+ALTER TABLE test ADD COLUMN x UInt32 default 0 SETTINGS mutations_sync=0;
+ALTER TABLE test UPDATE d = x + 1 where 1 SETTINGS mutations_sync=0;
+ALTER TABLE test DROP COLUMN x SETTINGS mutations_sync=2; -- { serverError BAD_ARGUMENTS }
+ALTER TABLE test UPDATE x = x + 1 where 1 SETTINGS mutations_sync=2;
 SELECT * from test format Null;
 DROP TABLE test;

@@ -27,6 +27,10 @@ SELECT
 FROM clear_column
 ORDER BY num ASC;
 
+ALTER TABLE clear_column DROP COLUMN num IN PARTITION '201612';
+
+ALTER TABLE clear_column DROP COLUMN num IN PARTITION '201611';
+
 SELECT
     data_compressed_bytes,
     data_uncompressed_bytes
@@ -68,6 +72,10 @@ INSERT INTO clear_column1 (d);
 
 SET replication_alter_partitions_sync = 2;
 
+ALTER TABLE clear_column1 ADD COLUMN s String;
+
+ALTER TABLE clear_column1 DROP COLUMN s IN PARTITION '200001';
+
 INSERT INTO clear_column1;
 
 INSERT INTO clear_column1;
@@ -78,6 +86,12 @@ ORDER BY
     d ASC,
     i ASC,
     s ASC;
+
+ALTER TABLE clear_column1 DROP COLUMN i IN PARTITION '200001';
+
+ALTER TABLE clear_column1 DROP COLUMN i IN PARTITION '200002';
+
+ALTER TABLE clear_column1 DROP COLUMN s IN PARTITION '200002';
 
 SELECT DISTINCT *
 FROM clear_column2
@@ -95,6 +109,12 @@ WHERE database = currentDatabase()
 GROUP BY table;
 
 SET optimize_throw_if_noop = 1;
+
+-- clear column in empty partition should be Ok
+ALTER TABLE clear_column1 DROP COLUMN s IN PARTITION '200012', DROP COLUMN i IN PARTITION '200012';
+
+-- Drop empty partition also Ok
+ALTER TABLE clear_column1 DROP PARTITION '200012', DROP PARTITION '200011';
 
 DROP TABLE clear_column1;
 

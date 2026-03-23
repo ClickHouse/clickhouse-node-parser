@@ -26,6 +26,8 @@ INSERT INTO test_table SELECT
     ['a', 'b', 'c']
 FROM numbers(1);
 
+ALTER TABLE test_table ADD COLUMN y Array(String) ALIAS ['qwqw'] AFTER x;
+
 SELECT y
 FROM test_table
 ORDER BY c ASC;
@@ -58,6 +60,8 @@ INSERT INTO test_table SELECT
     number % 3,
     ['a']
 FROM numbers(1);
+
+ALTER TABLE test_table ADD COLUMN `n.y` Array(String) ALIAS ['qwqw'] AFTER `n.x`;
 
 SELECT
     a,

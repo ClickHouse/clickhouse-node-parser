@@ -11,4 +11,8 @@ FROM numbers(1000000);
 SELECT COUNT()
 FROM test;
 
+ALTER TABLE test DROP PARTITION tuple();
+
+ALTER TABLE test ATTACH PARTITION tuple();
+
 DROP TABLE test;

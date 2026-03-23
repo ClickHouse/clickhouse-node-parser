@@ -46,6 +46,32 @@ SELECT *
 FROM t_detach_attach_patches
 ORDER BY `ALL` ASC;
 
+ALTER TABLE t_detach_attach_patches DROP PARTITION 0; -- { serverError SUPPORT_IS_DISABLED }
+
+ALTER TABLE t_detach_attach_patches APPLY PATCHES IN PARTITION 0;
+
+ALTER TABLE t_detach_attach_patches DROP PART '1_0_0_0'; -- { serverError SUPPORT_IS_DISABLED }
+
+ALTER TABLE t_detach_attach_patches APPLY PATCHES IN PARTITION 1;
+
+ALTER TABLE t_detach_attach_patches DROP PART '1_0_0_0_4';
+
+ALTER TABLE t_detach_attach_patches MOVE PARTITION 2 TO TABLE t_detach_attach_patches_dst; -- { serverError SUPPORT_IS_DISABLED }
+
+ALTER TABLE t_detach_attach_patches APPLY PATCHES IN PARTITION 2;
+
+ALTER TABLE t_detach_attach_patches_dst REPLACE PARTITION 3 FROM t_detach_attach_patches; -- { serverError SUPPORT_IS_DISABLED }
+
+ALTER TABLE t_detach_attach_patches APPLY PATCHES IN PARTITION 3;
+
+ALTER TABLE t_detach_attach_patches DROP PARTITION 4;
+
+ALTER TABLE t_detach_attach_patches DROP PART '5_0_0_0';
+
+ALTER TABLE t_detach_attach_patches ATTACH PARTITION 0;
+
+ALTER TABLE t_detach_attach_patches ATTACH PART '1_0_0_0_4';
+
 SET apply_patch_parts = 0;
 
 DROP TABLE t_detach_attach_patches;

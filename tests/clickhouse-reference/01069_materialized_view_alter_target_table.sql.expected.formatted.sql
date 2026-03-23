@@ -26,6 +26,8 @@ FROM mv_source;
 
 INSERT INTO mv_source;
 
+ALTER TABLE mv_target ADD COLUMN b UInt8;
+
 INSERT INTO mv_source;
 
 SELECT *

@@ -11,6 +11,8 @@ SETTINGS min_bytes_for_wide_part = 1, min_rows_for_wide_part = 1;
 INSERT INTO test_lazy SELECT *
 FROM numbers(100);
 
+ALTER TABLE test_lazy ADD COLUMN `array` Array(UInt64) SETTINGS mutations_sync = 1;
+
 SELECT
     id,
     `array`

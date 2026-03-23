@@ -25,6 +25,10 @@ ORDER BY
     _block_number ASC,
     _block_offset ASC;
 
+ALTER TABLE t_block_offset MODIFY SETTING enable_block_number_column = 1;
+
+ALTER TABLE t_block_offset MODIFY SETTING enable_block_offset_column = 1;
+
 INSERT INTO t_block_offset SELECT number * 2 + 1
 FROM numbers(16);
 

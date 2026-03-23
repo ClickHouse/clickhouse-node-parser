@@ -14,3 +14,5 @@ SELECT count()
 FROM a8x;
 
 SET mutations_sync = 1;
+
+ALTER TABLE a8x UPDATE number = 0 WHERE number = -3;

@@ -32,6 +32,10 @@ SELECT
     uniqExact(s)
 FROM t_sparse_alter;
 
+ALTER TABLE t_sparse_alter DROP COLUMN s, RENAME COLUMN u TO t;
+
+ALTER TABLE t_sparse_alter MODIFY COLUMN t UInt16;
+
 SELECT uniqExact(t)
 FROM t_sparse_alter;
 

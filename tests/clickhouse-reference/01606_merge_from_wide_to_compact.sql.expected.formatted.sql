@@ -25,6 +25,8 @@ WHERE table = 'wide_to_comp'
     AND active
 ORDER BY name ASC;
 
+ALTER TABLE wide_to_comp MODIFY SETTING min_rows_for_wide_part = 10000000;
+
 SELECT count()
 FROM wide_to_comp
 WHERE NOT ignore(*);

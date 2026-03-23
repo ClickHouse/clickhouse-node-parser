@@ -23,6 +23,8 @@ WHERE database = currentDatabase()
     AND table = 'test_move_partition_throttling'
     AND active;
 
+ALTER TABLE test_move_partition_throttling MOVE PARTITION tuple() TO VOLUME 'remote' SETTINGS max_remote_write_network_bandwidth = 1600000;
+
 -- (8e6-1600000)/1600000=4.0
 SELECT
     query_kind,

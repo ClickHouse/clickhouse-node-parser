@@ -29,6 +29,8 @@ INSERT INTO table_one SELECT
     number
 FROM numbers(100);
 
+ALTER TABLE table_two REPLACE PARTITION 0 FROM table_one;
+
 CREATE TABLE table_two
 (
     id UInt64,

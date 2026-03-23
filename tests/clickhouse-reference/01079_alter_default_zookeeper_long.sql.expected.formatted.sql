@@ -15,8 +15,33 @@ INSERT INTO alter_default SELECT
 FROM `system`.numbers
 LIMIT 100;
 
+-- Cannot add column without type
+ALTER TABLE alter_default ADD COLUMN value DEFAULT '10'; --{serverError BAD_ARGUMENTS}
+
+ALTER TABLE alter_default ADD COLUMN value String DEFAULT '10';
+
 SELECT sum(CAST(value AS UInt64))
 FROM alter_default;
 
+ALTER TABLE alter_default MODIFY COLUMN value UInt64;
+
+ALTER TABLE alter_default MODIFY COLUMN value UInt64 DEFAULT 10;
+
 SELECT sum(value)
 FROM alter_default;
+
+ALTER TABLE alter_default MODIFY COLUMN value DEFAULT 100;
+
+ALTER TABLE alter_default MODIFY COLUMN value UInt16 DEFAULT 100;
+
+ALTER TABLE alter_default MODIFY COLUMN value UInt8 DEFAULT 10;
+
+ALTER TABLE alter_default ADD COLUMN bad_column UInt8 DEFAULT 'q'; --{serverError CANNOT_PARSE_TEXT}
+
+ALTER TABLE alter_default ADD COLUMN better_column UInt8 DEFAULT '1';
+
+ALTER TABLE alter_default ADD COLUMN other_date String DEFAULT '0';
+
+ALTER TABLE alter_default MODIFY COLUMN other_date DateTime; --{serverError CANNOT_PARSE_DATETIME}
+
+ALTER TABLE alter_default MODIFY COLUMN other_date DEFAULT 1;

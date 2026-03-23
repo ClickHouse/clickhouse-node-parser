@@ -25,3 +25,10 @@ SETTINGS auto_statistics_types = '';
 INSERT INTO t0;
 
 INSERT INTO t1;
+
+ALTER TABLE t1 UPDATE key = 0 WHERE 1
+OR NOT NOT exists((
+    SELECT key
+    FROM t0
+    WHERE key > 0
+)) SETTINGS mutations_sync = 2, allow_experimental_analyzer = 0, query_plan_optimize_prewhere = 0, query_plan_enable_optimizations = 0, use_statistics = 1;

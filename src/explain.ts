@@ -1,4 +1,7 @@
 import {
+  AlterStatement,
+  AlterCommand,
+  AlterPartitionExpr,
   BinaryExpr,
   CTE,
   ColumnDef,
@@ -1825,12 +1828,9 @@ function createTableQueryNode(stmt: CreateTableStatement): ExplainNode {
         }
         case 'projectionDef': {
           // PROJECTION ... INDEX col TYPE name format
-          if (el.projectionIndex) {
-            const pi = el.projectionIndex;
-            const piChildren: ExplainNode[] = [
-              n(`Identifier ${pi.column}`),
-              n(`Function ${pi.typeName}`, [n('ExpressionList')]),
-            ];
+          if (el.indexExpr) {
+            const piChildren: ExplainNode[] = [exprNode(el.indexExpr)];
+            if (el.indexType) piChildren.push(indexTypeToExplainNode(el.indexType));
             projections.push(n('Projection', piChildren));
             break;
           }
@@ -2033,6 +2033,335 @@ function insertQueryNode(stmt: InsertStatement): ExplainNode {
   return n('InsertQuery  ', children);
 }
 
+// ── ALTER TABLE explain helpers ──────────────────────────────────────────────
+
+// Build a Partition or Partition_ID node from an AlterPartitionExpr
+// For main partition commands (DROP/ATTACH/REPLACE/MOVE/FETCH/FREEZE PARTITION),
+// ALL and tuple(...) both produce Partition_ID (empty).
+// For IN PARTITION sub-clauses (CLEAR/MATERIALIZE), expressions produce normal Partition nodes.
+function partitionNode(part: AlterPartitionExpr): ExplainNode {
+  if (part.partitionKind === 'all') {
+    return n('Partition_ID ');
+  }
+  if (part.partitionKind === 'id') {
+    if (part.id.kind === 'queryParam') {
+      return n('Partition_ID', [exprNode(part.id)]);
+    }
+    const lit = part.id as import('./ast').Literal;
+    const label = `Partition_ID Literal_'${escapeStringValue(lit.value)}'`;
+    return n(label, [n(`Literal '${escapeStringValue(lit.value)}'`)]);
+  }
+  return n('Partition', [exprNode(part.expr)]);
+}
+
+// Build an AlterCommand explain node
+function alterCommandNode(cmd: AlterCommand): ExplainNode {
+  const children: ExplainNode[] = [];
+  const type = cmd.commandType;
+
+  switch (type) {
+    case 'ADD_COLUMN':
+      if (cmd.column) children.push(columnDeclNode(cmd.column));
+      if (cmd.afterColumn) children.push(n(`Identifier ${cmd.afterColumn}`));
+      break;
+
+    case 'DROP_COLUMN':
+      if (cmd.columnName) children.push(n(`Identifier ${cmd.columnName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'MODIFY_COLUMN': {
+      if (cmd.column) children.push(columnDeclNode(cmd.column));
+      const colSettingOp = (cmd as Record<string, unknown>).columnSettingOp as
+        | { op: string; names?: string[]; settings?: unknown[] }
+        | undefined;
+      if (colSettingOp) {
+        if (colSettingOp.op === 'RESET_SETTING' && colSettingOp.names) {
+          children.push(
+            n(
+              'ExpressionList',
+              colSettingOp.names.map((name: string) => n(`Identifier ${name}`)),
+            ),
+          );
+        } else {
+          children.push(n('Set'));
+        }
+      }
+      if (cmd.afterColumn) children.push(n(`Identifier ${cmd.afterColumn}`));
+      break;
+    }
+
+    case 'RENAME_COLUMN':
+      if (cmd.oldName) children.push(n(`Identifier ${cmd.oldName}`));
+      if (cmd.newName) children.push(n(`Identifier ${cmd.newName}`));
+      break;
+
+    case 'COMMENT_COLUMN':
+      if (cmd.columnName) children.push(n(`Identifier ${cmd.columnName}`));
+      if (cmd.comment) children.push(n(`Literal '${escapeStringValue(cmd.comment.value)}'`));
+      break;
+
+    case 'MATERIALIZE_COLUMN':
+      if (cmd.columnName) children.push(n(`Identifier ${cmd.columnName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'ADD_INDEX':
+      if (cmd.index) {
+        const idxChildren: ExplainNode[] = [];
+        if (cmd.index.expr) {
+          idxChildren.push(exprNode(cmd.index.expr));
+        }
+        if (cmd.index.indexType) {
+          idxChildren.push(indexTypeToExplainNode(cmd.index.indexType));
+        }
+        children.push(n('Index', idxChildren));
+      }
+      if (cmd.afterIndex) children.push(n(`Identifier ${cmd.afterIndex}`));
+      break;
+
+    case 'DROP_INDEX':
+      if (cmd.indexName) children.push(n(`Identifier ${cmd.indexName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'MATERIALIZE_INDEX':
+      if (cmd.indexName) children.push(n(`Identifier ${cmd.indexName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'ADD_PROJECTION':
+      if (cmd.projection) {
+        const projChildren: ExplainNode[] = [];
+        if (cmd.projection.indexExpr) {
+          // INDEX variant: PROJECTION name INDEX expr TYPE type
+          projChildren.push(exprNode(cmd.projection.indexExpr));
+          if (cmd.projection.indexType) {
+            projChildren.push(indexTypeToExplainNode(cmd.projection.indexType));
+          }
+        } else if (cmd.projection.query) {
+          const pqChildren: ExplainNode[] = [];
+          if (cmd.projection.query.select)
+            pqChildren.push(n('ExpressionList', cmd.projection.query.select.map(exprNode)));
+          if (cmd.projection.query.groupBy && cmd.projection.query.groupBy.kind === 'expressions') {
+            pqChildren.push(n('ExpressionList', cmd.projection.query.groupBy.items.map(exprNode)));
+          }
+          if (cmd.projection.query.orderBy && cmd.projection.query.orderBy.length > 0) {
+            if (cmd.projection.query.orderBy.length === 1)
+              pqChildren.push(exprNode(cmd.projection.query.orderBy[0].expr));
+            else
+              pqChildren.push(
+                n('Function tuple', [
+                  n(
+                    'ExpressionList',
+                    cmd.projection.query.orderBy.map((o) => exprNode(o.expr)),
+                  ),
+                ]),
+              );
+          }
+          projChildren.push(n('ProjectionSelectQuery', pqChildren));
+        }
+        if (cmd.projection.projectionSettings && cmd.projection.projectionSettings.length > 0) {
+          projChildren.push(n('Set'));
+        }
+        children.push(n('Projection', projChildren));
+      }
+      break;
+
+    case 'DROP_PROJECTION':
+      if (cmd.projectionName) children.push(n(`Identifier ${cmd.projectionName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'MATERIALIZE_PROJECTION':
+      if (cmd.projectionName) children.push(n(`Identifier ${cmd.projectionName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'ADD_CONSTRAINT':
+      if (cmd.constraint) {
+        children.push(n('Constraint', [exprNode(cmd.constraint.expr)]));
+      }
+      break;
+
+    case 'DROP_CONSTRAINT':
+      if (cmd.constraintName) children.push(n(`Identifier ${cmd.constraintName}`));
+      break;
+
+    case 'ADD_STATISTICS':
+    case 'MODIFY_STATISTICS': {
+      const statChildren: ExplainNode[] = [];
+      if (cmd.statColumns && cmd.statColumns.length > 0) {
+        statChildren.push(
+          n(
+            'ExpressionList',
+            cmd.statColumns.map((c) => n(`Identifier ${c}`)),
+          ),
+        );
+      }
+      if (cmd.statTypes && cmd.statTypes.length > 0) {
+        statChildren.push(
+          n(
+            'ExpressionList',
+            cmd.statTypes.map((t) => indexTypeToExplainNode(t)),
+          ),
+        );
+      }
+      children.push(n('Stat', statChildren));
+      break;
+    }
+
+    case 'DROP_STATISTICS':
+      if (cmd.statColumns && cmd.statColumns.length > 0) {
+        children.push(
+          n('Stat', [
+            n(
+              'ExpressionList',
+              cmd.statColumns.map((c) => n(`Identifier ${c}`)),
+            ),
+          ]),
+        );
+      }
+      break;
+    case 'MATERIALIZE_STATISTICS':
+      if (cmd.statColumns && cmd.statColumns.length > 0) {
+        children.push(
+          n('Stat', [
+            n(
+              'ExpressionList',
+              cmd.statColumns.map((c: string) => n(`Identifier ${c}`)),
+            ),
+          ]),
+        );
+      }
+      break;
+
+    case 'UPDATE':
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      if (cmd.where) children.push(exprNode(cmd.where));
+      if (cmd.assignments && cmd.assignments.length > 0) {
+        const assignNodes = cmd.assignments.map((a) =>
+          n(`Assignment ${a.column}`, [exprNode(a.expr)]),
+        );
+        children.push(n('ExpressionList', assignNodes));
+      }
+      break;
+
+    case 'DELETE':
+      if (cmd.where) children.push(exprNode(cmd.where));
+      break;
+
+    case 'DROP_PARTITION':
+    case 'ATTACH_PARTITION':
+      if (cmd.partName) {
+        // DETACH/DROP PART 'name' → direct Literal child
+        children.push(n(`Literal '${escapeStringValue(cmd.partName.value)}'`));
+      } else if (cmd.partition) {
+        children.push(partitionNode(cmd.partition));
+      }
+      break;
+    case 'DROP_DETACHED_PARTITION':
+    case 'REPLACE_PARTITION':
+    case 'MOVE_PARTITION':
+    case 'FETCH_PARTITION':
+    case 'FREEZE_PARTITION':
+      if (cmd.partition) {
+        children.push(partitionNode(cmd.partition));
+      }
+      break;
+
+    case 'FREEZE_ALL':
+      // No children
+      break;
+
+    case 'MODIFY_TTL':
+      if (cmd.ttl) {
+        const ttlElements = cmd.ttl.map((item) => {
+          const ttlChildren = [exprNode(item.expr)];
+          if (item.where) ttlChildren.push(exprNode(item.where));
+          return n('TTLElement', ttlChildren);
+        });
+        children.push(n('ExpressionList', ttlElements));
+      }
+      break;
+
+    case 'REMOVE_TTL':
+    case 'REMOVE_SAMPLE_BY':
+      // No children
+      break;
+
+    case 'MATERIALIZE_TTL':
+      // No children (partition is handled at statement level)
+      break;
+
+    case 'MODIFY_ORDER_BY':
+    case 'MODIFY_SAMPLE_BY':
+      if (cmd.expr) children.push(exprNode(cmd.expr));
+      break;
+
+    case 'MODIFY_SETTING':
+      children.push(n('Set'));
+      break;
+
+    case 'RESET_SETTING':
+      if (cmd.settingNames && cmd.settingNames.length > 0) {
+        children.push(
+          n(
+            'ExpressionList',
+            cmd.settingNames.map((name) => n(`Identifier ${name}`)),
+          ),
+        );
+      }
+      break;
+
+    case 'MODIFY_QUERY':
+      if (cmd.query) children.push(stmtNode(cmd.query));
+      break;
+
+    case 'MODIFY_COMMENT':
+      if (cmd.comment) children.push(n(`Literal '${escapeStringValue(cmd.comment.value)}'`));
+      break;
+
+    case 'APPLY_DELETED_MASK':
+    case 'APPLY_PATCHES':
+    case 'REWRITE_PARTS':
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+  }
+
+  return n(`AlterCommand ${type}`, children);
+}
+
+// Build AlterQuery explain node
+function alterQueryNode(stmt: AlterStatement): ExplainNode {
+  const t = stmt.table;
+  const label = t.database ? `AlterQuery ${t.database} ${t.table}` : `AlterQuery  ${t.table}`;
+
+  const children: ExplainNode[] = [];
+
+  // ExpressionList of AlterCommand nodes
+  const cmdNodes = stmt.commands.map(alterCommandNode);
+  children.push(n('ExpressionList', cmdNodes));
+
+  // Identifier(s) for table name
+  if (t.database) {
+    children.push(n(`Identifier ${t.database}`));
+  }
+  children.push(n(`Identifier ${t.table}`));
+
+  // Optional FORMAT → Identifier child (before Set)
+  if (stmt.format) {
+    children.push(n(`Identifier ${stmt.format}`));
+  }
+
+  // Optional SETTINGS → Set child
+  if (stmt.settings && stmt.settings.length > 0) {
+    children.push(n('Set'));
+  }
+
+  return n(label, children);
+}
+
 // Build the top-level SelectWithUnionQuery node for a statement (SelectStatement or UnionStatement)
 function stmtNode(stmt: Statement): ExplainNode {
   if (stmt.kind === 'parallelWith') return parallelWithQueryNode(stmt);
@@ -2043,6 +2372,39 @@ function stmtNode(stmt: Statement): ExplainNode {
     return n('Set');
   }
   if (stmt.kind === 'system') {
+    // Opaque ALTER statements for access control objects (ALTER USER, ALTER ROLE, etc.)
+    if (/^ALTER\s/i.test(stmt.body)) {
+      const alterAliases: Record<string, string> = {
+        USER: 'CreateUserQuery',
+        ROLE: 'CreateRoleQuery',
+        'ROW POLICY': 'CREATE ROW POLICY or ALTER ROW POLICY query',
+        POLICY: 'CREATE ROW POLICY or ALTER ROW POLICY query',
+        'SETTINGS PROFILE': 'CreateSettingsProfileQuery',
+        PROFILE: 'CreateSettingsProfileQuery',
+        QUOTA: 'CreateQuotaQuery',
+        'NAMED COLLECTION': 'AlterNamedCollectionQuery',
+      };
+      const m = stmt.body.match(
+        /^ALTER\s+(USER|ROLE|ROW\s+POLICY|POLICY|SETTINGS\s+PROFILE|PROFILE|QUOTA|NAMED\s+COLLECTION)\b/i,
+      );
+      if (m) {
+        const key = m[1].toUpperCase().replace(/\s+/g, ' ');
+        const label = alterAliases[key] || 'SYSTEM query';
+        // For ALTER USER, extract auth data
+        if (key === 'USER') {
+          const authByMatch = stmt.body.match(/IDENTIFIED\s+(?:WITH\s+\w+\s+)?BY\s+'([^']*)'/i);
+          if (authByMatch) {
+            return n(label, [n('AuthenticationData', [n(`Literal '${authByMatch[1]}'`)])]);
+          }
+          // NOT IDENTIFIED or IDENTIFIED WITH <type> (no password)
+          if (/(?:NOT\s+)?IDENTIFIED/i.test(stmt.body) && !/RENAME/i.test(stmt.body)) {
+            return n(label, [n('AuthenticationData')]);
+          }
+        }
+        return n(label);
+      }
+      return n('SYSTEM query');
+    }
     // Opaque DROP statements produce specific labels based on the DROP target type
     if (/^DROP\s/i.test(stmt.body)) {
       const dropAliases: Record<string, string> = {
@@ -2162,6 +2524,7 @@ function stmtNode(stmt: Statement): ExplainNode {
 
     return n(label, children);
   }
+  if (stmt.kind === 'alter') return alterQueryNode(stmt);
 
   const format = stmt.format;
 

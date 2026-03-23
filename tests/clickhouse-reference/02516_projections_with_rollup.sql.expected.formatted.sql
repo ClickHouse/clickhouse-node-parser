@@ -59,6 +59,26 @@ INSERT INTO video_log SELECT
 FROM rng
 LIMIT 10;
 
+ALTER TABLE video_log ADD PROJECTION p_norm (SELECT
+    datetime,
+    device_id,
+    bytes,
+    duration
+ORDER BY device_id ASC);
+
+ALTER TABLE video_log MATERIALIZE PROJECTION p_norm SETTINGS mutations_sync = 1;
+
+ALTER TABLE video_log ADD PROJECTION p_agg (SELECT
+    toStartOfHour(datetime) AS hour,
+    domain,
+    sum(bytes),
+    avg(duration)
+GROUP BY
+    hour,
+    domain);
+
+ALTER TABLE video_log MATERIALIZE PROJECTION p_agg SETTINGS mutations_sync = 1;
+
 -- We are not interested in the result of this query, but it should not produce a logical error.
 SELECT
     avg_duration1,

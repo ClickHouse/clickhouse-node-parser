@@ -12,6 +12,8 @@ SETTINGS prewarm_mark_cache = 1, min_bytes_for_wide_part = 0;
 
 INSERT INTO t_prewarm_add_column;
 
+ALTER TABLE t_prewarm_add_column ADD COLUMN b UInt64;
+
 INSERT INTO t_prewarm_add_column;
 
 SELECT *

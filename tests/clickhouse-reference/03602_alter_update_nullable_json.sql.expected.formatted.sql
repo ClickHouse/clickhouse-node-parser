@@ -18,6 +18,8 @@ INSERT INTO test SELECT
     '{"a" : 1}'
 FROM numbers(100000);
 
+ALTER TABLE test UPDATE json = '{"b" : 1}' WHERE id > 90000;
+
 SELECT DISTINCT arrayJoin(JSONDynamicPaths(assumeNotNull(json)))
 FROM test;
 

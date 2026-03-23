@@ -55,6 +55,8 @@ ENGINE = ReplicatedMergeTree(concat('/clickhouse/tables/to_', currentDatabase())
 ORDER BY x
 SETTINGS old_parts_lifetime = 1, max_cleanup_delay_period = 1, cleanup_delay_period = 1, max_parts_to_merge_at_once = 2;
 
+ALTER TABLE shard_0.from_1 ON CLUSTER test_cluster_two_shards_different_databases MOVE PARTITION tuple() TO TABLE shard_0.to SETTINGS distributed_ddl_output_mode = 'never_throw', distributed_ddl_task_timeout = 1 FORMAT Null;
+
 SELECT
     name,
     active

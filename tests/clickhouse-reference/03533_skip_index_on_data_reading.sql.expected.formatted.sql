@@ -120,6 +120,10 @@ SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, min_bytes_for_full_
 -- insert a part with no index
 INSERT INTO test_partial_index;
 
+ALTER TABLE test_partial_index ADD INDEX region_idx region TYPE minmax GRANULARITY 1;
+
+ALTER TABLE test_partial_index ADD INDEX user_id_idx user_id TYPE minmax GRANULARITY 1;
+
 -- agree on one granule
 SELECT *
 FROM test_partial_index

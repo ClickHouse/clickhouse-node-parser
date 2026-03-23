@@ -31,4 +31,7 @@ SELECT
 FROM t_lwu_merges
 SETTINGS apply_patch_parts = 1;
 
+-- Add a barrier mutation between patch parts.
+ALTER TABLE t_lwu_merges DELETE WHERE id = 0 SETTINGS mutations_sync = 0;
+
 DROP TABLE t_lwu_merges;

@@ -18,6 +18,8 @@ SELECT *
 FROM report
 WHERE product = 'IU';
 
+ALTER TABLE report MODIFY COLUMN product Enum8('IU' = 1, 'WS' = 2, 'PS' = 3);
+
 SELECT *
 FROM report
 WHERE product = 'PS';
@@ -42,6 +44,8 @@ INSERT INTO replicated_report;
 SELECT *
 FROM replicated_report
 WHERE product = 'IU';
+
+ALTER TABLE replicated_report MODIFY COLUMN product Enum8('IU' = 1, 'WS' = 2, 'PS' = 3) SETTINGS alter_sync = 2;
 
 SELECT *
 FROM replicated_report

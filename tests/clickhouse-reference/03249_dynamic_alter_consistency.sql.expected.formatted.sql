@@ -14,6 +14,8 @@ SETTINGS min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1;
 INSERT INTO test SELECT if(number < 600000, number::Dynamic, (concat('str_', number))::Dynamic)
 FROM numbers(1000000);
 
+ALTER TABLE test MODIFY COLUMN d Dynamic(max_types = 1);
+
 SELECT
     count(),
     dynamicType(d),

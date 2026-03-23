@@ -27,4 +27,6 @@ SET max_parts_to_move = 5;
 INSERT INTO t SELECT number
 FROM numbers(10);
 
+ALTER TABLE t MOVE PARTITION tuple() TO TABLE t2; -- { serverError TOO_MANY_PARTS }
+
 SET max_parts_to_move = 15;

@@ -21,6 +21,8 @@ SETTINGS async_insert = 1;
 -- ADD COLUMN
 INSERT INTO t_async_insert_alter;
 
+ALTER TABLE t_async_insert_alter ADD COLUMN value2 Int64;
+
 SELECT *
 FROM t_async_insert_alter
 ORDER BY id ASC;
@@ -28,8 +30,12 @@ ORDER BY id ASC;
 -- MODIFY COLUMN
 INSERT INTO t_async_insert_alter;
 
+ALTER TABLE t_async_insert_alter MODIFY COLUMN value2 String;
+
 -- DROP COLUMN
 INSERT INTO t_async_insert_alter;
+
+ALTER TABLE t_async_insert_alter DROP COLUMN value2;
 
 SELECT
     query,

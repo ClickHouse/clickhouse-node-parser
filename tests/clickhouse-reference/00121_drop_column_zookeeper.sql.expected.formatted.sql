@@ -14,6 +14,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test/alter_00121/t1'
 
 INSERT INTO alter_00121;
 
+ALTER TABLE alter_00121 DROP COLUMN x;
+
 DROP TABLE alter_00121;
 
 CREATE TABLE alter_00121
@@ -27,5 +29,7 @@ INSERT INTO alter_00121;
 SELECT *
 FROM alter_00121
 ORDER BY d ASC;
+
+ALTER TABLE alter_00121 ADD COLUMN x UInt8;
 
 INSERT INTO alter_00121;

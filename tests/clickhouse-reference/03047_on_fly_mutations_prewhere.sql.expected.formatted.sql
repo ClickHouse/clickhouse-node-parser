@@ -22,15 +22,21 @@ INSERT INTO t_update_prewhere SELECT
     number
 FROM numbers(100000);
 
+ALTER TABLE t_update_prewhere UPDATE c1 = 0 WHERE id % 2 = 0;
+
 SELECT count()
 FROM t_update_prewhere
 PREWHERE c1 != 0
 WHERE c2 % 3 = 0;
 
+ALTER TABLE t_update_prewhere UPDATE c3 = c2 * 2 WHERE c1 != 0;
+
 SELECT sum(c3)
 FROM t_update_prewhere
 PREWHERE c3 % 3 = 0
 WHERE c1 != 0;
+
+ALTER TABLE t_update_prewhere UPDATE c2 = c3 - c1 WHERE c3 < 10000;
 
 SELECT sum(c2)
 FROM t_update_prewhere

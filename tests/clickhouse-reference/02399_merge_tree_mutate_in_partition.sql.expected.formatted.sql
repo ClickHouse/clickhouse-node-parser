@@ -27,6 +27,8 @@ SELECT
 FROM mt
 ORDER BY _part ASC;
 
+ALTER TABLE mt UPDATE n = n + (n NOT IN (m)) IN PARTITION ID '1' WHERE 1 SETTINGS mutations_sync = 1;
+
 DROP TABLE m;
 
 SELECT

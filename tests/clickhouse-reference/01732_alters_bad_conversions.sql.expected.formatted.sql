@@ -11,6 +11,8 @@ ORDER BY tuple();
 
 INSERT INTO bad_conversions;
 
+ALTER TABLE bad_conversions MODIFY COLUMN a Array(String); -- { serverError TYPE_MISMATCH }
+
 SELECT count()
 FROM `system`.mutations
 WHERE table = 'bad_conversions'
@@ -24,6 +26,8 @@ ENGINE = MergeTree
 ORDER BY tuple();
 
 INSERT INTO bad_conversions_2;
+
+ALTER TABLE bad_conversions_2 MODIFY COLUMN e Enum('bar' = 1, 'foo' = 2); -- { serverError CANNOT_CONVERT_TYPE }
 
 SELECT count()
 FROM `system`.mutations

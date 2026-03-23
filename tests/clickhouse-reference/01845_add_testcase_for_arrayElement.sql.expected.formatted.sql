@@ -40,3 +40,5 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY tuple();
+
+ALTER TABLE test ADD COLUMN xx UInt32 MATERIALIZED arr[1];

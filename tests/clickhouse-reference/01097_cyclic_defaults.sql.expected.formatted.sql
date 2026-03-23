@@ -43,4 +43,8 @@ CREATE TABLE table_with_cyclic_defaults
 )
 ENGINE = Memory;
 
+ALTER TABLE table_with_cyclic_defaults ADD COLUMN c String DEFAULT b, ADD COLUMN b String DEFAULT c; --{serverError CYCLIC_ALIASES}
+
+ALTER TABLE table_with_cyclic_defaults ADD COLUMN b String DEFAULT a, MODIFY COLUMN a DEFAULT b; --{serverError CYCLIC_ALIASES}
+
 SELECT 1;

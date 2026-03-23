@@ -13,6 +13,8 @@ create user '   spaces';
 create user 'spaces    ';
 create user ` INTERSERVER SECRET `;  -- { serverError BAD_ARGUMENTS }
 create user 'test 01119';
+alter user `test 01119` rename to " spaces ";
+alter user " spaces " rename to " INTERSERVER SECRET ";  -- { serverError BAD_ARGUMENTS }
 create user "Вася Пупкин";
 create user "无名氏 ";
 create user "🙈 🙉 🙊";

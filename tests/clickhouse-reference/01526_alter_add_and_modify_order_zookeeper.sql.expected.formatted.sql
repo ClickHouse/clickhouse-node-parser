@@ -23,6 +23,10 @@ INSERT INTO table_for_alter;
 SELECT *
 FROM table_for_alter;
 
+ALTER TABLE table_for_alter ADD COLUMN `order` UInt32, MODIFY ORDER BY (d, order);
+
+ALTER TABLE table_for_alter ADD COLUMN datum UInt32, MODIFY ORDER BY (d, order, datum);
+
 INSERT INTO table_for_alter;
 
 SELECT *

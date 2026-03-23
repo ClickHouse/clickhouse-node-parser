@@ -31,6 +31,8 @@ INSERT INTO t_1 SELECT
 FROM t_random_1
 LIMIT 1000000;
 
+ALTER TABLE t_1 ADD COLUMN foo String DEFAULT 'foo';
+
 SELECT COUNTDistinct((_part))
 FROM t_1;
 

@@ -20,6 +20,10 @@ INSERT INTO visits_dist (StartDate, Name);
 
 INSERT INTO visits_dist (StartDate, Name);
 
+ALTER TABLE visits RENAME COLUMN Name TO Name2;
+
+ALTER TABLE visits_dist RENAME COLUMN Name TO Name2;
+
 SELECT *
 FROM visits_dist
 ORDER BY

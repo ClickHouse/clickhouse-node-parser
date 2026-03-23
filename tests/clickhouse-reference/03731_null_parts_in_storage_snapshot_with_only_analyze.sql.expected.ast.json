@@ -120,5 +120,128 @@
         "table": "t1"
       }
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "key",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ],
+        "where": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "unaryExpr",
+              "op": "NOT",
+              "expr": {
+                "kind": "unaryExpr",
+                "op": "NOT",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "exists",
+                  "args": [
+                    {
+                      "kind": "subqueryExpr",
+                      "query": {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "key"
+                            ]
+                          }
+                        ],
+                        "from": {
+                          "kind": "tableRef",
+                          "table": "t0"
+                        },
+                        "where": {
+                          "kind": "binaryExpr",
+                          "op": ">",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "key"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "query_plan_optimize_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "query_plan_enable_optimizations",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "use_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
   }
 ]

@@ -18,6 +18,8 @@ INSERT INTO ttl;
 
 INSERT INTO ttl;
 
+ALTER TABLE ttl MODIFY TTL d + toIntervalDay(1);
+
 SELECT sleep(1)
 FORMAT Null; -- wait if very fast merge happen
 

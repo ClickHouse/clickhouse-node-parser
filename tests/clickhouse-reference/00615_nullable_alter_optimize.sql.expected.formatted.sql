@@ -13,6 +13,10 @@ ENGINE = MergeTree(dt, (id, key, dt), 8192);
 
 INSERT INTO test_00615 (dt, id, key, data);
 
+ALTER TABLE test_00615 DROP COLUMN data;
+
+ALTER TABLE test_00615 ADD COLUMN data Nullable(Float64);
+
 SELECT *
 FROM test_00615
 ORDER BY data ASC;

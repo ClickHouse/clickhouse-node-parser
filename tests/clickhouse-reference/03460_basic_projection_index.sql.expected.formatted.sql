@@ -196,6 +196,8 @@ SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, min_bytes_for_full_
 
 INSERT INTO t_partial;
 
+ALTER TABLE t_partial ADD PROJECTION region_proj INDEX region TYPE basic;
+
 INSERT INTO t_partial;
 
 -- Should use projection for rows 4–6 only

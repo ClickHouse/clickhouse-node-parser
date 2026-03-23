@@ -23,5 +23,15 @@ SELECT count()
 FROM `system`.zookeeper
 WHERE path = concat('/clickhouse/test/', currentDatabase(), '/01586_replicated_mutations_empty_partitions/', getMacro('shard'), '/block_numbers');
 
+ALTER TABLE replicated_mutations_empty_partitions DROP PARTITION '3';
+
+ALTER TABLE replicated_mutations_empty_partitions DROP PARTITION '4';
+
+ALTER TABLE replicated_mutations_empty_partitions DROP PARTITION '5';
+
+ALTER TABLE replicated_mutations_empty_partitions DROP PARTITION '9';
+
+ALTER TABLE replicated_mutations_empty_partitions MODIFY COLUMN value UInt64 SETTINGS replication_alter_partitions_sync = 2;
+
 SELECT sum(value)
 FROM replicated_mutations_empty_partitions;

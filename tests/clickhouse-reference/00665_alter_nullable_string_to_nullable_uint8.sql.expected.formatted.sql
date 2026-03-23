@@ -16,4 +16,6 @@ SELECT *
 FROM alter_00665
 ORDER BY boolean_false ASC;
 
+ALTER TABLE alter_00665 MODIFY COLUMN boolean_false Nullable(UInt8);
+
 DROP TABLE alter_00665;

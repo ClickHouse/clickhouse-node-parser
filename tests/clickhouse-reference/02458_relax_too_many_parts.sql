@@ -6,6 +6,8 @@ INSERT INTO test VALUES (1, 'a');
 INSERT INTO test VALUES (2, 'a');
 INSERT INTO test VALUES (3, 'a');
 INSERT INTO test VALUES (4, 'a'); -- { serverError TOO_MANY_PARTS }
+-- But it can be relaxed with a setting:
+ALTER TABLE test MODIFY SETTING max_avg_part_size_for_too_many_parts = '1M';
 INSERT INTO test VALUES (5, 'a');
 INSERT INTO test VALUES (6, 'a');
 INSERT INTO test VALUES (7, 'a'); -- { serverError TOO_MANY_PARTS }

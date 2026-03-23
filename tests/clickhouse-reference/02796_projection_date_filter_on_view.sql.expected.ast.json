@@ -203,6 +203,184 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_1m"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "fx_5m",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "symbol"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toStartOfInterval",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dt_close"
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIntervalSecond",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "300"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "alias": "dt_close"
+              },
+              {
+                "kind": "functionCall",
+                "name": "argMin",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "open"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dt_close"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "max",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "high"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "min",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "low"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "argMax",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "close"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dt_close"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "volume"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "volume"
+              }
+            ],
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "symbol"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dt_close"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- add projection"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_1m"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_PROJECTION",
+        "projectionName": "fx_5m"
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- materialize projection"
+    ]
+  },
+  {
     "kind": "createView",
     "table": {
       "kind": "tableRef",

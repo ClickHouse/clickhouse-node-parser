@@ -19,6 +19,8 @@ SETTINGS allow_nullable_key = 1;
 INSERT INTO test_tolowcardinality_nullable VALUES (1, 'a'), (2, 'b'), (3, NULL), (4, 'a');
 -- Query that triggers KeyCondition optimization with toLowCardinality
 SELECT * FROM test_tolowcardinality_nullable WHERE toLowCardinality(str) = 'a' ORDER BY id;
+-- Mutation that also uses the partition key
+ALTER TABLE test_tolowcardinality_nullable DELETE WHERE id = 1 SETTINGS mutations_sync = 2;
 SELECT * FROM test_tolowcardinality_nullable ORDER BY id;
 DROP TABLE test_tolowcardinality_nullable;
 -- Test 2: Direct toLowCardinality on Nullable column

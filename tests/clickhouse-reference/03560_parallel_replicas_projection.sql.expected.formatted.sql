@@ -15,6 +15,11 @@ INSERT INTO normal SELECT
     number AS value
 FROM numbers(10000);
 
+ALTER TABLE normal ADD PROJECTION p_normal (SELECT
+    key,
+    value
+ORDER BY key ASC);
+
 INSERT INTO normal SELECT
     number AS key,
     number AS value
@@ -67,6 +72,11 @@ INSERT INTO agg SELECT
     number AS key,
     number AS value
 FROM numbers(100);
+
+ALTER TABLE agg ADD PROJECTION p_agg (SELECT
+    key,
+    sum(value)
+GROUP BY key);
 
 INSERT INTO agg SELECT
     number AS key,

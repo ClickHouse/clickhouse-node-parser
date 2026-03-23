@@ -9,6 +9,8 @@ ORDER BY tuple();
 
 INSERT INTO test (x);
 
+ALTER TABLE test DROP COLUMN x; --{serverError BAD_ARGUMENTS}
+
 DROP TABLE test;
 
 CREATE TABLE test
@@ -20,6 +22,18 @@ ENGINE = MergeTree
 ORDER BY tuple();
 
 INSERT INTO test (x, y);
+
+ALTER TABLE test DROP COLUMN x IN PARTITION ''; --{serverError INVALID_PARTITION_VALUE}
+
+ALTER TABLE test DROP COLUMN x IN PARTITION 'asdasd'; --{serverError INVALID_PARTITION_VALUE}
+
+ALTER TABLE test DROP COLUMN x IN PARTITION '123'; --{serverError INVALID_PARTITION_VALUE}
+
+ALTER TABLE test DROP COLUMN y; --{serverError BAD_ARGUMENTS}
+
+ALTER TABLE test ADD COLUMN z String DEFAULT 'Hello';
+
+ALTER TABLE test DROP COLUMN z;
 
 INSERT INTO test (x, y, z);
 

@@ -22,7 +22,13 @@ INSERT INTO test SELECT number * 3, rand() FROM numbers(360000);
 INSERT INTO test SELECT number * 3 + 1, rand() FROM numbers(360000);
 INSERT INTO test SELECT number * 3 + 2, rand() FROM numbers(360000);
 SELECT sum(l._part_offset = r._parent_part_offset) FROM test l JOIN mergeTreeProjection(currentDatabase(), test, p) r USING (a) SETTINGS enable_analyzer = 1;
+ALTER TABLE test ADD PROJECTION p2 (SELECT a, b, _part_offset ORDER BY b);
+ALTER TABLE test MATERIALIZE PROJECTION p2 SETTINGS mutations_sync = 2;
 SELECT sum(l._part_offset = r._parent_part_offset) FROM test l JOIN mergeTreeProjection(currentDatabase(), test, p2) r USING (a) SETTINGS enable_analyzer = 1;
+-- Cannot add physical _part_offset, _part_index and _parent_part_offset when there exists projection that refers to its parent `_part_offset`.
+ALTER TABLE test ADD COLUMN _part_offset int; -- { serverError BAD_ARGUMENTS }
+ALTER TABLE test ADD COLUMN _part_index int; -- { serverError BAD_ARGUMENTS }
+ALTER TABLE test ADD COLUMN _parent_part_offset int; -- { serverError BAD_ARGUMENTS }
 DROP TABLE test;
 CREATE TABLE test
 (

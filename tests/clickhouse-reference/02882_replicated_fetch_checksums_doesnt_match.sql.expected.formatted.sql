@@ -29,6 +29,8 @@ CREATE TABLE checksums_r3
 ENGINE = ReplicatedMergeTree('/tables/{database}/checksums_table', 'r3')
 ORDER BY tuple();
 
+ALTER TABLE checksums_r1 MODIFY COLUMN column1 Int32 SETTINGS alter_sync = 1;
+
 INSERT INTO checksums_r1;
 
 INSERT INTO checksums_r3;

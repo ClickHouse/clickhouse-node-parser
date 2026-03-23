@@ -12,3 +12,13 @@ CREATE TABLE alter_01355
     ToDrop UInt32
 )
 ENGINE = MergeTree(StartDate, intHash32(UserID), (CounterID, StartDate, intHash32(UserID), VisitID), 8192);
+
+ALTER TABLE alter_01355 ADD COLUMN Added1 UInt32;
+
+ALTER TABLE alter_01355 ADD COLUMN Added2 UInt32 AFTER NestedColumn;
+
+ALTER TABLE alter_01355 ADD COLUMN Added3 UInt32 AFTER ToDrop;
+
+ALTER TABLE alter_01355 MODIFY COLUMN Added2 UInt32;
+
+ALTER TABLE alter_01355 MODIFY COLUMN Added3 UInt32 AFTER CounterID;

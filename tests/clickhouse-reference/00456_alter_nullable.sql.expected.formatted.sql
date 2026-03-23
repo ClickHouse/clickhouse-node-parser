@@ -15,10 +15,14 @@ SELECT x
 FROM nullable_alter
 ORDER BY x ASC;
 
+ALTER TABLE nullable_alter MODIFY COLUMN x Nullable(String);
+
 INSERT INTO nullable_alter (x);
 
 SELECT x
 FROM nullable_alter
 ORDER BY x ASC;
+
+ALTER TABLE nullable_alter MODIFY COLUMN x Nullable(FixedString(5));
 
 DROP TABLE nullable_alter;

@@ -23,6 +23,8 @@ ORDER BY id ASC;
 
 SET mutations_sync = 1;
 
+ALTER TABLE test UPDATE a = 0 WHERE id < 4;
+
 SELECT
     *,
     _block_number,

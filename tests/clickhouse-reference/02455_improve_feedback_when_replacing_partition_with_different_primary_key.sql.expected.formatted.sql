@@ -27,3 +27,5 @@ CREATE TABLE test_b
 ENGINE = SummingMergeTree()
 ORDER BY (id, company)
 PARTITION BY company;
+
+ALTER TABLE test_b REPLACE PARTITION '0' FROM test_a; -- {serverError BAD_ARGUMENTS}

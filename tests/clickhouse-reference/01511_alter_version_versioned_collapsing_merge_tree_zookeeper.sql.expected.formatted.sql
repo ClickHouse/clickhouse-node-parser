@@ -31,6 +31,8 @@ SELECT *
 FROM table_with_version_replicated_1
 ORDER BY key ASC;
 
+ALTER TABLE table_with_version_replicated_1 MODIFY COLUMN version UInt32 SETTINGS replication_alter_partitions_sync = 2;
+
 INSERT INTO table_with_version_replicated_1;
 
 INSERT INTO table_with_version_replicated_1;

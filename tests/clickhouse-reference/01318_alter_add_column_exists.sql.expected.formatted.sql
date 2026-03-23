@@ -7,3 +7,11 @@ CREATE TABLE add_table
 )
 ENGINE = MergeTree()
 ORDER BY key;
+
+ALTER TABLE add_table ADD COLUMN value1 UInt64;
+
+ALTER TABLE add_table ADD COLUMN key String, ADD COLUMN value1 UInt64;
+
+ALTER TABLE add_table ADD COLUMN value1 UInt64, ADD COLUMN value2 UInt64;
+
+ALTER TABLE add_table ADD COLUMN value3 UInt64, ADD COLUMN value3 UInt32; --{serverError ILLEGAL_COLUMN}

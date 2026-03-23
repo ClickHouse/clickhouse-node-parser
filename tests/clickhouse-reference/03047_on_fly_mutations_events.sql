@@ -8,7 +8,11 @@ SET max_streams_for_merge_tree_reading = 1;
 CREATE TABLE t_lightweight_mut_7 (id UInt64, v UInt64)
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_7', '1') ORDER BY id;
 INSERT INTO t_lightweight_mut_7  SELECT number, number FROM numbers(100000);
+ALTER TABLE t_lightweight_mut_7 UPDATE v = 3 WHERE id % 5 = 0;
+ALTER TABLE t_lightweight_mut_7 DELETE WHERE v % 3 = 0;
 SELECT count() FROM t_lightweight_mut_7;
+ALTER TABLE t_lightweight_mut_7 UPDATE v = v WHERE 1 SETTINGS mutations_sync = 2;
+ALTER TABLE t_lightweight_mut_7 UPDATE v = v * v WHERE 1;
 SELECT 1, sum(v) FROM t_lightweight_mut_7;
 SELECT 2, sum(v) FROM t_lightweight_mut_7 SETTINGS apply_mutations_on_fly = 0;
 SELECT 3, sum(v) FROM t_lightweight_mut_7;

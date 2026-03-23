@@ -26,6 +26,11 @@ SETTINGS min_bytes_for_wide_part = 10485760;
 
 INSERT INTO users_compact;
 
+-- { echoOn }
+ALTER TABLE users_compact MODIFY SETTING lightweight_mutation_projection_mode = 'throw';
+
+ALTER TABLE users_compact MODIFY SETTING lightweight_mutation_projection_mode = 'drop';
+
 SELECT *
 FROM users_compact
 ORDER BY uid ASC;
@@ -47,6 +52,8 @@ WHERE (database = currentDatabase())
     AND (active = 1);
 
 INSERT INTO users_compact;
+
+ALTER TABLE users_compact MODIFY SETTING lightweight_mutation_projection_mode = 'rebuild';
 
 -- expecting projection p1, p2
 SELECT
@@ -83,6 +90,11 @@ SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO users_wide;
 
+-- { echoOn }
+ALTER TABLE users_wide MODIFY SETTING lightweight_mutation_projection_mode = 'throw';
+
+ALTER TABLE users_wide MODIFY SETTING lightweight_mutation_projection_mode = 'drop';
+
 SELECT *
 FROM users_wide
 ORDER BY uid ASC;
@@ -104,6 +116,8 @@ WHERE (database = currentDatabase())
     AND (active = 1);
 
 INSERT INTO users_wide;
+
+ALTER TABLE users_wide MODIFY SETTING lightweight_mutation_projection_mode = 'rebuild';
 
 -- expecting projection p1, p2
 SELECT

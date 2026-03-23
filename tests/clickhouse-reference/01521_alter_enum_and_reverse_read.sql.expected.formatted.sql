@@ -16,6 +16,8 @@ INSERT INTO enum_test SELECT
     'WS'
 FROM numbers(1);
 
+ALTER TABLE enum_test MODIFY COLUMN e Enum8('IU' = 1, 'WS' = 2, 'PS' = 3);
+
 INSERT INTO enum_test SELECT
     '2020-10-09 00:00:00',
     'h1',

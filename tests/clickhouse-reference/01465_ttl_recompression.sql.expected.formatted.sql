@@ -44,6 +44,8 @@ WHERE table = 'recompression_table'
     AND database = currentDatabase()
 ORDER BY name ASC;
 
+ALTER TABLE recompression_table MODIFY TTL dt + toIntervalDay(1) SETTINGS mutations_sync = 2;
+
 SELECT
     substring(name, 1, length(name) - 4),
     default_compression_codec
@@ -101,6 +103,8 @@ WHERE table = 'recompression_table_compact'
     AND active = 1
     AND database = currentDatabase()
 ORDER BY name ASC;
+
+ALTER TABLE recompression_table_compact MODIFY TTL dt + toIntervalMonth(1) SETTINGS mutations_sync = 2; -- mutation affect all columns, so codec changes
 
 -- merge level and mutation in part name is not important
 SELECT

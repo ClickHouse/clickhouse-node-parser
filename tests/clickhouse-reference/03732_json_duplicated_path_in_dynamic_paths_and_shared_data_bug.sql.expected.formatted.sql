@@ -15,6 +15,8 @@ INSERT INTO test SELECT
     '{}'
 FROM numbers(100000);
 
+ALTER TABLE test UPDATE json = '{"a" : 42}' WHERE id > 50000 SETTINGS mutations_sync = 1;
+
 CREATE TABLE test2
 (
     json JSON

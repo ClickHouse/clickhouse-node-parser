@@ -65,6 +65,8 @@ SETTINGS
     add_minmax_index_for_numeric_columns=0;
 -- insert a part with no index
 INSERT INTO test_partial_index VALUES (1, '2023-01-01', 101, 'https://example.com/page1', 'europe'), (2, '2023-01-01', 102, 'https://example.com/page2', 'us_west'), (3, '2023-01-02', 106, 'https://example.com/page3', 'us_west'), (4, '2023-01-02', 107, 'https://example.com/page4', 'us_west'), (5, '2023-01-03', 104, 'https://example.com/page5', 'asia');
+ALTER TABLE test_partial_index ADD INDEX region_idx region TYPE minmax GRANULARITY 1;
+ALTER TABLE test_partial_index ADD INDEX user_id_idx user_id TYPE minmax GRANULARITY 1;
 -- agree on one granule
 SELECT * FROM test_partial_index WHERE region = 'europe' AND user_id = 101 ORDER BY ALL SETTINGS log_comment = 'test_partial_1';
 -- all filtered

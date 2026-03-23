@@ -12,6 +12,8 @@ ENGINE = Memory();
 
 INSERT INTO t0 (c0);
 
+ALTER TABLE t0 (ADD COLUMN c1 JSON(c1 Variant(Int, JSON(c1 Int))));
+
 INSERT INTO t0 (c0, c1);
 
 DROP TABLE t0;

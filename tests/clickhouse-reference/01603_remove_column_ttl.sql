@@ -11,5 +11,6 @@ SETTINGS min_bytes_for_wide_part = 0; -- column TTL doesn't work for compact par
 INSERT INTO table_with_column_ttl VALUES (now(), 1, 32);
 INSERT INTO table_with_column_ttl VALUES (now() - INTERVAL 4 MONTH, 2, 45);
 SELECT UserID, Age FROM table_with_column_ttl ORDER BY UserID;
+ALTER TABLE table_with_column_ttl MODIFY COLUMN Age REMOVE TTL;
 INSERT INTO table_with_column_ttl VALUES (now() - INTERVAL 10 MONTH, 3, 27);
 DROP TABLE table_with_column_ttl;

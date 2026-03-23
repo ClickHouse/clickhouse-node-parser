@@ -20,6 +20,13 @@ INSERT INTO z SELECT
     1
 FROM numbers(1000000);
 
+ALTER TABLE z ADD PROJECTION pp (SELECT
+    id,
+    sum(c)
+GROUP BY id);
+
+ALTER TABLE z MATERIALIZE PROJECTION pp SETTINGS mutations_sync = 1;
+
 SELECT
     name,
     `partition`,

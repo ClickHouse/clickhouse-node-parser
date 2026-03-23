@@ -9,4 +9,6 @@ ORDER BY tuple();
 
 INSERT INTO t0;
 
+ALTER TABLE t0 (RENAME COLUMN `c0.c1` TO `c0.c2`), (MODIFY COLUMN `c0.c1` MODIFY SETTING max_compress_block_size = 1); -- {serverError NOT_FOUND_COLUMN_IN_BLOCK}
+
 DROP TABLE t0;

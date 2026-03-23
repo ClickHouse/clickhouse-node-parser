@@ -14,6 +14,8 @@ INSERT INTO t;
 
 SET alter_sync = 0;
 
+ALTER TABLE t RENAME COLUMN j TO k;
+
 SELECT *
 FROM t;
 

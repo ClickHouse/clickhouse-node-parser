@@ -24,4 +24,6 @@ CREATE TABLE test_table_replicated
     value String
 ) ENGINE=ReplicatedMergeTree('/clickhouse/tables/{database}/test_table_replicated', '1_replica') ORDER BY id;
 SELECT name, metadata_version FROM system.tables WHERE database = currentDatabase() AND name = 'test_table_replicated';
+ALTER TABLE test_table_replicated ADD COLUMN insert_time DateTime;
+ALTER TABLE test_table_replicated ADD COLUMN insert_time_updated DateTime;
 DROP TABLE test_table_replicated;

@@ -12,6 +12,8 @@ CREATE TABLE no_order
 ENGINE = MergeTree
 ORDER BY tuple();
 
+ALTER TABLE no_order MODIFY ORDER BY (a); -- { serverError BAD_ARGUMENTS}
+
 DROP TABLE no_order;
 
 DROP TABLE IF EXISTS old_style;
@@ -25,6 +27,8 @@ CREATE TABLE old_style
 )
 ENGINE = MergeTree(d, x, 8192);
 
+ALTER TABLE old_style ADD COLUMN y UInt32, MODIFY ORDER BY (x, y); -- { serverError BAD_ARGUMENTS}
+
 DROP TABLE old_style;
 
 DROP TABLE IF EXISTS summing;
@@ -37,6 +41,20 @@ CREATE TABLE summing
 )
 ENGINE = SummingMergeTree
 ORDER BY (x, y);
+
+/* Can't add an expression with existing column to ORDER BY. */
+ALTER TABLE summing MODIFY ORDER BY (x, y, -val); -- { serverError BAD_ARGUMENTS}
+
+/* Can't add an expression with existing column to ORDER BY. */
+ALTER TABLE summing ADD COLUMN z UInt32 DEFAULT x + 1, MODIFY ORDER BY (x, y, -z); -- { serverError BAD_ARGUMENTS}
+
+/* Can't add nonexistent column to ORDER BY. */
+ALTER TABLE summing MODIFY ORDER BY (x, y, nonexistent); -- { serverError UNKNOWN_IDENTIFIER}
+
+/* Can't modyfy ORDER BY so that it is no longer a prefix of the PRIMARY KEY. */
+ALTER TABLE summing MODIFY ORDER BY x; -- { serverError BAD_ARGUMENTS}
+
+ALTER TABLE summing ADD COLUMN z UInt32 AFTER y, MODIFY ORDER BY (x, y, -z);
 
 INSERT INTO summing (x, y, z, val);
 

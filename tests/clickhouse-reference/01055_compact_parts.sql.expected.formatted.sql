@@ -58,6 +58,12 @@ ORDER BY
     s ASC
 LIMIT 10;
 
+ALTER TABLE mt_compact DROP COLUMN `n.y`;
+
+ALTER TABLE mt_compact ADD COLUMN `n.y` Array(String) DEFAULT ['qwqw'] AFTER `n.x`;
+
+ALTER TABLE mt_compact UPDATE b = 42 WHERE 1;
+
 SELECT *
 FROM mt_compact
 WHERE a > 1

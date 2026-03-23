@@ -56,4 +56,8 @@ FROM `system`.tables
 WHERE database = currentDatabase()
     AND name = 'test_table_replicated';
 
+ALTER TABLE test_table_replicated ADD COLUMN insert_time DateTime;
+
+ALTER TABLE test_table_replicated ADD COLUMN insert_time_updated DateTime;
+
 DROP TABLE test_table_replicated;

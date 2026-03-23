@@ -45,6 +45,8 @@ ORDER BY id ASC;
 
 INSERT INTO alias_2;
 
+ALTER TABLE alias_1 ADD COLUMN status String DEFAULT 'active';
+
 SELECT
     id,
     value,
@@ -90,12 +92,18 @@ WHERE database = currentDatabase()
 SELECT count()
 FROM alias_4;
 
+ALTER TABLE alias_4 MODIFY SETTING max_bytes_to_merge_at_max_space_in_pool = 1000000;
+
+ALTER TABLE alias_4 UPDATE value = 'updated' WHERE id = 1 SETTINGS mutations_sync = 1;
+
 SELECT
     id,
     value,
     status
 FROM source_table
 WHERE id = 1;
+
+ALTER TABLE alias_4 DELETE WHERE id = 2 SETTINGS mutations_sync = 1;
 
 SELECT count()
 FROM source_table
@@ -122,6 +130,12 @@ INSERT INTO alias_part;
 
 SELECT count()
 FROM alias_part;
+
+ALTER TABLE alias_part DROP PARTITION '202401';
+
+ALTER TABLE alias_part ATTACH PARTITION '202401';
+
+ALTER TABLE alias_part DROP PARTITION '202403';
 
 INSERT INTO alias_4 SELECT
     id + 100,
@@ -235,6 +249,9 @@ SELECT *
 FROM metadata_alias
 ORDER BY id ASC;
 
+-- ALTER target table DIRECTLY (not through alias)
+ALTER TABLE metadata_target ADD COLUMN extra String DEFAULT 'data1';
+
 SELECT name
 FROM `system`.`columns`
 WHERE database = currentDatabase()
@@ -243,6 +260,10 @@ ORDER BY name ASC;
 
 -- INSERT through alias with new column should work
 INSERT INTO metadata_alias;
+
+ALTER TABLE metadata_target ADD COLUMN num UInt32 DEFAULT 0;
+
+ALTER TABLE metadata_target MODIFY COLUMN extra String DEFAULT 'data2';
 
 -- Insert with all columns
 INSERT INTO metadata_alias;
@@ -254,6 +275,9 @@ SELECT
     num
 FROM metadata_alias
 WHERE id = 4;
+
+-- DROP COLUMN on target
+ALTER TABLE metadata_target DROP COLUMN num;
 
 -- INSERT after DROP should work (without dropped column)
 INSERT INTO metadata_alias;

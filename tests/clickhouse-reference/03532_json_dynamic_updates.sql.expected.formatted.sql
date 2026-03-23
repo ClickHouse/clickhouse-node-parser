@@ -19,6 +19,10 @@ INSERT INTO test_updates SELECT
     42::Int64
 FROM numbers(100000);
 
+ALTER TABLE test_updates UPDATE json = '{"a" : [1, 2, 3], "d" : 42}' WHERE id >= 50000;
+
+ALTER TABLE test_updates UPDATE dynamic = [1, 2, 3]::Array(Int64) WHERE id >= 50000;
+
 SELECT DISTINCT arrayJoin(JSONDynamicPaths(json))
 FROM test_updates
 ORDER BY `all` ASC;
@@ -56,6 +60,10 @@ SELECT
     dynamic
 FROM test_updates
 FORMAT Null;
+
+ALTER TABLE test_updates UPDATE json = '{}' WHERE 1;
+
+ALTER TABLE test_updates UPDATE dynamic = NULL WHERE 1;
 
 DROP TABLE test_updates;
 

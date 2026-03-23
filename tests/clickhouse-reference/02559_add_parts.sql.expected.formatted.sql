@@ -23,4 +23,6 @@ INSERT INTO check_system_tables;
 
 INSERT INTO check_system_tables;
 
+ALTER TABLE check_system_tables DROP PARTITION 1;
+
 DROP TABLE IF EXISTS check_system_tables;

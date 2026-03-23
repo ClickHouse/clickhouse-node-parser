@@ -50,3 +50,5 @@ ENGINE = MergeTree
 ORDER BY tuple();
 
 INSERT INTO tab;
+
+ALTER TABLE tab UPDATE m1 = map(3.0, 'aaa') WHERE m1 = map(2.0, 'aa');

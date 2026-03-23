@@ -37,6 +37,8 @@ SELECT *
 FROM alter_compression_codec2
 ORDER BY id ASC;
 
+ALTER TABLE alter_compression_codec1 ADD COLUMN alter_column String DEFAULT 'default_value' CODEC(ZSTD);
+
 SELECT compression_codec
 FROM `system`.`columns`
 WHERE table = 'alter_compression_codec1'
@@ -53,12 +55,18 @@ INSERT INTO alter_compression_codec1;
 
 INSERT INTO alter_compression_codec1;
 
+ALTER TABLE alter_compression_codec1 MODIFY COLUMN alter_column CODEC(NONE);
+
 INSERT INTO alter_compression_codec2;
 
 INSERT INTO alter_compression_codec2;
 
 SET allow_suspicious_codecs = 1;
 
+ALTER TABLE alter_compression_codec1 MODIFY COLUMN alter_column CODEC(ZSTD, LZ4HC, LZ4, LZ4, NONE);
+
 INSERT INTO alter_compression_codec1;
 
 INSERT INTO alter_compression_codec2;
+
+ALTER TABLE alter_compression_codec1 MODIFY COLUMN alter_column FixedString(100);

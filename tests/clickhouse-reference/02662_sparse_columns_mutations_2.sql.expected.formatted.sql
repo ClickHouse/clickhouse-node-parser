@@ -35,4 +35,6 @@ SELECT
 FROM t_sparse_mutations_2
 WHERE s != '';
 
+ALTER TABLE t_sparse_mutations_2 UPDATE s = '' WHERE id % 13 != 0;
+
 DROP TABLE t_sparse_mutations_2;

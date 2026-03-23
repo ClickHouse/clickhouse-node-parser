@@ -27,9 +27,17 @@ INSERT INTO src_01019;
 
 SET allow_experimental_alter_materialized_view_structure = 1;
 
+-- Live alter which changes query logic and adds an extra column.
+ALTER TABLE pipe_01019 MODIFY QUERY SELECT
+    v * 2 AS v,
+    1 AS v2
+FROM src_01019;
+
 SELECT *
 FROM dest_01019
 ORDER BY v ASC;
+
+ALTER TABLE dest_01019 ADD COLUMN v2 UInt64;
 
 INSERT INTO src_01019;
 

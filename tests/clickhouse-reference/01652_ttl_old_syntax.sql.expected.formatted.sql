@@ -9,4 +9,6 @@ CREATE TABLE ttl_old_syntax
 )
 ENGINE = MergeTree(d, i, 8291);
 
+ALTER TABLE ttl_old_syntax MODIFY TTL toDate('2020-01-01'); -- { serverError BAD_ARGUMENTS }
+
 DROP TABLE ttl_old_syntax;

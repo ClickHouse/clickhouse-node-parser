@@ -14,3 +14,5 @@ CREATE TABLE t
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
+ALTER TABLE t MODIFY SAMPLE BY tuple(); -- { serverError INCORRECT_QUERY }

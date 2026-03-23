@@ -16,3 +16,11 @@ SELECT
     *,
     toTypeName(b)
 FROM tab_00718;
+
+ALTER TABLE tab_00718 MODIFY COLUMN b UInt32;
+
+ALTER TABLE tab_00718 MODIFY COLUMN b LowCardinality(UInt32);
+
+ALTER TABLE tab_00718 MODIFY COLUMN b LowCardinality(String);
+
+ALTER TABLE tab_00718 MODIFY COLUMN b String;

@@ -101,6 +101,7 @@ SETTINGS
     index_granularity = 1, min_bytes_for_wide_part = 0,
     min_bytes_for_full_part_storage = 0, enable_vertical_merge_algorithm = 0;
 INSERT INTO t_partial VALUES (1, 'us'), (2, 'eu'), (3, 'cn');
+ALTER TABLE t_partial ADD PROJECTION region_proj INDEX region TYPE basic;
 INSERT INTO t_partial VALUES (4, 'cn'), (5, 'ru'), (6, 'br');
 -- Should use projection for rows 4–6 only
 SELECT trimLeft(explain)

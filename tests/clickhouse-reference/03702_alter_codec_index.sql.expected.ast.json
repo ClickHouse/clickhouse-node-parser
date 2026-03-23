@@ -107,6 +107,139 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "UInt64"
+          },
+          "codec": [
+            {
+              "name": "NONE"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "UInt64"
+          },
+          "codec": [
+            {
+              "name": "Delta"
+            },
+            {
+              "name": "LZ4"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "alter_column_secondary_index_mode",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "throw"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "UInt32"
+          },
+          "codec": [
+            {
+              "name": "Delta"
+            },
+            {
+              "name": "LZ4"
+            }
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "alter_column_secondary_index_mode",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "rebuild"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- With rebuild the index will be updated, so ALTERs are allowed"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -128,6 +261,40 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "UInt64"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          },
+          "codec": [
+            {
+              "name": "Delta"
+            },
+            {
+              "name": "LZ4"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -142,6 +309,97 @@
         "parts": [
           "value"
         ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "UInt64"
+          },
+          "defaultKind": "ALIAS",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          },
+          "codec": [
+            {
+              "name": "Delta"
+            },
+            {
+              "name": "LZ4"
+            }
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "UInt64"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          },
+          "codec": [
+            {
+              "name": "Delta"
+            },
+            {
+              "name": "LZ4"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_codec_index"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "Int64"
+          }
+        }
       }
     ]
   }

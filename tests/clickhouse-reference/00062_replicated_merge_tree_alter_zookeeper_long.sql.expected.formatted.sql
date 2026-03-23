@@ -33,13 +33,35 @@ SELECT *
 FROM replicated_alter1
 ORDER BY k ASC;
 
-INSERT INTO replicated_alter1;
+ALTER TABLE replicated_alter1 ADD COLUMN dt DateTime('UTC');
 
 INSERT INTO replicated_alter1;
 
-INSERT INTO replicated_alter1;
+ALTER TABLE replicated_alter1 ADD COLUMN n Nested(ui8 UInt8, s String);
 
 INSERT INTO replicated_alter1;
+
+ALTER TABLE replicated_alter1 ADD COLUMN `n.d` Array(Date);
+
+INSERT INTO replicated_alter1;
+
+ALTER TABLE replicated_alter1 ADD COLUMN s String DEFAULT '0';
+
+INSERT INTO replicated_alter1;
+
+ALTER TABLE replicated_alter1 DROP COLUMN `n.d`, MODIFY COLUMN s Int64;
+
+ALTER TABLE replicated_alter1 ADD COLUMN `n.d` Array(Date), MODIFY COLUMN s UInt32;
+
+ALTER TABLE replicated_alter1 DROP COLUMN `n.ui8`, DROP COLUMN `n.d`;
+
+ALTER TABLE replicated_alter1 DROP COLUMN `n.s`;
+
+ALTER TABLE replicated_alter1 ADD COLUMN `n.s` Array(String), ADD COLUMN `n.d` Array(Date);
+
+ALTER TABLE replicated_alter1 DROP COLUMN n;
+
+ALTER TABLE replicated_alter1 MODIFY COLUMN dt Date, MODIFY COLUMN s DateTime('UTC') DEFAULT '1970-01-01 00:00:00';
 
 DROP TABLE replicated_alter1;
 

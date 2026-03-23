@@ -26,6 +26,8 @@ INSERT INTO mutate_and_zero_copy_replication1;
 
 SET mutations_sync = 2;
 
+ALTER TABLE mutate_and_zero_copy_replication1 UPDATE a = 2 WHERE 1;
+
 DROP TABLE mutate_and_zero_copy_replication1;
 
 SELECT *

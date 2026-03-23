@@ -36,6 +36,12 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY 1 ASC;
 
+ALTER TABLE test_materialize MODIFY SETTING use_const_adaptive_granularity = 1;
+
+ALTER TABLE test_materialize REWRITE PARTS IN PARTITION 1 SETTINGS mutations_sync = 2;
+
+ALTER TABLE test_materialize REWRITE PARTS SETTINGS mutations_sync = 2;
+
 SELECT
     partition_id,
     `rows`,

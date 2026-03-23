@@ -36,3 +36,5 @@ WHERE path = concat('/clickhouse/', currentDatabase(), '/01650_drop_part_and_ded
 ORDER BY value ASC;
 
 INSERT INTO partitioned_table; -- must be deduplicated
+
+ALTER TABLE partitioned_table DROP PART '3_1_1_0';

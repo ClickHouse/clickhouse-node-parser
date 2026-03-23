@@ -256,6 +256,60 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_substitute_udf"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id2",
+          "type": {
+            "name": "UInt64"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "02484_plusone",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "02484_plusthree",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id2"
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": "(02484_plusone(id), 02484_plusthree(id2))"
+        }
+      }
+    ]
+  },
+  {
     "kind": "createFunction",
     "name": "02484_plusthreedays",
     "functionExpr": {
@@ -285,6 +339,35 @@
         }
       }
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_substitute_udf"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_TTL",
+        "ttl": [
+          {
+            "expr": {
+              "kind": "functionCall",
+              "name": "02484_plusthreedays",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dt"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "kind": "drop",

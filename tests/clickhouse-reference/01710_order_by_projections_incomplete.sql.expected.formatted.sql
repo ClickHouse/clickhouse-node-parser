@@ -9,6 +9,9 @@ ORDER BY t;
 
 INSERT INTO data_order_by_proj_incomp;
 
+ALTER TABLE data_order_by_proj_incomp ADD PROJECTION tSort (SELECT *
+ORDER BY t ASC);
+
 INSERT INTO data_order_by_proj_incomp;
 
 -- { echoOn }

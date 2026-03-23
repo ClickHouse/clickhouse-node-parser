@@ -11,6 +11,10 @@ SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO t_materialize_column;
 
+ALTER TABLE t_materialize_column ADD COLUMN s LowCardinality(String) DEFAULT toString(i);
+
+ALTER TABLE t_materialize_column MATERIALIZE COLUMN s SETTINGS mutations_sync = 2;
+
 SELECT
     name,
     column,
@@ -24,6 +28,10 @@ ORDER BY
     column ASC;
 
 INSERT INTO t_materialize_column (i);
+
+ALTER TABLE t_materialize_column ADD INDEX s_bf s TYPE bloom_filter(0.01) GRANULARITY 1;
+
+ALTER TABLE t_materialize_column MATERIALIZE INDEX s_bf SETTINGS mutations_sync = 2;
 
 SELECT *
 FROM t_materialize_column

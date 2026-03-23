@@ -12,3 +12,4 @@ CREATE OR REPLACE TABLE 03593_t (
 ENGINE = MergeTree
 ORDER BY n
 SETTINGS allow_part_offset_column_in_projections=0;
+ALTER TABLE 03593_t ADD projection prj_s_pos (SELECT _part_offset ORDER BY s); -- {serverError BAD_ARGUMENTS}

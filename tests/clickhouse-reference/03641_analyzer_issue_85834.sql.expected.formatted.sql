@@ -12,6 +12,8 @@ PARTITION BY APIKey;
 
 INSERT INTO test_generic_events_all;
 
+ALTER TABLE test_generic_events_all ADD COLUMN OperatingSystem UInt64 DEFAULT 42;
+
 CREATE ROW POLICY rp ON test_generic_events_all USING APIKey > 35 TO CURRENT_USER;
 
 SELECT OperatingSystem

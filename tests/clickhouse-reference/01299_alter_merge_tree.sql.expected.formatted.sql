@@ -16,6 +16,8 @@ ENGINE = CollapsingMergeTree(StartDate, intHash32(UserID), tuple(CounterID, Star
 
 INSERT INTO merge_tree;
 
+ALTER TABLE merge_tree ADD COLUMN dummy String AFTER CounterID;
+
 INSERT INTO merge_tree;
 
 SELECT
@@ -24,5 +26,7 @@ SELECT
 FROM merge_tree
 WHERE dummy <> ''
 LIMIT 10;
+
+ALTER TABLE merge_tree DROP COLUMN dummy;
 
 DROP TABLE merge_tree;

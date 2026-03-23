@@ -52,6 +52,26 @@ ORDER BY
 
 SET mutations_sync = 1;
 
+ALTER TABLE test_xy UPDATE y = transform(x, (
+    SELECT groupArray(x)
+    FROM (
+            SELECT
+                x,
+                y
+            FROM updates
+            ORDER BY x ASC
+        ) AS t1
+), (
+    SELECT groupArray(y)
+    FROM (
+            SELECT
+                x,
+                y
+            FROM updates
+            ORDER BY x ASC
+        ) AS t2
+), y) WHERE 1;
+
 SELECT *
 FROM test_xy
 ORDER BY

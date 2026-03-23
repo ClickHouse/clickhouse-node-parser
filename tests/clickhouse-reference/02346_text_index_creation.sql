@@ -436,6 +436,9 @@ CREATE TABLE tab
     INDEX idx_1 (str) TYPE text(tokenizer = 'splitByNonAlpha')
 )
 ENGINE = MergeTree ORDER BY tuple();
+ALTER TABLE tab ADD INDEX idx_2(str) TYPE text(tokenizer = ngrams(3)); -- { serverError BAD_ARGUMENTS }
+-- It must still be possible to create a column on the same column with a different expression
+ALTER TABLE tab ADD INDEX idx_3(lower(str)) TYPE text(tokenizer = ngrams(3));
 CREATE TABLE tab
 (
     key UInt64,

@@ -18,4 +18,6 @@ WHERE database = currentDatabase()
 
 SET mutations_sync = 1;
 
+ALTER TABLE test DELETE WHERE time >= '2000-01-01 02:00:00';
+
 DROP TABLE test;

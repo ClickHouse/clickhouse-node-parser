@@ -16,3 +16,5 @@ INSERT INTO table_for_alter; -- { serverError TOO_MANY_PARTS }
 INSERT INTO table_for_alter SETTINGS parts_to_throw_insert = 100, parts_to_delay_insert = 100;
 
 INSERT INTO table_for_alter; -- { serverError TOO_MANY_PARTS }
+
+ALTER TABLE table_for_alter MODIFY SETTING parts_to_throw_insert = 100, parts_to_delay_insert = 100;

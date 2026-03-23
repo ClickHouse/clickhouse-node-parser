@@ -34,12 +34,16 @@ SELECT *
 FROM defaults
 ORDER BY (x, y) ASC;
 
+ALTER TABLE defaults ADD COLUMN n Nested(a UInt64, b String);
+
 INSERT INTO defaults;
 
 SELECT *
 FROM defaults
 WHERE x = 7
 FORMAT JSONEachRow;
+
+ALTER TABLE defaults ADD COLUMN `n.c` Array(UInt8) DEFAULT arrayMap(x -> 0, n.a) AFTER `n.a`;
 
 INSERT INTO defaults;
 

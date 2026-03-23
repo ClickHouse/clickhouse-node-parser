@@ -10,5 +10,6 @@ CREATE TABLE attach_r1 (d Date) ENGINE = ReplicatedMergeTree('/clickhouse/tables
 CREATE TABLE attach_r2 (d Date) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00236/01/attach', 'r2', d, d, 8192);
 INSERT INTO attach_r1 VALUES ('2014-01-01'), ('2014-02-01'), ('2014-03-01');
 SELECT d FROM attach_r1 ORDER BY d;
+ALTER TABLE attach_r2 DROP PARTITION 201402;
 DROP TABLE attach_r1;
 DROP TABLE attach_r2;

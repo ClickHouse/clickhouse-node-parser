@@ -7,4 +7,8 @@ CREATE TABLE defaults
 )
 ENGINE = Memory();
 
+ALTER TABLE defaults ADD COLUMN m Int8;
+
+ALTER TABLE defaults DROP COLUMN n;
+
 DROP TABLE defaults;

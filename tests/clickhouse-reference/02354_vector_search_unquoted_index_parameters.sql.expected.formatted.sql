@@ -37,3 +37,7 @@ CREATE TABLE tab2
     vec Array(Float32),
     PRIMARY KEY(id)
 );
+
+ALTER TABLE tab1 ADD INDEX idx1 vec TYPE vector_similarity('hnsw', 'L2Distance', 1);
+
+ALTER TABLE tab2 ADD INDEX idx2 vec TYPE vector_similarity(hnsw, L2Distance, 1);

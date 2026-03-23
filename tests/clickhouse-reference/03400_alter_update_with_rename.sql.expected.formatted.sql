@@ -14,6 +14,9 @@ ENGINE = Memory;
 
 INSERT INTO test_alter_atomic;
 
+-- This should fail early with a clear error, without making any changes
+ALTER TABLE test_alter_atomic UPDATE c0 = 1 WHERE true, RENAME COLUMN c0 TO c1; -- { serverError BAD_ARGUMENTS }
+
 -- Verify the column still has its original name (c0) since the ALTER was rejected
 SELECT *
 FROM test_alter_atomic;
@@ -56,6 +59,9 @@ SELECT *
 FROM test_alter_atomic
 ORDER BY key ASC;
 
+-- This should fail early with a clear error
+ALTER TABLE test_alter_atomic DELETE WHERE c0 = 0, RENAME COLUMN c0 TO c1; -- { serverError BAD_ARGUMENTS }
+
 -- Test 4: Verify UPDATE + RENAME on DIFFERENT columns works fine
 CREATE TABLE test_alter_atomic
 (
@@ -67,6 +73,9 @@ ENGINE = MergeTree
 ORDER BY key;
 
 INSERT INTO test_alter_atomic;
+
+-- UPDATE c0, RENAME c1 should work because they are different columns
+ALTER TABLE test_alter_atomic UPDATE c0 = 100 WHERE true, RENAME COLUMN c1 TO c2;
 
 -- Wait for mutation to complete
 SELECT sleepEachRow(0.1)
@@ -81,3 +90,6 @@ SELECT
 FROM test_alter_atomic;
 
 INSERT INTO test_alter_atomic;
+
+-- DELETE based on c0, RENAME c1 should work because they are different columns
+ALTER TABLE test_alter_atomic DELETE WHERE c0 = 10, RENAME COLUMN c1 TO c2;

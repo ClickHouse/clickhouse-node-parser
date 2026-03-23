@@ -16,6 +16,8 @@ INSERT INTO lc_null_int8_defnull;
 SELECT *
 FROM lc_null_int8_defnull AS values;
 
+ALTER TABLE lc_null_int8_defnull ADD COLUMN val2 LowCardinality(Nullable(Int8)) DEFAULT NULL;
+
 INSERT INTO lc_null_int8_defnull;
 
 SELECT *

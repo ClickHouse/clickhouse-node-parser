@@ -46,6 +46,12 @@ CREATE TABLE merge
 )
 ENGINE = Merge(currentDatabase(), 'merge\\[0-9\\]');
 
+ALTER TABLE merge1 ADD COLUMN dummy String AFTER CounterID;
+
+ALTER TABLE merge2 ADD COLUMN dummy String AFTER CounterID;
+
+ALTER TABLE merge ADD COLUMN dummy String AFTER CounterID;
+
 INSERT INTO merge1;
 
 SELECT
@@ -54,6 +60,11 @@ SELECT
 FROM merge
 WHERE dummy <> ''
 LIMIT 10;
+
+ALTER TABLE merge DROP COLUMN dummy;
+
+--error: must correctly fall into the alter
+ALTER TABLE merge ADD COLUMN dummy1 String AFTER CounterID;
 
 SELECT
     CounterID,

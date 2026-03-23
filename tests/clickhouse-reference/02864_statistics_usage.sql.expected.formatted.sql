@@ -36,6 +36,8 @@ FROM (
     )
 WHERE like(`explain`, '%Prewhere%'); -- checks a first, then b (statistics used)
 
+ALTER TABLE tab DROP STATISTICS a, b;
+
 SELECT
     name,
     column,
@@ -43,6 +45,12 @@ SELECT
 FROM `system`.parts_columns
 WHERE (database = currentDatabase())
     AND (table = 'tab');
+
+ALTER TABLE tab ADD STATISTICS a, b TYPE tdigest;
+
+ALTER TABLE tab MATERIALIZE STATISTICS ALL;
+
+ALTER TABLE tab RENAME COLUMN b TO c;
 
 SELECT replaceRegexpAll(`explain`, '__table1\\.', '')
 FROM (

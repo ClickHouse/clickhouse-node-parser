@@ -20,6 +20,9 @@ INSERT INTO test;
 
 INSERT INTO test; -- { serverError TOO_MANY_PARTS }
 
+-- But it can be relaxed with a setting:
+ALTER TABLE test MODIFY SETTING max_avg_part_size_for_too_many_parts = '1M';
+
 INSERT INTO test;
 
 INSERT INTO test;

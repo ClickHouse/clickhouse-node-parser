@@ -19,9 +19,13 @@ SETTINGS min_bytes_for_wide_part = 1;
 INSERT INTO TABLE tab SELECT number, randomPrintableASCII(1000), randomPrintableASCII(10), rand(number), rand(number+1), rand(number+2) FROM numbers(1000);
 SELECT count() FROM tab;
 SELECT formatQuery('ALTER TABLE tab MODIFY COLUMN long_string MODIFY SETTING min_compress_block_size = 8192;');
+ALTER TABLE tab MODIFY COLUMN long_string MODIFY SETTING min_compress_block_size = 8192;
 SELECT formatQuery('ALTER TABLE tab MODIFY COLUMN long_string RESET SETTING min_compress_block_size;');
+ALTER TABLE tab MODIFY COLUMN long_string RESET SETTING min_compress_block_size;
 SELECT formatQuery('ALTER TABLE tab MODIFY COLUMN long_string REMOVE SETTINGS;');
+ALTER TABLE tab MODIFY COLUMN long_string REMOVE SETTINGS;
 SELECT formatQuery('ALTER TABLE tab MODIFY COLUMN long_string String SETTINGS (min_compress_block_size = 163840, max_compress_block_size = 163840);');
+ALTER TABLE tab MODIFY COLUMN long_string String SETTINGS (min_compress_block_size = 163840, max_compress_block_size = 163840);
 DROP TABLE tab;
 SELECT '---';
 CREATE TABLE tab

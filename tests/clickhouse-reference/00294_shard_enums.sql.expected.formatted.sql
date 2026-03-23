@@ -21,11 +21,18 @@ INSERT INTO enums (k);
 SELECT *
 FROM enums;
 
+ALTER TABLE enums MODIFY COLUMN e Enum8('world' = 2, 'hello' = 1, '!' = 3);
+
 INSERT INTO enums (e, sign, letter);
 
 SELECT *
 FROM enums
 ORDER BY _part ASC;
+
+-- expand `e` and `sign` from Enum8 to Enum16 without changing values, change values of `letter` without changing type
+ALTER TABLE enums MODIFY COLUMN e Enum16('world' = 2, 'hello' = 1, '!' = 3), MODIFY COLUMN sign Enum16('minus' = -1, 'plus' = 1), MODIFY COLUMN letter Enum16('a' = 0, 'b' = 1, 'c' = 2, 'no letter' = -256);
+
+ALTER TABLE enums MODIFY COLUMN e Enum8('world' = 2, 'hello' = 1, '!' = 3), MODIFY COLUMN sign Enum8('minus' = -1, 'plus' = 1);
 
 INSERT INTO enums (letter, e);
 

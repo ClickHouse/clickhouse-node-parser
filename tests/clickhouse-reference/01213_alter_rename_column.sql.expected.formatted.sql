@@ -24,6 +24,8 @@ SELECT value1
 FROM table_for_rename
 WHERE key = 1;
 
+ALTER TABLE table_for_rename RENAME COLUMN value1 TO renamed_value1;
+
 SELECT renamed_value1
 FROM table_for_rename
 WHERE key = 1;
@@ -32,6 +34,14 @@ SELECT *
 FROM table_for_rename
 WHERE key = 1
 FORMAT TSVWithNames;
+
+ALTER TABLE table_for_rename RENAME COLUMN value3 TO value2; --{serverError DUPLICATE_COLUMN}
+
+ALTER TABLE table_for_rename RENAME COLUMN value3 TO r1, RENAME COLUMN value3 TO r2; --{serverError BAD_ARGUMENTS}
+
+ALTER TABLE table_for_rename RENAME COLUMN value3 TO r1, RENAME COLUMN r1 TO value1; --{serverError NOT_IMPLEMENTED}
+
+ALTER TABLE table_for_rename RENAME COLUMN value2 TO renamed_value2, RENAME COLUMN value3 TO renamed_value3;
 
 SELECT
     renamed_value2,
@@ -43,3 +53,7 @@ SELECT *
 FROM table_for_rename
 WHERE key = 7
 FORMAT TSVWithNames;
+
+ALTER TABLE table_for_rename RENAME COLUMN value100 TO renamed_value100; --{serverError NOT_FOUND_COLUMN_IN_BLOCK}
+
+ALTER TABLE table_for_rename RENAME COLUMN value100 TO renamed_value100;

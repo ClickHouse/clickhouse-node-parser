@@ -3464,5 +3464,1046 @@
     "leadingComments": [
       "-- CREATE TABLE was easy, ALTER is more fun"
     ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "no_statistics_type"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Error case: Unknown statistics types are rejected",
+      "-- (relevant for ADD and MODIFY)"
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "no_statistics_type"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "no_statistics_type"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          },
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- for some reason, ALTER TABLE tab MODIFY STATISTICS IF EXISTS is not supported",
+      "-- Error case: The same statistics type can't exist more than once on a column",
+      "-- (relevant for ADD and MODIFY)",
+      "--   Create the same statistics object twice"
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          },
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          },
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64_tdigest"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--   Create an statistics which exists already"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64_tdigest"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- no-op"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "f64_tdigest"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- no-op"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Error case: Column does not exist",
+      "-- (relevant for ADD, MODIFY, DROP, CLEAR, and MATERIALIZE)",
+      "-- Note that the results are unfortunately quite inconsistent ..."
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- no-op"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- no-op"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_STATISTICS",
+        "statColumns": [
+          "no_such_column"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "s"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Error case: Column exists but has no statistics",
+      "-- (relevant for MODIFY, DROP, CLEAR, and MATERIALIZE)",
+      "-- Note that the results are unfortunately quite inconsistent ..."
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "s"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "s"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- no-op"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "s"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "s"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- no-op"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- We don't check systematically that that statistics can only be created via ALTER ADD STATISTICS on columns of specific data types (the",
+      "-- internal type validation code is tested already above, (*)). Only do a rudimentary check for each statistics type with a data type that",
+      "-- works and one that doesn't work.",
+      "--   tdigest",
+      "--     Works:"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "f64"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "a"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--     Doesn't work:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "a"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--   uniq",
+      "--     Works:"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "a"
+        ],
+        "statTypes": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--     Doesn't work:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "a"
+        ],
+        "statTypes": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--   countmin",
+      "--     Works:"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "a"
+        ],
+        "statTypes": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--     Doesn't work:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "a"
+        ],
+        "statTypes": [
+          {
+            "name": "countmin"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--   minmax",
+      "--     Works:"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "f64"
+        ],
+        "statTypes": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "a"
+        ],
+        "statTypes": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--     Doesn't work:"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "a"
+        ],
+        "statTypes": [
+          {
+            "name": "minmax"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_STATISTICS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "f64_tdigest",
+          "type": {
+            "name": "UInt64"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_STATISTICS",
+        "statColumns": [
+          "f64",
+          "f32"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          },
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_STATISTICS",
+        "statColumns": [
+          "f64",
+          "f32"
+        ],
+        "statTypes": [
+          {
+            "name": "tdigest"
+          },
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "f64",
+          "f32"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_STATISTICS",
+        "statColumns": [
+          "f64",
+          "f32"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_STATISTICS",
+        "statColumns": [
+          "f64",
+          "f32"
+        ]
+      }
+    ]
   }
 ]

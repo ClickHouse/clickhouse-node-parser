@@ -16,6 +16,8 @@ SETTINGS min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, seria
 
 INSERT INTO t_lightweight_mut_5;
 
+ALTER TABLE t_lightweight_mut_5 UPDATE s1 = 'x', s2 = 'y' WHERE id = 1;
+
 SELECT s1
 FROM t_lightweight_mut_5
 ORDER BY id ASC;

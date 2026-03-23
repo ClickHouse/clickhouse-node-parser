@@ -119,5 +119,90 @@
         ]
       }
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx_vec",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "vec"
+            ]
+          },
+          "indexType": {
+            "name": "vector_similarity",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "hnsw"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "cosineDistance"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "f32"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "64"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "400"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Create index"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_INDEX",
+        "indexName": "idx_vec"
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
   }
 ]

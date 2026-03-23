@@ -72,6 +72,8 @@ ORDER BY
     target_brand ASC,
     target_timezone ASC;
 
+ALTER TABLE src_products DELETE WHERE category = 'catA' SETTINGS mutations_sync = 1;
+
 SELECT
     target_category,
     dictGetKeys('dict_products', 'category', target_category) AS product_ids_by_category_after

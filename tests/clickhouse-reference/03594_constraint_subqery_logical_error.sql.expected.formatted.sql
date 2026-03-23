@@ -7,6 +7,10 @@ ORDER BY tuple();
 
 INSERT INTO check_constraint (c0);
 
+ALTER TABLE check_constraint ADD CONSTRAINT c0 CHECK (
+    SELECT 1
+);
+
 SELECT 1
 FROM check_constraint
 WHERE 1 = 1
@@ -20,6 +24,10 @@ CREATE TABLE assume_constraint
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+
+ALTER TABLE assume_constraint ADD CONSTRAINT c0 ASSUME (
+    SELECT 1
+);
 
 INSERT INTO assume_constraint (c0);
 

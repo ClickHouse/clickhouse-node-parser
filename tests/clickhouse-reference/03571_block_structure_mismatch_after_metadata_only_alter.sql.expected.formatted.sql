@@ -13,6 +13,8 @@ PARTITION BY (product, toYYYYMM(generated_time));
 
 INSERT INTO t;
 
+ALTER TABLE t MODIFY COLUMN product Enum8('IU' = 1, 'WS' = 2, 'PS' = 3) SETTINGS alter_sync = 2;
+
 SELECT product
 FROM t
 GROUP BY product

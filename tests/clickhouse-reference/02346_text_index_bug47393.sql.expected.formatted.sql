@@ -21,6 +21,9 @@ WHERE database = currentDatabase()
     AND table = 'tab'
     AND active = 1;
 
+-- Update column synchronously
+ALTER TABLE tab UPDATE str = 'I am not inverted' WHERE 1 SETTINGS mutations_sync = 1;
+
 SELECT str
 FROM tab
 WHERE like(str, '%inverted%')

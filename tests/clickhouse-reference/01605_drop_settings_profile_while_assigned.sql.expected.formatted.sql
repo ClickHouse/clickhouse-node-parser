@@ -2,6 +2,8 @@ CREATE USER OR REPLACE 'test_01605';
 
 CREATE OR REPLACE SETTINGS PROFILE 'test_01605';
 
+ALTER USER 'test_01605' SETTINGS PROFILE 'test_01605';
+
 SELECT *
 FROM `system`.settings_profile_elements
 WHERE user_name = 'test_01605'

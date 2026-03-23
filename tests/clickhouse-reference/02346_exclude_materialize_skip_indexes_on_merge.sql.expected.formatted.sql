@@ -20,6 +20,9 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 4, materialize_skip_indexes_on_merge = 1, add_minmax_index_for_numeric_columns = 0;
 
+-- negative test case
+ALTER TABLE tab MODIFY SETTING exclude_materialize_skip_indexes_on_merge = '!@#$^#$&#$$%$,,.,3.45,45.';
+
 INSERT INTO tab SELECT
     number,
     number / 50
@@ -44,6 +47,8 @@ WHERE (like(`explain`, '%Name%'))
     OR (like(`explain`, '%Granules%'))
     OR (like(`explain`, '%Range%'));
 
+ALTER TABLE tab MODIFY SETTING exclude_materialize_skip_indexes_on_merge = 'idx_a';
+
 INSERT INTO tab SELECT
     number,
     number / 50
@@ -51,6 +56,10 @@ FROM numbers(100, 100);
 
 SELECT *
 FROM explain_indexes;
+
+ALTER TABLE tab MATERIALIZE INDEX idx_a;
+
+ALTER TABLE tab MODIFY SETTING exclude_materialize_skip_indexes_on_merge = 'idx_a, `id,x_b`';
 
 DROP TABLE tab;
 

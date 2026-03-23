@@ -11,3 +11,7 @@ ENGINE = MergeTree
 ORDER BY key;
 
 INSERT INTO tab;
+
+ALTER TABLE tab DROP PART 'all_1_1_0';
+
+ALTER TABLE tab ATTACH PART 'all_1_1_0';

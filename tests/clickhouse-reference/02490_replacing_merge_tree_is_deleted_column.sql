@@ -21,6 +21,7 @@ INSERT INTO test (*) VALUES ('d1', 1, 0), ('d1', 2, 1), ('d1', 3, 0), ('d1', 4, 
 CREATE TABLE test (uid String, version UInt32, is_deleted UInt8) ENGINE = ReplacingMergeTree(version, is_deleted) Order by (uid) SETTINGS clean_deleted_rows='Always', allow_experimental_replacing_merge_with_cleanup=1;
 -- d6 has to be removed since we set clean_deleted_rows as 'Always'
 select * from test where is_deleted=0 order by uid;
+ALTER TABLE test MODIFY SETTING clean_deleted_rows='Never';
 DROP TABLE IF EXISTS testCleanupR1;
 CREATE TABLE testCleanupR1 (uid String, version UInt32, is_deleted UInt8)
     ENGINE = ReplicatedReplacingMergeTree('/clickhouse/{database}/tables/test_cleanup/', 'r1', version, is_deleted)

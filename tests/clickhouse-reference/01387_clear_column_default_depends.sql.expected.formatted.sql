@@ -18,6 +18,10 @@ ORDER BY
     x ASC,
     y ASC;
 
+ALTER TABLE test DROP COLUMN x;
+
+ALTER TABLE test DROP COLUMN x; -- { serverError ILLEGAL_COLUMN }
+
 DROP TABLE test;
 
 CREATE TABLE test
@@ -55,3 +59,5 @@ CREATE TABLE Test
     event_date Date
 )
 ENGINE = MergeTree(event_date, impression_id_hashed, (event_date, impression_id_hashed), 8192);
+
+ALTER TABLE Test DROP COLUMN impression_id IN PARTITION '202001';

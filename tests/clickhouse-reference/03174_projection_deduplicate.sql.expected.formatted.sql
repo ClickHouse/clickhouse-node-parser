@@ -16,4 +16,6 @@ INSERT INTO test_projection_deduplicate;
 SELECT *
 FROM test_projection_deduplicate;
 
+ALTER TABLE test_projection_deduplicate DROP PROJECTION test_projection;
+
 DROP TABLE test_projection_deduplicate;

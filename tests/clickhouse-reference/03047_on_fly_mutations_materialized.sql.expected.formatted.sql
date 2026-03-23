@@ -28,6 +28,8 @@ SELECT
 FROM t_update_materialized
 ORDER BY id ASC;
 
+ALTER TABLE t_update_materialized UPDATE c1 = 2 WHERE id = 1;
+
 SELECT
     id,
     c2

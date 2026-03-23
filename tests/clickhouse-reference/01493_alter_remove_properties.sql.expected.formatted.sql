@@ -24,6 +24,12 @@ SELECT
     column_ttl
 FROM prop_table;
 
+ALTER TABLE prop_table MODIFY COLUMN column_comment;
+
+ALTER TABLE prop_table MODIFY COLUMN column_codec;
+
+ALTER TABLE prop_table MODIFY COLUMN column_alias;
+
 INSERT INTO prop_table (column_alias, column_codec, column_comment, column_ttl);
 
 SELECT
@@ -36,9 +42,17 @@ SELECT
 FROM prop_table
 ORDER BY column_ttl ASC;
 
-INSERT INTO prop_table (column_materialized, column_alias, column_codec, column_comment, column_ttl);
+ALTER TABLE prop_table MODIFY COLUMN column_materialized;
 
 INSERT INTO prop_table (column_materialized, column_alias, column_codec, column_comment, column_ttl);
+
+ALTER TABLE prop_table MODIFY COLUMN column_default;
+
+INSERT INTO prop_table (column_materialized, column_alias, column_codec, column_comment, column_ttl);
+
+ALTER TABLE prop_table REMOVE TTL;
+
+ALTER TABLE prop_table MODIFY COLUMN column_ttl;
 
 SELECT COUNT()
 FROM prop_table;

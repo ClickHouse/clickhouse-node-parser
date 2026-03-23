@@ -64,6 +64,10 @@ ORDER BY my.json.b::Int32 ASC;
 
 INSERT INTO test (my.json) SELECT '{"a" : 43, "b" : 43}';
 
+ALTER TABLE test MODIFY COLUMN `my.json` JSON(a UInt32, b UInt32); -- {serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE test UPDATE `my.json` = '{}' WHERE 1; -- {serverError CANNOT_UPDATE_COLUMN}
+
 CREATE TABLE test
 (
     `my.tuple` Tuple(a UInt32),
@@ -85,3 +89,7 @@ FROM test
 ORDER BY my.tuple.a ASC;
 
 INSERT INTO test (my.tuple) SELECT tuple(43);
+
+ALTER TABLE test MODIFY COLUMN `my.tuple` Tuple(a UInt32, b UInt32); -- {serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
+
+ALTER TABLE test UPDATE `my.tuple` = tuple(0, 0) WHERE 1; -- {serverError CANNOT_UPDATE_COLUMN}

@@ -121,3 +121,77 @@ CREATE TABLE tab
 )
 Engine = MergeTree()
 ORDER BY tuple();
+-- Error case: Unknown statistics types are rejected
+-- (relevant for ADD and MODIFY)
+ALTER TABLE tab ADD STATISTICS f64 TYPE no_statistics_type; -- { serverError INCORRECT_QUERY }
+ALTER TABLE tab ADD STATISTICS IF NOT EXISTS f64 TYPE no_statistics_type; -- { serverError INCORRECT_QUERY }
+ALTER TABLE tab MODIFY STATISTICS f64 TYPE no_statistics_type; -- { serverError INCORRECT_QUERY }
+-- for some reason, ALTER TABLE tab MODIFY STATISTICS IF EXISTS is not supported
+
+-- Error case: The same statistics type can't exist more than once on a column
+-- (relevant for ADD and MODIFY)
+--   Create the same statistics object twice
+ALTER TABLE tab ADD STATISTICS f64 TYPE tdigest, tdigest; -- { serverError INCORRECT_QUERY }
+ALTER TABLE tab ADD STATISTICS IF NOT EXISTS f64 TYPE tdigest, tdigest; -- { serverError INCORRECT_QUERY }
+ALTER TABLE tab MODIFY STATISTICS f64 TYPE tdigest, tdigest; -- { serverError INCORRECT_QUERY }
+--   Create an statistics which exists already
+ALTER TABLE tab ADD STATISTICS f64_tdigest TYPE tdigest; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab ADD STATISTICS IF NOT EXISTS f64_tdigest TYPE tdigest; -- no-op
+ALTER TABLE tab MODIFY STATISTICS f64_tdigest TYPE tdigest; -- no-op
+-- Error case: Column does not exist
+-- (relevant for ADD, MODIFY, DROP, CLEAR, and MATERIALIZE)
+-- Note that the results are unfortunately quite inconsistent ...
+ALTER TABLE tab ADD STATISTICS no_such_column TYPE tdigest; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab ADD STATISTICS IF NOT EXISTS no_such_column TYPE tdigest; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab MODIFY STATISTICS no_such_column TYPE tdigest; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab DROP STATISTICS no_such_column; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab DROP STATISTICS IF EXISTS no_such_column; -- no-op
+ALTER TABLE tab CLEAR STATISTICS no_such_column; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab CLEAR STATISTICS IF EXISTS no_such_column; -- no-op
+ALTER TABLE tab MATERIALIZE STATISTICS no_such_column; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab MATERIALIZE STATISTICS IF EXISTS no_such_column; -- { serverError ILLEGAL_STATISTICS }
+-- Error case: Column exists but has no statistics
+-- (relevant for MODIFY, DROP, CLEAR, and MATERIALIZE)
+-- Note that the results are unfortunately quite inconsistent ...
+ALTER TABLE tab MODIFY STATISTICS s TYPE tdigest; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab DROP STATISTICS s; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab DROP STATISTICS IF EXISTS s; -- no-op
+ALTER TABLE tab CLEAR STATISTICS s; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab CLEAR STATISTICS IF EXISTS s; -- no-op
+-- We don't check systematically that that statistics can only be created via ALTER ADD STATISTICS on columns of specific data types (the
+-- internal type validation code is tested already above, (*)). Only do a rudimentary check for each statistics type with a data type that
+-- works and one that doesn't work.
+--   tdigest
+--     Works:
+ALTER TABLE tab ADD STATISTICS f64 TYPE tdigest;
+ALTER TABLE tab DROP STATISTICS f64;
+ALTER TABLE tab MODIFY STATISTICS f64 TYPE tdigest;
+--     Doesn't work:
+ALTER TABLE tab ADD STATISTICS a TYPE tdigest; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab MODIFY STATISTICS a TYPE tdigest; -- { serverError ILLEGAL_STATISTICS }
+--   uniq
+--     Works:
+ALTER TABLE tab ADD STATISTICS f64 TYPE uniq;
+ALTER TABLE tab MODIFY STATISTICS f64 TYPE countmin;
+--     Doesn't work:
+ALTER TABLE tab ADD STATISTICS a TYPE uniq; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab MODIFY STATISTICS a TYPE uniq; -- { serverError ILLEGAL_STATISTICS }
+--   countmin
+--     Works:
+ALTER TABLE tab ADD STATISTICS f64 TYPE countmin;
+--     Doesn't work:
+ALTER TABLE tab ADD STATISTICS a TYPE countmin; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab MODIFY STATISTICS a TYPE countmin; -- { serverError ILLEGAL_STATISTICS }
+--   minmax
+--     Works:
+ALTER TABLE tab ADD STATISTICS f64 TYPE minmax;
+ALTER TABLE tab MODIFY STATISTICS f64 TYPE minmax;
+--     Doesn't work:
+ALTER TABLE tab ADD STATISTICS a TYPE minmax; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab MODIFY STATISTICS a TYPE minmax; -- { serverError ILLEGAL_STATISTICS }
+ALTER TABLE tab MODIFY COLUMN f64_tdigest UInt64;
+ALTER TABLE tab ADD STATISTICS f64, f32 TYPE tdigest, uniq;
+ALTER TABLE tab MODIFY STATISTICS f64, f32 TYPE tdigest, uniq;
+ALTER TABLE tab CLEAR STATISTICS f64, f32;
+ALTER TABLE tab MATERIALIZE STATISTICS f64, f32;
+ALTER TABLE tab DROP STATISTICS f64, f32;

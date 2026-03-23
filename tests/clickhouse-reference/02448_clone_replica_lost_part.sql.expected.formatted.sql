@@ -85,6 +85,8 @@ FROM rmt2;
 
 INSERT INTO rmt1;
 
+ALTER TABLE rmt1 UPDATE n = 10 WHERE n = 123 SETTINGS mutations_sync = 1;
+
 -- trigger log rotation, rmt1 will be lost
 INSERT INTO rmt2;
 
@@ -121,6 +123,8 @@ INSERT INTO rmt2;
 
 -- create a gap in block numbers by dropping part
 INSERT INTO rmt2;
+
+ALTER TABLE rmt2 DROP PART 'all_19_19_0'; -- remove 200
 
 INSERT INTO rmt2;
 

@@ -14,6 +14,7 @@ SETTINGS min_bytes_for_wide_part = 0,
     serialization_info_version = 'basic',
     storage_policy = 's3_cache';
 INSERT INTO t_lightweight_mut_5 VALUES (1, 'a', 'b');
+ALTER TABLE t_lightweight_mut_5 UPDATE s1 = 'x', s2 = 'y' WHERE id = 1;
 SELECT s1 FROM t_lightweight_mut_5 ORDER BY id;
 SELECT s2 FROM t_lightweight_mut_5 ORDER BY id;
 SELECT s1, s2 FROM t_lightweight_mut_5 ORDER BY id;

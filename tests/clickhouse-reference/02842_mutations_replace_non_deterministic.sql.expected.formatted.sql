@@ -19,6 +19,11 @@ ORDER BY id;
 
 INSERT INTO t_mutations_nondeterministic;
 
+ALTER TABLE t_mutations_nondeterministic UPDATE v = (
+    SELECT sum(number)
+    FROM numbers(100)
+) WHERE 1;
+
 SELECT
     id,
     v
@@ -45,6 +50,17 @@ ORDER BY id;
 
 INSERT INTO t_mutations_nondeterministic;
 
+ALTER TABLE t_mutations_nondeterministic UPDATE v = (
+    SELECT groupArray(number)
+    FROM numbers(10)
+) WHERE 1;
+
+-- Too big result.
+ALTER TABLE t_mutations_nondeterministic UPDATE v = (
+    SELECT groupArray(number)
+    FROM numbers(10000)
+) WHERE 1; -- { serverError BAD_ARGUMENTS }
+
 -- SELECT uniqExactState(...)
 CREATE TABLE t_mutations_nondeterministic
 (
@@ -55,6 +71,11 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/02842_mutations_repl
 ORDER BY id;
 
 INSERT INTO t_mutations_nondeterministic;
+
+ALTER TABLE t_mutations_nondeterministic UPDATE v = (
+    SELECT uniqExactState(number)
+    FROM numbers(5)
+) WHERE 1;
 
 SELECT
     id,
@@ -73,6 +94,8 @@ ORDER BY id;
 
 INSERT INTO t_mutations_nondeterministic;
 
+ALTER TABLE t_mutations_nondeterministic UPDATE v = now() WHERE 1;
+
 SELECT
     id,
     and(greaterOrEquals(v, now() - toIntervalMinute(10)), lessOrEquals(v, now()))
@@ -87,6 +110,15 @@ ORDER BY command ASC;
 
 INSERT INTO t_mutations_nondeterministic;
 
+ALTER TABLE t_mutations_nondeterministic UPDATE v = filesystemCapacity(materialize('default')) WHERE 1; -- { serverError BAD_ARGUMENTS }
+
+-- Check that function in subquery is not rewritten.
+ALTER TABLE t_mutations_nondeterministic UPDATE v = (
+    SELECT sum(number)
+    FROM numbers(1000)
+    WHERE number > randConstant()
+) WHERE 1 SETTINGS mutations_execute_subqueries_on_initiator = 0, allow_nondeterministic_mutations = 1;
+
 -- DELETE WHERE now()
 CREATE TABLE t_mutations_nondeterministic
 (
@@ -97,6 +129,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/02842_mutations_repl
 ORDER BY id;
 
 INSERT INTO t_mutations_nondeterministic;
+
+ALTER TABLE t_mutations_nondeterministic DELETE WHERE d < now();
 
 SELECT replaceRegexpOne(command, '(\\d{10})', 'timestamp')
 FROM `system`.mutations

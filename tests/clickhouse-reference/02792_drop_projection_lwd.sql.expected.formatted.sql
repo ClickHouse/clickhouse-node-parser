@@ -17,6 +17,9 @@ INSERT INTO t_projections_lwd SELECT
     number
 FROM numbers(100);
 
+-- drop projection
+ALTER TABLE t_projections_lwd DROP PROJECTION p;
+
 SELECT count()
 FROM t_projections_lwd;
 

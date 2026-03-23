@@ -18,4 +18,6 @@ ORDER BY dt ASC;
 
 SELECT '---';
 
+ALTER TABLE partition_and_primary_keys_using_same_expression DROP PARTITION '2018-02-20';
+
 DROP TABLE partition_and_primary_keys_using_same_expression;

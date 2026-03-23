@@ -22,4 +22,6 @@ SELECT *
 FROM alter_column
 ORDER BY _part ASC;
 
+ALTER TABLE alter_column MODIFY COLUMN y Int64;
+
 DROP TABLE alter_column;

@@ -24,4 +24,10 @@ SELECT
     count()
 FROM t_source_part_is_intact;
 
+-- size of the file serialization.json is the same in the new part but checksum is different
+ALTER TABLE t_source_part_is_intact UPDATE u = 0 WHERE u != 0;
+
+-- size of the file serialization.json is different in the new part
+ALTER TABLE t_source_part_is_intact UPDATE u = 1 WHERE 1;
+
 DROP TABLE t_source_part_is_intact;

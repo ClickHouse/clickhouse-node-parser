@@ -22,3 +22,10 @@ TO dest
 AS
 SELECT v
 FROM src;
+
+ALTER TABLE dest ADD COLUMN v2 UInt64;
+
+ALTER TABLE pipe MODIFY QUERY SELECT
+    v * 2 AS v,
+    1 AS v2
+FROM src;

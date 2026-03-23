@@ -19,6 +19,8 @@ FROM prewhere_defaults
 PREWHERE x != 0
 ORDER BY x ASC;
 
+ALTER TABLE prewhere_defaults ADD COLUMN y UInt16 DEFAULT x;
+
 INSERT INTO prewhere_defaults (x);
 
 DROP TABLE prewhere_defaults;

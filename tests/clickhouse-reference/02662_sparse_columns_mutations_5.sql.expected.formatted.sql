@@ -29,4 +29,6 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+ALTER TABLE t_sparse_mutations_5 MODIFY COLUMN t Tuple(UInt64, String);
+
 DROP TABLE t_sparse_mutations_5;

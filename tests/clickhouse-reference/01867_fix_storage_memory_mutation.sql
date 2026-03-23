@@ -10,6 +10,8 @@ INSERT INTO mem_test SELECT
     number,
     number
 FROM numbers(100);
+ALTER TABLE mem_test
+    UPDATE a = 0 WHERE b = 99;
 SELECT *
 FROM mem_test
 FORMAT Null;

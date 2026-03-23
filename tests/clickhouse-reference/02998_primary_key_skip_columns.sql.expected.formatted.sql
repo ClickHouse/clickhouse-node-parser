@@ -73,4 +73,6 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'test';
 
+ALTER TABLE test MODIFY SETTING primary_key_ratio_of_unique_prefix_values_to_skip_suffix_columns = 0.9;
+
 DROP TABLE test;

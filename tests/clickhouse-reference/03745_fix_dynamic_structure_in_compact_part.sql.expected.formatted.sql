@@ -14,4 +14,6 @@ INSERT INTO test SELECT
     '{}'
 FROM numbers(10000);
 
+ALTER TABLE test UPDATE json = '{"a" : 42}' WHERE id > 9000 SETTINGS mutations_sync = 1;
+
 DROP TABLE test;

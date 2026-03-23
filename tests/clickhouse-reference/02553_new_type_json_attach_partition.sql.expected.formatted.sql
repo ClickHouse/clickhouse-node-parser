@@ -12,7 +12,11 @@ ORDER BY tuple();
 
 INSERT INTO t_json_attach_partition;
 
+ALTER TABLE t_json_attach_partition DROP PARTITION tuple();
+
 INSERT INTO t_json_attach_partition;
+
+ALTER TABLE t_json_attach_partition ATTACH PARTITION tuple();
 
 SELECT *
 FROM t_json_attach_partition

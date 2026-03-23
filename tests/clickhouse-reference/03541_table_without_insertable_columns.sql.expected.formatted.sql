@@ -25,3 +25,5 @@ CREATE TABLE insertable
     b Int MATERIALIZED 1
 )
 ENGINE = Memory;
+
+ALTER TABLE insertable DROP COLUMN a; -- { serverError EMPTY_LIST_OF_COLUMNS_PASSED }

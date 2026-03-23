@@ -12,6 +12,19 @@ CREATE TABLE test_alter_drop_comment
 )
 ENGINE = Memory;
 
+-- Test case 1: DROP COLUMN + COMMENT COLUMN IF EXISTS (should succeed)
+-- This was previously failing with "Cannot find column c0 in ColumnsDescription"
+ALTER TABLE test_alter_drop_comment DROP COLUMN c0, COMMENT COLUMN c0 'this comment should be silently ignored';
+
+-- Test case 2: COMMENT COLUMN IF EXISTS on non-existent column (should succeed)
+ALTER TABLE test_alter_drop_comment COMMENT COLUMN non_existent_column 'this should be ignored';
+
+-- Test case 3: COMMENT COLUMN without IF EXISTS on non-existent column (should fail)
+ALTER TABLE test_alter_drop_comment COMMENT COLUMN non_existent_column 'this should fail'; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
+
+-- Test case 4: Multiple operations with IF EXISTS
+ALTER TABLE test_alter_drop_comment DROP COLUMN c1, COMMENT COLUMN c1 'dropped column comment', COMMENT COLUMN c2 'existing column comment';
+
 SELECT
     table,
     name,
@@ -34,6 +47,8 @@ CREATE TABLE test_alter_drop_comment_mt
 ENGINE = MergeTree()
 ORDER BY id;
 
+ALTER TABLE test_alter_drop_comment_mt DROP COLUMN status, COMMENT COLUMN status 'dropped status column', COMMENT COLUMN value 'existing value column';
+
 DROP TABLE test_alter_drop_comment_mt;
 
 -- Test edge case: try to drop and comment the same column without IF EXISTS (should fail)
@@ -43,5 +58,7 @@ CREATE TABLE test_alter_fail
     c1 Int
 )
 ENGINE = Memory;
+
+ALTER TABLE test_alter_fail DROP COLUMN c0, COMMENT COLUMN c0 'this should fail'; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 DROP TABLE test_alter_fail;

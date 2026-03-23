@@ -23,6 +23,10 @@ INSERT INTO tab SELECT
     concat('c2', toString(number + 1))
 FROM numbers(10000);
 
+ALTER TABLE tab ADD INDEX idx_c1 c1 TYPE text(tokenizer = ngrams(3));
+
+ALTER TABLE tab ADD INDEX idx_c2 c2 TYPE text(tokenizer = ngrams(3));
+
 SELECT count()
 FROM tab
 WHERE hasAllTokens(c1, 'c11')

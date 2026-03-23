@@ -11,6 +11,8 @@ PARTITION BY APIKey;
 
 INSERT INTO test_generic_events_all;
 
+ALTER TABLE test_generic_events_all ADD COLUMN OperatingSystem UInt64 DEFAULT 42;
+
 SELECT OperatingSystem
 FROM test_generic_events_all
 PREWHERE APIKey = 42
@@ -20,6 +22,8 @@ SELECT *
 FROM test_generic_events_all
 PREWHERE APIKey = 42
 WHERE SessionType = 42;
+
+ALTER TABLE test_generic_events_all ADD COLUMN OperatingSystem UInt64 DEFAULT SessionType + 1;
 
 SELECT *
 FROM test_generic_events_all

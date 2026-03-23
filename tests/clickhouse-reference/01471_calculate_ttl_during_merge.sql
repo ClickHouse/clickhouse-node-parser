@@ -12,4 +12,6 @@ INSERT INTO table_for_ttl SELECT now() - INTERVAL 2 YEAR, 1, toString(number) fr
 INSERT INTO table_for_ttl SELECT now() - INTERVAL 2 DAY, 3, toString(number) from numbers(2000, 1000);
 INSERT INTO table_for_ttl SELECT now(), 4, toString(number) from numbers(3000, 1000);
 SELECT count() FROM table_for_ttl;
+ALTER TABLE table_for_ttl MODIFY TTL d + INTERVAL 1 YEAR SETTINGS materialize_ttl_after_modify = 0;
+ALTER TABLE table_for_ttl MODIFY COLUMN value String TTL d + INTERVAL 1 DAY SETTINGS materialize_ttl_after_modify = 0;
 SELECT count(distinct value) FROM table_for_ttl;

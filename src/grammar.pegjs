@@ -121,6 +121,7 @@ TopLevelStatement
   = ExplainStatement
   / ParallelWithStatement
   / CreateStatement
+  / AlterStatement
   / SetStatement
   / UseStatement
   / SystemStatement
@@ -176,10 +177,627 @@ UseStatement
 SystemStatement
   = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return loc({ kind: 'system', body: body.trim() }); }
 
-// OpaqueStatement: statements we recognize but don't fully parse (ALTER, TRUNCATE, etc.)
+// ── ALTER TABLE statements ──────────────────────────────────────────────────
+
+// AlterStatement: ALTER TABLE [db.]table [ON CLUSTER cluster] command [, command ...] [SETTINGS ...] [FORMAT ...]
+AlterStatement
+  = "ALTER"i ![a-zA-Z0-9_] _ ("TEMPORARY"i ![a-zA-Z0-9_] _)? "TABLE"i ![a-zA-Z0-9_] _ table:TableRef
+    onCluster:( _ OnClusterClause )?
+    _ head:AlterCommand tail:( _ "," _ AlterCommand )*
+    preSettings:( _ SettingsClause )?
+    format:( _ FormatClause )?
+    postSettings:( _ SettingsClause )? {
+      const commands = [head, ...tail.map(t => t[3])];
+      const result = loc({ kind: 'alter', table, commands });
+      if (onCluster !== null) result.onCluster = onCluster[1];
+      const settings = preSettings !== null ? preSettings[1] : (postSettings !== null ? postSettings[1] : null);
+      if (settings !== null) result.settings = settings;
+      if (format !== null) result.format = format[1];
+      return result;
+    }
+
+// Each alter command alternative. Parenthesized commands like (APPLY DELETED MASK) are supported.
+AlterCommand
+  = "(" _ cmd:AlterCommandInner _ ")" { return { ...cmd, parenthesized: true }; }
+  / AlterCommandInner
+
+AlterCommandInner
+  = AlterCommandAddColumn
+  / AlterCommandDropColumn
+  / AlterCommandClearColumn
+  / AlterCommandModifyColumn
+  / AlterCommandRenameColumn
+  / AlterCommandCommentColumn
+  / AlterCommandMaterializeColumn
+  / AlterCommandModifyOrderBy
+  / AlterCommandModifySampleBy
+  / AlterCommandRemoveSampleBy
+  / AlterCommandModifyTTL
+  / AlterCommandRemoveTTL
+  / AlterCommandMaterializeTTL
+  / AlterCommandModifySetting
+  / AlterCommandResetSetting
+  / AlterCommandModifyQuery
+  / AlterCommandModifyComment
+  / AlterCommandAddIndex
+  / AlterCommandDropIndex
+  / AlterCommandClearIndex
+  / AlterCommandMaterializeIndex
+  / AlterCommandAddProjection
+  / AlterCommandDropProjection
+  / AlterCommandClearProjection
+  / AlterCommandMaterializeProjection
+  / AlterCommandAddConstraint
+  / AlterCommandDropConstraint
+  / AlterCommandAddStatistics
+  / AlterCommandDropStatistics
+  / AlterCommandClearStatistics
+  / AlterCommandModifyStatistics
+  / AlterCommandMaterializeStatistics
+  / AlterCommandUpdate
+  / AlterCommandDelete
+  / AlterCommandDropPartition
+  / AlterCommandDropDetachedPartition
+  / AlterCommandAttachPartition
+  / AlterCommandReplacePartition
+  / AlterCommandMovePartition
+  / AlterCommandFetchPartition
+  / AlterCommandFreezePartition
+  / AlterCommandFreezeAll
+  / AlterCommandApplyDeletedMask
+  / AlterCommandApplyPatches
+  / AlterCommandRewriteParts
+
+// ── Column commands ─────────────────────────────────────────────────────────
+
+AlterCommandAddColumn
+  = "ADD"i ![a-zA-Z0-9_] _ "COLUMN"i ![a-zA-Z0-9_]
+    ifNotExists:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ col:AlterColumnElement
+    after:( _ "AFTER"i ![a-zA-Z0-9_] _ AlterColumnRef / _ "FIRST"i ![a-zA-Z0-9_] )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'ADD_COLUMN', column: col });
+      if (after !== null && after[1] && typeof after[4] === 'string') result.afterColumn = after[4];
+      return result;
+    }
+
+AlterCommandDropColumn
+  = "DROP"i ![a-zA-Z0-9_] _ "COLUMN"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ col:AlterColumnRef
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'DROP_COLUMN', columnName: col });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandClearColumn
+  = "CLEAR"i ![a-zA-Z0-9_] _ "COLUMN"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ col:AlterColumnRef
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'DROP_COLUMN', columnName: col });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandModifyColumn
+  = ("MODIFY"i / "ALTER"i) ![a-zA-Z0-9_] _ "COLUMN"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName _ "TYPE"i ![a-zA-Z0-9_] _ type:ColumnDataType {
+      const col = loc({ kind: 'columnDef', name, type });
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_COLUMN', column: col });
+    }
+  / ("MODIFY"i / "ALTER"i) ![a-zA-Z0-9_] _ "COLUMN"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ col:AlterModifyColumnElement
+    removeProp:( _ "REMOVE"i ![a-zA-Z0-9_] _ AlterRemoveProperty )?
+    modifySetReset:( _ AlterModifyColumnSettingClause )?
+    after:( _ "AFTER"i ![a-zA-Z0-9_] _ AlterColumnRef / _ "FIRST"i ![a-zA-Z0-9_] )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'MODIFY_COLUMN', column: col });
+      if (modifySetReset !== null) result.columnSettingOp = modifySetReset[1];
+      if (after !== null && after[1] && typeof after[4] === 'string') result.afterColumn = after[4];
+      return result;
+    }
+
+// MODIFY COLUMN column element: like ColumnElement but with extra negative lookaheads
+// for MODIFY/RESET/REMOVE/AFTER/FIRST that can follow the column definition
+AlterModifyColumnElement
+  = name:$(AliasName ("." AliasName)+)
+    type:( _ !("DEFAULT"i ![a-zA-Z0-9_] / "MATERIALIZED"i ![a-zA-Z0-9_] / "EPHEMERAL"i ![a-zA-Z0-9_] / "ALIAS"i ![a-zA-Z0-9_] / "COMMENT"i ![a-zA-Z0-9_] / "CODEC"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / "STATISTICS"i ![a-zA-Z0-9_] / "SETTINGS"i ![a-zA-Z0-9_] / "NULL"i ![a-zA-Z0-9_] / "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] / "REMOVE"i ![a-zA-Z0-9_] / "MODIFY"i ![a-zA-Z0-9_] / "RESET"i ![a-zA-Z0-9_] / "FIRST"i ![a-zA-Z0-9_] / "AFTER"i ![a-zA-Z0-9_] / "," / ")") ColumnDataType )?
+    def:( _ ColumnDefault )?
+    comment:( _ ColumnComment )?
+    codec:( _ ColumnCodec )?
+    ttl:( _ ColumnTTL )? {
+      const result = loc({ kind: 'columnDef', name });
+      if (type !== null) result.type = type[2];
+      if (def !== null) { result.defaultKind = def[1].kind; if (def[1].expr) result.defaultExpr = def[1].expr; }
+      if (comment !== null) result.comment = comment[1];
+      if (codec !== null) result.codec = codec[1];
+      if (ttl !== null) result.ttl = ttl[1];
+      return result;
+    }
+  / name:AliasName
+    type:( _ !("DEFAULT"i ![a-zA-Z0-9_] / "MATERIALIZED"i ![a-zA-Z0-9_] / "EPHEMERAL"i ![a-zA-Z0-9_] / "ALIAS"i ![a-zA-Z0-9_] / "COMMENT"i ![a-zA-Z0-9_] / "CODEC"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / "STATISTICS"i ![a-zA-Z0-9_] / "SETTINGS"i ![a-zA-Z0-9_] / "NULL"i ![a-zA-Z0-9_] / "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] / "AUTO_INCREMENT"i ![a-zA-Z0-9_] / "COLLATE"i ![a-zA-Z0-9_] / "PRIMARY"i ![a-zA-Z0-9_] / "REMOVE"i ![a-zA-Z0-9_] / "MODIFY"i ![a-zA-Z0-9_] / "RESET"i ![a-zA-Z0-9_] / "FIRST"i ![a-zA-Z0-9_] / "AFTER"i ![a-zA-Z0-9_] / "," / ")") ColumnDataType )?
+    collate:( _ "COLLATE"i ![a-zA-Z0-9_] _ AliasName )?
+    nullable1:( _ NullableModifier )?
+    autoIncrement:( _ "AUTO_INCREMENT"i ![a-zA-Z0-9_] )?
+    primaryKey:( _ "PRIMARY"i ![a-zA-Z0-9_] _ "KEY"i ![a-zA-Z0-9_] )?
+    def:( _ ColumnDefault )?
+    nullable2:( _ NullableModifier )?
+    comment:( _ ColumnComment )?
+    codec:( _ ColumnCodec )?
+    stats:( _ ColumnStatistics )?
+    ttl:( _ ColumnTTL )?
+    colSettings:( _ ColumnSettings )? {
+      const result = loc({ kind: 'columnDef', name });
+      if (type !== null) result.type = type[2];
+      else if (autoIncrement !== null) result.type = { name: 'INT', args: [] };
+      const nullable = nullable2 !== null ? nullable2[1] : (nullable1 !== null ? nullable1[1] : null);
+      if (collate !== null) result.collate = collate[4];
+      if (nullable !== null) result.nullable = nullable;
+      if (primaryKey !== null) result.primaryKey = true;
+      if (def !== null) { result.defaultKind = def[1].kind; if (def[1].expr) result.defaultExpr = def[1].expr; }
+      if (comment !== null) result.comment = comment[1];
+      if (codec !== null) result.codec = codec[1];
+      if (stats !== null) result.statistics = stats[1];
+      if (ttl !== null) result.ttl = ttl[1];
+      if (colSettings !== null) result.columnSettings = colSettings[1];
+      return result;
+    }
+
+AlterRemoveProperty
+  = "DEFAULT"i ![a-zA-Z0-9_] { return 'DEFAULT'; }
+  / "MATERIALIZED"i ![a-zA-Z0-9_] { return 'MATERIALIZED'; }
+  / "ALIAS"i ![a-zA-Z0-9_] { return 'ALIAS'; }
+  / "COMMENT"i ![a-zA-Z0-9_] { return 'COMMENT'; }
+  / "CODEC"i ![a-zA-Z0-9_] { return 'CODEC'; }
+  / "TTL"i ![a-zA-Z0-9_] { return 'TTL'; }
+  / "SETTINGS"i ![a-zA-Z0-9_] { return 'SETTINGS'; }
+
+AlterModifyColumnSettingClause
+  = "MODIFY"i ![a-zA-Z0-9_] _ "SETTING"i ![a-zA-Z0-9_] _ settings:SettingsList { return { op: 'MODIFY_SETTING', settings }; }
+  / "RESET"i ![a-zA-Z0-9_] _ "SETTING"i ![a-zA-Z0-9_] _ names:AlterResetSettingNames { return { op: 'RESET_SETTING', names }; }
+
+AlterCommandRenameColumn
+  = "RENAME"i ![a-zA-Z0-9_] _ "COLUMN"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ oldName:AlterColumnRef _ "TO"i ![a-zA-Z0-9_] _ newName:AlterColumnRef {
+      return loc({ kind: 'alterCommand', commandType: 'RENAME_COLUMN', oldName, newName });
+    }
+
+AlterCommandCommentColumn
+  = "COMMENT"i ![a-zA-Z0-9_] _ "COLUMN"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ col:AlterColumnRef _ comment:StringLiteral {
+      return loc({ kind: 'alterCommand', commandType: 'COMMENT_COLUMN', columnName: col, comment });
+    }
+
+AlterCommandMaterializeColumn
+  = "MATERIALIZE"i ![a-zA-Z0-9_] _ "COLUMN"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ col:AlterColumnRef
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'MATERIALIZE_COLUMN', columnName: col });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+// Column element variant for ALTER that allows dotted names (e.g. AddedNested1.C Array(String))
+// Tries dotted name first (requires dot present), falls back to ColumnElement for plain names
+AlterColumnElement
+  = name:$(AliasName ("." AliasName)+)
+    type:( _ !("DEFAULT"i ![a-zA-Z0-9_] / "MATERIALIZED"i ![a-zA-Z0-9_] / "EPHEMERAL"i ![a-zA-Z0-9_] / "ALIAS"i ![a-zA-Z0-9_] / "COMMENT"i ![a-zA-Z0-9_] / "CODEC"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / "STATISTICS"i ![a-zA-Z0-9_] / "SETTINGS"i ![a-zA-Z0-9_] / "NULL"i ![a-zA-Z0-9_] / "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] / "AUTO_INCREMENT"i ![a-zA-Z0-9_] / "COLLATE"i ![a-zA-Z0-9_] / "PRIMARY"i ![a-zA-Z0-9_] / "," / ")") ColumnDataType )?
+    def:( _ ColumnDefault )?
+    comment:( _ ColumnComment )?
+    codec:( _ ColumnCodec )?
+    ttl:( _ ColumnTTL )? {
+      const result = loc({ kind: 'columnDef', name });
+      if (type !== null) result.type = type[2];
+      if (def !== null) { result.defaultKind = def[1].kind; if (def[1].expr) result.defaultExpr = def[1].expr; }
+      if (comment !== null) result.comment = comment[1];
+      if (codec !== null) result.codec = codec[1];
+      if (ttl !== null) result.ttl = ttl[1];
+      return result;
+    }
+  / ColumnElement
+
+// Projection definition without the leading PROJECTION keyword (used in ALTER ADD PROJECTION)
+AlterProjectionDef
+  = name:AliasName _ "(" _ query:SelectStatement _ ")"
+    projSettings:( _ "WITH"i ![a-zA-Z0-9_] _ "SETTINGS"i ![a-zA-Z0-9_] _ "(" _ SettingsList _ ")" )? {
+      const result = loc({ kind: 'projectionDef', name, query });
+      if (projSettings !== null) result.projectionSettings = projSettings[9];
+      return result;
+    }
+  / name:AliasName _ "INDEX"i ![a-zA-Z0-9_] _ indexExpr:IndexExpr _ "TYPE"i ![a-zA-Z0-9_] _ indexType:IndexTypeSpec {
+      return loc({ kind: 'projectionDef', name, indexExpr, indexType });
+    }
+
+// Constraint definition without the leading CONSTRAINT keyword (used in ALTER ADD CONSTRAINT)
+AlterConstraintDef
+  = name:AliasName _ ct:("CHECK"i / "ASSUME"i) ![a-zA-Z0-9_] _ expr:Expression {
+      return loc({ kind: 'constraintDef', name, constraintType: ct.toUpperCase(), expr });
+    }
+
+// Index definition without the leading INDEX keyword (used in ALTER ADD INDEX)
+AlterIndexDef
+  = name:AliasName _ expr:IndexExpr _ "TYPE"i ![a-zA-Z0-9_] _ indexType:IndexTypeSpec
+    gran:( _ "GRANULARITY"i ![a-zA-Z0-9_] _ n:$[0-9]+ { return parseInt(n, 10); } )? {
+      const result = loc({ kind: 'indexDef', name, expr, indexType });
+      if (gran !== null) result.granularity = gran;
+      return result;
+    }
+
+// Column references in ALTER can include dots (e.g. NestedColumn.A)
+AlterColumnRef
+  = head:AliasName tail:( "." AliasName )* { return head + tail.map(t => '.' + t[1]).join(''); }
+
+// ── Index commands ──────────────────────────────────────────────────────────
+
+AlterCommandAddIndex
+  = "ADD"i ![a-zA-Z0-9_] _ "INDEX"i ![a-zA-Z0-9_]
+    ifNotExists:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ idx:AlterIndexDef
+    after:( _ "AFTER"i ![a-zA-Z0-9_] _ AliasName / _ "FIRST"i ![a-zA-Z0-9_] )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'ADD_INDEX', index: idx });
+      if (after !== null && after[1] && typeof after[4] === 'string') result.afterIndex = after[4];
+      return result;
+    }
+
+AlterCommandDropIndex
+  = "DROP"i ![a-zA-Z0-9_] _ "INDEX"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'DROP_INDEX', indexName: name });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandClearIndex
+  = "CLEAR"i ![a-zA-Z0-9_] _ "INDEX"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'DROP_INDEX', indexName: name });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandMaterializeIndex
+  = "MATERIALIZE"i ![a-zA-Z0-9_] _ "INDEX"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'MATERIALIZE_INDEX', indexName: name });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+// ── Projection commands ─────────────────────────────────────────────────────
+
+AlterCommandAddProjection
+  = "ADD"i ![a-zA-Z0-9_] _ "PROJECTION"i ![a-zA-Z0-9_]
+    ifNotExists:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ proj:AlterProjectionDef
+    after:( _ "AFTER"i ![a-zA-Z0-9_] _ AliasName )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'ADD_PROJECTION', projection: proj });
+      if (after !== null) result.afterProjection = after[4];
+      return result;
+    }
+
+AlterCommandDropProjection
+  = "DROP"i ![a-zA-Z0-9_] _ "PROJECTION"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'DROP_PROJECTION', projectionName: name });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandClearProjection
+  = "CLEAR"i ![a-zA-Z0-9_] _ "PROJECTION"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'DROP_PROJECTION', projectionName: name });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandMaterializeProjection
+  = "MATERIALIZE"i ![a-zA-Z0-9_] _ "PROJECTION"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'MATERIALIZE_PROJECTION', projectionName: name });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+// ── Constraint commands ─────────────────────────────────────────────────────
+
+AlterCommandAddConstraint
+  = "ADD"i ![a-zA-Z0-9_] _ "CONSTRAINT"i ![a-zA-Z0-9_]
+    ifNotExists:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ constraint:AlterConstraintDef {
+      return loc({ kind: 'alterCommand', commandType: 'ADD_CONSTRAINT', constraint });
+    }
+
+AlterCommandDropConstraint
+  = "DROP"i ![a-zA-Z0-9_] _ "CONSTRAINT"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ name:AliasName {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_CONSTRAINT', constraintName: name });
+    }
+
+// ── Statistics commands ─────────────────────────────────────────────────────
+
+AlterCommandAddStatistics
+  = "ADD"i ![a-zA-Z0-9_] _ "STATISTICS"i ![a-zA-Z0-9_]
+    ifNotExists:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ columns:AlterStatisticsColumns _ "TYPE"i ![a-zA-Z0-9_] _ types:AlterStatisticsTypes {
+      return loc({ kind: 'alterCommand', commandType: 'ADD_STATISTICS', statColumns: columns, statTypes: types });
+    }
+
+AlterCommandDropStatistics
+  = "DROP"i ![a-zA-Z0-9_] _ "STATISTICS"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ "ALL"i ![a-zA-Z0-9_] {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_STATISTICS' });
+    }
+  / "DROP"i ![a-zA-Z0-9_] _ "STATISTICS"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ columns:AlterStatisticsColumns {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_STATISTICS', statColumns: columns });
+    }
+
+AlterCommandModifyStatistics
+  = "MODIFY"i ![a-zA-Z0-9_] _ "STATISTICS"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ columns:AlterStatisticsColumns _ "TYPE"i ![a-zA-Z0-9_] _ types:AlterStatisticsTypes {
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_STATISTICS', statColumns: columns, statTypes: types });
+    }
+
+AlterCommandClearStatistics
+  = "CLEAR"i ![a-zA-Z0-9_] _ "STATISTICS"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ "ALL"i ![a-zA-Z0-9_] {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_STATISTICS' });
+    }
+  / "CLEAR"i ![a-zA-Z0-9_] _ "STATISTICS"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ columns:AlterStatisticsColumns {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_STATISTICS', statColumns: columns });
+    }
+
+AlterCommandMaterializeStatistics
+  = "MATERIALIZE"i ![a-zA-Z0-9_] _ "STATISTICS"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ "ALL"i ![a-zA-Z0-9_] {
+      return loc({ kind: 'alterCommand', commandType: 'MATERIALIZE_STATISTICS' });
+    }
+  / "MATERIALIZE"i ![a-zA-Z0-9_] _ "STATISTICS"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ columns:AlterStatisticsColumns {
+      return loc({ kind: 'alterCommand', commandType: 'MATERIALIZE_STATISTICS', statColumns: columns });
+    }
+
+AlterStatisticsColumns
+  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
+
+AlterStatisticsTypes
+  = head:IndexTypeSpec tail:( _ "," _ IndexTypeSpec )* { return [head, ...tail.map(t => t[3])]; }
+
+// ── Mutation commands ───────────────────────────────────────────────────────
+
+AlterCommandUpdate
+  = "UPDATE"i ![a-zA-Z0-9_] _ assignments:AlterUpdateAssignmentList _ partition:AlterInPartitionClause _ "WHERE"i ![a-zA-Z0-9_] _ where:Expression {
+      return loc({ kind: 'alterCommand', commandType: 'UPDATE', assignments, where, partition });
+    }
+  / "UPDATE"i ![a-zA-Z0-9_] _ assignments:AlterAssignmentList _ "WHERE"i ![a-zA-Z0-9_] _ where:Expression {
+      return loc({ kind: 'alterCommand', commandType: 'UPDATE', assignments, where });
+    }
+
+AlterAssignmentList
+  = head:AlterAssignment tail:( _ "," _ AlterAssignment )* { return [head, ...tail.map(t => t[3])]; }
+
+AlterAssignment
+  = col:AlterColumnRef _ "=" _ expr:TernaryExpr {
+      return { column: col, expr };
+    }
+
+// Assignment list for UPDATE ... IN PARTITION — uses AddExpr (not TernaryExpr) for values
+// to prevent 'x + 1 IN PARTITION' being parsed as the SQL IN operator
+AlterUpdateAssignmentList
+  = head:AlterUpdateAssignment tail:( _ "," _ AlterUpdateAssignment )* { return [head, ...tail.map(t => t[3])]; }
+
+AlterUpdateAssignment
+  = col:AlterColumnRef _ "=" _ expr:AddExpr {
+      return { column: col, expr };
+    }
+
+AlterCommandDelete
+  = "DELETE"i ![a-zA-Z0-9_] _ "WHERE"i ![a-zA-Z0-9_] _ where:Expression
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'DELETE', where });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+  / "DELETE"i ![a-zA-Z0-9_] _ partition:AlterInPartitionClause _ "WHERE"i ![a-zA-Z0-9_] _ where:Expression {
+      return loc({ kind: 'alterCommand', commandType: 'DELETE', where, partition });
+    }
+
+// ── Partition commands ──────────────────────────────────────────────────────
+
+AlterCommandDropPartition
+  = ("DROP"i / "DETACH"i) ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ partName:StringLiteral {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_PARTITION', partName: partName });
+    }
+  / ("DROP"i / "DETACH"i) ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_PARTITION', partition: part });
+    }
+
+AlterCommandDropDetachedPartition
+  = "DROP"i ![a-zA-Z0-9_] _ "DETACHED"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_DETACHED_PARTITION', partition: part });
+    }
+
+AlterCommandAttachPartition
+  = "ATTACH"i ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ partName:StringLiteral {
+      return loc({ kind: 'alterCommand', commandType: 'ATTACH_PARTITION', partName: partName });
+    }
+  / "ATTACH"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr _ "FROM"i ![a-zA-Z0-9_] _ fromTable:TableRef {
+      return loc({ kind: 'alterCommand', commandType: 'REPLACE_PARTITION', partition: part, fromTable: fromTable });
+    }
+  / "ATTACH"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr
+    from:( _ "FROM"i ![a-zA-Z0-9_] _ TableRef )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'ATTACH_PARTITION', partition: part });
+      if (from !== null) result.fromTable = from[4];
+      return result;
+    }
+
+AlterCommandReplacePartition
+  = "REPLACE"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr _ "FROM"i ![a-zA-Z0-9_] _ table:TableRef {
+      return loc({ kind: 'alterCommand', commandType: 'REPLACE_PARTITION', partition: part, fromTable: table });
+    }
+
+AlterCommandMovePartition
+  = "MOVE"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr _ "TO"i ![a-zA-Z0-9_] _
+    dest:( "TABLE"i ![a-zA-Z0-9_] _ table:TableRef { return { destType: 'TABLE', table }; }
+         / "DISK"i ![a-zA-Z0-9_] _ disk:StringLiteral { return { destType: 'DISK', value: disk }; }
+         / "VOLUME"i ![a-zA-Z0-9_] _ vol:StringLiteral { return { destType: 'VOLUME', value: vol }; }
+         / "SHARD"i ![a-zA-Z0-9_] _ shard:StringLiteral { return { destType: 'SHARD', value: shard }; } ) {
+      return loc({ kind: 'alterCommand', commandType: 'MOVE_PARTITION', partition: part, moveDest: dest });
+    }
+
+AlterCommandFetchPartition
+  = "FETCH"i ![a-zA-Z0-9_] _ ("PARTITION"i / "PART"i) ![a-zA-Z0-9_]
+    _ part:AlterFetchPartitionExpr _ "FROM"i ![a-zA-Z0-9_] _ path:( StringLiteral / QueryParam ) {
+      return loc({ kind: 'alterCommand', commandType: 'FETCH_PARTITION', partition: part, fromPath: path });
+    }
+
+// Partition expression for FETCH that doesn't use general Expression to avoid packrat issues
+AlterFetchPartitionExpr
+  = "ALL"i ![a-zA-Z0-9_] { return { partitionKind: 'all' }; }
+  / "ID"i ![a-zA-Z0-9_] _ id:( StringLiteral / QueryParam ) { return { partitionKind: 'id', id }; }
+  / expr:TernaryExpr { return { partitionKind: 'expr', expr }; }
+
+AlterCommandFreezePartition
+  = "FREEZE"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr
+    withName:( _ "WITH"i ![a-zA-Z0-9_] _ "NAME"i ![a-zA-Z0-9_] _ StringLiteral )? {
+      return loc({ kind: 'alterCommand', commandType: 'FREEZE_PARTITION', partition: part });
+    }
+
+AlterCommandFreezeAll
+  = "FREEZE"i ![a-zA-Z0-9_]
+    withName:( _ "WITH"i ![a-zA-Z0-9_] _ "NAME"i ![a-zA-Z0-9_] _ StringLiteral )? {
+      return loc({ kind: 'alterCommand', commandType: 'FREEZE_ALL' });
+    }
+
+// ── Table-level commands ────────────────────────────────────────────────────
+
+AlterCommandModifyTTL
+  = "MODIFY"i ![a-zA-Z0-9_] _ "TTL"i ![a-zA-Z0-9_] _ head:TTLItem tail:( _ "," _ TTLItem )* {
+      const ttl = [head, ...tail.map(t => t[3])];
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_TTL', ttl });
+    }
+
+AlterCommandRemoveTTL
+  = "REMOVE"i ![a-zA-Z0-9_] _ "TTL"i ![a-zA-Z0-9_] {
+      return loc({ kind: 'alterCommand', commandType: 'REMOVE_TTL' });
+    }
+
+AlterCommandMaterializeTTL
+  = "MATERIALIZE"i ![a-zA-Z0-9_] _ "TTL"i ![a-zA-Z0-9_]
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'MATERIALIZE_TTL' });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandModifyOrderBy
+  = "MODIFY"i ![a-zA-Z0-9_] _ "ORDER"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ expr:Expression {
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_ORDER_BY', expr });
+    }
+
+AlterCommandModifySampleBy
+  = "MODIFY"i ![a-zA-Z0-9_] _ "SAMPLE"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ expr:Expression {
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_SAMPLE_BY', expr });
+    }
+
+AlterCommandRemoveSampleBy
+  = "REMOVE"i ![a-zA-Z0-9_] _ "SAMPLE"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] {
+      return loc({ kind: 'alterCommand', commandType: 'REMOVE_SAMPLE_BY' });
+    }
+
+AlterCommandModifySetting
+  = "MODIFY"i ![a-zA-Z0-9_] _ "SETTING"i ![a-zA-Z0-9_] _ settings:SettingsList {
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_SETTING', settings });
+    }
+
+AlterCommandResetSetting
+  = "RESET"i ![a-zA-Z0-9_] _ "SETTING"i ![a-zA-Z0-9_] _ names:AlterResetSettingNames {
+      return loc({ kind: 'alterCommand', commandType: 'RESET_SETTING', settingNames: names });
+    }
+
+AlterResetSettingNames
+  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
+
+AlterCommandModifyQuery
+  = "MODIFY"i ![a-zA-Z0-9_] _ "QUERY"i ![a-zA-Z0-9_] _ query:UnionQuery {
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_QUERY', query });
+    }
+
+AlterCommandModifyComment
+  = "MODIFY"i ![a-zA-Z0-9_] _ "COMMENT"i ![a-zA-Z0-9_] _ comment:StringLiteral {
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_COMMENT', comment });
+    }
+
+// ── Other commands ──────────────────────────────────────────────────────────
+
+AlterCommandApplyDeletedMask
+  = "APPLY"i ![a-zA-Z0-9_] _ "DELETED"i ![a-zA-Z0-9_] _ "MASK"i ![a-zA-Z0-9_]
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'APPLY_DELETED_MASK' });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandApplyPatches
+  = "APPLY"i ![a-zA-Z0-9_] _ "PATCHES"i ![a-zA-Z0-9_]
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'APPLY_PATCHES' });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+AlterCommandRewriteParts
+  = "REWRITE"i ![a-zA-Z0-9_] _ "PARTS"i ![a-zA-Z0-9_]
+    partition:( _ AlterInPartitionClause )? {
+      const result = loc({ kind: 'alterCommand', commandType: 'REWRITE_PARTS' });
+      if (partition !== null) result.partition = partition[1];
+      return result;
+    }
+
+// ── Partition expression helpers ────────────────────────────────────────────
+
+// A partition expression: PARTITION ALL, PARTITION ID 'xxx', or PARTITION expr
+AlterPartitionExpr
+  = "ALL"i ![a-zA-Z0-9_] { return { partitionKind: 'all' }; }
+  / "ID"i ![a-zA-Z0-9_] _ id:( StringLiteral / QueryParam ) { return { partitionKind: 'id', id }; }
+  / expr:TernaryExpr { return { partitionKind: 'expr', expr }; }
+
+// IN PARTITION clause used by CLEAR COLUMN/INDEX, MATERIALIZE, APPLY DELETED MASK, etc.
+AlterInPartitionClause
+  = "IN"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr { return part; }
+  / "IN"i ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ id:StringLiteral { return { partitionKind: 'id', id }; }
+
+// OpaqueStatement: statements we recognize but don't fully parse (TRUNCATE, etc.)
 // The body is consumed as raw text until end of statement.
 OpaqueStatement
-  = keyword:( "ALTER"i / "RENAME"i / "ATTACH"i / "DETACH"i / "OPTIMIZE"i / "CHECK"i / "DESCRIBE"i / "DESC"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "EXCHANGE"i / "KILL"i / "UNDO"i / "DELETE"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i / "TRUNCATE"i ) ![a-zA-Z0-9_] body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
+  = keyword:( "ALTER"i / "RENAME"i / "ATTACH"i / "DETACH"i / "OPTIMIZE"i / "CHECK"i / "DESCRIBE"i / "DESC"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "EXCHANGE"i / "KILL"i / "UNDO"i / "DELETE"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i / "TRUNCATE"i ) ![a-zA-Z0-9_] _ body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
 
 // ── DROP statements ─────────────────────────────────────────────────────────
 
@@ -1135,8 +1753,8 @@ TableElement
 
 // PROJECTION with INDEX: e.g. "PROJECTION region_proj INDEX region TYPE basic"
 ProjectionIndexElement
-  = "PROJECTION"i ![a-zA-Z0-9_] _ name:AliasName _ "INDEX"i ![a-zA-Z0-9_] _ col:AliasName _ "TYPE"i ![a-zA-Z0-9_] _ typeName:AliasName {
-      return loc({ kind: 'projectionDef', name, projectionIndex: { column: col, typeName } });
+  = "PROJECTION"i ![a-zA-Z0-9_] _ name:AliasName _ "INDEX"i ![a-zA-Z0-9_] _ indexExpr:IndexExpr _ "TYPE"i ![a-zA-Z0-9_] _ indexType:IndexTypeSpec {
+      return loc({ kind: 'projectionDef', name, indexExpr, indexType });
     }
 
 ColumnElement
@@ -1200,6 +1818,12 @@ CodecItemEntry
     }
   // Quoted codec name like 'AES-128-GCM-SIV'
   / "'" name:$[^']+ "'" args:( _ "(" _ ExpressionList? _ ")" )? {
+      const result = { name };
+      if (args !== null) result.args = args[3] || [];
+      return result;
+    }
+  // Backtick-quoted codec name like `@`
+  / "`" name:$[^`]+ "`" args:( _ "(" _ ExpressionList? _ ")" )? {
       const result = { name };
       if (args !== null) result.args = args[3] || [];
       return result;

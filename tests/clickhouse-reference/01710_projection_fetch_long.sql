@@ -7,7 +7,12 @@ create table tp_2 (x Int32, y Int32, projection p (select x, y order by x)) engi
 insert into tp_1 select number, number from numbers(3);
 select * from tp_2 order by x;
 insert into tp_1 select number, number from numbers(5);
+-- test projection creation, materialization, clear and drop
+alter table tp_1 add projection pp (select x, count() group by x);
 select count() from system.projection_parts where database = currentDatabase() and table = 'tp_2' and name = 'pp' and active;
 -- all other three operations are mutations
 set mutations_sync = 2;
+alter table tp_1 materialize projection pp;
+alter table tp_1 clear projection pp;
 select * from system.projection_parts where database = currentDatabase() and table = 'tp_2' and name = 'pp' and active;
+alter table tp_1 drop projection pp;

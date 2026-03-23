@@ -10,19 +10,25 @@ CREATE TABLE alter_compression_codec (
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 1);
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 2);
 SELECT * FROM alter_compression_codec ORDER BY id;
+ALTER TABLE alter_compression_codec ADD COLUMN alter_column String DEFAULT 'default_value' CODEC(ZSTD);
 SELECT compression_codec FROM system.columns WHERE database = currentDatabase() AND table = 'alter_compression_codec' AND name = 'alter_column';
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 3, '3');
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 4, '4');
+ALTER TABLE alter_compression_codec MODIFY COLUMN alter_column CODEC(NONE);
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 5, '5');
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 6, '6');
 SET allow_suspicious_codecs = 1;
+ALTER TABLE alter_compression_codec MODIFY COLUMN alter_column CODEC(ZSTD, LZ4HC, LZ4, LZ4, NONE);
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 7, '7');
 INSERT INTO alter_compression_codec VALUES('2018-01-01', 8, '8');
+ALTER TABLE alter_compression_codec MODIFY COLUMN alter_column FixedString(100);
 DROP TABLE IF EXISTS alter_bad_codec;
 CREATE TABLE alter_bad_codec (
     somedate Date CODEC(LZ4),
     id UInt64 CODEC(NONE)
 ) ENGINE = MergeTree() ORDER BY tuple();
+ALTER TABLE alter_bad_codec ADD COLUMN alter_column DateTime DEFAULT '2019-01-01 00:00:00' CODEC(gbdgkjsdh); -- { serverError UNKNOWN_CODEC }
+ALTER TABLE alter_bad_codec ADD COLUMN alter_column DateTime DEFAULT '2019-01-01 00:00:00' CODEC(ZSTD(100)); -- { serverError ILLEGAL_CODEC_PARAMETER }
 DROP TABLE IF EXISTS large_alter_table_00804;
 DROP TABLE IF EXISTS store_of_hash_00804;
 CREATE TABLE large_alter_table_00804 (
@@ -34,6 +40,7 @@ SET max_execution_time = 300;
 INSERT INTO large_alter_table_00804 SELECT toDate('2019-01-01'), number, toString(number + rand()) FROM system.numbers LIMIT 300000;
 CREATE TABLE store_of_hash_00804 (hash UInt64) ENGINE = Memory();
 INSERT INTO store_of_hash_00804 SELECT sum(cityHash64(*)) FROM large_alter_table_00804;
+ALTER TABLE large_alter_table_00804 MODIFY COLUMN data CODEC(NONE, LZ4, LZ4HC, ZSTD);
 SELECT compression_codec FROM system.columns WHERE database = currentDatabase() AND table = 'large_alter_table_00804' AND name = 'data';
 SELECT COUNT(hash) FROM store_of_hash_00804;
 SELECT COUNT(DISTINCT hash) FROM store_of_hash_00804;

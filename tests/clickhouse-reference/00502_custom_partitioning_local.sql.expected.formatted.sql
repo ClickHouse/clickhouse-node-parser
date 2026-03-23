@@ -23,6 +23,8 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM not_partitioned;
 
+ALTER TABLE not_partitioned DROP PARTITION ID 'all';
+
 SELECT `system`.detached_parts.* EXCEPT (bytes_on_disk, path, disk, modification_time)
 FROM `system`.detached_parts
 WHERE database = currentDatabase()
@@ -58,6 +60,8 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM partitioned_by_week;
 
+ALTER TABLE partitioned_by_week DROP PARTITION '1999-12-27';
+
 DROP TABLE partitioned_by_week;
 
 DROP TABLE IF EXISTS partitioned_by_tuple;
@@ -88,6 +92,8 @@ ORDER BY name ASC;
 SELECT sum(y)
 FROM partitioned_by_tuple;
 
+ALTER TABLE partitioned_by_tuple DROP PARTITION ID '20000101-1';
+
 DROP TABLE partitioned_by_tuple;
 
 DROP TABLE IF EXISTS partitioned_by_string;
@@ -117,6 +123,8 @@ ORDER BY name ASC;
 SELECT sum(x)
 FROM partitioned_by_string;
 
+ALTER TABLE partitioned_by_string DROP PARTITION 'bbb';
+
 DROP TABLE partitioned_by_string;
 
 DROP TABLE IF EXISTS without_fixed_size_columns;
@@ -144,5 +152,7 @@ ORDER BY name ASC;
 SELECT *
 FROM without_fixed_size_columns
 ORDER BY s ASC;
+
+ALTER TABLE without_fixed_size_columns DROP PARTITION 1;
 
 DROP TABLE without_fixed_size_columns;

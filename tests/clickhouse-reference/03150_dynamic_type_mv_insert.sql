@@ -19,6 +19,8 @@ CREATE MATERIALIZED VIEW dummy_rmv TO to_table
 AS SELECT * FROM null_table;
 INSERT INTO null_table ( n1, n2 ) VALUES (1, '2024-01-01'), (2, toDateTime64('2024-01-01', 3, 'Asia/Istanbul')), (3, toFloat32(1)), (4, toFloat64(2));
 SELECT *, dynamicType(n2) FROM to_table ORDER BY ALL;
+ALTER TABLE to_table MODIFY COLUMN n2 Dynamic(max_types=1);
+ALTER TABLE to_table MODIFY COLUMN n2 Dynamic(max_types=10);
 DROP TABLE null_table;
 DROP VIEW dummy_rmv;
 DROP TABLE to_table;

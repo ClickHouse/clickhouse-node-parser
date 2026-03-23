@@ -10,8 +10,11 @@ CREATE TABLE 02483_substitute_udf (id UInt32, number UInt32 DEFAULT 02483_pluson
 INSERT INTO 02483_substitute_udf (id, number) VALUES (1, NULL);
 SELECT * FROM 02483_substitute_udf ORDER BY id;
 CREATE FUNCTION 02483_plustwo AS (a) -> a + 2;
+ALTER TABLE 02483_substitute_udf MODIFY COLUMN number UInt32 DEFAULT 02483_plustwo(id);
 INSERT INTO 02483_substitute_udf (id, number) VALUES (5, NULL);
 CREATE FUNCTION 02483_plusthree AS (a) -> a + 3;
+ALTER TABLE 02483_substitute_udf DROP COLUMN number;
+ALTER TABLE 02483_substitute_udf ADD COLUMN new_number UInt32 DEFAULT 02483_plusthree(id);
 INSERT INTO 02483_substitute_udf (id, new_number) VALUES (10, NULL);
 DROP TABLE 02483_substitute_udf;
 DROP FUNCTION 02483_plusone;

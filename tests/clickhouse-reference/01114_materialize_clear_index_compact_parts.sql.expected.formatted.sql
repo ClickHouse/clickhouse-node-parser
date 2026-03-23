@@ -21,13 +21,23 @@ INSERT INTO minmax_compact;
 
 SET mutations_sync = 1;
 
+ALTER TABLE minmax_compact ADD INDEX idx tuple(i64, u64 * i64) TYPE minmax GRANULARITY 1;
+
+ALTER TABLE minmax_compact MATERIALIZE INDEX idx IN PARTITION 1;
+
 SET max_rows_to_read = 8;
 
 SELECT count()
 FROM minmax_compact
 WHERE i64 = 2;
 
+ALTER TABLE minmax_compact MATERIALIZE INDEX idx IN PARTITION 2;
+
 SET max_rows_to_read = 6;
+
+ALTER TABLE minmax_compact DROP INDEX idx IN PARTITION 1;
+
+ALTER TABLE minmax_compact DROP INDEX idx IN PARTITION 2;
 
 SET max_rows_to_read = 10;
 

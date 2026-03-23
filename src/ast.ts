@@ -1544,8 +1544,12 @@ export type ProjectionDef = {
   name: string;
   /** The projection SELECT query (for standard projections). */
   query?: SelectStatement;
-  /** PROJECTION ... INDEX col TYPE name (for projection index syntax). */
-  projectionIndex?: { column: string; typeName: string };
+  /** Index expression (for PROJECTION name INDEX expr TYPE type syntax). */
+  indexExpr?: Expression;
+  /** Index type (for PROJECTION name INDEX expr TYPE type syntax). */
+  indexType?: IndexType;
+  /** Optional WITH SETTINGS for projection. */
+  projectionSettings?: SettingItem[];
 } & NodeMetadata;
 
 /**
@@ -1592,6 +1596,14 @@ export type TableOrderByItem = { expr: Expression; dir?: 'ASC' | 'DESC' };
 
 /** A single TTL item with an expression and optional WHERE clause. */
 export type TTLItem = { expr: Expression; where?: Expression };
+
+/** Zod schema for {@link TTLItem}. */
+export const TTLItemSchema: z.ZodType<TTLItem> = z.lazy(() =>
+  z.object({
+    expr: ExpressionSchema,
+    where: ExpressionSchema.optional(),
+  }),
+);
 
 /** Storage-related clauses shared by CREATE TABLE and CREATE MATERIALIZED VIEW. */
 type StorageClauses = {
@@ -1838,6 +1850,321 @@ export type CreateStatement =
   | CreateWindowViewStatement
   | CreateLiveViewStatement;
 
+// ── ALTER TABLE statement ─────────────────────────────────────────────────────
+
+/**
+ * The kind of partition expression in an ALTER command.
+ */
+export type AlterPartitionExpr =
+  | { partitionKind: 'all' }
+  | { partitionKind: 'id'; id: Literal | QueryParam }
+  | { partitionKind: 'expr'; expr: Expression };
+
+/**
+ * All valid ALTER command type strings.
+ */
+export type AlterCommandType = AlterCommand['commandType'];
+
+/** Base fields shared by all ALTER commands. */
+type AlterCommandBase = {
+  kind: 'alterCommand';
+  /** Whether the command was wrapped in parentheses. */
+  parenthesized?: boolean;
+} & NodeMetadata;
+
+/** ALTER TABLE ... ADD COLUMN col [AFTER pos] */
+type AlterAddColumn = AlterCommandBase & {
+  commandType: 'ADD_COLUMN';
+  column: ColumnDef;
+  afterColumn?: string;
+};
+
+/** ALTER TABLE ... DROP COLUMN col [IN PARTITION ...] */
+type AlterDropColumn = AlterCommandBase & {
+  commandType: 'DROP_COLUMN';
+  columnName: string;
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... MODIFY COLUMN col [AFTER pos] [MODIFY/RESET SETTING ...] */
+type AlterModifyColumn = AlterCommandBase & {
+  commandType: 'MODIFY_COLUMN';
+  column: ColumnDef;
+  afterColumn?: string;
+  /** Optional MODIFY SETTING / RESET SETTING on the column. */
+  columnSettingOp?: { op: string; settings?: SettingItem[]; names?: string[] };
+};
+
+/** ALTER TABLE ... RENAME COLUMN old TO new */
+type AlterRenameColumn = AlterCommandBase & {
+  commandType: 'RENAME_COLUMN';
+  oldName: string;
+  newName: string;
+};
+
+/** ALTER TABLE ... COMMENT COLUMN col 'text' */
+type AlterCommentColumn = AlterCommandBase & {
+  commandType: 'COMMENT_COLUMN';
+  columnName: string;
+  comment: Literal;
+};
+
+/** ALTER TABLE ... MATERIALIZE COLUMN col [IN PARTITION ...] */
+type AlterMaterializeColumn = AlterCommandBase & {
+  commandType: 'MATERIALIZE_COLUMN';
+  columnName: string;
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... ADD INDEX idx [AFTER pos] */
+type AlterAddIndex = AlterCommandBase & {
+  commandType: 'ADD_INDEX';
+  index: IndexDef;
+  afterIndex?: string;
+};
+
+/** ALTER TABLE ... DROP INDEX idx [IN PARTITION ...] */
+type AlterDropIndex = AlterCommandBase & {
+  commandType: 'DROP_INDEX';
+  indexName: string;
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... MATERIALIZE INDEX idx [IN PARTITION ...] */
+type AlterMaterializeIndex = AlterCommandBase & {
+  commandType: 'MATERIALIZE_INDEX';
+  indexName: string;
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... ADD PROJECTION proj [AFTER pos] */
+type AlterAddProjection = AlterCommandBase & {
+  commandType: 'ADD_PROJECTION';
+  projection: ProjectionDef;
+  afterProjection?: string;
+};
+
+/** ALTER TABLE ... DROP PROJECTION proj [IN PARTITION ...] */
+type AlterDropProjection = AlterCommandBase & {
+  commandType: 'DROP_PROJECTION';
+  projectionName: string;
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... MATERIALIZE PROJECTION proj [IN PARTITION ...] */
+type AlterMaterializeProjection = AlterCommandBase & {
+  commandType: 'MATERIALIZE_PROJECTION';
+  projectionName: string;
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... ADD CONSTRAINT con CHECK expr */
+type AlterAddConstraint = AlterCommandBase & {
+  commandType: 'ADD_CONSTRAINT';
+  constraint: ConstraintDef;
+};
+
+/** ALTER TABLE ... DROP CONSTRAINT con */
+type AlterDropConstraint = AlterCommandBase & {
+  commandType: 'DROP_CONSTRAINT';
+  constraintName: string;
+};
+
+/** ALTER TABLE ... ADD/MODIFY STATISTICS cols TYPE types */
+type AlterAddOrModifyStatistics = AlterCommandBase & {
+  commandType: 'ADD_STATISTICS' | 'MODIFY_STATISTICS';
+  statColumns: string[];
+  statTypes: IndexType[];
+};
+
+/** ALTER TABLE ... DROP/CLEAR STATISTICS [cols] */
+type AlterDropStatistics = AlterCommandBase & {
+  commandType: 'DROP_STATISTICS';
+  statColumns?: string[];
+};
+
+/** ALTER TABLE ... MATERIALIZE STATISTICS [cols] */
+type AlterMaterializeStatistics = AlterCommandBase & {
+  commandType: 'MATERIALIZE_STATISTICS';
+  statColumns?: string[];
+};
+
+/** ALTER TABLE ... UPDATE col=val [, ...] [IN PARTITION ...] WHERE expr */
+type AlterUpdate = AlterCommandBase & {
+  commandType: 'UPDATE';
+  assignments: { column: string; expr: Expression }[];
+  where: Expression;
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... DELETE [IN PARTITION ...] WHERE expr */
+type AlterDelete = AlterCommandBase & {
+  commandType: 'DELETE';
+  where: Expression;
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... DROP/ATTACH PARTITION expr (or PART 'name') */
+type AlterDropOrAttachPartition = AlterCommandBase & {
+  commandType: 'DROP_PARTITION' | 'ATTACH_PARTITION';
+  partition?: AlterPartitionExpr;
+  partName?: Literal;
+};
+
+/** ALTER TABLE ... DROP DETACHED PARTITION expr */
+type AlterDropDetachedPartition = AlterCommandBase & {
+  commandType: 'DROP_DETACHED_PARTITION';
+  partition: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... REPLACE PARTITION expr FROM table */
+type AlterReplacePartition = AlterCommandBase & {
+  commandType: 'REPLACE_PARTITION';
+  partition: AlterPartitionExpr;
+  fromTable: TableRef;
+};
+
+/** ALTER TABLE ... MOVE PARTITION expr TO TABLE/DISK/VOLUME/SHARD target */
+type AlterMovePartition = AlterCommandBase & {
+  commandType: 'MOVE_PARTITION';
+  partition: AlterPartitionExpr;
+  moveDest?:
+    | { destType: 'TABLE'; table: TableRef }
+    | { destType: 'DISK' | 'VOLUME' | 'SHARD'; value: Literal };
+};
+
+/** ALTER TABLE ... FETCH PARTITION expr FROM 'path' */
+type AlterFetchPartition = AlterCommandBase & {
+  commandType: 'FETCH_PARTITION';
+  partition: AlterPartitionExpr;
+  fromPath?: Expression;
+};
+
+/** ALTER TABLE ... FREEZE PARTITION expr */
+type AlterFreezePartition = AlterCommandBase & {
+  commandType: 'FREEZE_PARTITION';
+  partition: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... FREEZE ALL */
+type AlterFreezeAll = AlterCommandBase & {
+  commandType: 'FREEZE_ALL';
+};
+
+/** ALTER TABLE ... MODIFY TTL expr */
+type AlterModifyTTL = AlterCommandBase & {
+  commandType: 'MODIFY_TTL';
+  ttl: TTLItem[];
+};
+
+/** ALTER TABLE ... REMOVE TTL / REMOVE SAMPLE BY */
+type AlterRemoveTTLOrSampleBy = AlterCommandBase & {
+  commandType: 'REMOVE_TTL' | 'REMOVE_SAMPLE_BY';
+};
+
+/** ALTER TABLE ... MATERIALIZE TTL [IN PARTITION ...] */
+type AlterMaterializeTTL = AlterCommandBase & {
+  commandType: 'MATERIALIZE_TTL';
+  partition?: AlterPartitionExpr;
+};
+
+/** ALTER TABLE ... MODIFY ORDER BY / MODIFY SAMPLE BY expr */
+type AlterModifyOrderByOrSampleBy = AlterCommandBase & {
+  commandType: 'MODIFY_ORDER_BY' | 'MODIFY_SAMPLE_BY';
+  expr: Expression;
+};
+
+/** ALTER TABLE ... MODIFY SETTING key=val [, ...] */
+type AlterModifySetting = AlterCommandBase & {
+  commandType: 'MODIFY_SETTING';
+  settings: SettingItem[];
+};
+
+/** ALTER TABLE ... RESET SETTING name [, ...] */
+type AlterResetSetting = AlterCommandBase & {
+  commandType: 'RESET_SETTING';
+  settingNames: string[];
+};
+
+/** ALTER TABLE ... MODIFY QUERY SELECT ... */
+type AlterModifyQuery = AlterCommandBase & {
+  commandType: 'MODIFY_QUERY';
+  query: QueryStatement;
+};
+
+/** ALTER TABLE ... MODIFY COMMENT 'text' */
+type AlterModifyComment = AlterCommandBase & {
+  commandType: 'MODIFY_COMMENT';
+  comment: Literal;
+};
+
+/** ALTER TABLE ... APPLY DELETED MASK / APPLY PATCHES / REWRITE PARTS [IN PARTITION ...] */
+type AlterApplyOrRewrite = AlterCommandBase & {
+  commandType: 'APPLY_DELETED_MASK' | 'APPLY_PATCHES' | 'REWRITE_PARTS';
+  partition?: AlterPartitionExpr;
+};
+
+/**
+ * An ALTER TABLE command — one of many operations within an ALTER TABLE statement.
+ * Discriminated union on `commandType`.
+ */
+export type AlterCommand =
+  | AlterAddColumn
+  | AlterDropColumn
+  | AlterModifyColumn
+  | AlterRenameColumn
+  | AlterCommentColumn
+  | AlterMaterializeColumn
+  | AlterAddIndex
+  | AlterDropIndex
+  | AlterMaterializeIndex
+  | AlterAddProjection
+  | AlterDropProjection
+  | AlterMaterializeProjection
+  | AlterAddConstraint
+  | AlterDropConstraint
+  | AlterAddOrModifyStatistics
+  | AlterDropStatistics
+  | AlterMaterializeStatistics
+  | AlterUpdate
+  | AlterDelete
+  | AlterDropOrAttachPartition
+  | AlterDropDetachedPartition
+  | AlterReplacePartition
+  | AlterMovePartition
+  | AlterFetchPartition
+  | AlterFreezePartition
+  | AlterFreezeAll
+  | AlterModifyTTL
+  | AlterRemoveTTLOrSampleBy
+  | AlterMaterializeTTL
+  | AlterModifyOrderByOrSampleBy
+  | AlterModifySetting
+  | AlterResetSetting
+  | AlterModifyQuery
+  | AlterModifyComment
+  | AlterApplyOrRewrite;
+
+/**
+ * An ALTER TABLE statement.
+ *
+ * @example `ALTER TABLE t ADD COLUMN x UInt32`
+ * @example `ALTER TABLE t UPDATE x = 1 WHERE id = 2`
+ */
+export type AlterStatement = {
+  kind: 'alter';
+  /** The table being altered. */
+  table: TableRef;
+  /** The list of ALTER commands. */
+  commands: AlterCommand[];
+  /** Optional ON CLUSTER clause. */
+  onCluster?: string;
+  /** Optional SETTINGS clause. */
+  settings?: SettingItem[];
+  /** Optional FORMAT clause. */
+  format?: string;
+} & NodeMetadata;
+
 /**
  * A PARALLEL WITH statement: chains multiple CREATE statements for parallel execution.
  *
@@ -1846,7 +2173,13 @@ export type CreateStatement =
 export type ParallelWithStatement = {
   kind: 'parallelWith';
   /** The CREATE or INSERT statements being executed in parallel (always 2+). */
-  queries: (CreateStatement | InsertStatement | TruncateStatement | DropStatement)[];
+  queries: (
+    | CreateStatement
+    | InsertStatement
+    | TruncateStatement
+    | DropStatement
+    | AlterStatement
+  )[];
 } & NodeMetadata;
 
 /**
@@ -1925,6 +2258,7 @@ export type Statement =
   | UseStatement
   | SystemStatement
   | CreateStatement
+  | AlterStatement
   | ParallelWithStatement
   | InsertStatement
   | TruncateStatement
@@ -1991,6 +2325,8 @@ export interface ASTNodeKindMap {
   createResource: CreateResourceStatement;
   createWindowView: CreateWindowViewStatement;
   createLiveView: CreateLiveViewStatement;
+  alter: AlterStatement;
+  alterCommand: AlterCommand;
   parallelWith: ParallelWithStatement;
   insert: InsertStatement;
   truncate: TruncateStatement;
@@ -2677,6 +3013,255 @@ export const QueryStatementSchema: z.ZodType<QueryStatement> = z.lazy(() =>
   ]),
 );
 
+/** Zod schema for {@link AlterPartitionExpr}. */
+export const AlterPartitionExprSchema: z.ZodType<AlterPartitionExpr> = z.lazy(() =>
+  z.union([
+    z.object({ partitionKind: z.literal('all') }),
+    z.object({ partitionKind: z.literal('id'), id: z.union([LiteralSchema, QueryParamSchema]) }),
+    z.object({ partitionKind: z.literal('expr'), expr: ExpressionSchema }),
+  ]),
+);
+
+/** Zod schema for {@link AlterCommand}. */
+const AlterCommandBaseFields = {
+  kind: z.literal('alterCommand'),
+  parenthesized: z.boolean().optional(),
+  ...ExprMetadataFields,
+};
+
+export const AlterCommandSchema: z.ZodType<AlterCommand> = z.lazy(() =>
+  z.discriminatedUnion('commandType', [
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('ADD_COLUMN'),
+      column: ColumnDefSchema,
+      afterColumn: z.string().optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('DROP_COLUMN'),
+      columnName: z.string(),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_COLUMN'),
+      column: ColumnDefSchema,
+      afterColumn: z.string().optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('RENAME_COLUMN'),
+      oldName: z.string(),
+      newName: z.string(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('COMMENT_COLUMN'),
+      columnName: z.string(),
+      comment: LiteralSchema,
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MATERIALIZE_COLUMN'),
+      columnName: z.string(),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('ADD_INDEX'),
+      index: IndexDefSchema,
+      afterIndex: z.string().optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('DROP_INDEX'),
+      indexName: z.string(),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MATERIALIZE_INDEX'),
+      indexName: z.string(),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('ADD_PROJECTION'),
+      projection: ProjectionDefSchema,
+      afterProjection: z.string().optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('DROP_PROJECTION'),
+      projectionName: z.string(),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MATERIALIZE_PROJECTION'),
+      projectionName: z.string(),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('ADD_CONSTRAINT'),
+      constraint: ConstraintDefSchema,
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('DROP_CONSTRAINT'),
+      constraintName: z.string(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('ADD_STATISTICS'),
+      statColumns: z.array(z.string()),
+      statTypes: z.array(IndexTypeSchema),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_STATISTICS'),
+      statColumns: z.array(z.string()),
+      statTypes: z.array(IndexTypeSchema),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('DROP_STATISTICS'),
+      statColumns: z.array(z.string()).optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MATERIALIZE_STATISTICS'),
+      statColumns: z.array(z.string()).optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('UPDATE'),
+      assignments: z.array(z.object({ column: z.string(), expr: ExpressionSchema })),
+      where: ExpressionSchema,
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('DELETE'),
+      where: ExpressionSchema,
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('DROP_PARTITION'),
+      partition: AlterPartitionExprSchema.optional(),
+      partName: LiteralSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('ATTACH_PARTITION'),
+      partition: AlterPartitionExprSchema.optional(),
+      partName: LiteralSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('DROP_DETACHED_PARTITION'),
+      partition: AlterPartitionExprSchema,
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('REPLACE_PARTITION'),
+      partition: AlterPartitionExprSchema,
+      fromTable: TableRefSchema,
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MOVE_PARTITION'),
+      partition: AlterPartitionExprSchema,
+      moveDest: z.any().optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('FETCH_PARTITION'),
+      partition: AlterPartitionExprSchema,
+      fromPath: ExpressionSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('FREEZE_PARTITION'),
+      partition: AlterPartitionExprSchema,
+    }),
+    z.object({ ...AlterCommandBaseFields, commandType: z.literal('FREEZE_ALL') }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_TTL'),
+      ttl: z.array(TTLItemSchema),
+    }),
+    z.object({ ...AlterCommandBaseFields, commandType: z.literal('REMOVE_TTL') }),
+    z.object({ ...AlterCommandBaseFields, commandType: z.literal('REMOVE_SAMPLE_BY') }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MATERIALIZE_TTL'),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_ORDER_BY'),
+      expr: ExpressionSchema,
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_SAMPLE_BY'),
+      expr: ExpressionSchema,
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_SETTING'),
+      settings: z.array(SettingItemSchema),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('RESET_SETTING'),
+      settingNames: z.array(z.string()),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_QUERY'),
+      query: QueryStatementSchema,
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_COMMENT'),
+      comment: LiteralSchema,
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('APPLY_DELETED_MASK'),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('APPLY_PATCHES'),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('REWRITE_PARTS'),
+      partition: AlterPartitionExprSchema.optional(),
+    }),
+  ]),
+);
+
+/** Zod schema for {@link AlterStatement}. */
+export const AlterStatementSchema: z.ZodType<AlterStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('alter'),
+    table: TableRefSchema,
+    commands: z.array(AlterCommandSchema),
+    onCluster: z.string().optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    format: z.string().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
 /** Zod schema for {@link ParallelWithStatement}. */
 export const ParallelWithStatementSchema: z.ZodType<ParallelWithStatement> = z.lazy(() =>
   z.object({
@@ -2687,6 +3272,7 @@ export const ParallelWithStatementSchema: z.ZodType<ParallelWithStatement> = z.l
         InsertStatementSchema,
         TruncateStatementSchema,
         DropStatementSchema,
+        AlterStatementSchema,
       ]),
     ),
     ...ExprMetadataFields,
@@ -2748,6 +3334,7 @@ export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
     UseStatementSchema,
     SystemStatementSchema,
     CreateStatementSchema,
+    AlterStatementSchema,
     ParallelWithStatementSchema,
     InsertStatementSchema,
     TruncateStatementSchema,

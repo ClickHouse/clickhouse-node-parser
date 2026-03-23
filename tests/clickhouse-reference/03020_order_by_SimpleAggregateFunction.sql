@@ -10,6 +10,10 @@ set allow_suspicious_primary_key = 1;
 drop table data;
 -- ALTER AggregatingMergeTree
 create table data (key Int) engine=AggregatingMergeTree() order by (key);
+alter table data add column value SimpleAggregateFunction(sum, UInt64), modify order by (key, value); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
+alter table data add column value SimpleAggregateFunction(sum, UInt64), modify order by (key, value) settings allow_suspicious_primary_key=1;
 -- ALTER ReplicatedAggregatingMergeTree
 create table data_rep (key Int) engine=ReplicatedAggregatingMergeTree('/tables/{database}', 'r1') order by (key);
+alter table data_rep add column value SimpleAggregateFunction(sum, UInt64), modify order by (key, value); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
+alter table data_rep add column value SimpleAggregateFunction(sum, UInt64), modify order by (key, value) settings allow_suspicious_primary_key=1;
 drop table data_rep;

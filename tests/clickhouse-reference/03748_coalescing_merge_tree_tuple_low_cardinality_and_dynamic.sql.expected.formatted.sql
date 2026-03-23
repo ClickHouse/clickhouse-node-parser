@@ -16,6 +16,8 @@ INSERT INTO test SELECT
     tuple('str', '{}')
 FROM numbers(100);
 
+ALTER TABLE test UPDATE t = tuple('str', '{"a" : 42}') WHERE id > 90;
+
 SELECT DISTINCT arrayJoin(JSONDynamicPaths(t.json))
 FROM test;
 

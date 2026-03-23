@@ -51,6 +51,8 @@ SELECT t = '2020-01-03' FROM (SELECT day2 AS t FROM test_table WHERE t = '2020-0
 SELECT COUNT() = 10 FROM test_table WHERE day1 = '2020-01-03' UNION ALL SELECT 1 FROM numbers(1) SETTINGS max_rows_to_read = 11;
 SELECT COUNT() = 0 FROM (SELECT  toDate('2019-01-01') AS  day1, day1 AS t   FROM test_table PREWHERE t = '2020-01-03'  WHERE t  = '2020-01-03' GROUP BY t );
 SELECT day1 = '2020-01-04' FROM test_table PREWHERE day1 = '2020-01-04'  WHERE day1 = '2020-01-04' GROUP BY day1 SETTINGS max_rows_to_read = 10;
+ALTER TABLE test_table add column array Array(UInt8) default [1, 2, 3];
+ALTER TABLE test_table add column struct.key Array(UInt8) default [2, 4, 6], add column struct.value Array(UInt8) alias array;
 set max_rows_to_read = 10;
 SELECT count() == 10 FROM test_table WHERE day = '2020-01-01';
 SELECT sum(struct.key) == 30, sum(struct.value) == 30 FROM (SELECT struct.key, struct.value FROM test_table array join struct WHERE day = '2020-01-01');

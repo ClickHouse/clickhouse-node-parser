@@ -3,5 +3,6 @@ CREATE TABLE t(`id` String, `dealer_id` String) ENGINE = MergeTree() ORDER BY id
 insert into t(id, dealer_id) values('1','2');
 SELECT * FROM t;
 SET mutations_sync = 1;
+ALTER TABLE t DELETE WHERE id in (select id from t as tmp);
 SELECT '---';
 DROP TABLE t;

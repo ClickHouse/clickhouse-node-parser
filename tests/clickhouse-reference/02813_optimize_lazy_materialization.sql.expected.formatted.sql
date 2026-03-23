@@ -138,6 +138,13 @@ FROM (
     )
 ORDER BY y + 1 ASC;
 
+-- queries with default value
+ALTER TABLE optimize_lazy_materialization ADD COLUMN default1 UInt64;
+
+ALTER TABLE optimize_lazy_materialization ADD COLUMN default2 UInt64 ALIAS 2;
+
+ALTER TABLE optimize_lazy_materialization ADD COLUMN default3 UInt64 ALIAS a + c;
+
 -- queries with compact merge tree
 CREATE TABLE optimize_lazy_materialization_with_compact_mt
 (
@@ -205,6 +212,13 @@ FROM optimize_lazy_materialization_with_compact_mt
 PREWHERE d > 1
 ORDER BY c ASC
 LIMIT 3;
+
+-- queries with default value
+ALTER TABLE optimize_lazy_materialization_with_compact_mt ADD COLUMN default1 UInt64;
+
+ALTER TABLE optimize_lazy_materialization_with_compact_mt ADD COLUMN default2 UInt64 ALIAS 2;
+
+ALTER TABLE optimize_lazy_materialization_with_compact_mt ADD COLUMN default3 UInt64 ALIAS a + c;
 
 -- { echoOff }
 DROP TABLE IF EXISTS optimize_lazy_materialization_with_compact_mt;

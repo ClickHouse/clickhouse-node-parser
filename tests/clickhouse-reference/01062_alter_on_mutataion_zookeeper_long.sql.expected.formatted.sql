@@ -37,6 +37,8 @@ LIMIT 100;
 SELECT sum(CAST(value AS UInt64))
 FROM test_alter_on_mutation;
 
+ALTER TABLE test_alter_on_mutation MODIFY COLUMN value UInt64;
+
 SELECT sum(value)
 FROM test_alter_on_mutation;
 
@@ -61,8 +63,18 @@ INSERT INTO test_alter_on_mutation SELECT
 FROM `system`.numbers
 LIMIT 100, 100;
 
+ALTER TABLE test_alter_on_mutation MODIFY COLUMN value String;
+
+ALTER TABLE test_alter_on_mutation ADD COLUMN value1 Float64;
+
 SELECT sum(value1)
 FROM test_alter_on_mutation;
+
+ALTER TABLE test_alter_on_mutation DROP COLUMN value;
+
+ALTER TABLE test_alter_on_mutation ADD COLUMN value String DEFAULT '10';
+
+ALTER TABLE test_alter_on_mutation MODIFY COLUMN value UInt64 DEFAULT 10;
 
 DROP TABLE IF EXISTS nested_alter;
 
@@ -85,5 +97,7 @@ INSERT INTO nested_alter;
 
 SELECT *
 FROM nested_alter;
+
+ALTER TABLE nested_alter DROP COLUMN `n.d`;
 
 DROP TABLE nested_alter;

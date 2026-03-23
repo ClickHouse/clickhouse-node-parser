@@ -27,6 +27,10 @@ FROM `system`.dictionaries
 WHERE name == '02155_test_dictionary'
     AND database == currentDatabase();
 
+ALTER TABLE `02155_test_dictionary` COMMENT COLUMN value 'value_column'; --{serverError NOT_IMPLEMENTED}
+
+ALTER TABLE `02155_test_dictionary` MODIFY COMMENT '02155_test_dictionary_comment_0';
+
 SELECT
     name,
     comment
@@ -36,6 +40,8 @@ WHERE name == '02155_test_dictionary'
 
 SELECT *
 FROM `02155_test_dictionary`;
+
+ALTER TABLE `02155_test_dictionary` MODIFY COMMENT '02155_test_dictionary_comment_1';
 
 DROP TABLE IF EXISTS `02155_test_dictionary_view`;
 
@@ -48,6 +54,10 @@ ENGINE = Dictionary(concat(currentDatabase(), '.02155_test_dictionary'));
 
 SELECT *
 FROM `02155_test_dictionary_view`;
+
+ALTER TABLE `02155_test_dictionary_view` COMMENT COLUMN value 'value_column'; --{serverError NOT_IMPLEMENTED}
+
+ALTER TABLE `02155_test_dictionary_view` MODIFY COMMENT '02155_test_dictionary_view_comment_0';
 
 SELECT
     name,

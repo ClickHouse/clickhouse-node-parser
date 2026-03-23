@@ -75,6 +75,10 @@ ENGINE = ReplicatedMergeTree(concat('/clickhouse/tables/to_', currentDatabase())
 ORDER BY x
 SETTINGS old_parts_lifetime = 1, max_cleanup_delay_period = 1, cleanup_delay_period = 1;
 
+ALTER TABLE shard_0.from_0 ON CLUSTER test_cluster_two_shards_different_databases MOVE PARTITION tuple() TO TABLE shard_0.to SETTINGS distributed_ddl_output_mode = 'never_throw', distributed_ddl_task_timeout = 1 FORMAT Null;
+
+ALTER TABLE shard_0.from_1 ON CLUSTER test_cluster_two_shards_different_databases MOVE PARTITION tuple() TO TABLE shard_0.to SETTINGS distributed_ddl_output_mode = 'never_throw', distributed_ddl_task_timeout = 1 FORMAT Null;
+
 -- If moved parts are not merged by OPTIMIZE or background merge restart
 -- can log Warning about metadata version on disk. It's normal situation
 -- and test shouldn't rarely fail because of it.

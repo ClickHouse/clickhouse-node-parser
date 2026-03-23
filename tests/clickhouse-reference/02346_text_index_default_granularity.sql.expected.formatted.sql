@@ -30,3 +30,10 @@ CREATE TABLE tab
 )
 ENGINE = MergeTree()
 ORDER BY k;
+
+ALTER TABLE tab ADD INDEX idx s TYPE text(tokenizer = ngrams(2));
+
+-- After ALTER DROP + ALTER ADD TABLE
+ALTER TABLE tab DROP INDEX idx;
+
+ALTER TABLE tab ADD INDEX idx s TYPE text(tokenizer = 'splitByNonAlpha');

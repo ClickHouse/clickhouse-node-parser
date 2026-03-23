@@ -26,4 +26,6 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+ALTER TABLE t_sparse_mutations_4 MODIFY COLUMN v String;
+
 DROP TABLE t_sparse_mutations_4;

@@ -11,8 +11,17 @@ create table enums (
 -- insert default values
 insert into enums (k) values (0);
 select * from enums;
+alter table enums modify column e Enum8('world' = 2, 'hello' = 1, '!' = 3);
 insert into enums (e, sign, letter) values ('!', 'plus', 'b');
 select * from enums ORDER BY _part;
+-- expand `e` and `sign` from Enum8 to Enum16 without changing values, change values of `letter` without changing type
+alter table enums
+    modify column e Enum16('world' = 2, 'hello' = 1, '!' = 3),
+    modify column sign Enum16('minus' = -1, 'plus' = 1),
+    modify column letter Enum16('a' = 0, 'b' = 1, 'c' = 2, 'no letter' = -256);
+alter table enums
+    modify column e Enum8('world' = 2, 'hello' = 1, '!' = 3),
+    modify column sign Enum8('minus' = -1, 'plus' = 1);
 insert into enums (letter, e) values ('c', 'world');
 drop table enums;
 create table enums (e Enum8('a' = 0, 'b' = 1, 'c' = 2, 'd' = 3)) engine = TinyLog;

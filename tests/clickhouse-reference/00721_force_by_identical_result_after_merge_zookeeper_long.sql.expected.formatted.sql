@@ -21,6 +21,10 @@ ORDER BY x;
 
 INSERT INTO byte_identical_r1 (x);
 
+-- Add a column with a default expression that will yield different values on different replicas.
+-- Call optimize to materialize it. Replicas should compare checksums and restore consistency.
+ALTER TABLE byte_identical_r1 ADD COLUMN y UInt64 DEFAULT rand();
+
 SET replication_alter_partitions_sync = 2;
 
 SELECT

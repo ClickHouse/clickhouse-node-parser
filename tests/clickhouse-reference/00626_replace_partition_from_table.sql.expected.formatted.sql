@@ -47,6 +47,12 @@ SELECT
     sum(d)
 FROM dst;
 
+ALTER TABLE dst REPLACE PARTITION 1 FROM src;
+
+ALTER TABLE src DROP PARTITION 1;
+
+ALTER TABLE dst DROP PARTITION 1;
+
 CREATE TEMPORARY TABLE test_block_numbers
 (
     m UInt64
@@ -58,6 +64,8 @@ WHERE database = currentDatabase()
     AND table = 'dst'
     AND active
     AND like(name, '1_%');
+
+ALTER TABLE dst REPLACE PARTITION 1 FROM dst;
 
 SELECT (max(m) - min(m) > 1) AS new_block_is_generated
 FROM test_block_numbers;
@@ -72,6 +80,10 @@ INSERT INTO src;
 
 INSERT INTO dst;
 
+ALTER TABLE dst REPLACE PARTITION 1 FROM src;
+
+ALTER TABLE dst REPLACE PARTITION ALL FROM src;
+
 SELECT
     count(),
     sum(d),
@@ -79,3 +91,11 @@ SELECT
 FROM dst;
 
 SET optimize_throw_if_noop = 1;
+
+ALTER TABLE dst DROP PARTITION 0;
+
+ALTER TABLE dst DROP PARTITION 1;
+
+ALTER TABLE dst DROP PARTITION 2;
+
+ALTER TABLE dst ATTACH PARTITION 1;

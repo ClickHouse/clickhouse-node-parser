@@ -33,6 +33,49 @@ FROM `system`.data_skipping_indices
 WHERE table = 'tbl1'
     AND database = currentDatabase();
 
+-- Settings 'add_minmax_index_for_*_columns' cannot be changed after table creation
+ALTER TABLE tbl1 MODIFY SETTING add_minmax_index_for_numeric_columns = false; -- { serverError READONLY_SETTING }
+
+ALTER TABLE tbl1 MODIFY SETTING add_minmax_index_for_string_columns = false; -- { serverError READONLY_SETTING }
+
+ALTER TABLE tbl1 MODIFY SETTING add_minmax_index_for_temporal_columns = false; -- { serverError READONLY_SETTING }
+
+ALTER TABLE tbl1 RESET SETTING add_minmax_index_for_numeric_columns; -- { serverError READONLY_SETTING }
+
+ALTER TABLE tbl1 RESET SETTING add_minmax_index_for_string_columns; -- { serverError READONLY_SETTING }
+
+ALTER TABLE tbl1 RESET SETTING add_minmax_index_for_temporal_columns; -- { serverError READONLY_SETTING }
+
+ALTER TABLE tbl1 ADD COLUMN n Int;
+
+ALTER TABLE tbl1 MATERIALIZE INDEX auto_minmax_index_n;
+
+ALTER TABLE tbl1 DROP COLUMN n;
+
+ALTER TABLE tbl1 ADD COLUMN s String;
+
+ALTER TABLE tbl1 ADD COLUMN t String;
+
+ALTER TABLE tbl1 DROP COLUMN t;
+
+ALTER TABLE tbl1 RENAME COLUMN s TO t;
+
+ALTER TABLE tbl1 ADD COLUMN dt DateTime64(9, 'UTC');
+
+ALTER TABLE tbl1 ADD COLUMN dt2 DateTime;
+
+ALTER TABLE tbl1 DROP COLUMN dt2;
+
+ALTER TABLE tbl1 RENAME COLUMN dt TO dt2;
+
+ALTER TABLE tbl1 ADD COLUMN d Date;
+
+ALTER TABLE tbl1 ADD COLUMN d32 Date32;
+
+ALTER TABLE tbl1 ADD COLUMN time Time;
+
+ALTER TABLE tbl1 ADD COLUMN time64 Time64;
+
 -- Check that users cannot create explicit minmax indices with the names of internal minmax indices
 CREATE TABLE tbl2
 (
@@ -66,6 +109,8 @@ ENGINE = MergeTree()
 ORDER BY key
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
+ALTER TABLE tbl3 ADD INDEX auto_minmax_index_y y TYPE minmax;
+
 CREATE TABLE tbl4
 (
     key Int,
@@ -76,6 +121,8 @@ ENGINE = MergeTree()
 ORDER BY key
 SETTINGS add_minmax_index_for_string_columns = true;
 
+ALTER TABLE tbl4 ADD INDEX auto_minmax_index_y y TYPE minmax; -- { serverError BAD_ARGUMENTS, ILLEGAL_COLUMN }
+
 CREATE TABLE tbl5
 (
     key Int,
@@ -85,6 +132,8 @@ CREATE TABLE tbl5
 ENGINE = MergeTree()
 ORDER BY key
 SETTINGS add_minmax_index_for_temporal_columns = true;
+
+ALTER TABLE tbl5 ADD INDEX auto_minmax_index_y y TYPE minmax; -- { serverError BAD_ARGUMENTS, ILLEGAL_COLUMN }
 
 CREATE TABLE tbl6
 (

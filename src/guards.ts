@@ -324,6 +324,16 @@ export function isCreateLiveViewStatement(
   return node !== undefined && node.kind === 'createLiveView';
 }
 
+/** Type guard for {@link import('./ast').AlterStatement | AlterStatement} nodes. */
+export function isAlterStatement(node: ASTNode | undefined): node is ASTNodeKindMap['alter'] {
+  return node !== undefined && node.kind === 'alter';
+}
+
+/** Type guard for {@link import('./ast').AlterCommand | AlterCommand} nodes. */
+export function isAlterCommand(node: ASTNode | undefined): node is ASTNodeKindMap['alterCommand'] {
+  return node !== undefined && node.kind === 'alterCommand';
+}
+
 /** Type guard for {@link import('./ast').InsertStatement | InsertStatement} nodes. */
 export function isInsertStatement(node: ASTNode | undefined): node is ASTNodeKindMap['insert'] {
   return node !== undefined && node.kind === 'insert';

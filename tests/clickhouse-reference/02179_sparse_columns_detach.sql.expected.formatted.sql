@@ -27,4 +27,6 @@ WHERE table = 't_sparse_detach'
     AND active
 ORDER BY column ASC;
 
+ALTER TABLE t_sparse_detach MODIFY SETTING vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1;
+
 DROP TABLE t_sparse_detach;

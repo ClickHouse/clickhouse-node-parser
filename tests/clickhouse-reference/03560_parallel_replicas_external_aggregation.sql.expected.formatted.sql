@@ -17,6 +17,16 @@ INSERT INTO t_proj_external_agg SELECT
     number
 FROM numbers(50000);
 
+ALTER TABLE t_proj_external_agg ADD PROJECTION aaaa (SELECT
+    k1,
+    k2,
+    k3,
+    sum(value)
+GROUP BY
+    k1,
+    k2,
+    k3);
+
 INSERT INTO t_proj_external_agg SELECT
     1,
     number % 2,

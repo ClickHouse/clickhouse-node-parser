@@ -12,6 +12,7 @@ CREATE TABLE tab
 ENGINE = MergeTree ORDER BY id
 SETTINGS min_bytes_for_wide_part = 0, index_granularity = 1024, index_granularity_bytes = 10485760, merge_max_block_size = 8192, add_minmax_index_for_numeric_columns=0;
 INSERT INTO tab SELECT number, 'v' || toString(number) FROM numbers(100000);
+ALTER TABLE tab ADD INDEX idx_text (text) TYPE text(tokenizer = ngrams(3));
 INSERT INTO tab SELECT number, 'v' || toString(number + 1000000) FROM numbers(100000);
 SELECT secondary_indices_compressed_bytes > 0
 FROM system.parts
@@ -30,4 +31,7 @@ SELECT trim(explain) FROM
 WHERE explain ILIKE '%Granules%';
 -- ------------------------------------------------------------
 SET mutations_sync = 2;
+ALTER TABLE tab CLEAR INDEX idx_text;
+-- ------------------------------------------------------------
+ALTER TABLE tab MATERIALIZE INDEX idx_text;
 DROP TABLE tab;

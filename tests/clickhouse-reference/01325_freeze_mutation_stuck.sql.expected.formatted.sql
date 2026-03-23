@@ -14,6 +14,10 @@ INSERT INTO mt;
 SELECT *
 FROM mt;
 
+ALTER TABLE mt FREEZE;
+
 SET mutations_sync = 1;
+
+ALTER TABLE mt UPDATE x = 'Goodbye' WHERE y = 1;
 
 DROP TABLE mt;

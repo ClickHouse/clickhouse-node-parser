@@ -27,6 +27,10 @@ SELECT a AS a, b AS b, c AS c, d AS d FROM optimize_lazy_materialization WHERE d
 SELECT a + 1 AS a, b AS b, c + 1 AS c, d + 1 AS d FROM optimize_lazy_materialization WHERE d > 1 ORDER BY c LIMIT 3;
 -- queries with non-trivial action's chain in expression
 SELECT y, z FROM (SELECT a as y, b as z FROM optimize_lazy_materialization WHERE d > 1 ORDER BY c LIMIT 3) ORDER BY y + 1;
+-- queries with default value
+ALTER TABLE optimize_lazy_materialization ADD COLUMN default1 UInt64;
+ALTER TABLE optimize_lazy_materialization ADD COLUMN default2 UInt64 ALIAS 2;
+ALTER TABLE optimize_lazy_materialization ADD COLUMN default3 UInt64 ALIAS a + c;
 -- queries with compact merge tree
 CREATE TABLE optimize_lazy_materialization_with_compact_mt (a UInt64, b UInt64, c UInt64, d UInt64, n Nested(x String))
 ENGINE MergeTree() PARTITION BY b ORDER BY a
@@ -41,6 +45,10 @@ SELECT _part_index, _part_offset FROM optimize_lazy_materialization_with_compact
 -- queries with filter
 SELECT * FROM optimize_lazy_materialization_with_compact_mt WHERE d > 1 ORDER BY c LIMIT 3;
 SELECT * FROM optimize_lazy_materialization_with_compact_mt PREWHERE d > 1 ORDER BY c LIMIT 3;
+-- queries with default value
+ALTER TABLE optimize_lazy_materialization_with_compact_mt ADD COLUMN default1 UInt64;
+ALTER TABLE optimize_lazy_materialization_with_compact_mt ADD COLUMN default2 UInt64 ALIAS 2;
+ALTER TABLE optimize_lazy_materialization_with_compact_mt ADD COLUMN default3 UInt64 ALIAS a+c;
 -- { echoOff }
 DROP TABLE IF EXISTS optimize_lazy_materialization_with_compact_mt;
 -- queries with int data type

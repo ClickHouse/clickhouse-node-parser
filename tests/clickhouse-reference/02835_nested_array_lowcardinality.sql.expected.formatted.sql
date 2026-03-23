@@ -14,6 +14,8 @@ INSERT INTO cool_table SELECT
     range(number)
 FROM numbers(10);
 
+ALTER TABLE cool_table ADD COLUMN `n.lc2` Array(LowCardinality(String));
+
 SELECT
     n.lc1,
     n.lc2
@@ -34,6 +36,8 @@ INSERT INTO cool_table SELECT
     arrayMap(x -> range(x % 4), range(number))
 FROM numbers(10);
 
+ALTER TABLE cool_table ADD COLUMN `n.lc2` Array(Array(LowCardinality(String)));
+
 CREATE TABLE IF NOT EXISTS cool_table
 (
     id UInt64,
@@ -47,3 +51,5 @@ INSERT INTO cool_table SELECT
     range(number),
     arrayMap(x -> (arrayMap(y -> 'k' || toString(y), range(x % 4)), range(x % 4))::Map(LowCardinality(String), UInt64), range(number))
 FROM numbers(10);
+
+ALTER TABLE cool_table ADD COLUMN `n.lc2` Array(Map(LowCardinality(String), UInt64));

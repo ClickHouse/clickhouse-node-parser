@@ -26,6 +26,8 @@ SELECT
     uniqExact(x)
 FROM modify_sample SAMPLE 0.1; -- { serverError SAMPLING_NOT_SUPPORTED }
 
+ALTER TABLE modify_sample MODIFY SAMPLE BY x;
+
 CREATE TABLE modify_sample_replicated
 (
     d Date DEFAULT '2000-01-01',
@@ -50,6 +52,12 @@ SELECT
     uniqExact(x)
 FROM modify_sample_replicated SAMPLE 0.1; -- { serverError SAMPLING_NOT_SUPPORTED }
 
+ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY x;
+
+ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY d; -- { serverError BAD_ARGUMENTS }
+
+ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY y;
+
 SELECT
     count(),
     min(y),
@@ -67,6 +75,8 @@ CREATE TABLE modify_sample_old
     y UInt64
 )
 ENGINE = MergeTree(d, (x, y), 8192);
+
+ALTER TABLE modify_sample_old MODIFY SAMPLE BY x; -- { serverError BAD_ARGUMENTS }
 
 DROP TABLE modify_sample;
 

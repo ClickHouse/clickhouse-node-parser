@@ -15,4 +15,16 @@ FROM `system`.data_skipping_indices
 WHERE database = current_database()
     AND table = 't_implicit';
 
+ALTER TABLE t_implicit DROP COLUMN s;
+
+ALTER TABLE t_implicit ADD COLUMN s2 String;
+
+ALTER TABLE t_implicit ADD COLUMN a2 UInt64;
+
+ALTER TABLE t_implicit RENAME COLUMN a2 TO a_renamed;
+
+ALTER TABLE t_implicit MODIFY COLUMN s2 UInt32;
+
+ALTER TABLE t_implicit MODIFY COLUMN a_renamed String;
+
 DROP TABLE t_implicit;

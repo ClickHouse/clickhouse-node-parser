@@ -36,11 +36,20 @@ ORDER BY
     e ASC,
     d ASC;
 
+-- update all columns used by proj_1
+ALTER TABLE testing UPDATE c = c + 1, d = d + 2 WHERE true SETTINGS mutations_sync = 2;
+
 SELECT *
 FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'testing'
     AND NOT is_done;
+
+-- update only one column
+ALTER TABLE testing UPDATE d = d - 1 WHERE true SETTINGS mutations_sync = 2;
+
+-- update only another one column
+ALTER TABLE testing UPDATE c = c - 1 WHERE true SETTINGS mutations_sync = 2;
 
 -- { echoOff }
 DROP TABLE testing;

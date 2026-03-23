@@ -16,6 +16,11 @@ FROM t;
 
 SET mutations_sync = 1;
 
+ALTER TABLE t DELETE WHERE id IN (
+    SELECT id
+    FROM t AS tmp
+);
+
 SELECT '---';
 
 DROP TABLE t;

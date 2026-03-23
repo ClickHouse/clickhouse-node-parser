@@ -19,6 +19,8 @@ SELECT
 FROM t_data_version
 ORDER BY a ASC;
 
+ALTER TABLE t_data_version UPDATE b = a * 100 WHERE 1 SETTINGS mutations_sync = 2;
+
 INSERT INTO t_data_version;
 
 -- Check parts pruning.

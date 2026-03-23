@@ -13,11 +13,15 @@ ORDER BY tuple();
 
 INSERT INTO wrong_metadata;
 
+ALTER TABLE wrong_metadata RENAME COLUMN column1 TO column1_renamed SETTINGS replication_alter_partitions_sync = 0;
+
 INSERT INTO wrong_metadata;
 
 SELECT *
 FROM wrong_metadata
 ORDER BY column1 ASC;
+
+ALTER TABLE wrong_metadata RENAME COLUMN column2 TO column2_renamed SETTINGS replication_alter_partitions_sync = 2;
 
 SELECT *
 FROM wrong_metadata
@@ -36,11 +40,15 @@ SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO wrong_metadata_wide;
 
+ALTER TABLE wrong_metadata_wide RENAME COLUMN column1 TO column1_renamed SETTINGS replication_alter_partitions_sync = 0;
+
 INSERT INTO wrong_metadata_wide;
 
 SELECT *
 FROM wrong_metadata_wide
 ORDER BY column1 ASC;
+
+ALTER TABLE wrong_metadata_wide RENAME COLUMN column2 TO column2_renamed SETTINGS replication_alter_partitions_sync = 2;
 
 SELECT *
 FROM wrong_metadata_wide

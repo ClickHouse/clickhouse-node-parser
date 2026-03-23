@@ -77,6 +77,8 @@ export interface NodePositionMap {
   createResource: Statement;
   createWindowView: Statement;
   createLiveView: Statement;
+  alter: Statement;
+  alterCommand: Statement;
   parallelWith: Statement;
   insert: Statement;
   truncate: Statement;

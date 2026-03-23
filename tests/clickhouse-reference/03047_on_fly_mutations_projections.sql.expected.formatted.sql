@@ -22,6 +22,8 @@ SELECT sum(v)
 FROM t_update_projections
 SETTINGS force_optimize_projection = 1;
 
+ALTER TABLE t_update_projections UPDATE v = v * v WHERE id % 2 = 1;
+
 SELECT sum(v)
 FROM t_update_projections;
 

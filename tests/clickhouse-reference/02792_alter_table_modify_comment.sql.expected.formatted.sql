@@ -7,6 +7,8 @@ FROM `system`.tables
 WHERE database = currentDatabase()
     AND table = 't';
 
+ALTER TABLE t MODIFY COMMENT 'World';
+
 DROP TABLE t;
 
 CREATE TABLE t
@@ -16,6 +18,8 @@ CREATE TABLE t
 ENGINE = MergeTree
 ORDER BY tuple()
 COMMENT 'Hello';
+
+ALTER TABLE t MODIFY COMMENT 'World', MODIFY COLUMN x UInt16;
 
 DROP TABLE t;
 

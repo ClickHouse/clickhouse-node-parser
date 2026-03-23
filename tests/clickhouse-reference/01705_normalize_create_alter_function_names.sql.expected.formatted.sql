@@ -10,6 +10,8 @@ CREATE TABLE x
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/x', 'r')
 ORDER BY i;
 
+ALTER TABLE x ADD INDEX nn LOG2(i) TYPE minmax GRANULARITY 1, ADD PROJECTION p2 (SELECT MIN(i));
+
 SELECT value
 FROM `system`.zookeeper
 WHERE name = 'metadata'

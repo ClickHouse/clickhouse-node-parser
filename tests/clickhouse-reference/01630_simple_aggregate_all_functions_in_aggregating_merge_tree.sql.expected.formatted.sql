@@ -136,6 +136,8 @@ FROM (
 
 SELECT '---mutation---';
 
+ALTER TABLE simple_agf_summing_mt DELETE WHERE (a % 3) = 0 SETTINGS mutations_sync = 1;
+
 INSERT INTO simple_agf_summing_mt SELECT
     number % 11151 AS a,
     minState(number),

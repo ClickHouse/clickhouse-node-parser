@@ -10,4 +10,6 @@ CREATE TABLE some_table
 )
 ENGINE = Memory; -- { serverError QUERY_IS_PROHIBITED}
 
+ALTER TABLE some_table DELETE WHERE 1; -- { serverError QUERY_IS_PROHIBITED}
+
 SET allow_ddl = 1; -- { serverError QUERY_IS_PROHIBITED}

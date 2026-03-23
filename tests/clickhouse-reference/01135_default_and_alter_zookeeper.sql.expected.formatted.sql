@@ -11,7 +11,11 @@ ORDER BY tuple();
 
 INSERT INTO default_table;
 
+ALTER TABLE default_table MODIFY COLUMN enum_column Enum8('undefined' = 0, 'fox' = 1, 'index' = 2) DEFAULT 'undefined';
+
 INSERT INTO default_table (id);
 
 SELECT COUNT()
 FROM default_table;
+
+ALTER TABLE default_table MODIFY COLUMN enum_column Enum8('undefined' = 0, 'fox' = 1, 'index' = 2) DEFAULT 'fox';

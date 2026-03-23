@@ -14,6 +14,8 @@ INSERT INTO test_rlp SELECT
     number
 FROM numbers(15);
 
+ALTER TABLE test_rlp ADD COLUMN c Int32 DEFAULT b + 10;
+
 -- { echoOn }
 SELECT
     a,

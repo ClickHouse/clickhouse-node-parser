@@ -31,3 +31,5 @@ INSERT INTO t_modify_from_lc_2 SELECT
     number,
     number
 FROM numbers(100000);
+
+ALTER TABLE t_modify_from_lc_1 MODIFY COLUMN a UInt32;

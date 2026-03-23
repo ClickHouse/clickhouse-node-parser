@@ -27,6 +27,8 @@ FROM numbers(20, 10);
 
 SET mutations_sync = 2;
 
+ALTER TABLE t_shared APPLY PATCHES, UPDATE c1 = 2000 WHERE id % 10 = 0;
+
 SELECT *
 FROM t_shared
 ORDER BY id ASC

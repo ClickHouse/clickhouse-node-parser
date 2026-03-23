@@ -11,6 +11,7 @@ settings
     vertical_merge_algorithm_min_rows_to_activate=1,
     min_bytes_for_wide_part=0;
 INSERT INTO t_vertical_merges SELECT NULL, 1;
+ALTER TABLE t_vertical_merges ADD COLUMN c String;
 SELECT a, b, c FROM t_vertical_merges;
 CREATE TABLE t_vertical_merges
 (
@@ -24,4 +25,5 @@ settings
     vertical_merge_algorithm_min_rows_to_activate=1,
     min_bytes_for_wide_part=0;
 INSERT INTO t_vertical_merges SELECT [], 1;
+ALTER TABLE t_vertical_merges CLEAR COLUMN b;
 SELECT a, b FROM t_vertical_merges;

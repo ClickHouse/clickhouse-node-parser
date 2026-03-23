@@ -26,3 +26,18 @@ create table test (
     json JSON(a UInt32),
     t Tuple(a UInt32, b UInt32),
 ) engine=MergeTree order by tuple() settings index_granularity=1;
+alter table test add projection p1 (select json order by json.a);
+alter table test materialize projection p1;
+alter table test add projection p2 (select t order by t.a);
+alter table test materialize projection p2;
+alter table test add projection p3 (select json order by json.c[].d.:Int64);
+alter table test materialize projection p3;
+alter table test add projection p (select json.b order by json.a); -- {serverError NOT_IMPLEMENTED}
+alter table test add projection p (select t.a order by json.a); -- {serverError NOT_IMPLEMENTED}
+alter table test add projection p (select a order by json.a); -- {serverError NOT_IMPLEMENTED}
+alter table test add projection p (select t.b order by t.a); -- {serverError NOT_IMPLEMENTED}
+alter table test add projection p (select json.a order by t.a); -- {serverError NOT_IMPLEMENTED}
+alter table test add projection p (select a order by t.a); -- {serverError NOT_IMPLEMENTED}
+alter table test add projection p (select json.a order by json.c[].d.:Int64); -- {serverError NOT_IMPLEMENTED}
+alter table test add projection p (select t.a order by json.c[].d.:Int64); -- {serverError NOT_IMPLEMENTED}
+alter table test add projection p (select a order by json.c[].d.:Int64);-- {serverError NOT_IMPLEMENTED}

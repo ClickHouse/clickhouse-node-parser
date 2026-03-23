@@ -25,6 +25,7 @@ SETTINGS
     serialization_info_version = 'basic',
     compact_parts_max_granules_to_buffer = 1;
 INSERT INTO t_merge_tree_index SELECT number % 5, number, 0, ['foo', 'bar'], ['aaa', 'bbb', 'ccc'], [11, 22, 33], (number, number), number FROM numbers(10);
+ALTER TABLE t_merge_tree_index ADD COLUMN c UInt64 AFTER b;
 INSERT INTO t_merge_tree_index SELECT number % 5, number, number, 10, ['foo', 'bar'], ['aaa', 'bbb', 'ccc'], [11, 22, 33], (number, number), number FROM numbers(5);
 INSERT INTO t_merge_tree_index SELECT number % 5, number, number, 10, ['foo', 'bar'], ['aaa', 'bbb', 'ccc'], [11, 22, 33], (number, number), number FROM numbers(10);
 SELECT * FROM mergeTreeIndex(currentDatabase(), t_merge_tree_index) ORDER BY part_name, mark_number FORMAT PrettyCompactNoEscapesMonoBlock;

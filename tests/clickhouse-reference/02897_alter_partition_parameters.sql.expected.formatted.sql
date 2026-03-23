@@ -10,12 +10,26 @@ PARTITION BY toMonday(EventDate);
 
 INSERT INTO test;
 
+ALTER TABLE test DROP PARTITION ('2023-10-09');
+
 SELECT count()
 FROM test;
 
+ALTER TABLE test DROP PARTITION ('2023-10-09');
+
+ALTER TABLE test DROP PARTITION '2023-10-09';
+
 SET param_partition = '2023-10-09';
 
+ALTER TABLE test DROP PARTITION {partition:String};
+
+ALTER TABLE test DROP PARTITION tuple(toMonday({partition:Date}));
+
 SET param_partition_id = '20231009';
+
+ALTER TABLE test DROP PARTITION ID {partition_id:String};
+
+ALTER TABLE test DROP PARTITION {partition:Date};
 
 DROP TABLE IF EXISTS test2;
 
@@ -30,12 +44,18 @@ PARTITION BY (a * b, b * b);
 
 INSERT INTO test2;
 
+ALTER TABLE test2 DROP PARTITION tuple(2, 4);
+
 SELECT count()
 FROM test2;
+
+ALTER TABLE test2 DROP PARTITION (2, 4);
 
 SET param_first = '2';
 
 SET param_second = '4';
+
+ALTER TABLE test2 DROP PARTITION tuple({first:UInt32}, {second:Int64});
 
 DROP TABLE IF EXISTS test3;
 
@@ -52,6 +72,8 @@ INSERT INTO test3;
 
 SET param_simple = '1';
 
+ALTER TABLE test3 DROP PARTITION {simple:String};
+
 SELECT count()
 FROM test3;
 
@@ -66,6 +88,8 @@ ORDER BY tuple()
 PARTITION BY EventDate;
 
 INSERT INTO test4;
+
+ALTER TABLE test4 ON CLUSTER `'test_shard_localhost'` DROP PARTITION {partition:String} FORMAT Null;
 
 SELECT count()
 FROM test4;
@@ -87,6 +111,8 @@ SET param_f = '1';
 
 SET param_s = '2';
 
+ALTER TABLE test5 DROP PARTITION ({f:UInt32}, 2);
+
 SELECT count()
 FROM test5;
 
@@ -104,6 +130,8 @@ PARTITION BY (a, b);
 INSERT INTO test6;
 
 SET param_tuple = (1, 2);
+
+ALTER TABLE test6 DROP PARTITION {tuple:Tuple(UInt32, Int64)};
 
 SELECT count()
 FROM test6;

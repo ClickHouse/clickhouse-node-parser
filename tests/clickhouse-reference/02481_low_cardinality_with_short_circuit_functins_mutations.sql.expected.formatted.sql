@@ -14,6 +14,8 @@ SELECT
     'yyyy'
 FROM numbers(10);
 
+ALTER TABLE issue_46128 UPDATE a = b WHERE id = 1 SETTINGS mutations_sync = 2;
+
 SELECT *
 FROM issue_46128
 WHERE id <= 2

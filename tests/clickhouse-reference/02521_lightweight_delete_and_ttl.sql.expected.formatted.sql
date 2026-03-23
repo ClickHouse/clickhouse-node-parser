@@ -38,5 +38,9 @@ SELECT
     count()
 FROM lwd_test_02521;
 
+ALTER TABLE lwd_test_02521 MODIFY TTL event_time + toIntervalMonth(1) SETTINGS mutations_sync = 1;
+
+ALTER TABLE lwd_test_02521 DELETE WHERE id >= 40000 SETTINGS mutations_sync = 1;
+
 -- { echoOff }
 DROP TABLE lwd_test_02521;

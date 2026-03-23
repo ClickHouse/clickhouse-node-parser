@@ -55,6 +55,8 @@ ORDER BY
     key ASC,
     value ASC;
 
+ALTER TABLE merge_tree_pk_sql ADD COLUMN key2 UInt64, MODIFY ORDER BY (key, key2);
+
 INSERT INTO merge_tree_pk_sql;
 
 INSERT INTO merge_tree_pk_sql;
@@ -86,6 +88,8 @@ FROM replicated_merge_tree_pk_sql FINAL
 ORDER BY
     key ASC,
     value ASC;
+
+ALTER TABLE replicated_merge_tree_pk_sql ADD COLUMN key2 UInt64, MODIFY ORDER BY (key, key2);
 
 INSERT INTO replicated_merge_tree_pk_sql;
 

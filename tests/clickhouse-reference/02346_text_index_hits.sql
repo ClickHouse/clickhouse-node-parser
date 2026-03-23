@@ -14,6 +14,8 @@ ENGINE = MergeTree
 ORDER BY (CounterID, EventDate);
 SET enable_full_text_index = 1;
 SET use_query_condition_cache = 0;
+ALTER TABLE hits_text ADD INDEX idx_search_phrase SearchPhrase TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 8;
+ALTER TABLE hits_text ADD INDEX idx_url URL TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 8;
 SET max_insert_threads = 4;
 INSERT INTO hits_text SELECT CounterID, EventDate, UserID,SearchPhrase, URL FROM test.hits;
 SET use_skip_indexes = 0;

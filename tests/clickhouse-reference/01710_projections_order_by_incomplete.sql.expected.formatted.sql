@@ -9,6 +9,9 @@ ORDER BY tuple();
 
 INSERT INTO data_proj_order_by_incomp;
 
+ALTER TABLE data_proj_order_by_incomp ADD PROJECTION tSort (SELECT *
+ORDER BY t ASC);
+
 INSERT INTO data_proj_order_by_incomp;
 
 -- { echoOn }
